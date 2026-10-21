@@ -3,74 +3,10 @@
 import type { LessonMediaTypes } from "~/shared/components/learning-content";
 
 export const lessonMedia = {
-  // %%vol_ladder(20, 6)%%
-  volLadder20_6: {
-    kind: "diagram",
-    svg: '<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" viewBox="0 0 660 184"><text x="16.0" y="22.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">i бит дают 2ⁱ разных кодов; степени стоят на равных расстояниях</text><line x1="50.0" y1="90.0" x2="620.0" y2="90.0" stroke="#d9d9d4" stroke-width="2"/><text x="16.0" y="120.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">2ⁱ</text><text x="16.0" y="144.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">i</text><circle cx="50.0" cy="90" r="5" fill="#17191e" stroke="#17191e" stroke-width="1"/><text x="50.0" y="120.0" font-family="inherit" font-size="13" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">2</text><text x="50.0" y="144.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">1</text><circle cx="164.0" cy="90" r="5" fill="#17191e" stroke="#17191e" stroke-width="1"/><text x="164.0" y="120.0" font-family="inherit" font-size="13" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">4</text><text x="164.0" y="144.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">2</text><circle cx="278.0" cy="90" r="5" fill="#17191e" stroke="#17191e" stroke-width="1"/><text x="278.0" y="120.0" font-family="inherit" font-size="13" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">8</text><text x="278.0" y="144.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">3</text><circle cx="392.0" cy="90" r="5" fill="#17191e" stroke="#17191e" stroke-width="1"/><text x="392.0" y="120.0" font-family="inherit" font-size="13" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">16</text><text x="392.0" y="144.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">4</text><circle cx="506.0" cy="90" r="5" fill="#fff" stroke="#ff6a00" stroke-width="2.5"/><text x="506.0" y="120.0" font-family="inherit" font-size="13" font-weight="600" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">32</text><text x="506.0" y="144.0" font-family="inherit" font-size="13" font-weight="600" fill="#ff6a00" text-anchor="middle" style="font-variant-numeric:tabular-nums">5</text><circle cx="620.0" cy="90" r="5" fill="#17191e" stroke="#17191e" stroke-width="1"/><text x="620.0" y="120.0" font-family="inherit" font-size="13" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">64</text><text x="620.0" y="144.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">6</text><line x1="420.5" y1="54.0" x2="420.5" y2="73.0" stroke="#ff6a00" stroke-width="1.5"/><path d="M 420.5 82.0 L 416.0 73.0 L 425.0 73.0 Z" fill="#ff6a00"/><text x="420.5" y="46.0" font-family="inherit" font-size="14" font-weight="600" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">N = 20</text><text x="330.0" y="176.0" font-family="inherit" font-size="14" font-weight="600" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">16 &lt; 20 ≤ 32: 4 бит мало, нужно 5</text></svg>',
-    width: 660,
-    height: 184,
-    alt: "Степени двойки и 20 объектов",
-  },
-  // %%pwd_code(7, 5)%%
-  pwdCode7_5: {
-    kind: "diagram",
-    svg: '<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" viewBox="0 0 660 204"><text x="24.0" y="22.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">7 символов по 5 битов; клетка — байт</text><rect x="24.0" y="69.0" width="76.5" height="20.0" fill="#f3f3f1" stroke="none"/><text x="62.2" y="56.0" font-family="inherit" font-size="12" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">символ 1</text><rect x="100.5" y="69.0" width="76.5" height="20.0" fill="#d9d9d4" stroke="none"/><text x="138.8" y="56.0" font-family="inherit" font-size="12" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">символ 2</text><rect x="177.0" y="69.0" width="76.5" height="20.0" fill="#f3f3f1" stroke="none"/><text x="215.2" y="56.0" font-family="inherit" font-size="12" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">символ 3</text><rect x="253.5" y="69.0" width="76.5" height="20.0" fill="#d9d9d4" stroke="none"/><text x="291.8" y="56.0" font-family="inherit" font-size="12" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">символ 4</text><rect x="330.0" y="69.0" width="76.5" height="20.0" fill="#f3f3f1" stroke="none"/><text x="368.2" y="56.0" font-family="inherit" font-size="12" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">символ 5</text><rect x="406.5" y="69.0" width="76.5" height="20.0" fill="#d9d9d4" stroke="none"/><text x="444.8" y="56.0" font-family="inherit" font-size="12" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">символ 6</text><rect x="483.0" y="69.0" width="76.5" height="20.0" fill="#f3f3f1" stroke="none"/><text x="521.2" y="56.0" font-family="inherit" font-size="12" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">символ 7</text><rect x="559.5" y="69.0" width="76.5" height="20.0" rx="4" fill="none" stroke="#ff6a00" stroke-width="1"/><rect x="24.0" y="66.0" width="122.4" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="146.4" y="66.0" width="122.4" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="268.8" y="66.0" width="122.4" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="391.2" y="66.0" width="122.4" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="513.6" y="66.0" width="122.4" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><text x="85.2" y="112.0" font-family="inherit" font-size="12" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">байт 1</text><text x="207.6" y="112.0" font-family="inherit" font-size="12" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">байт 2</text><text x="330.0" y="112.0" font-family="inherit" font-size="12" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">байт 3</text><text x="452.4" y="112.0" font-family="inherit" font-size="12" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">байт 4</text><text x="574.8" y="112.0" font-family="inherit" font-size="12" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">байт 5</text><text x="24.0" y="148.0" font-family="inherit" font-size="14" font-weight="600" fill="#17191e" text-anchor="start" style="font-variant-numeric:tabular-nums">7 · 5 = 35 битов кода; целых байтов ⌈35 / 8⌉ = 5</text><text x="24.0" y="172.0" font-family="inherit" font-size="13" font-weight="400" fill="#ff6a00" text-anchor="start" style="font-variant-numeric:tabular-nums">5 · 8 = 40 битов: 5 битов в последнем байте пустуют</text><text x="330.0" y="196.0" font-family="inherit" font-size="12" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">код символа может начаться в одном байте и закончиться в следующем</text></svg>',
-    width: 660,
-    height: 204,
-    alt: "Пароль из 7 символов по 5 бит в байтах",
-  },
-  // %%pwd_bytes(8, 35)%%
-  pwdBytes8_35: {
-    kind: "diagram",
-    svg: '<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" viewBox="0 0 660 236"><text x="24.0" y="22.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">8 паролей по 35 битов; клетка — один байт, заливка — биты кода</text><text x="24.0" y="48.0" font-family="inherit" font-size="14" font-weight="600" fill="#17191e" text-anchor="start" style="font-variant-numeric:tabular-nums">каждому паролю свои байты</text><rect x="24.0" y="61.0" width="66.9" height="20.0" fill="#f3f3f1" stroke="none"/><rect x="90.9" y="61.0" width="9.6" height="20.0" rx="4" fill="none" stroke="#ff6a00" stroke-width="1"/><rect x="100.5" y="61.0" width="66.9" height="20.0" fill="#d9d9d4" stroke="none"/><rect x="167.4" y="61.0" width="9.6" height="20.0" rx="4" fill="none" stroke="#ff6a00" stroke-width="1"/><rect x="177.0" y="61.0" width="66.9" height="20.0" fill="#f3f3f1" stroke="none"/><rect x="243.9" y="61.0" width="9.6" height="20.0" rx="4" fill="none" stroke="#ff6a00" stroke-width="1"/><rect x="253.5" y="61.0" width="66.9" height="20.0" fill="#d9d9d4" stroke="none"/><rect x="320.4" y="61.0" width="9.6" height="20.0" rx="4" fill="none" stroke="#ff6a00" stroke-width="1"/><rect x="330.0" y="61.0" width="66.9" height="20.0" fill="#f3f3f1" stroke="none"/><rect x="396.9" y="61.0" width="9.6" height="20.0" rx="4" fill="none" stroke="#ff6a00" stroke-width="1"/><rect x="406.5" y="61.0" width="66.9" height="20.0" fill="#d9d9d4" stroke="none"/><rect x="473.4" y="61.0" width="9.6" height="20.0" rx="4" fill="none" stroke="#ff6a00" stroke-width="1"/><rect x="483.0" y="61.0" width="66.9" height="20.0" fill="#f3f3f1" stroke="none"/><rect x="549.9" y="61.0" width="9.6" height="20.0" rx="4" fill="none" stroke="#ff6a00" stroke-width="1"/><rect x="559.5" y="61.0" width="66.9" height="20.0" fill="#d9d9d4" stroke="none"/><rect x="626.4" y="61.0" width="9.6" height="20.0" rx="4" fill="none" stroke="#ff6a00" stroke-width="1"/><rect x="24.0" y="58.0" width="15.3" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="39.3" y="58.0" width="15.3" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="54.6" y="58.0" width="15.3" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="69.9" y="58.0" width="15.3" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="85.2" y="58.0" width="15.3" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="100.5" y="58.0" width="15.3" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="115.8" y="58.0" width="15.3" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="131.1" y="58.0" width="15.3" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="146.4" y="58.0" width="15.3" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="161.7" y="58.0" width="15.3" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="177.0" y="58.0" width="15.3" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="192.3" y="58.0" width="15.3" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="207.6" y="58.0" width="15.3" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="222.9" y="58.0" width="15.3" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="238.2" y="58.0" width="15.3" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="253.5" y="58.0" width="15.3" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="268.8" y="58.0" width="15.3" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="284.1" y="58.0" width="15.3" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="299.4" y="58.0" width="15.3" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="314.7" y="58.0" width="15.3" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="330.0" y="58.0" width="15.3" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="345.3" y="58.0" width="15.3" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="360.6" y="58.0" width="15.3" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="375.9" y="58.0" width="15.3" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="391.2" y="58.0" width="15.3" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="406.5" y="58.0" width="15.3" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="421.8" y="58.0" width="15.3" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="437.1" y="58.0" width="15.3" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="452.4" y="58.0" width="15.3" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="467.7" y="58.0" width="15.3" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="483.0" y="58.0" width="15.3" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="498.3" y="58.0" width="15.3" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="513.6" y="58.0" width="15.3" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="528.9" y="58.0" width="15.3" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="544.2" y="58.0" width="15.3" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="559.5" y="58.0" width="15.3" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="574.8" y="58.0" width="15.3" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="590.1" y="58.0" width="15.3" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="605.4" y="58.0" width="15.3" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="620.7" y="58.0" width="15.3" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><line x1="24.0" y1="54.0" x2="24.0" y2="88.0" stroke="#17191e" stroke-width="2"/><line x1="100.5" y1="54.0" x2="100.5" y2="88.0" stroke="#17191e" stroke-width="2"/><line x1="177.0" y1="54.0" x2="177.0" y2="88.0" stroke="#17191e" stroke-width="2"/><line x1="253.5" y1="54.0" x2="253.5" y2="88.0" stroke="#17191e" stroke-width="2"/><line x1="330.0" y1="54.0" x2="330.0" y2="88.0" stroke="#17191e" stroke-width="2"/><line x1="406.5" y1="54.0" x2="406.5" y2="88.0" stroke="#17191e" stroke-width="2"/><line x1="483.0" y1="54.0" x2="483.0" y2="88.0" stroke="#17191e" stroke-width="2"/><line x1="559.5" y1="54.0" x2="559.5" y2="88.0" stroke="#17191e" stroke-width="2"/><line x1="636.0" y1="54.0" x2="636.0" y2="88.0" stroke="#17191e" stroke-width="2"/><text x="24.0" y="108.0" font-family="inherit" font-size="13" font-weight="400" fill="#ff6a00" text-anchor="start" style="font-variant-numeric:tabular-nums">8 · ⌈35 / 8⌉ = 8 · 5 = 40 байтов; пустует по 5 битов в каждом пароле</text><text x="24.0" y="140.0" font-family="inherit" font-size="14" font-weight="600" fill="#17191e" text-anchor="start" style="font-variant-numeric:tabular-nums">все пароли подряд, байты — общей записи</text><rect x="24.0" y="153.0" width="66.9" height="20.0" fill="#f3f3f1" stroke="none"/><rect x="90.9" y="153.0" width="66.9" height="20.0" fill="#d9d9d4" stroke="none"/><rect x="157.9" y="153.0" width="66.9" height="20.0" fill="#f3f3f1" stroke="none"/><rect x="224.8" y="153.0" width="66.9" height="20.0" fill="#d9d9d4" stroke="none"/><rect x="291.8" y="153.0" width="66.9" height="20.0" fill="#f3f3f1" stroke="none"/><rect x="358.7" y="153.0" width="66.9" height="20.0" fill="#d9d9d4" stroke="none"/><rect x="425.6" y="153.0" width="66.9" height="20.0" fill="#f3f3f1" stroke="none"/><rect x="492.6" y="153.0" width="66.9" height="20.0" fill="#d9d9d4" stroke="none"/><rect x="24.0" y="150.0" width="15.3" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="39.3" y="150.0" width="15.3" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="54.6" y="150.0" width="15.3" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="69.9" y="150.0" width="15.3" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="85.2" y="150.0" width="15.3" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="100.5" y="150.0" width="15.3" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="115.8" y="150.0" width="15.3" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="131.1" y="150.0" width="15.3" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="146.4" y="150.0" width="15.3" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="161.7" y="150.0" width="15.3" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="177.0" y="150.0" width="15.3" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="192.3" y="150.0" width="15.3" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="207.6" y="150.0" width="15.3" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="222.9" y="150.0" width="15.3" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="238.2" y="150.0" width="15.3" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="253.5" y="150.0" width="15.3" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="268.8" y="150.0" width="15.3" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="284.1" y="150.0" width="15.3" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="299.4" y="150.0" width="15.3" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="314.7" y="150.0" width="15.3" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="330.0" y="150.0" width="15.3" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="345.3" y="150.0" width="15.3" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="360.6" y="150.0" width="15.3" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="375.9" y="150.0" width="15.3" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="391.2" y="150.0" width="15.3" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="406.5" y="150.0" width="15.3" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="421.8" y="150.0" width="15.3" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="437.1" y="150.0" width="15.3" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="452.4" y="150.0" width="15.3" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="467.7" y="150.0" width="15.3" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="483.0" y="150.0" width="15.3" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="498.3" y="150.0" width="15.3" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="513.6" y="150.0" width="15.3" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="528.9" y="150.0" width="15.3" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="544.2" y="150.0" width="15.3" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><text x="24.0" y="200.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">⌈8 · 35 / 8⌉ = ⌈280 / 8⌉ = 35 байтов</text><text x="330.0" y="226.0" font-family="inherit" font-size="12" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">разница — пустые хвосты последних байтов каждого пароля</text></svg>',
-    width: 660,
-    height: 236,
-    alt: "8 паролей по 35 бит: свои байты и подряд",
-  },
-  // %%pwd_parts((35, 13), ("пароль", "сведения"))%%
-  pwdParts3513: {
-    kind: "diagram",
-    svg: '<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" viewBox="0 0 660 230"><text x="24.0" y="22.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">пароль — 35 битов + сведения — 13 битов; клетка — байт</text><text x="24.0" y="50.0" font-family="inherit" font-size="14" font-weight="600" fill="#17191e" text-anchor="start" style="font-variant-numeric:tabular-nums">части подряд, байты — всей записи</text><rect x="24.0" y="63.0" width="382.5" height="20.0" fill="#f3f3f1" stroke="none"/><rect x="406.5" y="63.0" width="142.1" height="20.0" fill="#d9d9d4" stroke="none"/><rect x="24.0" y="60.0" width="87.4" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="111.4" y="60.0" width="87.4" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="198.9" y="60.0" width="87.4" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="286.3" y="60.0" width="87.4" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="373.7" y="60.0" width="87.4" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="461.1" y="60.0" width="87.4" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><text x="24.0" y="108.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">⌈(35 + 13) / 8⌉ = ⌈48 / 8⌉ = 6 байтов</text><text x="24.0" y="142.0" font-family="inherit" font-size="14" font-weight="600" fill="#17191e" text-anchor="start" style="font-variant-numeric:tabular-nums">каждой части свои байты</text><rect x="24.0" y="155.0" width="382.5" height="20.0" fill="#f3f3f1" stroke="none"/><rect x="406.5" y="155.0" width="54.6" height="20.0" rx="4" fill="none" stroke="#ff6a00" stroke-width="1"/><rect x="24.0" y="152.0" width="87.4" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="111.4" y="152.0" width="87.4" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="198.9" y="152.0" width="87.4" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="286.3" y="152.0" width="87.4" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="373.7" y="152.0" width="87.4" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><line x1="24.0" y1="148.0" x2="24.0" y2="182.0" stroke="#17191e" stroke-width="2"/><rect x="461.1" y="155.0" width="142.1" height="20.0" fill="#d9d9d4" stroke="none"/><rect x="603.2" y="155.0" width="32.8" height="20.0" rx="4" fill="none" stroke="#ff6a00" stroke-width="1"/><rect x="461.1" y="152.0" width="87.4" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="548.6" y="152.0" width="87.4" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><line x1="461.1" y1="148.0" x2="461.1" y2="182.0" stroke="#17191e" stroke-width="2"/><line x1="636.0" y1="148.0" x2="636.0" y2="182.0" stroke="#17191e" stroke-width="2"/><text x="24.0" y="200.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">⌈35 / 8⌉ + ⌈13 / 8⌉ = 5 + 2 = 7 байтов</text><text x="330.0" y="220.0" font-family="inherit" font-size="12" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">обведённые клетки — выделенные, но пустые биты</text></svg>',
-    width: 660,
-    height: 230,
-    alt: "Части записи в битах и целые байты",
-  },
-  // %%pwd_range(5, 7)%%
-  pwdRange5_7: {
-    kind: "diagram",
-    svg: '<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" viewBox="0 0 660 200"><text x="16.0" y="22.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">биты на прямой, засечки — границы байтов; точка — L · 5</text><rect x="233.3" y="68.0" width="193.3" height="32.0" rx="2" fill="#f3f3f1" stroke="none" stroke-width="0"/><line x1="40.0" y1="84.0" x2="620.0" y2="84.0" stroke="#17191e" stroke-width="1.5"/><line x1="40.0" y1="62.0" x2="40.0" y2="106.0" stroke="#4d535e" stroke-width="1"/><text x="40.0" y="124.0" font-family="inherit" font-size="13" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">40</text><text x="40.0" y="142.0" font-family="inherit" font-size="12" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">5 Б</text><line x1="233.3" y1="62.0" x2="233.3" y2="106.0" stroke="#17191e" stroke-width="2"/><text x="233.3" y="124.0" font-family="inherit" font-size="13" font-weight="600" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">48</text><text x="233.3" y="142.0" font-family="inherit" font-size="12" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">6 Б</text><line x1="426.7" y1="62.0" x2="426.7" y2="106.0" stroke="#17191e" stroke-width="2"/><text x="426.7" y="124.0" font-family="inherit" font-size="13" font-weight="600" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">56</text><text x="426.7" y="142.0" font-family="inherit" font-size="12" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">7 Б</text><line x1="620.0" y1="62.0" x2="620.0" y2="106.0" stroke="#4d535e" stroke-width="1"/><text x="620.0" y="124.0" font-family="inherit" font-size="13" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">64</text><text x="620.0" y="142.0" font-family="inherit" font-size="12" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">8 Б</text><circle cx="40.0" cy="84" r="4.5" fill="#fff" stroke="#17191e" stroke-width="1.5"/><text x="40.0" y="56.0" font-family="inherit" font-size="12" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">L = 8</text><circle cx="160.8" cy="84" r="4.5" fill="#fff" stroke="#17191e" stroke-width="1.5"/><text x="160.8" y="56.0" font-family="inherit" font-size="12" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">L = 9</text><circle cx="281.7" cy="84" r="6" fill="#ff6a00" stroke="#ff6a00" stroke-width="1.5"/><text x="281.7" y="56.0" font-family="inherit" font-size="12" font-weight="600" fill="#ff6a00" text-anchor="middle" style="font-variant-numeric:tabular-nums">L = 10</text><circle cx="402.5" cy="84" r="6" fill="#ff6a00" stroke="#ff6a00" stroke-width="1.5"/><text x="402.5" y="56.0" font-family="inherit" font-size="12" font-weight="600" fill="#ff6a00" text-anchor="middle" style="font-variant-numeric:tabular-nums">L = 11</text><circle cx="523.3" cy="84" r="4.5" fill="#fff" stroke="#17191e" stroke-width="1.5"/><text x="523.3" y="56.0" font-family="inherit" font-size="12" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">L = 12</text><text x="16.0" y="164.0" font-family="inherit" font-size="14" font-weight="600" fill="#17191e" text-anchor="start" style="font-variant-numeric:tabular-nums">ровно 7 байтов: 48 &lt; L · 5 ≤ 56</text><text x="16.0" y="188.0" font-family="inherit" font-size="13" font-weight="400" fill="#ff6a00" text-anchor="start" style="font-variant-numeric:tabular-nums">подходят L = 10, 11; левая граница 48 не входит</text></svg>',
-    width: 660,
-    height: 200,
-    alt: "Длины кода L · 5 и границы байтов",
-  },
-  // %%pwd_range(6, 25, "upper")%%
-  pwdRange6_25_upper: {
-    kind: "diagram",
-    svg: '<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" viewBox="0 0 660 200"><text x="16.0" y="22.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">биты на прямой, засечки — границы байтов; точка — L · 6</text><rect x="40.0" y="68.0" width="386.7" height="32.0" rx="2" fill="#f3f3f1" stroke="none" stroke-width="0"/><line x1="40.0" y1="84.0" x2="620.0" y2="84.0" stroke="#17191e" stroke-width="1.5"/><line x1="40.0" y1="62.0" x2="40.0" y2="106.0" stroke="#4d535e" stroke-width="1"/><text x="40.0" y="124.0" font-family="inherit" font-size="13" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">184</text><text x="40.0" y="142.0" font-family="inherit" font-size="12" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">23 Б</text><line x1="233.3" y1="62.0" x2="233.3" y2="106.0" stroke="#17191e" stroke-width="2"/><text x="233.3" y="124.0" font-family="inherit" font-size="13" font-weight="600" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">192</text><text x="233.3" y="142.0" font-family="inherit" font-size="12" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">24 Б</text><line x1="426.7" y1="62.0" x2="426.7" y2="106.0" stroke="#17191e" stroke-width="2"/><text x="426.7" y="124.0" font-family="inherit" font-size="13" font-weight="600" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">200</text><text x="426.7" y="142.0" font-family="inherit" font-size="12" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">25 Б</text><line x1="620.0" y1="62.0" x2="620.0" y2="106.0" stroke="#4d535e" stroke-width="1"/><text x="620.0" y="124.0" font-family="inherit" font-size="13" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">208</text><text x="620.0" y="142.0" font-family="inherit" font-size="12" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">26 Б</text><circle cx="88.3" cy="84" r="6" fill="#ff6a00" stroke="#ff6a00" stroke-width="1.5"/><text x="88.3" y="56.0" font-family="inherit" font-size="12" font-weight="600" fill="#ff6a00" text-anchor="middle" style="font-variant-numeric:tabular-nums">L = 31</text><circle cx="233.3" cy="84" r="6" fill="#ff6a00" stroke="#ff6a00" stroke-width="1.5"/><text x="233.3" y="56.0" font-family="inherit" font-size="12" font-weight="600" fill="#ff6a00" text-anchor="middle" style="font-variant-numeric:tabular-nums">L = 32</text><circle cx="378.3" cy="84" r="6" fill="#ff6a00" stroke="#ff6a00" stroke-width="1.5"/><text x="378.3" y="56.0" font-family="inherit" font-size="12" font-weight="600" fill="#ff6a00" text-anchor="middle" style="font-variant-numeric:tabular-nums">L = 33</text><circle cx="523.3" cy="84" r="4.5" fill="#fff" stroke="#17191e" stroke-width="1.5"/><text x="523.3" y="56.0" font-family="inherit" font-size="12" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">L = 34</text><text x="16.0" y="164.0" font-family="inherit" font-size="14" font-weight="600" fill="#17191e" text-anchor="start" style="font-variant-numeric:tabular-nums">не более 25 байтов: L · 6 ≤ 200</text><text x="16.0" y="188.0" font-family="inherit" font-size="13" font-weight="400" fill="#ff6a00" text-anchor="start" style="font-variant-numeric:tabular-nums">наибольшая длина L = 33: 33 · 6 = 198 ≤ 200 &lt; 204</text></svg>',
-    width: 660,
-    height: 200,
-    alt: "Длины кода L · 6 и границы байтов",
-  },
-  // %%vol_fit(100, 7, "байт", "пароль")%%
-  volFit100_7: {
-    kind: "diagram",
-    svg: '<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" viewBox="0 0 660 176"><text x="30.0" y="22.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">вместимость 100 байт, один пароль — 7 байт</text><rect x="30.0" y="40.0" width="532.7" height="44.0" rx="2" fill="#f3f3f1" stroke="#17191e" stroke-width="1.5"/><rect x="31.5" y="46.0" width="34.3" height="32.0" rx="2" fill="#fff" stroke="#17191e" stroke-width="1"/><rect x="68.8" y="46.0" width="34.3" height="32.0" rx="2" fill="#fff" stroke="#17191e" stroke-width="1"/><rect x="106.1" y="46.0" width="34.3" height="32.0" rx="2" fill="#fff" stroke="#17191e" stroke-width="1"/><rect x="143.4" y="46.0" width="34.3" height="32.0" rx="2" fill="#fff" stroke="#17191e" stroke-width="1"/><rect x="180.7" y="46.0" width="34.3" height="32.0" rx="2" fill="#fff" stroke="#17191e" stroke-width="1"/><rect x="217.9" y="46.0" width="34.3" height="32.0" rx="2" fill="#fff" stroke="#17191e" stroke-width="1"/><rect x="255.2" y="46.0" width="34.3" height="32.0" rx="2" fill="#fff" stroke="#17191e" stroke-width="1"/><rect x="292.5" y="46.0" width="34.3" height="32.0" rx="2" fill="#fff" stroke="#17191e" stroke-width="1"/><rect x="329.8" y="46.0" width="34.3" height="32.0" rx="2" fill="#fff" stroke="#17191e" stroke-width="1"/><rect x="367.1" y="46.0" width="34.3" height="32.0" rx="2" fill="#fff" stroke="#17191e" stroke-width="1"/><rect x="404.4" y="46.0" width="34.3" height="32.0" rx="2" fill="#fff" stroke="#17191e" stroke-width="1"/><rect x="441.7" y="46.0" width="34.3" height="32.0" rx="2" fill="#fff" stroke="#17191e" stroke-width="1"/><rect x="479.0" y="46.0" width="34.3" height="32.0" rx="2" fill="#fff" stroke="#17191e" stroke-width="1"/><rect x="516.3" y="46.0" width="34.3" height="32.0" rx="2" fill="#fff" stroke="#17191e" stroke-width="1"/><rect x="553.6" y="46.0" width="34.3" height="32.0" rx="2" fill="#fff" stroke="#ff6a00" stroke-width="2" stroke-dasharray="5 4"/><line x1="562.7" y1="32.0" x2="562.7" y2="94.0" stroke="#ff6a00" stroke-width="1.5"/><text x="30.0" y="112.0" font-family="inherit" font-size="14" font-weight="600" fill="#17191e" text-anchor="start" style="font-variant-numeric:tabular-nums">100 / 7 = 14,2857</text><text x="30.0" y="136.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">целиком помещается 14; следующий выходит за границу</text><text x="30.0" y="160.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">14 · 7 = 98 ≤ 100 &lt; 105 = 15 · 7</text></svg>',
-    width: 660,
-    height: 176,
-    alt: "Сколько целых объектов по 7 байт помещается в 100 байт",
-  },
-  // %%pwd_range(5, 7, "lower")%%
-  pwdRange5_7_lower: {
-    kind: "diagram",
-    svg: '<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" viewBox="0 0 660 200"><text x="16.0" y="22.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">биты на прямой, засечки — границы байтов; точка — L · 5</text><rect x="233.3" y="68.0" width="386.7" height="32.0" rx="2" fill="#f3f3f1" stroke="none" stroke-width="0"/><line x1="40.0" y1="84.0" x2="620.0" y2="84.0" stroke="#17191e" stroke-width="1.5"/><line x1="40.0" y1="62.0" x2="40.0" y2="106.0" stroke="#4d535e" stroke-width="1"/><text x="40.0" y="124.0" font-family="inherit" font-size="13" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">40</text><text x="40.0" y="142.0" font-family="inherit" font-size="12" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">5 Б</text><line x1="233.3" y1="62.0" x2="233.3" y2="106.0" stroke="#17191e" stroke-width="2"/><text x="233.3" y="124.0" font-family="inherit" font-size="13" font-weight="600" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">48</text><text x="233.3" y="142.0" font-family="inherit" font-size="12" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">6 Б</text><line x1="426.7" y1="62.0" x2="426.7" y2="106.0" stroke="#17191e" stroke-width="2"/><text x="426.7" y="124.0" font-family="inherit" font-size="13" font-weight="600" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">56</text><text x="426.7" y="142.0" font-family="inherit" font-size="12" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">7 Б</text><line x1="620.0" y1="62.0" x2="620.0" y2="106.0" stroke="#4d535e" stroke-width="1"/><text x="620.0" y="124.0" font-family="inherit" font-size="13" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">64</text><text x="620.0" y="142.0" font-family="inherit" font-size="12" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">8 Б</text><circle cx="40.0" cy="84" r="4.5" fill="#fff" stroke="#17191e" stroke-width="1.5"/><text x="40.0" y="56.0" font-family="inherit" font-size="12" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">L = 8</text><circle cx="160.8" cy="84" r="4.5" fill="#fff" stroke="#17191e" stroke-width="1.5"/><text x="160.8" y="56.0" font-family="inherit" font-size="12" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">L = 9</text><circle cx="281.7" cy="84" r="6" fill="#ff6a00" stroke="#ff6a00" stroke-width="1.5"/><text x="281.7" y="56.0" font-family="inherit" font-size="12" font-weight="600" fill="#ff6a00" text-anchor="middle" style="font-variant-numeric:tabular-nums">L = 10</text><circle cx="402.5" cy="84" r="6" fill="#ff6a00" stroke="#ff6a00" stroke-width="1.5"/><text x="402.5" y="56.0" font-family="inherit" font-size="12" font-weight="600" fill="#ff6a00" text-anchor="middle" style="font-variant-numeric:tabular-nums">L = 11</text><circle cx="523.3" cy="84" r="6" fill="#ff6a00" stroke="#ff6a00" stroke-width="1.5"/><text x="523.3" y="56.0" font-family="inherit" font-size="12" font-weight="600" fill="#ff6a00" text-anchor="middle" style="font-variant-numeric:tabular-nums">L = 12</text><text x="16.0" y="164.0" font-family="inherit" font-size="14" font-weight="600" fill="#17191e" text-anchor="start" style="font-variant-numeric:tabular-nums">больше 6 байтов: L · 5 &gt; 48</text><text x="16.0" y="188.0" font-family="inherit" font-size="13" font-weight="400" fill="#ff6a00" text-anchor="start" style="font-variant-numeric:tabular-nums">наименьшая длина L = 10: 45 ≤ 48 &lt; 50</text></svg>',
-    width: 660,
-    height: 200,
-    alt: "Длины кода L · 5 и границы байтов",
-  },
   // %%pwd_parts((20, 12), ("буквы", "цифры"), common=(7, 36))%%
   pwdParts2012_b3fb67: {
     kind: "diagram",
-    svg: '<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" viewBox="0 0 660 322"><text x="24.0" y="22.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">буквы — 20 битов + цифры — 12 битов; клетка — байт</text><text x="24.0" y="50.0" font-family="inherit" font-size="14" font-weight="600" fill="#17191e" text-anchor="start" style="font-variant-numeric:tabular-nums">части подряд, байты — всей записи</text><rect x="24.0" y="63.0" width="220.0" height="20.0" fill="#f3f3f1" stroke="none"/><rect x="244.0" y="63.0" width="132.0" height="20.0" fill="#d9d9d4" stroke="none"/><rect x="24.0" y="60.0" width="88.0" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="112.0" y="60.0" width="88.0" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="200.0" y="60.0" width="88.0" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="288.0" y="60.0" width="88.0" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><text x="24.0" y="108.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">⌈(20 + 12) / 8⌉ = ⌈32 / 8⌉ = 4 байта</text><text x="24.0" y="142.0" font-family="inherit" font-size="14" font-weight="600" fill="#17191e" text-anchor="start" style="font-variant-numeric:tabular-nums">каждой части свои байты</text><rect x="24.0" y="155.0" width="220.0" height="20.0" fill="#f3f3f1" stroke="none"/><rect x="244.0" y="155.0" width="44.0" height="20.0" rx="4" fill="none" stroke="#ff6a00" stroke-width="1"/><rect x="24.0" y="152.0" width="88.0" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="112.0" y="152.0" width="88.0" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="200.0" y="152.0" width="88.0" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><line x1="24.0" y1="148.0" x2="24.0" y2="182.0" stroke="#17191e" stroke-width="2"/><rect x="288.0" y="155.0" width="132.0" height="20.0" fill="#d9d9d4" stroke="none"/><rect x="420.0" y="155.0" width="44.0" height="20.0" rx="4" fill="none" stroke="#ff6a00" stroke-width="1"/><rect x="288.0" y="152.0" width="88.0" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="376.0" y="152.0" width="88.0" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><line x1="288.0" y1="148.0" x2="288.0" y2="182.0" stroke="#17191e" stroke-width="2"/><line x1="464.0" y1="148.0" x2="464.0" y2="182.0" stroke="#17191e" stroke-width="2"/><text x="24.0" y="200.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">⌈20 / 8⌉ + ⌈12 / 8⌉ = 3 + 2 = 5 байтов</text><text x="24.0" y="234.0" font-family="inherit" font-size="14" font-weight="600" fill="#17191e" text-anchor="start" style="font-variant-numeric:tabular-nums">один код на все 7 символов: алфавит 36</text><rect x="24.0" y="247.0" width="66.0" height="20.0" fill="#f3f3f1" stroke="none"/><rect x="90.0" y="247.0" width="66.0" height="20.0" fill="#d9d9d4" stroke="none"/><rect x="156.0" y="247.0" width="66.0" height="20.0" fill="#f3f3f1" stroke="none"/><rect x="222.0" y="247.0" width="66.0" height="20.0" fill="#d9d9d4" stroke="none"/><rect x="288.0" y="247.0" width="66.0" height="20.0" fill="#f3f3f1" stroke="none"/><rect x="354.0" y="247.0" width="66.0" height="20.0" fill="#d9d9d4" stroke="none"/><rect x="420.0" y="247.0" width="66.0" height="20.0" fill="#f3f3f1" stroke="none"/><rect x="486.0" y="247.0" width="66.0" height="20.0" rx="4" fill="none" stroke="#ff6a00" stroke-width="1"/><rect x="24.0" y="244.0" width="88.0" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="112.0" y="244.0" width="88.0" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="200.0" y="244.0" width="88.0" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="288.0" y="244.0" width="88.0" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="376.0" y="244.0" width="88.0" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="464.0" y="244.0" width="88.0" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><text x="24.0" y="292.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">7 · 6 = 42 бита, ⌈42 / 8⌉ = 6 байтов</text><text x="330.0" y="312.0" font-family="inherit" font-size="12" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">обведённые клетки — выделенные, но пустые биты</text></svg>',
+    svg: '<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" viewBox="0 0 660 322"><text x="24.0" y="22.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">буквы — 20 битов + цифры — 12 битов; клетка — байт</text><text x="24.0" y="50.0" font-family="inherit" font-size="14" font-weight="600" fill="#17191e" text-anchor="start" style="font-variant-numeric:tabular-nums">части подряд, байты — всей записи</text><rect x="24.0" y="63.0" width="220.0" height="20.0" fill="#f3f3f1" stroke="none"/><rect x="244.0" y="63.0" width="132.0" height="20.0" fill="#d9d9d4" stroke="none"/><rect x="24.0" y="60.0" width="88.0" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="112.0" y="60.0" width="88.0" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="200.0" y="60.0" width="88.0" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="288.0" y="60.0" width="88.0" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><text x="24.0" y="108.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">20 + 12 = 32 бита, 32 / 8 = 4 байта</text><text x="24.0" y="142.0" font-family="inherit" font-size="14" font-weight="600" fill="#17191e" text-anchor="start" style="font-variant-numeric:tabular-nums">каждой части свои байты</text><rect x="24.0" y="155.0" width="220.0" height="20.0" fill="#f3f3f1" stroke="none"/><rect x="244.0" y="155.0" width="44.0" height="20.0" rx="4" fill="none" stroke="#ff6a00" stroke-width="1"/><rect x="24.0" y="152.0" width="88.0" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="112.0" y="152.0" width="88.0" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="200.0" y="152.0" width="88.0" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><line x1="24.0" y1="148.0" x2="24.0" y2="182.0" stroke="#17191e" stroke-width="2"/><rect x="288.0" y="155.0" width="132.0" height="20.0" fill="#d9d9d4" stroke="none"/><rect x="420.0" y="155.0" width="44.0" height="20.0" rx="4" fill="none" stroke="#ff6a00" stroke-width="1"/><rect x="288.0" y="152.0" width="88.0" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="376.0" y="152.0" width="88.0" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><line x1="288.0" y1="148.0" x2="288.0" y2="182.0" stroke="#17191e" stroke-width="2"/><line x1="464.0" y1="148.0" x2="464.0" y2="182.0" stroke="#17191e" stroke-width="2"/><text x="24.0" y="200.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">20 / 8 = 2,5 → 3; 12 / 8 = 1,5 → 2; 3 + 2 = 5 байтов</text><text x="24.0" y="234.0" font-family="inherit" font-size="14" font-weight="600" fill="#17191e" text-anchor="start" style="font-variant-numeric:tabular-nums">один код на все 7 символов: алфавит 36</text><rect x="24.0" y="247.0" width="66.0" height="20.0" fill="#f3f3f1" stroke="none"/><rect x="90.0" y="247.0" width="66.0" height="20.0" fill="#d9d9d4" stroke="none"/><rect x="156.0" y="247.0" width="66.0" height="20.0" fill="#f3f3f1" stroke="none"/><rect x="222.0" y="247.0" width="66.0" height="20.0" fill="#d9d9d4" stroke="none"/><rect x="288.0" y="247.0" width="66.0" height="20.0" fill="#f3f3f1" stroke="none"/><rect x="354.0" y="247.0" width="66.0" height="20.0" fill="#d9d9d4" stroke="none"/><rect x="420.0" y="247.0" width="66.0" height="20.0" fill="#f3f3f1" stroke="none"/><rect x="486.0" y="247.0" width="66.0" height="20.0" rx="4" fill="none" stroke="#ff6a00" stroke-width="1"/><rect x="24.0" y="244.0" width="88.0" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="112.0" y="244.0" width="88.0" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="200.0" y="244.0" width="88.0" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="288.0" y="244.0" width="88.0" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="376.0" y="244.0" width="88.0" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="464.0" y="244.0" width="88.0" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><text x="24.0" y="292.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">7 · 6 = 42 бита, 42 / 8 = 5,25 → 6 байтов</text><text x="330.0" y="312.0" font-family="inherit" font-size="12" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">обведённые клетки — выделенные, но пустые биты</text></svg>',
     width: 660,
     height: 322,
     alt: "Части записи в битах и целые байты",
@@ -86,16 +22,16 @@ export const lessonMedia = {
   // %%pwd_groups(10, 4)%%
   pwdGroups10_4: {
     kind: "diagram",
-    svg: '<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" viewBox="0 0 660 164"><text x="24.0" y="22.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">сообщение 10 байтов, группа — не больше 4, заголовок — 1 байт</text><rect x="24.0" y="46.0" width="40.0" height="36.0" rx="2" fill="#fff" stroke="#ff6a00" stroke-width="2"/><text x="44.0" y="69.0" font-family="inherit" font-size="13" font-weight="600" fill="#ff6a00" text-anchor="middle" style="font-variant-numeric:tabular-nums">з</text><rect x="64.0" y="46.0" width="40.0" height="36.0" rx="0" fill="#f3f3f1" stroke="#17191e" stroke-width="1"/><rect x="104.0" y="46.0" width="40.0" height="36.0" rx="0" fill="#f3f3f1" stroke="#17191e" stroke-width="1"/><rect x="144.0" y="46.0" width="40.0" height="36.0" rx="0" fill="#f3f3f1" stroke="#17191e" stroke-width="1"/><rect x="184.0" y="46.0" width="40.0" height="36.0" rx="0" fill="#f3f3f1" stroke="#17191e" stroke-width="1"/><text x="144.0" y="102.0" font-family="inherit" font-size="13" font-weight="600" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">4</text><rect x="230.0" y="46.0" width="40.0" height="36.0" rx="2" fill="#fff" stroke="#ff6a00" stroke-width="2"/><text x="250.0" y="69.0" font-family="inherit" font-size="13" font-weight="600" fill="#ff6a00" text-anchor="middle" style="font-variant-numeric:tabular-nums">з</text><rect x="270.0" y="46.0" width="40.0" height="36.0" rx="0" fill="#d9d9d4" stroke="#17191e" stroke-width="1"/><rect x="310.0" y="46.0" width="40.0" height="36.0" rx="0" fill="#d9d9d4" stroke="#17191e" stroke-width="1"/><rect x="350.0" y="46.0" width="40.0" height="36.0" rx="0" fill="#d9d9d4" stroke="#17191e" stroke-width="1"/><rect x="390.0" y="46.0" width="40.0" height="36.0" rx="0" fill="#d9d9d4" stroke="#17191e" stroke-width="1"/><text x="350.0" y="102.0" font-family="inherit" font-size="13" font-weight="600" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">4</text><rect x="436.0" y="46.0" width="40.0" height="36.0" rx="2" fill="#fff" stroke="#ff6a00" stroke-width="2"/><text x="456.0" y="69.0" font-family="inherit" font-size="13" font-weight="600" fill="#ff6a00" text-anchor="middle" style="font-variant-numeric:tabular-nums">з</text><rect x="476.0" y="46.0" width="40.0" height="36.0" rx="0" fill="#f3f3f1" stroke="#17191e" stroke-width="1"/><rect x="516.0" y="46.0" width="40.0" height="36.0" rx="0" fill="#f3f3f1" stroke="#17191e" stroke-width="1"/><text x="516.0" y="102.0" font-family="inherit" font-size="13" font-weight="600" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">2</text><text x="24.0" y="126.0" font-family="inherit" font-size="14" font-weight="600" fill="#17191e" text-anchor="start" style="font-variant-numeric:tabular-nums">групп ⌈10 / 4⌉ = 3; всего 10 + 3 · 1 = 13 байтов</text><text x="330.0" y="156.0" font-family="inherit" font-size="12" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">неполная последняя группа тоже получает заголовок</text></svg>',
+    svg: '<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" viewBox="0 0 660 164"><text x="24.0" y="22.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">сообщение 10 байтов, группа — не больше 4, заголовок — 1 байт</text><rect x="24.0" y="46.0" width="40.0" height="36.0" rx="2" fill="#fff" stroke="#ff6a00" stroke-width="2"/><text x="44.0" y="69.0" font-family="inherit" font-size="13" font-weight="600" fill="#ff6a00" text-anchor="middle" style="font-variant-numeric:tabular-nums">з</text><rect x="64.0" y="46.0" width="40.0" height="36.0" rx="0" fill="#f3f3f1" stroke="#17191e" stroke-width="1"/><rect x="104.0" y="46.0" width="40.0" height="36.0" rx="0" fill="#f3f3f1" stroke="#17191e" stroke-width="1"/><rect x="144.0" y="46.0" width="40.0" height="36.0" rx="0" fill="#f3f3f1" stroke="#17191e" stroke-width="1"/><rect x="184.0" y="46.0" width="40.0" height="36.0" rx="0" fill="#f3f3f1" stroke="#17191e" stroke-width="1"/><text x="144.0" y="102.0" font-family="inherit" font-size="13" font-weight="600" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">4</text><rect x="230.0" y="46.0" width="40.0" height="36.0" rx="2" fill="#fff" stroke="#ff6a00" stroke-width="2"/><text x="250.0" y="69.0" font-family="inherit" font-size="13" font-weight="600" fill="#ff6a00" text-anchor="middle" style="font-variant-numeric:tabular-nums">з</text><rect x="270.0" y="46.0" width="40.0" height="36.0" rx="0" fill="#d9d9d4" stroke="#17191e" stroke-width="1"/><rect x="310.0" y="46.0" width="40.0" height="36.0" rx="0" fill="#d9d9d4" stroke="#17191e" stroke-width="1"/><rect x="350.0" y="46.0" width="40.0" height="36.0" rx="0" fill="#d9d9d4" stroke="#17191e" stroke-width="1"/><rect x="390.0" y="46.0" width="40.0" height="36.0" rx="0" fill="#d9d9d4" stroke="#17191e" stroke-width="1"/><text x="350.0" y="102.0" font-family="inherit" font-size="13" font-weight="600" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">4</text><rect x="436.0" y="46.0" width="40.0" height="36.0" rx="2" fill="#fff" stroke="#ff6a00" stroke-width="2"/><text x="456.0" y="69.0" font-family="inherit" font-size="13" font-weight="600" fill="#ff6a00" text-anchor="middle" style="font-variant-numeric:tabular-nums">з</text><rect x="476.0" y="46.0" width="40.0" height="36.0" rx="0" fill="#f3f3f1" stroke="#17191e" stroke-width="1"/><rect x="516.0" y="46.0" width="40.0" height="36.0" rx="0" fill="#f3f3f1" stroke="#17191e" stroke-width="1"/><text x="516.0" y="102.0" font-family="inherit" font-size="13" font-weight="600" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">2</text><text x="24.0" y="126.0" font-family="inherit" font-size="14" font-weight="600" fill="#17191e" text-anchor="start" style="font-variant-numeric:tabular-nums">групп 10 / 4 = 2,5 → 3; всего 10 + 3 · 1 = 13 байтов</text><text x="330.0" y="156.0" font-family="inherit" font-size="12" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">неполная последняя группа тоже получает заголовок</text></svg>',
     width: 660,
     height: 164,
     alt: "Сообщение 10 байт группами по 4 с заголовками",
   },
   runPassword: {
     kind: "run",
-    code: "from math import ceil\n\n\ndef bits(a):\n    i = 0\n    while 2 ** i < a:\n        i += 1\n    return i\n\n\ni = bits(20)\none = ceil(7 * i / 8)\nprint(i, 7 * i, one, 8 * one)",
+    code: "from math import ceil\n\n\ndef bits(n):\n    i = 0\n    while 2 ** i < n:\n        i += 1\n    return i\n\n\ni = bits(10 + 26 + 26)\npassword = ceil(15 * i / 8)\nprint(i, 15 * i, password)",
     fileName: "password.py",
-    output: "5 35 5 40",
+    output: "6 90 12",
     steps: [
       {
         line: null,
@@ -136,7 +72,7 @@ export const lessonMedia = {
       },
       {
         line: 11,
-        text: "Вызывается функция `bits`. У вызова свои переменные: `a` = `20`.",
+        text: "Вызывается функция `bits`. У вызова свои переменные: `n` = `62`.",
         kind: "call",
         frames: [
           {
@@ -147,8 +83,8 @@ export const lessonMedia = {
             ],
           },
           {
-            title: "вызов bits(20)",
-            names: [{ n: "a", v: "20", ref: null, ch: true }],
+            title: "вызов bits(62)",
+            names: [{ n: "n", v: "62", ref: null, ch: true }],
           },
         ],
         objs: {},
@@ -167,9 +103,9 @@ export const lessonMedia = {
             ],
           },
           {
-            title: "вызов bits(20)",
+            title: "вызов bits(62)",
             names: [
-              { n: "a", v: "20", ref: null, ch: false },
+              { n: "n", v: "62", ref: null, ch: false },
               { n: "i", v: "0", ref: null, ch: true },
             ],
           },
@@ -179,7 +115,7 @@ export const lessonMedia = {
       },
       {
         line: 6,
-        text: "Проверка `2 ** i < a` даёт `True` — тело цикла выполняется.",
+        text: "Проверка `2 ** i < n` даёт `True` — тело цикла выполняется.",
         kind: "line",
         frames: [
           {
@@ -190,9 +126,9 @@ export const lessonMedia = {
             ],
           },
           {
-            title: "вызов bits(20)",
+            title: "вызов bits(62)",
             names: [
-              { n: "a", v: "20", ref: null, ch: false },
+              { n: "n", v: "62", ref: null, ch: false },
               { n: "i", v: "0", ref: null, ch: false },
             ],
           },
@@ -213,9 +149,9 @@ export const lessonMedia = {
             ],
           },
           {
-            title: "вызов bits(20)",
+            title: "вызов bits(62)",
             names: [
-              { n: "a", v: "20", ref: null, ch: false },
+              { n: "n", v: "62", ref: null, ch: false },
               { n: "i", v: "1", ref: null, ch: true },
             ],
           },
@@ -225,7 +161,7 @@ export const lessonMedia = {
       },
       {
         line: 6,
-        text: "Проверка `2 ** i < a` даёт `True` — тело цикла выполняется.",
+        text: "Проверка `2 ** i < n` даёт `True` — тело цикла выполняется.",
         kind: "line",
         frames: [
           {
@@ -236,9 +172,9 @@ export const lessonMedia = {
             ],
           },
           {
-            title: "вызов bits(20)",
+            title: "вызов bits(62)",
             names: [
-              { n: "a", v: "20", ref: null, ch: false },
+              { n: "n", v: "62", ref: null, ch: false },
               { n: "i", v: "1", ref: null, ch: false },
             ],
           },
@@ -259,9 +195,9 @@ export const lessonMedia = {
             ],
           },
           {
-            title: "вызов bits(20)",
+            title: "вызов bits(62)",
             names: [
-              { n: "a", v: "20", ref: null, ch: false },
+              { n: "n", v: "62", ref: null, ch: false },
               { n: "i", v: "2", ref: null, ch: true },
             ],
           },
@@ -271,7 +207,7 @@ export const lessonMedia = {
       },
       {
         line: 6,
-        text: "Проверка `2 ** i < a` даёт `True` — тело цикла выполняется.",
+        text: "Проверка `2 ** i < n` даёт `True` — тело цикла выполняется.",
         kind: "line",
         frames: [
           {
@@ -282,9 +218,9 @@ export const lessonMedia = {
             ],
           },
           {
-            title: "вызов bits(20)",
+            title: "вызов bits(62)",
             names: [
-              { n: "a", v: "20", ref: null, ch: false },
+              { n: "n", v: "62", ref: null, ch: false },
               { n: "i", v: "2", ref: null, ch: false },
             ],
           },
@@ -305,9 +241,9 @@ export const lessonMedia = {
             ],
           },
           {
-            title: "вызов bits(20)",
+            title: "вызов bits(62)",
             names: [
-              { n: "a", v: "20", ref: null, ch: false },
+              { n: "n", v: "62", ref: null, ch: false },
               { n: "i", v: "3", ref: null, ch: true },
             ],
           },
@@ -317,7 +253,7 @@ export const lessonMedia = {
       },
       {
         line: 6,
-        text: "Проверка `2 ** i < a` даёт `True` — тело цикла выполняется.",
+        text: "Проверка `2 ** i < n` даёт `True` — тело цикла выполняется.",
         kind: "line",
         frames: [
           {
@@ -328,9 +264,9 @@ export const lessonMedia = {
             ],
           },
           {
-            title: "вызов bits(20)",
+            title: "вызов bits(62)",
             names: [
-              { n: "a", v: "20", ref: null, ch: false },
+              { n: "n", v: "62", ref: null, ch: false },
               { n: "i", v: "3", ref: null, ch: false },
             ],
           },
@@ -351,9 +287,9 @@ export const lessonMedia = {
             ],
           },
           {
-            title: "вызов bits(20)",
+            title: "вызов bits(62)",
             names: [
-              { n: "a", v: "20", ref: null, ch: false },
+              { n: "n", v: "62", ref: null, ch: false },
               { n: "i", v: "4", ref: null, ch: true },
             ],
           },
@@ -363,7 +299,7 @@ export const lessonMedia = {
       },
       {
         line: 6,
-        text: "Проверка `2 ** i < a` даёт `True` — тело цикла выполняется.",
+        text: "Проверка `2 ** i < n` даёт `True` — тело цикла выполняется.",
         kind: "line",
         frames: [
           {
@@ -374,9 +310,9 @@ export const lessonMedia = {
             ],
           },
           {
-            title: "вызов bits(20)",
+            title: "вызов bits(62)",
             names: [
-              { n: "a", v: "20", ref: null, ch: false },
+              { n: "n", v: "62", ref: null, ch: false },
               { n: "i", v: "4", ref: null, ch: false },
             ],
           },
@@ -397,9 +333,9 @@ export const lessonMedia = {
             ],
           },
           {
-            title: "вызов bits(20)",
+            title: "вызов bits(62)",
             names: [
-              { n: "a", v: "20", ref: null, ch: false },
+              { n: "n", v: "62", ref: null, ch: false },
               { n: "i", v: "5", ref: null, ch: true },
             ],
           },
@@ -409,7 +345,7 @@ export const lessonMedia = {
       },
       {
         line: 6,
-        text: "Проверка `2 ** i < a` даёт `False` — цикл закончен, программа идёт дальше.",
+        text: "Проверка `2 ** i < n` даёт `True` — тело цикла выполняется.",
         kind: "line",
         frames: [
           {
@@ -420,9 +356,9 @@ export const lessonMedia = {
             ],
           },
           {
-            title: "вызов bits(20)",
+            title: "вызов bits(62)",
             names: [
-              { n: "a", v: "20", ref: null, ch: false },
+              { n: "n", v: "62", ref: null, ch: false },
               { n: "i", v: "5", ref: null, ch: false },
             ],
           },
@@ -431,8 +367,54 @@ export const lessonMedia = {
         out: "",
       },
       {
+        line: 7,
+        text: "`i += 1`: значение `i` увеличилось — было `5`, стало `6`.",
+        kind: "line",
+        frames: [
+          {
+            title: "программа",
+            names: [
+              { n: "ceil", v: "функция", ref: null, ch: false },
+              { n: "bits", v: "функция", ref: null, ch: false },
+            ],
+          },
+          {
+            title: "вызов bits(62)",
+            names: [
+              { n: "n", v: "62", ref: null, ch: false },
+              { n: "i", v: "6", ref: null, ch: true },
+            ],
+          },
+        ],
+        objs: {},
+        out: "",
+      },
+      {
+        line: 6,
+        text: "Проверка `2 ** i < n` даёт `False` — цикл закончен, программа идёт дальше.",
+        kind: "line",
+        frames: [
+          {
+            title: "программа",
+            names: [
+              { n: "ceil", v: "функция", ref: null, ch: false },
+              { n: "bits", v: "функция", ref: null, ch: false },
+            ],
+          },
+          {
+            title: "вызов bits(62)",
+            names: [
+              { n: "n", v: "62", ref: null, ch: false },
+              { n: "i", v: "6", ref: null, ch: false },
+            ],
+          },
+        ],
+        objs: {},
+        out: "",
+      },
+      {
         line: 8,
-        text: "Функция возвращает `5` в строку, откуда её вызвали. Переменные вызова больше не нужны и исчезают.",
+        text: "Функция возвращает `6` в строку, откуда её вызвали. Переменные вызова больше не нужны и исчезают.",
         kind: "return",
         frames: [
           {
@@ -443,10 +425,10 @@ export const lessonMedia = {
             ],
           },
           {
-            title: "вызов bits(20)",
+            title: "вызов bits(62)",
             names: [
-              { n: "a", v: "20", ref: null, ch: false },
-              { n: "i", v: "5", ref: null, ch: false },
+              { n: "n", v: "62", ref: null, ch: false },
+              { n: "i", v: "6", ref: null, ch: false },
             ],
           },
         ],
@@ -455,7 +437,7 @@ export const lessonMedia = {
       },
       {
         line: 11,
-        text: "Python вычисляет `bits(20)` → `5`, и `i` получает это значение.",
+        text: "Python вычисляет `bits(10 + 26 + 26)` → `6`, и `i` получает это значение.",
         kind: "line",
         frames: [
           {
@@ -463,7 +445,7 @@ export const lessonMedia = {
             names: [
               { n: "ceil", v: "функция", ref: null, ch: false },
               { n: "bits", v: "функция", ref: null, ch: false },
-              { n: "i", v: "5", ref: null, ch: true },
+              { n: "i", v: "6", ref: null, ch: true },
             ],
           },
         ],
@@ -472,7 +454,7 @@ export const lessonMedia = {
       },
       {
         line: 12,
-        text: "Python вычисляет `ceil(7 * i / 8)` → `5`, и `one` получает это значение.",
+        text: "Python вычисляет `ceil(15 * i / 8)` → `12`, и `password` получает это значение.",
         kind: "line",
         frames: [
           {
@@ -480,8 +462,8 @@ export const lessonMedia = {
             names: [
               { n: "ceil", v: "функция", ref: null, ch: false },
               { n: "bits", v: "функция", ref: null, ch: false },
-              { n: "i", v: "5", ref: null, ch: false },
-              { n: "one", v: "5", ref: null, ch: true },
+              { n: "i", v: "6", ref: null, ch: false },
+              { n: "password", v: "12", ref: null, ch: true },
             ],
           },
         ],
@@ -490,7 +472,7 @@ export const lessonMedia = {
       },
       {
         line: 13,
-        text: "На экран выводится «5 35 5 40».",
+        text: "На экран выводится «6 90 12».",
         kind: "line",
         frames: [
           {
@@ -498,21 +480,21 @@ export const lessonMedia = {
             names: [
               { n: "ceil", v: "функция", ref: null, ch: false },
               { n: "bits", v: "функция", ref: null, ch: false },
-              { n: "i", v: "5", ref: null, ch: false },
-              { n: "one", v: "5", ref: null, ch: false },
+              { n: "i", v: "6", ref: null, ch: false },
+              { n: "password", v: "12", ref: null, ch: false },
             ],
           },
         ],
         objs: {},
-        out: "5 35 5 40\n",
+        out: "6 90 12\n",
       },
     ],
   },
   runMinBits: {
     kind: "run",
-    code: "from math import ceil\n\nL, n, limit = 10, 100, 601\ni = 1\nwhile n * ceil(L * i / 8) < limit:\n    i += 1\nprint(i, 2 ** (i - 1) + 1)",
+    code: "from math import ceil\n\ni = 1\nwhile 40 * (ceil(15 * i / 8) + 18) <= 1200:\n    i += 1\nprint(i, 2 ** (i - 1) + 1)",
     fileName: "min_bits.py",
-    output: "5 17",
+    output: "7 65",
     steps: [
       {
         line: null,
@@ -537,24 +519,6 @@ export const lessonMedia = {
       },
       {
         line: 3,
-        text: "`L` = `10`; `n` = `100`; `limit` = `601`.",
-        kind: "line",
-        frames: [
-          {
-            title: "программа",
-            names: [
-              { n: "ceil", v: "функция", ref: null, ch: false },
-              { n: "L", v: "10", ref: null, ch: true },
-              { n: "n", v: "100", ref: null, ch: true },
-              { n: "limit", v: "601", ref: null, ch: true },
-            ],
-          },
-        ],
-        objs: {},
-        out: "",
-      },
-      {
-        line: 4,
         text: "`i` получает значение `1`.",
         kind: "line",
         frames: [
@@ -562,9 +526,6 @@ export const lessonMedia = {
             title: "программа",
             names: [
               { n: "ceil", v: "функция", ref: null, ch: false },
-              { n: "L", v: "10", ref: null, ch: false },
-              { n: "n", v: "100", ref: null, ch: false },
-              { n: "limit", v: "601", ref: null, ch: false },
               { n: "i", v: "1", ref: null, ch: true },
             ],
           },
@@ -573,17 +534,14 @@ export const lessonMedia = {
         out: "",
       },
       {
-        line: 5,
-        text: "Проверка `n * ceil(L * i / 8) < limit` даёт `True` — тело цикла выполняется.",
+        line: 4,
+        text: "Проверка `40 * (ceil(15 * i / 8) + 18) <= 1200` даёт `True` — тело цикла выполняется.",
         kind: "line",
         frames: [
           {
             title: "программа",
             names: [
               { n: "ceil", v: "функция", ref: null, ch: false },
-              { n: "L", v: "10", ref: null, ch: false },
-              { n: "n", v: "100", ref: null, ch: false },
-              { n: "limit", v: "601", ref: null, ch: false },
               { n: "i", v: "1", ref: null, ch: false },
             ],
           },
@@ -592,7 +550,7 @@ export const lessonMedia = {
         out: "",
       },
       {
-        line: 6,
+        line: 5,
         text: "`i += 1`: значение `i` увеличилось — было `1`, стало `2`.",
         kind: "line",
         frames: [
@@ -600,9 +558,6 @@ export const lessonMedia = {
             title: "программа",
             names: [
               { n: "ceil", v: "функция", ref: null, ch: false },
-              { n: "L", v: "10", ref: null, ch: false },
-              { n: "n", v: "100", ref: null, ch: false },
-              { n: "limit", v: "601", ref: null, ch: false },
               { n: "i", v: "2", ref: null, ch: true },
             ],
           },
@@ -611,17 +566,14 @@ export const lessonMedia = {
         out: "",
       },
       {
-        line: 5,
-        text: "Проверка `n * ceil(L * i / 8) < limit` даёт `True` — тело цикла выполняется.",
+        line: 4,
+        text: "Проверка `40 * (ceil(15 * i / 8) + 18) <= 1200` даёт `True` — тело цикла выполняется.",
         kind: "line",
         frames: [
           {
             title: "программа",
             names: [
               { n: "ceil", v: "функция", ref: null, ch: false },
-              { n: "L", v: "10", ref: null, ch: false },
-              { n: "n", v: "100", ref: null, ch: false },
-              { n: "limit", v: "601", ref: null, ch: false },
               { n: "i", v: "2", ref: null, ch: false },
             ],
           },
@@ -630,7 +582,7 @@ export const lessonMedia = {
         out: "",
       },
       {
-        line: 6,
+        line: 5,
         text: "`i += 1`: значение `i` увеличилось — было `2`, стало `3`.",
         kind: "line",
         frames: [
@@ -638,9 +590,6 @@ export const lessonMedia = {
             title: "программа",
             names: [
               { n: "ceil", v: "функция", ref: null, ch: false },
-              { n: "L", v: "10", ref: null, ch: false },
-              { n: "n", v: "100", ref: null, ch: false },
-              { n: "limit", v: "601", ref: null, ch: false },
               { n: "i", v: "3", ref: null, ch: true },
             ],
           },
@@ -649,17 +598,14 @@ export const lessonMedia = {
         out: "",
       },
       {
-        line: 5,
-        text: "Проверка `n * ceil(L * i / 8) < limit` даёт `True` — тело цикла выполняется.",
+        line: 4,
+        text: "Проверка `40 * (ceil(15 * i / 8) + 18) <= 1200` даёт `True` — тело цикла выполняется.",
         kind: "line",
         frames: [
           {
             title: "программа",
             names: [
               { n: "ceil", v: "функция", ref: null, ch: false },
-              { n: "L", v: "10", ref: null, ch: false },
-              { n: "n", v: "100", ref: null, ch: false },
-              { n: "limit", v: "601", ref: null, ch: false },
               { n: "i", v: "3", ref: null, ch: false },
             ],
           },
@@ -668,7 +614,7 @@ export const lessonMedia = {
         out: "",
       },
       {
-        line: 6,
+        line: 5,
         text: "`i += 1`: значение `i` увеличилось — было `3`, стало `4`.",
         kind: "line",
         frames: [
@@ -676,9 +622,6 @@ export const lessonMedia = {
             title: "программа",
             names: [
               { n: "ceil", v: "функция", ref: null, ch: false },
-              { n: "L", v: "10", ref: null, ch: false },
-              { n: "n", v: "100", ref: null, ch: false },
-              { n: "limit", v: "601", ref: null, ch: false },
               { n: "i", v: "4", ref: null, ch: true },
             ],
           },
@@ -687,17 +630,14 @@ export const lessonMedia = {
         out: "",
       },
       {
-        line: 5,
-        text: "Проверка `n * ceil(L * i / 8) < limit` даёт `True` — тело цикла выполняется.",
+        line: 4,
+        text: "Проверка `40 * (ceil(15 * i / 8) + 18) <= 1200` даёт `True` — тело цикла выполняется.",
         kind: "line",
         frames: [
           {
             title: "программа",
             names: [
               { n: "ceil", v: "функция", ref: null, ch: false },
-              { n: "L", v: "10", ref: null, ch: false },
-              { n: "n", v: "100", ref: null, ch: false },
-              { n: "limit", v: "601", ref: null, ch: false },
               { n: "i", v: "4", ref: null, ch: false },
             ],
           },
@@ -706,7 +646,7 @@ export const lessonMedia = {
         out: "",
       },
       {
-        line: 6,
+        line: 5,
         text: "`i += 1`: значение `i` увеличилось — было `4`, стало `5`.",
         kind: "line",
         frames: [
@@ -714,9 +654,6 @@ export const lessonMedia = {
             title: "программа",
             names: [
               { n: "ceil", v: "функция", ref: null, ch: false },
-              { n: "L", v: "10", ref: null, ch: false },
-              { n: "n", v: "100", ref: null, ch: false },
-              { n: "limit", v: "601", ref: null, ch: false },
               { n: "i", v: "5", ref: null, ch: true },
             ],
           },
@@ -725,17 +662,14 @@ export const lessonMedia = {
         out: "",
       },
       {
-        line: 5,
-        text: "Проверка `n * ceil(L * i / 8) < limit` даёт `False` — цикл закончен, программа идёт дальше.",
+        line: 4,
+        text: "Проверка `40 * (ceil(15 * i / 8) + 18) <= 1200` даёт `True` — тело цикла выполняется.",
         kind: "line",
         frames: [
           {
             title: "программа",
             names: [
               { n: "ceil", v: "функция", ref: null, ch: false },
-              { n: "L", v: "10", ref: null, ch: false },
-              { n: "n", v: "100", ref: null, ch: false },
-              { n: "limit", v: "601", ref: null, ch: false },
               { n: "i", v: "5", ref: null, ch: false },
             ],
           },
@@ -744,24 +678,157 @@ export const lessonMedia = {
         out: "",
       },
       {
-        line: 7,
-        text: "На экран выводится «5 17».",
+        line: 5,
+        text: "`i += 1`: значение `i` увеличилось — было `5`, стало `6`.",
         kind: "line",
         frames: [
           {
             title: "программа",
             names: [
               { n: "ceil", v: "функция", ref: null, ch: false },
-              { n: "L", v: "10", ref: null, ch: false },
-              { n: "n", v: "100", ref: null, ch: false },
-              { n: "limit", v: "601", ref: null, ch: false },
-              { n: "i", v: "5", ref: null, ch: false },
+              { n: "i", v: "6", ref: null, ch: true },
             ],
           },
         ],
         objs: {},
-        out: "5 17\n",
+        out: "",
+      },
+      {
+        line: 4,
+        text: "Проверка `40 * (ceil(15 * i / 8) + 18) <= 1200` даёт `True` — тело цикла выполняется.",
+        kind: "line",
+        frames: [
+          {
+            title: "программа",
+            names: [
+              { n: "ceil", v: "функция", ref: null, ch: false },
+              { n: "i", v: "6", ref: null, ch: false },
+            ],
+          },
+        ],
+        objs: {},
+        out: "",
+      },
+      {
+        line: 5,
+        text: "`i += 1`: значение `i` увеличилось — было `6`, стало `7`.",
+        kind: "line",
+        frames: [
+          {
+            title: "программа",
+            names: [
+              { n: "ceil", v: "функция", ref: null, ch: false },
+              { n: "i", v: "7", ref: null, ch: true },
+            ],
+          },
+        ],
+        objs: {},
+        out: "",
+      },
+      {
+        line: 4,
+        text: "Проверка `40 * (ceil(15 * i / 8) + 18) <= 1200` даёт `False` — цикл закончен, программа идёт дальше.",
+        kind: "line",
+        frames: [
+          {
+            title: "программа",
+            names: [
+              { n: "ceil", v: "функция", ref: null, ch: false },
+              { n: "i", v: "7", ref: null, ch: false },
+            ],
+          },
+        ],
+        objs: {},
+        out: "",
+      },
+      {
+        line: 6,
+        text: "На экран выводится «7 65».",
+        kind: "line",
+        frames: [
+          {
+            title: "программа",
+            names: [
+              { n: "ceil", v: "функция", ref: null, ch: false },
+              { n: "i", v: "7", ref: null, ch: false },
+            ],
+          },
+        ],
+        objs: {},
+        out: "7 65\n",
       },
     ],
+  },
+  // %%vol_ladder(62, 7)%%
+  volLadder62_7: {
+    kind: "diagram",
+    svg: '<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" viewBox="0 0 660 184"><text x="16.0" y="22.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">i бит дают 2ⁱ разных кодов; степени стоят на равных расстояниях</text><line x1="50.0" y1="90.0" x2="620.0" y2="90.0" stroke="#d9d9d4" stroke-width="2"/><text x="16.0" y="120.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">2ⁱ</text><text x="16.0" y="144.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">i</text><circle cx="50.0" cy="90" r="5" fill="#17191e" stroke="#17191e" stroke-width="1"/><text x="50.0" y="120.0" font-family="inherit" font-size="13" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">2</text><text x="50.0" y="144.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">1</text><circle cx="145.0" cy="90" r="5" fill="#17191e" stroke="#17191e" stroke-width="1"/><text x="145.0" y="120.0" font-family="inherit" font-size="13" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">4</text><text x="145.0" y="144.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">2</text><circle cx="240.0" cy="90" r="5" fill="#17191e" stroke="#17191e" stroke-width="1"/><text x="240.0" y="120.0" font-family="inherit" font-size="13" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">8</text><text x="240.0" y="144.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">3</text><circle cx="335.0" cy="90" r="5" fill="#17191e" stroke="#17191e" stroke-width="1"/><text x="335.0" y="120.0" font-family="inherit" font-size="13" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">16</text><text x="335.0" y="144.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">4</text><circle cx="430.0" cy="90" r="5" fill="#17191e" stroke="#17191e" stroke-width="1"/><text x="430.0" y="120.0" font-family="inherit" font-size="13" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">32</text><text x="430.0" y="144.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">5</text><circle cx="525.0" cy="90" r="5" fill="#fff" stroke="#ff6a00" stroke-width="2.5"/><text x="525.0" y="120.0" font-family="inherit" font-size="13" font-weight="600" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">64</text><text x="525.0" y="144.0" font-family="inherit" font-size="13" font-weight="600" fill="#ff6a00" text-anchor="middle" style="font-variant-numeric:tabular-nums">6</text><circle cx="620.0" cy="90" r="5" fill="#17191e" stroke="#17191e" stroke-width="1"/><text x="620.0" y="120.0" font-family="inherit" font-size="13" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">128</text><text x="620.0" y="144.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">7</text><line x1="519.1" y1="54.0" x2="519.1" y2="73.0" stroke="#ff6a00" stroke-width="1.5"/><path d="M 519.1 82.0 L 514.6 73.0 L 523.6 73.0 Z" fill="#ff6a00"/><text x="519.1" y="46.0" font-family="inherit" font-size="14" font-weight="600" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">N = 62</text><text x="330.0" y="176.0" font-family="inherit" font-size="14" font-weight="600" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">32 &lt; 62 ≤ 64: 5 бит мало, нужно 6</text></svg>',
+    width: 660,
+    height: 184,
+    alt: "Степени двойки и 62 объектов",
+  },
+  // %%pwd_code(15, 6)%%
+  pwdCode15_6: {
+    kind: "diagram",
+    svg: '<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" viewBox="0 0 660 204"><text x="24.0" y="22.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">15 символов по 6 битов; сверху — номера символов, снизу — байтов</text><rect x="24.0" y="69.0" width="38.2" height="20.0" fill="#f3f3f1" stroke="none"/><text x="43.1" y="56.0" font-family="inherit" font-size="12" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">1</text><rect x="62.2" y="69.0" width="38.2" height="20.0" fill="#d9d9d4" stroke="none"/><text x="81.4" y="56.0" font-family="inherit" font-size="12" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">2</text><line x1="62.2" y1="60.0" x2="62.2" y2="69.0" stroke="#4d535e" stroke-width="1"/><rect x="100.5" y="69.0" width="38.2" height="20.0" fill="#f3f3f1" stroke="none"/><text x="119.6" y="56.0" font-family="inherit" font-size="12" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">3</text><line x1="100.5" y1="60.0" x2="100.5" y2="69.0" stroke="#4d535e" stroke-width="1"/><rect x="138.8" y="69.0" width="38.2" height="20.0" fill="#d9d9d4" stroke="none"/><text x="157.9" y="56.0" font-family="inherit" font-size="12" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">4</text><line x1="138.8" y1="60.0" x2="138.8" y2="69.0" stroke="#4d535e" stroke-width="1"/><rect x="177.0" y="69.0" width="38.2" height="20.0" fill="#f3f3f1" stroke="none"/><text x="196.1" y="56.0" font-family="inherit" font-size="12" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">5</text><line x1="177.0" y1="60.0" x2="177.0" y2="69.0" stroke="#4d535e" stroke-width="1"/><rect x="215.2" y="69.0" width="38.2" height="20.0" fill="#d9d9d4" stroke="none"/><text x="234.4" y="56.0" font-family="inherit" font-size="12" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">6</text><line x1="215.2" y1="60.0" x2="215.2" y2="69.0" stroke="#4d535e" stroke-width="1"/><rect x="253.5" y="69.0" width="38.2" height="20.0" fill="#f3f3f1" stroke="none"/><text x="272.6" y="56.0" font-family="inherit" font-size="12" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">7</text><line x1="253.5" y1="60.0" x2="253.5" y2="69.0" stroke="#4d535e" stroke-width="1"/><rect x="291.8" y="69.0" width="38.2" height="20.0" fill="#d9d9d4" stroke="none"/><text x="310.9" y="56.0" font-family="inherit" font-size="12" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">8</text><line x1="291.8" y1="60.0" x2="291.8" y2="69.0" stroke="#4d535e" stroke-width="1"/><rect x="330.0" y="69.0" width="38.2" height="20.0" fill="#f3f3f1" stroke="none"/><text x="349.1" y="56.0" font-family="inherit" font-size="12" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">9</text><line x1="330.0" y1="60.0" x2="330.0" y2="69.0" stroke="#4d535e" stroke-width="1"/><rect x="368.2" y="69.0" width="38.2" height="20.0" fill="#d9d9d4" stroke="none"/><text x="387.4" y="56.0" font-family="inherit" font-size="12" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">10</text><line x1="368.2" y1="60.0" x2="368.2" y2="69.0" stroke="#4d535e" stroke-width="1"/><rect x="406.5" y="69.0" width="38.2" height="20.0" fill="#f3f3f1" stroke="none"/><text x="425.6" y="56.0" font-family="inherit" font-size="12" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">11</text><line x1="406.5" y1="60.0" x2="406.5" y2="69.0" stroke="#4d535e" stroke-width="1"/><rect x="444.8" y="69.0" width="38.2" height="20.0" fill="#d9d9d4" stroke="none"/><text x="463.9" y="56.0" font-family="inherit" font-size="12" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">12</text><line x1="444.8" y1="60.0" x2="444.8" y2="69.0" stroke="#4d535e" stroke-width="1"/><rect x="483.0" y="69.0" width="38.2" height="20.0" fill="#f3f3f1" stroke="none"/><text x="502.1" y="56.0" font-family="inherit" font-size="12" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">13</text><line x1="483.0" y1="60.0" x2="483.0" y2="69.0" stroke="#4d535e" stroke-width="1"/><rect x="521.2" y="69.0" width="38.2" height="20.0" fill="#d9d9d4" stroke="none"/><text x="540.4" y="56.0" font-family="inherit" font-size="12" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">14</text><line x1="521.2" y1="60.0" x2="521.2" y2="69.0" stroke="#4d535e" stroke-width="1"/><rect x="559.5" y="69.0" width="38.2" height="20.0" fill="#f3f3f1" stroke="none"/><text x="578.6" y="56.0" font-family="inherit" font-size="12" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">15</text><line x1="559.5" y1="60.0" x2="559.5" y2="69.0" stroke="#4d535e" stroke-width="1"/><rect x="597.8" y="69.0" width="38.2" height="20.0" rx="4" fill="none" stroke="#ff6a00" stroke-width="1"/><rect x="24.0" y="66.0" width="51.0" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="75.0" y="66.0" width="51.0" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="126.0" y="66.0" width="51.0" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="177.0" y="66.0" width="51.0" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="228.0" y="66.0" width="51.0" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="279.0" y="66.0" width="51.0" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="330.0" y="66.0" width="51.0" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="381.0" y="66.0" width="51.0" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="432.0" y="66.0" width="51.0" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="483.0" y="66.0" width="51.0" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="534.0" y="66.0" width="51.0" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="585.0" y="66.0" width="51.0" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><text x="49.5" y="112.0" font-family="inherit" font-size="12" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">1</text><text x="100.5" y="112.0" font-family="inherit" font-size="12" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">2</text><text x="151.5" y="112.0" font-family="inherit" font-size="12" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">3</text><text x="202.5" y="112.0" font-family="inherit" font-size="12" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">4</text><text x="253.5" y="112.0" font-family="inherit" font-size="12" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">5</text><text x="304.5" y="112.0" font-family="inherit" font-size="12" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">6</text><text x="355.5" y="112.0" font-family="inherit" font-size="12" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">7</text><text x="406.5" y="112.0" font-family="inherit" font-size="12" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">8</text><text x="457.5" y="112.0" font-family="inherit" font-size="12" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">9</text><text x="508.5" y="112.0" font-family="inherit" font-size="12" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">10</text><text x="559.5" y="112.0" font-family="inherit" font-size="12" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">11</text><text x="610.5" y="112.0" font-family="inherit" font-size="12" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">12</text><text x="24.0" y="148.0" font-family="inherit" font-size="14" font-weight="600" fill="#17191e" text-anchor="start" style="font-variant-numeric:tabular-nums">15 · 6 = 90 битов кода; байтов 90 / 8 = 11,25 → 12</text><text x="24.0" y="172.0" font-family="inherit" font-size="13" font-weight="400" fill="#ff6a00" text-anchor="start" style="font-variant-numeric:tabular-nums">12 · 8 = 96 битов: 6 битов в последнем байте пустуют</text><text x="330.0" y="196.0" font-family="inherit" font-size="12" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">код символа может начаться в одном байте и закончиться в следующем</text></svg>',
+    width: 660,
+    height: 204,
+    alt: "Пароль из 15 символов по 6 бит в байтах",
+  },
+  // %%pwd_bytes(3, 90)%%
+  pwdBytes3_90: {
+    kind: "diagram",
+    svg: '<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" viewBox="0 0 660 236"><text x="24.0" y="22.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">3 пароля по 90 битов; клетка — один байт, заливка — биты кода</text><text x="24.0" y="48.0" font-family="inherit" font-size="14" font-weight="600" fill="#17191e" text-anchor="start" style="font-variant-numeric:tabular-nums">каждому паролю свои байты</text><rect x="24.0" y="61.0" width="191.2" height="20.0" fill="#f3f3f1" stroke="none"/><rect x="215.2" y="61.0" width="12.8" height="20.0" rx="4" fill="none" stroke="#ff6a00" stroke-width="1"/><rect x="228.0" y="61.0" width="191.2" height="20.0" fill="#d9d9d4" stroke="none"/><rect x="419.2" y="61.0" width="12.8" height="20.0" rx="4" fill="none" stroke="#ff6a00" stroke-width="1"/><rect x="432.0" y="61.0" width="191.2" height="20.0" fill="#f3f3f1" stroke="none"/><rect x="623.2" y="61.0" width="12.8" height="20.0" rx="4" fill="none" stroke="#ff6a00" stroke-width="1"/><rect x="24.0" y="58.0" width="17.0" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="41.0" y="58.0" width="17.0" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="58.0" y="58.0" width="17.0" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="75.0" y="58.0" width="17.0" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="92.0" y="58.0" width="17.0" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="109.0" y="58.0" width="17.0" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="126.0" y="58.0" width="17.0" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="143.0" y="58.0" width="17.0" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="160.0" y="58.0" width="17.0" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="177.0" y="58.0" width="17.0" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="194.0" y="58.0" width="17.0" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="211.0" y="58.0" width="17.0" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="228.0" y="58.0" width="17.0" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="245.0" y="58.0" width="17.0" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="262.0" y="58.0" width="17.0" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="279.0" y="58.0" width="17.0" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="296.0" y="58.0" width="17.0" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="313.0" y="58.0" width="17.0" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="330.0" y="58.0" width="17.0" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="347.0" y="58.0" width="17.0" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="364.0" y="58.0" width="17.0" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="381.0" y="58.0" width="17.0" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="398.0" y="58.0" width="17.0" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="415.0" y="58.0" width="17.0" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="432.0" y="58.0" width="17.0" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="449.0" y="58.0" width="17.0" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="466.0" y="58.0" width="17.0" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="483.0" y="58.0" width="17.0" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="500.0" y="58.0" width="17.0" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="517.0" y="58.0" width="17.0" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="534.0" y="58.0" width="17.0" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="551.0" y="58.0" width="17.0" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="568.0" y="58.0" width="17.0" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="585.0" y="58.0" width="17.0" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="602.0" y="58.0" width="17.0" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="619.0" y="58.0" width="17.0" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><line x1="24.0" y1="54.0" x2="24.0" y2="88.0" stroke="#17191e" stroke-width="2"/><line x1="228.0" y1="54.0" x2="228.0" y2="88.0" stroke="#17191e" stroke-width="2"/><line x1="432.0" y1="54.0" x2="432.0" y2="88.0" stroke="#17191e" stroke-width="2"/><line x1="636.0" y1="54.0" x2="636.0" y2="88.0" stroke="#17191e" stroke-width="2"/><text x="24.0" y="108.0" font-family="inherit" font-size="13" font-weight="400" fill="#ff6a00" text-anchor="start" style="font-variant-numeric:tabular-nums">90 / 8 = 11,25 → 12, 3 · 12 = 36 байтов; пустует по 6 битов в каждом пароле</text><text x="24.0" y="140.0" font-family="inherit" font-size="14" font-weight="600" fill="#17191e" text-anchor="start" style="font-variant-numeric:tabular-nums">все пароли подряд, байты — общей записи</text><rect x="24.0" y="153.0" width="191.2" height="20.0" fill="#f3f3f1" stroke="none"/><rect x="215.2" y="153.0" width="191.2" height="20.0" fill="#d9d9d4" stroke="none"/><rect x="406.5" y="153.0" width="191.2" height="20.0" fill="#f3f3f1" stroke="none"/><rect x="597.8" y="153.0" width="4.2" height="20.0" rx="4" fill="none" stroke="#ff6a00" stroke-width="1"/><rect x="24.0" y="150.0" width="17.0" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="41.0" y="150.0" width="17.0" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="58.0" y="150.0" width="17.0" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="75.0" y="150.0" width="17.0" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="92.0" y="150.0" width="17.0" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="109.0" y="150.0" width="17.0" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="126.0" y="150.0" width="17.0" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="143.0" y="150.0" width="17.0" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="160.0" y="150.0" width="17.0" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="177.0" y="150.0" width="17.0" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="194.0" y="150.0" width="17.0" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="211.0" y="150.0" width="17.0" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="228.0" y="150.0" width="17.0" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="245.0" y="150.0" width="17.0" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="262.0" y="150.0" width="17.0" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="279.0" y="150.0" width="17.0" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="296.0" y="150.0" width="17.0" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="313.0" y="150.0" width="17.0" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="330.0" y="150.0" width="17.0" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="347.0" y="150.0" width="17.0" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="364.0" y="150.0" width="17.0" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="381.0" y="150.0" width="17.0" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="398.0" y="150.0" width="17.0" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="415.0" y="150.0" width="17.0" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="432.0" y="150.0" width="17.0" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="449.0" y="150.0" width="17.0" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="466.0" y="150.0" width="17.0" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="483.0" y="150.0" width="17.0" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="500.0" y="150.0" width="17.0" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="517.0" y="150.0" width="17.0" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="534.0" y="150.0" width="17.0" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="551.0" y="150.0" width="17.0" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="568.0" y="150.0" width="17.0" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="585.0" y="150.0" width="17.0" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><text x="24.0" y="200.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">3 · 90 = 270 битов, 270 / 8 = 33,75 → 34 байта</text><text x="330.0" y="226.0" font-family="inherit" font-size="12" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">разница — пустые хвосты последних байтов каждого пароля</text></svg>',
+    width: 660,
+    height: 236,
+    alt: "3 пароля по 90 бит: свои байты и подряд",
+  },
+  // %%pwd_record(12, 1200, 40)%%
+  pwdRecord12_1200_40: {
+    kind: "diagram",
+    svg: '<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" viewBox="0 0 660 220"><text x="24.0" y="22.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">40 одинаковых записей заняли 1 200 байтов</text><rect x="24.0" y="40.0" width="15.3" height="30.0" rx="0" fill="#f3f3f1" stroke="#17191e" stroke-width="0.75"/><rect x="39.3" y="40.0" width="15.3" height="30.0" rx="0" fill="#d9d9d4" stroke="#17191e" stroke-width="0.75"/><rect x="54.6" y="40.0" width="15.3" height="30.0" rx="0" fill="#f3f3f1" stroke="#17191e" stroke-width="0.75"/><rect x="69.9" y="40.0" width="15.3" height="30.0" rx="0" fill="#d9d9d4" stroke="#17191e" stroke-width="0.75"/><rect x="85.2" y="40.0" width="15.3" height="30.0" rx="0" fill="#f3f3f1" stroke="#17191e" stroke-width="0.75"/><rect x="100.5" y="40.0" width="15.3" height="30.0" rx="0" fill="#d9d9d4" stroke="#17191e" stroke-width="0.75"/><rect x="115.8" y="40.0" width="15.3" height="30.0" rx="0" fill="#f3f3f1" stroke="#17191e" stroke-width="0.75"/><rect x="131.1" y="40.0" width="15.3" height="30.0" rx="0" fill="#d9d9d4" stroke="#17191e" stroke-width="0.75"/><rect x="146.4" y="40.0" width="15.3" height="30.0" rx="0" fill="#f3f3f1" stroke="#17191e" stroke-width="0.75"/><rect x="161.7" y="40.0" width="15.3" height="30.0" rx="0" fill="#d9d9d4" stroke="#17191e" stroke-width="0.75"/><rect x="177.0" y="40.0" width="15.3" height="30.0" rx="0" fill="#f3f3f1" stroke="#17191e" stroke-width="0.75"/><rect x="192.3" y="40.0" width="15.3" height="30.0" rx="0" fill="#d9d9d4" stroke="#17191e" stroke-width="0.75"/><rect x="207.6" y="40.0" width="15.3" height="30.0" rx="0" fill="#f3f3f1" stroke="#17191e" stroke-width="0.75"/><rect x="222.9" y="40.0" width="15.3" height="30.0" rx="0" fill="#d9d9d4" stroke="#17191e" stroke-width="0.75"/><rect x="238.2" y="40.0" width="15.3" height="30.0" rx="0" fill="#f3f3f1" stroke="#17191e" stroke-width="0.75"/><rect x="253.5" y="40.0" width="15.3" height="30.0" rx="0" fill="#d9d9d4" stroke="#17191e" stroke-width="0.75"/><rect x="268.8" y="40.0" width="15.3" height="30.0" rx="0" fill="#f3f3f1" stroke="#17191e" stroke-width="0.75"/><rect x="284.1" y="40.0" width="15.3" height="30.0" rx="0" fill="#d9d9d4" stroke="#17191e" stroke-width="0.75"/><rect x="299.4" y="40.0" width="15.3" height="30.0" rx="0" fill="#f3f3f1" stroke="#17191e" stroke-width="0.75"/><rect x="314.7" y="40.0" width="15.3" height="30.0" rx="0" fill="#d9d9d4" stroke="#17191e" stroke-width="0.75"/><rect x="330.0" y="40.0" width="15.3" height="30.0" rx="0" fill="#f3f3f1" stroke="#17191e" stroke-width="0.75"/><rect x="345.3" y="40.0" width="15.3" height="30.0" rx="0" fill="#d9d9d4" stroke="#17191e" stroke-width="0.75"/><rect x="360.6" y="40.0" width="15.3" height="30.0" rx="0" fill="#f3f3f1" stroke="#17191e" stroke-width="0.75"/><rect x="375.9" y="40.0" width="15.3" height="30.0" rx="0" fill="#d9d9d4" stroke="#17191e" stroke-width="0.75"/><rect x="391.2" y="40.0" width="15.3" height="30.0" rx="0" fill="#f3f3f1" stroke="#17191e" stroke-width="0.75"/><rect x="406.5" y="40.0" width="15.3" height="30.0" rx="0" fill="#d9d9d4" stroke="#17191e" stroke-width="0.75"/><rect x="421.8" y="40.0" width="15.3" height="30.0" rx="0" fill="#f3f3f1" stroke="#17191e" stroke-width="0.75"/><rect x="437.1" y="40.0" width="15.3" height="30.0" rx="0" fill="#d9d9d4" stroke="#17191e" stroke-width="0.75"/><rect x="452.4" y="40.0" width="15.3" height="30.0" rx="0" fill="#f3f3f1" stroke="#17191e" stroke-width="0.75"/><rect x="467.7" y="40.0" width="15.3" height="30.0" rx="0" fill="#d9d9d4" stroke="#17191e" stroke-width="0.75"/><rect x="483.0" y="40.0" width="15.3" height="30.0" rx="0" fill="#f3f3f1" stroke="#17191e" stroke-width="0.75"/><rect x="498.3" y="40.0" width="15.3" height="30.0" rx="0" fill="#d9d9d4" stroke="#17191e" stroke-width="0.75"/><rect x="513.6" y="40.0" width="15.3" height="30.0" rx="0" fill="#f3f3f1" stroke="#17191e" stroke-width="0.75"/><rect x="528.9" y="40.0" width="15.3" height="30.0" rx="0" fill="#d9d9d4" stroke="#17191e" stroke-width="0.75"/><rect x="544.2" y="40.0" width="15.3" height="30.0" rx="0" fill="#f3f3f1" stroke="#17191e" stroke-width="0.75"/><rect x="559.5" y="40.0" width="15.3" height="30.0" rx="0" fill="#d9d9d4" stroke="#17191e" stroke-width="0.75"/><rect x="574.8" y="40.0" width="15.3" height="30.0" rx="0" fill="#f3f3f1" stroke="#17191e" stroke-width="0.75"/><rect x="590.1" y="40.0" width="15.3" height="30.0" rx="0" fill="#d9d9d4" stroke="#17191e" stroke-width="0.75"/><rect x="605.4" y="40.0" width="15.3" height="30.0" rx="0" fill="#f3f3f1" stroke="#17191e" stroke-width="0.75"/><rect x="620.7" y="40.0" width="15.3" height="30.0" rx="0" fill="#d9d9d4" stroke="#17191e" stroke-width="0.75"/><rect x="24.0" y="40.0" width="15.3" height="30.0" rx="0" fill="none" stroke="#ff6a00" stroke-width="2"/><line x1="24.0" y1="70.0" x2="24.0" y2="120.0" stroke="#ff6a00" stroke-width="1" stroke-dasharray="4 4"/><line x1="39.3" y1="70.0" x2="636.0" y2="120.0" stroke="#ff6a00" stroke-width="1" stroke-dasharray="4 4"/><rect x="24.0" y="120.0" width="244.8" height="34.0" rx="0" fill="#d9d9d4" stroke="#17191e" stroke-width="1"/><rect x="268.8" y="120.0" width="367.2" height="34.0" rx="0" fill="#fff" stroke="#ff6a00" stroke-width="2"/><text x="146.4" y="142.0" font-family="inherit" font-size="13" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">пароль 12 байтов</text><text x="452.4" y="142.0" font-family="inherit" font-size="13" font-weight="600" fill="#ff6a00" text-anchor="middle" style="font-variant-numeric:tabular-nums">сведения 18 байтов</text><text x="24.0" y="184.0" font-family="inherit" font-size="14" font-weight="600" fill="#17191e" text-anchor="start" style="font-variant-numeric:tabular-nums">одна запись: 1 200 / 40 = 30 байтов; сведения: 30 − 12 = 18 байтов</text><text x="330.0" y="212.0" font-family="inherit" font-size="12" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">каждая запись — свой пароль и свои сведения</text></svg>',
+    width: 660,
+    height: 220,
+    alt: "40 записей в 1200 байтах: пароль и сведения",
+  },
+  // %%pwd_parts((90, 20), ("пароль", "сведения"))%%
+  pwdParts9020: {
+    kind: "diagram",
+    svg: '<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" viewBox="0 0 660 230"><text x="24.0" y="22.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">пароль — 90 битов + сведения — 20 битов; клетка — байт</text><text x="24.0" y="50.0" font-family="inherit" font-size="14" font-weight="600" fill="#17191e" text-anchor="start" style="font-variant-numeric:tabular-nums">части подряд, байты — всей записи</text><rect x="24.0" y="63.0" width="459.0" height="20.0" fill="#f3f3f1" stroke="none"/><rect x="483.0" y="63.0" width="102.0" height="20.0" fill="#d9d9d4" stroke="none"/><rect x="585.0" y="63.0" width="10.2" height="20.0" rx="4" fill="none" stroke="#ff6a00" stroke-width="1"/><rect x="24.0" y="60.0" width="40.8" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="64.8" y="60.0" width="40.8" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="105.6" y="60.0" width="40.8" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="146.4" y="60.0" width="40.8" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="187.2" y="60.0" width="40.8" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="228.0" y="60.0" width="40.8" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="268.8" y="60.0" width="40.8" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="309.6" y="60.0" width="40.8" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="350.4" y="60.0" width="40.8" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="391.2" y="60.0" width="40.8" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="432.0" y="60.0" width="40.8" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="472.8" y="60.0" width="40.8" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="513.6" y="60.0" width="40.8" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="554.4" y="60.0" width="40.8" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><text x="24.0" y="108.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">90 + 20 = 110 битов, 110 / 8 = 13,75 → 14 байтов</text><text x="24.0" y="142.0" font-family="inherit" font-size="14" font-weight="600" fill="#17191e" text-anchor="start" style="font-variant-numeric:tabular-nums">каждой части свои байты</text><rect x="24.0" y="155.0" width="459.0" height="20.0" fill="#f3f3f1" stroke="none"/><rect x="483.0" y="155.0" width="30.6" height="20.0" rx="4" fill="none" stroke="#ff6a00" stroke-width="1"/><rect x="24.0" y="152.0" width="40.8" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="64.8" y="152.0" width="40.8" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="105.6" y="152.0" width="40.8" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="146.4" y="152.0" width="40.8" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="187.2" y="152.0" width="40.8" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="228.0" y="152.0" width="40.8" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="268.8" y="152.0" width="40.8" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="309.6" y="152.0" width="40.8" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="350.4" y="152.0" width="40.8" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="391.2" y="152.0" width="40.8" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="432.0" y="152.0" width="40.8" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="472.8" y="152.0" width="40.8" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><line x1="24.0" y1="148.0" x2="24.0" y2="182.0" stroke="#17191e" stroke-width="2"/><rect x="513.6" y="155.0" width="102.0" height="20.0" fill="#d9d9d4" stroke="none"/><rect x="615.6" y="155.0" width="20.4" height="20.0" rx="4" fill="none" stroke="#ff6a00" stroke-width="1"/><rect x="513.6" y="152.0" width="40.8" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="554.4" y="152.0" width="40.8" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="595.2" y="152.0" width="40.8" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><line x1="513.6" y1="148.0" x2="513.6" y2="182.0" stroke="#17191e" stroke-width="2"/><line x1="636.0" y1="148.0" x2="636.0" y2="182.0" stroke="#17191e" stroke-width="2"/><text x="24.0" y="200.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">90 / 8 = 11,25 → 12; 20 / 8 = 2,5 → 3; 12 + 3 = 15 байтов</text><text x="330.0" y="220.0" font-family="inherit" font-size="12" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">обведённые клетки — выделенные, но пустые биты</text></svg>',
+    width: 660,
+    height: 230,
+    alt: "Части записи в битах и целые байты",
+  },
+  // %%pwd_range(6, 12, "upper")%%
+  pwdRange6_12_upper: {
+    kind: "diagram",
+    svg: '<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" viewBox="0 0 660 200"><text x="16.0" y="22.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">биты на прямой, засечки — границы байтов; точка — K · 6</text><rect x="40.0" y="68.0" width="386.7" height="32.0" rx="2" fill="#f3f3f1" stroke="none" stroke-width="0"/><line x1="40.0" y1="84.0" x2="620.0" y2="84.0" stroke="#17191e" stroke-width="1.5"/><line x1="40.0" y1="62.0" x2="40.0" y2="106.0" stroke="#4d535e" stroke-width="1"/><text x="40.0" y="124.0" font-family="inherit" font-size="13" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">80</text><text x="40.0" y="142.0" font-family="inherit" font-size="12" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">10 Б</text><line x1="233.3" y1="62.0" x2="233.3" y2="106.0" stroke="#17191e" stroke-width="2"/><text x="233.3" y="124.0" font-family="inherit" font-size="13" font-weight="600" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">88</text><text x="233.3" y="142.0" font-family="inherit" font-size="12" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">11 Б</text><line x1="426.7" y1="62.0" x2="426.7" y2="106.0" stroke="#17191e" stroke-width="2"/><text x="426.7" y="124.0" font-family="inherit" font-size="13" font-weight="600" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">96</text><text x="426.7" y="142.0" font-family="inherit" font-size="12" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">12 Б</text><line x1="620.0" y1="62.0" x2="620.0" y2="106.0" stroke="#4d535e" stroke-width="1"/><text x="620.0" y="124.0" font-family="inherit" font-size="13" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">104</text><text x="620.0" y="142.0" font-family="inherit" font-size="12" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">13 Б</text><circle cx="136.7" cy="84" r="6" fill="#ff6a00" stroke="#ff6a00" stroke-width="1.5"/><text x="136.7" y="56.0" font-family="inherit" font-size="12" font-weight="600" fill="#ff6a00" text-anchor="middle" style="font-variant-numeric:tabular-nums">K = 14</text><circle cx="281.7" cy="84" r="6" fill="#ff6a00" stroke="#ff6a00" stroke-width="1.5"/><text x="281.7" y="56.0" font-family="inherit" font-size="12" font-weight="600" fill="#ff6a00" text-anchor="middle" style="font-variant-numeric:tabular-nums">K = 15</text><circle cx="426.7" cy="84" r="6" fill="#ff6a00" stroke="#ff6a00" stroke-width="1.5"/><text x="426.7" y="56.0" font-family="inherit" font-size="12" font-weight="600" fill="#ff6a00" text-anchor="middle" style="font-variant-numeric:tabular-nums">K = 16</text><circle cx="571.7" cy="84" r="4.5" fill="#fff" stroke="#17191e" stroke-width="1.5"/><text x="571.7" y="56.0" font-family="inherit" font-size="12" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">K = 17</text><text x="16.0" y="164.0" font-family="inherit" font-size="14" font-weight="600" fill="#17191e" text-anchor="start" style="font-variant-numeric:tabular-nums">не более 12 байтов: K · 6 ≤ 96</text><text x="16.0" y="188.0" font-family="inherit" font-size="13" font-weight="400" fill="#ff6a00" text-anchor="start" style="font-variant-numeric:tabular-nums">наибольшая длина K = 16: 16 · 6 = 96 ≤ 96 &lt; 102</text></svg>',
+    width: 660,
+    height: 200,
+    alt: "Длины кода K · 6 и границы байтов",
+  },
+  // %%vol_fit(1024, 30, "байт", "пользователь")%%
+  volFit1024_30: {
+    kind: "diagram",
+    svg: '<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" viewBox="0 0 660 176"><text x="30.0" y="22.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">вместимость 1 024 байт, один пользователь — 30 байт</text><rect x="30.0" y="40.0" width="553.8" height="44.0" rx="2" fill="#f3f3f1" stroke="#17191e" stroke-width="1.5"/><rect x="31.5" y="46.0" width="13.2" height="32.0" rx="2" fill="#fff" stroke="#17191e" stroke-width="1"/><rect x="47.7" y="46.0" width="13.2" height="32.0" rx="2" fill="#fff" stroke="#17191e" stroke-width="1"/><rect x="63.9" y="46.0" width="13.2" height="32.0" rx="2" fill="#fff" stroke="#17191e" stroke-width="1"/><rect x="80.2" y="46.0" width="13.2" height="32.0" rx="2" fill="#fff" stroke="#17191e" stroke-width="1"/><rect x="96.4" y="46.0" width="13.2" height="32.0" rx="2" fill="#fff" stroke="#17191e" stroke-width="1"/><rect x="112.6" y="46.0" width="13.2" height="32.0" rx="2" fill="#fff" stroke="#17191e" stroke-width="1"/><rect x="128.8" y="46.0" width="13.2" height="32.0" rx="2" fill="#fff" stroke="#17191e" stroke-width="1"/><rect x="145.1" y="46.0" width="13.2" height="32.0" rx="2" fill="#fff" stroke="#17191e" stroke-width="1"/><rect x="161.3" y="46.0" width="13.2" height="32.0" rx="2" fill="#fff" stroke="#17191e" stroke-width="1"/><rect x="177.5" y="46.0" width="13.2" height="32.0" rx="2" fill="#fff" stroke="#17191e" stroke-width="1"/><rect x="193.7" y="46.0" width="13.2" height="32.0" rx="2" fill="#fff" stroke="#17191e" stroke-width="1"/><rect x="210.0" y="46.0" width="13.2" height="32.0" rx="2" fill="#fff" stroke="#17191e" stroke-width="1"/><rect x="226.2" y="46.0" width="13.2" height="32.0" rx="2" fill="#fff" stroke="#17191e" stroke-width="1"/><rect x="242.4" y="46.0" width="13.2" height="32.0" rx="2" fill="#fff" stroke="#17191e" stroke-width="1"/><rect x="258.6" y="46.0" width="13.2" height="32.0" rx="2" fill="#fff" stroke="#17191e" stroke-width="1"/><rect x="274.9" y="46.0" width="13.2" height="32.0" rx="2" fill="#fff" stroke="#17191e" stroke-width="1"/><rect x="291.1" y="46.0" width="13.2" height="32.0" rx="2" fill="#fff" stroke="#17191e" stroke-width="1"/><rect x="307.3" y="46.0" width="13.2" height="32.0" rx="2" fill="#fff" stroke="#17191e" stroke-width="1"/><rect x="323.5" y="46.0" width="13.2" height="32.0" rx="2" fill="#fff" stroke="#17191e" stroke-width="1"/><rect x="339.8" y="46.0" width="13.2" height="32.0" rx="2" fill="#fff" stroke="#17191e" stroke-width="1"/><rect x="356.0" y="46.0" width="13.2" height="32.0" rx="2" fill="#fff" stroke="#17191e" stroke-width="1"/><rect x="372.2" y="46.0" width="13.2" height="32.0" rx="2" fill="#fff" stroke="#17191e" stroke-width="1"/><rect x="388.4" y="46.0" width="13.2" height="32.0" rx="2" fill="#fff" stroke="#17191e" stroke-width="1"/><rect x="404.6" y="46.0" width="13.2" height="32.0" rx="2" fill="#fff" stroke="#17191e" stroke-width="1"/><rect x="420.9" y="46.0" width="13.2" height="32.0" rx="2" fill="#fff" stroke="#17191e" stroke-width="1"/><rect x="437.1" y="46.0" width="13.2" height="32.0" rx="2" fill="#fff" stroke="#17191e" stroke-width="1"/><rect x="453.3" y="46.0" width="13.2" height="32.0" rx="2" fill="#fff" stroke="#17191e" stroke-width="1"/><rect x="469.5" y="46.0" width="13.2" height="32.0" rx="2" fill="#fff" stroke="#17191e" stroke-width="1"/><rect x="485.8" y="46.0" width="13.2" height="32.0" rx="2" fill="#fff" stroke="#17191e" stroke-width="1"/><rect x="502.0" y="46.0" width="13.2" height="32.0" rx="2" fill="#fff" stroke="#17191e" stroke-width="1"/><rect x="518.2" y="46.0" width="13.2" height="32.0" rx="2" fill="#fff" stroke="#17191e" stroke-width="1"/><rect x="534.4" y="46.0" width="13.2" height="32.0" rx="2" fill="#fff" stroke="#17191e" stroke-width="1"/><rect x="550.7" y="46.0" width="13.2" height="32.0" rx="2" fill="#fff" stroke="#17191e" stroke-width="1"/><rect x="566.9" y="46.0" width="13.2" height="32.0" rx="2" fill="#fff" stroke="#17191e" stroke-width="1"/><rect x="583.1" y="46.0" width="13.2" height="32.0" rx="2" fill="#fff" stroke="#ff6a00" stroke-width="2" stroke-dasharray="5 4"/><line x1="583.8" y1="32.0" x2="583.8" y2="94.0" stroke="#ff6a00" stroke-width="1.5"/><text x="30.0" y="112.0" font-family="inherit" font-size="14" font-weight="600" fill="#17191e" text-anchor="start" style="font-variant-numeric:tabular-nums">1 024 / 30 = 34,1333</text><text x="30.0" y="136.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">целиком помещается 34; следующий выходит за границу</text><text x="30.0" y="160.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">34 · 30 = 1 020 ≤ 1 024 &lt; 1 050 = 35 · 30</text></svg>',
+    width: 660,
+    height: 176,
+    alt: "Сколько целых объектов по 30 байт помещается в 1024 байт",
+  },
+  // %%pwd_range(6, 13, "lower")%%
+  pwdRange6_13_lower: {
+    kind: "diagram",
+    svg: '<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" viewBox="0 0 660 200"><text x="16.0" y="22.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">биты на прямой, засечки — границы байтов; точка — K · 6</text><rect x="233.3" y="68.0" width="386.7" height="32.0" rx="2" fill="#f3f3f1" stroke="none" stroke-width="0"/><line x1="40.0" y1="84.0" x2="620.0" y2="84.0" stroke="#17191e" stroke-width="1.5"/><line x1="40.0" y1="62.0" x2="40.0" y2="106.0" stroke="#4d535e" stroke-width="1"/><text x="40.0" y="124.0" font-family="inherit" font-size="13" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">88</text><text x="40.0" y="142.0" font-family="inherit" font-size="12" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">11 Б</text><line x1="233.3" y1="62.0" x2="233.3" y2="106.0" stroke="#17191e" stroke-width="2"/><text x="233.3" y="124.0" font-family="inherit" font-size="13" font-weight="600" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">96</text><text x="233.3" y="142.0" font-family="inherit" font-size="12" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">12 Б</text><line x1="426.7" y1="62.0" x2="426.7" y2="106.0" stroke="#17191e" stroke-width="2"/><text x="426.7" y="124.0" font-family="inherit" font-size="13" font-weight="600" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">104</text><text x="426.7" y="142.0" font-family="inherit" font-size="12" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">13 Б</text><line x1="620.0" y1="62.0" x2="620.0" y2="106.0" stroke="#4d535e" stroke-width="1"/><text x="620.0" y="124.0" font-family="inherit" font-size="13" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">112</text><text x="620.0" y="142.0" font-family="inherit" font-size="12" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">14 Б</text><circle cx="88.3" cy="84" r="4.5" fill="#fff" stroke="#17191e" stroke-width="1.5"/><text x="88.3" y="56.0" font-family="inherit" font-size="12" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">K = 15</text><circle cx="233.3" cy="84" r="4.5" fill="#fff" stroke="#17191e" stroke-width="1.5"/><text x="233.3" y="56.0" font-family="inherit" font-size="12" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">K = 16</text><circle cx="378.3" cy="84" r="6" fill="#ff6a00" stroke="#ff6a00" stroke-width="1.5"/><text x="378.3" y="56.0" font-family="inherit" font-size="12" font-weight="600" fill="#ff6a00" text-anchor="middle" style="font-variant-numeric:tabular-nums">K = 17</text><circle cx="523.3" cy="84" r="6" fill="#ff6a00" stroke="#ff6a00" stroke-width="1.5"/><text x="523.3" y="56.0" font-family="inherit" font-size="12" font-weight="600" fill="#ff6a00" text-anchor="middle" style="font-variant-numeric:tabular-nums">K = 18</text><text x="16.0" y="164.0" font-family="inherit" font-size="14" font-weight="600" fill="#17191e" text-anchor="start" style="font-variant-numeric:tabular-nums">больше 12 байтов: K · 6 &gt; 96</text><text x="16.0" y="188.0" font-family="inherit" font-size="13" font-weight="400" fill="#ff6a00" text-anchor="start" style="font-variant-numeric:tabular-nums">наименьшая длина K = 17: 16 · 6 = 96 — ещё 12 байтов, 17 · 6 = 102 &gt; 96</text></svg>',
+    width: 660,
+    height: 200,
+    alt: "Длины кода K · 6 и границы байтов",
+  },
+  // %%pwd_parts((90, 9), ("пароль", "номер"))%%
+  pwdParts909: {
+    kind: "diagram",
+    svg: '<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" viewBox="0 0 660 230"><text x="24.0" y="22.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">пароль — 90 битов + номер — 9 битов; клетка — байт</text><text x="24.0" y="50.0" font-family="inherit" font-size="14" font-weight="600" fill="#17191e" text-anchor="start" style="font-variant-numeric:tabular-nums">части подряд, байты — всей записи</text><rect x="24.0" y="63.0" width="491.8" height="20.0" fill="#f3f3f1" stroke="none"/><rect x="515.8" y="63.0" width="49.2" height="20.0" fill="#d9d9d4" stroke="none"/><rect x="565.0" y="63.0" width="27.3" height="20.0" rx="4" fill="none" stroke="#ff6a00" stroke-width="1"/><rect x="24.0" y="60.0" width="43.7" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="67.7" y="60.0" width="43.7" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="111.4" y="60.0" width="43.7" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="155.1" y="60.0" width="43.7" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="198.9" y="60.0" width="43.7" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="242.6" y="60.0" width="43.7" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="286.3" y="60.0" width="43.7" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="330.0" y="60.0" width="43.7" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="373.7" y="60.0" width="43.7" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="417.4" y="60.0" width="43.7" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="461.1" y="60.0" width="43.7" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="504.9" y="60.0" width="43.7" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="548.6" y="60.0" width="43.7" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><text x="24.0" y="108.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">90 + 9 = 99 битов, 99 / 8 = 12,375 → 13 байтов</text><text x="24.0" y="142.0" font-family="inherit" font-size="14" font-weight="600" fill="#17191e" text-anchor="start" style="font-variant-numeric:tabular-nums">каждой части свои байты</text><rect x="24.0" y="155.0" width="491.8" height="20.0" fill="#f3f3f1" stroke="none"/><rect x="515.8" y="155.0" width="32.8" height="20.0" rx="4" fill="none" stroke="#ff6a00" stroke-width="1"/><rect x="24.0" y="152.0" width="43.7" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="67.7" y="152.0" width="43.7" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="111.4" y="152.0" width="43.7" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="155.1" y="152.0" width="43.7" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="198.9" y="152.0" width="43.7" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="242.6" y="152.0" width="43.7" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="286.3" y="152.0" width="43.7" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="330.0" y="152.0" width="43.7" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="373.7" y="152.0" width="43.7" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="417.4" y="152.0" width="43.7" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="461.1" y="152.0" width="43.7" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="504.9" y="152.0" width="43.7" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><line x1="24.0" y1="148.0" x2="24.0" y2="182.0" stroke="#17191e" stroke-width="2"/><rect x="548.6" y="155.0" width="49.2" height="20.0" fill="#d9d9d4" stroke="none"/><rect x="597.8" y="155.0" width="38.2" height="20.0" rx="4" fill="none" stroke="#ff6a00" stroke-width="1"/><rect x="548.6" y="152.0" width="43.7" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><rect x="592.3" y="152.0" width="43.7" height="26.0" rx="0" fill="none" stroke="#17191e" stroke-width="1"/><line x1="548.6" y1="148.0" x2="548.6" y2="182.0" stroke="#17191e" stroke-width="2"/><line x1="636.0" y1="148.0" x2="636.0" y2="182.0" stroke="#17191e" stroke-width="2"/><text x="24.0" y="200.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">90 / 8 = 11,25 → 12; 9 / 8 = 1,125 → 2; 12 + 2 = 14 байтов</text><text x="330.0" y="220.0" font-family="inherit" font-size="12" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">обведённые клетки — выделенные, но пустые биты</text></svg>',
+    width: 660,
+    height: 230,
+    alt: "Части записи в битах и целые байты",
   },
 } as const satisfies Record<string, LessonMediaTypes.Generated>;

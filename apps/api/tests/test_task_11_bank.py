@@ -70,13 +70,13 @@ def smallest_alphabet_over(length: int, bytes_below: int) -> int:
 def answers() -> dict[str, str]:
     a: dict[str, str] = {}
     # subtopic 1
-    a["task-11-1-01"] = f"{i(17)} {i(32)} {i(33)}"
+    a["task-11-1-01"] = str(i(33))
     a["task-11-1-02"] = str(nbytes(9 * i(36)))
     a["task-11-1-03"] = str(200 * nbytes(13 * i(9)))
     a["task-11-1-04"] = str(40 * nbytes(12 * i(66)))
-    a["task-11-1-05"] = f"{4**6} {6 * i(4)}"
+    a["task-11-1-05"] = str(6 * i(4))  # bits, not the 4**6 passwords
     a["task-11-1-06"] = str(1024 * nbytes(40 * i(150)) // 1024)
-    a["task-11-1-07"] = f"{15 * nbytes(11 * i(6))} {nbytes(15 * 11 * i(6))}"
+    a["task-11-1-07"] = str(nbytes(15 * 11 * i(6)))  # whole bytes for the sequence
     a["task-11-1-08"] = str(524_288 * nbytes(180 * i(2016)) // 2**20)
     a["task-11-1-09"] = str(up(12_000 * nbytes(95 * i(1236)), 1024))
     # subtopic 2
@@ -86,16 +86,15 @@ def answers() -> dict[str, str]:
     a["task-11-2-04"] = str(1080 // 30 - nbytes(14 * i(30)))
     a["task-11-2-05"] = str(64 + 200 * (nbytes(8 * i(12)) + 12))
     a["task-11-2-06"] = str(96 - 9 * i(9))
-    pwd = 11 * i(5)
-    a["task-11-2-07"] = f"{nbytes(pwd + 25)} {nbytes(pwd) + nbytes(25)}"
+    a["task-11-2-07"] = str(nbytes(11 * i(5) + 25))  # whole bytes for the record
     a["task-11-2-08"] = str(300 * 1024 // 4096 - nbytes(60 * i(66)))
     a["task-11-2-09"] = str(500 * (nbytes(25 * i(38)) + 30))
     # subtopic 3: «не более»
-    a["task-11-3-01"] = f"{shortest_over(8, i(40))} {longest(9, i(40))}"
+    a["task-11-3-01"] = str(longest(9, i(40)))
     low = 8 * 8 // 12 + 1  # bits that do not fit 8 bytes
     high = 8 * 9 // 12
     assert low == high
-    a["task-11-3-02"] = f"{2 ** (low - 1) + 1} {2**high}"
+    a["task-11-3-02"] = str(2 ** (low - 1) + 1)
     a["task-11-3-04"] = str(longest(2048 // 100 - 3, i(33)))
     a["task-11-3-05"] = str(2 ** (8 * (480 // 40) // 15))
     a["task-11-3-06"] = str(2 ** (8 * (30 * 1024 // 1000) // 24) - 36)
@@ -103,10 +102,9 @@ def answers() -> dict[str, str]:
     a["task-11-3-08"] = str(2 ** (8 * (200 * 2**20 // 700_000) // 310))
     a["task-11-3-09"] = str(longest(500 * 1024 // 3000, i(762)))
     # subtopic 4: «не менее» and «более»
-    a["task-11-4-01"] = f"{up(1000, 40)} {1000 // 40 + 1}"
-    at_least = up(1000, 100)  # bytes per password
-    more = 1000 // 100 + 1
-    a["task-11-4-02"] = f"{shortest_over(at_least - 1, i(17))} {shortest_over(more - 1, i(17))}"
+    a["task-11-4-01"] = str(1000 // 40 + 1)  # «более»: the bound itself fails
+    more = 1000 // 100 + 1  # bytes per password
+    a["task-11-4-02"] = str(shortest_over(more - 1, i(17)))
     a["task-11-4-03"] = str(shortest_over(450 // 50, i(30)))
     a["task-11-4-04"] = str(smallest_alphabet_over(13, up(2001, 200) - 1))
     a["task-11-4-05"] = str(smallest_alphabet_over(20, up(6800, 400) - 1) - 36)
@@ -115,10 +113,10 @@ def answers() -> dict[str, str]:
     a["task-11-4-07"] = str(shortest_over(30 * 2**20 // 200_000, i(5036)))
     a["task-11-4-08"] = str(smallest_alphabet_over(40, up(95 * 2**20, 2_000_000) - 1))
     # subtopic 5: composite codes
-    a["task-11-5-01"] = f"{(256).bit_length()} {i(256)}"
+    a["task-11-5-01"] = str((256).bit_length())
     letters, digits = 5 * i(26), 3 * i(10)
-    a["task-11-5-02"] = f"{nbytes(letters + digits)} {nbytes(letters) + nbytes(digits)}"
-    a["task-11-5-03"] = f"{nbytes(6 * i(26) + 4 * i(9))} {nbytes(10 * i(35))}"
+    a["task-11-5-02"] = str(nbytes(letters + digits))
+    a["task-11-5-03"] = str(nbytes(10 * i(35)))  # one common code
     a["task-11-5-04"] = str(32 - nbytes(13 * i(22)) - nbytes((100).bit_length()))
     a["task-11-5-05"] = str(32 - nbytes(13 * i(22) + (100).bit_length()))
     a["task-11-5-06"] = str(nbytes(10 * i(26)) + nbytes((63).bit_length() + (366).bit_length()))

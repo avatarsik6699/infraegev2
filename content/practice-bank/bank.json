@@ -186943,19 +186943,19 @@
     {
       "task": {
         "id": "task-11-1-01",
-        "title": "Биты для 17, 32 и 33 символов",
+        "title": "Биты для 33 символов",
         "short_description": null,
         "explanation_kind": "worked_solution",
         "difficulty": 1,
         "estimated_minutes": 2,
-        "answer_instruction": "Введите три числа через пробел в том порядке, в каком их спрашивают.",
+        "answer_instruction": "Введите число.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Найди число битов на символ для алфавитов мощностью 17, 32 и 33."
+              "markdown": "Сколько битов нужно на символ алфавита мощностью 33?"
             }
           }
         ],
@@ -186963,7 +186963,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "i битов дают 2ⁱ кодов."
+              "markdown": "Найди наименьшую степень двойки, не меньшую 33."
             }
           }
         ],
@@ -186971,15 +186971,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "5, 5 и 6 битов: для 17 и 32 символов достаточно 32 кодов; для 33 нужны уже 64 возможных кода."
+              "markdown": "Пяти битов хватает на 2⁵ = 32 символа — на один меньше, чем нужно. Шесть битов дают 2⁶ = 64 кода, поэтому i = 6."
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "from math import ceil\n\n\ndef bits(alphabet):\n    i = 1\n    while 2 ** i < alphabet:\n        i += 1\n    return i\n\n\nprint(bits(17), bits(32), bits(33))",
+              "code": "from math import ceil\n\n\ndef bits(alphabet):\n    i = 1\n    while 2 ** i < alphabet:\n        i += 1\n    return i\n\n\nprint(bits(33))",
               "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `6`"
             }
           }
         ],
@@ -186988,14 +186994,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 0,
+            "position": 1,
             "material_id": "information-amount"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "minimalno-vozmozhnoe",
+            "section": "kod-simvola",
             "material_id": "information-amount"
           }
         ],
@@ -187017,7 +187023,7 @@
         ],
         "checker": {
           "checker_type": "exact_match",
-          "answer_variants": ["5 5 6"],
+          "answer_variants": ["6"],
           "numeric_tolerance": null
         }
       },
@@ -187046,7 +187052,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Алфавит — 26 букв и 10 цифр."
+              "markdown": "Наборы складываются: 26 + 10."
             }
           }
         ],
@@ -187054,7 +187060,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "7 байтов: A = 26 + 10 = 36, i = 6, L · i = 54, B = ⌈54 / 8⌉ = 7."
+              "markdown": "Алфавит — 26 букв и 10 цифр, N = 36, на символ 6 бит. Пароль 9 · 6 = 54 бита, 54 / 8 = 6,75 — округляем вверх до 7 байтов."
             }
           },
           {
@@ -187064,6 +187070,12 @@
               "code": "from math import ceil\n\n\ndef bits(alphabet):\n    i = 1\n    while 2 ** i < alphabet:\n        i += 1\n    return i\n\n\nprint(ceil(9 * bits(26 + 10) / 8))",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `7`"
+            }
           }
         ],
         "skills": [],
@@ -187071,7 +187083,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 1,
+            "position": 2,
             "material_id": "information-amount"
           }
         ],
@@ -187129,7 +187141,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Целые байты выделяют каждому паролю."
+              "markdown": "Сначала байты одного пароля, потом умножай на 200."
             }
           }
         ],
@@ -187137,7 +187149,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "1400 байтов: i = 4, L · i = 52, B = 7, V = 200 · 7."
+              "markdown": "Девяти символам хватает 4 бит. Пароль 13 · 4 = 52 бита → 7 байтов. Целые байты у каждого пароля, поэтому 200 · 7 = 1400."
             }
           },
           {
@@ -187147,6 +187159,12 @@
               "code": "from math import ceil\n\n\ndef bits(alphabet):\n    i = 1\n    while 2 ** i < alphabet:\n        i += 1\n    return i\n\n\nprint(200 * ceil(13 * bits(9) / 8))",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `1400`"
+            }
           }
         ],
         "skills": [],
@@ -187154,14 +187172,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 2,
+            "position": 3,
             "material_id": "information-amount"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "chto-okruglyat",
+            "section": "mnogo-parolej",
             "material_id": "information-amount"
           }
         ],
@@ -187212,7 +187230,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Требования к составу пароля алфавит не меняют."
+              "markdown": "Требования к составу пароля не меняют алфавит."
             }
           }
         ],
@@ -187220,7 +187238,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "440 байтов: A = 52 + 10 + 4 = 66, требования «хотя бы один» алфавит не меняют; i = 7, 12 · 7 = 84 бита, ⌈84 / 8⌉ = 11 байтов, 40 · 11."
+              "markdown": "Алфавит — 52 буквы, 10 цифр и 4 знака, N = 66; требования «хотя бы одна» его не меняют. На символ 7 бит, пароль 12 · 7 = 84 бита → 11 байтов, 40 паролей — 440 байтов."
             }
           },
           {
@@ -187230,6 +187248,12 @@
               "code": "from math import ceil\n\n\ndef bits(alphabet):\n    i = 1\n    while 2 ** i < alphabet:\n        i += 1\n    return i\n\n\nprint(40 * ceil(12 * bits(52 + 10 + 4) / 8))",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `440`"
+            }
           }
         ],
         "skills": [],
@@ -187237,7 +187261,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 3,
+            "position": 0,
             "material_id": "information-amount"
           }
         ],
@@ -187275,19 +187299,19 @@
     {
       "task": {
         "id": "task-11-1-05",
-        "title": "Сколько паролей и сколько битов",
+        "title": "Сколько битов, а не сколько паролей",
         "short_description": null,
         "explanation_kind": "worked_solution",
         "difficulty": 1,
         "estimated_minutes": 2,
-        "answer_instruction": "Введите два числа через пробел в том порядке, в каком их спрашивают.",
+        "answer_instruction": "Введите число.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Пароли длиной 6 составляют из алфавита в 4 символа. Сколько существует разных паролей? Сколько битов занимает один пароль при посимвольном кодировании?"
+              "markdown": "Пароли длиной 6 составляют из алфавита в 4 символа. Сколько битов занимает один пароль при посимвольном кодировании?"
             }
           }
         ],
@@ -187295,7 +187319,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Количество паролей и память для одного — разные величины."
+              "markdown": "Память пароля — длина, умноженная на биты одного символа."
             }
           }
         ],
@@ -187303,15 +187327,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "4096 паролей и 12 бит: 4⁶ = 4096 строк, а i = 2, 6 · 2 = 12 бит."
+              "markdown": "Четырём символам хватает 2 бит, пароль из 6 символов — 6 · 2 = 12 бит. Число 4⁶ = 4096 — сколько разных паролей можно составить, а не сколько битов занимает один."
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "from math import ceil\n\n\ndef bits(alphabet):\n    i = 1\n    while 2 ** i < alphabet:\n        i += 1\n    return i\n\n\nprint(4 ** 6, 6 * bits(4))",
+              "code": "from math import ceil\n\n\ndef bits(alphabet):\n    i = 1\n    while 2 ** i < alphabet:\n        i += 1\n    return i\n\n\nprint(6 * bits(4))",
               "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `12`"
             }
           }
         ],
@@ -187320,14 +187350,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 4,
+            "position": 5,
             "material_id": "information-amount"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "kolichestvo-i-pamyat",
+            "section": "mnogo-parolej",
             "material_id": "information-amount"
           }
         ],
@@ -187349,7 +187379,7 @@
         ],
         "checker": {
           "checker_type": "exact_match",
-          "answer_variants": ["4096 12"],
+          "answer_variants": ["12"],
           "numeric_tolerance": null
         }
       },
@@ -187378,7 +187408,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Элементы вместо символов не меняют расчёта."
+              "markdown": "Элементы вместо символов: расчёт тот же."
             }
           }
         ],
@@ -187386,7 +187416,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "40 Кбайт: 150 видов — 8 бит, 40 · 8 = 320 бит = 40 байтов, 1024 · 40 байтов = 40 Кбайт."
+              "markdown": "150 видам элементов нужно 8 бит. Описание — 40 · 8 = 320 бит = 40 байтов. 1024 описания — 1024 · 40 байтов = 40 Кбайт."
             }
           },
           {
@@ -187396,6 +187426,12 @@
               "code": "from math import ceil\n\n\ndef bits(alphabet):\n    i = 1\n    while 2 ** i < alphabet:\n        i += 1\n    return i\n\n\nprint(1024 * ceil(40 * bits(150) / 8) // 1024)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `40`"
+            }
           }
         ],
         "skills": [],
@@ -187403,14 +187439,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 5,
+            "position": 6,
             "material_id": "information-amount"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "elementy-i-sostoyaniya",
+            "section": "mnogo-parolej",
             "material_id": "information-amount"
           }
         ],
@@ -187441,19 +187477,19 @@
     {
       "task": {
         "id": "task-11-1-07",
-        "title": "Байты каждому коду или всей последовательности",
+        "title": "Байты всей последовательности",
         "short_description": null,
         "explanation_kind": "worked_solution",
         "difficulty": 1,
         "estimated_minutes": 3,
-        "answer_instruction": "Введите два числа через пробел в том порядке, в каком их спрашивают.",
+        "answer_instruction": "Введите число.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Каждый из 15 кодов состоит из 11 символов алфавита мощностью 6. Сколько байтов займут все коды, если целое число байтов выделяется каждому коду? А если все коды записаны подряд и целое число байтов выделяется всей последовательности?"
+              "markdown": "Каждый из 15 кодов состоит из 11 символов алфавита мощностью 6. Все коды записаны подряд, и целое число байтов выделяется всей последовательности. Сколько байтов займут все коды?"
             }
           }
         ],
@@ -187461,7 +187497,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Округляют тот объект, которому выделяют целые байты."
+              "markdown": "Целые байты выделяют всей последовательности — округляй только её."
             }
           }
         ],
@@ -187469,15 +187505,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "75 и 62 байта: i = 3, код — 33 бита; по 5 байтов на код — 15 · 5 = 75; подряд — ⌈495 / 8⌉ = 62."
+              "markdown": "Шести символам хватает 3 бит, код — 11 · 3 = 33 бита. Коды идут подряд, поэтому сначала складывают биты: 15 · 33 = 495 бит, 495 / 8 = 61,875 → 62 байта. С целыми байтами на каждый код было бы 15 · 5 = 75."
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "from math import ceil\n\n\ndef bits(alphabet):\n    i = 1\n    while 2 ** i < alphabet:\n        i += 1\n    return i\n\n\ncode = 11 * bits(6)\nprint(15 * ceil(code / 8), ceil(15 * code / 8))",
+              "code": "from math import ceil\n\n\ndef bits(alphabet):\n    i = 1\n    while 2 ** i < alphabet:\n        i += 1\n    return i\n\n\ncode = 11 * bits(6)\nprint(ceil(15 * code / 8))",
               "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `62`"
             }
           }
         ],
@@ -187486,14 +187528,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 6,
+            "position": 4,
             "material_id": "information-amount"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "chto-okruglyat",
+            "section": "mnogo-parolej",
             "material_id": "information-amount"
           }
         ],
@@ -187515,7 +187557,7 @@
         ],
         "checker": {
           "checker_type": "exact_match",
-          "answer_variants": ["75 62"],
+          "answer_variants": ["62"],
           "numeric_tolerance": null
         }
       },
@@ -187536,7 +187578,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "При регистрации каждому объекту присваивается идентификатор из 180 символов; символы — цифры шестнадцатеричной системы и знаки из специального алфавита в 2000 символов. Для каждого идентификатора отведено одинаковое минимально возможное целое число байтов, кодирование посимвольное, все символы кодируются одинаковым минимальным числом битов. Определите объём памяти в Мбайт для хранения 524 288 идентификаторов."
+              "markdown": "При регистрации каждому объекту присваивается идентификатор из 180 символов; символы — цифры шестнадцатеричной системы и знаки из специального алфавита в 2000 символов. Для каждого идентификатора отведено одинаковое минимально возможное целое число байтов, кодирование посимвольное, все символы кодируются одинаковым минимальным числом битов. Определи объём памяти в Мбайт для хранения 524 288 идентификаторов."
             }
           }
         ],
@@ -187544,7 +187586,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Алфавит — цифры шестнадцатеричной системы и специальные знаки."
+              "markdown": "Цифр шестнадцатеричной системы 16."
             }
           }
         ],
@@ -187552,7 +187594,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "124 Мбайт: A = 16 + 2000 = 2016, i = 11, 180 · 11 = 1980 бит, ⌈1980 / 8⌉ = 248 байтов, 524 288 · 248 / 2²⁰ = 124."
+              "markdown": "Алфавит — 16 цифр шестнадцатеричной системы и 2000 знаков, N = 2016, на символ 11 бит. Идентификатор 180 · 11 = 1980 бит → 248 байтов. Все: 524 288 · 248 байтов, делим на 2²⁰ — 124 Мбайт."
             }
           },
           {
@@ -187561,6 +187603,12 @@
               "language": "python",
               "code": "from math import ceil\n\n\ndef bits(alphabet):\n    i = 1\n    while 2 ** i < alphabet:\n        i += 1\n    return i\n\n\nper = ceil(180 * bits(16 + 2000) / 8)\nprint(524_288 * per // 2 ** 20)",
               "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `124`"
             }
           }
         ],
@@ -187576,7 +187624,7 @@
         "theory_links": [
           {
             "label": "Теория",
-            "section": "raschyot-python",
+            "section": "mnogo-parolej",
             "material_id": "information-amount"
           }
         ],
@@ -187619,7 +187667,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Номер детали состоит из 95 символов: десятичные цифры, заглавные латинские буквы и знаки специального набора из 1200 символов. Каждый номер занимает одинаковое минимально возможное целое число байтов, кодирование посимвольное, все символы кодируются одинаковым минимальным числом битов. Определите наименьшее целое число Кбайт, достаточное для хранения 12 000 номеров."
+              "markdown": "Номер детали состоит из 95 символов: десятичные цифры, заглавные латинские буквы и знаки специального набора из 1200 символов. Каждый номер занимает одинаковое минимально возможное целое число байтов, кодирование посимвольное, все символы кодируются одинаковым минимальным числом битов. Определи наименьшее целое число Кбайт, достаточное для хранения 12 000 номеров."
             }
           }
         ],
@@ -187627,7 +187675,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Объём в Кбайтах округляют вверх."
+              "markdown": "Наименьшее целое число Кбайт, которого хватит, — округление вверх."
             }
           }
         ],
@@ -187635,7 +187683,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "1536 Кбайт: A = 10 + 26 + 1200 = 1236, i = 11, 95 · 11 = 1045 бит, ⌈1045 / 8⌉ = 131 байт, 12 000 · 131 = 1 572 000 байтов = 1535,15… Кбайт, вверх — 1536."
+              "markdown": "N = 10 + 26 + 1200 = 1236, на символ 11 бит. Номер 95 · 11 = 1045 бит → 131 байт. Все номера — 12 000 · 131 = 1 572 000 байтов = 1535,15… Кбайт; чтобы всё поместилось, нужно 1536 Кбайт."
             }
           },
           {
@@ -187644,6 +187692,12 @@
               "language": "python",
               "code": "from math import ceil\n\n\ndef bits(alphabet):\n    i = 1\n    while 2 ** i < alphabet:\n        i += 1\n    return i\n\n\nper = ceil(95 * bits(10 + 26 + 1200) / 8)\nprint(ceil(12_000 * per / 1024))",
               "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `1536`"
             }
           }
         ],
@@ -187659,7 +187713,7 @@
         "theory_links": [
           {
             "label": "Теория",
-            "section": "raschyot-python",
+            "section": "mnogo-parolej",
             "material_id": "information-amount"
           }
         ],
@@ -187710,7 +187764,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Запись — пароль и сведения."
+              "markdown": "Запись — пароль в целых байтах и сведения."
             }
           }
         ],
@@ -187718,7 +187772,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "1728 байтов: i = 5, 10 · 5 = 50 бит, B = 7, R = 7 + 20 = 27, 64 · 27."
+              "markdown": "26 буквам нужно 5 бит, пароль 10 · 5 = 50 бит → 7 байтов. Запись 7 + 20 = 27 байтов, 64 записи — 1728 байтов."
             }
           },
           {
@@ -187728,6 +187782,12 @@
               "code": "from math import ceil\n\n\ndef bits(alphabet):\n    i = 1\n    while 2 ** i < alphabet:\n        i += 1\n    return i\n\n\nprint(64 * (ceil(10 * bits(26) / 8) + 20))",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `1728`"
+            }
           }
         ],
         "skills": [],
@@ -187735,14 +187795,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 9,
+            "position": 12,
             "material_id": "information-amount"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "dopolnitelnye-svedeniya",
+            "section": "obyom-zapisej",
             "material_id": "information-amount"
           }
         ],
@@ -187793,7 +187853,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Запись — пароль и сведения."
+              "markdown": "Запись — пароль в целых байтах и сведения."
             }
           }
         ],
@@ -187801,7 +187861,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "2176 байтов: i = 4, L · i = 60, B = 8, V = 128 · (8 + 9)."
+              "markdown": "12 символам хватает 4 бит, пароль 15 · 4 = 60 бит → 8 байтов. Запись 8 + 9 = 17 байтов, 128 записей — 2176 байтов."
             }
           },
           {
@@ -187811,6 +187871,12 @@
               "code": "from math import ceil\n\n\ndef bits(alphabet):\n    i = 1\n    while 2 ** i < alphabet:\n        i += 1\n    return i\n\n\nprint(128 * (ceil(15 * bits(12) / 8) + 9))",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `2176`"
+            }
           }
         ],
         "skills": [],
@@ -187818,14 +187884,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 10,
+            "position": 13,
             "material_id": "information-amount"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "dopolnitelnye-svedeniya",
+            "section": "obyom-zapisej",
             "material_id": "information-amount"
           }
         ],
@@ -187876,7 +187942,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Из размера записи вычтите пароль."
+              "markdown": "Из размера записи вычти байты пароля."
             }
           }
         ],
@@ -187884,7 +187950,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "14 байтов: R = 6 · 1024 / 256 = 24; i = 6, B = ⌈78 / 8⌉ = 10, D = 24 − 10."
+              "markdown": "Одна запись: 6 · 1024 / 256 = 24 байта. Пароль: 40 символам нужно 6 бит, 13 · 6 = 78 бит → 10 байтов. На сведения остаётся 24 − 10 = 14 байтов."
             }
           },
           {
@@ -187894,6 +187960,12 @@
               "code": "from math import ceil\n\n\ndef bits(alphabet):\n    i = 1\n    while 2 ** i < alphabet:\n        i += 1\n    return i\n\n\nrecord = 6 * 1024 // 256\nprint(record - ceil(13 * bits(40) / 8))",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `14`"
+            }
           }
         ],
         "skills": [],
@@ -187901,14 +187973,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 11,
+            "position": 9,
             "material_id": "information-amount"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "obratnyj-hod",
+            "section": "zapis-polzovatelya",
             "material_id": "information-amount"
           }
         ],
@@ -187959,7 +188031,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Обратный ход по той же цепочке."
+              "markdown": "Раздели общий объём на число пользователей и вычти пароль."
             }
           }
         ],
@@ -187967,7 +188039,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "27 байтов: R = 1080 / 30 = 36; i = 5, 14 · 5 = 70 бит, B = 9, D = 36 − 9."
+              "markdown": "Одна запись: 1080 / 30 = 36 байтов. Пароль: 30 символам нужно 5 бит, 14 · 5 = 70 бит → 9 байтов. Сведения: 36 − 9 = 27 байтов."
             }
           },
           {
@@ -187977,6 +188049,12 @@
               "code": "from math import ceil\n\n\ndef bits(alphabet):\n    i = 1\n    while 2 ** i < alphabet:\n        i += 1\n    return i\n\n\nrecord = 1080 // 30\nprint(record - ceil(14 * bits(30) / 8))",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `27`"
+            }
           }
         ],
         "skills": [],
@@ -187984,14 +188062,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 12,
+            "position": 10,
             "material_id": "information-amount"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "obratnyj-hod",
+            "section": "zapis-polzovatelya",
             "material_id": "information-amount"
           }
         ],
@@ -188042,7 +188120,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Заголовок прибавляют один раз."
+              "markdown": "Общий заголовок прибавляют один раз, а не к каждой записи."
             }
           }
         ],
@@ -188050,7 +188128,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "3264 байта: i = 4, 8 · 4 = 32 бита = 4 байта, R = 16, V = 64 + 200 · 16 — заголовок один раз."
+              "markdown": "12 символам хватает 4 бит, пароль 8 · 4 = 32 бита = 4 байта, запись 4 + 12 = 16 байтов. 200 записей — 3200 байтов, общий заголовок прибавляем один раз: 3264."
             }
           },
           {
@@ -188060,6 +188138,12 @@
               "code": "from math import ceil\n\n\ndef bits(alphabet):\n    i = 1\n    while 2 ** i < alphabet:\n        i += 1\n    return i\n\n\nprint(64 + 200 * (ceil(8 * bits(12) / 8) + 12))",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `3264`"
+            }
           }
         ],
         "skills": [],
@@ -188067,14 +188151,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 13,
+            "position": 15,
             "material_id": "information-amount"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "obshchij-zagolovok",
+            "section": "obyom-zapisej",
             "material_id": "information-amount"
           }
         ],
@@ -188125,7 +188209,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Пароль без отдельного округления."
+              "markdown": "Пароль не округляют: вычитай его биты из битов записи."
             }
           }
         ],
@@ -188133,7 +188217,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "60 битов: 12 · 8 − 9 · 4 = 96 − 36."
+              "markdown": "Запись — 12 · 8 = 96 бит. Девяти символам нужно 4 бита, пароль 9 · 4 = 36 бит, и его не округляют отдельно. На сведения остаётся 96 − 36 = 60 бит."
             }
           },
           {
@@ -188143,6 +188227,12 @@
               "code": "from math import ceil\n\n\ndef bits(alphabet):\n    i = 1\n    while 2 ** i < alphabet:\n        i += 1\n    return i\n\n\nprint(12 * 8 - 9 * bits(9))",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `60`"
+            }
           }
         ],
         "skills": [],
@@ -188150,14 +188240,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 14,
+            "position": 17,
             "material_id": "information-amount"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "svedeniya-v-bitah",
+            "section": "chasti-v-bitah",
             "material_id": "information-amount"
           }
         ],
@@ -188188,19 +188278,19 @@
     {
       "task": {
         "id": "task-11-2-07",
-        "title": "Подряд или по частям",
+        "title": "Пароль и сведения подряд",
         "short_description": null,
         "explanation_kind": "worked_solution",
         "difficulty": 1,
         "estimated_minutes": 3,
-        "answer_instruction": "Введите два числа через пробел в том порядке, в каком их спрашивают.",
+        "answer_instruction": "Введите число.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Пароль содержит 11 символов алфавита мощностью 5, дополнительные сведения — 25 битов. Сколько байтов займёт запись, если пароль и сведения записаны подряд и целое число байтов выделяется всей записи? А если каждой части выделяется своё целое число байтов?"
+              "markdown": "Пароль содержит 11 символов алфавита мощностью 5, дополнительные сведения — 25 битов. Пароль и сведения записаны подряд, целое число байтов выделяется всей записи. Сколько байтов займёт запись?"
             }
           }
         ],
@@ -188208,7 +188298,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Где выделяются целые байты, решает формулировка."
+              "markdown": "Целые байты всей записи: сложи биты частей, потом округляй."
             }
           }
         ],
@@ -188216,15 +188306,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "8 и 9 байтов: i = 3, пароль — 33 бита; подряд ⌈(33 + 25) / 8⌉ = ⌈58 / 8⌉ = 8; отдельно ⌈33 / 8⌉ + ⌈25 / 8⌉ = 5 + 4."
+              "markdown": "Пяти символам нужно 3 бита, пароль 11 · 3 = 33 бита. Подряд со сведениями — 33 + 25 = 58 бит, 58 / 8 = 7,25 → 8 байтов. С отдельными байтами у каждой части вышло бы 5 + 4 = 9."
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "from math import ceil\n\n\ndef bits(alphabet):\n    i = 1\n    while 2 ** i < alphabet:\n        i += 1\n    return i\n\n\npwd = 11 * bits(5)\nprint(ceil((pwd + 25) / 8), ceil(pwd / 8) + ceil(25 / 8))",
+              "code": "from math import ceil\n\n\ndef bits(alphabet):\n    i = 1\n    while 2 ** i < alphabet:\n        i += 1\n    return i\n\n\npwd = 11 * bits(5)\nprint(ceil((pwd + 25) / 8))",
               "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `8`"
             }
           }
         ],
@@ -188233,14 +188329,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 15,
+            "position": 16,
             "material_id": "information-amount"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "svedeniya-v-bitah",
+            "section": "chasti-v-bitah",
             "material_id": "information-amount"
           }
         ],
@@ -188262,7 +188358,7 @@
         ],
         "checker": {
           "checker_type": "exact_match",
-          "answer_variants": ["8 9"],
+          "answer_variants": ["8"],
           "numeric_tolerance": null
         }
       },
@@ -188299,7 +188395,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "22 байта: A = 52 + 10 + 4 = 66, i = 7, 60 · 7 = 420 бит, B = ⌈420 / 8⌉ = 53; R = 300 · 1024 / 4096 = 75, D = 75 − 53."
+              "markdown": "Алфавит — 52 буквы, 10 цифр и 4 знака, N = 66, на символ 7 бит. Пароль 60 · 7 = 420 бит → 53 байта. Запись 300 · 1024 / 4096 = 75 байтов, сведения 75 − 53 = 22."
             }
           },
           {
@@ -188309,6 +188405,12 @@
               "code": "from math import ceil\n\n\ndef bits(alphabet):\n    i = 1\n    while 2 ** i < alphabet:\n        i += 1\n    return i\n\n\nrecord = 300 * 1024 // 4096\nprint(record - ceil(60 * bits(52 + 10 + 4) / 8))",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `22`"
+            }
           }
         ],
         "skills": [],
@@ -188316,14 +188418,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 16,
+            "position": 11,
             "material_id": "information-amount"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "obratnyj-hod",
+            "section": "zapis-polzovatelya",
             "material_id": "information-amount"
           }
         ],
@@ -188382,7 +188484,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "24 500 байтов: A = 26 + 10 + 2 = 38, i = 6, 25 · 6 = 150 бит, B = ⌈150 / 8⌉ = 19, V = 500 · (19 + 30)."
+              "markdown": "Алфавит — 26 букв, 10 цифр, дефис и точка, N = 38, на символ 6 бит. Код 25 · 6 = 150 бит → 19 байтов, запись 19 + 30 = 49 байтов, 500 объектов — 24 500 байтов."
             }
           },
           {
@@ -188392,6 +188494,12 @@
               "code": "from math import ceil\n\n\ndef bits(alphabet):\n    i = 1\n    while 2 ** i < alphabet:\n        i += 1\n    return i\n\n\nprint(500 * (ceil(25 * bits(26 + 10 + 2) / 8) + 30))",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `24500`"
+            }
           }
         ],
         "skills": [],
@@ -188399,14 +188507,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 17,
+            "position": 14,
             "material_id": "information-amount"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "dopolnitelnye-svedeniya",
+            "section": "obyom-zapisej",
             "material_id": "information-amount"
           }
         ],
@@ -188437,19 +188545,19 @@
     {
       "task": {
         "id": "task-11-3-01",
-        "title": "Длина пароля по 9 байтам",
+        "title": "Наибольшая длина по 9 байтам",
         "short_description": null,
         "explanation_kind": "worked_solution",
         "difficulty": 1,
         "estimated_minutes": 2,
-        "answer_instruction": "Введите два числа через пробел в том порядке, в каком их спрашивают.",
+        "answer_instruction": "Введите число.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Пароль использует алфавит мощностью 40 и занимает минимально возможные 9 байтов. Найди минимальную и максимальную длину."
+              "markdown": "Пароль использует алфавит мощностью 40 и занимает минимально возможные 9 байтов. Какой наибольшей длины может быть пароль?"
             }
           }
         ],
@@ -188457,7 +188565,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Двойное неравенство 64 < 6L ≤ 72."
+              "markdown": "9 байтов вмещают 72 бита: раздели на биты одного символа."
             }
           }
         ],
@@ -188465,15 +188573,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "11 и 12: i = 6, 64 < 6L ≤ 72, 10,67 < L ≤ 12."
+              "markdown": "40 символам нужно 6 бит. 9 байтов — больше 64 бит (иначе хватило бы 8 байтов) и не больше 72. Длина 12 даёт 72 бита — ещё 9 байтов, длина 13 — 78 бит, уже 10 байтов. Наибольшая длина 12."
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "from math import ceil\n\n\ndef bits(alphabet):\n    i = 1\n    while 2 ** i < alphabet:\n        i += 1\n    return i\n\n\nok = [n for n in range(1, 30) if ceil(n * bits(40) / 8) == 9]\nprint(min(ok), max(ok))",
+              "code": "from math import ceil\n\n\ndef bits(alphabet):\n    i = 1\n    while 2 ** i < alphabet:\n        i += 1\n    return i\n\n\nok = [k for k in range(1, 30)\n      if ceil(k * bits(40) / 8) == 9]\nprint(max(ok))",
               "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `12`"
             }
           }
         ],
@@ -188489,7 +188603,7 @@
         "theory_links": [
           {
             "label": "Теория",
-            "section": "dlina-parolya",
+            "section": "dlina-po-bajtam",
             "material_id": "information-amount"
           }
         ],
@@ -188511,7 +188625,7 @@
         ],
         "checker": {
           "checker_type": "exact_match",
-          "answer_variants": ["11 12"],
+          "answer_variants": ["12"],
           "numeric_tolerance": null
         }
       },
@@ -188520,19 +188634,19 @@
     {
       "task": {
         "id": "task-11-3-02",
-        "title": "Мощность алфавита по 9 байтам",
+        "title": "Наименьший алфавит по 9 байтам",
         "short_description": null,
         "explanation_kind": "worked_solution",
         "difficulty": 1,
         "estimated_minutes": 3,
-        "answer_instruction": "Введите два числа через пробел в том порядке, в каком их спрашивают.",
+        "answer_instruction": "Введите число.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Пароль содержит 12 символов и занимает минимально возможные 9 байтов. Найди минимальную и максимальную мощность алфавита."
+              "markdown": "Пароль содержит 12 символов и занимает минимально возможные 9 байтов. Какова наименьшая возможная мощность алфавита?"
             }
           }
         ],
@@ -188540,7 +188654,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Сначала число битов, потом мощность."
+              "markdown": "Сначала найди число битов на символ, потом наименьший алфавит для него."
             }
           }
         ],
@@ -188548,15 +188662,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "33 и 64: 64 < 12i ≤ 72, 5,33 < i ≤ 6, i = 6, 32 < A ≤ 64."
+              "markdown": "9 байтов — больше 64 бит и не больше 72: 64 < 12i ≤ 72, значит, i = 6. Шесть битов нужны алфавитам от 33 до 64 символов, наименьший из них — 33."
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "from math import ceil\n\n\ndef bits(alphabet):\n    i = 1\n    while 2 ** i < alphabet:\n        i += 1\n    return i\n\n\nok = [a for a in range(2, 300)\n      if ceil(12 * bits(a) / 8) == 9]\nprint(min(ok), max(ok))",
+              "code": "from math import ceil\n\n\ndef bits(alphabet):\n    i = 1\n    while 2 ** i < alphabet:\n        i += 1\n    return i\n\n\nok = [n for n in range(2, 300)\n      if ceil(12 * bits(n) / 8) == 9]\nprint(min(ok))",
               "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `33`"
             }
           }
         ],
@@ -188572,7 +188692,7 @@
         "theory_links": [
           {
             "label": "Теория",
-            "section": "moshchnost-alfavita",
+            "section": "dlina-po-bajtam",
             "material_id": "information-amount"
           }
         ],
@@ -188594,7 +188714,7 @@
         ],
         "checker": {
           "checker_type": "exact_match",
-          "answer_variants": ["33 64"],
+          "answer_variants": ["33"],
           "numeric_tolerance": null
         }
       },
@@ -188623,7 +188743,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "От наибольшего размера записи — к паролю."
+              "markdown": "От наибольшего размера записи — к наибольшему числу битов пароля."
             }
           }
         ],
@@ -188631,7 +188751,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "22 символа: i = 6, Rₘₐₓ = ⌊2048 / 100⌋ = 20, на пароль остаётся 17 байтов: 6L ≤ 136, Lₘₐₓ = 22. Для 22 символов требуется 2000 байтов вместе с дополнительными сведениями; для 23 — 2100."
+              "markdown": "33 символам нужно 6 бит. Запись не больше 2048 / 100 = 20,48 → 20 байтов, пароль не больше 20 − 3 = 17 байтов = 136 бит, 136 / 6 = 22,6 → 22 символа. Проверка: 23 символа — 138 бит → 18 байтов, 100 · 21 = 2100 > 2048."
             }
           },
           {
@@ -188640,6 +188760,12 @@
               "language": "python",
               "code": "from math import ceil\n\n\ndef bits(alphabet):\n    i = 1\n    while 2 ** i < alphabet:\n        i += 1\n    return i\n\n\nrecord = 2048 // 100\nok = [n for n in range(1, 60)\n      if ceil(n * bits(33) / 8) + 3 <= record]\nprint(max(ok))",
               "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `22`"
             }
           }
         ],
@@ -188706,7 +188832,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Наибольшее целое число битов."
+              "markdown": "Найди наибольшее число битов на символ — ответ 2ⁱ."
             }
           }
         ],
@@ -188714,7 +188840,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "64: Bₘₐₓ = 480 / 40 = 12 байтов = 96 бит, 15i ≤ 96, i ≤ 6,4, i = 6, 2⁶ = 64."
+              "markdown": "Пароль не больше 480 / 40 = 12 байтов = 96 бит. 15 · i ≤ 96, i ≤ 6,4, то есть i = 6. Наибольший алфавит для 6 бит — 2⁶ = 64."
             }
           },
           {
@@ -188724,6 +188850,12 @@
               "code": "from math import ceil\n\n\ndef bits(alphabet):\n    i = 1\n    while 2 ** i < alphabet:\n        i += 1\n    return i\n\n\nok = [a for a in range(2, 1000)\n      if ceil(15 * bits(a) / 8) <= 480 // 40]\nprint(max(ok))",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `64`"
+            }
           }
         ],
         "skills": [],
@@ -188731,14 +188863,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 21,
+            "position": 22,
             "material_id": "information-amount"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "naibolshaya-moshchnost",
+            "section": "naibolshij-alfavit",
             "material_id": "information-amount"
           }
         ],
@@ -188789,7 +188921,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Сначала весь алфавит, потом вычесть известные символы."
+              "markdown": "Сначала наибольший весь алфавит, потом вычти известные символы."
             }
           }
         ],
@@ -188797,7 +188929,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "988: Bₘₐₓ = ⌊30 720 / 1000⌋ = 30 байтов = 240 бит, 24i ≤ 240, i = 10, 2¹⁰ − 36 = 988."
+              "markdown": "Код не больше 30 · 1024 / 1000 = 30,72 → 30 байтов = 240 бит, 24 · i ≤ 240, i = 10. Наибольший алфавит 2¹⁰ = 1024, из них 26 букв и 10 цифр известны: специальных знаков 1024 − 36 = 988."
             }
           },
           {
@@ -188807,6 +188939,12 @@
               "code": "most = (30 * 1024 // 1000) * 8 // 24\nprint(2 ** most - 36)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `988`"
+            }
           }
         ],
         "skills": [],
@@ -188814,14 +188952,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 22,
+            "position": 23,
             "material_id": "information-amount"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "specialnye-simvoly",
+            "section": "naibolshij-alfavit",
             "material_id": "information-amount"
           }
         ],
@@ -188880,7 +189018,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "101 475: i = 6, 16 · 6 = 96 бит = 12 байтов, R = 12 + 19 = 31, ⌊3 · 2²⁰ / 31⌋ = ⌊101 475,09…⌋."
+              "markdown": "40 символам нужно 6 бит, пароль 16 · 6 = 96 бит = 12 байтов, запись 12 + 19 = 31 байт. 3 Мбайт = 3 · 2²⁰ байтов, 3 · 2²⁰ / 31 = 101 475,09… — целых записей 101 475."
             }
           },
           {
@@ -188890,6 +189028,12 @@
               "code": "from math import ceil\n\n\ndef bits(alphabet):\n    i = 1\n    while 2 ** i < alphabet:\n        i += 1\n    return i\n\n\nrecord = ceil(16 * bits(40) / 8) + 19\nprint(3 * 2 ** 20 // record)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `101475`"
+            }
           }
         ],
         "skills": [],
@@ -188897,7 +189041,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 23,
+            "position": 24,
             "material_id": "information-amount"
           }
         ],
@@ -188947,7 +189091,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "На предприятии каждой детали присваивают серийный номер из 310 символов. Каждому номеру отведено одинаковое минимально возможное целое число байтов, кодирование посимвольное, все символы кодируются одинаковым минимальным числом битов. Для хранения 700 000 номеров отведено не более 200 Мбайт. Определите максимально возможную мощность алфавита."
+              "markdown": "На предприятии каждой детали присваивают серийный номер из 310 символов. Каждому номеру отведено одинаковое минимально возможное целое число байтов, кодирование посимвольное, все символы кодируются одинаковым минимальным числом битов. Для хранения 700 000 номеров отведено не более 200 Мбайт. Определи максимально возможную мощность алфавита."
             }
           }
         ],
@@ -188963,7 +189107,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "128: Bₘₐₓ = ⌊200 · 2²⁰ / 700 000⌋ = 299 байтов = 2392 бита, 310i ≤ 2392, i ≤ 7,7, i = 7, 2⁷ = 128."
+              "markdown": "Номер не больше 200 · 2²⁰ / 700 000 = 299,59… → 299 байтов = 2392 бита. 310 · i ≤ 2392, i ≤ 7,7, i = 7. Наибольший алфавит 2⁷ = 128."
             }
           },
           {
@@ -188973,6 +189117,12 @@
               "code": "most = 200 * 2 ** 20 // 700_000 * 8 // 310\nprint(2 ** most)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `128`"
+            }
           }
         ],
         "skills": [],
@@ -188980,14 +189130,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 24,
+            "position": 25,
             "material_id": "information-amount"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "krupnye-chisla",
+            "section": "naibolshee-chislo-zapisej",
             "material_id": "information-amount"
           }
         ],
@@ -189030,7 +189180,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Серийный номер содержит десятичные цифры, заглавные и строчные латинские буквы и символы из специального алфавита в 700 символов. Каждому номеру отведено одинаковое минимально возможное целое число байтов, кодирование посимвольное, все символы кодируются одинаковым минимальным числом битов. Для хранения 3000 номеров отведено не более 500 Кбайт. Определите максимально возможную длину номера."
+              "markdown": "Серийный номер содержит десятичные цифры, заглавные и строчные латинские буквы и символы из специального алфавита в 700 символов. Каждому номеру отведено одинаковое минимально возможное целое число байтов, кодирование посимвольное, все символы кодируются одинаковым минимальным числом битов. Для хранения 3000 номеров отведено не более 500 Кбайт. Определи максимально возможную длину номера."
             }
           }
         ],
@@ -189038,7 +189188,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Алфавит — цифры, латинские буквы обоих регистров и специальные символы."
+              "markdown": "Алфавит — цифры, буквы обоих регистров и специальные знаки."
             }
           }
         ],
@@ -189046,7 +189196,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "136: A = 10 + 52 + 700 = 762, i = 10; Bₘₐₓ = ⌊512 000 / 3000⌋ = 170 байтов = 1360 бит, 10L ≤ 1360."
+              "markdown": "Алфавит — 10 цифр, 52 буквы и 700 знаков, N = 762, на символ 10 бит. Номер не больше 500 · 1024 / 3000 = 170,67 → 170 байтов = 1360 бит, 10 · K ≤ 1360, K = 136."
             }
           },
           {
@@ -189056,6 +189206,12 @@
               "code": "from math import ceil\n\n\ndef bits(alphabet):\n    i = 1\n    while 2 ** i < alphabet:\n        i += 1\n    return i\n\n\nper = 500 * 1024 // 3000\nprint(per * 8 // bits(10 + 52 + 700))",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `136`"
+            }
           }
         ],
         "skills": [],
@@ -189063,14 +189219,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 25,
+            "position": 21,
             "material_id": "information-amount"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "krupnye-chisla",
+            "section": "naibolshaya-dlina",
             "material_id": "information-amount"
           }
         ],
@@ -189101,19 +189257,19 @@
     {
       "task": {
         "id": "task-11-4-01",
-        "title": "«Не менее» и «более»",
+        "title": "Запись при «более»",
         "short_description": null,
         "explanation_kind": "worked_solution",
         "difficulty": 1,
         "estimated_minutes": 2,
-        "answer_instruction": "Введите два числа через пробел в том порядке, в каком их спрашивают.",
+        "answer_instruction": "Введите число.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "40 одинаковых записей занимают целое число байтов каждая. Какое наименьшее число байтов может занимать одна запись, если все записи вместе занимают не менее 1000 байтов? А если более 1000 байтов?"
+              "markdown": "40 одинаковых записей занимают целое число байтов каждая. Все записи вместе занимают более 1000 байтов. Какое наименьшее число байтов может занимать одна запись?"
             }
           }
         ],
@@ -189121,7 +189277,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "При «более» равенство не подходит."
+              "markdown": "При «более» сама граница не подходит."
             }
           }
         ],
@@ -189129,15 +189285,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "25 и 26 байтов: ⌈1000 / 40⌉ = 25; при «более» 40 · 25 = 1000 уже не подходит, поэтому ⌊1000 / 40⌋ + 1 = 26."
+              "markdown": "При 25 байтах 40 записей занимают ровно 1000 — это не «более 1000». Значит, запись хотя бы 26 байтов: 40 · 26 = 1040."
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "from math import ceil\n\n\ndef bits(alphabet):\n    i = 1\n    while 2 ** i < alphabet:\n        i += 1\n    return i\n\n\nprint(ceil(1000 / 40), 1000 // 40 + 1)",
+              "code": "from math import ceil\n\n\ndef bits(alphabet):\n    i = 1\n    while 2 ** i < alphabet:\n        i += 1\n    return i\n\n\nprint(min(r for r in range(1, 100) if 40 * r > 1000))",
               "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `26`"
             }
           }
         ],
@@ -189153,7 +189315,7 @@
         "theory_links": [
           {
             "label": "Теория",
-            "section": "naimenshee-chislo-bajtov",
+            "section": "naimenshaya-zapis",
             "material_id": "information-amount"
           }
         ],
@@ -189175,7 +189337,7 @@
         ],
         "checker": {
           "checker_type": "exact_match",
-          "answer_variants": ["25 26"],
+          "answer_variants": ["26"],
           "numeric_tolerance": null
         }
       },
@@ -189184,19 +189346,19 @@
     {
       "task": {
         "id": "task-11-4-02",
-        "title": "Минимальная длина пароля",
+        "title": "Наименьшая длина при «более»",
         "short_description": null,
         "explanation_kind": "worked_solution",
         "difficulty": 2,
         "estimated_minutes": 4,
-        "answer_instruction": "Введите два числа через пробел: для «не менее», затем для «более».",
+        "answer_instruction": "Введите число.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Алфавит содержит 17 символов. Каждый пароль занимает минимальное целое число байтов. Найди минимальную длину пароля, если 100 паролей требуют: а) не менее 1000 байтов; б) более 1000 байтов."
+              "markdown": "Алфавит содержит 17 символов. Каждый пароль занимает минимальное целое число байтов. 100 паролей требуют более 1000 байтов. Найди наименьшую длину пароля."
             }
           }
         ],
@@ -189212,15 +189374,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "а) 15 символов; б) 17 символов. Здесь i = 5. Для «не менее 1000» достаточно 10 байтов на пароль, код должен не помещаться в 9 байтов: 5L > 72, Lₘᵢₙ = 15. Для «более 1000» необходимо хотя бы 11 байтов, код должен не помещаться в 10 байтов: 5L > 80, Lₘᵢₙ = 17. Пароли длиной и 15, и 16 символов занимают по 10 байтов: оба варианта дают ровно 1000 байтов и не удовлетворяют строгому условию «более»."
+              "markdown": "17 символам нужно 5 бит. «Более 1000» на 100 паролей — пароль хотя бы 11 байтов, то есть его код не помещается в 10 байтов: 5 · K > 80, K > 16. Наименьшая длина 17: 85 бит → 11 байтов."
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "from math import ceil\n\n\ndef bits(alphabet):\n    i = 1\n    while 2 ** i < alphabet:\n        i += 1\n    return i\n\n\na = min(n for n in range(1, 60)\n        if 100 * ceil(n * bits(17) / 8) >= 1000)\nb = min(n for n in range(1, 60)\n        if 100 * ceil(n * bits(17) / 8) > 1000)\nprint(a, b)",
+              "code": "from math import ceil\n\n\ndef bits(alphabet):\n    i = 1\n    while 2 ** i < alphabet:\n        i += 1\n    return i\n\n\nprint(min(k for k in range(1, 60)\n          if 100 * ceil(k * bits(17) / 8) > 1000))",
               "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `17`"
             }
           }
         ],
@@ -189229,14 +189397,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 27,
+            "position": 28,
             "material_id": "information-amount"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "ne-pomeshchaetsya",
+            "section": "naimenshaya-dlina",
             "material_id": "information-amount"
           }
         ],
@@ -189258,7 +189426,7 @@
         ],
         "checker": {
           "checker_type": "exact_match",
-          "answer_variants": ["15 17"],
+          "answer_variants": ["17"],
           "numeric_tolerance": null
         }
       },
@@ -189287,7 +189455,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "B ≥ ⌊450 / 50⌋ + 1."
+              "markdown": "Пароль хотя бы на байт больше, чем 450 / 50."
             }
           }
         ],
@@ -189295,7 +189463,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "15 символов: i = 5; B ≥ ⌊450 / 50⌋ + 1 = 10, код не помещается в 9 байтов: 5L > 72, L > 14,4."
+              "markdown": "30 символам нужно 5 бит. При 9 байтах 50 паролей заняли бы ровно 450, поэтому пароль хотя бы 10 байтов: код не помещается в 9 байтов, 5 · K > 72, K > 14,4. Наименьшая длина 15."
             }
           },
           {
@@ -189305,6 +189473,12 @@
               "code": "from math import ceil\n\n\ndef bits(alphabet):\n    i = 1\n    while 2 ** i < alphabet:\n        i += 1\n    return i\n\n\nprint(min(n for n in range(1, 60)\n          if 50 * ceil(n * bits(30) / 8) > 450))",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `15`"
+            }
           }
         ],
         "skills": [],
@@ -189312,14 +189486,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 28,
+            "position": 29,
             "material_id": "information-amount"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "ne-pomeshchaetsya",
+            "section": "naimenshaya-dlina",
             "material_id": "information-amount"
           }
         ],
@@ -189370,7 +189544,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Минимальное подходящее число битов, затем мощность."
+              "markdown": "Найди наименьшее число битов, затем наименьший алфавит для него."
             }
           }
         ],
@@ -189378,7 +189552,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "65 символов: B ≥ ⌈2001 / 200⌉ = 11; чтобы пароль не помещался в 10 байтов, 13i > 80, минимально i = 7, Aₘᵢₙ = 2⁶ + 1 = 65."
+              "markdown": "2001 / 200 = 10,005, поэтому пароль хотя бы 11 байтов: код не помещается в 10 байтов, 13 · i > 80, i > 6,15, i = 7. Семь битов нужны начиная с 2⁶ + 1 = 65 символов."
             }
           },
           {
@@ -189388,6 +189562,12 @@
               "code": "from math import ceil\n\n\ndef bits(alphabet):\n    i = 1\n    while 2 ** i < alphabet:\n        i += 1\n    return i\n\n\nprint(min(a for a in range(2, 5000)\n          if 200 * ceil(13 * bits(a) / 8) >= 2001))",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `65`"
+            }
           }
         ],
         "skills": [],
@@ -189395,14 +189575,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 29,
+            "position": 31,
             "material_id": "information-amount"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "minimalnaya-moshchnost",
+            "section": "naimenshij-alfavit",
             "material_id": "information-amount"
           }
         ],
@@ -189453,7 +189633,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Сначала минимальный алфавит, затем вычесть известные символы."
+              "markdown": "Сначала наименьший весь алфавит, затем вычти известные символы."
             }
           }
         ],
@@ -189461,7 +189641,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "29 символов: B ≥ ⌈6800 / 400⌉ = 17, 20i > 128, i = 7, алфавит хотя бы 2⁶ + 1 = 65, специальных 65 − 36 = 29."
+              "markdown": "6800 / 400 = 17 байтов на код — код не помещается в 16 байтов: 20 · i > 128, i = 7. Наименьший алфавит для 7 бит — 65 символов, из них 26 букв и 10 цифр известны: специальных хотя бы 65 − 36 = 29."
             }
           },
           {
@@ -189471,6 +189651,12 @@
               "code": "from math import ceil\n\n\ndef bits(alphabet):\n    i = 1\n    while 2 ** i < alphabet:\n        i += 1\n    return i\n\n\nprint(min(s for s in range(0, 5000)\n          if 400 * ceil(20 * bits(36 + s) / 8) >= 6800))",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `29`"
+            }
           }
         ],
         "skills": [],
@@ -189478,14 +189664,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 30,
+            "position": 32,
             "material_id": "information-amount"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "minimalnyj-nabor",
+            "section": "naimenshij-alfavit",
             "material_id": "information-amount"
           }
         ],
@@ -189536,7 +189722,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Заголовок у каждого сообщения."
+              "markdown": "Заголовок добавляется к каждому из 8 сообщений."
             }
           }
         ],
@@ -189544,7 +189730,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "11 байтов: символ — 7 битов; 280 битов = 35 байтов и 175 битов → 22 байта; 3 · 35 + 5 · 22 = 215; 215 + 8h > 300, h > 10,6."
+              "markdown": "100 символам нужно 7 бит. Сообщение из 40 символов — 280 бит = 35 байтов, из 25 — 175 бит → 22 байта. Без заголовков 3 · 35 + 5 · 22 = 215 байтов; 215 + 8 · h > 300, h > 10,6, наименьший заголовок 11 байтов."
             }
           },
           {
@@ -189554,6 +189740,12 @@
               "code": "from math import ceil\n\n\ndef bits(alphabet):\n    i = 1\n    while 2 ** i < alphabet:\n        i += 1\n    return i\n\n\nlong = ceil(40 * bits(100) / 8)\nshort = ceil(25 * bits(100) / 8)\ndata = 3 * long + 5 * short\nprint(min(h for h in range(100) if data + 8 * h > 300))",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `11`"
+            }
           }
         ],
         "skills": [],
@@ -189561,14 +189753,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 31,
+            "position": 27,
             "material_id": "information-amount"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "celaya-chast-zapisi",
+            "section": "naimenshaya-zapis",
             "material_id": "information-amount"
           }
         ],
@@ -189611,7 +189803,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Серийный номер содержит десятичные цифры, заглавные латинские буквы и символы из специального алфавита в 5000 символов. Каждому номеру отведено одинаковое минимально возможное целое число байтов, кодирование посимвольное, все символы кодируются одинаковым минимальным числом битов. Известно, что 200 000 номеров занимают более 30 Мбайт. Определите минимально возможную длину номера."
+              "markdown": "Серийный номер содержит десятичные цифры, заглавные латинские буквы и символы из специального алфавита в 5000 символов. Каждому номеру отведено одинаковое минимально возможное целое число байтов, кодирование посимвольное, все символы кодируются одинаковым минимальным числом битов. Известно, что 200 000 номеров занимают более 30 Мбайт. Определи минимально возможную длину номера."
             }
           }
         ],
@@ -189627,7 +189819,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "97 символов: A = 10 + 26 + 5000 = 5036, i = 13; B ≥ ⌊30 · 2²⁰ / 200 000⌋ + 1 = 158, 13L > 8 · 157 = 1256, L > 96,6."
+              "markdown": "N = 10 + 26 + 5000 = 5036, на символ 13 бит. 30 · 2²⁰ / 200 000 = 157,29…, поэтому номер хотя бы 158 байтов: код не помещается в 157 байтов, 13 · K > 1256, K > 96,6. Наименьшая длина 97."
             }
           },
           {
@@ -189637,6 +189829,12 @@
               "code": "from math import ceil\n\n\ndef bits(alphabet):\n    i = 1\n    while 2 ** i < alphabet:\n        i += 1\n    return i\n\n\nprint(min(n for n in range(1, 500)\n          if 200_000 * ceil(n * bits(5036) / 8) > 30 * 2 ** 20))",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `97`"
+            }
           }
         ],
         "skills": [],
@@ -189644,14 +189842,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 32,
+            "position": 30,
             "material_id": "information-amount"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "krupnye-chisla-granica",
+            "section": "naimenshaya-dlina",
             "material_id": "information-amount"
           }
         ],
@@ -189694,7 +189892,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Серийный номер состоит из 40 символов. Каждый номер занимает одинаковое минимально возможное целое число байтов, кодирование посимвольное, все символы кодируются одинаковым минимальным числом битов. Для хранения 2 000 000 номеров требуется не менее 95 Мбайт. Определите минимально возможную мощность алфавита."
+              "markdown": "Серийный номер состоит из 40 символов. Каждый номер занимает одинаковое минимально возможное целое число байтов, кодирование посимвольное, все символы кодируются одинаковым минимальным числом битов. Для хранения 2 000 000 номеров требуется не менее 95 Мбайт. Определи минимально возможную мощность алфавита."
             }
           }
         ],
@@ -189702,7 +189900,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Наименьшее число битов, при котором номера не помещаются в меньшее."
+              "markdown": "Наименьшее число битов, при котором номер не помещается в меньшее число байтов."
             }
           }
         ],
@@ -189710,7 +189908,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "513 символов: B ≥ ⌈95 · 2²⁰ / 2 000 000⌉ = 50, 40i > 392, i = 10, Aₘᵢₙ = 2⁹ + 1 = 513."
+              "markdown": "95 · 2²⁰ / 2 000 000 = 49,8…, поэтому номер хотя бы 50 байтов: код не помещается в 49 байтов, 40 · i > 392, i > 9,8, i = 10. Десять битов нужны начиная с 2⁹ + 1 = 513 символов."
             }
           },
           {
@@ -189719,6 +189917,12 @@
               "language": "python",
               "code": "from math import ceil\n\n\ndef bits(alphabet):\n    i = 1\n    while 2 ** i < alphabet:\n        i += 1\n    return i\n\n\nprint(min(a for a in range(2, 5000)\n          if 2_000_000 * ceil(40 * bits(a) / 8)\n          >= 95 * 2 ** 20))",
               "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `513`"
             }
           }
         ],
@@ -189734,7 +189938,7 @@
         "theory_links": [
           {
             "label": "Теория",
-            "section": "krupnye-chisla-granica",
+            "section": "naimenshij-alfavit",
             "material_id": "information-amount"
           }
         ],
@@ -189765,19 +189969,19 @@
     {
       "task": {
         "id": "task-11-5-01",
-        "title": "Номер числом и код из 256",
+        "title": "Номер 256 двоичным числом",
         "short_description": null,
         "explanation_kind": "worked_solution",
         "difficulty": 1,
         "estimated_minutes": 2,
-        "answer_instruction": "Введите два числа через пробел в том порядке, в каком их спрашивают.",
+        "answer_instruction": "Введите число.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Сколько битов нужно, чтобы записать двоичным числом номер от 1 до 256? А чтобы назначить разные коды одинаковой длины 256 объектам?"
+              "markdown": "Сколько битов нужно, чтобы записать двоичным числом номер от 1 до 256?"
             }
           }
         ],
@@ -189785,7 +189989,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Номер 256 записывается числом, а коды нумеруют варианты."
+              "markdown": "Число от 1 до m записывают j битами, если 2ʲ > m."
             }
           }
         ],
@@ -189793,181 +189997,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "9 и 8 битов: восемью битами записываются числа только до 255, поэтому числу 256 нужно 9 битов (2⁹ = 512 > 256); а 256 вариантам хватает 2⁸ = 256 кодов."
+              "markdown": "Восемью битами записываются числа только до 255, а 256 = 100000000 — девять цифр. Для 256 разных объектов хватило бы 8 бит, но здесь нужно записать само число."
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "from math import ceil\n\n\ndef bits(alphabet):\n    i = 1\n    while 2 ** i < alphabet:\n        i += 1\n    return i\n\n\nprint((256).bit_length(), bits(256))",
+              "code": "from math import ceil\n\n\ndef bits(alphabet):\n    i = 1\n    while 2 ** i < alphabet:\n        i += 1\n    return i\n\n\nprint((256).bit_length())",
               "caption": "Решение программой"
-            }
-          }
-        ],
-        "skills": [],
-        "exam_numbers": [11],
-        "files": [],
-        "lessons": [
-          {
-            "position": 34,
-            "material_id": "information-amount"
-          }
-        ],
-        "theory_links": [
-          {
-            "label": "Теория",
-            "section": "nomer-kak-chislo",
-            "material_id": "information-amount"
-          }
-        ],
-        "catalog_visible": false,
-        "archived": false,
-        "sources": [
-          {
-            "url": null,
-            "kind": "original",
-            "role": "original",
-            "year": null,
-            "title": null,
-            "author": null,
-            "primary": true,
-            "is_public": true,
-            "adaptation": null,
-            "original_id": null
-          }
-        ],
-        "checker": {
-          "checker_type": "exact_match",
-          "answer_variants": ["9 8"],
-          "numeric_tolerance": null
-        }
-      },
-      "solution_revision": 1
-    },
-    {
-      "task": {
-        "id": "task-11-5-02",
-        "title": "Байты всему коду или по частям",
-        "short_description": null,
-        "explanation_kind": "worked_solution",
-        "difficulty": 1,
-        "estimated_minutes": 2,
-        "answer_instruction": "Введите два числа через пробел в том порядке, в каком их спрашивают.",
-        "interaction_type": "production",
-        "content_schema_version": 1,
-        "statement": [
-          {
-            "type": "text",
-            "data": {
-              "markdown": "Код состоит из пяти заглавных латинских букв и трёх десятичных цифр. У каждой части своё минимальное число битов на символ. Сколько байтов понадобится, если целые байты выделяются: а) всему коду; б) каждой части отдельно?"
-            }
-          }
-        ],
-        "hint": [
-          {
-            "type": "text",
-            "data": {
-              "markdown": "Где выделяются целые байты, решает формулировка."
-            }
-          }
-        ],
-        "explanation": [
-          {
-            "type": "text",
-            "data": {
-              "markdown": "а) 5 байтов; б) 6 байтов. Части занимают 5 · 5 = 25 бит и 3 · 4 = 12 бит; совместно ⌈37 / 8⌉ = 5, отдельно ⌈25 / 8⌉ + ⌈12 / 8⌉ = 4 + 2 = 6."
             }
           },
           {
-            "type": "code_example",
-            "data": {
-              "language": "python",
-              "code": "from math import ceil\n\n\ndef bits(alphabet):\n    i = 1\n    while 2 ** i < alphabet:\n        i += 1\n    return i\n\n\na, d = 5 * bits(26), 3 * bits(10)\nprint(ceil((a + d) / 8), ceil(a / 8) + ceil(d / 8))",
-              "caption": "Решение программой"
-            }
-          }
-        ],
-        "skills": [],
-        "exam_numbers": [11],
-        "files": [],
-        "lessons": [
-          {
-            "position": 35,
-            "material_id": "information-amount"
-          }
-        ],
-        "theory_links": [
-          {
-            "label": "Теория",
-            "section": "gde-bajty",
-            "material_id": "information-amount"
-          }
-        ],
-        "catalog_visible": false,
-        "archived": false,
-        "sources": [
-          {
-            "url": null,
-            "kind": "original",
-            "role": "original",
-            "year": null,
-            "title": null,
-            "author": null,
-            "primary": true,
-            "is_public": true,
-            "adaptation": null,
-            "original_id": null
-          }
-        ],
-        "checker": {
-          "checker_type": "exact_match",
-          "answer_variants": ["5 6"],
-          "numeric_tolerance": null
-        }
-      },
-      "solution_revision": 1
-    },
-    {
-      "task": {
-        "id": "task-11-5-03",
-        "title": "Свои биты или общий код",
-        "short_description": null,
-        "explanation_kind": "worked_solution",
-        "difficulty": 1,
-        "estimated_minutes": 3,
-        "answer_instruction": "Введите два числа через пробел в том порядке, в каком их спрашивают.",
-        "interaction_type": "production",
-        "content_schema_version": 1,
-        "statement": [
-          {
             "type": "text",
             "data": {
-              "markdown": "Код состоит из 6 заглавных латинских букв и 4 цифр от 1 до 9 (ноль не используется). Сколько байтов займёт код, если у каждой части своё минимальное число битов, а целые байты выделяются коду целиком? А если все 10 символов кодируются одним общим кодом одинаковой длины?"
-            }
-          }
-        ],
-        "hint": [
-          {
-            "type": "text",
-            "data": {
-              "markdown": "Ноль не используется: цифр девять."
-            }
-          }
-        ],
-        "explanation": [
-          {
-            "type": "text",
-            "data": {
-              "markdown": "6 и 8 байтов: 6 · 5 + 4 · 4 = 46 бит, ⌈46 / 8⌉ = 6; общий алфавит 26 + 9 = 35, i = 6, 10 · 6 = 60 бит, ⌈60 / 8⌉ = 8."
-            }
-          },
-          {
-            "type": "code_example",
-            "data": {
-              "language": "python",
-              "code": "from math import ceil\n\n\ndef bits(alphabet):\n    i = 1\n    while 2 ** i < alphabet:\n        i += 1\n    return i\n\n\nprint(ceil((6 * bits(26) + 4 * bits(9)) / 8),\n      ceil(10 * bits(26 + 9) / 8))",
-              "caption": "Решение программой"
+              "markdown": "Ответ: `9`"
             }
           }
         ],
@@ -189983,7 +190027,7 @@
         "theory_links": [
           {
             "label": "Теория",
-            "section": "razbor-koda",
+            "section": "nomer-chislom",
             "material_id": "information-amount"
           }
         ],
@@ -190005,7 +190049,185 @@
         ],
         "checker": {
           "checker_type": "exact_match",
-          "answer_variants": ["6 8"],
+          "answer_variants": ["9"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "task-11-5-02",
+        "title": "Байты всему коду",
+        "short_description": null,
+        "explanation_kind": "worked_solution",
+        "difficulty": 1,
+        "estimated_minutes": 2,
+        "answer_instruction": "Введите число.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Код состоит из пяти заглавных латинских букв и трёх десятичных цифр. У каждой части своё минимальное число битов на символ, целые байты выделяются всему коду. Сколько байтов займёт код?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Целые байты всему коду: сложи биты частей, потом округляй."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Буквы: 5 · 5 = 25 бит, цифры: 3 · 4 = 12 бит. Целые байты всему коду — складываем биты: 37 бит → 5 байтов. С отдельными байтами у частей вышло бы 4 + 2 = 6."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "from math import ceil\n\n\ndef bits(alphabet):\n    i = 1\n    while 2 ** i < alphabet:\n        i += 1\n    return i\n\n\na, d = 5 * bits(26), 3 * bits(10)\nprint(ceil((a + d) / 8))",
+              "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `5`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [11],
+        "files": [],
+        "lessons": [
+          {
+            "position": 34,
+            "material_id": "information-amount"
+          }
+        ],
+        "theory_links": [
+          {
+            "label": "Теория",
+            "section": "chasti-koda",
+            "material_id": "information-amount"
+          }
+        ],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["5"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "task-11-5-03",
+        "title": "Общий код для букв и цифр",
+        "short_description": null,
+        "explanation_kind": "worked_solution",
+        "difficulty": 1,
+        "estimated_minutes": 3,
+        "answer_instruction": "Введите число.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Код состоит из 6 заглавных латинских букв и 4 цифр от 1 до 9 (ноль не используется). Все 10 символов кодируются одним общим кодом одинаковой минимальной длины, код занимает минимальное целое число байтов. Сколько байтов займёт код?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Один общий код — один алфавит на все символы."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Цифр без нуля девять, общий алфавит 26 + 9 = 35, на символ 6 бит. Код 10 · 6 = 60 бит → 8 байтов. Если бы у частей были свои коды, вышло бы 6 · 5 + 4 · 4 = 46 бит → 6 байтов."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "from math import ceil\n\n\ndef bits(alphabet):\n    i = 1\n    while 2 ** i < alphabet:\n        i += 1\n    return i\n\n\nprint(ceil(10 * bits(26 + 9) / 8))",
+              "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `8`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [11],
+        "files": [],
+        "lessons": [
+          {
+            "position": 35,
+            "material_id": "information-amount"
+          }
+        ],
+        "theory_links": [
+          {
+            "label": "Теория",
+            "section": "chasti-koda",
+            "material_id": "information-amount"
+          }
+        ],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["8"],
           "numeric_tolerance": null
         }
       },
@@ -190034,7 +190256,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Номер — двоичное число от 1 до 100."
+              "markdown": "У кода и номера свои целые байты."
             }
           }
         ],
@@ -190042,7 +190264,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "22 байта: A = 22, i = 5, код 65 бит → 9 байтов; номер 7 бит → 1 байт; 32 − 9 − 1."
+              "markdown": "Алфавит кода — 12 букв и 10 цифр, N = 22, на символ 5 бит: 13 · 5 = 65 бит → 9 байтов. Номер до 100 двоичным числом — 7 бит → свой 1 байт. Сведения: 32 − 9 − 1 = 22 байта."
             }
           },
           {
@@ -190052,6 +190274,12 @@
               "code": "from math import ceil\n\n\ndef bits(alphabet):\n    i = 1\n    while 2 ** i < alphabet:\n        i += 1\n    return i\n\n\ncode = ceil(13 * bits(22) / 8)\nnumber = ceil((100).bit_length() / 8)\nprint(32 - code - number)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `22`"
+            }
           }
         ],
         "skills": [],
@@ -190059,14 +190287,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 37,
+            "position": 39,
             "material_id": "information-amount"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "nomer-i-kod",
+            "section": "gde-bajty",
             "material_id": "information-amount"
           }
         ],
@@ -190117,7 +190345,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Код и номер вместе занимают целые байты."
+              "markdown": "Код и номер вместе: сложи биты, потом округляй."
             }
           }
         ],
@@ -190125,7 +190353,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "23 байта: 65 + 7 = 72 бита = 9 байтов, 32 − 9."
+              "markdown": "Код 65 бит и номер 7 бит записаны подряд: 72 бита = ровно 9 байтов. Сведения: 32 − 9 = 23 байта."
             }
           },
           {
@@ -190135,6 +190363,12 @@
               "code": "from math import ceil\n\n\ndef bits(alphabet):\n    i = 1\n    while 2 ** i < alphabet:\n        i += 1\n    return i\n\n\nboth = ceil((13 * bits(22) + (100).bit_length()) / 8)\nprint(32 - both)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `23`"
+            }
           }
         ],
         "skills": [],
@@ -190142,14 +190376,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 38,
+            "position": 40,
             "material_id": "information-amount"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "nomer-i-kod",
+            "section": "gde-bajty",
             "material_id": "information-amount"
           }
         ],
@@ -190200,7 +190434,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Год и день — двоичные числа минимальной длины."
+              "markdown": "Год и день — двоичные числа минимальной длины, вместе в целых байтах."
             }
           }
         ],
@@ -190208,7 +190442,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "9 байтов: код 50 бит → 7 байтов; год 6 бит и день 9 бит — 15 бит → 2 байта; 7 + 2."
+              "markdown": "Код 10 · 5 = 50 бит → 7 байтов. Год до 63 — 6 бит, день до 366 — 9 бит, вместе 15 бит → 2 байта. Всего 7 + 2 = 9 байтов."
             }
           },
           {
@@ -190218,6 +190452,12 @@
               "code": "from math import ceil\n\n\ndef bits(alphabet):\n    i = 1\n    while 2 ** i < alphabet:\n        i += 1\n    return i\n\n\ncode = ceil(10 * bits(26) / 8)\nterm = ceil(((63).bit_length() + (366).bit_length()) / 8)\nprint(code + term)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `9`"
+            }
           }
         ],
         "skills": [],
@@ -190225,14 +190465,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 39,
+            "position": 37,
             "material_id": "information-amount"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "bit-length",
+            "section": "nomer-chislom",
             "material_id": "information-amount"
           }
         ],
@@ -190283,7 +190523,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Снизу вверх: блок, объект, все объекты."
+              "markdown": "Считай снизу вверх: блок, объект, все объекты."
             }
           }
         ],
@@ -190291,7 +190531,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "600 Кбайт: блок 5 · 6 + 10 = 40 бит = 5 байтов, объект 30 · 5 = 150 байтов, 4096 · 150 = 614 400 байтов."
+              "markdown": "Буквы и цифры — 36 символов, по 6 бит: 5 · 6 = 30 бит; тип — одно из 1000 значений, 10 бит. Блок 40 бит = 5 байтов, объект 30 · 5 = 150 байтов, 4096 объектов — 614 400 байтов = 600 Кбайт."
             }
           },
           {
@@ -190301,6 +190541,12 @@
               "code": "from math import ceil\n\n\ndef bits(alphabet):\n    i = 1\n    while 2 ** i < alphabet:\n        i += 1\n    return i\n\n\nblock = ceil((5 * bits(36) + (1000).bit_length()) / 8)\nprint(4096 * 30 * block // 1024)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `600`"
+            }
           }
         ],
         "skills": [],
@@ -190308,14 +190554,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 40,
+            "position": 41,
             "material_id": "information-amount"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "urovni",
+            "section": "gde-bajty",
             "material_id": "information-amount"
           }
         ],
@@ -190366,7 +190612,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Код — буквы категории и номер вместе."
+              "markdown": "Код — буквы категории и номер вместе, в общих целых байтах."
             }
           }
         ],
@@ -190374,7 +190620,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "30 байтов: 8 · 5 + 13 = 53 бита → 7 байтов; 2368 / 64 = 37, 37 − 7."
+              "markdown": "Категория 8 · 5 = 40 бит, номер до 5000 — 13 бит, вместе 53 бита → 7 байтов. Запись 2368 / 64 = 37 байтов, дополнительные данные 37 − 7 = 30."
             }
           },
           {
@@ -190384,6 +190630,12 @@
               "code": "from math import ceil\n\n\ndef bits(alphabet):\n    i = 1\n    while 2 ** i < alphabet:\n        i += 1\n    return i\n\n\ncode = ceil((8 * bits(26) + (5000).bit_length()) / 8)\nprint(2368 // 64 - code)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `30`"
+            }
           }
         ],
         "skills": [],
@@ -190391,14 +190643,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 41,
+            "position": 38,
             "material_id": "information-amount"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "nomer-i-kod",
+            "section": "nomer-chislom",
             "material_id": "information-amount"
           }
         ],
@@ -190449,7 +190701,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Идентификатор, структура, дополнительная информация."
+              "markdown": "Из записи вычти идентификатор и структуру."
             }
           }
         ],
@@ -190457,7 +190709,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "64 байта: идентификатор 30 бит → 4 байта; элемент 12 бит, 40 · 12 = 480 бит = 60 байтов; 2 · 2²⁰ / 16 384 = 128, 128 − 4 − 60."
+              "markdown": "Идентификатор 6 · 5 = 30 бит → 4 байта. Элементам 3000 видов нужно 12 бит, структура 40 · 12 = 480 бит = 60 байтов. Запись 2 · 2²⁰ / 16 384 = 128 байтов, дополнительная информация 128 − 4 − 60 = 64."
             }
           },
           {
@@ -190466,6 +190718,12 @@
               "language": "python",
               "code": "from math import ceil\n\n\ndef bits(alphabet):\n    i = 1\n    while 2 ** i < alphabet:\n        i += 1\n    return i\n\n\nident = ceil(6 * bits(26) / 8)\nstruct = ceil(40 * bits(3000) / 8)\nprint(2 * 2 ** 20 // 16_384 - ident - struct)",
               "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `64`"
             }
           }
         ],
@@ -190481,7 +190739,7 @@
         "theory_links": [
           {
             "label": "Теория",
-            "section": "urovni",
+            "section": "gde-bajty",
             "material_id": "information-amount"
           }
         ],
@@ -190540,7 +190798,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "35 байтов: групп ⌈25 / 6⌉ = 5, 25 + 5 · 2."
+              "markdown": "Групп 25 / 6 = 4,17 → 5: четыре по 6 байтов и одна неполная в 1 байт. Заголовков тоже пять: 25 + 5 · 2 = 35 байтов."
             }
           },
           {
@@ -190549,6 +190807,12 @@
               "language": "python",
               "code": "from math import ceil\n\n\ndef bits(alphabet):\n    i = 1\n    while 2 ** i < alphabet:\n        i += 1\n    return i\n\n\nprint(25 + ceil(25 / 6) * 2)",
               "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `35`"
             }
           }
         ],
@@ -190565,7 +190829,7 @@
         "theory_links": [
           {
             "label": "Теория",
-            "section": "chislo-zagolovkov",
+            "section": "gruppy-s-zagolovkami",
             "material_id": "information-amount"
           }
         ],
@@ -190616,7 +190880,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Сначала наибольший объём сообщения с заголовками."
+              "markdown": "Сначала наибольший объём сообщения вместе с заголовками."
             }
           }
         ],
@@ -190624,7 +190888,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "57 символов: B = 50 — 50 + 10 = 60, B = 51 — 51 + 11 = 62; i = 7, 7L ≤ 400."
+              "markdown": "Сообщение в 50 байтов — 10 групп, 50 + 10 = 60; в 51 байт — уже 11 групп, 62. Значит, сообщение не больше 50 байтов = 400 бит. 100 символам нужно 7 бит, 400 / 7 = 57,1 → 57 символов."
             }
           },
           {
@@ -190633,6 +190897,12 @@
               "language": "python",
               "code": "from math import ceil\n\n\ndef bits(alphabet):\n    i = 1\n    while 2 ** i < alphabet:\n        i += 1\n    return i\n\n\nsize = max(b for b in range(1, 100) if b + ceil(b / 5) <= 60)\nprint(size * 8 // bits(100))",
               "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `57`"
             }
           }
         ],
@@ -190649,7 +190919,7 @@
         "theory_links": [
           {
             "label": "Теория",
-            "section": "naibolshee-soobshchenie",
+            "section": "gruppy-s-zagolovkami",
             "material_id": "information-amount"
           }
         ],
@@ -190708,7 +190978,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "4096 изделий: код партии 20 бит, вместе с номером больше 32 бит при j ≥ 13, а 13 битов нужны начиная с номера 2¹² = 4096."
+              "markdown": "Код партии 4 · 5 = 20 бит. Больше 4 байтов — больше 32 бит, то есть номеру нужно хотя бы 13 бит. 13 битов нужны числу начиная с 2¹² = 4096."
             }
           },
           {
@@ -190718,6 +190988,12 @@
               "code": "from math import ceil\n\n\ndef bits(alphabet):\n    i = 1\n    while 2 ** i < alphabet:\n        i += 1\n    return i\n\n\nprint(min(n for n in range(1, 100_000)\n          if 4 * bits(26) + n.bit_length() > 32))",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `4096`"
+            }
           }
         ],
         "skills": [],
@@ -190725,7 +191001,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 45,
+            "position": 46,
             "material_id": "information-amount",
             "counts_toward_mastery": false
           }
@@ -190733,7 +191009,7 @@
         "theory_links": [
           {
             "label": "Теория",
-            "section": "razmer-zavisit",
+            "section": "nomer-zavisit",
             "material_id": "information-amount"
           }
         ],
@@ -190784,7 +191060,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Длина номера зависит от числа изделий — перебирайте n."
+              "markdown": "Длина номера зависит от числа изделий — перебирай n."
             }
           }
         ],
@@ -190792,7 +191068,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "292 изделия: для n от 256 до 511 номер — 9 бит, 50 + 9 = 59 бит → 8 байтов, запись 28 байтов; 292 · 28 = 8176 ≤ 8192 < 293 · 28."
+              "markdown": "Перебор числа изделий: для n от 256 до 511 номер — 9 бит, код 50 + 9 = 59 бит → 8 байтов, запись 28 байтов. 292 · 28 = 8176 ≤ 8192, а 293 · 28 = 8204 — уже больше."
             }
           },
           {
@@ -190802,6 +191078,12 @@
               "code": "from math import ceil\n\n\ndef bits(alphabet):\n    i = 1\n    while 2 ** i < alphabet:\n        i += 1\n    return i\n\n\nbest = 0\nfor n in range(1, 2000):\n    record = ceil((10 * bits(26) + n.bit_length()) / 8) + 20\n    if n * record <= 8 * 1024:\n        best = n\nprint(best)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `292`"
+            }
           }
         ],
         "skills": [],
@@ -190809,7 +191091,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 46,
+            "position": 47,
             "material_id": "information-amount",
             "counts_toward_mastery": false
           }
@@ -190817,7 +191099,7 @@
         "theory_links": [
           {
             "label": "Теория",
-            "section": "perebor-kolichestva",
+            "section": "nomer-zavisit",
             "material_id": "information-amount"
           }
         ],
@@ -190868,7 +191150,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Наибольший объём сообщения, затем символы."
+              "markdown": "Сначала наибольший объём сообщения, затем символы."
             }
           }
         ],
@@ -190876,7 +191158,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "1592 символа: наибольший объём сообщения 1792 байта (1792 + 256 = 2048), i = 9, 9L ≤ 14 336."
+              "markdown": "Сообщение в 1792 байта — 256 групп по 7, 1792 + 256 = 2048; на байт больше — уже 257 групп и 2050. 300 символам нужно 9 бит, 1792 · 8 / 9 = 1592,9 → 1592 символа."
             }
           },
           {
@@ -190886,6 +191168,12 @@
               "code": "from math import ceil\n\n\ndef bits(alphabet):\n    i = 1\n    while 2 ** i < alphabet:\n        i += 1\n    return i\n\n\nsize = max(b for b in range(1, 3000) if b + ceil(b / 7) <= 2048)\nprint(size * 8 // bits(300))",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `1592`"
+            }
           }
         ],
         "skills": [],
@@ -190893,7 +191181,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 47,
+            "position": 45,
             "material_id": "information-amount",
             "counts_toward_mastery": false
           }
@@ -190901,7 +191189,7 @@
         "theory_links": [
           {
             "label": "Теория",
-            "section": "naibolshee-soobshchenie",
+            "section": "gruppy-s-zagolovkami",
             "material_id": "information-amount"
           }
         ],
@@ -190952,7 +191240,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Перебирайте число изделий."
+              "markdown": "Перебирай число изделий: длина номера зависит от него."
             }
           }
         ],
@@ -190960,7 +191248,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "1059 изделий: код партии 15 · 6 = 90 бит, номер до 2047 — 11 бит, 101 бит → 13 байтов, запись 58 байтов; 1059 · 58 = 61 422 ≤ 61 440 < 1060 · 58."
+              "markdown": "52 буквам нужно 6 бит, код партии 15 · 6 = 90 бит. Перебор числа изделий: при n до 2047 номер — 11 бит, код 101 бит → 13 байтов, запись 58 байтов. 1059 · 58 = 61 422 ≤ 61 440, а 1060 · 58 = 61 480 — больше."
             }
           },
           {
@@ -190969,6 +191257,12 @@
               "language": "python",
               "code": "from math import ceil\n\n\ndef bits(alphabet):\n    i = 1\n    while 2 ** i < alphabet:\n        i += 1\n    return i\n\n\nbest = 0\nfor n in range(1, 3000):\n    record = ceil((15 * bits(52) + n.bit_length()) / 8) + 45\n    if n * record <= 60 * 1024:\n        best = n\nprint(best)",
               "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `1059`"
             }
           }
         ],
@@ -190985,7 +191279,7 @@
         "theory_links": [
           {
             "label": "Теория",
-            "section": "perebor-kolichestva",
+            "section": "nomer-zavisit",
             "material_id": "information-amount"
           }
         ],
@@ -191028,7 +191322,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "При регистрации каждому объекту присваивается идентификатор из 220 символов; символы — десятичные цифры и знаки специального алфавита из 3500 символов. Для каждого идентификатора отведено одинаковое минимально возможное целое число байтов, кодирование посимвольное, все символы кодируются одинаковым минимальным числом битов. Определите объём памяти в Мбайт для хранения 1 048 576 идентификаторов. (Подтема 1: алфавит из частей и целые байты.)"
+              "markdown": "При регистрации каждому объекту присваивается идентификатор из 220 символов; символы — десятичные цифры и знаки специального алфавита из 3500 символов. Для каждого идентификатора отведено одинаковое минимально возможное целое число байтов, кодирование посимвольное, все символы кодируются одинаковым минимальным числом битов. Определи объём памяти в Мбайт для хранения 1 048 576 идентификаторов."
             }
           }
         ],
@@ -191036,7 +191330,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Алфавит из частей и целые байты."
+              "markdown": "Алфавит из двух частей, целые байты — идентификатору."
             }
           }
         ],
@@ -191044,7 +191338,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "330 Мбайт: A = 10 + 3500 = 3510, i = 12, 220 · 12 = 2640 бит = 330 байтов, 2²⁰ · 330 байтов = 330 Мбайт."
+              "markdown": "N = 10 + 3500 = 3510, на символ 12 бит. Идентификатор 220 · 12 = 2640 бит = 330 байтов. 2²⁰ идентификаторов — 2²⁰ · 330 байтов = 330 Мбайт."
             }
           },
           {
@@ -191053,6 +191347,12 @@
               "language": "python",
               "code": "from math import ceil\n\n\ndef bits(alphabet):\n    i = 1\n    while 2 ** i < alphabet:\n        i += 1\n    return i\n\n\nper = ceil(220 * bits(10 + 3500) / 8)\nprint(2 ** 20 * per // 2 ** 20)",
               "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `330`"
             }
           }
         ],
@@ -191105,7 +191405,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Каждому пользователю выдаётся пароль из 30 символов — заглавных латинских букв и десятичных цифр. Каждому паролю отведено одинаковое минимально возможное целое число байтов, кодирование посимвольное. Кроме пароля, для каждого пользователя хранятся дополнительные сведения в одинаковом целом числе байтов. Для 512 пользователей потребовалось 20 Кбайт. Сколько байтов выделено дополнительным сведениям об одном пользователе? (Подтема 2: обратная задача о сведениях.)"
+              "markdown": "Каждому пользователю выдаётся пароль из 30 символов — заглавных латинских букв и десятичных цифр. Каждому паролю отведено одинаковое минимально возможное целое число байтов, кодирование посимвольное. Кроме пароля, для каждого пользователя хранятся дополнительные сведения в одинаковом целом числе байтов. Для 512 пользователей потребовалось 20 Кбайт. Сколько байтов выделено дополнительным сведениям об одном пользователе?"
             }
           }
         ],
@@ -191113,7 +191413,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Обратная задача о сведениях."
+              "markdown": "Размер записи минус байты пароля."
             }
           }
         ],
@@ -191121,7 +191421,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "17 байтов: A = 36, i = 6, 30 · 6 = 180 бит, ⌈180 / 8⌉ = 23 байта; R = 20 · 1024 / 512 = 40, D = 40 − 23."
+              "markdown": "Алфавит — 26 букв и 10 цифр, N = 36, 6 бит. Пароль 30 · 6 = 180 бит → 23 байта. Запись 20 · 1024 / 512 = 40 байтов, сведения 40 − 23 = 17."
             }
           },
           {
@@ -191130,6 +191430,12 @@
               "language": "python",
               "code": "from math import ceil\n\n\ndef bits(alphabet):\n    i = 1\n    while 2 ** i < alphabet:\n        i += 1\n    return i\n\n\nrecord = 20 * 1024 // 512\nprint(record - ceil(30 * bits(36) / 8))",
               "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `17`"
             }
           }
         ],
@@ -191182,7 +191488,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Серийный номер детали состоит из 150 символов. Каждому номеру отведено одинаковое минимально возможное целое число байтов, кодирование посимвольное, все символы кодируются одинаковым минимальным числом битов. Для хранения 40 000 номеров отведено не более 3 Мбайт. Определите максимально возможную мощность алфавита. (Подтема 3: «не более».)"
+              "markdown": "Серийный номер детали состоит из 150 символов. Каждому номеру отведено одинаковое минимально возможное целое число байтов, кодирование посимвольное, все символы кодируются одинаковым минимальным числом битов. Для хранения 40 000 номеров отведено не более 3 Мбайт. Определи максимально возможную мощность алфавита."
             }
           }
         ],
@@ -191198,7 +191504,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "16: Bₘₐₓ = ⌊3 · 2²⁰ / 40 000⌋ = 78 байтов = 624 бита, 150i ≤ 624, i = 4, 2⁴ = 16."
+              "markdown": "Номер не больше 3 · 2²⁰ / 40 000 = 78,6 → 78 байтов = 624 бита. 150 · i ≤ 624, i ≤ 4,16, i = 4, наибольший алфавит 2⁴ = 16."
             }
           },
           {
@@ -191207,6 +191513,12 @@
               "language": "python",
               "code": "most = 3 * 2 ** 20 // 40_000 * 8 // 150\nprint(2 ** most)",
               "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `16`"
             }
           }
         ],
@@ -191259,7 +191571,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Серийный номер содержит десятичные цифры, заглавные латинские буквы и символы из специального алфавита в 2000 символов. Каждому номеру отведено одинаковое минимально возможное целое число байтов, кодирование посимвольное, все символы кодируются одинаковым минимальным числом битов. Известно, что 5000 номеров занимают более 600 Кбайт. Определите минимально возможную длину номера. (Подтема 4: «более».)"
+              "markdown": "Серийный номер содержит десятичные цифры, заглавные латинские буквы и символы из специального алфавита в 2000 символов. Каждому номеру отведено одинаковое минимально возможное целое число байтов, кодирование посимвольное, все символы кодируются одинаковым минимальным числом битов. Известно, что 5000 номеров занимают более 600 Кбайт. Определи минимально возможную длину номера."
             }
           }
         ],
@@ -191275,7 +191587,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "89: A = 2036, i = 11; B ≥ ⌊614 400 / 5000⌋ + 1 = 123, 11L > 8 · 122 = 976, L > 88,7."
+              "markdown": "N = 10 + 26 + 2000 = 2036, на символ 11 бит. 600 · 1024 / 5000 = 122,88, поэтому номер хотя бы 123 байта: код не помещается в 122 байта, 11 · K > 976, K > 88,7. Наименьшая длина 89."
             }
           },
           {
@@ -191284,6 +191596,12 @@
               "language": "python",
               "code": "from math import ceil\n\n\ndef bits(alphabet):\n    i = 1\n    while 2 ** i < alphabet:\n        i += 1\n    return i\n\n\nprint(min(n for n in range(1, 500)\n          if 5000 * ceil(n * bits(2036) / 8) > 600 * 1024))",
               "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `89`"
             }
           }
         ],
@@ -191336,7 +191654,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "На электронной карте записаны личный код, номер подразделения и дополнительная информация. Личный код — 12 символов, каждый из которых одна из 18 разрешённых букв; код кодируется посимвольно минимальным числом битов и занимает минимальное целое число байтов. Номер подразделения — целое число от 1 до 1500, записан двоичным числом и занимает минимальное целое число байтов. Всего на карте 40 байтов данных. Сколько байтов занимает дополнительная информация? (Подтема 5: номер двоичным числом.)"
+              "markdown": "На электронной карте записаны личный код, номер подразделения и дополнительная информация. Личный код — 12 символов, каждый из которых одна из 18 разрешённых букв; код кодируется посимвольно минимальным числом битов и занимает минимальное целое число байтов. Номер подразделения — целое число от 1 до 1500, записан двоичным числом и занимает минимальное целое число байтов. Всего на карте 40 байтов данных. Сколько байтов занимает дополнительная информация?"
             }
           }
         ],
@@ -191344,7 +191662,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Номер подразделения — двоичное число."
+              "markdown": "Номер подразделения — двоичное число в своих целых байтах."
             }
           }
         ],
@@ -191352,7 +191670,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "30 байтов: 18 букв — 5 бит, 12 · 5 = 60 бит → 8 байтов; 1500 < 2¹¹ — 11 бит → 2 байта; 40 − 8 − 2."
+              "markdown": "18 буквам нужно 5 бит, код 12 · 5 = 60 бит → 8 байтов. Номер до 1500 двоичным числом — 11 бит → 2 байта. Дополнительная информация: 40 − 8 − 2 = 30 байтов."
             }
           },
           {
@@ -191361,6 +191679,12 @@
               "language": "python",
               "code": "from math import ceil\n\n\ndef bits(alphabet):\n    i = 1\n    while 2 ** i < alphabet:\n        i += 1\n    return i\n\n\ncode = ceil(12 * bits(18) / 8)\nnumber = ceil((1500).bit_length() / 8)\nprint(40 - code - number)",
               "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `30`"
             }
           }
         ],
@@ -830742,56 +831066,30 @@
       "id": "information-amount",
       "sections": [
         "kak-ustroena-tema-11",
-        "chto-hranim",
-        "kod-simvola",
-        "minimalno-vozmozhnoe",
         "alfavit",
-        "obyom-parolya",
-        "kolichestvo-i-pamyat",
+        "kod-simvola",
         "celye-bajty",
-        "chto-okruglyat",
-        "elementy-i-sostoyaniya",
-        "raschyot-python",
+        "mnogo-parolej",
         "parol-itogo",
         "zapis-polzovatelya",
-        "dopolnitelnye-svedeniya",
-        "obratnyj-hod",
-        "obshchij-zagolovok",
-        "svedeniya-v-bitah",
+        "obyom-zapisej",
+        "chasti-v-bitah",
         "zapisi-itogo",
-        "diapazon",
-        "okruglenie-skryvaet",
-        "dlina-parolya",
-        "moshchnost-alfavita",
-        "granicy",
+        "dlina-po-bajtam",
         "naibolshaya-dlina",
-        "naibolshaya-moshchnost",
-        "specialnye-simvoly",
+        "naibolshij-alfavit",
         "naibolshee-chislo-zapisej",
-        "krupnye-chisla",
         "ne-bolee-itogo",
-        "nizhnyaya-granica",
-        "naimenshee-chislo-bajtov",
-        "ne-pomeshchaetsya",
-        "minimalnaya-moshchnost",
-        "minimalnyj-nabor",
-        "perebor-bitov",
-        "celaya-chast-zapisi",
-        "krupnye-chisla-granica",
+        "naimenshaya-zapis",
+        "naimenshaya-dlina",
+        "naimenshij-alfavit",
         "bolee-itogo",
-        "po-chastyam",
-        "razbor-koda",
+        "chasti-koda",
+        "nomer-chislom",
         "gde-bajty",
-        "nomer-kak-chislo",
-        "bit-length",
-        "nomer-i-kod",
-        "urovni",
         "sostavnye-itogo",
-        "dopolnitelnyy-urok-sluzhebnye",
-        "chislo-zagolovkov",
-        "naibolshee-soobshchenie",
-        "razmer-zavisit",
-        "perebor-kolichestva",
+        "gruppy-s-zagolovkami",
+        "nomer-zavisit",
         "sluzhebnye-itogo"
       ],
       "kind": "topic",
@@ -830803,16 +831101,10 @@
           "access": "free",
           "sections": [
             "kak-ustroena-tema-11",
-            "chto-hranim",
-            "kod-simvola",
-            "minimalno-vozmozhnoe",
             "alfavit",
-            "obyom-parolya",
-            "kolichestvo-i-pamyat",
+            "kod-simvola",
             "celye-bajty",
-            "chto-okruglyat",
-            "elementy-i-sostoyaniya",
-            "raschyot-python",
+            "mnogo-parolej",
             "parol-itogo"
           ]
         },
@@ -830821,10 +831113,8 @@
           "access": "free",
           "sections": [
             "zapis-polzovatelya",
-            "dopolnitelnye-svedeniya",
-            "obratnyj-hod",
-            "obshchij-zagolovok",
-            "svedeniya-v-bitah",
+            "obyom-zapisej",
+            "chasti-v-bitah",
             "zapisi-itogo"
           ]
         },
@@ -830832,16 +831122,10 @@
           "slug": "ne-bolee",
           "access": "free",
           "sections": [
-            "diapazon",
-            "okruglenie-skryvaet",
-            "dlina-parolya",
-            "moshchnost-alfavita",
-            "granicy",
+            "dlina-po-bajtam",
             "naibolshaya-dlina",
-            "naibolshaya-moshchnost",
-            "specialnye-simvoly",
+            "naibolshij-alfavit",
             "naibolshee-chislo-zapisej",
-            "krupnye-chisla",
             "ne-bolee-itogo"
           ]
         },
@@ -830849,14 +831133,9 @@
           "slug": "bolee-i-ne-menee",
           "access": "free",
           "sections": [
-            "nizhnyaya-granica",
-            "naimenshee-chislo-bajtov",
-            "ne-pomeshchaetsya",
-            "minimalnaya-moshchnost",
-            "minimalnyj-nabor",
-            "perebor-bitov",
-            "celaya-chast-zapisi",
-            "krupnye-chisla-granica",
+            "naimenshaya-zapis",
+            "naimenshaya-dlina",
+            "naimenshij-alfavit",
             "bolee-itogo"
           ]
         },
@@ -830864,13 +831143,9 @@
           "slug": "sostavnye-kody",
           "access": "free",
           "sections": [
-            "po-chastyam",
-            "razbor-koda",
+            "chasti-koda",
+            "nomer-chislom",
             "gde-bajty",
-            "nomer-kak-chislo",
-            "bit-length",
-            "nomer-i-kod",
-            "urovni",
             "sostavnye-itogo"
           ]
         },
@@ -830878,11 +831153,8 @@
           "slug": "sluzhebnye-dannye",
           "access": "free",
           "sections": [
-            "dopolnitelnyy-urok-sluzhebnye",
-            "chislo-zagolovkov",
-            "naibolshee-soobshchenie",
-            "razmer-zavisit",
-            "perebor-kolichestva",
+            "gruppy-s-zagolovkami",
+            "nomer-zavisit",
             "sluzhebnye-itogo"
           ]
         }

@@ -9,13 +9,15 @@ bytes for every password against all codes one after another.
 after another in whole bytes, or whole bytes for every part; ``common`` adds a
 row where all symbols share one alphabet.
 ``pwd_range(i, nbytes, mode)`` — the line of bits with byte boundaries and the
-multiples of i: which code lengths L · i give exactly nbytes bytes ("exact"),
+multiples of i: which code lengths K · i give exactly nbytes bytes ("exact"),
 at most nbytes ("upper") or need more than nbytes − 1 ("lower").
 ``pwd_groups(size, group, head)`` — a message cut into groups of at most
 ``group`` bytes, each with its own header.
 ``pwd_code(symbols, bits)`` — one password: the codes of its symbols one after
 another over the byte grid; a code may cross a byte boundary, the tail of the
 last byte stays empty.
+``pwd_record(password, total, count)`` — equal records fill the total: one record is
+the password bytes plus the extra data.
 ``pwd_number(j)`` — j bits hold the codes 0 … 2ʲ − 1: 2ʲ objects fit, the
 numbers 1 … 2ʲ in binary do not — the last one needs bit j + 1.
 Topic 7 builders (``vol_ladder``, ``vol_fit``) are reused as they are.
@@ -23,6 +25,7 @@ Topic 7 builders (``vol_ladder``, ``vol_fit``) are reused as they are.
 
 from __future__ import annotations
 
+from fractions import Fraction
 from math import ceil
 
 from figures import ACCENT, FAINT, INK, MUTED, WASH, _text
@@ -46,6 +49,30 @@ def _ru_bits(n: int) -> str:
     return f"{num(n)} битов"
 
 
+def _ru_passwords(n: int) -> str:
+    if n % 10 == 1 and n % 100 != 11:
+        return f"{num(n)} пароль"
+    if n % 10 in (2, 3, 4) and n % 100 not in (12, 13, 14):
+        return f"{num(n)} пароля"
+    return f"{num(n)} паролей"
+
+
+def _up(a: int, b: int = 8) -> str:
+    """a / b rounded up, written as the lessons write it: 90 / 8 = 11,25 → 12."""
+    whole = ceil(a / b)
+    if a % b == 0:
+        return f"{num(a)} / {b} = {num(whole)}"
+    return f"{num(a)} / {b} = {num(Fraction(a, b))} → {num(whole)}"
+
+
+def _up_bytes(nbits: int) -> str:
+    """nbits / 8 rounded up, ending in a word: 90 / 8 = 11,25 → 12 байтов."""
+    whole = ceil(nbits / 8)
+    if nbits % 8 == 0:
+        return f"{num(nbits)} / 8 = {_ru_bytes(whole)}"
+    return f"{num(nbits)} / 8 = {num(Fraction(nbits, 8))} → {_ru_bytes(whole)}"
+
+
 def _byte_grid(x0: float, y: float, nbytes: int, unit: float, h: float = 26) -> list[str]:
     """Outlines of nbytes bytes, each 8 · unit wide."""
     return [_rect(x0 + b * 8 * unit, y, 8 * unit, h, "none", INK, 1, rx=0) for b in range(nbytes)]
@@ -64,17 +91,17 @@ def _segment(x0: float, y: float, start: int, length: int, unit: float, k: int, 
 
 
 def pwd_bytes(count: int = 8, bits: int = 35) -> str:
-    """count codes of ``bits`` bits: ⌈bits / 8⌉ bytes each against all of them in a row."""
+    """count codes of ``bits`` bits: whole bytes for each against all of them in a row."""
     own = ceil(bits / 8)
     packed = ceil(count * bits / 8)
     left = 24
     unit = (W - 2 * left) / (count * own * 8)
-    out = _svg(236, f"{count} паролей по {bits} бит: свои байты и подряд")
+    out = _svg(236, f"{_ru_passwords(count)} по {bits} бит: свои байты и подряд")
     out.append(
         _text(
             left,
             22,
-            f"{count} паролей по {_ru_bits(bits)}; клетка — один байт, заливка — биты кода",
+            f"{_ru_passwords(count)} по {_ru_bits(bits)}; клетка — один байт, заливка — биты кода",
             13,
             MUTED,
         )
@@ -93,7 +120,7 @@ def pwd_bytes(count: int = 8, bits: int = 35) -> str:
         _text(
             left,
             y1 + 50,
-            f"{count} · ⌈{bits} / 8⌉ = {count} · {own} = {_ru_bytes(count * own)}; "
+            f"{_up(bits)}, {count} · {own} = {_ru_bytes(count * own)}; "
             f"пустует по {_ru_bits(own * 8 - bits)} в каждом пароле",
             13,
             ACCENT,
@@ -111,7 +138,7 @@ def pwd_bytes(count: int = 8, bits: int = 35) -> str:
         _text(
             left,
             y2 + 50,
-            f"⌈{count} · {bits} / 8⌉ = ⌈{num(count * bits)} / 8⌉ = {_ru_bytes(packed)}",
+            f"{count} · {bits} = {_ru_bits(count * bits)}, {_up_bytes(count * bits)}",
             13,
             MUTED,
         )
@@ -175,7 +202,7 @@ def pwd_parts(parts=(35, 13), names=("пароль", "сведения"), common
         _text(
             left,
             y + 48,
-            f"⌈({' + '.join(map(str, parts))}) / 8⌉ = ⌈{total} / 8⌉ = {_ru_bytes(together)}",
+            f"{' + '.join(map(str, parts))} = {_ru_bits(total)}, {_up_bytes(total)}",
             13,
             MUTED,
         )
@@ -191,12 +218,12 @@ def pwd_parts(parts=(35, 13), names=("пароль", "сведения"), common
         out.append(_line(x, y - 4, x, y + 30, INK, 2))
         x += each[k] * 8 * unit
     out.append(_line(x, y - 4, x, y + 30, INK, 2))
-    sums = " + ".join(f"⌈{p} / 8⌉" for p in parts)
+    sums = "; ".join(_up(p) for p in parts)
     out.append(
         _text(
             left,
             y + 48,
-            f"{sums} = {' + '.join(map(str, each))} = {_ru_bytes(sum(each))}",
+            f"{sums}; {' + '.join(map(str, each))} = {_ru_bytes(sum(each))}",
             13,
             MUTED,
         )
@@ -228,7 +255,7 @@ def pwd_parts(parts=(35, 13), names=("пароль", "сведения"), common
             _text(
                 left,
                 y + 48,
-                f"{symbols} · {i} = {bits} бита, ⌈{bits} / 8⌉ = {_ru_bytes(nbytes)}",
+                f"{symbols} · {i} = {_ru_bits(bits)}, {_up_bytes(bits)}",
                 13,
                 MUTED,
             )
@@ -251,10 +278,10 @@ def pwd_parts(parts=(35, 13), names=("пароль", "сведения"), common
 
 
 def pwd_range(i: int = 5, nbytes: int = 7, mode: str = "exact") -> str:
-    """Bits on a line with byte boundaries; the multiples L · i of the code length.
+    """Bits on a line with byte boundaries; the multiples K · i of the code length.
 
-    ``exact`` — L · i in (8(B − 1); 8B]; ``upper`` — L · i ≤ 8B;
-    ``lower`` — L · i > 8(B − 1).
+    ``exact`` — K · i in (8(B − 1); 8B]; ``upper`` — K · i ≤ 8B;
+    ``lower`` — K · i > 8(B − 1).
     """
     lo_bit, hi_bit = 8 * (nbytes - 2), 8 * (nbytes + 1)
     left, right, y = 40, 620, 84
@@ -270,13 +297,13 @@ def pwd_range(i: int = 5, nbytes: int = 7, mode: str = "exact") -> str:
         "lower": lambda v: v > a,
     }[mode]
     title = {
-        "exact": f"ровно {_ru_bytes(nbytes)}: {a} < L · {i} ≤ {b}",
-        "upper": f"не более {_ru_bytes(nbytes)}: L · {i} ≤ {b}",
-        "lower": f"больше {_ru_bytes(nbytes - 1)}: L · {i} > {a}",
+        "exact": f"ровно {_ru_bytes(nbytes)}: {a} < K · {i} ≤ {b}",
+        "upper": f"не более {_ru_bytes(nbytes)}: K · {i} ≤ {b}",
+        "lower": f"больше {_ru_bytes(nbytes - 1)}: K · {i} > {a}",
     }[mode]
-    out = _svg(200, f"Длины кода L · {i} и границы байтов")
+    out = _svg(200, f"Длины кода K · {i} и границы байтов")
     out.append(
-        _text(16, 22, f"биты на прямой, засечки — границы байтов; точка — L · {i}", 13, MUTED)
+        _text(16, 22, f"биты на прямой, засечки — границы байтов; точка — K · {i}", 13, MUTED)
     )
     # the allowed stretch
     xa = x(a) if mode != "upper" else left
@@ -304,7 +331,7 @@ def pwd_range(i: int = 5, nbytes: int = 7, mode: str = "exact") -> str:
             _text(
                 x(v),
                 y - 28,
-                f"L = {L}",
+                f"K = {L}",
                 12,
                 ACCENT if hit else MUTED,
                 "middle",
@@ -312,13 +339,13 @@ def pwd_range(i: int = 5, nbytes: int = 7, mode: str = "exact") -> str:
             )
         )
     if mode == "exact":
-        note = f"подходят L = {', '.join(map(str, fits))}; левая граница {a} не входит"
+        note = f"подходят K = {', '.join(map(str, fits))}; левая граница {a} не входит"
     elif mode == "upper":
         best = max(fits)
-        note = f"наибольшая длина L = {best}: {best} · {i} = {best * i} ≤ {b} < {(best + 1) * i}"
+        note = f"наибольшая длина K = {best}: {best} · {i} = {best * i} ≤ {b} < {(best + 1) * i}"
     else:
         least = min(fits)
-        note = f"наименьшая длина L = {least}: {(least - 1) * i} ≤ {a} < {least * i}"
+        note = f"наименьшая длина K = {least}: {least - 1} · {i} = {(least - 1) * i} — ещё {_ru_bytes(nbytes - 1)}, {least} · {i} = {least * i} > {a}"
     out.append(_text(16, 164, title, 14, INK, weight=600))
     out.append(_text(16, 188, note, 13, ACCENT))
     out.append("</svg>")
@@ -361,7 +388,7 @@ def pwd_groups(size: int = 10, group: int = 4, head: int = 1) -> str:
         _text(
             left,
             y + 80,
-            f"групп ⌈{size} / {group}⌉ = {groups}; всего {size} + {groups} · {head} = {_ru_bytes(total)}",
+            f"групп {_up(size, group)}; всего {size} + {groups} · {head} = {_ru_bytes(total)}",
             14,
             INK,
             weight=600,
@@ -385,23 +412,30 @@ def pwd_code(symbols: int = 7, bits: int = 5) -> str:
     unit = (W - 2 * left) / (nbytes * 8)
     y = 66
     out = _svg(204, f"Пароль из {symbols} символов по {bits} бит в байтах")
-    out.append(_text(left, 22, f"{symbols} символов по {_ru_bits(bits)}; клетка — байт", 13, MUTED))
+    crowded = bits * unit < 60
+    head = "сверху — номера символов, снизу — байтов" if crowded else "клетка — байт"
+    out.append(_text(left, 22, f"{symbols} символов по {_ru_bits(bits)}; {head}", 13, MUTED))
     for k in range(symbols):
         out.append(_segment(left, y, k * bits, bits, unit, k))
         x = left + (k * bits + bits / 2) * unit
-        out.append(_text(x, y - 10, f"символ {k + 1}", 12, INK, "middle"))
+        label = str(k + 1) if crowded else f"символ {k + 1}"
+        out.append(_text(x, y - 10, label, 12, INK, "middle"))
+        if k:
+            xs = left + k * bits * unit
+            out.append(_line(xs, y - 6, xs, y + 3, MUTED, 1))
     if nbytes * 8 > total:
         out.append(
             _rect(left + total * unit, y + 3, (nbytes * 8 - total) * unit, 20, "none", ACCENT, 1)
         )
     out += _byte_grid(left, y, nbytes, unit)
     for b in range(nbytes):
-        out.append(_text(left + (b * 8 + 4) * unit, y + 46, f"байт {b + 1}", 12, MUTED, "middle"))
+        label = str(b + 1) if crowded else f"байт {b + 1}"
+        out.append(_text(left + (b * 8 + 4) * unit, y + 46, label, 12, MUTED, "middle"))
     out.append(
         _text(
             left,
             y + 82,
-            f"{symbols} · {bits} = {_ru_bits(total)} кода; целых байтов ⌈{total} / 8⌉ = {nbytes}",
+            f"{symbols} · {bits} = {_ru_bits(total)} кода; байтов {_up(total)}",
             14,
             INK,
             weight=600,
@@ -487,6 +521,64 @@ def pwd_number(j: int = 3) -> str:
     return "".join(out)
 
 
+# --- one record out of the total -----------------------------------------------------------
+
+
+def pwd_record(password: int = 12, total: int = 1200, count: int = 40) -> str:
+    """count equal records fill total bytes; one record = password bytes + the rest."""
+    record = total // count
+    extra = record - password
+    left = 24
+    out = _svg(220, f"{count} записей в {total} байтах: пароль и сведения")
+    out.append(
+        _text(left, 22, f"{num(count)} одинаковых записей заняли {_ru_bytes(total)}", 13, MUTED)
+    )
+    y1, step = 40, (W - 2 * left) / count
+    for k in range(count):
+        out.append(
+            _rect(left + k * step, y1, step, 30, WASH if k % 2 == 0 else FAINT, INK, 0.75, rx=0)
+        )
+    out.append(_rect(left, y1, step, 30, "none", ACCENT, 2, rx=0))
+    y2 = 120
+    unit = (W - 2 * left) / record
+    out.append(_line(left, y1 + 30, left, y2, ACCENT, 1, dashed=True))
+    out.append(_line(left + step, y1 + 30, W - left, y2, ACCENT, 1, dashed=True))
+    out.append(_rect(left, y2, password * unit, 34, FAINT, INK, 1, rx=0))
+    out.append(_rect(left + password * unit, y2, extra * unit, 34, "#fff", ACCENT, 2, rx=0))
+    out.append(
+        _text(
+            left + password * unit / 2, y2 + 22, f"пароль {_ru_bytes(password)}", 13, INK, "middle"
+        )
+    )
+    out.append(
+        _text(
+            left + (password + extra / 2) * unit,
+            y2 + 22,
+            f"сведения {_ru_bytes(extra)}",
+            13,
+            ACCENT,
+            "middle",
+            600,
+        )
+    )
+    out.append(
+        _text(
+            left,
+            y2 + 64,
+            f"одна запись: {num(total)} / {count} = {_ru_bytes(record)}; "
+            f"сведения: {record} − {password} = {_ru_bytes(extra)}",
+            14,
+            INK,
+            weight=600,
+        )
+    )
+    out.append(
+        _text(W / 2, 212, "каждая запись — свой пароль и свои сведения", 12, MUTED, "middle")
+    )
+    out.append("</svg>")
+    return "".join(out)
+
+
 PASSWORD_FIGURES: dict = {
     "pwd_bytes": pwd_bytes,
     "pwd_parts": pwd_parts,
@@ -494,6 +586,7 @@ PASSWORD_FIGURES: dict = {
     "pwd_groups": pwd_groups,
     "pwd_code": pwd_code,
     "pwd_number": pwd_number,
+    "pwd_record": pwd_record,
 }
 PASSWORD_STEPPERS: dict = {}
 PASSWORD_WIDGETS: dict = {}

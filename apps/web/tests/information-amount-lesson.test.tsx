@@ -72,6 +72,12 @@ function pieces(node: React.ReactNode, out: Piece[] = []): Piece[] {
     out.push({ kind: "text", text: textOf(node.props.children as never) });
     return out;
   }
+  // the panels of LessonTabs are props, not children
+  const tabs = node.props.tabs as { content: React.ReactNode }[] | undefined;
+  if (Array.isArray(tabs)) {
+    for (const tab of tabs) pieces(tab.content, out);
+    return out;
+  }
   return pieces(node.props.children as React.ReactNode, out);
 }
 
@@ -105,7 +111,7 @@ describe("task 11 passwords lesson (Change 184)", () => {
       ["sluzhebnye-dannye", "advanced"],
     ]);
     expect(subtopics.map(({ checkpoint }) => checkpoint?.length ?? 0)).toEqual([
-      0, 0, 1, 0, 0, 0,
+      5, 5, 5, 5, 5, 4,
     ]);
     expect(lesson.examFocus).toBeDefined();
     expect(lesson.result).toBeDefined();
@@ -181,7 +187,7 @@ describe("task 11 passwords lesson (Change 184)", () => {
           prelude += piece.code + "\n";
       }
     }
-    expect(ran).toBe(11);
+    expect(ran).toBe(14);
   }, 60_000);
 
   it("keeps spaces around inline code, links and emphasis", () => {
