@@ -86,7 +86,7 @@ function compiles(code: string): boolean {
 }
 
 describe("task 6 simple algorithms lesson (Change 190)", () => {
-  it("has five core subtopics, two advanced and their self-checks", () => {
+  it("has five core subtopics, one advanced and their self-checks", () => {
     expect(lesson).toMatchObject({
       id: "simple-algorithms",
       routeSlug: "6-prostejshie-algoritmy-dlya-ispolnitelej",
@@ -98,15 +98,14 @@ describe("task 6 simple algorithms lesson (Change 190)", () => {
     const subtopics = lessonSubtopics(lesson);
     expect(subtopics.map(({ slug, level }) => [slug, level])).toEqual([
       ["sostoyanie-i-komandy", "core"],
-      ["postroenie-i-reshetka", "core"],
       ["granica-i-velichiny", "core"],
       ["neskolko-figur", "core"],
+      ["postroenie-i-reshetka", "core"],
       ["naklonnaya-geometriya", "core"],
-      ["obratnyj-vopros-i-poseshcheniya", "advanced"],
-      ["tochnyj-podschet-i-dugi", "advanced"],
+      ["podschet-programmoj", "advanced"],
     ]);
     expect(subtopics.map(({ checkpoint }) => checkpoint?.length ?? 0)).toEqual([
-      7, 4, 1, 0, 0, 0, 0,
+      5, 5, 5, 5, 5, 4,
     ]);
     expect(lesson.examFocus).toBeDefined();
     expect(lesson.result).toBeDefined();
@@ -190,7 +189,7 @@ describe("task 6 simple algorithms lesson (Change 190)", () => {
           prelude += piece.code + "\n";
       }
     }
-    expect(ran).toBe(8);
+    expect(ran).toBe(5);
   }, 60_000);
 
   it("keeps spaces around inline code, links and emphasis", () => {
@@ -220,7 +219,7 @@ describe("task 6 simple algorithms lesson (Change 190)", () => {
     );
     expect(
       container.querySelectorAll("[data-python-term]").length,
-    ).toBeGreaterThanOrEqual(8);
+    ).toBeGreaterThanOrEqual(5);
     expect(container.querySelectorAll("aside, [role='note']")).toHaveLength(0);
   });
 });

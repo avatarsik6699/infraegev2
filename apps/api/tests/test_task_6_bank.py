@@ -6,8 +6,8 @@ The bank's answers come from the stand's executor (``turtle_figures``: ray casti
 trace). Here the algorithm is read from the bank task itself (its text or its program
 block) and run again by a separate executor on complex numbers; a point is inside when the
 contour winds around it, on the line when it lies on a drawn segment. Rectangles given by
-their bounds are counted by formulas, visits by stepping one unit at a time. The programs of
-subtopic 7 must print the same answers.
+their bounds are counted by formulas. The programs of the advanced subtopic must print the
+same answers.
 """
 
 import cmath
@@ -159,18 +159,6 @@ def _overlap(a, b):
     return max(a[0], b[0]), min(a[1], b[1]), max(a[2], b[2]), min(a[3], b[3])
 
 
-def _visits(sides: int, first: bool) -> tuple[int, int]:
-    """«Повтори 5 [Вперёд 3 Направо 90]» walked one unit at a time."""
-    count: dict[complex, int] = {0j: 1} if first else {}
-    z, step = 0j, 1j
-    for _ in range(sides):
-        for _ in range(3):
-            z += step
-            count[z] = count.get(z, 0) + 1
-        step *= -1j
-    return sum(v >= 2 for v in count.values()), len(set(count) | {0j})
-
-
 def _solution(task: TaskData) -> str | None:
     found = [
         b.data.code
@@ -184,35 +172,35 @@ def _solution(task: TaskData) -> str | None:
 def answers() -> dict[str, str]:
     t = _entries()
     a: dict[str, str] = {}
-    a["task-6-1-05"] = f"{360 // 6} {360 // 8}"
-    end = _trace(t["task-6-1-08"])[2]
-    a["task-6-1-08"] = f"{round(end.real)} {round(end.imag)}"
+    a["task-6-1-05"] = str(360 // 8)
+    for k in ("1-08", "1-09", "1-10", "2-07"):
+        end = _trace(t[f"task-6-{k}"])[2]
+        a[f"task-6-{k}"] = f"{round(end.real)} {round(end.imag)}"
     a["task-6-2-02"] = str(6 * 25)
     a["task-6-2-05"] = str((8 - -3) * (6 - -2))
-    # 2.7: three sides close the triangle, the fourth goes up 10 and turns right by 120°
-    a["task-6-2-07"] = f"0 10 {(90 - 120) % 360}"
-    a["task-6-2-08"] = f"{(13 + 2) * (11 + 2)} {_box(0, 8, 0, 6, True)}"
-    a["task-6-3-02"] = f"{_count(t['task-6-3-02'], 'i')} {_count(t['task-6-3-02'], 'ie')}"
-    a["task-6-3-03"] = (
-        f"{_box(0, 9, 0, 4, True)} {_box(0, 9, 0, 4)} {_box(0, 9, 0, 4) - _box(0, 9, 0, 4, True)}"
-    )
+    # 2.8: range(-3, b) reaches x = 4 when b − 1 = 4
+    a["task-6-2-08"] = str(next(b for b in range(-3, 20) if 4 in range(-3, b)))
+    h1, h2 = _figure_points(t["task-6-2-09"])
+    a["task-6-2-09"] = str(len(h1 | h2))
+    a["task-6-3-02"] = str(_count(t["task-6-3-02"], "ie"))
+    a["task-6-3-03"] = str(_box(0, 9, 0, 4) - _box(0, 9, 0, 4, True))
     # 3.4: x = k on the segment to (6; 4) has y = 4k/6
     a["task-6-3-04"] = str(sum(1 for k in range(0, 7) if (4 * k) % 6 == 0))
     a["task-6-3-05"] = str(_count(t["task-6-3-05"], "e"))
     # 3.6: Pick's theorem I = S − B/2 + 1; B: 6 on one leg, 5 on the other, gcd(6, 5) on the third
     boundary = 6 + 5 + math.gcd(6, 5)
-    a["task-6-3-06"] = f"15 {round(15 - boundary / 2 + 1)}"
+    a["task-6-3-06"] = str(round(15 - boundary / 2 + 1))
     a["task-6-3-07"] = str(_count(t["task-6-3-07"], "i"))
     a["task-6-3-08"] = str(_count(t["task-6-3-08"], "ie"))
     both = _overlap((-2, 5, -1, 4), (1, 7, 2, 6))
-    a["task-6-4-01"] = f"{_box(*both)} {_box(*both, True)}"
+    a["task-6-4-01"] = str(_box(*both))
     a["task-6-4-02"] = str(
         _box(0, 4, 0, 3) + _box(2, 6, 1, 4) - _box(*_overlap((0, 4, 0, 3), (2, 6, 1, 4)))
     )
-    a["task-6-4-03"] = f"0 {_box(*_overlap((0, 3, 0, 2), (3, 5, 0, 2)))} 0"
+    a["task-6-4-03"] = str(_box(*_overlap((0, 3, 0, 2), (3, 5, 0, 2))))
     A, B = (0, 8, 0, 6), (3, 10, 2, 7)
     inner = _box(*A, True) + _box(*B, True) - _box(4, 7, 3, 5)
-    a["task-6-4-04"] = f"{_box(*A) - _box(*_overlap(A, B))} {inner}"
+    a["task-6-4-04"] = str(inner)
     a["task-6-4-05"] = str(_box(0, 10, 0, 6) - _box(*_overlap((0, 10, 0, 6), (4, 12, 2, 9))))
     f1, f2 = _figure_points(t["task-6-4-06"])
     a["task-6-4-06"] = str(len(f1 & f2))
@@ -232,20 +220,10 @@ def answers() -> dict[str, str]:
     a["task-6-6-02"] = str(next(n for n in range(1, 99) if _box(0, 4, 0, n) > 60))
     a["task-6-6-03"] = str(next(n for n in range(1, 99) if _box(0, n, 0, n, True) > 100))
     a["task-6-6-04"] = str((min(10, 6) + 1) * (min(4, 6) + 1))
-    a["task-6-6-05"] = str((10 - 3 + 1) * (4 - 3 + 1))
-    a["task-6-6-06"] = str(_visits(5, True)[0])
-    a["task-6-6-07"] = " ".join(map(str, _visits(5, False)))
     a["task-6-7-01"] = str(_box(0, 9, 0, 4, True))
     a["task-6-7-02"] = str(_box(*A) + _box(*B) - 2 * _box(*_overlap(A, B)))
     a["task-6-7-03"] = str(
         sum(1 for x in range(1, 6) for y in range(1, 7) if x / 3**0.5 < y < 6 - x / 3**0.5)
-    )
-    a["task-6-7-04"] = f"{len(range(3, 7))} {len(range(2, 4))}"
-    a["task-6-7-05"] = str(
-        sum(1 for x in range(0, 11) for y in range(0, 6) if (x - 5) ** 2 + y * y <= 25)
-    )
-    a["task-6-7-06"] = str(
-        sum(1 for x in range(0, 11) for y in range(1, 6) if (x - 5) ** 2 + y * y < 25)
     )
     for k, kinds in (("8-01", "i"), ("8-02", "ie"), ("8-04", "i")):
         a[f"task-6-{k}"] = str(_count(t[f"task-6-{k}"], kinds))
@@ -262,7 +240,7 @@ def answers() -> dict[str, str]:
 def test_every_answer_matches_independent_recomputation(answers: dict[str, str]) -> None:
     tasks = _entries()
     assert sorted(tasks) == sorted(answers)
-    assert sorted(t.lessons[0].position for t in tasks.values()) == list(range(45))
+    assert sorted(t.lessons[0].position for t in tasks.values()) == list(range(42))
     for task_id, task in tasks.items():
         assert task.checker.answer_variants[0] == answers[task_id], task_id
         assert task.exam_numbers == [6] and not task.catalog_visible and not task.archived

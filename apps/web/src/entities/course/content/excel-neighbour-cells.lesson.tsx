@@ -1,4 +1,3 @@
-import { Notation } from "~/shared/components/notation";
 import { Typography } from "~/shared/components/typography";
 import { defineCourseLesson } from "../lib/define-course-lesson";
 import { excelNeighbourCellsLessonPublication } from "./course-publication.mjs";

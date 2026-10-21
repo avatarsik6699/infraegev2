@@ -746228,19 +746228,19 @@
     {
       "task": {
         "id": "task-6-1-05",
-        "title": "Поворот правильного многоугольника",
+        "title": "Поворот правильного восьмиугольника",
         "short_description": null,
         "explanation_kind": "worked_solution",
         "difficulty": 1,
         "estimated_minutes": 1,
-        "answer_instruction": "Введите два числа через пробел в том порядке, в каком их спрашивают.",
+        "answer_instruction": "Введите число.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "На какой угол поворачивает Черепаха на каждом шаге обхода правильного шестиугольника? А восьмиугольника?"
+              "markdown": "На какой угол поворачивает Черепаха на каждом шаге обхода правильного восьмиугольника?"
             }
           }
         ],
@@ -746248,7 +746248,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Суммарный поворот при обходе — 360°."
+              "markdown": "За полный обход повороты в сумме дают 360°."
             }
           }
         ],
@@ -746256,7 +746256,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "60° и 45°: суммарный поворот обхода 360°, делим на 6 и на 8."
+              "markdown": "Восемь одинаковых поворотов дают 360°, поэтому каждый 360° / 8 = 45°."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `45`"
             }
           }
         ],
@@ -746265,7 +746271,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 0,
+            "position": 21,
             "material_id": "simple-algorithms"
           }
         ],
@@ -746294,7 +746300,7 @@
         ],
         "checker": {
           "checker_type": "exact_match",
-          "answer_variants": ["60 45"],
+          "answer_variants": ["45"],
           "numeric_tolerance": null
         }
       },
@@ -746315,7 +746321,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Черепахе был дан для исполнения алгоритм «Повтори 4 [Вперёд 5 Направо 90 Вперёд 5 Направо 270]». Начальное положение (0; 0), голова вверх. Определите координаты Черепахи после выполнения алгоритма."
+              "markdown": "Черепаха находится в начале координат, голова направлена вверх. Ей дали алгоритм «Повтори 4 [Вперёд 5 Направо 90 Вперёд 5 Направо 270]». Определи координаты Черепахи после выполнения алгоритма."
             }
           }
         ],
@@ -746323,7 +746329,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Каждое повторение — 5 вверх и 5 вправо."
+              "markdown": "«Направо 270» поворачивает голову так же, как «Налево 90»."
             }
           }
         ],
@@ -746331,7 +746337,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "(20; 20): каждое повторение — «лестница» на 5 вверх и 5 вправо, «Направо 270» возвращает голову вверх."
+              "markdown": "За одно повторение Черепаха проходит 5 вверх, поворачивает вправо и проходит 5 вправо, а «Направо 270» снова направляет голову вверх. Четыре такие ступеньки: 4 · 5 = 20 вправо и 20 вверх."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `20 20`"
             }
           }
         ],
@@ -746347,7 +746359,7 @@
         "theory_links": [
           {
             "label": "Теория",
-            "section": "konechnoe-sostoyanie",
+            "section": "povtori-i-cikl",
             "material_id": "simple-algorithms"
           }
         ],
@@ -746377,6 +746389,168 @@
     },
     {
       "task": {
+        "id": "task-6-1-09",
+        "title": "Назад без разворота",
+        "short_description": null,
+        "explanation_kind": "worked_solution",
+        "difficulty": 1,
+        "estimated_minutes": 3,
+        "answer_instruction": "Введите координаты x и y через пробел.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Черепаха находится в начале координат, голова направлена вверх. Ей дали алгоритм «Вперёд 4 Направо 90 Вперёд 3 Назад 7 Налево 90 Вперёд 2». Определи координаты Черепахи после выполнения алгоритма."
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "«Назад» перемещает Черепаху в обратную сторону, но голова продолжает смотреть туда же."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Черепаха поднимается до (0; 4), поворачивает вправо и доходит до (3; 4). «Назад 7» ведёт её влево до (−4; 4), а голова по-прежнему смотрит вправо. «Налево 90» направляет голову вверх, и последний шаг ведёт в (−4; 6)."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `-4 6`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [6],
+        "files": [],
+        "lessons": [
+          {
+            "position": 0,
+            "material_id": "simple-algorithms"
+          }
+        ],
+        "theory_links": [
+          {
+            "label": "Теория",
+            "section": "dvizhenie-i-povorot",
+            "material_id": "simple-algorithms"
+          }
+        ],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["-4 6"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "task-6-1-10",
+        "title": "Где начнётся вторая фигура",
+        "short_description": null,
+        "explanation_kind": "worked_solution",
+        "difficulty": 1,
+        "estimated_minutes": 3,
+        "answer_instruction": "Введите координаты x и y через пробел.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Черепаха находится в начале координат, голова направлена вверх, хвост опущен. Ей дали алгоритм «Повтори 2 [Вперёд 9 Направо 90 Вперёд 7 Направо 90] Поднять хвост Вперёд 3 Направо 90 Вперёд 4 Налево 90 Опустить хвост». Определи координаты точки, в которой Черепаха опустит хвост."
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Сначала найди, где окажется Черепаха после прямоугольника и куда будет смотреть."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Два повторения обходят прямоугольник 7 × 9 и возвращают Черепаху в (0; 0) головой вверх. С поднятым хвостом она проходит 3 вверх — до (0; 3), поворачивает вправо и проходит 4 — до (4; 3), затем поворачивает вверх. Здесь хвост и опускается."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `4 3`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [6],
+        "files": [],
+        "lessons": [
+          {
+            "position": 3,
+            "material_id": "simple-algorithms"
+          }
+        ],
+        "theory_links": [
+          {
+            "label": "Теория",
+            "section": "perehod-mezhdu-figurami",
+            "material_id": "simple-algorithms"
+          }
+        ],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["4 3"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
         "id": "task-6-2-02",
         "title": "Масштаб и расстояние",
         "short_description": null,
@@ -746390,7 +746564,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "При k = 25 сколько экранных единиц пройдёт Черепаха по команде «Вперёд 6»?"
+              "markdown": "В программе на turtle масштаб k = 25. Сколько точек экрана пройдёт Черепаха по команде «Вперёд 6»?"
             }
           }
         ],
@@ -746398,7 +746572,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Расстояние умножают на k."
+              "markdown": "На масштаб умножают расстояние."
             }
           }
         ],
@@ -746406,7 +746580,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "150 = 6 · 25."
+              "markdown": "Команда записывается как `t.forward(6 * k)`: 6 · 25 = 150."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `150`"
             }
           }
         ],
@@ -746415,7 +746595,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 2,
+            "position": 17,
             "material_id": "simple-algorithms"
           }
         ],
@@ -746465,7 +746645,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Сколько точек отметит сетка `for x in range(-3, 8):` и вложенный `for y in range(-2, 6):`?"
+              "markdown": "Сетку наносят циклом `for x in range(-3, 8):` и вложенным в него `for y in range(-2, 6):`. Сколько точек она отметит?"
             }
           }
         ],
@@ -746473,7 +746653,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Число значений range — разность границ."
+              "markdown": "`range(a, b)` даёт b − a чисел."
             }
           }
         ],
@@ -746481,7 +746661,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "88: 11 значений x на 8 значений y."
+              "markdown": "x принимает 11 значений (от −3 до 7), y — 8 значений (от −2 до 5). Точек 11 · 8 = 88."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `88`"
             }
           }
         ],
@@ -746490,7 +746676,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 3,
+            "position": 18,
             "material_id": "simple-algorithms"
           }
         ],
@@ -746528,19 +746714,19 @@
     {
       "task": {
         "id": "task-6-2-07",
-        "title": "Диагностика после алгоритма",
+        "title": "Лишнее повторение треугольника",
         "short_description": null,
         "explanation_kind": "worked_solution",
         "difficulty": 2,
         "estimated_minutes": 3,
-        "answer_instruction": "Введите три числа через пробел в том порядке, в каком их спрашивают.",
+        "answer_instruction": "Введите координаты x и y через пробел.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Черепахе дан алгоритм «Повтори 4 [Вперёд 10 Направо 120]», начало (0; 0), голова вверх. Какие координаты и направление в градусах напечатает диагностическая часть шаблона сразу после алгоритма?"
+              "markdown": "Черепаха находится в начале координат, голова направлена вверх. Ей дали алгоритм «Повтори 4 [Вперёд 10 Направо 120]». Определи координаты Черепахи после выполнения алгоритма."
             }
           }
         ],
@@ -746548,7 +746734,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Три повторения замыкают треугольник, четвёртое идёт дальше."
+              "markdown": "Три повторения замыкают треугольник и возвращают Черепаху в начало."
             }
           }
         ],
@@ -746556,7 +746742,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Координаты 0 и 10, направление 330: три повторения возвращают в (0; 0), четвёртое проходит сторону вверх до (0; 10) и поворачивает голову на 120° от 90°."
+              "markdown": "Три повторения рисуют равносторонний треугольник и возвращают Черепаху в (0; 0) головой вверх. Четвёртое повторение проходит первую сторону ещё раз — до (0; 10)."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `0 10`"
             }
           }
         ],
@@ -746565,7 +746757,183 @@
         "files": [],
         "lessons": [
           {
-            "position": 4,
+            "position": 2,
+            "material_id": "simple-algorithms"
+          }
+        ],
+        "theory_links": [
+          {
+            "label": "Теория",
+            "section": "povtori-i-cikl",
+            "material_id": "simple-algorithms"
+          }
+        ],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["0 10"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "task-6-2-08",
+        "title": "Правая граница range",
+        "short_description": null,
+        "explanation_kind": "worked_solution",
+        "difficulty": 2,
+        "estimated_minutes": 3,
+        "answer_instruction": "Введите число.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Фигура занимает −3 ≤ x ≤ 4. Сетку по x наносят циклом `for x in range(-3, b):`. При каком наименьшем b в сетку попадёт столбец x = 4?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Правая граница `range` в перебор не входит."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "`range(-3, b)` даёт числа от −3 до b − 1. Чтобы среди них было 4, нужно b − 1 ≥ 4, то есть b = 5."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `5`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [6],
+        "files": [],
+        "lessons": [
+          {
+            "position": 19,
+            "material_id": "simple-algorithms"
+          }
+        ],
+        "theory_links": [
+          {
+            "label": "Теория",
+            "section": "setka-tochek",
+            "material_id": "simple-algorithms"
+          }
+        ],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["5"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "task-6-2-09",
+        "title": "Две фигуры с командами «Назад»",
+        "short_description": null,
+        "explanation_kind": "worked_solution",
+        "difficulty": 2,
+        "estimated_minutes": 5,
+        "answer_instruction": "Введите число.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Черепаха находится в начале координат, голова направлена вверх, хвост опущен. Ей дали алгоритм:"
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "text",
+              "code": "Повтори 2 [Вперёд 4 Направо 90 Вперёд 9 Направо 90]\nПоднять хвост\nНазад 3 Направо 90 Назад 2 Налево 90\nОпустить хвост\nПовтори 2 [Вперёд 8 Направо 90 Вперёд 5 Направо 90]",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Определи, сколько точек с целочисленными координатами принадлежит объединению областей, ограниченных заданными алгоритмом линиями, включая точки на линиях."
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "«Назад» ведёт в отрицательные координаты: построй рисунок программой или найди, где опустится хвост."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Первая фигура — 0 ≤ x ≤ 9, 0 ≤ y ≤ 4. С поднятым хвостом Черепаха пятится на 3 вниз и на 2 влево, хвост опускается в (−2; −3), голова смотрит вверх. Вторая фигура — −2 ≤ x ≤ 3, −3 ≤ y ≤ 5. В первой 10 · 5 = 50 точек, во второй 6 · 9 = 54, общих (0 ≤ x ≤ 3, 0 ≤ y ≤ 4) 4 · 5 = 20. В объединении 50 + 54 − 20 = 84."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `84`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [6],
+        "files": [],
+        "lessons": [
+          {
+            "position": 20,
             "material_id": "simple-algorithms"
           }
         ],
@@ -746594,82 +746962,7 @@
         ],
         "checker": {
           "checker_type": "exact_match",
-          "answer_variants": ["0 10 330"],
-          "numeric_tolerance": null
-        }
-      },
-      "solution_revision": 1
-    },
-    {
-      "task": {
-        "id": "task-6-2-08",
-        "title": "Точки сетки шаблона",
-        "short_description": null,
-        "explanation_kind": "worked_solution",
-        "difficulty": 2,
-        "estimated_minutes": 3,
-        "answer_instruction": "Введите два числа через пробел в том порядке, в каком их спрашивают.",
-        "interaction_type": "production",
-        "content_schema_version": 1,
-        "statement": [
-          {
-            "type": "text",
-            "data": {
-              "markdown": "В шаблоне сетка `range(-2, 13)` и `range(-2, 11)`. Сколько всего точек она отмечает и сколько из них попадает внутрь прямоугольника 8 × 6 строго?"
-            }
-          }
-        ],
-        "hint": [
-          {
-            "type": "text",
-            "data": {
-              "markdown": "Лишние точки сетки лежат снаружи."
-            }
-          }
-        ],
-        "explanation": [
-          {
-            "type": "text",
-            "data": {
-              "markdown": "195 точек: 15 · 13; строго внутри — 35, как и раньше: лишние точки сетки просто снаружи."
-            }
-          }
-        ],
-        "skills": [],
-        "exam_numbers": [6],
-        "files": [],
-        "lessons": [
-          {
-            "position": 5,
-            "material_id": "simple-algorithms"
-          }
-        ],
-        "theory_links": [
-          {
-            "label": "Теория",
-            "section": "diapazony-setki",
-            "material_id": "simple-algorithms"
-          }
-        ],
-        "catalog_visible": false,
-        "archived": false,
-        "sources": [
-          {
-            "url": null,
-            "kind": "original",
-            "role": "original",
-            "year": null,
-            "title": null,
-            "author": null,
-            "primary": true,
-            "is_public": true,
-            "adaptation": null,
-            "original_id": null
-          }
-        ],
-        "checker": {
-          "checker_type": "exact_match",
-          "answer_variants": ["195 35"],
+          "answer_variants": ["84"],
           "numeric_tolerance": null
         }
       },
@@ -746678,25 +746971,19 @@
     {
       "task": {
         "id": "task-6-3-02",
-        "title": "Квадрат влево-вверх",
+        "title": "Квадрат при старте вправо",
         "short_description": null,
         "explanation_kind": "worked_solution",
         "difficulty": 1,
         "estimated_minutes": 3,
-        "answer_instruction": "Введите два числа через пробел в том порядке, в каком их спрашивают.",
+        "answer_instruction": "Введите число.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Учти другое начальное направление и левые повороты."
-            }
-          },
-          {
-            "type": "text",
-            "data": {
-              "markdown": "Начальное положение (0;0), направление вправо."
+              "markdown": "Черепаха находится в начале координат, голова направлена вправо, хвост опущен. Ей дали алгоритм:"
             }
           },
           {
@@ -746710,7 +746997,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Найди число точек строго внутри и вместе с границей."
+              "markdown": "Определи, сколько точек с целочисленными координатами находится внутри области, ограниченной линией, включая точки на линии."
             }
           }
         ],
@@ -746718,7 +747005,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Сначала строго внутри, потом вместе с границей."
+              "markdown": "Квадрат 3 × 3: на каждой его стороне 4 точки вместе с концами."
             }
           }
         ],
@@ -746726,7 +747013,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Квадрат 3 × 3: строго внутри 4, вместе с границей 16."
+              "markdown": "Черепаха идёт вправо и поворачивает налево — получается квадрат 0 ≤ x ≤ 3, 0 ≤ y ≤ 3. Вместе с границей x и y принимают по 4 значения: 4 · 4 = 16."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `16`"
             }
           }
         ],
@@ -746735,14 +747028,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 6,
+            "position": 4,
             "material_id": "simple-algorithms"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "vnutri-na-granice-snaruzhi",
+            "section": "chto-sprashivaet-vopros",
             "material_id": "simple-algorithms"
           }
         ],
@@ -746764,7 +747057,7 @@
         ],
         "checker": {
           "checker_type": "exact_match",
-          "answer_variants": ["4 16"],
+          "answer_variants": ["16"],
           "numeric_tolerance": null
         }
       },
@@ -746773,19 +747066,19 @@
     {
       "task": {
         "id": "task-6-3-03",
-        "title": "Точки прямоугольника 9 × 4",
+        "title": "Точки на границе прямоугольника",
         "short_description": null,
         "explanation_kind": "worked_solution",
         "difficulty": 1,
         "estimated_minutes": 2,
-        "answer_instruction": "Введите три числа через пробел в том порядке, в каком их спрашивают.",
+        "answer_instruction": "Введите число.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Прямоугольник 9 × 4 со сторонами вдоль осей и целыми вершинами. Сколько целочисленных точек строго внутри, вместе с границей и только на границе?"
+              "markdown": "Прямоугольник 9 × 4 расположен сторонами вдоль осей, его вершины — точки с целочисленными координатами. Сколько целочисленных точек лежит на его границе?"
             }
           }
         ],
@@ -746793,7 +747086,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Строго внутри (a − 1)(b − 1), с границей (a + 1)(b + 1)."
+              "markdown": "Посчитай точки вместе с границей и вычти точки строго внутри."
             }
           }
         ],
@@ -746801,7 +747094,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "24, 50 и 26: (9 − 1)(4 − 1) = 24, (9 + 1)(4 + 1) = 50, 50 − 24 = 26."
+              "markdown": "Вместе с границей (9 + 1)(4 + 1) = 50 точек, строго внутри (9 − 1)(4 − 1) = 24. На границе 50 − 24 = 26."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `26`"
             }
           }
         ],
@@ -746817,7 +747116,7 @@
         "theory_links": [
           {
             "label": "Теория",
-            "section": "pryamougolnik-po-osyam",
+            "section": "podschet-po-ryadam",
             "material_id": "simple-algorithms"
           }
         ],
@@ -746839,7 +747138,7 @@
         ],
         "checker": {
           "checker_type": "exact_match",
-          "answer_variants": ["24 50 26"],
+          "answer_variants": ["26"],
           "numeric_tolerance": null
         }
       },
@@ -746860,7 +747159,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Сколько целочисленных точек лежит на отрезке из (0; 0) в (6; 4), включая концы?"
+              "markdown": "Сколько целочисленных точек лежит на отрезке от (0; 0) до (6; 4), включая концы?"
             }
           }
         ],
@@ -746868,7 +747167,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Шаг по отрезку — делитель смещений."
+              "markdown": "Отрезок лежит на прямой y = 2x / 3: проверь, при каких целых x значение y целое."
             }
           }
         ],
@@ -746876,7 +747175,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "3 точки: (0; 0), (3; 2), (6; 4) — шаг по отрезку 3 вправо и 2 вверх."
+              "markdown": "На отрезке y = 2x / 3 при 0 ≤ x ≤ 6. Целое y получается только при x = 0, 3, 6: точки (0; 0), (3; 2), (6; 4)."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `3`"
             }
           }
         ],
@@ -746885,14 +747190,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 8,
+            "position": 25,
             "material_id": "simple-algorithms"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "tochki-i-promezhutki",
+            "section": "granica-treugolnika",
             "material_id": "simple-algorithms"
           }
         ],
@@ -746935,7 +747240,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Черепаха из (0; 0) вверх выполнила «Вперёд 2 Направо 90 Вперёд 5 Направо 90 Вперёд 2». Сколько различных целочисленных точек лежит на нарисованных линиях?"
+              "markdown": "Черепаха находится в начале координат, голова направлена вверх. Ей дали алгоритм «Вперёд 2 Направо 90 Вперёд 5 Направо 90 Вперёд 2». Сколько различных точек с целочисленными координатами лежит на нарисованной линии?"
             }
           }
         ],
@@ -746943,7 +747248,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Общие концы отрезков считают один раз."
+              "markdown": "Общий конец соседних отрезков считай один раз."
             }
           }
         ],
@@ -746951,7 +747256,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "10 точек: на левой стороне 3, на верхней ещё 5, на правой ещё 2 — общие концы считаем один раз, 3 + 5 + 2 = 10."
+              "markdown": "На левой стороне точки (0; 0), (0; 1), (0; 2) — три. На верхней ещё 5: её левый конец уже посчитан. На правой ещё 2. Всего 3 + 5 + 2 = 10."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `10`"
             }
           }
         ],
@@ -746960,7 +747271,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 9,
+            "position": 8,
             "material_id": "simple-algorithms"
           }
         ],
@@ -746998,19 +747309,19 @@
     {
       "task": {
         "id": "task-6-3-06",
-        "title": "Площадь и точки треугольника",
+        "title": "Точки прямоугольного треугольника",
         "short_description": null,
         "explanation_kind": "worked_solution",
         "difficulty": 2,
         "estimated_minutes": 3,
-        "answer_instruction": "Введите два числа через пробел в том порядке, в каком их спрашивают.",
+        "answer_instruction": "Введите число.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Чертёжник нарисовал треугольник с вершинами (0; 0), (6; 0), (0; 5). Найди его площадь и число целочисленных точек строго внутри."
+              "markdown": "Треугольник имеет вершины (0; 0), (6; 0), (0; 5). Сколько целочисленных точек лежит строго внутри него?"
             }
           }
         ],
@@ -747018,7 +747329,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Площадь — половина прямоугольника; точки — по столбцам."
+              "markdown": "Считай по столбцам: при каждом x — целые y под наклонной стороной."
             }
           }
         ],
@@ -747026,7 +747337,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Площадь 15 = 6 · 5 / 2; строго внутри 10 точек: по столбцам x = 1, 2, 3, 4 — 4, 3, 2, 1."
+              "markdown": "Наклонная сторона идёт из (6; 0) в (0; 5): y = 5 − 5x / 6. При x = 1 подходят y = 1…4, при x = 2 — 1…3, при x = 3 — 1 и 2, при x = 4 — только 1, при x = 5 — ни одного (y < 0,84). Всего 4 + 3 + 2 + 1 = 10."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `10`"
             }
           }
         ],
@@ -747035,14 +747352,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 10,
+            "position": 24,
             "material_id": "simple-algorithms"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "ploshchad-treugolnika",
+            "section": "tochki-mezhdu-naklonnymi",
             "material_id": "simple-algorithms"
           }
         ],
@@ -747064,7 +747381,7 @@
         ],
         "checker": {
           "checker_type": "exact_match",
-          "answer_variants": ["15 10"],
+          "answer_variants": ["10"],
           "numeric_tolerance": null
         }
       },
@@ -747085,7 +747402,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Черепахе был дан для исполнения алгоритм «Повтори 6 [Вперёд 11 Направо 90 Вперёд 6 Направо 90]». Голова в начале направлена вверх, хвост опущен. Определите, сколько точек с целочисленными координатами будут находиться внутри области, ограниченной линией. Точки на линии учитывать не следует."
+              "markdown": "Черепахе был дан для исполнения алгоритм «Повтори 6 [Вперёд 11 Направо 90 Вперёд 6 Направо 90]». Голова в начале направлена вверх, хвост опущен. Определи, сколько точек с целочисленными координатами находится внутри области, ограниченной линией. Точки на линии учитывать не следует."
             }
           }
         ],
@@ -747093,7 +747410,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Повторный обход не меняет область."
+              "markdown": "Повторный обход идёт по тем же линиям и не меняет область."
             }
           }
         ],
@@ -747101,7 +747418,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "50: шесть повторений обходят один прямоугольник 6 × 11 трижды, (6 − 1)(11 − 1) = 50."
+              "markdown": "Два повторения обходят прямоугольник шириной 6 и высотой 11, шесть — тот же прямоугольник трижды. Строго внутри x = 1…5 и y = 1…10: 5 · 10 = 50."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `50`"
             }
           }
         ],
@@ -747110,14 +747433,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 11,
+            "position": 6,
             "material_id": "simple-algorithms"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "chto-sprashivaet-vopros",
+            "section": "podschet-po-ryadam",
             "material_id": "simple-algorithms"
           }
         ],
@@ -747160,7 +747483,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Черепахе был дан для исполнения алгоритм «Повтори 4 [Вперёд 5 Налево 90]». В начальный момент Черепаха находится в начале координат, голова направлена влево. Определите, сколько точек с целочисленными координатами будут находиться внутри области, ограниченной линией, включая точки на линии."
+              "markdown": "Черепаха находится в начале координат, голова направлена влево. Ей дали алгоритм «Повтори 4 [Вперёд 5 Налево 90]». Определи, сколько точек с целочисленными координатами находится внутри области, ограниченной линией, включая точки на линии."
             }
           }
         ],
@@ -747168,7 +747491,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Голова влево, повороты налево."
+              "markdown": "Направление и повороты решают, где лежит квадрат, но не меняют число точек."
             }
           }
         ],
@@ -747176,7 +747499,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "36: квадрат 5 × 5 со сторонами по осям, (5 + 1)(5 + 1) = 36."
+              "markdown": "Черепаха идёт влево и поворачивает налево — получается квадрат −5 ≤ x ≤ 0, −5 ≤ y ≤ 0. Вместе с границей x и y принимают по 6 значений: 6 · 6 = 36."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `36`"
             }
           }
         ],
@@ -747185,14 +747514,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 12,
+            "position": 5,
             "material_id": "simple-algorithms"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "chto-sprashivaet-vopros",
+            "section": "podschet-po-ryadam",
             "material_id": "simple-algorithms"
           }
         ],
@@ -747228,50 +747557,14 @@
         "explanation_kind": "worked_solution",
         "difficulty": 1,
         "estimated_minutes": 3,
-        "answer_instruction": "Введите два числа через пробел в том порядке, в каком их спрашивают.",
+        "answer_instruction": "Введите число.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Найди пересечение прямоугольников."
-            }
-          },
-          {
-            "type": "text",
-            "data": {
-              "markdown": "Первый:"
-            }
-          },
-          {
-            "type": "text",
-            "data": {
-              "markdown": "-2≤ x≤5, -1≤ y≤4."
-            }
-          },
-          {
-            "type": "text",
-            "data": {
-              "markdown": "Второй:"
-            }
-          },
-          {
-            "type": "text",
-            "data": {
-              "markdown": "1≤ x≤7, 2≤ y≤6."
-            }
-          },
-          {
-            "type": "text",
-            "data": {
-              "markdown": "Сколько целочисленных точек находится:"
-            }
-          },
-          {
-            "type": "text",
-            "data": {
-              "markdown": "- в пересечении вместе с границей; - строго внутри пересечения?"
+              "markdown": "Прямоугольники −2 ≤ x ≤ 5, −1 ≤ y ≤ 4 и 1 ≤ x ≤ 7, 2 ≤ y ≤ 6. Сколько целочисленных точек лежит в их пересечении, если точки на сторонах учитывать?"
             }
           }
         ],
@@ -747279,7 +747572,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Левая граница — максимум левых, правая — минимум правых."
+              "markdown": "Левая граница пересечения — бо́льшая из левых, правая — меньшая из правых."
             }
           }
         ],
@@ -747287,7 +747580,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "15 точек вместе с границей и 3 строго внутри: пересечение 1 ≤ x ≤ 5, 2 ≤ y ≤ 4."
+              "markdown": "Пересечение 1 ≤ x ≤ 5, 2 ≤ y ≤ 4: 5 значений x и 3 значения y, 5 · 3 = 15."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `15`"
             }
           }
         ],
@@ -747296,14 +747595,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 13,
+            "position": 10,
             "material_id": "simple-algorithms"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "granicy-peresecheniya",
+            "section": "peresechenie",
             "material_id": "simple-algorithms"
           }
         ],
@@ -747325,7 +747624,7 @@
         ],
         "checker": {
           "checker_type": "exact_match",
-          "answer_variants": ["15 3"],
+          "answer_variants": ["15"],
           "numeric_tolerance": null
         }
       },
@@ -747346,37 +747645,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Найди объединение с учётом границ."
-            }
-          },
-          {
-            "type": "text",
-            "data": {
-              "markdown": "Первая фигура:"
-            }
-          },
-          {
-            "type": "text",
-            "data": {
-              "markdown": "0≤ x≤4, 0≤ y≤3."
-            }
-          },
-          {
-            "type": "text",
-            "data": {
-              "markdown": "Вторая:"
-            }
-          },
-          {
-            "type": "text",
-            "data": {
-              "markdown": "2≤ x≤6, 1≤ y≤4."
-            }
-          },
-          {
-            "type": "text",
-            "data": {
-              "markdown": "Сколько различных целочисленных точек принадлежит хотя бы одной фигуре?"
+              "markdown": "Прямоугольники 0 ≤ x ≤ 4, 0 ≤ y ≤ 3 и 2 ≤ x ≤ 6, 1 ≤ y ≤ 4. Сколько различных целочисленных точек принадлежит хотя бы одному из них, если точки на сторонах учитывать?"
             }
           }
         ],
@@ -747384,7 +747653,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Общую часть вычитают один раз."
+              "markdown": "При сложении общие точки посчитаны дважды."
             }
           }
         ],
@@ -747392,7 +747661,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "31: 20 + 20 − 9."
+              "markdown": "В каждом прямоугольнике 5 · 4 = 20 точек. Пересечение 2 ≤ x ≤ 4, 1 ≤ y ≤ 3 — 3 · 3 = 9 точек. В объединении 20 + 20 − 9 = 31."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `31`"
             }
           }
         ],
@@ -747401,7 +747676,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 14,
+            "position": 11,
             "material_id": "simple-algorithms"
           }
         ],
@@ -747444,50 +747719,14 @@
         "explanation_kind": "worked_solution",
         "difficulty": 2,
         "estimated_minutes": 3,
-        "answer_instruction": "Введите три числа через пробел в том порядке, в каком их спрашивают.",
+        "answer_instruction": "Введите число.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Исследуй соприкосновение фигур."
-            }
-          },
-          {
-            "type": "text",
-            "data": {
-              "markdown": "Первый прямоугольник:"
-            }
-          },
-          {
-            "type": "text",
-            "data": {
-              "markdown": "0≤ x≤3, 0≤ y≤2."
-            }
-          },
-          {
-            "type": "text",
-            "data": {
-              "markdown": "Второй:"
-            }
-          },
-          {
-            "type": "text",
-            "data": {
-              "markdown": "3≤ x≤5, 0≤ y≤2."
-            }
-          },
-          {
-            "type": "text",
-            "data": {
-              "markdown": "Найди:"
-            }
-          },
-          {
-            "type": "text",
-            "data": {
-              "markdown": "- площадь пересечения; - число общих целочисленных точек с учётом границ; - число точек строго внутри пересечения."
+              "markdown": "Прямоугольники 0 ≤ x ≤ 3, 0 ≤ y ≤ 2 и 3 ≤ x ≤ 5, 0 ≤ y ≤ 2. Сколько у них общих целочисленных точек, если точки на сторонах учитывать?"
             }
           }
         ],
@@ -747495,7 +747734,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Пересечение — отрезок: площади нет, точки на нём есть."
+              "markdown": "Прямоугольники касаются по стороне: площади у общей части нет, а точки на ней есть."
             }
           }
         ],
@@ -747503,7 +747742,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Площадь 0, общих точек с границами 3, строго внутри 0."
+              "markdown": "Общая часть — отрезок x = 3, 0 ≤ y ≤ 2. На нём точки (3; 0), (3; 1), (3; 2)."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `3`"
             }
           }
         ],
@@ -747541,7 +747786,7 @@
         ],
         "checker": {
           "checker_type": "exact_match",
-          "answer_variants": ["0 3 0"],
+          "answer_variants": ["3"],
           "numeric_tolerance": null
         }
       },
@@ -747550,19 +747795,19 @@
     {
       "task": {
         "id": "task-6-4-04",
-        "title": "В A, но не в B",
+        "title": "Строго внутри хотя бы одного",
         "short_description": null,
         "explanation_kind": "worked_solution",
         "difficulty": 2,
         "estimated_minutes": 4,
-        "answer_instruction": "Введите два числа через пробел в том порядке, в каком их спрашивают.",
+        "answer_instruction": "Введите число.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Прямоугольники A: 0 ≤ x ≤ 8, 0 ≤ y ≤ 6 и B: 3 ≤ x ≤ 10, 2 ≤ y ≤ 7. Сколько целочисленных точек лежит в A, но не в B, если границы включены? Сколько — строго внутри хотя бы одного из них?"
+              "markdown": "Прямоугольники A: 0 ≤ x ≤ 8, 0 ≤ y ≤ 6 и B: 3 ≤ x ≤ 10, 2 ≤ y ≤ 7. Сколько целочисленных точек лежит строго внутри хотя бы одного из них?"
             }
           }
         ],
@@ -747570,7 +747815,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "«Строго внутри хотя бы одного» — объединение внутренностей."
+              "markdown": "Посчитай точки строго внутри каждого прямоугольника и вычти точки строго внутри обоих."
             }
           }
         ],
@@ -747578,7 +747823,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "33 = 63 − 30; строго внутри хотя бы одного — 47: 35 + 24 − 12."
+              "markdown": "Строго внутри A — 7 · 5 = 35 точек, строго внутри B — 6 · 4 = 24. Строго внутри обоих: 4 ≤ x ≤ 7, 3 ≤ y ≤ 5 — 4 · 3 = 12. Всего 35 + 24 − 12 = 47."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `47`"
             }
           }
         ],
@@ -747587,14 +747838,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 16,
+            "position": 13,
             "material_id": "simple-algorithms"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "tolko-v-odnoj-figure",
+            "section": "obedinenie",
             "material_id": "simple-algorithms"
           }
         ],
@@ -747616,7 +747867,7 @@
         ],
         "checker": {
           "checker_type": "exact_match",
-          "answer_variants": ["33 47"],
+          "answer_variants": ["47"],
           "numeric_tolerance": null
         }
       },
@@ -747637,7 +747888,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Прямоугольники A: 0 ≤ x ≤ 10, 0 ≤ y ≤ 6 и B: 4 ≤ x ≤ 12, 2 ≤ y ≤ 9. Сколько целочисленных точек принадлежит A и не принадлежит B, если границы включены?"
+              "markdown": "Прямоугольники A: 0 ≤ x ≤ 10, 0 ≤ y ≤ 6 и B: 4 ≤ x ≤ 12, 2 ≤ y ≤ 9. Сколько целочисленных точек принадлежит A и не принадлежит B, если точки на сторонах учитывать?"
             }
           }
         ],
@@ -747645,7 +747896,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Из точек A вычтите точки пересечения."
+              "markdown": "Из точек A вычти общие точки."
             }
           }
         ],
@@ -747653,7 +747904,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "42: 77 − 35, пересечение 4 ≤ x ≤ 10, 2 ≤ y ≤ 6."
+              "markdown": "В A 11 · 7 = 77 точек. Пересечение 4 ≤ x ≤ 10, 2 ≤ y ≤ 6 — 7 · 5 = 35 точек. В A, но не в B: 77 − 35 = 42."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `42`"
             }
           }
         ],
@@ -747662,7 +747919,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 17,
+            "position": 14,
             "material_id": "simple-algorithms"
           }
         ],
@@ -747726,7 +747983,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "В начальный момент Черепаха находится в начале координат, голова направлена вверх. Определите, сколько точек с целочисленными координатами будут находиться внутри пересечения областей, ограниченных заданными алгоритмом линиями, включая точки на линиях."
+              "markdown": "В начальный момент Черепаха находится в начале координат, голова направлена вверх. Определи, сколько точек с целочисленными координатами находится внутри пересечения областей, ограниченных заданными алгоритмом линиями, включая точки на линиях."
             }
           }
         ],
@@ -747734,7 +747991,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Переход с поднятым хвостом сдвигает вторую фигуру."
+              "markdown": "Найди точку, где опустится хвост: оттуда начнётся вторая фигура."
             }
           }
         ],
@@ -747742,7 +747999,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "28: фигуры 0 ≤ x ≤ 7, 0 ≤ y ≤ 9 и 4 ≤ x ≤ 10, 3 ≤ y ≤ 11, пересечение 4 ≤ x ≤ 7, 3 ≤ y ≤ 9, 4 · 7 = 28."
+              "markdown": "Первая фигура — 0 ≤ x ≤ 7, 0 ≤ y ≤ 9. Переход с поднятым хвостом ведёт в (4; 3), и вторая фигура — 4 ≤ x ≤ 10, 3 ≤ y ≤ 11. Пересечение 4 ≤ x ≤ 7, 3 ≤ y ≤ 9: 4 значения x и 7 значений y, 4 · 7 = 28."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `28`"
             }
           }
         ],
@@ -747751,14 +748014,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 18,
+            "position": 9,
             "material_id": "simple-algorithms"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "perehod-mezhdu-figurami",
+            "section": "peresechenie",
             "material_id": "simple-algorithms"
           }
         ],
@@ -747801,7 +748064,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Для алгоритма из задачи 6 определите, сколько точек с целочисленными координатами принадлежат объединению областей, включая точки на линиях."
+              "markdown": "Черепахе был дан для исполнения следующий алгоритм:"
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "text",
+              "code": "Повтори 2 [Вперёд 9 Направо 90 Вперёд 7 Направо 90]\nПоднять хвост\nВперёд 3 Направо 90 Вперёд 4 Налево 90\nОпустить хвост\nПовтори 2 [Вперёд 8 Направо 90 Вперёд 6 Направо 90]",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "В начальный момент Черепаха находится в начале координат, голова направлена вверх. Определи, сколько точек с целочисленными координатами принадлежит объединению областей, ограниченных заданными алгоритмом линиями, включая точки на линиях."
             }
           }
         ],
@@ -747809,7 +748086,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Сумма точек фигур минус пересечение."
+              "markdown": "Сложи точки двух фигур и вычти общие."
             }
           }
         ],
@@ -747817,7 +748094,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "115: 80 + 63 − 28."
+              "markdown": "В первой фигуре 0 ≤ x ≤ 7, 0 ≤ y ≤ 9 — 8 · 10 = 80 точек, во второй 4 ≤ x ≤ 10, 3 ≤ y ≤ 11 — 7 · 9 = 63, общих 28. В объединении 80 + 63 − 28 = 115."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `115`"
             }
           }
         ],
@@ -747826,7 +748109,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 19,
+            "position": 12,
             "material_id": "simple-algorithms"
           }
         ],
@@ -747876,13 +748159,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Построй треугольник и посчитай точки по столбцам."
-            }
-          },
-          {
-            "type": "text",
-            "data": {
-              "markdown": "Начальное положение (0;0), направление вверх."
+              "markdown": "Черепаха находится в начале координат, голова направлена вверх, хвост опущен. Ей дали алгоритм:"
             }
           },
           {
@@ -747896,7 +748173,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Сколько целочисленных точек находится строго внутри получившейся области?"
+              "markdown": "Определи, сколько точек с целочисленными координатами находится внутри области, ограниченной линией. Точки на линии учитывать не следует."
             }
           }
         ],
@@ -747904,7 +748181,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Пятое повторение проходит по уже нарисованным сторонам."
+              "markdown": "Пятое повторение идёт по уже нарисованным сторонам; считай по столбцам."
             }
           }
         ],
@@ -747912,7 +748189,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "13 точек: по столбцам 5, 3, 3, 1, 1."
+              "markdown": "Три повторения рисуют треугольник со стороной 6, остальные идут по нему же. Третья вершина (3√3; 3) ≈ (5,2; 3). По столбцам x = 1…5 строго внутри 5, 3, 3, 1, 1 точек — всего 13."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `13`"
             }
           }
         ],
@@ -747921,7 +748204,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 20,
+            "position": 23,
             "material_id": "simple-algorithms"
           }
         ],
@@ -747971,13 +748254,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Построй наклонный ромб с отрицательными координатами."
-            }
-          },
-          {
-            "type": "text",
-            "data": {
-              "markdown": "Начальное положение (0;0), направление вправо."
+              "markdown": "Черепаха находится в начале координат, голова направлена вправо, хвост опущен. Ей дали алгоритм:"
             }
           },
           {
@@ -747991,7 +748268,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Переведи алгоритм в Python, нанеси сетку с отрицательными значениями x и y, посчитай точки строго внутри."
+              "markdown": "Определи, сколько точек с целочисленными координатами находится внутри области, ограниченной линией. Точки на линии учитывать не следует."
             }
           }
         ],
@@ -747999,7 +748276,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Сетке нужны отрицательные значения y."
+              "markdown": "Фигура лежит ниже оси x: сетке нужны отрицательные y."
             }
           }
         ],
@@ -748007,7 +748284,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "12 точек: два ряда по 6 при y = −1 и y = −2."
+              "markdown": "Повороты 150° и 30° дают ромб: горизонтальные стороны длиной 6 на уровнях y = 0 и y = −3 и наклонные стороны между ними. Строго внутри — два ряда при y = −1 и y = −2, в каждом по 6 точек: 12."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `12`"
             }
           }
         ],
@@ -748016,7 +748299,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 21,
+            "position": 29,
             "material_id": "simple-algorithms"
           }
         ],
@@ -748066,7 +748349,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Черепахе был дан для исполнения алгоритм «Повтори 3 [Вперёд 10 Направо 120]». Голова в начале направлена вверх, хвост опущен. Определите, сколько точек с целочисленными координатами будут находиться внутри области, ограниченной линией. Точки на линии учитывать не следует."
+              "markdown": "Черепахе был дан для исполнения алгоритм «Повтори 3 [Вперёд 10 Направо 120]». Голова в начале направлена вверх, хвост опущен. Определи, сколько точек с целочисленными координатами находится внутри области, ограниченной линией. Точки на линии учитывать не следует."
             }
           }
         ],
@@ -748074,7 +748357,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Считайте по столбцам."
+              "markdown": "Третья вершина — (5√3; 5) ≈ (8,66; 5); считай по столбцам x = 1…8."
             }
           }
         ],
@@ -748082,7 +748365,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "38 точек."
+              "markdown": "Получается равносторонний треугольник со стороной 10 и вершинами (0; 0), (0; 10), (8,66; 5). По столбцам x = 1…8 строго внутри 9, 7, 7, 5, 5, 3, 1, 1 точек — всего 38."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `38`"
             }
           }
         ],
@@ -748098,7 +748387,7 @@
         "theory_links": [
           {
             "label": "Теория",
-            "section": "tochki-mezhdu-naklonnymi",
+            "section": "naklonnye-storony",
             "material_id": "simple-algorithms"
           }
         ],
@@ -748141,7 +748430,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Черепахе был дан для исполнения алгоритм «Повтори 2 [Вперёд 9 Направо 60 Вперёд 6 Направо 120]». Голова в начале направлена вверх. Определите, сколько точек с целочисленными координатами будут находиться внутри области, ограниченной линией. Точки на линии учитывать не следует."
+              "markdown": "Черепахе был дан для исполнения алгоритм «Повтори 2 [Вперёд 9 Направо 60 Вперёд 6 Направо 120]». Голова в начале направлена вверх, хвост опущен. Определи, сколько точек с целочисленными координатами находится внутри области, ограниченной линией. Точки на линии учитывать не следует."
             }
           }
         ],
@@ -748149,7 +748438,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Вторая вертикальная сторона не на целом x."
+              "markdown": "Вторая вертикальная сторона лежит на нецелом x."
             }
           }
         ],
@@ -748157,7 +748446,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "45 точек: в каждом из пяти столбцов x = 1 … 5 по 9."
+              "markdown": "Получается параллелограмм: две вертикальные стороны длиной 9 и две наклонные длиной 6. Вторая вертикальная сторона лежит на x = 3√3 ≈ 5,2, поэтому столбцы x = 1…5. В каждом строго внутри по 9 точек: 5 · 9 = 45."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `45`"
             }
           }
         ],
@@ -748166,7 +748461,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 23,
+            "position": 27,
             "material_id": "simple-algorithms"
           }
         ],
@@ -748216,7 +748511,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Для алгоритма из задачи 4 определите, сколько точек с целочисленными координатами лежат на линии."
+              "markdown": "Черепахе был дан для исполнения алгоритм «Повтори 2 [Вперёд 9 Направо 60 Вперёд 6 Направо 120]». Голова в начале направлена вверх, хвост опущен. Определи, сколько точек с целочисленными координатами лежит на нарисованной линии."
             }
           }
         ],
@@ -748224,7 +748519,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Проверьте каждую сторону по её уравнению."
+              "markdown": "Проверь каждую сторону: на какой из них координаты точек целые?"
             }
           }
         ],
@@ -748232,7 +748527,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "10 точек — только на вертикальной стороне x = 0; вторая вертикальная сторона лежит на x = 3√3 ≈ 5,196."
+              "markdown": "На вертикальной стороне x = 0 лежат точки (0; 0), …, (0; 9) — 10 штук. Вторая вертикальная сторона лежит на x = 3√3 ≈ 5,2, а на наклонных сторонах при целом x координата y нецелая. Всего 10."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `10`"
             }
           }
         ],
@@ -748241,14 +748542,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 24,
+            "position": 28,
             "material_id": "simple-algorithms"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "spornaya-tochka",
+            "section": "naklonnyj-chetyrehugolnik",
             "material_id": "simple-algorithms"
           }
         ],
@@ -748291,7 +748592,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Черепахе был дан для исполнения алгоритм «Повтори 4 [Направо 45 Вперёд 6 Направо 45]». Голова в начале направлена вверх. Определите, сколько точек с целочисленными координатами будут находиться внутри области, ограниченной линией, включая точки на линии."
+              "markdown": "Черепахе был дан для исполнения алгоритм «Повтори 4 [Направо 45 Вперёд 6 Направо 45]». Голова в начале направлена вверх, хвост опущен. Определи, сколько точек с целочисленными координатами находится внутри области, ограниченной линией, включая точки на линии."
             }
           }
         ],
@@ -748299,7 +748600,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Стороны лежат на прямых y = x и y = −x."
+              "markdown": "Две стороны квадрата лежат на прямых y = x и y = −x."
             }
           }
         ],
@@ -748307,7 +748608,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "41: 32 точки строго внутри и 9 на сторонах, лежащих на прямых y = x и y = −x."
+              "markdown": "Получается квадрат, повёрнутый на 45°, с вершинами (0; 0), (4,24; 4,24), (8,49; 0), (4,24; −4,24). Строго внутри по столбцам x = 1…8: 1, 3, 5, 7, 7, 5, 3, 1 — 32 точки. На сторонах y = x и y = −x ещё 9 точек от (0; 0) до (4; 4) и (4; −4), на двух других сторонах целых точек нет. Всего 32 + 9 = 41."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `41`"
             }
           }
         ],
@@ -748316,14 +748623,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 25,
+            "position": 26,
             "material_id": "simple-algorithms"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "naklonnyj-chetyrehugolnik",
+            "section": "granica-treugolnika",
             "material_id": "simple-algorithms"
           }
         ],
@@ -748366,7 +748673,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Черепаха из (0; 0) вверх выполнила «Вперёд 4 Направо 90 Вперёд 2 Направо 90 Вперёд 2 Налево 90 Вперёд 3 Направо 90 Вперёд 2 Направо 90 Вперёд 5». Сколько целочисленных точек строго внутри фигуры?"
+              "markdown": "Черепаха находится в начале координат, голова направлена вверх. Ей дали алгоритм «Вперёд 4 Направо 90 Вперёд 2 Направо 90 Вперёд 2 Налево 90 Вперёд 3 Направо 90 Вперёд 2 Направо 90 Вперёд 5». Определи, сколько точек с целочисленными координатами находится внутри области, ограниченной линией. Точки на линии учитывать не следует."
             }
           }
         ],
@@ -748374,7 +748681,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Разрежьте фигуру на прямоугольники."
+              "markdown": "Разрежь фигуру на прямоугольники и проверь точки на линии разреза."
             }
           }
         ],
@@ -748382,7 +748689,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "6 точек: (1; 1), (1; 2), (1; 3) в высокой части, (3; 1), (4; 1) в низкой и (2; 1) на линии разреза x = 2."
+              "markdown": "Фигура состоит из высокой части 0 ≤ x ≤ 2, 0 ≤ y ≤ 4 и низкой 2 ≤ x ≤ 5, 0 ≤ y ≤ 2. Строго внутри высокой — (1; 1), (1; 2), (1; 3), внутри низкой — (3; 1), (4; 1). Линия разреза x = 2 не нарисована, поэтому точка (2; 1) тоже внутри. Всего 6."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `6`"
             }
           }
         ],
@@ -748391,7 +748704,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 26,
+            "position": 16,
             "material_id": "simple-algorithms"
           }
         ],
@@ -748441,7 +748754,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Черепахе был дан для исполнения алгоритм «Повтори 2 [Вперёд A Направо 90 Вперёд 4 Направо 90]», голова в начале направлена вверх. При каком наименьшем натуральном A внутри области, ограниченной линией, будет не менее 30 точек с целочисленными координатами? Точки на линии не учитывать."
+              "markdown": "Черепаха находится в начале координат, голова направлена вверх. Ей дали алгоритм «Повтори 2 [Вперёд A Направо 90 Вперёд 4 Направо 90]», где A — натуральное число. При каком наименьшем A внутри области, ограниченной линией, будет не менее 30 точек с целочисленными координатами? Точки на линии не учитывать."
             }
           }
         ],
@@ -748449,7 +748762,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Точки строго внутри — 3(A − 1)."
+              "markdown": "Строго внутри прямоугольника 4 × A лежит 3(A − 1) точек."
             }
           }
         ],
@@ -748457,7 +748770,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "11: 3(A − 1) ≥ 30, A − 1 ≥ 10; при A = 10 только 27."
+              "markdown": "Нужно 3(A − 1) ≥ 30, то есть A − 1 ≥ 10, A ≥ 11. Проверка: при A = 10 точек 27 — мало, при A = 11 ровно 30."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `11`"
             }
           }
         ],
@@ -748466,7 +748785,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 27,
+            "position": 33,
             "material_id": "simple-algorithms",
             "counts_toward_mastery": false
           }
@@ -748474,7 +748793,7 @@
         "theory_links": [
           {
             "label": "Теория",
-            "section": "chislo-tochek-ot-parametra",
+            "section": "obratnyj-vopros",
             "material_id": "simple-algorithms"
           }
         ],
@@ -748517,7 +748836,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Для того же алгоритма: при каком наименьшем натуральном A область вместе с линией содержит больше 60 точек с целочисленными координатами?"
+              "markdown": "Черепаха находится в начале координат, голова направлена вверх. Ей дали алгоритм «Повтори 2 [Вперёд A Направо 90 Вперёд 4 Направо 90]», где A — натуральное число. При каком наименьшем A область вместе с линией содержит больше 60 точек с целочисленными координатами?"
             }
           }
         ],
@@ -748525,7 +748844,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "«Больше» — строгое неравенство."
+              "markdown": "«Больше» — строгое неравенство: ровно 60 точек не подходит."
             }
           }
         ],
@@ -748533,7 +748852,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "12: 5(A + 1) > 60, A + 1 > 12; при A = 11 ровно 60 — не больше."
+              "markdown": "Вместе с границей 5(A + 1) точек. Нужно 5(A + 1) > 60, то есть A + 1 > 12, A ≥ 12. При A = 11 точек ровно 60 — это не больше 60."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `12`"
             }
           }
         ],
@@ -748542,7 +748867,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 28,
+            "position": 34,
             "material_id": "simple-algorithms",
             "counts_toward_mastery": false
           }
@@ -748550,7 +748875,7 @@
         "theory_links": [
           {
             "label": "Теория",
-            "section": "strogij-i-nestrogij-porog",
+            "section": "obratnyj-vopros",
             "material_id": "simple-algorithms"
           }
         ],
@@ -748593,7 +748918,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Черепахе был дан для исполнения алгоритм «Повтори 2 [Вперёд A Направо 90 Вперёд A Направо 90]». При каком наименьшем натуральном A строго внутри будет больше 100 точек с целочисленными координатами?"
+              "markdown": "Черепаха находится в начале координат, голова направлена вверх. Ей дали алгоритм «Повтори 2 [Вперёд A Направо 90 Вперёд A Направо 90]», где A — натуральное число. При каком наименьшем A строго внутри будет больше 100 точек с целочисленными координатами?"
             }
           }
         ],
@@ -748601,7 +748926,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "При равенстве порог ещё не пройден."
+              "markdown": "Строго внутри квадрата A × A лежит (A − 1)² точек; ровно 100 — ещё не больше."
             }
           }
         ],
@@ -748609,7 +748934,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "12: (A − 1)² > 100, A − 1 ≥ 11; при A = 11 ровно 100."
+              "markdown": "Нужно (A − 1)² > 100, то есть A − 1 > 10, A ≥ 12. При A = 11 точек ровно 100."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `12`"
             }
           }
         ],
@@ -748618,7 +748949,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 29,
+            "position": 35,
             "material_id": "simple-algorithms",
             "counts_toward_mastery": false
           }
@@ -748626,7 +748957,7 @@
         "theory_links": [
           {
             "label": "Теория",
-            "section": "strogij-i-nestrogij-porog",
+            "section": "obratnyj-vopros",
             "material_id": "simple-algorithms"
           }
         ],
@@ -748669,7 +749000,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Первая фигура — прямоугольник 0 ≤ x ≤ 10, 0 ≤ y ≤ 4. Вторую фигуру, квадрат 6 × 6 со сторонами вдоль осей, можно поставить в любую целую точку. Какое наибольшее число точек с целочисленными координатами может оказаться в пересечении, включая границу?"
+              "markdown": "Первая фигура — прямоугольник 0 ≤ x ≤ 10, 0 ≤ y ≤ 4. Вторую фигуру, квадрат 6 × 6 со сторонами вдоль осей, можно поставить так, чтобы его вершины были в целочисленных точках. Какое наибольшее число точек с целочисленными координатами может оказаться в пересечении фигур, если точки на сторонах учитывать?"
             }
           }
         ],
@@ -748677,7 +749008,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "По каждой оси общая часть не длиннее меньшей фигуры."
+              "markdown": "По каждой оси общая часть не длиннее меньшей из двух сторон."
             }
           }
         ],
@@ -748685,7 +749016,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "35: по ширине общая часть не длиннее 6 (7 точек), по высоте не длиннее 4 (5 точек); 7 · 5 достигается, например, при (0; −1)."
+              "markdown": "По ширине общая часть не длиннее 6 — это 7 значений x, по высоте не длиннее 4 — 5 значений y. Значит, точек не больше 7 · 5 = 35, и это достигается, например, когда левый нижний угол квадрата в (0; −1)."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `35`"
             }
           }
         ],
@@ -748694,7 +749031,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 30,
+            "position": 36,
             "material_id": "simple-algorithms",
             "counts_toward_mastery": false
           }
@@ -748702,7 +749039,7 @@
         "theory_links": [
           {
             "label": "Теория",
-            "section": "figura-ne-pomeshchaetsya",
+            "section": "naibolshee-peresechenie",
             "material_id": "simple-algorithms"
           }
         ],
@@ -748768,22 +749105,10 @@
         "skills": [],
         "exam_numbers": [6],
         "files": [],
-        "lessons": [
-          {
-            "position": 31,
-            "material_id": "simple-algorithms",
-            "counts_toward_mastery": false
-          }
-        ],
-        "theory_links": [
-          {
-            "label": "Теория",
-            "section": "naibolshee-peresechenie",
-            "material_id": "simple-algorithms"
-          }
-        ],
+        "lessons": [],
+        "theory_links": [],
         "catalog_visible": false,
-        "archived": false,
+        "archived": true,
         "sources": [
           {
             "url": null,
@@ -748844,22 +749169,10 @@
         "skills": [],
         "exam_numbers": [6],
         "files": [],
-        "lessons": [
-          {
-            "position": 32,
-            "material_id": "simple-algorithms",
-            "counts_toward_mastery": false
-          }
-        ],
-        "theory_links": [
-          {
-            "label": "Теория",
-            "section": "schetchik-poseshchenij",
-            "material_id": "simple-algorithms"
-          }
-        ],
+        "lessons": [],
+        "theory_links": [],
         "catalog_visible": false,
-        "archived": false,
+        "archived": true,
         "sources": [
           {
             "url": null,
@@ -748920,22 +749233,10 @@
         "skills": [],
         "exam_numbers": [6],
         "files": [],
-        "lessons": [
-          {
-            "position": 33,
-            "material_id": "simple-algorithms",
-            "counts_toward_mastery": false
-          }
-        ],
-        "theory_links": [
-          {
-            "label": "Теория",
-            "section": "poseshcheniya",
-            "material_id": "simple-algorithms"
-          }
-        ],
+        "lessons": [],
+        "theory_links": [],
         "catalog_visible": false,
-        "archived": false,
+        "archived": true,
         "sources": [
           {
             "url": null,
@@ -748973,7 +749274,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Напиши программу, которая считает целочисленные точки строго внутри прямоугольника 0 < x < 9, 0 < y < 4."
+              "markdown": "Напиши программу, которая считает целочисленные точки строго внутри прямоугольника 0 ≤ x ≤ 9, 0 ≤ y ≤ 4. Сколько их?"
             }
           }
         ],
@@ -748981,7 +749282,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Перебор с запасом и проверка условия."
+              "markdown": "Перебери точки с запасом и проверь условие со знаками без равенства."
             }
           }
         ],
@@ -748989,7 +749290,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "24: условие `0 < x < 9 and 0 < y < 4`, перебор с запасом."
+              "markdown": "Строго внутри — условие `0 < x < 9 and 0 < y < 4`. Программа печатает 24, столько же, сколько (9 − 1)(4 − 1)."
             }
           },
           {
@@ -748999,6 +749300,12 @@
               "code": "count = 0\nfor x in range(-1, 11):\n    for y in range(-1, 6):\n        if 0 < x < 9 and 0 < y < 4:\n            count += 1\nprint(count)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `24`"
+            }
           }
         ],
         "skills": [],
@@ -749006,7 +749313,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 34,
+            "position": 30,
             "material_id": "simple-algorithms",
             "counts_toward_mastery": false
           }
@@ -749057,7 +749364,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Для прямоугольников A: 0 ≤ x ≤ 8, 0 ≤ y ≤ 6 и B: 3 ≤ x ≤ 10, 2 ≤ y ≤ 7 посчитай программой точки, лежащие ровно в одном из них, границы включены."
+              "markdown": "Для прямоугольников A: 0 ≤ x ≤ 8, 0 ≤ y ≤ 6 и B: 3 ≤ x ≤ 10, 2 ≤ y ≤ 7 посчитай программой точки, лежащие ровно в одном из них. Точки на сторонах учитывать."
             }
           }
         ],
@@ -749065,7 +749372,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Ровно в одном — in_A != in_B."
+              "markdown": "Точка лежит ровно в одном прямоугольнике, когда принадлежности различаются: `in_a != in_b`."
             }
           }
         ],
@@ -749073,7 +749380,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "51: условие `in_A != in_B`."
+              "markdown": "Условие `in_a != in_b` верно, когда точка лежит в одной фигуре, но не в другой. Программа печатает 51 = 63 + 48 − 2 · 30."
             }
           },
           {
@@ -749083,6 +749390,12 @@
               "code": "count = 0\nfor x in range(-1, 12):\n    for y in range(-1, 9):\n        in_a = 0 <= x <= 8 and 0 <= y <= 6\n        in_b = 3 <= x <= 10 and 2 <= y <= 7\n        if in_a != in_b:\n            count += 1\nprint(count)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `51`"
+            }
           }
         ],
         "skills": [],
@@ -749090,7 +749403,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 35,
+            "position": 31,
             "material_id": "simple-algorithms",
             "counts_toward_mastery": false
           }
@@ -749141,7 +749454,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Перепиши программу для треугольника со стороной 6: Черепаха из (0; 0) вверх выполняет «Повтори 3 [Вперёд 6 Направо 120]». Сколько точек строго внутри?"
+              "markdown": "Черепаха находится в начале координат, голова направлена вверх. Она выполняет «Повтори 3 [Вперёд 6 Направо 120]». Напиши программу, которая считает целочисленные точки строго внутри получившегося треугольника. Сколько их?"
             }
           }
         ],
@@ -749149,7 +749462,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Точка между двумя наклонными сторонами."
+              "markdown": "Нижняя сторона лежит на прямой y = x / √3, верхняя — на y = 6 − x / √3."
             }
           }
         ],
@@ -749157,7 +749470,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "13: `x / math.sqrt(3) < y < 6 - x / math.sqrt(3)`, x от 1 до 5."
+              "markdown": "Точка строго внутри, если x > 0 и x / √3 < y < 6 − x / √3. Программа печатает 13."
             }
           },
           {
@@ -749167,6 +749480,12 @@
               "code": "import math\n\ncount = 0\nfor x in range(-1, 8):\n    for y in range(-1, 8):\n        low = x / math.sqrt(3)\n        if 0 < x and low < y < 6 - low:\n            count += 1\nprint(count)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `13`"
+            }
           }
         ],
         "skills": [],
@@ -749174,7 +749493,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 36,
+            "position": 32,
             "material_id": "simple-algorithms",
             "counts_toward_mastery": false
           }
@@ -749256,22 +749575,10 @@
         "skills": [],
         "exam_numbers": [6],
         "files": [],
-        "lessons": [
-          {
-            "position": 37,
-            "material_id": "simple-algorithms",
-            "counts_toward_mastery": false
-          }
-        ],
-        "theory_links": [
-          {
-            "label": "Теория",
-            "section": "necelye-granicy",
-            "material_id": "simple-algorithms"
-          }
-        ],
+        "lessons": [],
+        "theory_links": [],
         "catalog_visible": false,
-        "archived": false,
+        "archived": true,
         "sources": [
           {
             "url": null,
@@ -749340,22 +749647,10 @@
         "skills": [],
         "exam_numbers": [6],
         "files": [],
-        "lessons": [
-          {
-            "position": 38,
-            "material_id": "simple-algorithms",
-            "counts_toward_mastery": false
-          }
-        ],
-        "theory_links": [
-          {
-            "label": "Теория",
-            "section": "krivolinejnaya-granica",
-            "material_id": "simple-algorithms"
-          }
-        ],
+        "lessons": [],
+        "theory_links": [],
         "catalog_visible": false,
-        "archived": false,
+        "archived": true,
         "sources": [
           {
             "url": null,
@@ -749424,22 +749719,10 @@
         "skills": [],
         "exam_numbers": [6],
         "files": [],
-        "lessons": [
-          {
-            "position": 39,
-            "material_id": "simple-algorithms",
-            "counts_toward_mastery": false
-          }
-        ],
-        "theory_links": [
-          {
-            "label": "Теория",
-            "section": "krivolinejnaya-granica",
-            "material_id": "simple-algorithms"
-          }
-        ],
+        "lessons": [],
+        "theory_links": [],
         "catalog_visible": false,
-        "archived": false,
+        "archived": true,
         "sources": [
           {
             "url": null,
@@ -749477,7 +749760,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Черепахе был дан для исполнения алгоритм «Повтори 7 [Вперёд 12 Направо 90 Вперёд 5 Направо 90]». Голова направлена вверх. Определите, сколько точек с целочисленными координатами будут находиться внутри области, ограниченной линией. Точки на линии учитывать не следует. (Подтемы 1, 3.)"
+              "markdown": "Черепахе был дан для исполнения алгоритм «Повтори 7 [Вперёд 12 Направо 90 Вперёд 5 Направо 90]». Голова направлена вверх. Определи, сколько точек с целочисленными координатами находится внутри области, ограниченной линией. Точки на линии учитывать не следует."
             }
           }
         ],
@@ -749485,7 +749768,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Подтемы 1, 3."
+              "markdown": "Лишние повторы идут по тому же прямоугольнику."
             }
           }
         ],
@@ -749493,7 +749776,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "44: семь повторений обходят один прямоугольник 5 × 12 три с половиной раза, (5 − 1)(12 − 1) = 44."
+              "markdown": "Два повторения обходят прямоугольник шириной 5 и высотой 12, семь — тот же прямоугольник три с половиной раза. Строго внутри (5 − 1)(12 − 1) = 44."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `44`"
             }
           }
         ],
@@ -749502,7 +749791,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 40,
+            "position": 37,
             "material_id": "simple-algorithms"
           }
         ],
@@ -749546,7 +749835,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Черепахе был дан для исполнения алгоритм «Повтори 3 [Вперёд 4 Налево 90 Вперёд 9 Налево 90]». Голова направлена вправо. Определите, сколько точек с целочисленными координатами будут находиться внутри области, ограниченной линией, включая точки на линии. (Подтемы 1, 3.)"
+              "markdown": "Черепахе был дан для исполнения алгоритм «Повтори 3 [Вперёд 4 Налево 90 Вперёд 9 Налево 90]». Голова направлена вправо. Определи, сколько точек с целочисленными координатами находится внутри области, ограниченной линией, включая точки на линии."
             }
           }
         ],
@@ -749554,7 +749843,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Подтемы 1, 3."
+              "markdown": "Голова вправо, повороты налево: сначала найди, где лежит прямоугольник."
             }
           }
         ],
@@ -749562,7 +749851,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "50: прямоугольник 0 ≤ x ≤ 4, 0 ≤ y ≤ 9, (4 + 1)(9 + 1) = 50."
+              "markdown": "Черепаха проходит 4 вправо, поворачивает вверх и проходит 9: прямоугольник 0 ≤ x ≤ 4, 0 ≤ y ≤ 9, повторы идут по нему же. Вместе с границей (4 + 1)(9 + 1) = 50."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `50`"
             }
           }
         ],
@@ -749571,7 +749866,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 41,
+            "position": 38,
             "material_id": "simple-algorithms"
           }
         ],
@@ -749615,7 +749910,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Черепахе был дан для исполнения следующий алгоритм. Голова направлена вверх. Определите, сколько точек с целочисленными координатами будут находиться внутри пересечения областей, ограниченных заданными алгоритмом линиями, включая точки на линиях. (Подтема 4.)"
+              "markdown": "Черепахе был дан для исполнения следующий алгоритм. Голова направлена вверх. Определи, сколько точек с целочисленными координатами находится внутри пересечения областей, ограниченных заданными алгоритмом линиями, включая точки на линиях."
             }
           },
           {
@@ -749631,7 +749926,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Подтема 4."
+              "markdown": "Найди, где опустится хвост, и пересеки фигуры отдельно по x и по y."
             }
           }
         ],
@@ -749639,7 +749934,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "64: фигуры 0 ≤ x ≤ 8, 0 ≤ y ≤ 10 и 1 ≤ x ≤ 8, 3 ≤ y ≤ 12; пересечение 1 ≤ x ≤ 8, 3 ≤ y ≤ 10, 8 · 8 = 64."
+              "markdown": "Первая фигура — 0 ≤ x ≤ 8, 0 ≤ y ≤ 10. Хвост опускается в (1; 3), вторая фигура — 1 ≤ x ≤ 8, 3 ≤ y ≤ 12. Пересечение 1 ≤ x ≤ 8, 3 ≤ y ≤ 10: 8 · 8 = 64."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `64`"
             }
           }
         ],
@@ -749648,7 +749949,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 42,
+            "position": 39,
             "material_id": "simple-algorithms"
           }
         ],
@@ -749692,7 +749993,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Черепахе был дан для исполнения алгоритм «Повтори 6 [Вперёд 12 Направо 120]». Голова направлена вверх. Определите, сколько точек с целочисленными координатами будут находиться внутри области, ограниченной линией. Точки на линии учитывать не следует. (Подтема 5.)"
+              "markdown": "Черепахе был дан для исполнения алгоритм «Повтори 6 [Вперёд 12 Направо 120]». Голова направлена вверх. Определи, сколько точек с целочисленными координатами находится внутри области, ограниченной линией. Точки на линии учитывать не следует."
             }
           }
         ],
@@ -749700,7 +750001,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Подтема 5."
+              "markdown": "Шесть повторений обходят один треугольник дважды; считай по столбцам."
             }
           }
         ],
@@ -749708,7 +750009,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "56: равносторонний треугольник со стороной 12, обойдённый дважды; точки по столбцам x = 1 … 10."
+              "markdown": "Получается равносторонний треугольник со стороной 12, третья вершина (6√3; 6) ≈ (10,39; 6). По столбцам x = 1…10 строго внутри 11, 9, 9, 7, 7, 5, 3, 3, 1, 1 точек — всего 56."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `56`"
             }
           }
         ],
@@ -749717,7 +750024,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 43,
+            "position": 40,
             "material_id": "simple-algorithms"
           }
         ],
@@ -749761,7 +750068,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Черепахе был дан для исполнения алгоритм «Вперёд 8 Направо 90 Вперёд 4 Направо 90 Вперёд 5 Налево 90 Вперёд 6 Направо 90 Вперёд 3 Направо 90 Вперёд 10». Голова направлена вверх. Определите площадь области, ограниченной линией. (Подтемы 3, 5.)"
+              "markdown": "Черепахе был дан для исполнения алгоритм «Вперёд 8 Направо 90 Вперёд 4 Направо 90 Вперёд 5 Налево 90 Вперёд 6 Направо 90 Вперёд 3 Направо 90 Вперёд 10». Голова направлена вверх. Определи площадь области, ограниченной линией."
             }
           }
         ],
@@ -749769,7 +750076,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Подтемы 3, 5."
+              "markdown": "Разрежь фигуру на два прямоугольника."
             }
           }
         ],
@@ -749777,7 +750084,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "50: фигура Г — части 4 × 8 и 6 × 3, 32 + 18 = 50."
+              "markdown": "Фигура Г состоит из части 4 × 8 (0 ≤ x ≤ 4, 0 ≤ y ≤ 8) и части 6 × 3 (4 ≤ x ≤ 10, 0 ≤ y ≤ 3). Площадь 32 + 18 = 50."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `50`"
             }
           }
         ],
@@ -749786,7 +750099,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 44,
+            "position": 41,
             "material_id": "simple-algorithms"
           }
         ],
@@ -831313,85 +831626,40 @@
       "sections": [
         "kak-ustroena-tema-6",
         "sostoyanie-cherepahi",
-        "koordinaty",
-        "celochislennye-tochki",
         "dvizhenie-i-povorot",
-        "napravlenie-kak-ugol",
-        "ugol-povorota-i-ugol-figury",
-        "modul-turtle",
-        "nachalnoe-napravlenie",
         "povtori-i-cikl",
-        "otstupy",
-        "neskolko-storon-za-povtorenie",
-        "povtornyj-prohod",
-        "konechnoe-sostoyanie",
-        "chertezhnik",
+        "perehod-mezhdu-figurami",
         "sostoyanie-itogo",
-        "risunok-kak-proverka",
-        "masshtab",
-        "masshtab-i-koordinaty",
-        "pervaya-programma",
-        "sluzhebnye-komandy",
-        "setka-tochek",
-        "peremennye-cikla",
-        "hvost-pered-setkoj",
-        "odin-masshtab",
-        "diapazony-setki",
-        "setka-ne-schitaet",
-        "risunok-ne-pomeshchaetsya",
-        "gde-zapuskat",
-        "gotovyj-shablon",
-        "postroenie-itogo",
         "chto-sprashivaet-vopros",
         "vnutri-na-granice-snaruzhi",
         "podschet-po-ryadam",
-        "tochki-i-promezhutki",
-        "pryamougolnik-po-osyam",
         "tochki-ploshchad-perimetr",
         "nezamknutaya-liniya",
-        "rasstoyanie-i-dlina-puti",
-        "ploshchad-treugolnika",
         "granica-itogo",
-        "dve-figury",
-        "perehod-mezhdu-figurami",
         "peresechenie",
-        "granicy-peresecheniya",
         "obedinenie",
         "tolko-v-odnoj-figure",
-        "tri-figury",
         "peresechenie-po-granice",
-        "granica-obedineniya",
+        "nevypuklaya-figura",
         "figury-itogo",
+        "risunok-kak-proverka",
+        "gotovyj-shablon",
+        "perevod-komand",
+        "masshtab",
+        "setka-tochek",
+        "postroenie-itogo",
         "naklonnye-storony",
-        "naklon-na-setke",
-        "polozhenie-treugolnika",
+        "ugol-povorota-i-ugol-figury",
         "tochki-mezhdu-naklonnymi",
         "granica-treugolnika",
-        "sedmoe-povtorenie",
         "naklonnyj-chetyrehugolnik",
-        "spornaya-tochka",
-        "pogreshnost-koordinat",
-        "proverka-konechnogo-polozheniya",
-        "nevypuklaya-figura",
         "naklon-itogo",
-        "obratnyj-vopros",
-        "chislo-tochek-ot-parametra",
-        "strogij-i-nestrogij-porog",
-        "naibolshee-peresechenie",
-        "figura-ne-pomeshchaetsya",
-        "poseshcheniya",
-        "schetchik-poseshchenij",
-        "obratnyj-itogo",
-        "podschet-programmoj",
         "uslovie-prinadlezhnosti",
-        "koordinaty-bez-masshtaba",
         "dva-pryamougolnika",
         "treugolnik-programmoj",
-        "necelye-granicy",
-        "proizvolnyj-povorot",
-        "komanda-dugi",
-        "krivolinejnaya-granica",
-        "dugi-itogo"
+        "obratnyj-vopros",
+        "naibolshee-peresechenie",
+        "podschet-itogo"
       ],
       "kind": "topic",
       "status": "published",
@@ -831403,41 +831671,10 @@
           "sections": [
             "kak-ustroena-tema-6",
             "sostoyanie-cherepahi",
-            "koordinaty",
-            "celochislennye-tochki",
             "dvizhenie-i-povorot",
-            "napravlenie-kak-ugol",
-            "ugol-povorota-i-ugol-figury",
-            "modul-turtle",
-            "nachalnoe-napravlenie",
             "povtori-i-cikl",
-            "otstupy",
-            "neskolko-storon-za-povtorenie",
-            "povtornyj-prohod",
-            "konechnoe-sostoyanie",
-            "chertezhnik",
+            "perehod-mezhdu-figurami",
             "sostoyanie-itogo"
-          ]
-        },
-        {
-          "slug": "postroenie-i-reshetka",
-          "access": "free",
-          "sections": [
-            "risunok-kak-proverka",
-            "masshtab",
-            "masshtab-i-koordinaty",
-            "pervaya-programma",
-            "sluzhebnye-komandy",
-            "setka-tochek",
-            "peremennye-cikla",
-            "hvost-pered-setkoj",
-            "odin-masshtab",
-            "diapazony-setki",
-            "setka-ne-schitaet",
-            "risunok-ne-pomeshchaetsya",
-            "gde-zapuskat",
-            "gotovyj-shablon",
-            "postroenie-itogo"
           ]
         },
         {
@@ -831447,12 +831684,8 @@
             "chto-sprashivaet-vopros",
             "vnutri-na-granice-snaruzhi",
             "podschet-po-ryadam",
-            "tochki-i-promezhutki",
-            "pryamougolnik-po-osyam",
             "tochki-ploshchad-perimetr",
             "nezamknutaya-liniya",
-            "rasstoyanie-i-dlina-puti",
-            "ploshchad-treugolnika",
             "granica-itogo"
           ]
         },
@@ -831460,16 +831693,24 @@
           "slug": "neskolko-figur",
           "access": "free",
           "sections": [
-            "dve-figury",
-            "perehod-mezhdu-figurami",
             "peresechenie",
-            "granicy-peresecheniya",
             "obedinenie",
             "tolko-v-odnoj-figure",
-            "tri-figury",
             "peresechenie-po-granice",
-            "granica-obedineniya",
+            "nevypuklaya-figura",
             "figury-itogo"
+          ]
+        },
+        {
+          "slug": "postroenie-i-reshetka",
+          "access": "free",
+          "sections": [
+            "risunok-kak-proverka",
+            "gotovyj-shablon",
+            "perevod-komand",
+            "masshtab",
+            "setka-tochek",
+            "postroenie-itogo"
           ]
         },
         {
@@ -831477,47 +831718,23 @@
           "access": "free",
           "sections": [
             "naklonnye-storony",
-            "naklon-na-setke",
-            "polozhenie-treugolnika",
+            "ugol-povorota-i-ugol-figury",
             "tochki-mezhdu-naklonnymi",
             "granica-treugolnika",
-            "sedmoe-povtorenie",
             "naklonnyj-chetyrehugolnik",
-            "spornaya-tochka",
-            "pogreshnost-koordinat",
-            "proverka-konechnogo-polozheniya",
-            "nevypuklaya-figura",
             "naklon-itogo"
           ]
         },
         {
-          "slug": "obratnyj-vopros-i-poseshcheniya",
+          "slug": "podschet-programmoj",
           "access": "free",
           "sections": [
-            "obratnyj-vopros",
-            "chislo-tochek-ot-parametra",
-            "strogij-i-nestrogij-porog",
-            "naibolshee-peresechenie",
-            "figura-ne-pomeshchaetsya",
-            "poseshcheniya",
-            "schetchik-poseshchenij",
-            "obratnyj-itogo"
-          ]
-        },
-        {
-          "slug": "tochnyj-podschet-i-dugi",
-          "access": "free",
-          "sections": [
-            "podschet-programmoj",
             "uslovie-prinadlezhnosti",
-            "koordinaty-bez-masshtaba",
             "dva-pryamougolnika",
             "treugolnik-programmoj",
-            "necelye-granicy",
-            "proizvolnyj-povorot",
-            "komanda-dugi",
-            "krivolinejnaya-granica",
-            "dugi-itogo"
+            "obratnyj-vopros",
+            "naibolshee-peresechenie",
+            "podschet-itogo"
           ]
         }
       ],

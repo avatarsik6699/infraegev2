@@ -495,11 +495,74 @@ def tt_segment(a, b, height: int = 220) -> str:
     return "".join(out)
 
 
+def tt_turn(side: float = 8, turn: float = 120, height: int = 300) -> str:
+    """The turn of the turtle at a vertex and the angle of the figure there."""
+    a = math.radians(90 - turn)
+    b = (0.0, float(side))
+    c = (b[0] + side * math.cos(a), b[1] + side * math.sin(a))
+    grid = (-3, math.ceil(c[0]) + 2, -1, side + 3)
+    v = _View(grid, 30, 14, W - 60, height - 28)
+    out = [f'<svg viewBox="0 0 {W} {height}" role="img" aria-label="Поворот и угол фигуры">']
+    (ax, ay), (bx, by), (cx, cy) = v(0, 0), v(*b), v(*c)
+    (ex, ey) = v(0, side + 3.2)
+    out.append(
+        f'<line x1="{bx:.1f}" y1="{by:.1f}" x2="{ex:.1f}" y2="{ey:.1f}" stroke="{MUTED}" '
+        f'stroke-width="1.6" stroke-dasharray="6 5"/>'
+    )
+    out.append(
+        f'<polyline points="{ax:.1f},{ay:.1f} {bx:.1f},{by:.1f} {cx:.1f},{cy:.1f}" fill="none" '
+        f'stroke="{INK}" stroke-width="2.2" stroke-linejoin="round"/>'
+    )
+    out.append(
+        f'<line x1="{cx:.1f}" y1="{cy:.1f}" x2="{ax:.1f}" y2="{ay:.1f}" stroke="{FAINT}" stroke-width="2"/>'
+    )
+
+    def arc(r, t0, t1, sweep, color, width):
+        x0, y0 = bx + r * math.cos(math.radians(t0)), by - r * math.sin(math.radians(t0))
+        x1, y1 = bx + r * math.cos(math.radians(t1)), by - r * math.sin(math.radians(t1))
+        return (
+            f'<path d="M {x0:.1f} {y0:.1f} A {r} {r} 0 0 {sweep} {x1:.1f} {y1:.1f}" fill="none" '
+            f'stroke="{color}" stroke-width="{width}" stroke-linecap="round"/>'
+        )
+
+    # the turn: from «straight on» (up) clockwise to the new direction
+    out.append(arc(46, 90, 90 - turn, 1, ACCENT, 2.4))
+    # the angle of the figure: between the side it came by and the next side
+    out.append(arc(26, 270, 450 - turn, 0, INK, 1.6))
+    mid = math.radians(90 - turn / 2)
+    out.append(
+        _text(
+            bx + 60 * math.cos(mid),
+            by - 60 * math.sin(mid) + 6,
+            f"{turn:g}°",
+            16,
+            ACCENT,
+            weight=700,
+        )
+    )
+    inner = math.radians(270 + (180 - turn) / 2)
+    out.append(
+        _text(
+            bx + 44 * math.cos(inner),
+            by - 44 * math.sin(inner) + 6,
+            f"{180 - turn:g}°",
+            15,
+            INK,
+            "middle",
+            700,
+        )
+    )
+    out.append(_text(ex + 8, ey + 4, "прямо", 13, MUTED))
+    out.append("</svg>")
+    return "".join(out)
+
+
 TURTLE_FIGURES: dict = {
     "tt_draw": tt_draw,
     "tt_state": tt_state,
     "tt_rects": tt_rects,
     "tt_segment": tt_segment,
+    "tt_turn": tt_turn,
 }
 TURTLE_STEPPERS: dict = {"tt_state": state_frames}
 TURTLE_WIDGETS: dict = {}
