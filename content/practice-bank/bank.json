@@ -131879,19 +131879,19 @@
     {
       "task": {
         "id": "excel-first-formulas-t01",
-        "title": "В A2 записано 12, в B2 — 5",
+        "title": "=A2+B2*2",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 1,
         "estimated_minutes": null,
-        "answer_instruction": "Запишите ответы через пробел в порядке вопроса.",
+        "answer_instruction": "Введите число.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "В `A2` записано 12, в `B2` — 5. Найди результаты `=A2+B2*2` и `=(A2+B2)*2`. Объясни различие."
+              "markdown": "В `A2` записано 12, в `B2` — 5. Чему равно `=A2+B2*2`?"
             }
           }
         ],
@@ -131899,7 +131899,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Первые формулы»: рассуди по шагам, а затем проверь в Excel."
+              "markdown": "Умножение выполняется раньше сложения."
             }
           }
         ],
@@ -131907,7 +131907,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "22 и 34. В первой формуле сначала 5×2, во второй сначала 12+5."
+              "markdown": "Сначала 5 × 2 = 10, потом 12 + 10 = 22."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `22`"
             }
           }
         ],
@@ -131939,7 +131945,7 @@
         ],
         "checker": {
           "checker_type": "exact_match",
-          "answer_variants": ["22 34"],
+          "answer_variants": ["22"],
           "numeric_tolerance": null
         }
       },
@@ -131948,19 +131954,19 @@
     {
       "task": {
         "id": "excel-first-formulas-t02",
-        "title": "Вычисли =2*3^2, =(2*3)^2 и =10%*50",
+        "title": "=2*3^2",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 1,
         "estimated_minutes": null,
-        "answer_instruction": "Запишите ответы через пробел в порядке вопроса.",
+        "answer_instruction": "Введите число.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Вычисли `=2*3^2`, `=(2*3)^2` и `=10%*50`."
+              "markdown": "Чему равно `=2*3^2`?"
             }
           }
         ],
@@ -131968,7 +131974,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Первые формулы»: рассуди по шагам, а затем проверь в Excel."
+              "markdown": "Степень выполняется раньше умножения."
             }
           }
         ],
@@ -131976,76 +131982,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "18, 36 и 5: степень раньше умножения, 10% — это 0,1."
+              "markdown": "3^2 = 9, затем 2 × 9 = 18."
             }
-          }
-        ],
-        "skills": [],
-        "exam_numbers": [],
-        "files": [],
-        "lessons": [
-          {
-            "position": 1,
-            "material_id": "excel-first-formulas"
-          }
-        ],
-        "theory_links": [],
-        "catalog_visible": false,
-        "archived": false,
-        "sources": [
-          {
-            "url": null,
-            "kind": "original",
-            "role": "original",
-            "year": null,
-            "title": null,
-            "author": null,
-            "primary": true,
-            "is_public": true,
-            "adaptation": null,
-            "original_id": null
-          }
-        ],
-        "checker": {
-          "checker_type": "exact_match",
-          "answer_variants": ["18 36 5"],
-          "numeric_tolerance": null
-        }
-      },
-      "solution_revision": 1
-    },
-    {
-      "task": {
-        "id": "excel-first-formulas-t03",
-        "title": "В A2 — 15, в B2 — 8",
-        "short_description": null,
-        "explanation_kind": "unclassified",
-        "difficulty": 1,
-        "estimated_minutes": null,
-        "answer_instruction": "Запишите ответы через пробел в порядке вопроса.",
-        "interaction_type": "production",
-        "content_schema_version": 1,
-        "statement": [
+          },
           {
             "type": "text",
             "data": {
-              "markdown": "В `A2` — 15, в `B2` — 8. Чему равны `=(A2+B2)/2` и `=A2+B2/2`? Какая из формул — среднее?"
-            }
-          }
-        ],
-        "hint": [
-          {
-            "type": "text",
-            "data": {
-              "markdown": "Опора — урок «Первые формулы»: рассуди по шагам, а затем проверь в Excel."
-            }
-          }
-        ],
-        "explanation": [
-          {
-            "type": "text",
-            "data": {
-              "markdown": "11,5 и 19. Среднее — первая: во второй делится только `B2`."
+              "markdown": "Ответ: `18`"
             }
           }
         ],
@@ -132077,7 +132020,7 @@
         ],
         "checker": {
           "checker_type": "exact_match",
-          "answer_variants": ["11,5 19"],
+          "answer_variants": ["18"],
           "numeric_tolerance": null
         }
       },
@@ -132085,20 +132028,20 @@
     },
     {
       "task": {
-        "id": "excel-first-formulas-t04",
-        "title": "В D2 набрано число 200, в E2 — формула =B2*C2 (цена 40, количество 5)",
+        "id": "excel-first-formulas-t03",
+        "title": "Среднее двух ячеек",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 1,
         "estimated_minutes": null,
-        "answer_instruction": "Запишите ответы через пробел в порядке вопроса.",
+        "answer_instruction": "Введите число; дробную часть — через запятую.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "В `D2` набрано число 200, в `E2` — формула `=B2*C2` (цена 40, количество 5). Цену изменили на 50. Что теперь показывают `D2` и `E2`?"
+              "markdown": "В `A2` — 15, в `B2` — 8. Чему равно `=(A2+B2)/2`?"
             }
           }
         ],
@@ -132106,7 +132049,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Первые формулы»: рассуди по шагам, а затем проверь в Excel."
+              "markdown": "Сначала сумма в скобках, потом деление."
             }
           }
         ],
@@ -132114,145 +132057,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "`D2` — 200, `E2` — 250: набранное число не связано с ценой."
+              "markdown": "15 + 8 = 23, 23 / 2 = 11,5 — это среднее двух чисел."
             }
-          }
-        ],
-        "skills": [],
-        "exam_numbers": [],
-        "files": [],
-        "lessons": [
-          {
-            "position": 3,
-            "material_id": "excel-first-formulas"
-          }
-        ],
-        "theory_links": [],
-        "catalog_visible": false,
-        "archived": false,
-        "sources": [
-          {
-            "url": null,
-            "kind": "original",
-            "role": "original",
-            "year": null,
-            "title": null,
-            "author": null,
-            "primary": true,
-            "is_public": true,
-            "adaptation": null,
-            "original_id": null
-          }
-        ],
-        "checker": {
-          "checker_type": "exact_match",
-          "answer_variants": ["200 250"],
-          "numeric_tolerance": null
-        }
-      },
-      "solution_revision": 1
-    },
-    {
-      "task": {
-        "id": "excel-first-formulas-t05",
-        "title": "По операции продано 8 упаковок массой 250 г по цене 120 рублей за упаковку",
-        "short_description": null,
-        "explanation_kind": "unclassified",
-        "difficulty": 1,
-        "estimated_minutes": null,
-        "answer_instruction": "Запишите ответы через пробел в порядке вопроса.",
-        "interaction_type": "production",
-        "content_schema_version": 1,
-        "statement": [
+          },
           {
             "type": "text",
             "data": {
-              "markdown": "По операции продано 8 упаковок массой 250 г по цене 120 рублей за упаковку. Найди массу в килограммах и выручку. Почему нельзя перемножить все три числа для ответа в рублях?"
-            }
-          }
-        ],
-        "hint": [
-          {
-            "type": "text",
-            "data": {
-              "markdown": "Опора — урок «Первые формулы»: рассуди по шагам, а затем проверь в Excel."
-            }
-          }
-        ],
-        "explanation": [
-          {
-            "type": "text",
-            "data": {
-              "markdown": "Масса 8×250/1000 = 2 кг. Выручка 8×120 = 960 рублей. Цена уже задана за упаковку, поэтому дополнительное умножение на её массу меняет смысл и единицы результата."
-            }
-          }
-        ],
-        "skills": [],
-        "exam_numbers": [],
-        "files": [],
-        "lessons": [
-          {
-            "position": 4,
-            "material_id": "excel-first-formulas"
-          }
-        ],
-        "theory_links": [],
-        "catalog_visible": false,
-        "archived": false,
-        "sources": [
-          {
-            "url": null,
-            "kind": "original",
-            "role": "original",
-            "year": null,
-            "title": null,
-            "author": null,
-            "primary": true,
-            "is_public": true,
-            "adaptation": null,
-            "original_id": null
-          }
-        ],
-        "checker": {
-          "checker_type": "exact_match",
-          "answer_variants": ["2 960"],
-          "numeric_tolerance": null
-        }
-      },
-      "solution_revision": 1
-    },
-    {
-      "task": {
-        "id": "excel-first-formulas-t07",
-        "title": "В B2 — 0, в A2 — 300",
-        "short_description": null,
-        "explanation_kind": "unclassified",
-        "difficulty": 1,
-        "estimated_minutes": null,
-        "answer_instruction": "Введите ответ одним значением — так, как его покажет Excel.",
-        "interaction_type": "production",
-        "content_schema_version": 1,
-        "statement": [
-          {
-            "type": "text",
-            "data": {
-              "markdown": "В `B2` — 0, в `A2` — 300. Что покажет `=A2/B2` и что нужно выяснить, прежде чем исправлять формулу?"
-            }
-          }
-        ],
-        "hint": [
-          {
-            "type": "text",
-            "data": {
-              "markdown": "Опора — урок «Первые формулы»: рассуди по шагам, а затем проверь в Excel."
-            }
-          }
-        ],
-        "explanation": [
-          {
-            "type": "text",
-            "data": {
-              "markdown": "`#ДЕЛ/0!`. Нужно выяснить, почему знаменатель ноль: неверные данные, пропуск или особый случай условия."
+              "markdown": "Ответ: `11,5`"
             }
           }
         ],
@@ -132284,7 +132095,7 @@
         ],
         "checker": {
           "checker_type": "exact_match",
-          "answer_variants": ["#ДЕЛ/0!"],
+          "answer_variants": ["11,5", "11.5"],
           "numeric_tolerance": null
         }
       },
@@ -132292,26 +132103,20 @@
     },
     {
       "task": {
-        "id": "excel-first-formulas-t08",
-        "title": "Составь таблицу трёх покупок: блокнот — 60 рублей, 3 штуки; линейка — 25…",
+        "id": "excel-first-formulas-t04",
+        "title": "Формула после правки цены",
         "short_description": null,
         "explanation_kind": "unclassified",
-        "difficulty": 2,
+        "difficulty": 1,
         "estimated_minutes": null,
-        "answer_instruction": "Запишите ответы через пробел в порядке вопроса.",
+        "answer_instruction": "Введите число.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Составь таблицу трёх покупок: блокнот — 60 рублей, 3 штуки; линейка — 25 рублей, 4 штуки; ластик — 10 рублей, 6 штук. Найди стоимость каждой покупки и итог формулами."
-            }
-          },
-          {
-            "type": "attachment",
-            "data": {
-              "usage_id": "statement-1"
+              "markdown": "В `D2` набрано число 200, в `E2` — формула `=B2*C2` (цена 40 в `B2`, количество 5 в `C2`). Цену изменили на 50. Что теперь показывает `E2`?"
             }
           }
         ],
@@ -132319,7 +132124,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Первые формулы»: рассуди по шагам, а затем проверь в Excel."
+              "markdown": "Формула пересчитывается, когда меняются её данные."
             }
           }
         ],
@@ -132327,25 +132132,22 @@
           {
             "type": "text",
             "data": {
-              "markdown": "180, 100 и 60, итог 340: `=B2*C2` в каждой строке и `=D2+D3+D4`."
+              "markdown": "`E2` пересчитана: 50 × 5 = 250."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `250`"
             }
           }
         ],
         "skills": [],
         "exam_numbers": [],
-        "files": [
-          {
-            "id": "statement-1",
-            "purpose": "attachment",
-            "checksum": "18272be3baae940a812063ff3240a27b2a20486339aca23ad8744c5b56044875",
-            "filename": "excel-zadachnik.xlsx",
-            "attribution": null,
-            "description": "Задачник курса: лист «Задачи» — данные задачи и жёлтые ячейки для формул, лист «Ответы» — решения формулами"
-          }
-        ],
+        "files": [],
         "lessons": [
           {
-            "position": 6,
+            "position": 7,
             "material_id": "excel-first-formulas"
           }
         ],
@@ -132368,7 +132170,247 @@
         ],
         "checker": {
           "checker_type": "exact_match",
-          "answer_variants": ["180 100 60 340"],
+          "answer_variants": ["250"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-first-formulas-t05",
+        "title": "Масса в килограммах",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Введите число.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Продано 8 упаковок массой 250 г каждая. Какова их общая масса в килограммах?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Сначала граммы: 8 × 250, потом перевод в килограммы делением на 1000."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "8 × 250 = 2000 г, 2000 / 1000 = 2 кг."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `2`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 9,
+            "material_id": "excel-first-formulas"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["2"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-first-formulas-t07",
+        "title": "Деление на ноль",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Введите ответ так, как его покажет Excel.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "В `A2` — 300, в `B2` — 0. Что покажет `=A2/B2`?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Деление на ноль не определено."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Знаменатель равен нулю, Excel показывает `#ДЕЛ/0!`. Исправлять нужно данные."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `#ДЕЛ/0!`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 11,
+            "material_id": "excel-first-formulas"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["#ДЕЛ/0!"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-first-formulas-t08",
+        "title": "Сделай сам: итог покупок",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 2,
+        "estimated_minutes": null,
+        "answer_instruction": "Введите число.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Составь таблицу трёх покупок: блокнот — 60 рублей, 3 штуки; линейка — 25 рублей, 4 штуки; ластик — 10 рублей, 6 штук. Найди стоимость каждой покупки и итог формулами. Чему равен итог?"
+            }
+          },
+          {
+            "type": "attachment",
+            "data": {
+              "usage_id": "statement-1"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Стоимость каждой покупки — цена × количество; итог — сумма трёх стоимостей."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Стоимости: 60 × 3 = 180, 25 × 4 = 100, 10 × 6 = 60 — формула `=B2*C2` в каждой строке; итог `=D2+D3+D4` = 340."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `340`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [
+          {
+            "id": "statement-1",
+            "purpose": "attachment",
+            "checksum": "18272be3baae940a812063ff3240a27b2a20486339aca23ad8744c5b56044875",
+            "filename": "excel-zadachnik.xlsx",
+            "attribution": null,
+            "description": "Задачник курса: лист «Задачи» — данные задачи и жёлтые ячейки для формул, лист «Ответы» — решения формулами"
+          }
+        ],
+        "lessons": [
+          {
+            "position": 13,
+            "material_id": "excel-first-formulas"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["340"],
           "numeric_tolerance": null
         }
       },
@@ -132377,19 +132419,19 @@
     {
       "task": {
         "id": "excel-references-t04",
-        "title": "Ссылку A$2 копируют на два столбца вправо и на три строки вниз",
+        "title": "Ссылка A$2 при копировании",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 1,
         "estimated_minutes": null,
-        "answer_instruction": "Запишите ответы через пробел в порядке вопроса.",
+        "answer_instruction": "Введите ссылку латиницей, со знаками $, если они есть.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Ссылку `A$2` копируют на два столбца вправо и на три строки вниз. Во что она превратится? А ссылка `$A2`?"
+              "markdown": "Ссылку `A$2` копируют на два столбца вправо и три строки вниз. Во что она превратится?"
             }
           }
         ],
@@ -132397,7 +132439,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Копирование формул и знак $»: рассуди по шагам, а затем проверь в Excel."
+              "markdown": "$ перед 2 держит строку, а столбец сдвигается."
             }
           }
         ],
@@ -132405,283 +132447,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "`C$2` и `$A5`."
+              "markdown": "Столбец A → C, строка 2 закреплена: `C$2`."
             }
-          }
-        ],
-        "skills": [],
-        "exam_numbers": [],
-        "files": [],
-        "lessons": [
-          {
-            "position": 0,
-            "material_id": "excel-references"
-          }
-        ],
-        "theory_links": [],
-        "catalog_visible": false,
-        "archived": false,
-        "sources": [
-          {
-            "url": null,
-            "kind": "original",
-            "role": "original",
-            "year": null,
-            "title": null,
-            "author": null,
-            "primary": true,
-            "is_public": true,
-            "adaptation": null,
-            "original_id": null
-          }
-        ],
-        "checker": {
-          "checker_type": "exact_match",
-          "answer_variants": ["C$2 $A5"],
-          "numeric_tolerance": null
-        }
-      },
-      "solution_revision": 1
-    },
-    {
-      "task": {
-        "id": "excel-references-t05",
-        "title": "Скидка в H2 равна 15%, стоимости в D2:D5 — 200, 60, 240 и 60",
-        "short_description": null,
-        "explanation_kind": "unclassified",
-        "difficulty": 1,
-        "estimated_minutes": null,
-        "answer_instruction": "Запишите ответы через пробел в порядке вопроса.",
-        "interaction_type": "production",
-        "content_schema_version": 1,
-        "statement": [
+          },
           {
             "type": "text",
             "data": {
-              "markdown": "Скидка в `H2` равна 15%, стоимости в `D2:D5` — 200, 60, 240 и 60. В `E2` записано `=D2*(1-$H$2)` и скопировано до `E5`. Найди значения `E2:E5` и их сумму."
-            }
-          }
-        ],
-        "hint": [
-          {
-            "type": "text",
-            "data": {
-              "markdown": "Опора — урок «Копирование формул и знак $»: рассуди по шагам, а затем проверь в Excel."
-            }
-          }
-        ],
-        "explanation": [
-          {
-            "type": "text",
-            "data": {
-              "markdown": "170, 51, 204 и 51; сумма 476."
-            }
-          }
-        ],
-        "skills": [],
-        "exam_numbers": [],
-        "files": [],
-        "lessons": [
-          {
-            "position": 1,
-            "material_id": "excel-references"
-          }
-        ],
-        "theory_links": [],
-        "catalog_visible": false,
-        "archived": false,
-        "sources": [
-          {
-            "url": null,
-            "kind": "original",
-            "role": "original",
-            "year": null,
-            "title": null,
-            "author": null,
-            "primary": true,
-            "is_public": true,
-            "adaptation": null,
-            "original_id": null
-          }
-        ],
-        "checker": {
-          "checker_type": "exact_match",
-          "answer_variants": ["170 51 204 51 476"],
-          "numeric_tolerance": null
-        }
-      },
-      "solution_revision": 1
-    },
-    {
-      "task": {
-        "id": "excel-range-functions-t01",
-        "title": "В A1 число 7, в A2 число 0, A3 пуста, A4 содержит текст «нет»",
-        "short_description": null,
-        "explanation_kind": "unclassified",
-        "difficulty": 1,
-        "estimated_minutes": null,
-        "answer_instruction": "Запишите ответы через пробел в порядке вопроса.",
-        "interaction_type": "production",
-        "content_schema_version": 1,
-        "statement": [
-          {
-            "type": "text",
-            "data": {
-              "markdown": "В `A1` число 7, в `A2` число 0, `A3` пуста, `A4` содержит текст «нет». Чему равны СУММ(`A1:A4`), СЧЁТ(`A1:A4`), СЧЁТЗ(`A1:A4`), СРЗНАЧ(`A1:A4`)?"
-            }
-          }
-        ],
-        "hint": [
-          {
-            "type": "text",
-            "data": {
-              "markdown": "Опора — урок «Функции по диапазону»: рассуди по шагам, а затем проверь в Excel."
-            }
-          }
-        ],
-        "explanation": [
-          {
-            "type": "text",
-            "data": {
-              "markdown": "Сумма 7, количество чисел 2, непустых значений 3, среднее 3,5. Ноль участвует в среднем, текст и пустота не участвуют."
-            }
-          }
-        ],
-        "skills": [],
-        "exam_numbers": [],
-        "files": [],
-        "lessons": [
-          {
-            "position": 0,
-            "material_id": "excel-range-functions"
-          }
-        ],
-        "theory_links": [],
-        "catalog_visible": false,
-        "archived": false,
-        "sources": [
-          {
-            "url": null,
-            "kind": "original",
-            "role": "original",
-            "year": null,
-            "title": null,
-            "author": null,
-            "primary": true,
-            "is_public": true,
-            "adaptation": null,
-            "original_id": null
-          }
-        ],
-        "checker": {
-          "checker_type": "exact_match",
-          "answer_variants": ["7 2 3 3,5"],
-          "numeric_tolerance": null
-        }
-      },
-      "solution_revision": 1
-    },
-    {
-      "task": {
-        "id": "excel-range-functions-t02",
-        "title": "В A1:A3 — 5, 5 и 11",
-        "short_description": null,
-        "explanation_kind": "unclassified",
-        "difficulty": 1,
-        "estimated_minutes": null,
-        "answer_instruction": "Запишите ответы через пробел в порядке вопроса.",
-        "interaction_type": "production",
-        "content_schema_version": 1,
-        "statement": [
-          {
-            "type": "text",
-            "data": {
-              "markdown": "В `A1:A3` — 5, 5 и 11. Найди НАИБОЛЬШИЙ(`A1:A3`;1), НАИБОЛЬШИЙ(`A1:A3`;2) и НАИМЕНЬШИЙ(`A1:A3`;2)."
-            }
-          }
-        ],
-        "hint": [
-          {
-            "type": "text",
-            "data": {
-              "markdown": "Опора — урок «Функции по диапазону»: рассуди по шагам, а затем проверь в Excel."
-            }
-          }
-        ],
-        "explanation": [
-          {
-            "type": "text",
-            "data": {
-              "markdown": "11, 5 и 5: второе место с учётом повторений."
-            }
-          }
-        ],
-        "skills": [],
-        "exam_numbers": [],
-        "files": [],
-        "lessons": [
-          {
-            "position": 1,
-            "material_id": "excel-range-functions"
-          }
-        ],
-        "theory_links": [],
-        "catalog_visible": false,
-        "archived": false,
-        "sources": [
-          {
-            "url": null,
-            "kind": "original",
-            "role": "original",
-            "year": null,
-            "title": null,
-            "author": null,
-            "primary": true,
-            "is_public": true,
-            "adaptation": null,
-            "original_id": null
-          }
-        ],
-        "checker": {
-          "checker_type": "exact_match",
-          "answer_variants": ["11 5 5"],
-          "numeric_tolerance": null
-        }
-      },
-      "solution_revision": 1
-    },
-    {
-      "task": {
-        "id": "excel-range-functions-t03",
-        "title": "В группе из 3 человек средний балл 90, в группе из 7 — 70",
-        "short_description": null,
-        "explanation_kind": "unclassified",
-        "difficulty": 1,
-        "estimated_minutes": null,
-        "answer_instruction": "Запишите ответы через пробел в порядке вопроса.",
-        "interaction_type": "production",
-        "content_schema_version": 1,
-        "statement": [
-          {
-            "type": "text",
-            "data": {
-              "markdown": "В группе из 3 человек средний балл 90, в группе из 7 — 70. Найди общее среднее и среднее двух средних."
-            }
-          }
-        ],
-        "hint": [
-          {
-            "type": "text",
-            "data": {
-              "markdown": "Опора — урок «Функции по диапазону»: рассуди по шагам, а затем проверь в Excel."
-            }
-          }
-        ],
-        "explanation": [
-          {
-            "type": "text",
-            "data": {
-              "markdown": "Общее среднее 76: (90·3 + 70·7)/10; среднее двух средних — 80."
+              "markdown": "Ответ: `C$2`"
             }
           }
         ],
@@ -132691,6 +132463,156 @@
         "lessons": [
           {
             "position": 2,
+            "material_id": "excel-references"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["C$2"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-references-t05",
+        "title": "Скидка для папок",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Введите число.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Скидка в `G2` равна 15%, стоимости в `D2:D5` — 200, 60, 240 и 60. В `E2` записано `=D2*(1-$G$2)` и скопировано до `E5`. Чему равно `E4`?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "В `E4` стоит `=D4*(1-$G$2)`: скидка общая для всех строк."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "240 × (1 − 0,15) = 240 × 0,85 = 204."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `204`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 5,
+            "material_id": "excel-references"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["204"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-range-functions-t01",
+        "title": "СУММ с текстом и пустотой",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Введите число.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "В `A1` число 7, в `A2` — 0, `A3` пуста, в `A4` текст «нет». Чему равна `=СУММ(A1:A4)`?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "`СУММ` складывает только числа."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Числа — 7 и 0, их сумма 7."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `7`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 0,
             "material_id": "excel-range-functions"
           }
         ],
@@ -132713,7 +132635,157 @@
         ],
         "checker": {
           "checker_type": "exact_match",
-          "answer_variants": ["76 80"],
+          "answer_variants": ["7"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-range-functions-t02",
+        "title": "Второе по убыванию",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Введите число.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "В `A1:A3` — 5, 5 и 11. Чему равна `=НАИБОЛЬШИЙ(A1:A3;2)`?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Выстрой числа по убыванию и возьми второе место."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "По убыванию: 11, 5, 5. Второе место — 5."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `5`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 5,
+            "material_id": "excel-range-functions"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["5"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-range-functions-t03",
+        "title": "Общий средний балл",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Введите число.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "В группе из 3 человек средний балл 90, в группе из 7 — 70. Найди общий средний балл всех 10 человек."
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Сумма баллов группы — её средний балл × число человек."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "(90 × 3 + 70 × 7) / 10 = (270 + 490) / 10 = 76."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `76`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 8,
+            "material_id": "excel-range-functions"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["76"],
           "numeric_tolerance": null
         }
       },
@@ -132722,12 +132794,12 @@
     {
       "task": {
         "id": "excel-range-functions-t04",
-        "title": "Что вернёт =СРЗНАЧ(A1:A3), если в диапазоне только текст?",
+        "title": "СРЗНАЧ без чисел",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 1,
         "estimated_minutes": null,
-        "answer_instruction": "Введите ответ одним значением — так, как его покажет Excel.",
+        "answer_instruction": "Введите ответ так, как его покажет Excel.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
@@ -132742,7 +132814,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Функции по диапазону»: рассуди по шагам, а затем проверь в Excel."
+              "markdown": "Чисел нет — делить не на что."
             }
           }
         ],
@@ -132750,7 +132822,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "`#ДЕЛ/0!`: чисел нет, среднее не определено."
+              "markdown": "Количество чисел 0, среднее не определено: `#ДЕЛ/0!`."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `#ДЕЛ/0!`"
             }
           }
         ],
@@ -132759,7 +132837,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 3,
+            "position": 4,
             "material_id": "excel-range-functions"
           }
         ],
@@ -132791,7 +132869,7 @@
     {
       "task": {
         "id": "excel-range-functions-t07",
-        "title": "Найди =СУММКВ(A1:B1) для чисел 5 и 12",
+        "title": "Сумма квадратов",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 1,
@@ -132811,7 +132889,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Функции по диапазону»: рассуди по шагам, а затем проверь в Excel."
+              "markdown": "`СУММКВ` складывает квадраты чисел."
             }
           }
         ],
@@ -132819,7 +132897,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "169: 25 + 144."
+              "markdown": "5² + 12² = 25 + 144 = 169."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `169`"
             }
           }
         ],
@@ -132828,7 +132912,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 4,
+            "position": 11,
             "material_id": "excel-range-functions"
           }
         ],
@@ -806805,6 +806889,1731 @@
         "checker": {
           "checker_type": "exact_match",
           "answer_variants": ["14"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-first-formulas-t09",
+        "title": "=(A2+B2)*2",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Введите число.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "В `A2` записано 12, в `B2` — 5. Чему равно `=(A2+B2)*2`?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Скобки выполняются первыми."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Сначала 12 + 5 = 17, потом 17 × 2 = 34."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `34`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 1,
+            "material_id": "excel-first-formulas"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["34"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-first-formulas-t10",
+        "title": "=(2*3)^2",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Введите число.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Чему равно `=(2*3)^2`?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Скобки выполняются раньше степени."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "2 × 3 = 6, затем 6^2 = 36."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `36`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 3,
+            "material_id": "excel-first-formulas"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["36"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-first-formulas-t11",
+        "title": "=10%*50",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Введите число.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Чему равно `=10%*50`?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Знак % означает сотые доли: 10% — это 0,1."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "10% = 0,1, и 0,1 × 50 = 5."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `5`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 4,
+            "material_id": "excel-first-formulas"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["5"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-first-formulas-t12",
+        "title": "Формула без скобок",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Введите число.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "В `A2` — 15, в `B2` — 8. Чему равно `=A2+B2/2`?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Без скобок делится только `B2`."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "8 / 2 = 4, затем 15 + 4 = 19. Это не среднее."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `19`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 6,
+            "material_id": "excel-first-formulas"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["19"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-first-formulas-t13",
+        "title": "Число после правки цены",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Введите число.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "В той же таблице: что теперь показывает `D2`, где набрано число 200?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Набранное число ни с чем не связано."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Число 200 не зависит от цены и осталось прежним."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `200`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 8,
+            "material_id": "excel-first-formulas"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["200"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-first-formulas-t14",
+        "title": "Выручка в рублях",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Введите число.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Те же 8 упаковок продали по 120 рублей за упаковку. Какова выручка в рублях?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Цена дана за упаковку — масса для выручки не нужна."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Рубли за упаковку × упаковки = рубли: 8 × 120 = 960."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `960`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 10,
+            "material_id": "excel-first-formulas"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["960"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-first-formulas-t15",
+        "title": "Текст в вычислении",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Введите ответ так, как его покажет Excel.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "В `B2` набрано «40 руб.», в `C2` — 5. Что покажет `=B2*C2`?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "«40 руб.» — текст, а не число."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Текст нельзя умножить на число — Excel показывает `#ЗНАЧ!`. Цену вводят числом 40."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `#ЗНАЧ!`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 12,
+            "material_id": "excel-first-formulas"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["#ЗНАЧ!"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-first-formulas-t16",
+        "title": "Сделай сам: стоимость линеек",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Введите число.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "В той же таблице: какова стоимость линеек?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Цена линейки × их количество."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "25 × 4 = 100."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `100`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 14,
+            "material_id": "excel-first-formulas"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["100"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-references-t09",
+        "title": "Копия на три строки вниз",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Введите формулу со знаком =, адреса латиницей.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "В `D2` записано `=B2*C2`. Формулу скопировали в `D5`. Какой она стала?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Копия сдвинулась на три строки вниз — номера строк в ссылках тоже."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Строка 2 + 3 = 5 у обеих ссылок: `=B5*C5`."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `=B5*C5`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 0,
+            "material_id": "excel-references"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["=B5*C5"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-references-t10",
+        "title": "Копия на два столбца вправо",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Введите формулу со знаком =, адреса латиницей.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ту же формулу `=B2*C2` из `D2` скопировали в `F2`. Какой она стала?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Копия сдвинулась на два столбца вправо — буквы в ссылках тоже."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "B → D, C → E, строка та же: `=D2*E2`."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `=D2*E2`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 1,
+            "material_id": "excel-references"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["=D2*E2"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-references-t11",
+        "title": "Ссылка $A2 при копировании",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Введите ссылку латиницей, со знаками $, если они есть.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ссылку `$A2` копируют на два столбца вправо и три строки вниз. Во что она превратится?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "$ перед A держит столбец, а строка сдвигается."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Столбец A закреплён, строка 2 → 5: `$A5`."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `$A5`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 3,
+            "material_id": "excel-references"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["$A5"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-references-t12",
+        "title": "Ссылка $A$2 при копировании",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Введите ссылку латиницей, со знаками $, если они есть.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ссылку `$A$2` копируют на два столбца вправо и три строки вниз. Во что она превратится?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Закреплены и столбец, и строка."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Обе части закреплены — ссылка не меняется: `$A$2`."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `$A$2`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 4,
+            "material_id": "excel-references"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["$A$2"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-references-t13",
+        "title": "Сумма после скидки",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Введите число.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "В той же таблице: чему равна сумма `E2:E5`?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Скидка одна для всех — можно снять её с общей стоимости."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "(200 + 60 + 240 + 60) × 0,85 = 560 × 0,85 = 476."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `476`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 6,
+            "material_id": "excel-references"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["476"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-references-t14",
+        "title": "Скидка без $",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Введите число.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "В `E2` по ошибке записали `=D2*(1-G2)` и скопировали вниз. Скидка в `G2` — 15%, в `D3` — 60. Что покажет `E3`?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Куда сдвинулась ссылка на скидку в строке 3?"
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "В `E3` стоит `=D3*(1-G3)`; `G3` пуста и считается нулём: 60 × 1 = 60."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `60`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 7,
+            "material_id": "excel-references"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["60"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-references-t15",
+        "title": "Формула в таблице умножения",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Введите формулу со знаком =, адреса латиницей.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Таблица умножения урока: в `B2` записано `=$A2*B$1` и скопировано на `B2:F6`. Какая формула окажется в `E5`?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "В `$A2` сдвигается только строка, в `B$1` — только столбец."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Копия на три строки вниз и три столбца вправо: `$A2` → `$A5`, `B$1` → `E$1`."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `=$A5*E$1`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 8,
+            "material_id": "excel-references"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["=$A5*E$1"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-references-t16",
+        "title": "Значение в таблице умножения",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Введите число.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Чему равно значение в `E5` той же таблицы, если в `A2:A6` и в `B1:F1` числа 1–5?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Найди числа в `A5` и `E1`."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "`A5` = 4, `E1` = 4, 4 × 4 = 16."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `16`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 9,
+            "material_id": "excel-references"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["16"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-range-functions-t09",
+        "title": "СЧЁТ с текстом и пустотой",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Введите число.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "В `A1` число 7, в `A2` — 0, `A3` пуста, в `A4` текст «нет». Чему равна `=СЧЁТ(A1:A4)`?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "`СЧЁТ` считает ячейки с числами; 0 — тоже число."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Числа в `A1` и `A2` — две ячейки."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `2`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 1,
+            "material_id": "excel-range-functions"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["2"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-range-functions-t10",
+        "title": "СЧЁТЗ с текстом и пустотой",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Введите число.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "В `A1` число 7, в `A2` — 0, `A3` пуста, в `A4` текст «нет». Чему равна `=СЧЁТЗ(A1:A4)`?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "`СЧЁТЗ` считает непустые ячейки, текст тоже."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Непустые — `A1`, `A2`, `A4`: три."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `3`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 2,
+            "material_id": "excel-range-functions"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["3"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-range-functions-t11",
+        "title": "СРЗНАЧ с текстом и пустотой",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Введите число; дробную часть — через запятую.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "В `A1` число 7, в `A2` — 0, `A3` пуста, в `A4` текст «нет». Чему равна `=СРЗНАЧ(A1:A4)`?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Сумма чисел на их количество: ноль участвует, пустота и текст — нет."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "(7 + 0) / 2 = 3,5."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `3,5`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 3,
+            "material_id": "excel-range-functions"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["3,5", "3.5"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-range-functions-t12",
+        "title": "Второе по возрастанию",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Введите число.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "В `A1:A3` — 5, 5 и 11. Чему равна `=НАИМЕНЬШИЙ(A1:A3;2)`?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Выстрой числа по возрастанию; повторы занимают отдельные места."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "По возрастанию: 5, 5, 11. Второе место — снова 5."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `5`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 6,
+            "material_id": "excel-range-functions"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["5"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-range-functions-t13",
+        "title": "Два наибольших",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Введите число.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "В `A1:A3` — 5, 5 и 11. Чему равна `=НАИБОЛЬШИЙ(A1:A3;1)+НАИБОЛЬШИЙ(A1:A3;2)`?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Первое и второе места по убыванию."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "11 + 5 = 16."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `16`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 7,
+            "material_id": "excel-range-functions"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["16"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-range-functions-t14",
+        "title": "Среднее двух средних",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Введите число.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Для тех же групп найди среднее двух средних баллов."
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Сложи два средних и раздели на 2."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "(90 + 70) / 2 = 80 — больше общего 76: маленькая группа получила слишком большой вес."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `80`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 9,
+            "material_id": "excel-range-functions"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["80"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-range-functions-t15",
+        "title": "Сумма без максимума",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Введите число.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "В `A2:F2` — 6, 1, 6, 2, 3, 4. Чему равна `=СУММ(A2:F2)-МАКС(A2:F2)`?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Сумма строки минус наибольшее число — один раз, даже если оно повторяется."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Сумма 22, максимум 6: 22 − 6 = 16."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `16`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 10,
+            "material_id": "excel-range-functions"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["16"],
           "numeric_tolerance": null
         }
       },

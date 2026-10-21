@@ -539,7 +539,7 @@ export const excelFirstFormulasLessonPublication = Object.freeze({
   routeSlug: "pervye-formuly",
   title: "Первые формулы",
   summary:
-    "Знак равенства, арифметика и порядок действий, единицы измерения, связь с исходными данными.",
+    "Знак равенства, адреса щелчком, арифметика и порядок действий, ошибки в формулах, стоимость и итог.",
   status: "published",
 });
 

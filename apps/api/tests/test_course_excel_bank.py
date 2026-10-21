@@ -143,23 +143,44 @@ RECOMPUTED = {
     "excel-cell-values-t14": lambda: str(
         (datetime.date(2026, 10, 15) - datetime.date(2026, 10, 1)).days
     ),
-    "excel-first-formulas-t01": lambda: f"{12 + 5 * 2} {(12 + 5) * 2}",
-    "excel-first-formulas-t02": lambda: f"{2 * 3**2} {(2 * 3) ** 2} {_num(0.10 * 50)}",
-    "excel-first-formulas-t03": lambda: f"{_num((15 + 8) / 2)} {_num(15 + 8 / 2)}",
-    "excel-first-formulas-t04": lambda: f"200 {50 * 5}",
-    "excel-first-formulas-t05": lambda: f"{_num(8 * 250 / 1000)} {8 * 120}",
+    "excel-first-formulas-t01": lambda: str(12 + 5 * 2),
+    "excel-first-formulas-t09": lambda: str((12 + 5) * 2),
+    "excel-first-formulas-t02": lambda: str(2 * 3**2),
+    "excel-first-formulas-t10": lambda: str((2 * 3) ** 2),
+    "excel-first-formulas-t11": lambda: _num(0.10 * 50),
+    "excel-first-formulas-t03": lambda: _num((15 + 8) / 2),
+    "excel-first-formulas-t12": lambda: _num(15 + 8 / 2),
+    "excel-first-formulas-t04": lambda: str(50 * 5),
+    "excel-first-formulas-t13": lambda: "200",
+    "excel-first-formulas-t05": lambda: _num(8 * 250 / 1000),
+    "excel-first-formulas-t14": lambda: str(8 * 120),
     "excel-first-formulas-t07": lambda: "#ДЕЛ/0!",
-    "excel-first-formulas-t08": lambda: _with_total([60 * 3, 25 * 4, 10 * 6]),
-    "excel-references-t04": lambda: "C$2 $A5",
-    "excel-references-t05": lambda: _with_total(
-        [round(d * (1 - 0.15), 9) for d in (200, 60, 240, 60)]
+    "excel-first-formulas-t15": lambda: "#ЗНАЧ!",
+    "excel-first-formulas-t08": lambda: str(60 * 3 + 25 * 4 + 10 * 6),
+    "excel-first-formulas-t16": lambda: str(25 * 4),
+    "excel-references-t09": lambda: "=B5*C5",
+    "excel-references-t10": lambda: "=D2*E2",
+    "excel-references-t04": lambda: "C$2",
+    "excel-references-t11": lambda: "$A5",
+    "excel-references-t12": lambda: "$A$2",
+    "excel-references-t05": lambda: _num(round(240 * (1 - 0.15), 9)),
+    "excel-references-t13": lambda: _num(
+        round(sum(round(d * (1 - 0.15), 9) for d in (200, 60, 240, 60)), 9)
     ),
-    "excel-range-functions-t01": lambda: f"{7 + 0} 2 3 {_num((7 + 0) / 2)}",
-    "excel-range-functions-t02": lambda: (
-        f"{sorted([5, 5, 11])[-1]} {sorted([5, 5, 11])[-2]} {sorted([5, 5, 11])[1]}"
-    ),
-    "excel-range-functions-t03": lambda: f"{_num((90 * 3 + 70 * 7) / 10)} {_num((90 + 70) / 2)}",
+    "excel-references-t14": lambda: _num(60 * (1 - 0)),
+    "excel-references-t15": lambda: "=$A5*E$1",
+    "excel-references-t16": lambda: str(4 * 4),
+    "excel-range-functions-t01": lambda: str(7 + 0),
+    "excel-range-functions-t09": lambda: str(sum(isinstance(v, int) for v in (7, 0, None, "нет"))),
+    "excel-range-functions-t10": lambda: str(sum(v is not None for v in (7, 0, None, "нет"))),
+    "excel-range-functions-t11": lambda: _num((7 + 0) / 2),
     "excel-range-functions-t04": lambda: "#ДЕЛ/0!",
+    "excel-range-functions-t02": lambda: str(sorted([5, 5, 11], reverse=True)[1]),
+    "excel-range-functions-t12": lambda: str(sorted([5, 5, 11])[1]),
+    "excel-range-functions-t13": lambda: str(sum(sorted([5, 5, 11], reverse=True)[:2])),
+    "excel-range-functions-t03": lambda: _num((90 * 3 + 70 * 7) / 10),
+    "excel-range-functions-t14": lambda: _num((90 + 70) / 2),
+    "excel-range-functions-t15": lambda: str(sum([6, 1, 6, 2, 3, 4]) - max([6, 1, 6, 2, 3, 4])),
     "excel-range-functions-t07": lambda: str(5**2 + 12**2),
     "excel-conditions-t03": lambda: (
         f"{'ИСТИНА' if 10 > 10 else 'ЛОЖЬ'} {'ИСТИНА' if 10 >= 10 else 'ЛОЖЬ'}"

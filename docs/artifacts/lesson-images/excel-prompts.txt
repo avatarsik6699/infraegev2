@@ -45,3 +45,22 @@ Microsoft Excel for Windows, RUSSIAN interface. Over a blank workbook (dimmed in
 Below: a preview table with exactly three columns and headers "Товар", "Цена", "Количество", and exactly two data rows: "Тетрадь", "40", "5" and "Ручка", "20", "3". Numbers right-aligned.
 Bottom right buttons exactly: "Загрузить", "Преобразовать данные", "Отмена".
 One numbered marker: a dark green #347a66 circle with white digit 1, placed just left of the "Разделитель" dropdown, not covering text. No arrows, no other annotations.
+
+Курс Excel, урок 2.2 (Change 197, 2026-10-21). Один кадр, тоже WebP 1280×800 в apps/web/public/images/lessons/excel-sheet/.
+
+excel-fill-handle.webp
+Use case: ui-mockup. Same requirements as excel-window.webp: Windows 11 light theme, EXACT 1280×800, crisp legible text, straight-on screenshot, no watermark, window fills canvas.
+
+Microsoft Excel for Windows (Microsoft 365), RUSSIAN interface, the same workbook as excel-window.webp: title bar "Книга1 - Excel", ribbon tab "Главная" active, sheet tab "База" active. The Name Box shows exactly "D2"; the formula bar shows exactly "=B2*C2".
+Grid, columns A–G, rows 1–20. Data exactly:
+A1 Товар, B1 Цена, C1 Количество, D1 Стоимость
+A2 Тетрадь, B2 40, C2 5, D2 200
+A3 Ручка, B3 20, C3 3, D3 empty
+A4 Папка, B4 120, C4 2, D4 empty
+A5 Карандаш, B5 15, C5 4, D5 empty
+Text left-aligned, numbers right-aligned, no bold, no fill colours.
+The moment of dragging the fill handle: cell D2 has the standard green selection border; the mouse pointer is the thin black cross "+" of the fill handle, placed at the bottom-right corner of D2's border. A grey dashed drag outline covers D2:D5. No tooltip near the pointer.
+Add exactly two numbered markers (solid dark green #347a66 circles about 30 px, white bold digit), each just outside the element, never covering text:
+1 — next to the small square fill handle at the bottom-right corner of D2,
+2 — next to the dashed outline at D5.
+No arrows, no captions, no other annotations.

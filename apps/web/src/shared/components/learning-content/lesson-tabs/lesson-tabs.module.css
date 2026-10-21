@@ -15,6 +15,10 @@
   border-radius: var(--radius-control);
 }
 
+.panel[hidden] {
+  display: none;
+}
+
 .caption {
   color: var(--color-muted);
   font-family: var(--font-ui);

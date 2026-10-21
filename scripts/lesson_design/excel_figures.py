@@ -706,6 +706,341 @@ def rank_line(values: list[float] | tuple = (3, 8, 8, 2), k: int = 2) -> str:
     return "".join(out)
 
 
+# --- module 2 of the course: a formula on a small sheet (Change 197) -------------
+
+# the colours of the first two references, as on the live sheet of a lesson
+REF_COLORS = ("#1f4fd0", "#7a3fb8")
+GOODS_SHEET = {
+    "A1": "Товар",
+    "B1": "Цена",
+    "C1": "Количество",
+    "D1": "Стоимость",
+    "A2": "Тетрадь",
+    "B2": "40",
+    "C2": "5",
+    "A3": "Ручка",
+    "B3": "20",
+    "C3": "3",
+    "A4": "Папка",
+    "B4": "120",
+    "C4": "2",
+    "A5": "Карандаш",
+    "B5": "15",
+    "C5": "4",
+}
+GOODS_WIDTHS = {"A": 104, "B": 64, "C": 108, "D": 104}
+
+
+def _grid(L, T, rows, values, *, widths=GOODS_WIDTHS, rh=30, frames=(), wash=()) -> str:
+    """A small sheet: column letters, row numbers and the cells ``values``
+    (``{"D2": ("=B2*C2", "mono")}`` draws a formula being typed). ``frames`` are
+    ``(addr, colour)`` borders drawn on top, ``wash`` — cells with a light fill."""
+    out = []
+    xs, x = {}, L
+    for col, w in widths.items():
+        xs[col] = (x, w)
+        out.append(_box(x, T - 24, w, 24, col, fill=WASH, color=MUTED, size=13, weight=500))
+        x += w
+    for r in range(1, rows + 1):
+        y = T + (r - 1) * rh
+        out.append(_box(L - 34, y, 34, rh, str(r), fill=WASH, color=MUTED, size=13, weight=500))
+        for col, (cx, w) in xs.items():
+            addr = f"{col}{r}"
+            out.append(_box(cx, y, w, rh, fill=WASH if addr in wash else "#fff"))
+            v = values.get(addr, "")
+            if isinstance(v, tuple):
+                out.append(_ref_text(cx + 8, y + rh / 2 + 5, v[0], 14.5))
+            elif v != "":
+                right = typed(v) is not None and not isinstance(typed(v), str)
+                out.append(
+                    _t(
+                        cx + w - 9 if right else cx + 9,
+                        y + rh / 2 + 5,
+                        v,
+                        14.5,
+                        INK,
+                        "end" if right else "start",
+                    )
+                )
+    for addr, colour in frames:
+        col, r = addr[0], int(addr[1:])
+        cx, w = xs[col]
+        y = T + (r - 1) * rh
+        out.append(
+            f'<rect x="{cx + 1}" y="{y + 1}" width="{w - 2}" height="{rh - 2}" fill="none" stroke="{colour}" stroke-width="2.5"/>'
+        )
+    return "".join(out)
+
+
+def _ref_text(x, y, text, size) -> str:
+    """A formula in mono with its first references in the reference colours."""
+    spans, last, k = [], 0, 0
+    import re  # noqa: PLC0415
+
+    for m in re.finditer(r"\$?[A-Z]{1,3}\$?\d+", text):
+        spans.append((text[last : m.start()], INK, 400))
+        spans.append((m.group(0), REF_COLORS[min(k, 1)], 700))
+        last, k = m.end(), k + 1
+    spans.append((text[last:], INK, 400))
+    body = "".join(
+        f'<tspan fill="{c}" font-weight="{w}">{html.escape(t)}</tspan>' for t, c, w in spans if t
+    )
+    return (
+        f'<text x="{x:.1f}" y="{y:.1f}" font-family="{MONO}" font-size="{size}" '
+        f'style="font-variant-ligatures:none;white-space:pre">{body}</text>'
+    )
+
+
+def _formula_bar(y, name, text) -> str:
+    out = [_box(24, y, 64, 30, name, size=14, mono=True, color=INK)]
+    out.append(_t(102, y + 20, "fx", 14, MUTED))
+    out.append(_box(124, y, 512, 30))
+    if text:
+        out.append(_ref_text(134, y + 20, text, 15))
+    return "".join(out)
+
+
+def point_entry_frames() -> list[tuple[str, str]]:
+    """A formula typed with clicks: =, a click on B2, *, a click on C2, Enter."""
+    L, T, rows = 58, 92, 3
+    h = T + rows * 30 + 14
+    base = {k: v for k, v in GOODS_SHEET.items() if int(k[1:]) <= rows}
+    steps = [
+        ("D2", "", "", [], "Выбери D2 — здесь будет стоимость тетрадей."),
+        ("D2", "=", "=", [], "Набери знак =. Теперь щелчок по ячейке впишет в формулу её адрес."),
+        (
+            "D2",
+            "=B2",
+            "=B2",
+            [("B2", REF_COLORS[0])],
+            "Щёлкни по B2: в формуле появился её адрес, а сама ячейка обведена тем же цветом.",
+        ),
+        ("D2", "=B2*", "=B2*", [("B2", REF_COLORS[0])], "Набери * — знак умножения."),
+        (
+            "D2",
+            "=B2*C2",
+            "=B2*C2",
+            [("B2", REF_COLORS[0]), ("C2", REF_COLORS[1])],
+            "Щёлкни по C2 — второй адрес, второй цвет. Формула готова.",
+        ),
+        (
+            "D3",
+            "",
+            None,
+            [],
+            "Enter: в D2 результат 200, выделение перешло на D3. Вернись на D2 — строка формул покажет =B2*C2.",
+        ),
+    ]
+    frames = []
+    for at, bar, typing, refs, note in steps:
+        out = [_svg(h, "Формула =B2*C2, набранная щелчками по ячейкам")]
+        out.append(_formula_bar(14, at, bar))
+        values: dict[str, str | tuple[str, str]] = dict(base)
+        if typing is None:
+            values["D2"] = "200"
+        elif typing:
+            values["D2"] = (typing, "mono")
+        out.append(_grid(L, T, rows, values, frames=[*refs, (at, ACCENT)]))
+        out.append("</svg>")
+        frames.append(("".join(out), note))
+    return frames
+
+
+def point_entry() -> str:
+    from figures import _stepper
+
+    return _stepper(point_entry_frames())
+
+
+def fill_down_frames() -> list[tuple[str, str]]:
+    """=B2*C2 filled down D2:D5 with the fill handle: every copy takes its own row."""
+    L, T, rows, rh = 58, 40, 5, 30
+    h = T + rows * rh + 16
+    dx = L + sum(GOODS_WIDTHS.values())
+    d_left = dx - GOODS_WIDTHS["D"]
+    px = dx + 40
+    costs = {2: "200", 3: "60", 4: "240", 5: "60"}
+
+    def cell_y(r):
+        return T + (r - 1) * rh
+
+    def panel(upto):
+        out = [_t(px, T - 8, "формула в ячейке", 13, MUTED)]
+        for r in range(2, upto + 1):
+            y = cell_y(r) + rh / 2 + 5
+            out.append(_t(px, y, f"D{r}", 14, MUTED, mono=True))
+            # the row numbers that moved with the copy are marked
+            colour, weight = (ACCENT, 700) if r > 2 else (INK, 400)
+            parts = [("=B", INK, 400), (str(r), colour, weight), ("*C", INK, 400), (str(r), colour, weight)]
+            spans = "".join(
+                f'<tspan fill="{c}" font-weight="{w}">{t}</tspan>' for t, c, w in parts
+            )
+            out.append(
+                f'<text x="{px + 40:.1f}" y="{y:.1f}" font-family="{MONO}" font-size="15" '
+                f'style="font-variant-ligatures:none;white-space:pre">{spans}</text>'
+            )
+        return "".join(out)
+
+    def handle(r):
+        x, y = dx, cell_y(r) + rh
+        return f'<rect x="{x - 5}" y="{y - 5}" width="9" height="9" fill="{ACCENT}" stroke="#fff" stroke-width="1.5"/>'
+
+    frames = []
+    base = {k: v for k, v in GOODS_SHEET.items() if int(k[1:]) <= rows}
+
+    # 1: the formula in D2 and its fill handle
+    out = [_svg(h, "Маркер заполнения копирует =B2*C2 из D2 в D3:D5")]
+    out.append(_grid(L, T, rows, {**base, "D2": "200"}, frames=[("D2", ACCENT)]))
+    out.append(handle(2))
+    y = cell_y(3) + 4
+    out.append(
+        f'<path d="M {dx + 6} {cell_y(3) - 2} L {dx + 26} {y + 12}" stroke="{MUTED}" stroke-width="1.25" fill="none"/>'
+    )
+    out.append(_t(dx + 30, y + 17, "маркер заполнения", 14, INK, weight=600))
+    out.append(_t(px, T - 8, "формула в ячейке", 13, MUTED))
+    out.append(_t(px, cell_y(2) + rh / 2 + 5, "D2", 14, MUTED, mono=True))
+    out.append(_ref_text(px + 40, cell_y(2) + rh / 2 + 5, "=B2*C2", 15))
+    out.append("</svg>")
+    frames.append(
+        (
+            "".join(out),
+            "В D2 формула =B2*C2, результат 200. Квадратик в правом нижнем углу рамки — маркер заполнения.",
+        )
+    )
+
+    # 2: dragging the handle down to D5
+    out = [_svg(h, "Маркер заполнения тянут вниз до D5")]
+    out.append(_grid(L, T, rows, {**base, "D2": "200"}, frames=[("D2", ACCENT)]))
+    out.append(
+        f'<rect x="{d_left + 1}" y="{cell_y(2) + 1}" width="{GOODS_WIDTHS["D"] - 2}" height="{4 * rh - 2}" '
+        f'fill="none" stroke="{ACCENT}" stroke-width="1.75" stroke-dasharray="5 4"/>'
+    )
+    out.append(handle(5))
+    x = dx + 18
+    out.append(
+        f'<path d="M {x} {cell_y(2) + rh - 4} V {cell_y(5) + rh - 10}" stroke="{ACCENT}" stroke-width="2" fill="none"/>'
+    )
+    out.append(_arrow_head(x, cell_y(5) + rh - 4, 0, 1, ACCENT))
+    out.append(_t(x + 14, cell_y(4) + 4, "тянем до D5", 14, INK, weight=600))
+    out.append("</svg>")
+    frames.append(
+        (
+            "".join(out),
+            "Тяни маркер вниз до D5. Пунктир показывает, куда лягут копии.",
+        )
+    )
+
+    # 3: the copies
+    filled = {**base, **{f"D{r}": v for r, v in costs.items()}}
+    out = [_svg(h, "Копии формулы в D3:D5")]
+    out.append(_grid(L, T, rows, filled, wash={"D3", "D4", "D5"}))
+    out.append(
+        f'<rect x="{d_left + 1}" y="{cell_y(2) + 1}" width="{GOODS_WIDTHS["D"] - 2}" height="{4 * rh - 2}" '
+        f'fill="none" stroke="{ACCENT}" stroke-width="2.5"/>'
+    )
+    out.append(panel(5))
+    out.append("</svg>")
+    frames.append(
+        (
+            "".join(out),
+            "Отпусти: в D3:D5 копии. У каждой номер строки сдвинулся вместе с ней: =B3*C3, =B4*C4, =B5*C5.",
+        )
+    )
+
+    # 4: one copy takes its own row
+    out = [_svg(h, "D4 берёт цену и количество строки 4")]
+    out.append(
+        _grid(
+            L,
+            T,
+            rows,
+            filled,
+            frames=[("B4", REF_COLORS[0]), ("C4", REF_COLORS[1]), ("D4", ACCENT)],
+        )
+    )
+    out.append(_t(px, T - 8, "формула в ячейке", 13, MUTED))
+    out.append(_t(px, cell_y(4) + rh / 2 + 5, "D4", 14, MUTED, weight=700, mono=True))
+    out.append(_ref_text(px + 40, cell_y(4) + rh / 2 + 5, "=B4*C4", 15))
+    out.append("</svg>")
+    frames.append(
+        (
+            "".join(out),
+            "Выбери D4: =B4*C4 берёт цену и количество своей строки — 120 × 2 = 240.",
+        )
+    )
+    return frames
+
+
+def fill_down() -> str:
+    from figures import _stepper
+
+    return _stepper(fill_down_frames())
+
+
+COUNTERS = {
+    "СУММ": ("складывает числа", lambda v: isinstance(v, float), lambda v: f"+{display(v)}"),
+    "СЧЁТ": ("считает числа", lambda v: isinstance(v, float), lambda v: "+1"),
+    "СЧЁТЗ": ("считает непустые", lambda v: v != "", lambda v: "+1"),
+    "СЧИТАТЬПУСТОТЫ": ("считает пустые", lambda v: v == "", lambda v: "+1"),
+}
+
+
+def count_cells(fn: str = "СУММ", values: list[str] | tuple = ("10", "20", "нет", "")) -> str:
+    """Which cells of A2:A5 a counting function takes, and its result."""
+    what, takes, adds = COUNTERS[fn]
+    cells = []
+    for s in values:
+        v = typed(s) if s != "" else ""
+        cells.append(float(v) if isinstance(v, (int, float)) and not isinstance(v, bool) else v)
+    last = 1 + len(values)
+    formula = f"={fn}(A2:A{last})"
+    L, T, cw, rh = 58, 70, 104, 32
+    h = T + len(values) * rh + 52
+    out = [_svg(h, f"{formula} {what}", 400)]
+    out.append(_t(24, 26, formula, 17, INK, weight=600, mono=True))
+    out.append(_t(24 + len(formula) * 10.3 + 14, 26, what, 14, MUTED))
+    out.append(_box(L, T - 24, cw, 24, "A", fill=WASH, color=MUTED, size=13, weight=500))
+    total = 0.0
+    for i, v in enumerate(cells):
+        y = T + i * rh
+        hit = takes(v)
+        out.append(_box(L - 34, y, 34, rh, str(i + 2), fill=WASH, color=MUTED, size=13, weight=500))
+        out.append(_box(L, y, cw, rh, fill=WASH if hit else "#fff"))
+        if v != "":
+            num = isinstance(v, float)
+            out.append(
+                _t(
+                    L + cw - 9 if num else L + 9,
+                    y + rh / 2 + 5,
+                    values[i],
+                    15,
+                    INK if hit else MUTED,
+                    "end" if num else "start",
+                )
+            )
+        if hit:
+            out.append(
+                f'<rect x="{L + 1}" y="{y + 1}" width="{cw - 2}" height="{rh - 2}" fill="none" stroke="{ACCENT}" stroke-width="2.5"/>'
+            )
+            total += float(v) if fn == "СУММ" else 1
+        kind = "число" if isinstance(v, float) else ("пусто" if v == "" else "текст")
+        verdict = f"{kind}: {adds(v)}" if hit else f"{kind}: пропуск"
+        out.append(
+            _t(
+                L + cw + 22,
+                y + rh / 2 + 5,
+                verdict,
+                14.5,
+                INK if hit else MUTED,
+                weight=600 if hit else 400,
+            )
+        )
+    y = T + len(cells) * rh + 32
+    out.append(_t(24, y, f"{formula} = {display(total)}", 17, INK, weight=700, mono=True))
+    out.append("</svg>")
+    return "".join(out)
+
+
 ROUNDERS = [
     ("ОКРУГЛ", "к ближайшему целому", "=ОКРУГЛ({};0)"),
     ("ОКРУГЛВВЕРХ", "от нуля", "=ОКРУГЛВВЕРХ({};0)"),
@@ -1109,6 +1444,9 @@ EXCEL_FIGURES = {
         "text_slots": text_slots,
         "sumif_steps": sumif_steps,
         "vlookup_steps": vlookup_steps,
+        "point_entry": point_entry,
+        "fill_down": fill_down,
+        "count_cells": count_cells,
     }.items()
 }
 EXCEL_WIDGETS = {"fill_try": "FillSandbox"}
@@ -1120,6 +1458,8 @@ EXCEL_STEPPERS = {
         "ctrl_jump": ctrl_jump_frames,
         "sumif_steps": sumif_frames,
         "vlookup_steps": vlookup_frames,
+        "point_entry": point_entry_frames,
+        "fill_down": fill_down_frames,
     }.items()
 }
 EXCEL_SCRIPTS = {"data-fill-try": FILL_TRY_JS}

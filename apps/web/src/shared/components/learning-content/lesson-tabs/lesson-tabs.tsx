@@ -42,7 +42,8 @@ export const LessonTabs: React.FC<Props> = (props) => {
     );
   }
 
-  const current = props.tabs[index] ?? props.tabs[0];
+  // every panel stays mounted and the others are hidden: a live sheet or a
+  // stepper keeps its own state, and two tabs never share one instance
   return (
     <div className={styles.root} data-lesson-tabs data-enhanced>
       <ChoiceChips
@@ -51,13 +52,17 @@ export const LessonTabs: React.FC<Props> = (props) => {
         selected={index}
         onSelect={setIndex}
       />
-      <section
-        className={styles.panel}
-        aria-label={current.label}
-        aria-live="polite"
-      >
-        <div className={styles.content}>{current.content}</div>
-      </section>
+      {props.tabs.map((tab, i) => (
+        <section
+          key={tab.label}
+          className={styles.panel}
+          aria-label={tab.label}
+          aria-live="polite"
+          hidden={i !== index}
+        >
+          <div className={styles.content}>{tab.content}</div>
+        </section>
+      ))}
     </div>
   );
 };
