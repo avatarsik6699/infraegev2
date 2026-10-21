@@ -9,10 +9,7 @@ by trying every cut of the bits. The bank's own solution programs must print the
 answers.
 """
 
-import heapq
 import math
-import subprocess
-import sys
 from functools import cache
 from itertools import permutations, product
 from pathlib import Path
@@ -148,14 +145,13 @@ def answers() -> dict[str, str]:
     a: dict[str, str] = {}
     table = {"А": "0", "Б": "10", "В": "110", "Г": "111"}
     vaga = "".join(table[c] for c in "ВАГА")
-    a["task-4-1-02"] = f"{vaga} {len(vaga)}"
-    sixes = len(list(product("01", repeat=6)))
-    uniform = next(n for n in range(1, 9) if len(list(product("01", repeat=n))) >= 20)
-    a["task-4-1-03"] = f"{sixes} {uniform}"
+    a["task-4-1-02"] = vaga
+    candidates = ["1", "00", "101", "11", "0011"]
+    (a["task-4-1-04"],) = [c for c in candidates if _prefix_free(["10", "001", c])]
     (word,) = set(_cuts("010100011", {"00": "А", "010": "Б", "011": "В", "1": "Г"}))
     a["task-4-2-01"] = word
     a["task-4-2-04"] = _shortest(["00", "01", "110", "111"])
-    a["task-4-2-05"] = f"{_shortest(['0', '111', '101'])} {_shortest(['0', '111', '101'], max)}"
+    a["task-4-2-05"] = _shortest(["0", "111", "101"], max)
     a["task-4-2-06"] = " ".join(w for w in _compatible(["1", "000", "011"], 4) if len(w) == 4)
     a["task-4-2-07"] = _shortest(["01", "001", "11", "100"])
     a["task-4-2-08"] = _shortest(
@@ -172,9 +168,7 @@ def answers() -> dict[str, str]:
     a["task-4-3-08"] = str(_best(["000", "001", "0100", "011", "10", "1101"], [1, 1]))
     a["task-4-3-09"] = _shortest(["000", "001", "01", "10"], room=True)
     a["task-4-4-01"] = str(sum(len(table[c]) for c in "АББАВ"))
-    a["task-4-4-02"] = (
-        f"{sum(len(c) for c in table.values())} {len(vaga)} {len(table['В']) * len(table['Г'])}"
-    )
+    a["task-4-4-02"] = f"{sum(len(c) for c in table.values())} {len(vaga)}"
     a["task-4-4-03"] = str(min(4 * x + 1 * y for x, y in permutations([2, 3])))
     a["task-4-4-04"] = str(_best(["0"], [2, 1, 0]))
     a["task-4-4-05"] = str(6 + _best(["00", "011", "101"], [2, 0]))
@@ -182,86 +176,9 @@ def answers() -> dict[str, str]:
     a["task-4-4-07"] = str(3 + _best(["010", "011", "10"], [2, 1, 0, 0]))
     a["task-4-4-08"] = str(4 + _best(["1", "01"], [3, 1]))
     a["task-4-5-01"] = str(_best(["01", "10", "110"], [6, 2, 1, 1]))
-    full = [
-        sorted(len(c) for c in s)
-        for s in _sets(["0", "10"], 3, 6)
-        if not _compatible(["0", "10", *s], 6)
-    ]
-    a["task-4-5-02"] = " ".join(map(str, min(full, key=sum)))
-    a["task-4-5-03"] = f"{_best(['0'], [5, 1, 1, 1])} {_best(['0'], [2, 2, 2, 2])}"
     a["task-4-5-04"] = str(5 + _best(["001", "01"], [2, 1, 1, 1]))
     a["task-4-5-05"] = str(8 + _best(["1100", "1111"], [2, 1, 1, 1, 1]))
     a["task-4-5-06"] = str(2 + _best(["11"], [2, 2, 1, 0]))
-    a["task-4-6-01"] = str(len(_compatible(["1", "01"], 5)))
-    a["task-4-6-02"] = str(
-        sum(1 for w in _compatible(["1", "01"], 5) if _compatible(["1", "01", w], 6))
-    )
-    a["task-4-6-03"] = str(
-        sum(1 for w in _compatible(["0", "100"], 4) if _compatible(["0", "100", w], 5))
-    )
-    fixed = ["10", "110", "1110", "11111"]
-    a["task-4-6-05"] = str(min(len(x) * len(y) for x, y in _sets(fixed, 2, 6)))
-    pairs = []
-    for s in _sets(["0"], 4, 6):
-        ls = sorted(len(c) for c in s)
-        pairs.append((2 * ls[0] + ls[1] + ls[2] + ls[3], sum(ls)))
-    a["task-4-6-06"] = str(min(pairs)[1])
-    records = []
-    for o, t in _sets(["10"], 2, 4):
-        for oo, tt in ((o, t), (t, o)):
-            records.append("10" + oo + tt + oo + "10")
-    best = min(records, key=lambda s: (len(s), s))
-    a["task-4-6-07"] = format(int(best, 2), "o")
-    ones = []
-    for v, g, r in _sets(["01", "111"], 3, 5):
-        for x, y in permutations([v, g, r], 2):
-            ones.append(x.count("1") + 1 + y.count("1"))
-    a["task-4-6-08"] = str(min(ones))
-    a["task-4-6-09"] = min(
-        (w for w in _words(4) if len(w) > 1 and w not in ("01", "11", "001")
-         and not _prefix_free(["01", "11", "001", w])),
-        key=lambda w: (len(w), w),
-    )  # fmt: skip
-    s = "0100100"
-    a["task-4-7-01"] = next(
-        f"{s[:i]} {s[i:j]}"
-        for i in range(1, 7)
-        for j in range(i + 1, 7)
-        if s[:i] + s[i:j] + s[:i] + s[i:j] + s[:i] == s and _prefix_free([s[:i], s[i:j]])
-    )
-    s = "100111010"
-    a["task-4-7-02"] = next(
-        s[j:k]
-        for i in range(1, 5)
-        for j in range(i + 1, 8)
-        for k in range(j + 1, 9)
-        if s[:i] + s[i:j] + s[j:k] + s[i:j] + s[:i] == s and _prefix_free([s[:i], s[i:j], s[j:k]])
-    )
-    fixed = ["00", "011", "110"]
-    lengths = {
-        len(lw) + len(sw) + 5
-        for lw, sw in permutations(_compatible(fixed, 5), 2)
-        if 2 * len(lw) + 2 + len(sw) == 9
-        and _prefix_free([*fixed, lw, sw])
-        and _compatible([*fixed, lw, sw], 6)
-    }
-    (only,) = lengths
-    a["task-4-7-03"] = str(only)
-    s1, s2 = "110010", "100110"
-    a["task-4-7-04"] = next(
-        s1[:i] + s1[i:j] + s1[:i] + s1[i:j]
-        for i in range(1, 5)
-        for j in range(i + 1, 6)
-        if s1[j:] + s1[i:j] + s1[:i] == s2 and _prefix_free([s1[:i], s1[i:j], s1[j:]])
-    )
-    heap = [5, 3, 1, 1]
-    heapq.heapify(heap)
-    cost = 0
-    while len(heap) > 1:
-        merged = heapq.heappop(heap) + heapq.heappop(heap)
-        cost += merged
-        heapq.heappush(heap, merged)
-    a["task-4-7-07"] = str(cost)
     a["task-4-8-01"] = _shortest(["00", "01", "101", "11"], room=True)
     a["task-4-8-02"] = str(_best(["000", "01", "100", "11", "1010"], [1, 1, 1]))
     a["task-4-8-03"] = str(3 + _best(["0", "10"], [2, 1, 1]))
@@ -270,26 +187,16 @@ def answers() -> dict[str, str]:
     return a
 
 
-def _solution(task: TaskData) -> str:
-    (code,) = [
-        block.data.code
-        for block in task.explanation
-        if block.type == "code_example" and block.data.language == "python"
-    ]
-    return code
-
-
 def test_every_answer_matches_independent_recomputation(answers: dict[str, str]) -> None:
     tasks = _entries()
     assert sorted(tasks) == sorted(answers)
-    assert sorted(t.lessons[0].position for t in tasks.values()) == list(range(50))
+    assert sorted(t.lessons[0].position for t in tasks.values()) == list(range(35))
     for task_id, task in tasks.items():
         assert task.checker.answer_variants[0] == answers[task_id], task_id
         assert task.exam_numbers == [4] and not task.catalog_visible and not task.archived
         on_final_page = task_id.startswith("task-4-8-")
         assert bool(task.theory_links) != on_final_page, task_id
-        advanced = task_id.startswith(("task-4-6-", "task-4-7-"))
-        assert task.lessons[0].counts_toward_mastery == (not advanced), task_id
+        assert task.lessons[0].counts_toward_mastery, task_id
 
 
 def test_checker_accepts_the_answer_and_rejects_a_neighbour(answers: dict[str, str]) -> None:
@@ -307,17 +214,3 @@ def test_checker_accepts_the_answer_and_rejects_a_neighbour(answers: dict[str, s
             else last[:-1] + chr(ord(last[-1]) + 1)
         )
         assert not is_correct(task.checker, " ".join(tokens)), task_id
-
-
-def test_solution_programs_print_the_answer(answers: dict[str, str]) -> None:
-    for task_id, task in _entries().items():
-        code = _solution(task)
-        result = subprocess.run(
-            [sys.executable, "-I", "-c", code],
-            capture_output=True,
-            text=True,
-            check=True,
-            timeout=300,
-        )
-        assert " ".join(result.stdout.split()) == answers[task_id], task_id
-        assert all(len(line) <= 64 for line in code.splitlines()), task_id

@@ -408,7 +408,6 @@
         "kod-bukvy",
         "dlina-kodovogo-slova",
         "ravnomernyj-kod",
-        "chislo-posledovatelnostej",
         "neodnoznachnost",
         "uslovie-fano",
         "chtenie-sleva",
@@ -433,31 +432,8 @@
         "bukva-ne-v-slove",
         "rezervnaya-vetv",
         "chastym-korotkie",
-        "dlina-itogo",
-        "korotkij-ne-vsegda",
         "lovushka-chastoj",
-        "dokazatelstvo-minimuma",
-        "lovushka-vtoroj",
-        "perebor-form",
-        "programma-perebora",
-        "forma-itogo",
-        "dopolnitelnyy-urok-podschet",
-        "podschet-kodov",
-        "maksimalnaya-dlina",
-        "proizvedenie-dlin",
-        "dva-trebovaniya",
-        "zapis-slova",
-        "chislo-edinic",
-        "narushenie-fano",
-        "podschet-itogo",
-        "dopolnitelnyy-urok-zapis",
-        "kody-po-povtoram",
-        "uravnenie-na-dliny",
-        "dva-slova",
-        "ne-tolko-fano",
-        "neravenstvo-krafta",
-        "metod-haffmana",
-        "zapis-itogo"
+        "dlina-itogo"
       ],
       "kind": "topic",
       "status": "published",
@@ -471,7 +447,6 @@
             "kod-bukvy",
             "dlina-kodovogo-slova",
             "ravnomernyj-kod",
-            "chislo-posledovatelnostej",
             "neodnoznachnost",
             "uslovie-fano",
             "chtenie-sleva",
@@ -514,49 +489,8 @@
             "bukva-ne-v-slove",
             "rezervnaya-vetv",
             "chastym-korotkie",
-            "dlina-itogo"
-          ]
-        },
-        {
-          "slug": "forma-dereva",
-          "access": "free",
-          "sections": [
-            "korotkij-ne-vsegda",
             "lovushka-chastoj",
-            "dokazatelstvo-minimuma",
-            "lovushka-vtoroj",
-            "perebor-form",
-            "programma-perebora",
-            "forma-itogo"
-          ]
-        },
-        {
-          "slug": "podschet-i-velichiny",
-          "access": "free",
-          "sections": [
-            "dopolnitelnyy-urok-podschet",
-            "podschet-kodov",
-            "maksimalnaya-dlina",
-            "proizvedenie-dlin",
-            "dva-trebovaniya",
-            "zapis-slova",
-            "chislo-edinic",
-            "narushenie-fano",
-            "podschet-itogo"
-          ]
-        },
-        {
-          "slug": "kod-po-zapisi",
-          "access": "free",
-          "sections": [
-            "dopolnitelnyy-urok-zapis",
-            "kody-po-povtoram",
-            "uravnenie-na-dliny",
-            "dva-slova",
-            "ne-tolko-fano",
-            "neravenstvo-krafta",
-            "metod-haffmana",
-            "zapis-itogo"
+            "dlina-itogo"
           ]
         }
       ],

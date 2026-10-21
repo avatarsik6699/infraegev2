@@ -166105,14 +166105,14 @@
         "explanation_kind": "worked_solution",
         "difficulty": 1,
         "estimated_minutes": 2,
-        "answer_instruction": "Введите запись слова и число знаков через пробел.",
+        "answer_instruction": "Введите запись слова из 0 и 1.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "По таблице А — `0`, Б — `10`, В — `110`, Г — `111` закодируй слово ВАГА. Сколько знаков в записи?"
+              "markdown": "По таблице А — `0`, Б — `10`, В — `110`, Г — `111` закодируй слово ВАГА."
             }
           }
         ],
@@ -166128,15 +166128,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "`11001110`: 110 | 0 | 111 | 0, всего 8 знаков."
+              "markdown": "Коды букв записывают подряд, без разделителей: 110 | 0 | 111 | 0."
             }
           },
           {
-            "type": "code_example",
+            "type": "text",
             "data": {
-              "language": "python",
-              "code": "code = {'А': '0', 'Б': '10', 'В': '110', 'Г': '111'}\ns = ''\nfor letter in 'ВАГА':\n    s += code[letter]\nprint(s, len(s))",
-              "caption": "Решение программой"
+              "markdown": "Ответ: `11001110`"
             }
           }
         ],
@@ -166174,7 +166172,7 @@
         ],
         "checker": {
           "checker_type": "exact_match",
-          "answer_variants": ["11001110 8"],
+          "answer_variants": ["11001110"],
           "numeric_tolerance": null
         }
       },
@@ -166226,6 +166224,76 @@
         "skills": [],
         "exam_numbers": [4],
         "files": [],
+        "lessons": [],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": true,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["64 5"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "task-4-1-04",
+        "title": "Какой код можно добавить",
+        "short_description": null,
+        "explanation_kind": "worked_solution",
+        "difficulty": 1,
+        "estimated_minutes": 2,
+        "answer_instruction": "Введите кодовое слово (последовательность из 0 и 1).",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Заданы коды А — `10` и Б — `001`. Какой из кандидатов `1`, `00`, `101`, `11`, `0011` можно назначить букве В, чтобы выполнялось условие Фано?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Каждого кандидата проверь в обе стороны: не начало ли он чужого кода и не начинается ли с чужого кода."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "`1` — начало `10`, `00` — начало `001`; `101` начинается с `10`, `0011` — с `001`. Подходит только `11`: с `10` у него общее лишь начало `1`, а дальше коды расходятся."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `11`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [4],
+        "files": [],
         "lessons": [
           {
             "position": 1,
@@ -166235,7 +166303,7 @@
         "theory_links": [
           {
             "label": "Теория",
-            "section": "chislo-posledovatelnostej",
+            "section": "proverka-v-obe-storony",
             "material_id": "coding-and-fano"
           }
         ],
@@ -166257,7 +166325,7 @@
         ],
         "checker": {
           "checker_type": "exact_match",
-          "answer_variants": ["64 5"],
+          "answer_variants": ["11"],
           "numeric_tolerance": null
         }
       },
@@ -166286,7 +166354,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Идите от корня до буквы, затем снова от корня."
+              "markdown": "Иди от корня до буквы, затем снова от корня."
             }
           }
         ],
@@ -166298,11 +166366,9 @@
             }
           },
           {
-            "type": "code_example",
+            "type": "text",
             "data": {
-              "language": "python",
-              "code": "def decode(bits, letter):\n    word, buf = '', ''\n    for b in bits:\n        buf += b\n        if buf in letter:\n            word += letter[buf]\n            buf = ''\n    return word, buf\n\n\nletter = {'00': 'А', '010': 'Б', '011': 'В', '1': 'Г'}\nprint(decode('010100011', letter)[0])",
-              "caption": "Решение программой"
+              "markdown": "Ответ: `БГАВ`"
             }
           }
         ],
@@ -166318,7 +166384,7 @@
         "theory_links": [
           {
             "label": "Теория",
-            "section": "chtenie-po-derevu",
+            "section": "chtenie-sleva",
             "material_id": "coding-and-fano"
           }
         ],
@@ -166369,7 +166435,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Проверяйте длины по возрастанию."
+              "markdown": "Проверяй длины по возрастанию: сначала 1, потом 2."
             }
           }
         ],
@@ -166377,15 +166443,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "`10`: коды длины 1 недопустимы — `0` начало `00` и `01`, `1` начало `110` и `111`; код `10` свободен."
+              "markdown": "Коды длины 1 недопустимы — `0` начало `00` и `01`, `1` начало `110` и `111`; код `10` свободен."
             }
           },
           {
-            "type": "code_example",
+            "type": "text",
             "data": {
-              "language": "python",
-              "code": "def fano(codes):\n    for i in range(len(codes)):\n        for j in range(len(codes)):\n            if i != j and codes[j].startswith(codes[i]):\n                return False\n    return True\n\n\ndef codes_of(length):\n    return [bin(x)[2:].zfill(length)\n            for x in range(2 ** length)]\n\n\nfixed = ['00', '01', '110', '111']\nfor length in range(1, 8):\n    ok = [c for c in codes_of(length)\n          if fano(fixed + [c])]\n    if ok:\n        print(min(ok))\n        break",
-              "caption": "Решение программой"
+              "markdown": "Ответ: `10`"
             }
           }
         ],
@@ -166432,19 +166496,19 @@
     {
       "task": {
         "id": "task-4-2-05",
-        "title": "Наименьший и наибольший кратчайший код",
+        "title": "Кратчайший код Г",
         "short_description": null,
         "explanation_kind": "worked_solution",
         "difficulty": 2,
         "estimated_minutes": 3,
-        "answer_instruction": "Введите два кодовых слова через пробел: с наименьшим, затем с наибольшим значением.",
+        "answer_instruction": "Введите кодовое слово (последовательность из 0 и 1).",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Сообщения содержат только буквы А, Б, В, Г; А — `0`, Б — `111`, В — `101`. Найди кратчайший код Г с наименьшим и с наибольшим числовым значением."
+              "markdown": "Сообщения содержат только буквы А, Б, В, Г; А — `0`, Б — `111`, В — `101`. Найди кратчайший код Г; если вариантов несколько, выбери код с наибольшим числовым значением."
             }
           }
         ],
@@ -166460,15 +166524,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "`100` и `110`: свободны ровно две вершины длины 3 — `100` и `110`, коротких свободных нет."
+              "markdown": "Свободны ровно две вершины длины 3 — `100` и `110`, коротких свободных нет. Большее значение у `110`."
             }
           },
           {
-            "type": "code_example",
+            "type": "text",
             "data": {
-              "language": "python",
-              "code": "def fano(codes):\n    for i in range(len(codes)):\n        for j in range(len(codes)):\n            if i != j and codes[j].startswith(codes[i]):\n                return False\n    return True\n\n\ndef codes_of(length):\n    return [bin(x)[2:].zfill(length)\n            for x in range(2 ** length)]\n\n\nfixed = ['0', '111', '101']\nfor length in range(1, 8):\n    ok = [c for c in codes_of(length) if fano(fixed + [c])]\n    if ok:\n        print(min(ok), max(ok))\n        break",
-              "caption": "Решение программой"
+              "markdown": "Ответ: `110`"
             }
           }
         ],
@@ -166506,7 +166568,7 @@
         ],
         "checker": {
           "checker_type": "exact_match",
-          "answer_variants": ["100 110"],
+          "answer_variants": ["110"],
           "numeric_tolerance": null
         }
       },
@@ -166547,11 +166609,9 @@
             }
           },
           {
-            "type": "code_example",
+            "type": "text",
             "data": {
-              "language": "python",
-              "code": "def fano(codes):\n    for i in range(len(codes)):\n        for j in range(len(codes)):\n            if i != j and codes[j].startswith(codes[i]):\n                return False\n    return True\n\n\ndef codes_of(length):\n    return [bin(x)[2:].zfill(length)\n            for x in range(2 ** length)]\n\n\nfixed = ['1', '000', '011']\nprint(*[c for c in codes_of(4) if fano(fixed + [c])])",
-              "caption": "Решение программой"
+              "markdown": "Ответ: `0010 0011 0100 0101`"
             }
           }
         ],
@@ -166610,7 +166670,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Для кодирования некоторой последовательности, состоящей из букв К, Л, М, Н, П, решили использовать неравномерный двоичный код, удовлетворяющий условию Фано. Для букв К, Л, М, Н использовали соответственно кодовые слова `01`, `001`, `11`, `100`. Укажите кратчайшее возможное кодовое слово для буквы П. Если таких кодов несколько, укажите код с наименьшим числовым значением."
+              "markdown": "Для кодирования некоторой последовательности, состоящей из букв К, Л, М, Н, П, решили использовать неравномерный двоичный код, удовлетворяющий условию Фано. Для букв К, Л, М, Н использовали соответственно кодовые слова `01`, `001`, `11`, `100`. Укажи кратчайшее возможное кодовое слово для буквы П. Если таких кодов несколько, укажи код с наименьшим числовым значением."
             }
           }
         ],
@@ -166626,15 +166686,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "`000`: свободны `000` и `101`, обе длины 3; меньшее значение у `000`, ведущие нули сохраняем."
+              "markdown": "Свободны `000` и `101`, обе длины 3; меньшее значение у `000`, ведущие нули сохраняем."
             }
           },
           {
-            "type": "code_example",
+            "type": "text",
             "data": {
-              "language": "python",
-              "code": "def fano(codes):\n    for i in range(len(codes)):\n        for j in range(len(codes)):\n            if i != j and codes[j].startswith(codes[i]):\n                return False\n    return True\n\n\ndef codes_of(length):\n    return [bin(x)[2:].zfill(length)\n            for x in range(2 ** length)]\n\n\nfixed = ['01', '001', '11', '100']\nfor length in range(1, 8):\n    ok = [c for c in codes_of(length)\n          if fano(fixed + [c])]\n    if ok:\n        print(min(ok))\n        break",
-              "caption": "Решение программой"
+              "markdown": "Ответ: `000`"
             }
           }
         ],
@@ -166693,7 +166751,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "По каналу связи передаются сообщения, содержащие только десять букв: А, Б, В, Г, Д, Е, Ж, З, И, К. Используется двоичный код, удовлетворяющий условию Фано. Для девяти букв кодовые слова известны: А — `000`, Б — `0010`, В — `0011`, Г — `010`, Д — `0110`, Е — `100`, Ж — `101`, З — `1100`, И — `111`. Укажите кратчайшее кодовое слово для буквы К. Если таких кодов несколько, укажите код с наименьшим числовым значением."
+              "markdown": "По каналу связи передаются сообщения, содержащие только десять букв: А, Б, В, Г, Д, Е, Ж, З, И, К. Используется двоичный код, удовлетворяющий условию Фано. Для девяти букв кодовые слова известны: А — `000`, Б — `0010`, В — `0011`, Г — `010`, Д — `0110`, Е — `100`, Ж — `101`, З — `1100`, И — `111`. Укажи кратчайшее кодовое слово для буквы К. Если таких кодов несколько, укажи код с наименьшим числовым значением."
             }
           }
         ],
@@ -166701,7 +166759,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Найдите свободные вершины дерева девяти кодов."
+              "markdown": "Найди свободные вершины дерева девяти кодов."
             }
           }
         ],
@@ -166709,15 +166767,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "`0111`: свободны только `0111` и `1101`, обе длины 4."
+              "markdown": "Свободны только `0111` и `1101`, обе длины 4."
             }
           },
           {
-            "type": "code_example",
+            "type": "text",
             "data": {
-              "language": "python",
-              "code": "def fano(codes):\n    for i in range(len(codes)):\n        for j in range(len(codes)):\n            if i != j and codes[j].startswith(codes[i]):\n                return False\n    return True\n\n\ndef codes_of(length):\n    return [bin(x)[2:].zfill(length)\n            for x in range(2 ** length)]\n\n\nfixed = ['000', '0010', '0011', '010', '0110', '100', '101',\n         '1100', '111']\nfor length in range(1, 8):\n    ok = [c for c in codes_of(length)\n          if fano(fixed + [c])]\n    if ok:\n        print(min(ok))\n        break",
-              "caption": "Решение программой"
+              "markdown": "Ответ: `0111`"
             }
           }
         ],
@@ -166776,7 +166832,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Сообщения содержат только буквы Р, С, Т, У; используется двоичный код, удовлетворяющий условию Фано: Р — `1`, С — `001`, Т — `010`. Укажите кратчайшее кодовое слово для буквы У. Если таких кодов несколько, укажите код с наибольшим числовым значением."
+              "markdown": "Сообщения содержат только буквы Р, С, Т, У; используется двоичный код, удовлетворяющий условию Фано: Р — `1`, С — `001`, Т — `010`. Укажи кратчайшее кодовое слово для буквы У. Если таких кодов несколько, укажи код с наибольшим числовым значением."
             }
           }
         ],
@@ -166784,7 +166840,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Из кодов наименьшей длины выберите больший."
+              "markdown": "Из кодов наименьшей длины выбери больший."
             }
           }
         ],
@@ -166792,15 +166848,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "`011`: свободны `000` и `011`; из двух кодов длины 3 большее значение у `011`."
+              "markdown": "Свободны `000` и `011`; из двух кодов длины 3 большее значение у `011`."
             }
           },
           {
-            "type": "code_example",
+            "type": "text",
             "data": {
-              "language": "python",
-              "code": "def fano(codes):\n    for i in range(len(codes)):\n        for j in range(len(codes)):\n            if i != j and codes[j].startswith(codes[i]):\n                return False\n    return True\n\n\ndef codes_of(length):\n    return [bin(x)[2:].zfill(length)\n            for x in range(2 ** length)]\n\n\nfixed = ['1', '001', '010']\nfor length in range(1, 8):\n    ok = [c for c in codes_of(length)\n          if fano(fixed + [c])]\n    if ok:\n        print(max(ok))\n        break",
-              "caption": "Решение программой"
+              "markdown": "Ответ: `011`"
             }
           }
         ],
@@ -166875,15 +166929,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "`000`: свободна только ветвь `00`; код `00` оставил бы Г без места, поэтому В — `000`, Г — `001`."
+              "markdown": "Свободна только ветвь `00`; код `00` оставил бы Г без места, поэтому В — `000`, Г — `001`."
             }
           },
           {
-            "type": "code_example",
+            "type": "text",
             "data": {
-              "language": "python",
-              "code": "def fano(codes):\n    for i in range(len(codes)):\n        for j in range(len(codes)):\n            if i != j and codes[j].startswith(codes[i]):\n                return False\n    return True\n\n\ndef codes_of(length):\n    return [bin(x)[2:].zfill(length)\n            for x in range(2 ** length)]\n\n\ndef free_branches(used):\n    \"\"\"Free vertices next to the paths of the used codes.\"\"\"\n    result = []\n    for code in used:\n        for k in range(len(code)):\n            for b in '01':\n                v = code[:k] + b\n                if all(not c.startswith(v)\n                       and not v.startswith(c) for c in used):\n                    if v not in result:\n                        result.append(v)\n    return result\n\n\ndef fill(d, k):\n    \"\"\"Depths of k letters in a branch of depth d: one letter\n    there, or two non-empty halves.\"\"\"\n    if k == 1:\n        return [[d]]\n    result = []\n    for i in range(1, k):\n        for left in fill(d + 1, i):\n            for right in fill(d + 1, k - i):\n                result.append(left + right)\n    return result\n\n\ndef leaves(depths, k):\n    \"\"\"Depths of k letters spread over the free branches.\"\"\"\n    if k == 0:\n        return [[]]\n    if not depths:\n        return []\n    d, rest = depths[0], depths[1:]\n    result = list(leaves(rest, k))\n    for here in range(1, k + 1):\n        for part in fill(d, here):\n            for tail in leaves(rest, k - here):\n                result.append(part + tail)\n    return result\n\n\ndef best(used, weights):\n    \"\"\"Smallest sum of weight · length of the new codes:\n    frequent letters take the short places.\"\"\"\n    depths = [len(v) for v in free_branches(used)]\n    w = sorted(weights, reverse=True)\n    return min(sum(x * y for x, y in zip(w, sorted(ls)))\n               for ls in leaves(depths, len(w)))\n\n\nfixed = ['1', '01']\nfor length in range(1, 8):\n    ok = [c for c in codes_of(length)\n          if fano(fixed + [c]) and free_branches(fixed + [c])]\n    if ok:\n        print(min(ok))\n        break",
-              "caption": "Решение программой"
+              "markdown": "Ответ: `000`"
             }
           }
         ],
@@ -166950,7 +167002,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Разветвляйте свободную ветвь столько раз, сколько нужно букв."
+              "markdown": "Разветвляй свободную ветвь столько раз, сколько нужно букв."
             }
           }
         ],
@@ -166958,15 +167010,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "9: три буквы в ветви `0…` получают длины 2, 3, 3, например Б — `00`, В — `010`, Г — `011`; 1 + 2 + 3 + 3 = 9."
+              "markdown": "Три буквы в ветви `0…` получают длины 2, 3, 3, например Б — `00`, В — `010`, Г — `011`; 1 + 2 + 3 + 3 = 9."
             }
           },
           {
-            "type": "code_example",
+            "type": "text",
             "data": {
-              "language": "python",
-              "code": "def fano(codes):\n    for i in range(len(codes)):\n        for j in range(len(codes)):\n            if i != j and codes[j].startswith(codes[i]):\n                return False\n    return True\n\n\ndef codes_of(length):\n    return [bin(x)[2:].zfill(length)\n            for x in range(2 ** length)]\n\n\ndef free_branches(used):\n    \"\"\"Free vertices next to the paths of the used codes.\"\"\"\n    result = []\n    for code in used:\n        for k in range(len(code)):\n            for b in '01':\n                v = code[:k] + b\n                if all(not c.startswith(v)\n                       and not v.startswith(c) for c in used):\n                    if v not in result:\n                        result.append(v)\n    return result\n\n\ndef fill(d, k):\n    \"\"\"Depths of k letters in a branch of depth d: one letter\n    there, or two non-empty halves.\"\"\"\n    if k == 1:\n        return [[d]]\n    result = []\n    for i in range(1, k):\n        for left in fill(d + 1, i):\n            for right in fill(d + 1, k - i):\n                result.append(left + right)\n    return result\n\n\ndef leaves(depths, k):\n    \"\"\"Depths of k letters spread over the free branches.\"\"\"\n    if k == 0:\n        return [[]]\n    if not depths:\n        return []\n    d, rest = depths[0], depths[1:]\n    result = list(leaves(rest, k))\n    for here in range(1, k + 1):\n        for part in fill(d, here):\n            for tail in leaves(rest, k - here):\n                result.append(part + tail)\n    return result\n\n\ndef best(used, weights):\n    \"\"\"Smallest sum of weight · length of the new codes:\n    frequent letters take the short places.\"\"\"\n    depths = [len(v) for v in free_branches(used)]\n    w = sorted(weights, reverse=True)\n    return min(sum(x * y for x, y in zip(w, sorted(ls)))\n               for ls in leaves(depths, len(w)))\n\n\nprint(1 + best(['1'], [1, 1, 1]))",
-              "caption": "Решение программой"
+              "markdown": "Ответ: `9`"
             }
           }
         ],
@@ -167041,15 +167091,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "25: пять букв в ветви `11…` получают длины 4, 4, 4, 5, 5; 1 + 2 + 22 = 25."
+              "markdown": "Пять букв в ветви `11…` получают длины 4, 4, 4, 5, 5; 1 + 2 + 22 = 25."
             }
           },
           {
-            "type": "code_example",
+            "type": "text",
             "data": {
-              "language": "python",
-              "code": "def fano(codes):\n    for i in range(len(codes)):\n        for j in range(len(codes)):\n            if i != j and codes[j].startswith(codes[i]):\n                return False\n    return True\n\n\ndef codes_of(length):\n    return [bin(x)[2:].zfill(length)\n            for x in range(2 ** length)]\n\n\ndef free_branches(used):\n    \"\"\"Free vertices next to the paths of the used codes.\"\"\"\n    result = []\n    for code in used:\n        for k in range(len(code)):\n            for b in '01':\n                v = code[:k] + b\n                if all(not c.startswith(v)\n                       and not v.startswith(c) for c in used):\n                    if v not in result:\n                        result.append(v)\n    return result\n\n\ndef fill(d, k):\n    \"\"\"Depths of k letters in a branch of depth d: one letter\n    there, or two non-empty halves.\"\"\"\n    if k == 1:\n        return [[d]]\n    result = []\n    for i in range(1, k):\n        for left in fill(d + 1, i):\n            for right in fill(d + 1, k - i):\n                result.append(left + right)\n    return result\n\n\ndef leaves(depths, k):\n    \"\"\"Depths of k letters spread over the free branches.\"\"\"\n    if k == 0:\n        return [[]]\n    if not depths:\n        return []\n    d, rest = depths[0], depths[1:]\n    result = list(leaves(rest, k))\n    for here in range(1, k + 1):\n        for part in fill(d, here):\n            for tail in leaves(rest, k - here):\n                result.append(part + tail)\n    return result\n\n\ndef best(used, weights):\n    \"\"\"Smallest sum of weight · length of the new codes:\n    frequent letters take the short places.\"\"\"\n    depths = [len(v) for v in free_branches(used)]\n    w = sorted(weights, reverse=True)\n    return min(sum(x * y for x, y in zip(w, sorted(ls)))\n               for ls in leaves(depths, len(w)))\n\n\nprint(1 + 2 + best(['0', '10'], [1, 1, 1, 1, 1]))",
-              "caption": "Решение программой"
+              "markdown": "Ответ: `25`"
             }
           }
         ],
@@ -167124,15 +167172,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "9: свободны `010` и `11`; делим более короткую `11`, места `010`, `110`, `111`."
+              "markdown": "Свободны `010` и `11`; делим более короткую `11`, места `010`, `110`, `111`."
             }
           },
           {
-            "type": "code_example",
+            "type": "text",
             "data": {
-              "language": "python",
-              "code": "def fano(codes):\n    for i in range(len(codes)):\n        for j in range(len(codes)):\n            if i != j and codes[j].startswith(codes[i]):\n                return False\n    return True\n\n\ndef codes_of(length):\n    return [bin(x)[2:].zfill(length)\n            for x in range(2 ** length)]\n\n\ndef free_branches(used):\n    \"\"\"Free vertices next to the paths of the used codes.\"\"\"\n    result = []\n    for code in used:\n        for k in range(len(code)):\n            for b in '01':\n                v = code[:k] + b\n                if all(not c.startswith(v)\n                       and not v.startswith(c) for c in used):\n                    if v not in result:\n                        result.append(v)\n    return result\n\n\ndef fill(d, k):\n    \"\"\"Depths of k letters in a branch of depth d: one letter\n    there, or two non-empty halves.\"\"\"\n    if k == 1:\n        return [[d]]\n    result = []\n    for i in range(1, k):\n        for left in fill(d + 1, i):\n            for right in fill(d + 1, k - i):\n                result.append(left + right)\n    return result\n\n\ndef leaves(depths, k):\n    \"\"\"Depths of k letters spread over the free branches.\"\"\"\n    if k == 0:\n        return [[]]\n    if not depths:\n        return []\n    d, rest = depths[0], depths[1:]\n    result = list(leaves(rest, k))\n    for here in range(1, k + 1):\n        for part in fill(d, here):\n            for tail in leaves(rest, k - here):\n                result.append(part + tail)\n    return result\n\n\ndef best(used, weights):\n    \"\"\"Smallest sum of weight · length of the new codes:\n    frequent letters take the short places.\"\"\"\n    depths = [len(v) for v in free_branches(used)]\n    w = sorted(weights, reverse=True)\n    return min(sum(x * y for x, y in zip(w, sorted(ls)))\n               for ls in leaves(depths, len(w)))\n\n\nprint(best(['00', '011', '10'], [1, 1, 1]))",
-              "caption": "Решение программой"
+              "markdown": "Ответ: `9`"
             }
           }
         ],
@@ -167199,7 +167245,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Сравните одну букву в каждой ветви и деление короткой."
+              "markdown": "Сравни два варианта: по букве в каждой ветви или обе буквы в короткой."
             }
           }
         ],
@@ -167207,15 +167253,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "6: свободны `00` и `01000`; 2 + 5 = 7, а `000` и `001` дают 3 + 3 = 6."
+              "markdown": "Свободны `00` и `01000`; 2 + 5 = 7, а `000` и `001` дают 3 + 3 = 6."
             }
           },
           {
-            "type": "code_example",
+            "type": "text",
             "data": {
-              "language": "python",
-              "code": "def fano(codes):\n    for i in range(len(codes)):\n        for j in range(len(codes)):\n            if i != j and codes[j].startswith(codes[i]):\n                return False\n    return True\n\n\ndef codes_of(length):\n    return [bin(x)[2:].zfill(length)\n            for x in range(2 ** length)]\n\n\ndef free_branches(used):\n    \"\"\"Free vertices next to the paths of the used codes.\"\"\"\n    result = []\n    for code in used:\n        for k in range(len(code)):\n            for b in '01':\n                v = code[:k] + b\n                if all(not c.startswith(v)\n                       and not v.startswith(c) for c in used):\n                    if v not in result:\n                        result.append(v)\n    return result\n\n\ndef fill(d, k):\n    \"\"\"Depths of k letters in a branch of depth d: one letter\n    there, or two non-empty halves.\"\"\"\n    if k == 1:\n        return [[d]]\n    result = []\n    for i in range(1, k):\n        for left in fill(d + 1, i):\n            for right in fill(d + 1, k - i):\n                result.append(left + right)\n    return result\n\n\ndef leaves(depths, k):\n    \"\"\"Depths of k letters spread over the free branches.\"\"\"\n    if k == 0:\n        return [[]]\n    if not depths:\n        return []\n    d, rest = depths[0], depths[1:]\n    result = list(leaves(rest, k))\n    for here in range(1, k + 1):\n        for part in fill(d, here):\n            for tail in leaves(rest, k - here):\n                result.append(part + tail)\n    return result\n\n\ndef best(used, weights):\n    \"\"\"Smallest sum of weight · length of the new codes:\n    frequent letters take the short places.\"\"\"\n    depths = [len(v) for v in free_branches(used)]\n    w = sorted(weights, reverse=True)\n    return min(sum(x * y for x, y in zip(w, sorted(ls)))\n               for ls in leaves(depths, len(w)))\n\n\nprint(best(['1', '011', '0101', '01001'], [1, 1]))",
-              "caption": "Решение программой"
+              "markdown": "Ответ: `6`"
             }
           }
         ],
@@ -167290,15 +167334,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "`110`: свободна только ветвь `11`, код `11` не оставил бы места остальным буквам."
+              "markdown": "Свободна только ветвь `11`, код `11` не оставил бы места остальным буквам."
             }
           },
           {
-            "type": "code_example",
+            "type": "text",
             "data": {
-              "language": "python",
-              "code": "def fano(codes):\n    for i in range(len(codes)):\n        for j in range(len(codes)):\n            if i != j and codes[j].startswith(codes[i]):\n                return False\n    return True\n\n\ndef codes_of(length):\n    return [bin(x)[2:].zfill(length)\n            for x in range(2 ** length)]\n\n\ndef free_branches(used):\n    \"\"\"Free vertices next to the paths of the used codes.\"\"\"\n    result = []\n    for code in used:\n        for k in range(len(code)):\n            for b in '01':\n                v = code[:k] + b\n                if all(not c.startswith(v)\n                       and not v.startswith(c) for c in used):\n                    if v not in result:\n                        result.append(v)\n    return result\n\n\ndef fill(d, k):\n    \"\"\"Depths of k letters in a branch of depth d: one letter\n    there, or two non-empty halves.\"\"\"\n    if k == 1:\n        return [[d]]\n    result = []\n    for i in range(1, k):\n        for left in fill(d + 1, i):\n            for right in fill(d + 1, k - i):\n                result.append(left + right)\n    return result\n\n\ndef leaves(depths, k):\n    \"\"\"Depths of k letters spread over the free branches.\"\"\"\n    if k == 0:\n        return [[]]\n    if not depths:\n        return []\n    d, rest = depths[0], depths[1:]\n    result = list(leaves(rest, k))\n    for here in range(1, k + 1):\n        for part in fill(d, here):\n            for tail in leaves(rest, k - here):\n                result.append(part + tail)\n    return result\n\n\ndef best(used, weights):\n    \"\"\"Smallest sum of weight · length of the new codes:\n    frequent letters take the short places.\"\"\"\n    depths = [len(v) for v in free_branches(used)]\n    w = sorted(weights, reverse=True)\n    return min(sum(x * y for x, y in zip(w, sorted(ls)))\n               for ls in leaves(depths, len(w)))\n\n\nfixed = ['00', '010', '011', '10']\nfor length in range(1, 8):\n    ok = [c for c in codes_of(length)\n          if fano(fixed + [c]) and free_branches(fixed + [c])]\n    if ok:\n        print(min(ok))\n        break",
-              "caption": "Решение программой"
+              "markdown": "Ответ: `110`"
             }
           }
         ],
@@ -167373,15 +167415,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "18: свободны `101` и `111`, три буквы получают длины 3, 4, 4; 1 + 3 + 3 + 11 = 18."
+              "markdown": "Свободны `101` и `111`, три буквы получают длины 3, 4, 4; 1 + 3 + 3 + 11 = 18."
             }
           },
           {
-            "type": "code_example",
+            "type": "text",
             "data": {
-              "language": "python",
-              "code": "def fano(codes):\n    for i in range(len(codes)):\n        for j in range(len(codes)):\n            if i != j and codes[j].startswith(codes[i]):\n                return False\n    return True\n\n\ndef codes_of(length):\n    return [bin(x)[2:].zfill(length)\n            for x in range(2 ** length)]\n\n\ndef free_branches(used):\n    \"\"\"Free vertices next to the paths of the used codes.\"\"\"\n    result = []\n    for code in used:\n        for k in range(len(code)):\n            for b in '01':\n                v = code[:k] + b\n                if all(not c.startswith(v)\n                       and not v.startswith(c) for c in used):\n                    if v not in result:\n                        result.append(v)\n    return result\n\n\ndef fill(d, k):\n    \"\"\"Depths of k letters in a branch of depth d: one letter\n    there, or two non-empty halves.\"\"\"\n    if k == 1:\n        return [[d]]\n    result = []\n    for i in range(1, k):\n        for left in fill(d + 1, i):\n            for right in fill(d + 1, k - i):\n                result.append(left + right)\n    return result\n\n\ndef leaves(depths, k):\n    \"\"\"Depths of k letters spread over the free branches.\"\"\"\n    if k == 0:\n        return [[]]\n    if not depths:\n        return []\n    d, rest = depths[0], depths[1:]\n    result = list(leaves(rest, k))\n    for here in range(1, k + 1):\n        for part in fill(d, here):\n            for tail in leaves(rest, k - here):\n                result.append(part + tail)\n    return result\n\n\ndef best(used, weights):\n    \"\"\"Smallest sum of weight · length of the new codes:\n    frequent letters take the short places.\"\"\"\n    depths = [len(v) for v in free_branches(used)]\n    w = sorted(weights, reverse=True)\n    return min(sum(x * y for x, y in zip(w, sorted(ls)))\n               for ls in leaves(depths, len(w)))\n\n\nprint(1 + 3 + 3 + best(['0', '100', '110'], [1, 1, 1]))",
-              "caption": "Решение программой"
+              "markdown": "Ответ: `18`"
             }
           }
         ],
@@ -167448,7 +167488,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Сравните свободные ветви по длине."
+              "markdown": "Сравни свободные ветви по длине."
             }
           }
         ],
@@ -167456,15 +167496,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "7: свободны `0101`, `1100` и `111`; лучшие места — `111` и одно из мест длины 4, 3 + 4 = 7."
+              "markdown": "Свободны `0101`, `1100` и `111`; лучшие места — `111` и одно из мест длины 4, 3 + 4 = 7."
             }
           },
           {
-            "type": "code_example",
+            "type": "text",
             "data": {
-              "language": "python",
-              "code": "def fano(codes):\n    for i in range(len(codes)):\n        for j in range(len(codes)):\n            if i != j and codes[j].startswith(codes[i]):\n                return False\n    return True\n\n\ndef codes_of(length):\n    return [bin(x)[2:].zfill(length)\n            for x in range(2 ** length)]\n\n\ndef free_branches(used):\n    \"\"\"Free vertices next to the paths of the used codes.\"\"\"\n    result = []\n    for code in used:\n        for k in range(len(code)):\n            for b in '01':\n                v = code[:k] + b\n                if all(not c.startswith(v)\n                       and not v.startswith(c) for c in used):\n                    if v not in result:\n                        result.append(v)\n    return result\n\n\ndef fill(d, k):\n    \"\"\"Depths of k letters in a branch of depth d: one letter\n    there, or two non-empty halves.\"\"\"\n    if k == 1:\n        return [[d]]\n    result = []\n    for i in range(1, k):\n        for left in fill(d + 1, i):\n            for right in fill(d + 1, k - i):\n                result.append(left + right)\n    return result\n\n\ndef leaves(depths, k):\n    \"\"\"Depths of k letters spread over the free branches.\"\"\"\n    if k == 0:\n        return [[]]\n    if not depths:\n        return []\n    d, rest = depths[0], depths[1:]\n    result = list(leaves(rest, k))\n    for here in range(1, k + 1):\n        for part in fill(d, here):\n            for tail in leaves(rest, k - here):\n                result.append(part + tail)\n    return result\n\n\ndef best(used, weights):\n    \"\"\"Smallest sum of weight · length of the new codes:\n    frequent letters take the short places.\"\"\"\n    depths = [len(v) for v in free_branches(used)]\n    w = sorted(weights, reverse=True)\n    return min(sum(x * y for x, y in zip(w, sorted(ls)))\n               for ls in leaves(depths, len(w)))\n\n\nprint(best(['000', '001', '0100', '011', '10', '1101'], [1, 1]))",
-              "caption": "Решение программой"
+              "markdown": "Ответ: `7`"
             }
           }
         ],
@@ -167523,7 +167561,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Для кодирования некоторой последовательности, состоящей из букв К, Л, М, Н, П, Р, решили использовать неравномерный двоичный код, удовлетворяющий условию Фано. Для букв К, Л, М, Н использовали кодовые слова `000`, `001`, `01`, `10`. Для букв П и Р коды неизвестны. Укажите кратчайшее возможное кодовое слово для буквы П. Если таких кодов несколько, укажите код с наименьшим числовым значением."
+              "markdown": "Для кодирования некоторой последовательности, состоящей из букв К, Л, М, Н, П, Р, решили использовать неравномерный двоичный код, удовлетворяющий условию Фано. Для букв К, Л, М, Н использовали кодовые слова `000`, `001`, `01`, `10`. Для букв П и Р коды неизвестны. Укажи кратчайшее возможное кодовое слово для буквы П. Если таких кодов несколько, укажи код с наименьшим числовым значением."
             }
           }
         ],
@@ -167539,15 +167577,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "`110`: свободна только ветвь `11`, код `11` оставил бы Р без места."
+              "markdown": "Свободна только ветвь `11`, код `11` оставил бы Р без места."
             }
           },
           {
-            "type": "code_example",
+            "type": "text",
             "data": {
-              "language": "python",
-              "code": "def fano(codes):\n    for i in range(len(codes)):\n        for j in range(len(codes)):\n            if i != j and codes[j].startswith(codes[i]):\n                return False\n    return True\n\n\ndef codes_of(length):\n    return [bin(x)[2:].zfill(length)\n            for x in range(2 ** length)]\n\n\ndef free_branches(used):\n    \"\"\"Free vertices next to the paths of the used codes.\"\"\"\n    result = []\n    for code in used:\n        for k in range(len(code)):\n            for b in '01':\n                v = code[:k] + b\n                if all(not c.startswith(v)\n                       and not v.startswith(c) for c in used):\n                    if v not in result:\n                        result.append(v)\n    return result\n\n\ndef fill(d, k):\n    \"\"\"Depths of k letters in a branch of depth d: one letter\n    there, or two non-empty halves.\"\"\"\n    if k == 1:\n        return [[d]]\n    result = []\n    for i in range(1, k):\n        for left in fill(d + 1, i):\n            for right in fill(d + 1, k - i):\n                result.append(left + right)\n    return result\n\n\ndef leaves(depths, k):\n    \"\"\"Depths of k letters spread over the free branches.\"\"\"\n    if k == 0:\n        return [[]]\n    if not depths:\n        return []\n    d, rest = depths[0], depths[1:]\n    result = list(leaves(rest, k))\n    for here in range(1, k + 1):\n        for part in fill(d, here):\n            for tail in leaves(rest, k - here):\n                result.append(part + tail)\n    return result\n\n\ndef best(used, weights):\n    \"\"\"Smallest sum of weight · length of the new codes:\n    frequent letters take the short places.\"\"\"\n    depths = [len(v) for v in free_branches(used)]\n    w = sorted(weights, reverse=True)\n    return min(sum(x * y for x, y in zip(w, sorted(ls)))\n               for ls in leaves(depths, len(w)))\n\n\nfixed = ['000', '001', '01', '10']\nfor length in range(1, 8):\n    ok = [c for c in codes_of(length)\n          if fano(fixed + [c]) and free_branches(fixed + [c])]\n    if ok:\n        print(min(ok))\n        break",
-              "caption": "Решение программой"
+              "markdown": "Ответ: `110`"
             }
           }
         ],
@@ -167622,15 +167658,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "9: 0 | 10 | 10 | 0 | 110, 1 + 2 + 2 + 1 + 3 = 9."
+              "markdown": "0 | 10 | 10 | 0 | 110, 1 + 2 + 2 + 1 + 3 = 9."
             }
           },
           {
-            "type": "code_example",
+            "type": "text",
             "data": {
-              "language": "python",
-              "code": "code = {'А': '0', 'Б': '10', 'В': '110', 'Г': '111'}\nword = 'АББАВ'\ntotal = 0\nfor letter in code:\n    total += word.count(letter) * len(code[letter])\nprint(total)",
-              "caption": "Решение программой"
+              "markdown": "Ответ: `9`"
             }
           }
         ],
@@ -167677,19 +167711,19 @@
     {
       "task": {
         "id": "task-4-4-02",
-        "title": "Три разные величины",
+        "title": "Две разные величины",
         "short_description": null,
         "explanation_kind": "worked_solution",
         "difficulty": 1,
         "estimated_minutes": 2,
-        "answer_instruction": "Введите три числа через пробел в том порядке, в каком их спрашивают.",
+        "answer_instruction": "Введите два числа через пробел: сумму длин, затем длину записи слова.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Для той же таблицы найди сумму длин всех кодов, длину записи слова ВАГА и произведение длин кодов В и Г."
+              "markdown": "Для таблицы А — `0`, Б — `10`, В — `110`, Г — `111` найди сумму длин всех кодов и длину записи слова ВАГА."
             }
           }
         ],
@@ -167697,7 +167731,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Сумма длин, длина записи слова и произведение — разные величины."
+              "markdown": "Сумма длин считает каждый код один раз, длина слова — каждое появление буквы."
             }
           }
         ],
@@ -167705,15 +167739,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "9, 8 и 9: 1 + 2 + 3 + 3 = 9; 3 + 1 + 3 + 1 = 8; 3 · 3 = 9."
+              "markdown": "Сумма длин всех кодов: 1 + 2 + 3 + 3 = 9. Длина записи ВАГА: 3 + 1 + 3 + 1 = 8 — буква А встречается дважды."
             }
           },
           {
-            "type": "code_example",
+            "type": "text",
             "data": {
-              "language": "python",
-              "code": "code = {'А': '0', 'Б': '10', 'В': '110', 'Г': '111'}\ntotal = sum(len(c) for c in code.values())\nword = sum(len(code[letter]) for letter in 'ВАГА')\nprint(total, word, len(code['В']) * len(code['Г']))",
-              "caption": "Решение программой"
+              "markdown": "Ответ: `9 8`"
             }
           }
         ],
@@ -167751,7 +167783,7 @@
         ],
         "checker": {
           "checker_type": "exact_match",
-          "answer_variants": ["9 8 9"],
+          "answer_variants": ["9 8"],
           "numeric_tolerance": null
         }
       },
@@ -167788,15 +167820,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "11: 4 · 2 + 1 · 3 = 11, а наоборот 4 · 3 + 1 · 2 = 14."
+              "markdown": "4 · 2 + 1 · 3 = 11, а наоборот 4 · 3 + 1 · 2 = 14."
             }
           },
           {
-            "type": "code_example",
+            "type": "text",
             "data": {
-              "language": "python",
-              "code": "from itertools import permutations\n\nplaces = [2, 3]\nfreq = [4, 1]\nprint(min(sum(f * p for f, p in zip(freq, order))\n          for order in permutations(places)))",
-              "caption": "Решение программой"
+              "markdown": "Ответ: `11`"
             }
           }
         ],
@@ -167871,15 +167901,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "7: М — `10`, О — `110`, К — `111`; 2 + 3 + 2 = 7. Два двухзначных кода для М и О заняли бы всю ветвь `1…` и не оставили места К."
+              "markdown": "М — `10`, О — `110`, К — `111`; 2 + 3 + 2 = 7. Два двухзначных кода для М и О заняли бы всю ветвь `1…` и не оставили места К."
             }
           },
           {
-            "type": "code_example",
+            "type": "text",
             "data": {
-              "language": "python",
-              "code": "def fano(codes):\n    for i in range(len(codes)):\n        for j in range(len(codes)):\n            if i != j and codes[j].startswith(codes[i]):\n                return False\n    return True\n\n\ndef codes_of(length):\n    return [bin(x)[2:].zfill(length)\n            for x in range(2 ** length)]\n\n\ndef free_branches(used):\n    \"\"\"Free vertices next to the paths of the used codes.\"\"\"\n    result = []\n    for code in used:\n        for k in range(len(code)):\n            for b in '01':\n                v = code[:k] + b\n                if all(not c.startswith(v)\n                       and not v.startswith(c) for c in used):\n                    if v not in result:\n                        result.append(v)\n    return result\n\n\ndef fill(d, k):\n    \"\"\"Depths of k letters in a branch of depth d: one letter\n    there, or two non-empty halves.\"\"\"\n    if k == 1:\n        return [[d]]\n    result = []\n    for i in range(1, k):\n        for left in fill(d + 1, i):\n            for right in fill(d + 1, k - i):\n                result.append(left + right)\n    return result\n\n\ndef leaves(depths, k):\n    \"\"\"Depths of k letters spread over the free branches.\"\"\"\n    if k == 0:\n        return [[]]\n    if not depths:\n        return []\n    d, rest = depths[0], depths[1:]\n    result = list(leaves(rest, k))\n    for here in range(1, k + 1):\n        for part in fill(d, here):\n            for tail in leaves(rest, k - here):\n                result.append(part + tail)\n    return result\n\n\ndef best(used, weights):\n    \"\"\"Smallest sum of weight · length of the new codes:\n    frequent letters take the short places.\"\"\"\n    depths = [len(v) for v in free_branches(used)]\n    w = sorted(weights, reverse=True)\n    return min(sum(x * y for x, y in zip(w, sorted(ls)))\n               for ls in leaves(depths, len(w)))\n\n\nprint(best(['0'], [2, 1, 0]))",
-              "caption": "Решение программой"
+              "markdown": "Ответ: `7`"
             }
           }
         ],
@@ -167954,15 +167982,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "10: Т встречается дважды и получает свободный код `11`, остальные буквы — в резервных ветвях `010` и `100`; 2 · 2 + 3 + 3 = 10."
+              "markdown": "Т встречается дважды и получает свободный код `11`, остальные буквы — в резервных ветвях `010` и `100`; 2 · 2 + 3 + 3 = 10."
             }
           },
           {
-            "type": "code_example",
+            "type": "text",
             "data": {
-              "language": "python",
-              "code": "def fano(codes):\n    for i in range(len(codes)):\n        for j in range(len(codes)):\n            if i != j and codes[j].startswith(codes[i]):\n                return False\n    return True\n\n\ndef codes_of(length):\n    return [bin(x)[2:].zfill(length)\n            for x in range(2 ** length)]\n\n\ndef free_branches(used):\n    \"\"\"Free vertices next to the paths of the used codes.\"\"\"\n    result = []\n    for code in used:\n        for k in range(len(code)):\n            for b in '01':\n                v = code[:k] + b\n                if all(not c.startswith(v)\n                       and not v.startswith(c) for c in used):\n                    if v not in result:\n                        result.append(v)\n    return result\n\n\ndef fill(d, k):\n    \"\"\"Depths of k letters in a branch of depth d: one letter\n    there, or two non-empty halves.\"\"\"\n    if k == 1:\n        return [[d]]\n    result = []\n    for i in range(1, k):\n        for left in fill(d + 1, i):\n            for right in fill(d + 1, k - i):\n                result.append(left + right)\n    return result\n\n\ndef leaves(depths, k):\n    \"\"\"Depths of k letters spread over the free branches.\"\"\"\n    if k == 0:\n        return [[]]\n    if not depths:\n        return []\n    d, rest = depths[0], depths[1:]\n    result = list(leaves(rest, k))\n    for here in range(1, k + 1):\n        for part in fill(d, here):\n            for tail in leaves(rest, k - here):\n                result.append(part + tail)\n    return result\n\n\ndef best(used, weights):\n    \"\"\"Smallest sum of weight · length of the new codes:\n    frequent letters take the short places.\"\"\"\n    depths = [len(v) for v in free_branches(used)]\n    w = sorted(weights, reverse=True)\n    return min(sum(x * y for x, y in zip(w, sorted(ls)))\n               for ls in leaves(depths, len(w)))\n\n\nfixed = ['00', '011', '101']\nprint(3 + 3 + best(fixed, [2, 0]))",
-              "caption": "Решение программой"
+              "markdown": "Ответ: `10`"
             }
           }
         ],
@@ -168037,15 +168063,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "16: свободны `00`, `11`, `101`. К и Е встречаются по два раза и получают `00` и `11`, Л и Т — `1010` и `1011`; 2 · 2 + 2 · 2 + 4 + 4 = 16."
+              "markdown": "Свободны `00`, `11`, `101`. К и Е встречаются по два раза и получают `00` и `11`, Л и Т — `1010` и `1011`; 2 · 2 + 2 · 2 + 4 + 4 = 16."
             }
           },
           {
-            "type": "code_example",
+            "type": "text",
             "data": {
-              "language": "python",
-              "code": "def fano(codes):\n    for i in range(len(codes)):\n        for j in range(len(codes)):\n            if i != j and codes[j].startswith(codes[i]):\n                return False\n    return True\n\n\ndef codes_of(length):\n    return [bin(x)[2:].zfill(length)\n            for x in range(2 ** length)]\n\n\ndef free_branches(used):\n    \"\"\"Free vertices next to the paths of the used codes.\"\"\"\n    result = []\n    for code in used:\n        for k in range(len(code)):\n            for b in '01':\n                v = code[:k] + b\n                if all(not c.startswith(v)\n                       and not v.startswith(c) for c in used):\n                    if v not in result:\n                        result.append(v)\n    return result\n\n\ndef fill(d, k):\n    \"\"\"Depths of k letters in a branch of depth d: one letter\n    there, or two non-empty halves.\"\"\"\n    if k == 1:\n        return [[d]]\n    result = []\n    for i in range(1, k):\n        for left in fill(d + 1, i):\n            for right in fill(d + 1, k - i):\n                result.append(left + right)\n    return result\n\n\ndef leaves(depths, k):\n    \"\"\"Depths of k letters spread over the free branches.\"\"\"\n    if k == 0:\n        return [[]]\n    if not depths:\n        return []\n    d, rest = depths[0], depths[1:]\n    result = list(leaves(rest, k))\n    for here in range(1, k + 1):\n        for part in fill(d, here):\n            for tail in leaves(rest, k - here):\n                result.append(part + tail)\n    return result\n\n\ndef best(used, weights):\n    \"\"\"Smallest sum of weight · length of the new codes:\n    frequent letters take the short places.\"\"\"\n    depths = [len(v) for v in free_branches(used)]\n    w = sorted(weights, reverse=True)\n    return min(sum(x * y for x, y in zip(w, sorted(ls)))\n               for ls in leaves(depths, len(w)))\n\n\nprint(best(['01', '100'], [2, 2, 1, 1]))",
-              "caption": "Решение программой"
+              "markdown": "Ответ: `16`"
             }
           }
         ],
@@ -168120,15 +168144,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "10: свободны `00` и `11`; А — `00`, Ж — `110`, резерв для Д и Е — `111`; 2 · 2 + 3 + 3 = 10."
+              "markdown": "Свободны `00` и `11`; А — `00`, Ж — `110`, резерв для Д и Е — `111`; 2 · 2 + 3 + 3 = 10."
             }
           },
           {
-            "type": "code_example",
+            "type": "text",
             "data": {
-              "language": "python",
-              "code": "def fano(codes):\n    for i in range(len(codes)):\n        for j in range(len(codes)):\n            if i != j and codes[j].startswith(codes[i]):\n                return False\n    return True\n\n\ndef codes_of(length):\n    return [bin(x)[2:].zfill(length)\n            for x in range(2 ** length)]\n\n\ndef free_branches(used):\n    \"\"\"Free vertices next to the paths of the used codes.\"\"\"\n    result = []\n    for code in used:\n        for k in range(len(code)):\n            for b in '01':\n                v = code[:k] + b\n                if all(not c.startswith(v)\n                       and not v.startswith(c) for c in used):\n                    if v not in result:\n                        result.append(v)\n    return result\n\n\ndef fill(d, k):\n    \"\"\"Depths of k letters in a branch of depth d: one letter\n    there, or two non-empty halves.\"\"\"\n    if k == 1:\n        return [[d]]\n    result = []\n    for i in range(1, k):\n        for left in fill(d + 1, i):\n            for right in fill(d + 1, k - i):\n                result.append(left + right)\n    return result\n\n\ndef leaves(depths, k):\n    \"\"\"Depths of k letters spread over the free branches.\"\"\"\n    if k == 0:\n        return [[]]\n    if not depths:\n        return []\n    d, rest = depths[0], depths[1:]\n    result = list(leaves(rest, k))\n    for here in range(1, k + 1):\n        for part in fill(d, here):\n            for tail in leaves(rest, k - here):\n                result.append(part + tail)\n    return result\n\n\ndef best(used, weights):\n    \"\"\"Smallest sum of weight · length of the new codes:\n    frequent letters take the short places.\"\"\"\n    depths = [len(v) for v in free_branches(used)]\n    w = sorted(weights, reverse=True)\n    return min(sum(x * y for x, y in zip(w, sorted(ls)))\n               for ls in leaves(depths, len(w)))\n\n\nfixed = ['010', '011', '10']\nprint(3 + best(fixed, [2, 1, 0, 0]))",
-              "caption": "Решение программой"
+              "markdown": "Ответ: `10`"
             }
           }
         ],
@@ -168203,15 +168225,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "16: свободна только ветвь `00`; О и Л получают `000` и `001`; 2 · 1 + 3 · 3 + 3 + 2 = 16."
+              "markdown": "Свободна только ветвь `00`; О и Л получают `000` и `001`; 2 · 1 + 3 · 3 + 3 + 2 = 16."
             }
           },
           {
-            "type": "code_example",
+            "type": "text",
             "data": {
-              "language": "python",
-              "code": "def fano(codes):\n    for i in range(len(codes)):\n        for j in range(len(codes)):\n            if i != j and codes[j].startswith(codes[i]):\n                return False\n    return True\n\n\ndef codes_of(length):\n    return [bin(x)[2:].zfill(length)\n            for x in range(2 ** length)]\n\n\ndef free_branches(used):\n    \"\"\"Free vertices next to the paths of the used codes.\"\"\"\n    result = []\n    for code in used:\n        for k in range(len(code)):\n            for b in '01':\n                v = code[:k] + b\n                if all(not c.startswith(v)\n                       and not v.startswith(c) for c in used):\n                    if v not in result:\n                        result.append(v)\n    return result\n\n\ndef fill(d, k):\n    \"\"\"Depths of k letters in a branch of depth d: one letter\n    there, or two non-empty halves.\"\"\"\n    if k == 1:\n        return [[d]]\n    result = []\n    for i in range(1, k):\n        for left in fill(d + 1, i):\n            for right in fill(d + 1, k - i):\n                result.append(left + right)\n    return result\n\n\ndef leaves(depths, k):\n    \"\"\"Depths of k letters spread over the free branches.\"\"\"\n    if k == 0:\n        return [[]]\n    if not depths:\n        return []\n    d, rest = depths[0], depths[1:]\n    result = list(leaves(rest, k))\n    for here in range(1, k + 1):\n        for part in fill(d, here):\n            for tail in leaves(rest, k - here):\n                result.append(part + tail)\n    return result\n\n\ndef best(used, weights):\n    \"\"\"Smallest sum of weight · length of the new codes:\n    frequent letters take the short places.\"\"\"\n    depths = [len(v) for v in free_branches(used)]\n    w = sorted(weights, reverse=True)\n    return min(sum(x * y for x, y in zip(w, sorted(ls)))\n               for ls in leaves(depths, len(w)))\n\n\nprint(2 * 1 + 1 * 2 + best(['1', '01'], [3, 1]))",
-              "caption": "Решение программой"
+              "markdown": "Ответ: `16`"
             }
           }
         ],
@@ -168278,7 +168298,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Сравните все формы дерева."
+              "markdown": "Сравни два варианта: А занимает вершину `00` целиком или `00` делится на две."
             }
           }
         ],
@@ -168286,15 +168306,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "30: А — `00`, Б — `1110`, В — `11110`, Г — `11111`; 6 · 2 + 2 · 4 + 1 · 5 + 1 · 5 = 30. Без кода длины 2 не больше двух новых кодов получают длину 3, и лучшая оценка 6 · 3 + 2 · 3 + 1 · 4 + 1 · 4 = 32. Здесь кратчайший код частой букве выгоден — решение определяется всей совокупностью частот."
+              "markdown": "А — `00`, Б — `1110`, В — `11110`, Г — `11111`; 6 · 2 + 2 · 4 + 1 · 5 + 1 · 5 = 30. Без кода длины 2 не больше двух новых кодов получают длину 3, и лучшая оценка 6 · 3 + 2 · 3 + 1 · 4 + 1 · 4 = 32. Здесь кратчайший код частой букве выгоден — решение определяется всей совокупностью частот."
             }
           },
           {
-            "type": "code_example",
+            "type": "text",
             "data": {
-              "language": "python",
-              "code": "def fano(codes):\n    for i in range(len(codes)):\n        for j in range(len(codes)):\n            if i != j and codes[j].startswith(codes[i]):\n                return False\n    return True\n\n\ndef codes_of(length):\n    return [bin(x)[2:].zfill(length)\n            for x in range(2 ** length)]\n\n\ndef free_branches(used):\n    \"\"\"Free vertices next to the paths of the used codes.\"\"\"\n    result = []\n    for code in used:\n        for k in range(len(code)):\n            for b in '01':\n                v = code[:k] + b\n                if all(not c.startswith(v)\n                       and not v.startswith(c) for c in used):\n                    if v not in result:\n                        result.append(v)\n    return result\n\n\ndef fill(d, k):\n    \"\"\"Depths of k letters in a branch of depth d: one letter\n    there, or two non-empty halves.\"\"\"\n    if k == 1:\n        return [[d]]\n    result = []\n    for i in range(1, k):\n        for left in fill(d + 1, i):\n            for right in fill(d + 1, k - i):\n                result.append(left + right)\n    return result\n\n\ndef leaves(depths, k):\n    \"\"\"Depths of k letters spread over the free branches.\"\"\"\n    if k == 0:\n        return [[]]\n    if not depths:\n        return []\n    d, rest = depths[0], depths[1:]\n    result = list(leaves(rest, k))\n    for here in range(1, k + 1):\n        for part in fill(d, here):\n            for tail in leaves(rest, k - here):\n                result.append(part + tail)\n    return result\n\n\ndef best(used, weights):\n    \"\"\"Smallest sum of weight · length of the new codes:\n    frequent letters take the short places.\"\"\"\n    depths = [len(v) for v in free_branches(used)]\n    w = sorted(weights, reverse=True)\n    return min(sum(x * y for x, y in zip(w, sorted(ls)))\n               for ls in leaves(depths, len(w)))\n\n\nprint(best(['01', '10', '110'], [6, 2, 1, 1]))",
-              "caption": "Решение программой"
+              "markdown": "Ответ: `30`"
             }
           }
         ],
@@ -168384,21 +168402,10 @@
         "skills": [],
         "exam_numbers": [4],
         "files": [],
-        "lessons": [
-          {
-            "position": 27,
-            "material_id": "coding-and-fano"
-          }
-        ],
-        "theory_links": [
-          {
-            "label": "Теория",
-            "section": "perebor-form",
-            "material_id": "coding-and-fano"
-          }
-        ],
+        "lessons": [],
+        "theory_links": [],
         "catalog_visible": false,
-        "archived": false,
+        "archived": true,
         "sources": [
           {
             "url": null,
@@ -168467,21 +168474,10 @@
         "skills": [],
         "exam_numbers": [4],
         "files": [],
-        "lessons": [
-          {
-            "position": 28,
-            "material_id": "coding-and-fano"
-          }
-        ],
-        "theory_links": [
-          {
-            "label": "Теория",
-            "section": "dokazatelstvo-minimuma",
-            "material_id": "coding-and-fano"
-          }
-        ],
+        "lessons": [],
+        "theory_links": [],
         "catalog_visible": false,
-        "archived": false,
+        "archived": true,
         "sources": [
           {
             "url": null,
@@ -168535,15 +168531,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "18: свободны `000` и `1`. Отдать П код `1` — тогда А, О, Р уходят в `000…`, длина 21. Лучше разделить `1`: П — `10`, две буквы — `110`, `111`, одна — `000`; 5 + 2 · 2 + 3 + 3 + 3 = 18."
+              "markdown": "Свободны `000` и `1`. Отдать П код `1` — тогда А, О, Р уходят в `000…`, длина 21. Лучше разделить `1`: П — `10`, две буквы — `110`, `111`, одна — `000`; 5 + 2 · 2 + 3 + 3 + 3 = 18."
             }
           },
           {
-            "type": "code_example",
+            "type": "text",
             "data": {
-              "language": "python",
-              "code": "def fano(codes):\n    for i in range(len(codes)):\n        for j in range(len(codes)):\n            if i != j and codes[j].startswith(codes[i]):\n                return False\n    return True\n\n\ndef codes_of(length):\n    return [bin(x)[2:].zfill(length)\n            for x in range(2 ** length)]\n\n\ndef free_branches(used):\n    \"\"\"Free vertices next to the paths of the used codes.\"\"\"\n    result = []\n    for code in used:\n        for k in range(len(code)):\n            for b in '01':\n                v = code[:k] + b\n                if all(not c.startswith(v)\n                       and not v.startswith(c) for c in used):\n                    if v not in result:\n                        result.append(v)\n    return result\n\n\ndef fill(d, k):\n    \"\"\"Depths of k letters in a branch of depth d: one letter\n    there, or two non-empty halves.\"\"\"\n    if k == 1:\n        return [[d]]\n    result = []\n    for i in range(1, k):\n        for left in fill(d + 1, i):\n            for right in fill(d + 1, k - i):\n                result.append(left + right)\n    return result\n\n\ndef leaves(depths, k):\n    \"\"\"Depths of k letters spread over the free branches.\"\"\"\n    if k == 0:\n        return [[]]\n    if not depths:\n        return []\n    d, rest = depths[0], depths[1:]\n    result = list(leaves(rest, k))\n    for here in range(1, k + 1):\n        for part in fill(d, here):\n            for tail in leaves(rest, k - here):\n                result.append(part + tail)\n    return result\n\n\ndef best(used, weights):\n    \"\"\"Smallest sum of weight · length of the new codes:\n    frequent letters take the short places.\"\"\"\n    depths = [len(v) for v in free_branches(used)]\n    w = sorted(weights, reverse=True)\n    return min(sum(x * y for x, y in zip(w, sorted(ls)))\n               for ls in leaves(depths, len(w)))\n\n\nfixed = ['001', '01']\nprint(3 + 2 + best(fixed, [2, 1, 1, 1]))",
-              "caption": "Решение программой"
+              "markdown": "Ответ: `18`"
             }
           }
         ],
@@ -168552,7 +168546,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 29,
+            "position": 27,
             "material_id": "coding-and-fano"
           }
         ],
@@ -168618,15 +168612,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "24: свободны `0`, `10`, `1101`, `1110`. Если А — `0`, а М — кратчайший свободный `10`, то К, О, Ы остаются `1101` и `1110…`, и длина 26. Выгоднее разделить `10`: А — `0`, М — `100`, К — `101`, О — `1101`, Ы — `1110`; вместе с Р и Н 2 · 1 + 3 + 3 + 4 + 4 + 4 + 4 = 24."
+              "markdown": "Свободны `0`, `10`, `1101`, `1110`. Если А — `0`, а М — кратчайший свободный `10`, то К, О, Ы остаются `1101` и `1110…`, и длина 26. Выгоднее разделить `10`: А — `0`, М — `100`, К — `101`, О — `1101`, Ы — `1110`; вместе с Р и Н 2 · 1 + 3 + 3 + 4 + 4 + 4 + 4 = 24."
             }
           },
           {
-            "type": "code_example",
+            "type": "text",
             "data": {
-              "language": "python",
-              "code": "def fano(codes):\n    for i in range(len(codes)):\n        for j in range(len(codes)):\n            if i != j and codes[j].startswith(codes[i]):\n                return False\n    return True\n\n\ndef codes_of(length):\n    return [bin(x)[2:].zfill(length)\n            for x in range(2 ** length)]\n\n\ndef free_branches(used):\n    \"\"\"Free vertices next to the paths of the used codes.\"\"\"\n    result = []\n    for code in used:\n        for k in range(len(code)):\n            for b in '01':\n                v = code[:k] + b\n                if all(not c.startswith(v)\n                       and not v.startswith(c) for c in used):\n                    if v not in result:\n                        result.append(v)\n    return result\n\n\ndef fill(d, k):\n    \"\"\"Depths of k letters in a branch of depth d: one letter\n    there, or two non-empty halves.\"\"\"\n    if k == 1:\n        return [[d]]\n    result = []\n    for i in range(1, k):\n        for left in fill(d + 1, i):\n            for right in fill(d + 1, k - i):\n                result.append(left + right)\n    return result\n\n\ndef leaves(depths, k):\n    \"\"\"Depths of k letters spread over the free branches.\"\"\"\n    if k == 0:\n        return [[]]\n    if not depths:\n        return []\n    d, rest = depths[0], depths[1:]\n    result = list(leaves(rest, k))\n    for here in range(1, k + 1):\n        for part in fill(d, here):\n            for tail in leaves(rest, k - here):\n                result.append(part + tail)\n    return result\n\n\ndef best(used, weights):\n    \"\"\"Smallest sum of weight · length of the new codes:\n    frequent letters take the short places.\"\"\"\n    depths = [len(v) for v in free_branches(used)]\n    w = sorted(weights, reverse=True)\n    return min(sum(x * y for x, y in zip(w, sorted(ls)))\n               for ls in leaves(depths, len(w)))\n\n\nfixed = ['1100', '1111']\nprint(4 + 4 + best(fixed, [2, 1, 1, 1, 1]))",
-              "caption": "Решение программой"
+              "markdown": "Ответ: `24`"
             }
           }
         ],
@@ -168635,14 +168627,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 30,
+            "position": 28,
             "material_id": "coding-and-fano"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "lovushka-vtoroj",
+            "section": "lovushka-chastoj",
             "material_id": "coding-and-fano"
           }
         ],
@@ -168693,7 +168685,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Не забудьте резерв для Я."
+              "markdown": "Не забудь резерв для Я и сравни два варианта дерева."
             }
           }
         ],
@@ -168701,15 +168693,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "13: свободны `0` и `10`; К и А встречаются по два раза, С — один, ещё нужен резерв для Я. Если К — `0`, остальным трём местам остаётся ветвь `10…`, и длина 14. Лучше разделить `0`: К — `00`, А — `01`, С — `100`, резерв — `101`; 2 · 2 + 2 · 2 + 3 + 2 = 13."
+              "markdown": "Свободны `0` и `10`; К и А встречаются по два раза, С — один, ещё нужен резерв для Я. Если К — `0`, остальным трём местам остаётся ветвь `10…`, и длина 14. Лучше разделить `0`: К — `00`, А — `01`, С — `100`, резерв — `101`; 2 · 2 + 2 · 2 + 3 + 2 = 13."
             }
           },
           {
-            "type": "code_example",
+            "type": "text",
             "data": {
-              "language": "python",
-              "code": "def fano(codes):\n    for i in range(len(codes)):\n        for j in range(len(codes)):\n            if i != j and codes[j].startswith(codes[i]):\n                return False\n    return True\n\n\ndef codes_of(length):\n    return [bin(x)[2:].zfill(length)\n            for x in range(2 ** length)]\n\n\ndef free_branches(used):\n    \"\"\"Free vertices next to the paths of the used codes.\"\"\"\n    result = []\n    for code in used:\n        for k in range(len(code)):\n            for b in '01':\n                v = code[:k] + b\n                if all(not c.startswith(v)\n                       and not v.startswith(c) for c in used):\n                    if v not in result:\n                        result.append(v)\n    return result\n\n\ndef fill(d, k):\n    \"\"\"Depths of k letters in a branch of depth d: one letter\n    there, or two non-empty halves.\"\"\"\n    if k == 1:\n        return [[d]]\n    result = []\n    for i in range(1, k):\n        for left in fill(d + 1, i):\n            for right in fill(d + 1, k - i):\n                result.append(left + right)\n    return result\n\n\ndef leaves(depths, k):\n    \"\"\"Depths of k letters spread over the free branches.\"\"\"\n    if k == 0:\n        return [[]]\n    if not depths:\n        return []\n    d, rest = depths[0], depths[1:]\n    result = list(leaves(rest, k))\n    for here in range(1, k + 1):\n        for part in fill(d, here):\n            for tail in leaves(rest, k - here):\n                result.append(part + tail)\n    return result\n\n\ndef best(used, weights):\n    \"\"\"Smallest sum of weight · length of the new codes:\n    frequent letters take the short places.\"\"\"\n    depths = [len(v) for v in free_branches(used)]\n    w = sorted(weights, reverse=True)\n    return min(sum(x * y for x, y in zip(w, sorted(ls)))\n               for ls in leaves(depths, len(w)))\n\n\nprint(2 + best(['11'], [2, 2, 1, 0]))",
-              "caption": "Решение программой"
+              "markdown": "Ответ: `13`"
             }
           }
         ],
@@ -168718,14 +168708,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 31,
+            "position": 29,
             "material_id": "coding-and-fano"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "perebor-form",
+            "section": "lovushka-chastoj",
             "material_id": "coding-and-fano"
           }
         ],
@@ -168799,22 +168789,10 @@
         "skills": [],
         "exam_numbers": [4],
         "files": [],
-        "lessons": [
-          {
-            "position": 32,
-            "material_id": "coding-and-fano",
-            "counts_toward_mastery": false
-          }
-        ],
-        "theory_links": [
-          {
-            "label": "Теория",
-            "section": "podschet-kodov",
-            "material_id": "coding-and-fano"
-          }
-        ],
+        "lessons": [],
+        "theory_links": [],
         "catalog_visible": false,
-        "archived": false,
+        "archived": true,
         "sources": [
           {
             "url": null,
@@ -168883,22 +168861,10 @@
         "skills": [],
         "exam_numbers": [4],
         "files": [],
-        "lessons": [
-          {
-            "position": 33,
-            "material_id": "coding-and-fano",
-            "counts_toward_mastery": false
-          }
-        ],
-        "theory_links": [
-          {
-            "label": "Теория",
-            "section": "podschet-kodov",
-            "material_id": "coding-and-fano"
-          }
-        ],
+        "lessons": [],
+        "theory_links": [],
         "catalog_visible": false,
-        "archived": false,
+        "archived": true,
         "sources": [
           {
             "url": null,
@@ -168967,22 +168933,10 @@
         "skills": [],
         "exam_numbers": [4],
         "files": [],
-        "lessons": [
-          {
-            "position": 34,
-            "material_id": "coding-and-fano",
-            "counts_toward_mastery": false
-          }
-        ],
-        "theory_links": [
-          {
-            "label": "Теория",
-            "section": "podschet-kodov",
-            "material_id": "coding-and-fano"
-          }
-        ],
+        "lessons": [],
+        "theory_links": [],
         "catalog_visible": false,
-        "archived": false,
+        "archived": true,
         "sources": [
           {
             "url": null,
@@ -169051,22 +169005,10 @@
         "skills": [],
         "exam_numbers": [4],
         "files": [],
-        "lessons": [
-          {
-            "position": 35,
-            "material_id": "coding-and-fano",
-            "counts_toward_mastery": false
-          }
-        ],
-        "theory_links": [
-          {
-            "label": "Теория",
-            "section": "proizvedenie-dlin",
-            "material_id": "coding-and-fano"
-          }
-        ],
+        "lessons": [],
+        "theory_links": [],
         "catalog_visible": false,
-        "archived": false,
+        "archived": true,
         "sources": [
           {
             "url": null,
@@ -169135,22 +169077,10 @@
         "skills": [],
         "exam_numbers": [4],
         "files": [],
-        "lessons": [
-          {
-            "position": 36,
-            "material_id": "coding-and-fano",
-            "counts_toward_mastery": false
-          }
-        ],
-        "theory_links": [
-          {
-            "label": "Теория",
-            "section": "dva-trebovaniya",
-            "material_id": "coding-and-fano"
-          }
-        ],
+        "lessons": [],
+        "theory_links": [],
         "catalog_visible": false,
-        "archived": false,
+        "archived": true,
         "sources": [
           {
             "url": null,
@@ -169219,22 +169149,10 @@
         "skills": [],
         "exam_numbers": [4],
         "files": [],
-        "lessons": [
-          {
-            "position": 37,
-            "material_id": "coding-and-fano",
-            "counts_toward_mastery": false
-          }
-        ],
-        "theory_links": [
-          {
-            "label": "Теория",
-            "section": "zapis-slova",
-            "material_id": "coding-and-fano"
-          }
-        ],
+        "lessons": [],
+        "theory_links": [],
         "catalog_visible": false,
-        "archived": false,
+        "archived": true,
         "sources": [
           {
             "url": null,
@@ -169303,22 +169221,10 @@
         "skills": [],
         "exam_numbers": [4],
         "files": [],
-        "lessons": [
-          {
-            "position": 38,
-            "material_id": "coding-and-fano",
-            "counts_toward_mastery": false
-          }
-        ],
-        "theory_links": [
-          {
-            "label": "Теория",
-            "section": "chislo-edinic",
-            "material_id": "coding-and-fano"
-          }
-        ],
+        "lessons": [],
+        "theory_links": [],
         "catalog_visible": false,
-        "archived": false,
+        "archived": true,
         "sources": [
           {
             "url": null,
@@ -169387,22 +169293,10 @@
         "skills": [],
         "exam_numbers": [4],
         "files": [],
-        "lessons": [
-          {
-            "position": 39,
-            "material_id": "coding-and-fano",
-            "counts_toward_mastery": false
-          }
-        ],
-        "theory_links": [
-          {
-            "label": "Теория",
-            "section": "narushenie-fano",
-            "material_id": "coding-and-fano"
-          }
-        ],
+        "lessons": [],
+        "theory_links": [],
         "catalog_visible": false,
-        "archived": false,
+        "archived": true,
         "sources": [
           {
             "url": null,
@@ -169471,22 +169365,10 @@
         "skills": [],
         "exam_numbers": [4],
         "files": [],
-        "lessons": [
-          {
-            "position": 40,
-            "material_id": "coding-and-fano",
-            "counts_toward_mastery": false
-          }
-        ],
-        "theory_links": [
-          {
-            "label": "Теория",
-            "section": "kody-po-povtoram",
-            "material_id": "coding-and-fano"
-          }
-        ],
+        "lessons": [],
+        "theory_links": [],
         "catalog_visible": false,
-        "archived": false,
+        "archived": true,
         "sources": [
           {
             "url": null,
@@ -169555,22 +169437,10 @@
         "skills": [],
         "exam_numbers": [4],
         "files": [],
-        "lessons": [
-          {
-            "position": 41,
-            "material_id": "coding-and-fano",
-            "counts_toward_mastery": false
-          }
-        ],
-        "theory_links": [
-          {
-            "label": "Теория",
-            "section": "kody-po-povtoram",
-            "material_id": "coding-and-fano"
-          }
-        ],
+        "lessons": [],
+        "theory_links": [],
         "catalog_visible": false,
-        "archived": false,
+        "archived": true,
         "sources": [
           {
             "url": null,
@@ -169639,22 +169509,10 @@
         "skills": [],
         "exam_numbers": [4],
         "files": [],
-        "lessons": [
-          {
-            "position": 42,
-            "material_id": "coding-and-fano",
-            "counts_toward_mastery": false
-          }
-        ],
-        "theory_links": [
-          {
-            "label": "Теория",
-            "section": "uravnenie-na-dliny",
-            "material_id": "coding-and-fano"
-          }
-        ],
+        "lessons": [],
+        "theory_links": [],
         "catalog_visible": false,
-        "archived": false,
+        "archived": true,
         "sources": [
           {
             "url": null,
@@ -169723,22 +169581,10 @@
         "skills": [],
         "exam_numbers": [4],
         "files": [],
-        "lessons": [
-          {
-            "position": 43,
-            "material_id": "coding-and-fano",
-            "counts_toward_mastery": false
-          }
-        ],
-        "theory_links": [
-          {
-            "label": "Теория",
-            "section": "dva-slova",
-            "material_id": "coding-and-fano"
-          }
-        ],
+        "lessons": [],
+        "theory_links": [],
         "catalog_visible": false,
-        "archived": false,
+        "archived": true,
         "sources": [
           {
             "url": null,
@@ -169807,22 +169653,10 @@
         "skills": [],
         "exam_numbers": [4],
         "files": [],
-        "lessons": [
-          {
-            "position": 44,
-            "material_id": "coding-and-fano",
-            "counts_toward_mastery": false
-          }
-        ],
-        "theory_links": [
-          {
-            "label": "Теория",
-            "section": "metod-haffmana",
-            "material_id": "coding-and-fano"
-          }
-        ],
+        "lessons": [],
+        "theory_links": [],
         "catalog_visible": false,
-        "archived": false,
+        "archived": true,
         "sources": [
           {
             "url": null,
@@ -169860,7 +169694,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Для кодирования некоторой последовательности, состоящей из букв К, Л, М, Н, П, Р, решили использовать неравномерный двоичный код, удовлетворяющий условию Фано. Для букв К, Л, М, Н использовали соответственно кодовые слова `00`, `01`, `101`, `11`. Для букв П и Р кодовые слова неизвестны. Укажите кратчайшее возможное кодовое слово для буквы П. Если таких кодов несколько, укажите код с наименьшим числовым значением. (Подтемы 2 и 3: место для Р.)"
+              "markdown": "Для кодирования некоторой последовательности, состоящей из букв К, Л, М, Н, П, Р, решили использовать неравномерный двоичный код, удовлетворяющий условию Фано. Для букв К, Л, М, Н использовали соответственно кодовые слова `00`, `01`, `101`, `11`. Для букв П и Р кодовые слова неизвестны. Укажи кратчайшее возможное кодовое слово для буквы П. Если таких кодов несколько, укажи код с наименьшим числовым значением."
             }
           }
         ],
@@ -169876,15 +169710,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "`1000`: свободна только ветвь `100`; код `100` не оставил бы места Р."
+              "markdown": "Свободна только ветвь `100`; код `100` не оставил бы места Р."
             }
           },
           {
-            "type": "code_example",
+            "type": "text",
             "data": {
-              "language": "python",
-              "code": "def fano(codes):\n    for i in range(len(codes)):\n        for j in range(len(codes)):\n            if i != j and codes[j].startswith(codes[i]):\n                return False\n    return True\n\n\ndef codes_of(length):\n    return [bin(x)[2:].zfill(length)\n            for x in range(2 ** length)]\n\n\ndef free_branches(used):\n    \"\"\"Free vertices next to the paths of the used codes.\"\"\"\n    result = []\n    for code in used:\n        for k in range(len(code)):\n            for b in '01':\n                v = code[:k] + b\n                if all(not c.startswith(v)\n                       and not v.startswith(c) for c in used):\n                    if v not in result:\n                        result.append(v)\n    return result\n\n\ndef fill(d, k):\n    \"\"\"Depths of k letters in a branch of depth d: one letter\n    there, or two non-empty halves.\"\"\"\n    if k == 1:\n        return [[d]]\n    result = []\n    for i in range(1, k):\n        for left in fill(d + 1, i):\n            for right in fill(d + 1, k - i):\n                result.append(left + right)\n    return result\n\n\ndef leaves(depths, k):\n    \"\"\"Depths of k letters spread over the free branches.\"\"\"\n    if k == 0:\n        return [[]]\n    if not depths:\n        return []\n    d, rest = depths[0], depths[1:]\n    result = list(leaves(rest, k))\n    for here in range(1, k + 1):\n        for part in fill(d, here):\n            for tail in leaves(rest, k - here):\n                result.append(part + tail)\n    return result\n\n\ndef best(used, weights):\n    \"\"\"Smallest sum of weight · length of the new codes:\n    frequent letters take the short places.\"\"\"\n    depths = [len(v) for v in free_branches(used)]\n    w = sorted(weights, reverse=True)\n    return min(sum(x * y for x, y in zip(w, sorted(ls)))\n               for ls in leaves(depths, len(w)))\n\n\nfixed = ['00', '01', '101', '11']\nfor length in range(1, 8):\n    ok = [c for c in codes_of(length)\n          if fano(fixed + [c]) and free_branches(fixed + [c])]\n    if ok:\n        print(min(ok))\n        break",
-              "caption": "Решение программой"
+              "markdown": "Ответ: `1000`"
             }
           }
         ],
@@ -169893,7 +169725,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 45,
+            "position": 30,
             "material_id": "coding-and-fano"
           }
         ],
@@ -169937,7 +169769,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "По каналу связи передаются сообщения, содержащие только восемь букв: А, Б, В, Г, Д, Е, Ж, З. Используется двоичный код, удовлетворяющий условию Фано. Известны коды: А — `000`, Б — `01`, В — `100`, Г — `11`, Д — `1010`. Какое наименьшее количество двоичных знаков потребуется для кодирования трёх оставшихся букв? В ответе запишите суммарную длину кодовых слов для букв Е, Ж, З. (Подтема 3: несколько свободных ветвей.)"
+              "markdown": "По каналу связи передаются сообщения, содержащие только восемь букв: А, Б, В, Г, Д, Е, Ж, З. Используется двоичный код, удовлетворяющий условию Фано. Известны коды: А — `000`, Б — `01`, В — `100`, Г — `11`, Д — `1010`. Какое наименьшее количество двоичных знаков потребуется для кодирования трёх оставшихся букв? В ответе запишите суммарную длину кодовых слов для букв Е, Ж, З."
             }
           }
         ],
@@ -169953,15 +169785,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "12: свободны `001` и `1011`; делим более короткую `001` — места `0010`, `0011`, `1011`, 4 + 4 + 4 = 12."
+              "markdown": "Свободны `001` и `1011`; делим более короткую `001` — места `0010`, `0011`, `1011`, 4 + 4 + 4 = 12."
             }
           },
           {
-            "type": "code_example",
+            "type": "text",
             "data": {
-              "language": "python",
-              "code": "def fano(codes):\n    for i in range(len(codes)):\n        for j in range(len(codes)):\n            if i != j and codes[j].startswith(codes[i]):\n                return False\n    return True\n\n\ndef codes_of(length):\n    return [bin(x)[2:].zfill(length)\n            for x in range(2 ** length)]\n\n\ndef free_branches(used):\n    \"\"\"Free vertices next to the paths of the used codes.\"\"\"\n    result = []\n    for code in used:\n        for k in range(len(code)):\n            for b in '01':\n                v = code[:k] + b\n                if all(not c.startswith(v)\n                       and not v.startswith(c) for c in used):\n                    if v not in result:\n                        result.append(v)\n    return result\n\n\ndef fill(d, k):\n    \"\"\"Depths of k letters in a branch of depth d: one letter\n    there, or two non-empty halves.\"\"\"\n    if k == 1:\n        return [[d]]\n    result = []\n    for i in range(1, k):\n        for left in fill(d + 1, i):\n            for right in fill(d + 1, k - i):\n                result.append(left + right)\n    return result\n\n\ndef leaves(depths, k):\n    \"\"\"Depths of k letters spread over the free branches.\"\"\"\n    if k == 0:\n        return [[]]\n    if not depths:\n        return []\n    d, rest = depths[0], depths[1:]\n    result = list(leaves(rest, k))\n    for here in range(1, k + 1):\n        for part in fill(d, here):\n            for tail in leaves(rest, k - here):\n                result.append(part + tail)\n    return result\n\n\ndef best(used, weights):\n    \"\"\"Smallest sum of weight · length of the new codes:\n    frequent letters take the short places.\"\"\"\n    depths = [len(v) for v in free_branches(used)]\n    w = sorted(weights, reverse=True)\n    return min(sum(x * y for x, y in zip(w, sorted(ls)))\n               for ls in leaves(depths, len(w)))\n\n\nprint(best(['000', '01', '100', '11', '1010'], [1, 1, 1]))",
-              "caption": "Решение программой"
+              "markdown": "Ответ: `12`"
             }
           }
         ],
@@ -169970,7 +169800,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 46,
+            "position": 31,
             "material_id": "coding-and-fano"
           }
         ],
@@ -170014,7 +169844,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "По каналу связи передаются сообщения, содержащие только буквы А, Л, О, П, Т. Используется двоичный код, удовлетворяющий условию Фано. Кодовые слова для некоторых букв известны: Л — `0`, О — `10`. Какое наименьшее количество двоичных знаков потребуется для кодирования слова ЛОПАТА? (Подтема 4.)"
+              "markdown": "По каналу связи передаются сообщения, содержащие только буквы А, Л, О, П, Т. Используется двоичный код, удовлетворяющий условию Фано. Кодовые слова для некоторых букв известны: Л — `0`, О — `10`. Какое наименьшее количество двоичных знаков потребуется для кодирования слова ЛОПАТА?"
             }
           }
         ],
@@ -170030,15 +169860,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "17: свободна ветвь `11`; А встречается дважды и получает `110`, П и Т — `1110` и `1111`; 1 + 2 + 4 + 3 + 4 + 3 = 17."
+              "markdown": "Свободна ветвь `11`; А встречается дважды и получает `110`, П и Т — `1110` и `1111`; 1 + 2 + 4 + 3 + 4 + 3 = 17."
             }
           },
           {
-            "type": "code_example",
+            "type": "text",
             "data": {
-              "language": "python",
-              "code": "def fano(codes):\n    for i in range(len(codes)):\n        for j in range(len(codes)):\n            if i != j and codes[j].startswith(codes[i]):\n                return False\n    return True\n\n\ndef codes_of(length):\n    return [bin(x)[2:].zfill(length)\n            for x in range(2 ** length)]\n\n\ndef free_branches(used):\n    \"\"\"Free vertices next to the paths of the used codes.\"\"\"\n    result = []\n    for code in used:\n        for k in range(len(code)):\n            for b in '01':\n                v = code[:k] + b\n                if all(not c.startswith(v)\n                       and not v.startswith(c) for c in used):\n                    if v not in result:\n                        result.append(v)\n    return result\n\n\ndef fill(d, k):\n    \"\"\"Depths of k letters in a branch of depth d: one letter\n    there, or two non-empty halves.\"\"\"\n    if k == 1:\n        return [[d]]\n    result = []\n    for i in range(1, k):\n        for left in fill(d + 1, i):\n            for right in fill(d + 1, k - i):\n                result.append(left + right)\n    return result\n\n\ndef leaves(depths, k):\n    \"\"\"Depths of k letters spread over the free branches.\"\"\"\n    if k == 0:\n        return [[]]\n    if not depths:\n        return []\n    d, rest = depths[0], depths[1:]\n    result = list(leaves(rest, k))\n    for here in range(1, k + 1):\n        for part in fill(d, here):\n            for tail in leaves(rest, k - here):\n                result.append(part + tail)\n    return result\n\n\ndef best(used, weights):\n    \"\"\"Smallest sum of weight · length of the new codes:\n    frequent letters take the short places.\"\"\"\n    depths = [len(v) for v in free_branches(used)]\n    w = sorted(weights, reverse=True)\n    return min(sum(x * y for x, y in zip(w, sorted(ls)))\n               for ls in leaves(depths, len(w)))\n\n\nprint(1 + 2 + best(['0', '10'], [2, 1, 1]))",
-              "caption": "Решение программой"
+              "markdown": "Ответ: `17`"
             }
           }
         ],
@@ -170047,7 +169875,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 47,
+            "position": 32,
             "material_id": "coding-and-fano"
           }
         ],
@@ -170091,7 +169919,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "По каналу связи передаются сообщения, содержащие только буквы А, К, Н, Р, Т, Я. Используется двоичный код, удовлетворяющий условию Фано. Известен код буквы Р — `011`. Какое наименьшее количество двоичных знаков потребуется для кодирования слова ТАРАКАН? (Подтема 5: формы дерева.)"
+              "markdown": "По каналу связи передаются сообщения, содержащие только буквы А, К, Н, Р, Т, Я. Используется двоичный код, удовлетворяющий условию Фано. Известен код буквы Р — `011`. Какое наименьшее количество двоичных знаков потребуется для кодирования слова ТАРАКАН?"
             }
           }
         ],
@@ -170099,7 +169927,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Сравните формы дерева; Я нужна резервная ветвь."
+              "markdown": "Сравни два варианта дерева; букве Я нужна резервная ветвь."
             }
           }
         ],
@@ -170107,15 +169935,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "16: свободны `00`, `010` и `1`; А встречается трижды и получает `1`. Если Т взять кратчайший свободный `00`, то К, Н и резерв для Я уйдут в ветвь `010…` — 17. Лучше разделить `00`: Т — `000`, К — `001`, Н — `0100`, резерв — `0101`; Т | А | Р | А | К | А | Н — 3 + 1 + 3 + 1 + 3 + 1 + 4 = 16."
+              "markdown": "Свободны `00`, `010` и `1`; А встречается трижды и получает `1`. Если Т взять кратчайший свободный `00`, то К, Н и резерв для Я уйдут в ветвь `010…` — 17. Лучше разделить `00`: Т — `000`, К — `001`, Н — `0100`, резерв — `0101`; Т | А | Р | А | К | А | Н — 3 + 1 + 3 + 1 + 3 + 1 + 4 = 16."
             }
           },
           {
-            "type": "code_example",
+            "type": "text",
             "data": {
-              "language": "python",
-              "code": "def fano(codes):\n    for i in range(len(codes)):\n        for j in range(len(codes)):\n            if i != j and codes[j].startswith(codes[i]):\n                return False\n    return True\n\n\ndef codes_of(length):\n    return [bin(x)[2:].zfill(length)\n            for x in range(2 ** length)]\n\n\ndef free_branches(used):\n    \"\"\"Free vertices next to the paths of the used codes.\"\"\"\n    result = []\n    for code in used:\n        for k in range(len(code)):\n            for b in '01':\n                v = code[:k] + b\n                if all(not c.startswith(v)\n                       and not v.startswith(c) for c in used):\n                    if v not in result:\n                        result.append(v)\n    return result\n\n\ndef fill(d, k):\n    \"\"\"Depths of k letters in a branch of depth d: one letter\n    there, or two non-empty halves.\"\"\"\n    if k == 1:\n        return [[d]]\n    result = []\n    for i in range(1, k):\n        for left in fill(d + 1, i):\n            for right in fill(d + 1, k - i):\n                result.append(left + right)\n    return result\n\n\ndef leaves(depths, k):\n    \"\"\"Depths of k letters spread over the free branches.\"\"\"\n    if k == 0:\n        return [[]]\n    if not depths:\n        return []\n    d, rest = depths[0], depths[1:]\n    result = list(leaves(rest, k))\n    for here in range(1, k + 1):\n        for part in fill(d, here):\n            for tail in leaves(rest, k - here):\n                result.append(part + tail)\n    return result\n\n\ndef best(used, weights):\n    \"\"\"Smallest sum of weight · length of the new codes:\n    frequent letters take the short places.\"\"\"\n    depths = [len(v) for v in free_branches(used)]\n    w = sorted(weights, reverse=True)\n    return min(sum(x * y for x, y in zip(w, sorted(ls)))\n               for ls in leaves(depths, len(w)))\n\n\nprint(3 + best(['011'], [3, 1, 1, 1, 0]))",
-              "caption": "Решение программой"
+              "markdown": "Ответ: `16`"
             }
           }
         ],
@@ -170124,7 +169950,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 48,
+            "position": 33,
             "material_id": "coding-and-fano"
           }
         ],
@@ -170168,7 +169994,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Все заглавные буквы русского алфавита закодированы неравномерным двоичным кодом, в котором никакое кодовое слово не является началом другого кодового слова. Известен код буквы Р — `11`. Какое наименьшее число двоичных знаков может содержать код слова КОРОВА? (Подтемы 4 и 5: резерв для алфавита и формы дерева.)"
+              "markdown": "Все заглавные буквы русского алфавита закодированы неравномерным двоичным кодом, в котором никакое кодовое слово не является началом другого кодового слова. Известен код буквы Р — `11`. Какое наименьшее число двоичных знаков может содержать код слова КОРОВА?"
             }
           }
         ],
@@ -170184,15 +170010,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "15: свободны `0` и `10`; О встречается дважды. Код `0` для О заставляет К, В, А и резерв уйти в ветвь `10…` — 16. Лучше разделить `0`: К — `00`, О — `01`, В — `100`, А — `1010`, резерв — `1011`; К | О | Р | О | В | А — 2 + 2 + 2 + 2 + 3 + 4 = 15."
+              "markdown": "Свободны `0` и `10`; О встречается дважды. Код `0` для О заставляет К, В, А и резерв уйти в ветвь `10…` — 16. Лучше разделить `0`: К — `00`, О — `01`, В — `100`, А — `1010`, резерв — `1011`; К | О | Р | О | В | А — 2 + 2 + 2 + 2 + 3 + 4 = 15."
             }
           },
           {
-            "type": "code_example",
+            "type": "text",
             "data": {
-              "language": "python",
-              "code": "def fano(codes):\n    for i in range(len(codes)):\n        for j in range(len(codes)):\n            if i != j and codes[j].startswith(codes[i]):\n                return False\n    return True\n\n\ndef codes_of(length):\n    return [bin(x)[2:].zfill(length)\n            for x in range(2 ** length)]\n\n\ndef free_branches(used):\n    \"\"\"Free vertices next to the paths of the used codes.\"\"\"\n    result = []\n    for code in used:\n        for k in range(len(code)):\n            for b in '01':\n                v = code[:k] + b\n                if all(not c.startswith(v)\n                       and not v.startswith(c) for c in used):\n                    if v not in result:\n                        result.append(v)\n    return result\n\n\ndef fill(d, k):\n    \"\"\"Depths of k letters in a branch of depth d: one letter\n    there, or two non-empty halves.\"\"\"\n    if k == 1:\n        return [[d]]\n    result = []\n    for i in range(1, k):\n        for left in fill(d + 1, i):\n            for right in fill(d + 1, k - i):\n                result.append(left + right)\n    return result\n\n\ndef leaves(depths, k):\n    \"\"\"Depths of k letters spread over the free branches.\"\"\"\n    if k == 0:\n        return [[]]\n    if not depths:\n        return []\n    d, rest = depths[0], depths[1:]\n    result = list(leaves(rest, k))\n    for here in range(1, k + 1):\n        for part in fill(d, here):\n            for tail in leaves(rest, k - here):\n                result.append(part + tail)\n    return result\n\n\ndef best(used, weights):\n    \"\"\"Smallest sum of weight · length of the new codes:\n    frequent letters take the short places.\"\"\"\n    depths = [len(v) for v in free_branches(used)]\n    w = sorted(weights, reverse=True)\n    return min(sum(x * y for x, y in zip(w, sorted(ls)))\n               for ls in leaves(depths, len(w)))\n\n\nprint(2 + best(['11'], [2, 1, 1, 1, 0]))",
-              "caption": "Решение программой"
+              "markdown": "Ответ: `15`"
             }
           }
         ],
@@ -170201,7 +170025,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 49,
+            "position": 34,
             "material_id": "coding-and-fano"
           }
         ],
@@ -828197,7 +828021,6 @@
         "kod-bukvy",
         "dlina-kodovogo-slova",
         "ravnomernyj-kod",
-        "chislo-posledovatelnostej",
         "neodnoznachnost",
         "uslovie-fano",
         "chtenie-sleva",
@@ -828222,31 +828045,8 @@
         "bukva-ne-v-slove",
         "rezervnaya-vetv",
         "chastym-korotkie",
-        "dlina-itogo",
-        "korotkij-ne-vsegda",
         "lovushka-chastoj",
-        "dokazatelstvo-minimuma",
-        "lovushka-vtoroj",
-        "perebor-form",
-        "programma-perebora",
-        "forma-itogo",
-        "dopolnitelnyy-urok-podschet",
-        "podschet-kodov",
-        "maksimalnaya-dlina",
-        "proizvedenie-dlin",
-        "dva-trebovaniya",
-        "zapis-slova",
-        "chislo-edinic",
-        "narushenie-fano",
-        "podschet-itogo",
-        "dopolnitelnyy-urok-zapis",
-        "kody-po-povtoram",
-        "uravnenie-na-dliny",
-        "dva-slova",
-        "ne-tolko-fano",
-        "neravenstvo-krafta",
-        "metod-haffmana",
-        "zapis-itogo"
+        "dlina-itogo"
       ],
       "kind": "topic",
       "status": "published",
@@ -828260,7 +828060,6 @@
             "kod-bukvy",
             "dlina-kodovogo-slova",
             "ravnomernyj-kod",
-            "chislo-posledovatelnostej",
             "neodnoznachnost",
             "uslovie-fano",
             "chtenie-sleva",
@@ -828303,49 +828102,8 @@
             "bukva-ne-v-slove",
             "rezervnaya-vetv",
             "chastym-korotkie",
-            "dlina-itogo"
-          ]
-        },
-        {
-          "slug": "forma-dereva",
-          "access": "free",
-          "sections": [
-            "korotkij-ne-vsegda",
             "lovushka-chastoj",
-            "dokazatelstvo-minimuma",
-            "lovushka-vtoroj",
-            "perebor-form",
-            "programma-perebora",
-            "forma-itogo"
-          ]
-        },
-        {
-          "slug": "podschet-i-velichiny",
-          "access": "free",
-          "sections": [
-            "dopolnitelnyy-urok-podschet",
-            "podschet-kodov",
-            "maksimalnaya-dlina",
-            "proizvedenie-dlin",
-            "dva-trebovaniya",
-            "zapis-slova",
-            "chislo-edinic",
-            "narushenie-fano",
-            "podschet-itogo"
-          ]
-        },
-        {
-          "slug": "kod-po-zapisi",
-          "access": "free",
-          "sections": [
-            "dopolnitelnyy-urok-zapis",
-            "kody-po-povtoram",
-            "uravnenie-na-dliny",
-            "dva-slova",
-            "ne-tolko-fano",
-            "neravenstvo-krafta",
-            "metod-haffmana",
-            "zapis-itogo"
+            "dlina-itogo"
           ]
         }
       ],

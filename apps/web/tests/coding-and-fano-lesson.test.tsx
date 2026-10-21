@@ -1,4 +1,3 @@
-import { spawnSync } from "node:child_process";
 import { isValidElement } from "react";
 import { describe, expect, it, vi } from "vitest";
 import {
@@ -75,18 +74,8 @@ function pieces(node: React.ReactNode, out: Piece[] = []): Piece[] {
   return pieces(node.props.children as React.ReactNode, out);
 }
 
-/** A complete definition, not a one-line fragment shown for explanation. */
-function compiles(code: string): boolean {
-  const check = spawnSync(
-    "python3",
-    ["-I", "-c", "import sys; compile(sys.stdin.read(), 'block', 'exec')"],
-    { input: code, encoding: "utf8" },
-  );
-  return check.status === 0;
-}
-
 describe("task 4 Fano condition lesson (Change 184)", () => {
-  it("has five core subtopics, two advanced and their self-checks", () => {
+  it("has four core subtopics and their self-checks", () => {
     expect(lesson).toMatchObject({
       id: "coding-and-fano",
       routeSlug: "4-kodirovanie-i-uslovie-fano",
@@ -101,12 +90,9 @@ describe("task 4 Fano condition lesson (Change 184)", () => {
       ["kodovoe-derevo", "core"],
       ["mesto-dlya-vseh-bukv", "core"],
       ["dlina-slova", "core"],
-      ["forma-dereva", "core"],
-      ["podschet-i-velichiny", "advanced"],
-      ["kod-po-zapisi", "advanced"],
     ]);
     expect(subtopics.map(({ checkpoint }) => checkpoint?.length ?? 0)).toEqual([
-      6, 2, 0, 0, 1, 1, 2,
+      5, 4, 5, 4,
     ]);
     expect(lesson.examFocus).toBeDefined();
     expect(lesson.result).toBeDefined();
@@ -132,62 +118,11 @@ describe("task 4 Fano condition lesson (Change 184)", () => {
     expect(publicPaths).toContain("/ege/4-kodirovanie-i-uslovie-fano/praktika");
   });
 
-  it("runs every program that shows its output and gets that output", () => {
-    // The rule of scripts/lesson_design/verify_code.py: programs run next to
-    // the lesson's folder (topic 4 has no data files); a fragment that continues an earlier
-    // program of the same page runs after it, with that output discarded.
-    const files = process.cwd(); // the topic has no data files
-    let prelude = "";
-    let earlier = "";
-    let ran = 0;
-    const run = (code: string) =>
-      spawnSync("python3", ["-I", "-c", code], {
-        encoding: "utf8",
-        cwd: files,
-      });
-    const byId = new Map(lesson.theory.map((block) => [block.id, block]));
-    for (const subtopic of lessonSubtopics(lesson)) {
-      earlier = ""; // continuations stay within one subtopic page
-      const page = subtopic.conceptIds.map((id) => byId.get(id)?.explanation);
-      for (const piece of pieces(page)) {
-        if (piece.kind === "run") {
-          // later programs of the page may call its function (verify_code.py)
-          const result = run(prelude + piece.code);
-          expect(result.stdout.trim(), piece.code).toBe(piece.output.trim());
-          earlier += piece.code + "\n";
-          ran += 1;
-          // and so may every later page: its definitions join the prelude
-          for (const part of piece.code.split("\n\n\n"))
-            if (part.startsWith("def ")) prelude += part + "\n";
-          continue;
-        }
-        if (piece.kind !== "code" || piece.language !== "python") continue;
-        if (piece.output !== undefined && piece.code.includes("print")) {
-          let result = run(prelude + piece.code);
-          if (result.status !== 0 && earlier) {
-            result = run(
-              prelude +
-                "import contextlib, io\n" +
-                "with contextlib.redirect_stdout(io.StringIO()):\n" +
-                `    exec(compile(${JSON.stringify(earlier)}, 'earlier', 'exec'))\n` +
-                piece.code,
-            );
-          }
-          expect(result.status, result.stderr).toBe(0);
-          expect(result.stdout.trim(), piece.code).toBe(piece.output.trim());
-          earlier += piece.code + "\n";
-          ran += 1;
-        }
-        if (
-          /^def /mu.test(piece.code) &&
-          !piece.code.includes("print") &&
-          compiles(piece.code)
-        )
-          prelude += piece.code + "\n";
-      }
-    }
-    expect(ran).toBe(10);
-  }, 60_000);
+  it("is solved with the code tree, without programs (Change 197)", () => {
+    expect(
+      pieces(authoredContent).filter(({ kind }) => kind !== "text"),
+    ).toEqual([]);
+  });
 
   it("keeps spaces around inline code, links and emphasis", () => {
     const html = renderAuthoredLessonContent(authoredContent).innerHTML.replace(
@@ -209,14 +144,11 @@ describe("task 4 Fano condition lesson (Change 184)", () => {
     expect(
       container.querySelectorAll("figure[data-lesson-diagram]"),
     ).toHaveLength(diagrams.length);
-    expect(media.filter((item) => item.kind === "stepper")).toHaveLength(5);
+    expect(media.filter((item) => item.kind === "stepper")).toHaveLength(4);
     expect(container.querySelectorAll("img, video")).toHaveLength(0);
     expect(container.querySelectorAll("[data-topic-cheat-sheet]")).toHaveLength(
       1,
     );
-    expect(
-      container.querySelectorAll("[data-python-term]").length,
-    ).toBeGreaterThanOrEqual(10);
     expect(container.querySelectorAll("aside, [role='note']")).toHaveLength(0);
   });
 });
