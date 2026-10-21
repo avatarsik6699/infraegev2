@@ -132944,19 +132944,19 @@
     {
       "task": {
         "id": "excel-conditions-t03",
-        "title": "Что вернут =A2>10 и =A2>=10 при A2 = 10?",
+        "title": "«Больше» на границе",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 1,
         "estimated_minutes": null,
-        "answer_instruction": "Запишите ответы через пробел в порядке вопроса.",
+        "answer_instruction": "Введите ИСТИНА или ЛОЖЬ.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Что вернут `=A2>10` и `=A2>=10` при `A2` = 10?"
+              "markdown": "Что вернёт `=A2>10` при `A2` = 10?"
             }
           }
         ],
@@ -132964,7 +132964,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Проверки и ЕСЛИ»: рассуди по шагам, а затем проверь в Excel."
+              "markdown": "«Больше» не включает границу."
             }
           }
         ],
@@ -132972,7 +132972,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "`ЛОЖЬ` и `ИСТИНА`."
+              "markdown": "10 не больше 10 — `ЛОЖЬ`."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `ЛОЖЬ`"
             }
           }
         ],
@@ -133004,7 +133010,7 @@
         ],
         "checker": {
           "checker_type": "exact_match",
-          "answer_variants": ["ЛОЖЬ ИСТИНА"],
+          "answer_variants": ["ЛОЖЬ"],
           "numeric_tolerance": null
         }
       },
@@ -133013,7 +133019,7 @@
     {
       "task": {
         "id": "excel-conditions-t06",
-        "title": "Баллы пяти учеников: 35, 40, 55, 70, 71",
+        "title": "Признак по баллам",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 1,
@@ -133025,7 +133031,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Баллы пяти учеников: 35, 40, 55, 70, 71. Сколько из них дадут признак 1 в задаче 1?"
+              "markdown": "Баллы пяти учеников: 35, 40, 55, 70, 71. У скольких из них `=ЕСЛИ(И(A2>=40;A2<=70);1;0)` даст 1?"
             }
           }
         ],
@@ -133033,7 +133039,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Проверки и ЕСЛИ»: рассуди по шагам, а затем проверь в Excel."
+              "markdown": "Границы 40 и 70 входят."
             }
           }
         ],
@@ -133041,7 +133047,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Три: 40, 55 и 70."
+              "markdown": "Подходят 40, 55 и 70; 35 и 71 — нет."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `3`"
             }
           }
         ],
@@ -133050,7 +133062,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 1,
+            "position": 5,
             "material_id": "excel-conditions"
           }
         ],
@@ -133082,19 +133094,19 @@
     {
       "task": {
         "id": "excel-conditions-t08",
-        "title": "Составь лист: в A2:A6 — числа 12, 7, 20, 3, 15; в B — признак «число от 5 до…",
+        "title": "Сделай сам: признак и итог",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 2,
         "estimated_minutes": null,
-        "answer_instruction": "Запишите ответы через пробел в порядке вопроса.",
+        "answer_instruction": "Введите число.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Составь лист: в `A2:A6` — числа 12, 7, 20, 3, 15; в B — признак «число от 5 до 15 включительно», в `B8` — количество подходящих чисел. Какие признаки и какой итог получатся?"
+              "markdown": "Составь лист: в `A2:A6` — числа 12, 7, 20, 3, 15; в B — признак «число от 5 до 15 включительно», в `B8` — количество подходящих чисел. Чему равно `B8`?"
             }
           },
           {
@@ -133108,7 +133120,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Проверки и ЕСЛИ»: рассуди по шагам, а затем проверь в Excel."
+              "markdown": "Признак `=ЕСЛИ(И(A2>=5;A2<=15);1;0)` в каждой строке, итог — сумма признаков."
             }
           }
         ],
@@ -133116,7 +133128,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Признаки 1, 1, 0, 0, 1; итог 3."
+              "markdown": "Признаки 1, 1, 0, 0, 1 — подходят 12, 7 и 15; в `B8` `=СУММ(B2:B6)` = 3."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `3`"
             }
           }
         ],
@@ -133134,7 +133152,7 @@
         ],
         "lessons": [
           {
-            "position": 2,
+            "position": 8,
             "material_id": "excel-conditions"
           }
         ],
@@ -133157,7 +133175,7 @@
         ],
         "checker": {
           "checker_type": "exact_match",
-          "answer_variants": ["1 1 0 0 1 3"],
+          "answer_variants": ["3"],
           "numeric_tolerance": null
         }
       },
@@ -133166,7 +133184,7 @@
     {
       "task": {
         "id": "excel-numbers-t01",
-        "title": "Цена 800 рублей увеличилась на 15%, затем уменьшилась на 15%",
+        "title": "Рост и падение на 15%",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 1,
@@ -133178,7 +133196,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Цена 800 рублей увеличилась на 15%, затем уменьшилась на 15%. Найди итоговую цену. Почему она не равна исходной?"
+              "markdown": "Цена 800 рублей выросла на 15%, затем упала на 15%. Какой стала цена?"
             }
           }
         ],
@@ -133186,7 +133204,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Проценты, округление, остаток»: рассуди по шагам, а затем проверь в Excel."
+              "markdown": "Второй процент берётся от новой цены."
             }
           }
         ],
@@ -133194,7 +133212,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "800×1,15×0,85=782. Уменьшение применяется уже к 920, поэтому размер второго изменения в рублях больше первого. Два одинаковых процента с разными основаниями не взаимоуничтожаются."
+              "markdown": "800 × 1,15 = 920, затем 920 × 0,85 = 782 — меньше исходной: падение считается от большего числа."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `782`"
             }
           }
         ],
@@ -133235,7 +133259,7 @@
     {
       "task": {
         "id": "excel-numbers-t02",
-        "title": "Для 37 предметов используются коробки вместимостью 8",
+        "title": "Коробки по 8",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 1,
@@ -133247,7 +133271,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Для 37 предметов используются коробки вместимостью 8. Сколько коробок нужно? Запиши формулу."
+              "markdown": "Сколько коробок вместимостью 8 нужно для 37 предметов?"
             }
           }
         ],
@@ -133255,7 +133279,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Проценты, округление, остаток»: рассуди по шагам, а затем проверь в Excel."
+              "markdown": "Частное 37 / 8 округляют вверх."
             }
           }
         ],
@@ -133263,7 +133287,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Пять коробок. `=ОКРУГЛВВЕРХ(37/8;0)`. Четыре коробки вмещают только 32 предмета."
+              "markdown": "37 / 8 = 4,625 → 5: четыре коробки вмещают только 32 предмета. `=ОКРУГЛВВЕРХ(37/8;0)`."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `5`"
             }
           }
         ],
@@ -133272,7 +133302,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 1,
+            "position": 2,
             "material_id": "excel-numbers"
           }
         ],
@@ -133304,19 +133334,19 @@
     {
       "task": {
         "id": "excel-numbers-t04",
-        "title": "Найди =ОКРУГЛ(3456;-2), =ОКРУГЛВНИЗ(7,99;0) и =ОКРУГЛВВЕРХ(-0,1;0)",
+        "title": "Округление до сотен",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 1,
         "estimated_minutes": null,
-        "answer_instruction": "Запишите ответы через пробел в порядке вопроса.",
+        "answer_instruction": "Введите число.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Найди `=ОКРУГЛ(3456;-2)`, `=ОКРУГЛВНИЗ(7,99;0)` и `=ОКРУГЛВВЕРХ(-0,1;0)`."
+              "markdown": "Чему равно `=ОКРУГЛ(3456;-2)`?"
             }
           }
         ],
@@ -133324,7 +133354,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Проценты, округление, остаток»: рассуди по шагам, а затем проверь в Excel."
+              "markdown": "Второй аргумент −2 — округление до сотен."
             }
           }
         ],
@@ -133332,76 +133362,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "3500, 7 и −1."
+              "markdown": "3456 ближе к 3500, чем к 3400."
             }
-          }
-        ],
-        "skills": [],
-        "exam_numbers": [],
-        "files": [],
-        "lessons": [
-          {
-            "position": 2,
-            "material_id": "excel-numbers"
-          }
-        ],
-        "theory_links": [],
-        "catalog_visible": false,
-        "archived": false,
-        "sources": [
-          {
-            "url": null,
-            "kind": "original",
-            "role": "original",
-            "year": null,
-            "title": null,
-            "author": null,
-            "primary": true,
-            "is_public": true,
-            "adaptation": null,
-            "original_id": null
-          }
-        ],
-        "checker": {
-          "checker_type": "exact_match",
-          "answer_variants": ["3500 7 -1", "3500 7 −1"],
-          "numeric_tolerance": null
-        }
-      },
-      "solution_revision": 1
-    },
-    {
-      "task": {
-        "id": "excel-numbers-t05",
-        "title": "Чему равны ЦЕЛОЕ(-4,5) и ОТБР(-4,5)?",
-        "short_description": null,
-        "explanation_kind": "unclassified",
-        "difficulty": 1,
-        "estimated_minutes": null,
-        "answer_instruction": "Запишите ответы через пробел в порядке вопроса.",
-        "interaction_type": "production",
-        "content_schema_version": 1,
-        "statement": [
+          },
           {
             "type": "text",
             "data": {
-              "markdown": "Чему равны `ЦЕЛОЕ(-4,5)` и `ОТБР(-4,5)`?"
-            }
-          }
-        ],
-        "hint": [
-          {
-            "type": "text",
-            "data": {
-              "markdown": "Опора — урок «Проценты, округление, остаток»: рассуди по шагам, а затем проверь в Excel."
-            }
-          }
-        ],
-        "explanation": [
-          {
-            "type": "text",
-            "data": {
-              "markdown": "−5 и −4."
+              "markdown": "Ответ: `3500`"
             }
           }
         ],
@@ -133433,7 +133400,7 @@
         ],
         "checker": {
           "checker_type": "exact_match",
-          "answer_variants": ["-5 -4", "−5 −4"],
+          "answer_variants": ["3500"],
           "numeric_tolerance": null
         }
       },
@@ -133441,20 +133408,20 @@
     },
     {
       "task": {
-        "id": "excel-numbers-t09",
-        "title": "Три цены 1,4, 1,4 и 1,4 нужно сложить и округлить до целого",
+        "id": "excel-numbers-t05",
+        "title": "ЦЕЛОЕ отрицательного",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 1,
         "estimated_minutes": null,
-        "answer_instruction": "Запишите ответы через пробел в порядке вопроса.",
+        "answer_instruction": "Введите число.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Три цены 1,4, 1,4 и 1,4 нужно сложить и округлить до целого. Сравни два порядка: сначала округлить каждую, потом сложить, и наоборот."
+              "markdown": "Чему равно `=ЦЕЛОЕ(-4,5)`?"
             }
           }
         ],
@@ -133462,7 +133429,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Проценты, округление, остаток»: рассуди по шагам, а затем проверь в Excel."
+              "markdown": "`ЦЕЛОЕ` идёт влево по числовой прямой."
             }
           }
         ],
@@ -133470,7 +133437,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Округлить каждую и сложить — 3, сложить и округлить — 4: 4,2 округляется до 4."
+              "markdown": "Ближайшее целое слева от −4,5 — −5."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `-5`"
             }
           }
         ],
@@ -133479,7 +133452,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 4,
+            "position": 6,
             "material_id": "excel-numbers"
           }
         ],
@@ -133502,7 +133475,7 @@
         ],
         "checker": {
           "checker_type": "exact_match",
-          "answer_variants": ["3 4"],
+          "answer_variants": ["-5", "−5"],
           "numeric_tolerance": null
         }
       },
@@ -133510,8 +133483,8 @@
     },
     {
       "task": {
-        "id": "excel-conditional-count-t04",
-        "title": "В строке 2, 3, 6, 7 нужно посчитать элементы, кратные 2 или 3",
+        "id": "excel-numbers-t09",
+        "title": "Округлить, потом сложить",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 1,
@@ -133523,7 +133496,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "В строке 2, 3, 6, 7 нужно посчитать элементы, кратные 2 или 3. Почему сложение двух отдельных количеств без поправки даёт ошибку?"
+              "markdown": "Три цены по 1,4. Округли каждую до целого, затем сложи. Что получится?"
             }
           }
         ],
@@ -133531,7 +133504,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Подсчёт и сумма по условию»: рассуди по шагам, а затем проверь в Excel."
+              "markdown": "1,4 округляется до 1."
             }
           }
         ],
@@ -133539,7 +133512,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Подходят 2, 3 и 6: ответ 3. Кратных 2 два, кратных 3 два, но 6 попало в обе группы. Нужно 2+2−1=3 или один признак через `ИЛИ`."
+              "markdown": "1 + 1 + 1 = 3."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `3`"
             }
           }
         ],
@@ -133548,7 +133527,82 @@
         "files": [],
         "lessons": [
           {
-            "position": 0,
+            "position": 8,
+            "material_id": "excel-numbers"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["3"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-conditional-count-t04",
+        "title": "Кратные 2 или 3",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Введите число.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "В строке 2, 3, 6, 7. Сколько элементов кратны 2 или 3?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "6 кратно и 2, и 3 — считай его один раз."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Подходят 2, 3 и 6: 2 + 2 − 1 = 3, общая часть вычтена."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `3`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 5,
             "material_id": "excel-conditional-count"
           }
         ],
@@ -133580,19 +133634,19 @@
     {
       "task": {
         "id": "excel-conditional-count-t05",
-        "title": "Запиши частоты для строки 7, 7, 2, 2, 5, 9",
+        "title": "Частота одного числа",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 1,
         "estimated_minutes": null,
-        "answer_instruction": "Запишите ответы через пробел в порядке вопроса.",
+        "answer_instruction": "Введите число.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Запиши частоты для строки 7, 7, 2, 2, 5, 9. Сколько разных значений повторяется? Сколько позиций занято повторяющимися элементами?"
+              "markdown": "В `A2:F2` — 7, 7, 2, 2, 5, 9. Что вернёт `=СЧЁТЕСЛИ($A2:$F2;C2)`?"
             }
           }
         ],
@@ -133600,7 +133654,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Подсчёт и сумма по условию»: рассуди по шагам, а затем проверь в Excel."
+              "markdown": "В `C2` число 2 — сколько раз оно встречается в строке?"
             }
           }
         ],
@@ -133608,7 +133662,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Частоты 2, 2, 2, 2, 1, 1. Повторяются два разных значения — 7 и 2. Они занимают четыре позиции."
+              "markdown": "Двойка стоит в `C2` и `D2` — частота 2."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `2`"
             }
           }
         ],
@@ -133617,7 +133677,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 1,
+            "position": 6,
             "material_id": "excel-conditional-count"
           }
         ],
@@ -133640,7 +133700,7 @@
         ],
         "checker": {
           "checker_type": "exact_match",
-          "answer_variants": ["2 2 2 2 1 1 2 4"],
+          "answer_variants": ["2"],
           "numeric_tolerance": null
         }
       },
@@ -133649,19 +133709,19 @@
     {
       "task": {
         "id": "excel-conditional-count-t06",
-        "title": "Для строки 6, 6, 1, 2, 3, 9 найди сумму одиночных и сумму повторяющихся…",
+        "title": "Сделай сам: сумма одиночных",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 2,
         "estimated_minutes": null,
-        "answer_instruction": "Запишите ответы через пробел в порядке вопроса.",
+        "answer_instruction": "Введите число.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Для строки 6, 6, 1, 2, 3, 9 найди сумму одиночных и сумму повторяющихся элементов."
+              "markdown": "Для строки 6, 6, 1, 2, 3, 9 найди сумму одиночных элементов."
             }
           },
           {
@@ -133675,7 +133735,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Подсчёт и сумма по условию»: рассуди по шагам, а затем проверь в Excel."
+              "markdown": "Одиночные — числа с частотой 1."
             }
           }
         ],
@@ -133683,7 +133743,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Одиночные 15 (1 + 2 + 3 + 9), повторяющиеся 12 (6 + 6)."
+              "markdown": "Частоты 2, 2, 1, 1, 1, 1; одиночные 1 + 2 + 3 + 9 = 15: `=СУММЕСЛИ(G2:L2;1;A2:F2)`."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `15`"
             }
           }
         ],
@@ -133701,7 +133767,7 @@
         ],
         "lessons": [
           {
-            "position": 2,
+            "position": 9,
             "material_id": "excel-conditional-count"
           }
         ],
@@ -133724,7 +133790,7 @@
         ],
         "checker": {
           "checker_type": "exact_match",
-          "answer_variants": ["15 12"],
+          "answer_variants": ["15"],
           "numeric_tolerance": null
         }
       },
@@ -133768,12 +133834,7 @@
         "skills": [],
         "exam_numbers": [],
         "files": [],
-        "lessons": [
-          {
-            "position": 3,
-            "material_id": "excel-conditional-count"
-          }
-        ],
+        "lessons": [],
         "theory_links": [],
         "catalog_visible": false,
         "archived": false,
@@ -133837,12 +133898,7 @@
         "skills": [],
         "exam_numbers": [],
         "files": [],
-        "lessons": [
-          {
-            "position": 4,
-            "material_id": "excel-conditional-count"
-          }
-        ],
+        "lessons": [],
         "theory_links": [],
         "catalog_visible": false,
         "archived": false,
@@ -133871,19 +133927,19 @@
     {
       "task": {
         "id": "excel-conditional-count-t09",
-        "title": "В A2:A5 — 10, 15, 20, 25",
+        "title": "Сумма по категории",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 1,
         "estimated_minutes": null,
-        "answer_instruction": "Запишите ответы через пробел в порядке вопроса.",
+        "answer_instruction": "Введите число.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "В `A2:A5` — 10, 15, 20, 25. Что вернут `=СУММЕСЛИ(A2:A5;\">=15\")` и `=СРЗНАЧЕСЛИ(A2:A5;\">30\")`?"
+              "markdown": "В `A2:A5` — Книги, Еда, Книги, Игрушки, в `D2:D5` — 100, 50, 200, 300. Что вернёт `=СУММЕСЛИ(A2:A5;\"Книги\";D2:D5)`?"
             }
           }
         ],
@@ -133891,7 +133947,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Подсчёт и сумма по условию»: рассуди по шагам, а затем проверь в Excel."
+              "markdown": "Складываются числа из D тех строк, где в A «Книги»."
             }
           }
         ],
@@ -133899,7 +133955,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "60 и `#ДЕЛ/0!`: подходящих чисел нет."
+              "markdown": "Книги в строках 2 и 4: 100 + 200 = 300."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `300`"
             }
           }
         ],
@@ -133908,7 +133970,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 5,
+            "position": 3,
             "material_id": "excel-conditional-count"
           }
         ],
@@ -133931,7 +133993,7 @@
         ],
         "checker": {
           "checker_type": "exact_match",
-          "answer_variants": ["60 #ДЕЛ/0!"],
+          "answer_variants": ["300"],
           "numeric_tolerance": null
         }
       },
@@ -133940,19 +134002,19 @@
     {
       "task": {
         "id": "excel-text-dates-t01",
-        "title": "Что вернут =ЛЕВСИМВ(\"Москва\";3), =ПРАВСИМВ(\"Москва\";2) и =ПСТР(\"Москва\";2;4)?",
+        "title": "ЛЕВСИМВ",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 1,
         "estimated_minutes": null,
-        "answer_instruction": "Запишите ответы через пробел в порядке вопроса.",
+        "answer_instruction": "Введите текст без кавычек.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Что вернут `=ЛЕВСИМВ(\"Москва\";3)`, `=ПРАВСИМВ(\"Москва\";2)` и `=ПСТР(\"Москва\";2;4)`?"
+              "markdown": "Что вернёт `=ЛЕВСИМВ(\"Москва\";3)`?"
             }
           }
         ],
@@ -133960,7 +134022,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Текст и даты»: рассуди по шагам, а затем проверь в Excel."
+              "markdown": "Первые символы слева, сколько указано."
             }
           }
         ],
@@ -133968,7 +134030,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Мос, ва и оскв."
+              "markdown": "Три первых символа — «Мос»."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `Мос`"
             }
           }
         ],
@@ -134000,7 +134068,7 @@
         ],
         "checker": {
           "checker_type": "exact_match",
-          "answer_variants": ["Мос ва оскв"],
+          "answer_variants": ["Мос"],
           "numeric_tolerance": null
         }
       },
@@ -134009,19 +134077,19 @@
     {
       "task": {
         "id": "excel-text-dates-t02",
-        "title": "Чему равна =ДЛСТР(\" да \")?",
+        "title": "Длина с пробелами",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 1,
         "estimated_minutes": null,
-        "answer_instruction": "Запишите ответы через пробел в порядке вопроса.",
+        "answer_instruction": "Введите число.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Чему равна `=ДЛСТР(\" да \")`? А `=ДЛСТР(СЖПРОБЕЛЫ(\" да \"))`?"
+              "markdown": "Чему равна `=ДЛСТР(\" да \")`?"
             }
           }
         ],
@@ -134029,7 +134097,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Текст и даты»: рассуди по шагам, а затем проверь в Excel."
+              "markdown": "Пробелы — тоже символы."
             }
           }
         ],
@@ -134037,7 +134105,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "4 и 2."
+              "markdown": "Пробел, «д», «а», пробел — 4."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `4`"
             }
           }
         ],
@@ -134046,7 +134120,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 1,
+            "position": 3,
             "material_id": "excel-text-dates"
           }
         ],
@@ -134069,7 +134143,7 @@
         ],
         "checker": {
           "checker_type": "exact_match",
-          "answer_variants": ["4 2"],
+          "answer_variants": ["4"],
           "numeric_tolerance": null
         }
       },
@@ -808618,6 +808692,2031 @@
         }
       },
       "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-conditions-t09",
+        "title": "«Не меньше» на границе",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Введите ИСТИНА или ЛОЖЬ.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Что вернёт `=A2>=10` при `A2` = 10?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "«Не меньше» включает границу."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "10 не меньше 10 — `ИСТИНА`."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `ИСТИНА`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 1,
+            "material_id": "excel-conditions"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["ИСТИНА"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-conditions-t10",
+        "title": "Цепочка сравнений",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Введите ИСТИНА или ЛОЖЬ.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Что вернёт `=10<=A2<=20` при `A2` = 15?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Сравнения выполняются по очереди: результат первого сравнивается с 20."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "10<=15 даёт `ИСТИНА`, затем `ИСТИНА<=20` — `ЛОЖЬ`: логическое значение Excel считает больше любого числа."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `ЛОЖЬ`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 2,
+            "material_id": "excel-conditions"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["ЛОЖЬ"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-conditions-t11",
+        "title": "ИЛИ на границе",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Введите ИСТИНА или ЛОЖЬ.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Что вернёт `=ИЛИ(A2<10;A2>20)` при `A2` = 20?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Проверь обе части: меньше ли 20 десяти и больше ли 20 двадцати."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "20<10 — `ЛОЖЬ`, 20>20 — `ЛОЖЬ`; ни одна не истинна, `ИЛИ` даёт `ЛОЖЬ`."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `ЛОЖЬ`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 3,
+            "material_id": "excel-conditions"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["ЛОЖЬ"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-conditions-t12",
+        "title": "Ровно одна из двух",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Введите ИСТИНА или ЛОЖЬ.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "В `A2` — `ИСТИНА`, в `B2` — `ИСТИНА`. Что вернёт `=A2<>B2`?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "`A2<>B2` истинно, только когда значения различаются."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Обе проверки истинны, значения равны — `ЛОЖЬ`: «ровно одна» не выполнена."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `ЛОЖЬ`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 4,
+            "material_id": "excel-conditions"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["ЛОЖЬ"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-conditions-t13",
+        "title": "ЕСЛИ выбирает большее",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Введите число.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Что вернёт `=ЕСЛИ(A2>B2;A2;B2)` при `A2` = 3 и `B2` = 8?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Условие ложно — `ЕСЛИ` берёт третий аргумент."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "3>8 — `ЛОЖЬ`, поэтому результат — `B2`, то есть 8."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `8`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 6,
+            "material_id": "excel-conditions"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["8"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-conditions-t14",
+        "title": "Защита деления",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Введите ответ так, как его покажет Excel.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "В `A2` — 120, в `B2` — 0. Что вернёт `=ЕСЛИ(B2=0;\"нет данных\";A2/B2)`?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "При нуле в `B2` условие истинно."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "`B2=0` — `ИСТИНА`, `ЕСЛИ` выбирает текст и не делит."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `нет данных`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 7,
+            "material_id": "excel-conditions"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["нет данных"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-numbers-t10",
+        "title": "Процент изменения",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Введите число процентов без знака %.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Цена выросла с 250 до 300 рублей. На сколько процентов?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "(новое − старое) / старое."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "(300 − 250) / 250 = 0,2 — это 20%."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `20`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 1,
+            "material_id": "excel-numbers"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["20"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-numbers-t11",
+        "title": "ОКРУГЛВНИЗ",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Введите число.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Чему равно `=ОКРУГЛВНИЗ(7,99;0)`?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "`ОКРУГЛВНИЗ` округляет к нулю."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "7,99 к нулю — 7."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `7`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 4,
+            "material_id": "excel-numbers"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["7"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-numbers-t12",
+        "title": "ОКРУГЛВВЕРХ у отрицательного",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Введите число.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Чему равно `=ОКРУГЛВВЕРХ(-0,1;0)`?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "`ОКРУГЛВВЕРХ` округляет от нуля."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "От нуля для −0,1 — это −1."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `-1`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 5,
+            "material_id": "excel-numbers"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["-1", "−1"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-numbers-t13",
+        "title": "ОТБР отрицательного",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Введите число.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Чему равно `=ОТБР(-4,5)`?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "`ОТБР` просто отбрасывает дробную часть."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "−4,5 без дробной части — −4."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `-4`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 7,
+            "material_id": "excel-numbers"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["-4", "−4"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-numbers-t14",
+        "title": "Сложить, потом округлить",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Введите число.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Те же три цены по 1,4 сначала сложи, затем округли до целого. Что получится?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Сначала сумма: 1,4 × 3."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "1,4 × 3 = 4,2 → 4. Порядок округления меняет ответ."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `4`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 9,
+            "material_id": "excel-numbers"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["4"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-numbers-t15",
+        "title": "Остаток от деления",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Введите число.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Чему равно `=ОСТАТ(100;7)`?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Сколько полных семёрок помещается в 100?"
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "7 × 14 = 98, 100 = 14 × 7 + 2."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `2`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 10,
+            "material_id": "excel-numbers"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["2"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-numbers-t16",
+        "title": "Последняя цифра отрицательного",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Введите число.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Что вернёт `=ОСТАТ(ABS(A2);10)` при `A2` = −127?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "`ABS` убирает знак, `ОСТАТ` по 10 даёт последнюю цифру."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "ABS(−127) = 127, ОСТАТ(127;10) = 7."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `7`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 11,
+            "material_id": "excel-numbers"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["7"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-conditional-count-t10",
+        "title": "СЧЁТЕСЛИ со сравнением",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Введите число.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "В `A2:A7` — 5, 7, 10, 5, 8, 3. Что вернёт `=СЧЁТЕСЛИ(A2:A7;\">5\")`?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Строго больше 5 — пятёрки не входят."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Больше 5: 7, 10 и 8 — три."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `3`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 0,
+            "material_id": "excel-conditional-count"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["3"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-conditional-count-t11",
+        "title": "Порог из ячейки",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Введите число.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "В тех же `A2:A7` (5, 7, 10, 5, 8, 3), в `E9` — 7. Что вернёт `=СЧЁТЕСЛИ(A2:A7;\">=\"&E9)`?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "`\">=\"&E9` превращается в критерий `\">=7\"`."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Не меньше 7: 7, 10 и 8 — три."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `3`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 1,
+            "material_id": "excel-conditional-count"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["3"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-conditional-count-t12",
+        "title": "Два условия на один столбец",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Введите число.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "В `A2:A7` баллы 72, 85, 55, 60, 64, 90. Что вернёт `=СЧЁТЕСЛИМН(A2:A7;\">=60\";A2:A7;\"<=80\")`?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Оба условия для одной ячейки: от 60 до 80 включительно."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Подходят 72, 60 и 64."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `3`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 2,
+            "material_id": "excel-conditional-count"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["3"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-conditional-count-t13",
+        "title": "Среднее без совпадений",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Введите ответ так, как его покажет Excel.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "В `A2:A5` — 10, 15, 20, 25. Что вернёт `=СРЗНАЧЕСЛИ(A2:A5;\">30\")`?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Есть ли числа больше 30?"
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Подходящих чисел нет, среднее не определено: `#ДЕЛ/0!`."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `#ДЕЛ/0!`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 4,
+            "material_id": "excel-conditional-count"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["#ДЕЛ/0!"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-conditional-count-t14",
+        "title": "Разные повторяющиеся значения",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Введите число.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "В строке 7, 7, 2, 2, 5, 9: сколько разных значений повторяется?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Считай значения, а не позиции."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Повторяются 7 и 2 — два значения."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `2`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 7,
+            "material_id": "excel-conditional-count"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["2"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-conditional-count-t15",
+        "title": "Позиции повторов",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Введите число.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "В той же строке 7, 7, 2, 2, 5, 9: сколько позиций занято повторяющимися элементами?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Позиции с частотой больше 1."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Частоты 2, 2, 2, 2, 1, 1 — четыре позиции."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `4`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 8,
+            "material_id": "excel-conditional-count"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["4"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-conditional-count-t16",
+        "title": "Сумма повторяющихся",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Введите число.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Для той же строки 6, 6, 1, 2, 3, 9 найди сумму повторяющихся элементов."
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Повторяющиеся — с частотой больше 1, каждое вхождение."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "6 + 6 = 12: `=СУММЕСЛИ(G2:L2;\">1\";A2:F2)`."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `12`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 10,
+            "material_id": "excel-conditional-count"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["12"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-text-dates-t09",
+        "title": "ПРАВСИМВ",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Введите текст без кавычек.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Что вернёт `=ПРАВСИМВ(\"Москва\";2)`?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Последние символы справа."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Два последних символа — «ва»."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `ва`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 1,
+            "material_id": "excel-text-dates"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["ва"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-text-dates-t10",
+        "title": "ПСТР",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Введите текст без кавычек.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Что вернёт `=ПСТР(\"Москва\";2;4)`?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Начать со второго символа и взять четыре."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Позиции 2–5: «оскв»."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `оскв`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 2,
+            "material_id": "excel-text-dates"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["оскв"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-text-dates-t11",
+        "title": "Длина после СЖПРОБЕЛЫ",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Введите число.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Чему равна `=ДЛСТР(СЖПРОБЕЛЫ(\" да \"))`?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "`СЖПРОБЕЛЫ` убирает пробелы по краям."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Остаётся «да» — 2 символа."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `2`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 4,
+            "material_id": "excel-text-dates"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["2"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-text-dates-t12",
+        "title": "ПОДСТАВИТЬ",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Введите текст без кавычек.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Что вернёт `=ПОДСТАВИТЬ(\"12-34-5\";\"-\";\"\")`?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Каждый дефис заменяется пустым текстом."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Дефисы убраны: «12345» — это текст."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `12345`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 5,
+            "material_id": "excel-text-dates"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["12345"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-text-dates-t13",
+        "title": "Дней между датами",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Введите число.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Сколько дней от `=ДАТА(2026;2;27)` до `=ДАТА(2026;3;2)`?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "В феврале 2026 года 28 дней."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "28 февраля, 1 марта, 2 марта — 3 дня."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `3`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 6,
+            "material_id": "excel-text-dates"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["3"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-text-dates-t14",
+        "title": "Месяц 13",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Введите число.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Что вернёт `=МЕСЯЦ(ДАТА(2026;13;1))`?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Месяц 13 `ДАТА` переносит на следующий год."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "ДАТА(2026;13;1) — 1 января 2027 года, месяц 1."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `1`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 7,
+            "material_id": "excel-text-dates"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["1"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-text-dates-t15",
+        "title": "Граница периода",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Введите ИСТИНА или ЛОЖЬ.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "В `A2` — момент 15.10.2026 12:30. Что вернёт `=A2<=ДАТА(2026;10;15)`?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "`ДАТА(2026;10;15)` — это 15 октября 00:00."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "12:30 позже начала дня — `ЛОЖЬ`. Надёжнее граница «раньше 16 октября»."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `ЛОЖЬ`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 8,
+            "material_id": "excel-text-dates"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["ЛОЖЬ"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
     }
   ],
   "files": [
@@ -823120,7 +825219,7 @@
     },
     {
       "id": "excel-conditional-count",
-      "sections": ["intro", "s1", "s2", "s3", "s4", "s5", "s6", "s7", "s8"],
+      "sections": ["intro", "s1", "s2", "s3", "s4", "s5", "s6", "s7"],
       "kind": "course",
       "status": "published",
       "course_id": "excel",

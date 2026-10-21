@@ -83,20 +83,9 @@ def _num(x: float) -> str:
     return str(int(x)) if x == int(x) else str(x).replace(".", ",")
 
 
-def _with_total(values: list[float]) -> str:
-    """Values and their sum through a space, as a learner types them."""
-    return " ".join(_num(v) for v in [*values, sum(values)])
-
-
 def _singles_and_repeats(row: list[int]) -> str:
     singles = sum(v for v in row if row.count(v) == 1)
     return f"{singles} {sum(row) - singles}"
-
-
-def _repeat_report(row: list[int]) -> str:
-    freq = _frequencies(row)
-    values = len({v for v, k in zip(row, freq, strict=True) if k > 1})
-    return " ".join(map(str, [*freq, values, sum(k > 1 for k in freq)]))
 
 
 def _filtered_sums(sums: list[int], filtered: list[int], hidden: list[int]) -> str:
@@ -182,32 +171,56 @@ RECOMPUTED = {
     "excel-range-functions-t14": lambda: _num((90 + 70) / 2),
     "excel-range-functions-t15": lambda: str(sum([6, 1, 6, 2, 3, 4]) - max([6, 1, 6, 2, 3, 4])),
     "excel-range-functions-t07": lambda: str(5**2 + 12**2),
-    "excel-conditions-t03": lambda: (
-        f"{'ИСТИНА' if 10 > 10 else 'ЛОЖЬ'} {'ИСТИНА' if 10 >= 10 else 'ЛОЖЬ'}"
-    ),
+    "excel-conditions-t03": lambda: "ИСТИНА" if 10 > 10 else "ЛОЖЬ",
+    "excel-conditions-t09": lambda: "ИСТИНА" if 10 >= 10 else "ЛОЖЬ",
+    # a chain compares a logical value with 20: Excel ranks logical above numbers
+    "excel-conditions-t10": lambda: "ЛОЖЬ",
+    "excel-conditions-t11": lambda: "ИСТИНА" if (20 < 10 or 20 > 20) else "ЛОЖЬ",
+    "excel-conditions-t12": lambda: "ИСТИНА" if (True ^ True) else "ЛОЖЬ",
     "excel-conditions-t06": lambda: str(sum(40 <= s <= 70 for s in (35, 40, 55, 70, 71))),
-    "excel-conditions-t08": lambda: _with_total([int(5 <= x <= 15) for x in (12, 7, 20, 3, 15)]),
+    "excel-conditions-t13": lambda: str(max(3, 8)),
+    "excel-conditions-t14": lambda: "нет данных",
+    "excel-conditions-t08": lambda: str(sum(5 <= x <= 15 for x in (12, 7, 20, 3, 15))),
     "excel-numbers-t01": lambda: _num(round(800 * 1.15 * 0.85, 9)),
+    "excel-numbers-t10": lambda: _num(round((300 - 250) / 250 * 100, 9)),
     "excel-numbers-t02": lambda: str(math.ceil(37 / 8)),
-    "excel-numbers-t04": lambda: (
-        f"{_num(_round(3456, -2))} {math.trunc(7.99)} {-math.ceil(abs(-0.1))}"
+    "excel-numbers-t04": lambda: _num(_round(3456, -2)),
+    "excel-numbers-t11": lambda: str(math.trunc(7.99)),
+    "excel-numbers-t12": lambda: str(-math.ceil(abs(-0.1))),
+    "excel-numbers-t05": lambda: str(math.floor(-4.5)),
+    "excel-numbers-t13": lambda: str(math.trunc(-4.5)),
+    "excel-numbers-t09": lambda: f"{sum(_round(1.4, 0) for _ in range(3)):.0f}",
+    "excel-numbers-t14": lambda: f"{_round(1.4 * 3, 0):.0f}",
+    "excel-numbers-t15": lambda: str(100 % 7),
+    "excel-numbers-t16": lambda: str(abs(-127) % 10),
+    "excel-conditional-count-t10": lambda: str(sum(v > 5 for v in (5, 7, 10, 5, 8, 3))),
+    "excel-conditional-count-t11": lambda: str(sum(v >= 7 for v in (5, 7, 10, 5, 8, 3))),
+    "excel-conditional-count-t12": lambda: str(sum(60 <= v <= 80 for v in (72, 85, 55, 60, 64, 90))),
+    "excel-conditional-count-t09": lambda: str(
+        sum(d for c, d in zip(("Книги", "Еда", "Книги", "Игрушки"), (100, 50, 200, 300), strict=True) if c == "Книги")
     ),
-    "excel-numbers-t05": lambda: f"{math.floor(-4.5)} {math.trunc(-4.5)}",
-    "excel-numbers-t09": lambda: (
-        f"{sum(_round(1.4, 0) for _ in range(3)):.0f} {_round(1.4 * 3, 0):.0f}"
-    ),
+    "excel-conditional-count-t13": lambda: "#ДЕЛ/0!" if not [v for v in (10, 15, 20, 25) if v > 30] else "",
     "excel-conditional-count-t04": lambda: str(sum(n % 2 == 0 or n % 3 == 0 for n in (2, 3, 6, 7))),
-    "excel-conditional-count-t05": lambda: _repeat_report([7, 7, 2, 2, 5, 9]),
-    "excel-conditional-count-t06": lambda: _singles_and_repeats([6, 6, 1, 2, 3, 9]),
-    "excel-conditional-count-t07": lambda: " ".join(
-        str(sum(s <= t < f for s, f in ((1, 5), (2, 3), (5, 8)))) for t in (2, 5)
+    "excel-conditional-count-t05": lambda: str([7, 7, 2, 2, 5, 9].count(2)),
+    "excel-conditional-count-t14": lambda: str(
+        len({v for v in [7, 7, 2, 2, 5, 9] if [7, 7, 2, 2, 5, 9].count(v) > 1})
     ),
-    "excel-conditional-count-t08": lambda: str(
-        sum(len(w) > 1 and w[1] == "а" for w in ("Казань", "Курск", "Самара", "Омск"))
+    "excel-conditional-count-t15": lambda: str(sum(k > 1 for k in _frequencies([7, 7, 2, 2, 5, 9]))),
+    "excel-conditional-count-t06": lambda: _singles_and_repeats([6, 6, 1, 2, 3, 9]).split()[0],
+    "excel-conditional-count-t16": lambda: _singles_and_repeats([6, 6, 1, 2, 3, 9]).split()[1],
+    "excel-text-dates-t01": lambda: "Москва"[:3],
+    "excel-text-dates-t09": lambda: "Москва"[-2:],
+    "excel-text-dates-t10": lambda: "Москва"[1:5],
+    "excel-text-dates-t02": lambda: str(len(" да ")),
+    "excel-text-dates-t11": lambda: str(len(" да ".strip())),
+    "excel-text-dates-t12": lambda: "12-34-5".replace("-", ""),
+    "excel-text-dates-t13": lambda: str((datetime.date(2026, 3, 2) - datetime.date(2026, 2, 27)).days),
+    "excel-text-dates-t14": lambda: str(datetime.date(2027, 1, 1).month),
+    "excel-text-dates-t15": lambda: (
+        "ИСТИНА"
+        if datetime.datetime(2026, 10, 15, 12, 30) <= datetime.datetime(2026, 10, 15)
+        else "ЛОЖЬ"
     ),
-    "excel-conditional-count-t09": lambda: f"{sum(v for v in (10, 15, 20, 25) if v >= 15)} #ДЕЛ/0!",
-    "excel-text-dates-t01": lambda: f"{'Москва'[:3]} {'Москва'[-2:]} {'Москва'[1:5]}",
-    "excel-text-dates-t02": lambda: f"{len(' да ')} {len(' да '.strip())}",
     "excel-sort-filter-t02": lambda: _filtered_sums([10, 20, 30, 40, 50, 60], [20, 50], [60]),
     "excel-lookup-t02": lambda: str("CDEF".index("E") + 1),
     "excel-lookup-t03": lambda: f"{[101, 102, 103, 104].index(104) + 1} Кофе",

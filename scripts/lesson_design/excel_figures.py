@@ -871,10 +871,13 @@ def fill_down_frames() -> list[tuple[str, str]]:
             out.append(_t(px, y, f"D{r}", 14, MUTED, mono=True))
             # the row numbers that moved with the copy are marked
             colour, weight = (ACCENT, 700) if r > 2 else (INK, 400)
-            parts = [("=B", INK, 400), (str(r), colour, weight), ("*C", INK, 400), (str(r), colour, weight)]
-            spans = "".join(
-                f'<tspan fill="{c}" font-weight="{w}">{t}</tspan>' for t, c, w in parts
-            )
+            parts = [
+                ("=B", INK, 400),
+                (str(r), colour, weight),
+                ("*C", INK, 400),
+                (str(r), colour, weight),
+            ]
+            spans = "".join(f'<tspan fill="{c}" font-weight="{w}">{t}</tspan>' for t, c, w in parts)
             out.append(
                 f'<text x="{px + 40:.1f}" y="{y:.1f}" font-family="{MONO}" font-size="15" '
                 f'style="font-variant-ligatures:none;white-space:pre">{spans}</text>'
@@ -1039,6 +1042,252 @@ def count_cells(fn: str = "СУММ", values: list[str] | tuple = ("10", "20", "
     out.append(_t(24, y, f"{formula} = {display(total)}", 17, INK, weight=700, mono=True))
     out.append("</svg>")
     return "".join(out)
+
+
+# --- module 3 of the course (Change 197) -------------------------------------------
+
+
+def interval_logic(kind: str = "И", lo: float = 10, hi: float = 20, points=(5, 15, 25)) -> str:
+    """Two comparisons on the number line and what И or ИЛИ makes of them:
+    И keeps their common part [lo; hi], ИЛИ joins the two outer rays."""
+    if kind not in ("И", "ИЛИ"):
+        raise SystemExit("interval_logic: kind is И or ИЛИ")
+    a, b = 0, 30
+    L, R = 210, 630
+    rows = (44, 98, 166)
+
+    def px(v: float) -> float:
+        return L + (v - a) / (b - a) * (R - L)
+
+    if kind == "И":
+        first = (f"A2>={display(lo)}", lo, b, True, lo)
+        second = (f"A2<={display(hi)}", a, hi, True, hi)
+        result = f"И(A2>={display(lo)};A2<={display(hi)})"
+        parts = [(lo, hi, True, True)]
+        test = lambda v: lo <= v <= hi  # noqa: E731
+    else:
+        first = (f"A2<{display(lo)}", a, lo, False, lo)
+        second = (f"A2>{display(hi)}", hi, b, False, hi)
+        result = f"ИЛИ(A2<{display(lo)};A2>{display(hi)})"
+        parts = [(a, lo, None, False), (hi, b, False, None)]
+        test = lambda v: v < lo or v > hi  # noqa: E731
+    out = [_svg(250, f"{result} на числовой прямой")]
+
+    def axis(y, ticks):
+        s = f'<line x1="{L}" y1="{y}" x2="{R}" y2="{y}" stroke="{FAINT}" stroke-width="1.5"/>'
+        for v in range(a, b + 1, 5):
+            s += f'<line x1="{px(v):.1f}" y1="{y - 4}" x2="{px(v):.1f}" y2="{y + 4}" stroke="{MUTED}"/>'
+            if ticks:
+                s += _t(px(v), y + 22, str(v), 12.5, MUTED, "middle")
+        return s
+
+    def dot(v, y, closed, colour):
+        if closed is None:
+            return ""
+        fill = colour if closed else "#fff"
+        return f'<circle cx="{px(v):.1f}" cy="{y}" r="6" fill="{fill}" stroke="{colour}" stroke-width="2.5"/>'
+
+    for (label, x0, x1, closed, edge), y in ((first, rows[0]), (second, rows[1])):
+        out.append(_t(24, y + 5, label, 15, INK, weight=600, mono=True))
+        out.append(axis(y, False))
+        out.append(
+            f'<line x1="{px(x0):.1f}" y1="{y}" x2="{px(x1):.1f}" y2="{y}" stroke="{INK}" stroke-width="3"/>'
+        )
+        out.append(dot(edge, y, closed, INK))
+    y = rows[2]
+    out.append(_t(24, y + 5, kind, 15, INK, weight=700, mono=True))
+    out.append(_t(24, y + 24, "обе" if kind == "И" else "хотя бы одна", 13, MUTED))
+    out.append(axis(y, True))
+    for x0, x1, c0, c1 in parts:
+        out.append(
+            f'<line x1="{px(x0):.1f}" y1="{y}" x2="{px(x1):.1f}" y2="{y}" stroke="{ACCENT}" stroke-width="5"/>'
+        )
+        out.append(dot(x0, y, c0, ACCENT))
+        out.append(dot(x1, y, c1, ACCENT))
+    verdicts = []
+    for v in points:
+        out.append(f'<path d="M {px(v):.1f} {y - 10} l -6 -10 h 12 z" fill="{INK}"/>')
+        out.append(_t(px(v), y - 26, display(v), 13, INK, "middle", 600))
+        verdicts.append(f"{display(v)} → {'ИСТИНА' if test(v) else 'ЛОЖЬ'}")
+    out.append(_t(24, 236, "  ·  ".join(verdicts), 14, INK, weight=600, mono=True))
+    out.append("</svg>")
+    return "".join(out)
+
+
+def groups(n: int = 19, k: int = 8, mode: str = "boxes") -> str:
+    """n items packed by k: full groups and a tail. ``boxes`` counts the groups
+    with the tail (ОКРУГЛВВЕРХ), ``rest`` shows the tail as the remainder (ОСТАТ)."""
+    if mode not in ("boxes", "rest"):
+        raise SystemExit("groups: mode is boxes or rest")
+    full, tail = divmod(n, k)
+    count = full + (1 if tail else 0)
+    slot, gap, pad, between = 18, 5, 8, 16
+    gw = k * (slot + gap) - gap + 2 * pad
+    L, T = 24, 62
+    if mode == "boxes":
+        title = f"=ОКРУГЛВВЕРХ({n}/{k};0) = {count}"
+        note = f"{n} / {k} = {display(n / k)}, вверх до целого — {count}"
+    else:
+        title = f"=ОСТАТ({n};{k}) = {tail}"
+        note = f"{n} = {full} × {k} + {tail}"
+    out = [_svg(T + 2 * pad + slot + 60, f"{n} предметов по {k}: {note}")]
+    out.append(_t(24, 26, title, 17, INK, weight=600, mono=True))
+    out.append(_t(24, 48, note, 14, MUTED))
+    left = n
+    for g in range(count):
+        x = L + g * (gw + between)
+        in_group = min(k, left)
+        left -= in_group
+        is_tail = in_group < k
+        if mode == "rest" and is_tail:
+            stroke, dash, sw = MUTED, ' stroke-dasharray="4 3"', 1.5
+        else:
+            stroke, dash, sw = (ACCENT if not is_tail else INK), "", 2
+        out.append(
+            f'<rect x="{x}" y="{T}" width="{gw}" height="{slot + 2 * pad}" rx="6" fill="#fff" '
+            f'stroke="{stroke}" stroke-width="{sw}"{dash}/>'
+        )
+        for i in range(k):
+            cx = x + pad + i * (slot + gap) + slot / 2
+            cy = T + pad + slot / 2
+            if i < in_group:
+                out.append(f'<circle cx="{cx:.1f}" cy="{cy:.1f}" r="{slot / 2 - 1}" fill="{INK}"/>')
+            elif mode == "boxes":
+                out.append(
+                    f'<circle cx="{cx:.1f}" cy="{cy:.1f}" r="{slot / 2 - 2}" fill="none" stroke="{FAINT}" stroke-width="1.5"/>'
+                )
+        if mode == "boxes":
+            label = f"коробка {g + 1}" + (f": {in_group} из {k}" if is_tail else "")
+        else:
+            label = "остаток" if is_tail else f"{k}"
+        out.append(
+            _t(
+                x + gw / 2,
+                T + slot + 2 * pad + 22,
+                label,
+                13.5,
+                INK if is_tail else MUTED,
+                "middle",
+                600 if is_tail else 400,
+            )
+        )
+    out.append("</svg>")
+    return "".join(out)
+
+
+def freq_frames(row: list[int] | tuple = (4, 4, 1, 2, 3, 5)) -> list[tuple[str, str]]:
+    """=СЧЁТЕСЛИ($A2:$F2;A2) copied right over G2:L2: each copy counts the number
+    above its own column in the whole fixed row."""
+    vals = [int(v) for v in row]
+    n = len(vals)
+    cw, rh, L, T = 44, 32, 58, 92
+    letters = [col_letters(i + 1) for i in range(2 * n)]
+    freq = [vals.count(v) for v in vals]
+    h = T + rh + 70
+
+    def frame(upto, at, note):
+        out = [_svg(h, "Частоты значений строки: СЧЁТЕСЛИ со смешанной ссылкой")]
+        if at is None:
+            formula = f"={'СЧЁТЕСЛИ'}($A2:${letters[n - 1]}2;A2)"
+            out.append(_t(24, 26, f"{letters[n]}2: {formula}", 16, INK, weight=600, mono=True))
+        else:
+            cell = f"{letters[n + at]}2"
+            out.append(_t(24, 26, f"{cell}:", 16, MUTED, weight=600, mono=True))
+            text = f"=СЧЁТЕСЛИ($A2:${letters[n - 1]}2;{letters[at]}2)"
+            out.append(_ref_text(24 + len(cell) * 10 + 16, 26, text, 16))
+        for i, col in enumerate(letters):
+            x = L + i * cw + (10 if i >= n else 0)
+            out.append(_box(x, T - 24, cw, 24, col, fill=WASH, color=MUTED, size=13, weight=500))
+        out.append(_box(L - 34, T, 34, rh, "2", fill=WASH, color=MUTED, size=13, weight=500))
+        same = set()
+        if at is not None:
+            same = {i for i, v in enumerate(vals) if v == vals[at]}
+        for i, v in enumerate(vals):
+            x = L + i * cw
+            out.append(
+                _box(
+                    x,
+                    T,
+                    cw,
+                    rh,
+                    str(v),
+                    fill=WASH if i in same else "#fff",
+                    size=15,
+                    weight=700 if i in same else 400,
+                )
+            )
+        for i in range(n):
+            x = L + (n + i) * cw + 10
+            shown = str(freq[i]) if i <= upto else ""
+            out.append(_box(x, T, cw, rh, shown, size=15, weight=700 if i == at else 400))
+        if at is not None:
+            out.append(
+                f'<rect x="{L + 1}" y="{T + 1}" width="{n * cw - 2}" height="{rh - 2}" fill="none" stroke="{REF_COLORS[0]}" stroke-width="2.5"/>'
+            )
+            x = L + at * cw
+            out.append(
+                f'<rect x="{x + 4}" y="{T + 4}" width="{cw - 8}" height="{rh - 8}" fill="none" stroke="{REF_COLORS[1]}" stroke-width="2.5"/>'
+            )
+            x = L + (n + at) * cw + 10
+            out.append(
+                f'<rect x="{x + 1}" y="{T + 1}" width="{cw - 2}" height="{rh - 2}" fill="none" stroke="{ACCENT}" stroke-width="2.5"/>'
+            )
+        if upto == n - 1 and at is None:
+            singles = [str(v) for v, f in zip(vals, freq, strict=True) if f == 1]
+            repeats = sorted({str(v) for v, f in zip(vals, freq, strict=True) if f > 1})
+            out.append(
+                _t(
+                    24,
+                    T + rh + 34,
+                    f"частота 1 — одиночные: {', '.join(singles)}",
+                    14,
+                    INK,
+                    weight=600,
+                )
+            )
+            out.append(
+                _t(
+                    24,
+                    T + rh + 56,
+                    f"частота больше 1 — повторяются: {', '.join(repeats)}",
+                    14,
+                    INK,
+                    weight=600,
+                )
+            )
+        out.append("</svg>")
+        return ("".join(out), note)
+
+    frames = [
+        frame(
+            -1,
+            None,
+            f"Строка {', '.join(map(str, vals))} в A2:{letters[n - 1]}2. В {letters[n]}2 формула; её копируют вправо до {letters[2 * n - 1]}2.",
+        )
+    ]
+    for i, v in enumerate(vals):
+        times = {1: "один раз", 2: "два раза", 3: "три раза"}.get(freq[i], f"{freq[i]} раз")
+        frames.append(
+            frame(
+                i,
+                i,
+                f"{letters[n + i]}2: критерий {letters[i]}2 = {v}, диапазон $A2:${letters[n - 1]}2 тот же. Число {v} встречается в строке {times} — {freq[i]}.",
+            )
+        )
+    frames.append(
+        frame(
+            n - 1,
+            None,
+            "Частоты готовы. Частота 1 — число без пары, больше 1 — повторяющееся: каждое его вхождение получает свою частоту.",
+        )
+    )
+    return frames
+
+
+def freq_steps(row: list[int] | tuple = (4, 4, 1, 2, 3, 5)) -> str:
+    from figures import _stepper
+
+    return _stepper(freq_frames(row))
 
 
 ROUNDERS = [
@@ -1447,6 +1696,9 @@ EXCEL_FIGURES = {
         "point_entry": point_entry,
         "fill_down": fill_down,
         "count_cells": count_cells,
+        "interval_logic": interval_logic,
+        "groups": groups,
+        "freq_steps": freq_steps,
     }.items()
 }
 EXCEL_WIDGETS = {"fill_try": "FillSandbox"}
@@ -1460,6 +1712,7 @@ EXCEL_STEPPERS = {
         "vlookup_steps": vlookup_frames,
         "point_entry": point_entry_frames,
         "fill_down": fill_down_frames,
+        "freq_steps": freq_frames,
     }.items()
 }
 EXCEL_SCRIPTS = {"data-fill-try": FILL_TRY_JS}
