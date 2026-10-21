@@ -1,9 +1,14 @@
 import { CodeBlock } from "~/shared/components/code-block";
 import { Notation } from "~/shared/components/notation";
 import { Typography } from "~/shared/components/typography";
-import { LessonSummary } from "~/shared/components/learning-content";
+import {
+  LessonDiagram,
+  LessonSummary,
+  ProofDisclosure,
+} from "~/shared/components/learning-content";
 import { defineCourseLesson } from "../lib/define-course-lesson";
 import { pythonAdvancedFeaturesLessonPublication } from "./course-publication.mjs";
+import { lessonMedia } from "./python-advanced-features.media";
 
 export const pythonAdvancedFeaturesLesson = defineCourseLesson({
   ...pythonAdvancedFeaturesLessonPublication,
@@ -12,10 +17,10 @@ export const pythonAdvancedFeaturesLesson = defineCourseLesson({
   learningOutcomes: [
     "Замыкания",
     "Декораторы",
-    "With",
-    "Match",
+    "with",
+    "match",
     "Байты",
-    "Async",
+    "async",
   ],
   accessTier: "free",
   theory: [
@@ -33,19 +38,20 @@ export const pythonAdvancedFeaturesLesson = defineCourseLesson({
             него.
           </Typography.Text>
           <Typography.Text>
+            Декоратор <Notation>{"@cache"}</Notation> из урока о рекурсии
+            запоминает ответы, хотя код функции ты не менял. А{" "}
+            <Notation>{"with open(…)"}</Notation> закрывает файл сам, даже при
+            ошибке. Как это устроено?{" "}
             <strong>
-              Функции в Python — такие же значения, как числа: их создают внутри
-              других функций, возвращают и оборачивают; на этом держатся
+              Функция в Python — такое же значение, как число: её создают внутри
+              другой функции, возвращают и оборачивают; на этом держатся
               замыкания, декораторы и контекстные менеджеры
             </strong>
-            . Урок стоит читать после уверенного освоения функций. Механизмы
-            ниже полезны для понимания библиотек, но не обязательны в каждом
-            решении. Опора — модель вызова из модуля «Функции» и декоратор{" "}
-            <Notation>{"@cache"}</Notation> из урока о рекурсии.
+            .
           </Typography.Text>
           <Typography.Text>
-            Разберём функцию <Notation>{"make_multiplier"}</Notation>, которая
-            создаёт другие функции, и декоратор, который сообщает о вызове.
+            Разберём эти три механизма, а в конце — ещё три полезные вещи:{" "}
+            <Notation>{"match"}</Notation>, байты и асинхронное ожидание.
           </Typography.Text>
         </>
       ),
@@ -59,18 +65,18 @@ export const pythonAdvancedFeaturesLesson = defineCourseLesson({
             <strong>
               Внутренняя функция помнит имена внешней — это замыкание.
             </strong>{" "}
-            Функция может быть создана внутри другой функции и использовать её
-            локальные имена. Если такая внутренняя функция продолжает
-            использовать окружающие связи после завершения внешней, возникает{" "}
-            <strong>замыкание</strong>.
+            Функцию можно определить внутри другой функции, и она видит
+            локальные имена внешней. Если внутренняя функция пережила вызов
+            внешней и всё ещё пользуется её именами, это{" "}
+            <strong>замыкание</strong>:
           </Typography.Text>
           <CodeBlock
             code={
               "def make_multiplier(factor):\n    def multiply(number):\n        return number * factor\n    return multiply\n\ntriple = make_multiplier(3)\ndouble = make_multiplier(2)\nprint(triple(7), double(7))"
             }
-            label={"Программа на Python"}
+            label={"Функция, которая создаёт функции"}
             language="python"
-            fileName="make_multiplier.py"
+            fileName="main.py"
             output={"21 14"}
           />
           <Typography.Text>
@@ -80,19 +86,28 @@ export const pythonAdvancedFeaturesLesson = defineCourseLesson({
             <Notation>{"triple"}</Notation> это 3, у{" "}
             <Notation>{"double"}</Notation> — 2.
           </Typography.Text>
+          <LessonDiagram
+            {...lessonMedia.closureCells}
+            caption={
+              <>
+                Два вызова <Notation>{"make_multiplier"}</Notation> — две
+                функции, у каждой свой запомненный{" "}
+                <Notation>{"factor"}</Notation>.
+              </>
+            }
+          />
           <Typography.Text>
-            Замыкание обычно сохраняет доступ к переменной, а не обязательно
-            снимок её значения в момент создания. Поэтому функции, созданные
-            внутри цикла и обращающиеся к одной переменной цикла, при
-            последующем вызове могут все увидеть её последнее значение:
+            Замыкание помнит саму переменную, а не её значение в момент
+            создания. Поэтому функции, созданные в цикле, видят одну переменную
+            цикла — и после цикла все получают её последнее значение:
           </Typography.Text>
           <CodeBlock
             code={
               "late = [lambda: i for i in range(3)]\nsnapshot = [lambda i=i: i for i in range(3)]\nprint([f() for f in late], [f() for f in snapshot])"
             }
-            label={"Программа на Python"}
+            label={"Функции из цикла и переменная цикла"}
             language="python"
-            fileName="late.py"
+            fileName="main.py"
             output={"[2, 2, 2] [0, 1, 2]"}
           />
           <Typography.Text>
@@ -112,28 +127,47 @@ export const pythonAdvancedFeaturesLesson = defineCourseLesson({
               Декоратор получает функцию и возвращает обёртку с дополнительным
               поведением.
             </strong>{" "}
-            Декоратор получает функцию и возвращает объект, который будет
-            использоваться под её именем. В простом варианте возвращается
-            функция-обёртка:
+            Запись <Notation>{"@announce"}</Notation> над{" "}
+            <Notation>{"def add"}</Notation> означает{" "}
+            <Notation>{"add = announce(add)"}</Notation>: имя{" "}
+            <Notation>{"add"}</Notation> теперь указывает на то, что вернул
+            декоратор.
           </Typography.Text>
           <CodeBlock
             code={
               'from functools import wraps\n\ndef announce(function):\n    @wraps(function)\n    def wrapper(*args, **kwargs):\n        print("Вызов", function.__name__)\n        result = function(*args, **kwargs)\n        return result\n    return wrapper\n\n@announce\ndef add(a, b):\n    return a + b\n\nprint(add(2, 5))'
             }
-            label={"В простом варианте возвращается функция-обёртка"}
+            label={"Декоратор announce"}
             language="python"
-            fileName="announce.py"
+            fileName="main.py"
             output={"Вызов add\n7"}
           />
           <Typography.Text>
-            Сначала сообщение о вызове, затем 7. <Notation>{"*args"}</Notation>{" "}
-            собирает позиционные аргументы, <Notation>{"**kwargs"}</Notation> —
-            именованные; при вызове{" "}
-            <Notation>{"function(*args, **kwargs)"}</Notation> они
-            распаковываются обратно. <Notation>{"wraps"}</Notation> сохраняет
-            полезные метаданные исходной функции, например имя и документацию.{" "}
-            <Notation>{"__name__"}</Notation> — имя функции как атрибут.
+            Сначала сообщение о вызове, затем 7.{" "}
+            <Notation>{"wrapper"}</Notation> — замыкание: он помнит исходную{" "}
+            <Notation>{"function"}</Notation>. <Notation>{"*args"}</Notation> и{" "}
+            <Notation>{"**kwargs"}</Notation> из урока об аргументах принимают
+            любые аргументы и передают их дальше без изменений:
           </Typography.Text>
+          <LessonDiagram
+            {...lessonMedia.decoratorWrap}
+            caption={
+              <>
+                После <Notation>{"@announce"}</Notation> вызов{" "}
+                <Notation>{"add(2, 5)"}</Notation> попадает в обёртку, она
+                печатает сообщение и вызывает исходную функцию.
+              </>
+            }
+          />
+          <ProofDisclosure summary="Тонкости: зачем wraps" kind="nuance">
+            <Typography.Text>
+              Без <Notation>{"@wraps(function)"}</Notation> у обёрнутой функции
+              было бы имя <Notation>{"wrapper"}</Notation>: атрибут{" "}
+              <Notation>{"__name__"}</Notation> и описание взялись бы от
+              обёртки. <Notation>{"wraps"}</Notation> копирует их с исходной
+              функции.
+            </Typography.Text>
+          </ProofDisclosure>
           <Typography.Text>
             Если забыть <Notation>{"return result"}</Notation>, обёртка будет
             всегда возвращать <Notation>{"None"}</Notation>, даже если исходная
@@ -155,31 +189,40 @@ export const pythonAdvancedFeaturesLesson = defineCourseLesson({
               Контекстный менеджер задаёт, что делать при входе в блок{" "}
               <Notation>{"with"}</Notation> и при выходе из него.
             </strong>{" "}
-            Объект, поддерживающий вход и выход из блока{" "}
-            <Notation>{"with"}</Notation>, называют{" "}
-            <strong>контекстным менеджером</strong>. У обычных классов это
-            методы <Notation>{"__enter__"}</Notation> и{" "}
-            <Notation>{"__exit__"}</Notation>. Удобно также создавать их через{" "}
-            <Notation>{"contextlib.contextmanager"}</Notation>:
+            Проще всего написать его генератором с{" "}
+            <Notation>{"@contextmanager"}</Notation>: код до{" "}
+            <Notation>{"yield"}</Notation> — вход, после — выход:
           </Typography.Text>
           <CodeBlock
             code={
-              'from contextlib import contextmanager\nfrom time import perf_counter\n\n@contextmanager\ndef measured(label):\n    start = perf_counter()\n    try:\n        yield\n    finally:\n        elapsed = perf_counter() - start\n        print(label, elapsed)\n\nwith measured("Вычисление"):\n    result = sum(range(100_000))'
+              'from contextlib import contextmanager\n\n@contextmanager\ndef section(title):\n    print("начало:", title)\n    try:\n        yield\n    finally:\n        print("конец:", title)\n\nwith section("подсчёт"):\n    print(sum(range(10)))'
             }
-            label={"Удобно также создавать их через contextlib.contextmanager"}
+            label={"Контекстный менеджер section"}
             language="python"
-            fileName="measured.py"
+            fileName="main.py"
+            output={"начало: подсчёт\n45\nконец: подсчёт"}
           />
           <Typography.Text>
-            Код до <Notation>{"yield"}</Notation> выполняется при входе, блок
-            пользователя — в момент паузы, завершающая часть — при выходе. Здесь
-            генератор должен передать управление ровно один раз.{" "}
-            <Notation>{"finally"}</Notation> обеспечивает измерение и при
-            возникновении обычного исключения внутри блока. Вывод — подпись и
-            время — каждый раз разный, поэтому здесь не показан. Файл в{" "}
-            <Notation>{"with open(...)"}</Notation> закрывается тем же
-            механизмом.
+            При входе в <Notation>{"with"}</Notation> выполняется код до{" "}
+            <Notation>{"yield"}</Notation>, затем блок, затем часть после{" "}
+            <Notation>{"yield"}</Notation>. <Notation>{"finally"}</Notation> из
+            урока об исключениях гарантирует выход и при ошибке в блоке. Так же
+            можно замерить время: <Notation>{"perf_counter()"}</Notation> до{" "}
+            <Notation>{"yield"}</Notation> и после. И так же{" "}
+            <Notation>{"with open(…)"}</Notation> закрывает файл.
           </Typography.Text>
+          <ProofDisclosure
+            summary="Тонкости: контекстный менеджер классом"
+            kind="nuance"
+          >
+            <Typography.Text>
+              Без декоратора контекстный менеджер — класс с методами{" "}
+              <Notation>{"__enter__"}</Notation> (вход) и{" "}
+              <Notation>{"__exit__"}</Notation> (выход). Генератор с{" "}
+              <Notation>{"@contextmanager"}</Notation> должен выполнить{" "}
+              <Notation>{"yield"}</Notation> ровно один раз.
+            </Typography.Text>
+          </ProofDisclosure>
         </>
       ),
     },
@@ -193,29 +236,38 @@ export const pythonAdvancedFeaturesLesson = defineCourseLesson({
               <Notation>{"match"}</Notation> проверяет форму значения и раздаёт
               его части по именам.
             </strong>{" "}
-            В Python 3.10+ конструкция <Notation>{"match"}</Notation> проверяет
-            форму значения. Она полезна для разбора небольших команд и вложенных
-            данных:
+            Она удобна для разбора небольших команд:
           </Typography.Text>
           <CodeBlock
             code={
               'for line in ["move 3 5", "quit", "jump"]:\n    command = line.split()\n    match command:\n        case ["move", x, y]:\n            print(int(x), int(y))\n        case ["quit"]:\n            print("Завершение")\n        case _:\n            print("Неизвестная команда")'
             }
-            label={
-              "Она полезна для разбора небольших команд и вложенных данных"
-            }
+            label={"Разбор команд через match"}
             language="python"
             fileName="main.py"
             output={"3 5\nЗавершение\nНеизвестная команда"}
           />
           <Typography.Text>
-            Шаблон <Notation>{"['move', x, y]"}</Notation> требует
-            последовательность из трёх элементов с первым элементом{" "}
-            <Notation>{'"move"'}</Notation>, а остальные связывает с именами.
-            Это не просто другая запись цепочки сравнений. Обычное имя в шаблоне
-            чаще захватывает значение, а не сравнивает его с прежней переменной;
-            для сравнения констант необходимо понимать правила шаблонов. Новичку
-            нередко проще обычный <Notation>{"if"}</Notation>.
+            Шаблон <Notation>{'["move", x, y]'}</Notation> подходит для списка
+            из трёх элементов, где первый — <Notation>{'"move"'}</Notation>, и
+            связывает два остальных с именами <Notation>{"x"}</Notation> и{" "}
+            <Notation>{"y"}</Notation>. <Notation>{"case _"}</Notation> ловит
+            всё остальное. Шаблоны проверяются сверху вниз до первого
+            подходящего:
+          </Typography.Text>
+          <LessonDiagram
+            {...lessonMedia.matchPaths}
+            caption={
+              <>
+                Для <Notation>{'"jump"'}</Notation> проверены все три шаблона —
+                подошёл только последний.
+              </>
+            }
+          />
+          <Typography.Text>
+            Имя в шаблоне не сравнивается с переменной, а захватывает значение.
+            Если нужно просто сравнить с несколькими константами, понятнее
+            обычный <Notation>{"if"}</Notation>.
           </Typography.Text>
         </>
       ),
@@ -238,9 +290,9 @@ export const pythonAdvancedFeaturesLesson = defineCourseLesson({
             code={
               'text = "Привет"\ndata = text.encode("utf-8")\nrestored = data.decode("utf-8")\nprint(restored == text)\nprint(len(text), len(data))'
             }
-            label={"Для перевода между ними нужна кодировка"}
+            label={"Строка и её байты в UTF-8"}
             language="python"
-            fileName="text.py"
+            fileName="main.py"
             output={"True\n6 12"}
           />
           <Typography.Text>
@@ -273,9 +325,7 @@ export const pythonAdvancedFeaturesLesson = defineCourseLesson({
             code={
               'import asyncio\n\nasync def report(name, delay):\n    await asyncio.sleep(delay)\n    return name\n\nasync def main():\n    results = await asyncio.gather(\n        report("A", 0.02),\n        report("B", 0.01),\n    )\n    print(results)\n\nif __name__ == "__main__":\n    asyncio.run(main())'
             }
-            label={
-              "Это не обязательно одновременные вычисления на разных ядрах"
-            }
+            label={"Два ожидания через asyncio.gather"}
             language="python"
             fileName="main.py"
             output={"['A', 'B']"}
@@ -288,19 +338,36 @@ export const pythonAdvancedFeaturesLesson = defineCourseLesson({
             <Notation>{"gather"}</Notation> организует совместное выполнение
             переданных операций и возвращает результаты в порядке аргументов, а
             не порядке завершения: B закончилась раньше, но стоит второй.{" "}
-            <Notation>{"asyncio.run"}</Notation> запускает внешний цикл событий
-            в обычном скрипте. В среде с уже работающим циклом, например
-            некоторых ноутбуках, используют её собственный способ запуска, часто{" "}
-            <Notation>{"await main()"}</Notation>.
+            <Notation>{"asyncio.run"}</Notation> запускает всё это в обычном
+            скрипте.
           </Typography.Text>
+          <LessonDiagram
+            {...lessonMedia.asyncTimeline}
+            caption={
+              <>
+                Пока A ждёт, B тоже ждёт: общее время — самое долгое ожидание,
+                0,02 с, а не сумма 0,03 с.
+              </>
+            }
+          />
           <Typography.Text>
             Обычное тяжёлое вычисление без точек ожидания блокирует такой цикл.
             Замена <Notation>{"def"}</Notation> на{" "}
             <Notation>{"async def"}</Notation> сама по себе не ускоряет перебор
-            делителей. Потоки и отдельные процессы — другие механизмы
-            конкурентного выполнения с собственными правилами общего состояния.
-            Их стоит изучать под конкретную задачу после этой основы.
+            делителей.
           </Typography.Text>
+          <ProofDisclosure
+            summary="Тонкости: ноутбуки, потоки и процессы"
+            kind="nuance"
+          >
+            <Typography.Text>
+              В средах, где цикл событий уже запущен (например, некоторые
+              ноутбуки), вместо <Notation>{"asyncio.run(main())"}</Notation>{" "}
+              пишут <Notation>{"await main()"}</Notation>. Потоки и процессы —
+              другие способы выполнять работу одновременно, со своими правилами
+              общих данных.
+            </Typography.Text>
+          </ProofDisclosure>
         </>
       ),
     },
@@ -311,19 +378,33 @@ export const pythonAdvancedFeaturesLesson = defineCourseLesson({
       prompt: (
         <>
           <Typography.Text>
-            Почему функция с <Notation>{"yield"}</Notation> не возвращает сразу
-            обычный список?
+            Что вернёт <Notation>{"double(triple(2))"}</Notation> для функций из
+            урока?
           </Typography.Text>
         </>
       ),
       reveal: (
         <>
           <Typography.Text>
-            Она описывает процесс последовательной выдачи. Вызов создаёт объект
-            с сохраняемым состоянием, а результаты появляются по запросу. При
-            необходимости все элементы можно собрать{" "}
-            <Notation>{"list(generator)"}</Notation>, если источник конечен и
-            помещается в память.
+            12: <Notation>{"triple(2)"}</Notation> = 6, затем{" "}
+            <Notation>{"double(6)"}</Notation> = 12.
+          </Typography.Text>
+        </>
+      ),
+    },
+    {
+      id: "t2",
+      prompt: (
+        <>
+          <Typography.Text>
+            Что напечатает <Notation>{'with section("x"): print(1)'}</Notation>?
+          </Typography.Text>
+        </>
+      ),
+      reveal: (
+        <>
+          <Typography.Text>
+            «начало: x», 1 и «конец: x» — вход, блок и выход.
           </Typography.Text>
         </>
       ),
@@ -389,49 +470,54 @@ export const pythonAdvancedFeaturesLesson = defineCourseLesson({
   ],
   result: (
     <>
+      <Typography.Text>
+        Функция — значение: её создают, возвращают и оборачивают. На этом стоят
+        замыкания, декораторы и контекстные менеджеры. Вот что понадобится
+        дальше.
+      </Typography.Text>
       <LessonSummary
         items={[
           {
+            key: "Замыкание",
             note: (
               <>
-                Замыкание — внутренняя функция с доступом к именам внешней; оно
-                видит переменную, а не снимок.
+                Внутренняя функция помнит переменные внешней — саму переменную,
+                а не снимок.
               </>
             ),
           },
           {
+            key: "Декоратор",
             note: (
               <>
-                Декоратор — функция, которая получает функцию и возвращает
-                обёртку; обёртка должна вернуть результат.
+                <Notation>{"@d"}</Notation> над функцией —{" "}
+                <Notation>{"f = d(f)"}</Notation>; обёртка должна вернуть
+                результат.
               </>
             ),
           },
           {
+            key: <Notation>{"with"}</Notation>,
             note: (
               <>
-                Контекстный менеджер описывает вход и выход блока{" "}
-                <Notation>{"with"}</Notation>; <Notation>{"finally"}</Notation>{" "}
-                выполняется и при ошибке.
+                Вход — до <Notation>{"yield"}</Notation>, выход — после;{" "}
+                <Notation>{"finally"}</Notation> выполняет выход и при ошибке.
               </>
             ),
           },
           {
+            key: <Notation>{"match"}</Notation>,
             note: (
               <>
-                <Notation>{"match"}</Notation> проверяет форму значения;{" "}
-                <Notation>{"str.encode"}</Notation> и{" "}
-                <Notation>{"bytes.decode"}</Notation> переводят текст и байты.
+                Проверяет форму значения сверху вниз;{" "}
+                <Notation>{"encode"}</Notation> и{" "}
+                <Notation>{"decode"}</Notation> — текст и байты.
               </>
             ),
           },
           {
-            note: (
-              <>
-                <Notation>{"async"}</Notation>/<Notation>{"await"}</Notation>{" "}
-                помогают ждать внешние операции, но не ускоряют вычисления.
-              </>
-            ),
+            key: <Notation>{"async"}</Notation>,
+            note: <>Ожидания идут вместе, вычисления быстрее не становятся.</>,
           },
         ]}
       />

@@ -1,15 +1,21 @@
 import { CodeBlock } from "~/shared/components/code-block";
 import { Notation } from "~/shared/components/notation";
 import { Typography } from "~/shared/components/typography";
-import { LessonSummary } from "~/shared/components/learning-content";
+import {
+  LessonDiagram,
+  LessonSummary,
+  ProofDisclosure,
+  TerminalCommand,
+} from "~/shared/components/learning-content";
 import { defineCourseLesson } from "../lib/define-course-lesson";
 import { pythonTestingLessonPublication } from "./course-publication.mjs";
+import { lessonMedia } from "./python-testing.media";
 
 export const pythonTestingLesson = defineCourseLesson({
   ...pythonTestingLessonPublication,
   masteryThreshold: 0.8,
   level: "advanced",
-  learningOutcomes: ["Аннотации", "Unittest", "Эталон", "Свойства"],
+  learningOutcomes: ["Аннотации", "unittest", "Эталон", "Свойства"],
   accessTier: "free",
   theory: [
     {
@@ -26,19 +32,15 @@ export const pythonTestingLesson = defineCourseLesson({
             решаются без него.
           </Typography.Text>
           <Typography.Text>
+            Программу из урока 7.1 ты проверял руками: запускал на обычном,
+            пустом и испорченном файле и сверял вывод. После каждой правки всё
+            это пришлось бы повторять.{" "}
             <strong>
-              Код пишут так, чтобы его можно было прочитать и проверить:
-              понятные имена, аннотации договорённости и автоматические проверки
-              на выбранных и случайных примерах
+              Код пишут так, чтобы его было легко прочитать и проверить:
+              понятные имена, аннотации договорённости и тесты, которые
+              проверяют программу за тебя
             </strong>
-            . Опора — <Notation>{"assert"}</Notation> и подбор проверочных
-            примеров из урока об исключениях, разделение программы на части из
-            урока о модулях.
-          </Typography.Text>
-          <Typography.Text>
-            Работать будем с функцией поиска максимального отрицательного числа:
-            аннотируем её, напишем модульные тесты и сравним быстрое решение с
-            медленным эталоном.
+            .
           </Typography.Text>
         </>
       ),
@@ -86,18 +88,15 @@ export const pythonTestingLesson = defineCourseLesson({
               Аннотация типа описывает ожидаемые данные, но Python её не
               проверяет.
             </strong>{" "}
-            <strong>Аннотация типа</strong> сообщает читателю и инструментам,
-            какие данные ожидаются:
+            Её пишут после имени параметра и после <Notation>{"->"}</Notation>:
           </Typography.Text>
           <CodeBlock
             code={
               "def count_positive(numbers: list[int]) -> int:\n    return sum(number > 0 for number in numbers)\n\nprint(count_positive([3, -1, 0, 5]))"
             }
-            label={
-              "Аннотация типа сообщает читателю и инструментам, какие данные ожидаются"
-            }
+            label={"Аннотации у count_positive"}
             language="python"
-            fileName="count_positive.py"
+            fileName="main.py"
             output={"2"}
           />
           <Typography.Text>
@@ -117,19 +116,24 @@ export const pythonTestingLesson = defineCourseLesson({
             code={
               "def maximum_negative(numbers: list[int]) -> int | None:\n    best = None\n    for number in numbers:\n        if number < 0 and (best is None or number > best):\n            best = number\n    return best\n\nprint(maximum_negative([5, -9, -2, 0]), maximum_negative([]))"
             }
-            label={"Программа на Python"}
+            label={"Результат int или None"}
             language="python"
-            fileName="maximum_negative.py"
+            fileName="main.py"
             output={"-2 None"}
           />
           <Typography.Text>
             <Notation>{"int | None"}</Notation> в Python 3.10+ означает один из
             двух вариантов результата. Это помогает помнить про отсутствие
-            ответа. Если функция принимает любой перебираемый источник, точнее
-            будет <Notation>{"Iterable[int]"}</Notation> из{" "}
-            <Notation>{"collections.abc"}</Notation>, а не обязательно{" "}
-            <Notation>{"list[int]"}</Notation>.
+            ответа.
           </Typography.Text>
+          <ProofDisclosure summary="Тонкости: не только список" kind="nuance">
+            <Typography.Text>
+              Если функция принимает любой перебираемый источник — список,
+              кортеж, генератор, — точнее аннотация{" "}
+              <Notation>{"Iterable[int]"}</Notation> из модуля{" "}
+              <Notation>{"collections.abc"}</Notation>.
+            </Typography.Text>
+          </ProofDisclosure>
           <Typography.Text>
             Аннотация — часть описания договорённости. Проверку диапазона,
             запрет пустого входа и изменение аргументов часто надо описать
@@ -145,35 +149,73 @@ export const pythonTestingLesson = defineCourseLesson({
         <>
           <Typography.Text>
             <strong>
-              Модульный тест — программа, которая сравнивает поведение функции с
-              ожидаемым.
+              Модульный тест — программа, которая вызывает функцию и сравнивает
+              результат с ожидаемым.
             </strong>{" "}
-            <strong>Тест</strong> — программа, сравнивающая фактическое
-            поведение с ожидаемым. <strong>Модульный тест</strong> проверяет
-            небольшую самостоятельную часть, например функцию. Разделённые
-            вычисление и ввод позволяют делать это без ручного набора данных.
+            Проверим <Notation>{"summarize"}</Notation> из урока 7.1. Тесты
+            лежат в отдельном файле рядом с{" "}
+            <Notation>{"analyze_numbers.py"}</Notation> и импортируют функцию,
+            как <Notation>{"check.py"}</Notation> в том уроке:
           </Typography.Text>
           <CodeBlock
             code={
-              'import unittest\n\ndef maximum_negative(numbers):\n    best = None\n    for number in numbers:\n        if number < 0 and (best is None or number > best):\n            best = number\n    return best\n\nclass MaximumNegativeTests(unittest.TestCase):\n    def test_mixed_values(self):\n        self.assertEqual(maximum_negative([5, -9, -2, 0]), -2)\n\n    def test_no_negative_values(self):\n        self.assertIsNone(maximum_negative([0, 4]))\n\n    def test_empty_input(self):\n        self.assertIsNone(maximum_negative([]))\n\nif __name__ == "__main__":\n    unittest.main()'
+              'import unittest\n\nfrom analyze_numbers import summarize\n\n\nclass SummarizeTests(unittest.TestCase):\n    def test_usual_numbers(self):\n        report = summarize([5, -2, 10, 7])\n        self.assertEqual(report["total"], 20)\n        self.assertEqual(report["maximum"], 10)\n\n    def test_one_number(self):\n        self.assertEqual(summarize([-5])["average"], -5.0)\n\n    def test_empty_list(self):\n        self.assertIsNone(summarize([])["maximum"])\n\n    def test_fractional_average(self):\n        self.assertEqual(summarize([1, 2])["average"], 1.5)\n\n\nif __name__ == "__main__":\n    unittest.main()'
             }
-            label={
-              "Разделённые вычисление и ввод позволяют делать это без ручного набора данных"
-            }
+            label={"Тесты для summarize"}
+            collapsible={false}
             language="python"
-            fileName="maximum_negative.py"
+            fileName="test_summary.py"
+            output={
+              "....\n----------------------------------------------------------------------\nRan 4 tests in 0.000s\n\nOK"
+            }
           />
           <Typography.Text>
-            <Notation>{"unittest.TestCase"}</Notation> предоставляет методы
-            проверок. Имя метода начинается с <Notation>{"test_"}</Notation>,
-            чтобы система обнаружила тест. <Notation>{"assertEqual"}</Notation>{" "}
-            требует равенство, <Notation>{"assertIsNone"}</Notation> — значение{" "}
-            <Notation>{"None"}</Notation>. В отличие от инструкции{" "}
-            <Notation>{"assert"}</Notation>, это обычные методы тестовой
-            библиотеки, они не исчезают из-за <Notation>{"-O"}</Notation>.
-            Запуск печатает точки для пройденных тестов и строку{" "}
-            <Notation>{"OK"}</Notation>; время прогона в отчёте каждый раз своё.
+            Класс тестов наследует <Notation>{"unittest.TestCase"}</Notation>,
+            как <Notation>{"Task"}</Notation> наследовал{" "}
+            <Notation>{"NamedItem"}</Notation> в уроке о классах. Каждый метод с
+            именем на <Notation>{"test_"}</Notation> — отдельный тест.{" "}
+            <Notation>{"assertEqual(a, b)"}</Notation> требует равенства,{" "}
+            <Notation>{"assertIsNone"}</Notation> — значения{" "}
+            <Notation>{"None"}</Notation>. Точка в выводе — пройденный тест,{" "}
+            <Notation>{"OK"}</Notation> — все прошли; время прогона у тебя может
+            быть другим. Запуск из терминала:
           </Typography.Text>
+          <TerminalCommand command={"python test_summary.py"} />
+          <Typography.Text>
+            Тесты нужны ради момента, когда что-то сломалось. Допустим, при
+            правке в <Notation>{"summarize"}</Notation> написали{" "}
+            <Notation>{"//"}</Notation> вместо <Notation>{"/"}</Notation>:
+          </Typography.Text>
+          <CodeBlock
+            code={'        "average": total // len(numbers),'}
+            label={"Ошибка в summarize и вывод тестов"}
+            collapsible={false}
+            language="python"
+            fileName="analyze_numbers.py"
+            output={
+              '.F..\n======================================================================\nFAIL: test_fractional_average (__main__.SummarizeTests.test_fractional_average)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File "test_summary.py", line 19, in test_fractional_average\n    self.assertEqual(summarize([1, 2])["average"], 1.5)\nAssertionError: 1 != 1.5\n\n----------------------------------------------------------------------\nRan 4 tests in 0.000s\n\nFAILED (failures=1)'
+            }
+          />
+          <Typography.Text>
+            Вторая точка стала <Notation>{"F"}</Notation>: тест{" "}
+            <Notation>{"test_fractional_average"}</Notation> упал. Ниже — строка
+            теста и что не совпало: получили 1, ждали 1.5. Остальные три теста
+            прошли — для них целое деление случайно дало верный ответ. Поэтому
+            тесты подбирают так, чтобы каждый ловил свою ошибку, как в уроке об
+            исключениях.
+          </Typography.Text>
+          <ProofDisclosure
+            summary="Тонкости: assertEqual и assert"
+            kind="nuance"
+          >
+            <Typography.Text>
+              Методы <Notation>{"assertEqual"}</Notation> и другие — обычные
+              методы библиотеки: в отличие от инструкции{" "}
+              <Notation>{"assert"}</Notation>, они не отключаются при запуске{" "}
+              <Notation>{"python -O"}</Notation> и показывают оба значения при
+              расхождении.
+            </Typography.Text>
+          </ProofDisclosure>
         </>
       ),
     },
@@ -199,19 +241,31 @@ export const pythonTestingLesson = defineCourseLesson({
             code={
               'import random\n\ndef digit_sum(number):\n    number = abs(number)\n    total = 0\n    while number > 0:\n        total += number % 10\n        number //= 10\n    return total\n\ndef digit_sum_slow(number):\n    return sum(int(c) for c in str(abs(number)))\n\nrng = random.Random(42)\nfor _ in range(1000):\n    n = rng.randint(-10**6, 10**6)\n    assert digit_sum(n) == digit_sum_slow(n), n\nprint("совпадает на 1000 случайных числах")'
             }
-            label={
-              "Например, сумму цифр можно считать арифметикой, а эталон — прямо через запись числа"
-            }
+            label={"digit_sum против эталона на 1000 случайных числах"}
             language="python"
-            fileName="digit_sum.py"
+            fileName="main.py"
             output={"совпадает на 1000 случайных числах"}
           />
           <Typography.Text>
-            Договорённость — целые числа любого знака. При случайной генерации
-            используй фиксированное начальное состояние генератора, например{" "}
-            <Notation>{"random.Random(42)"}</Notation>, чтобы ошибку можно было
-            воспроизвести. Случайные тесты дополняют, а не заменяют специально
-            выбранные границы: число 0 случайно может и не выпасть.
+            Договорённость — целые числа любого знака.
+          </Typography.Text>
+          <LessonDiagram
+            {...lessonMedia.oracleCheck}
+            caption={
+              <>
+                Одно и то же <Notation>{"n"}</Notation> идёт в обе функции. Пока
+                ответы равны — следующее число; при расхождении{" "}
+                <Notation>{"assert"}</Notation> останавливает программу и
+                показывает <Notation>{"n"}</Notation>.
+              </>
+            }
+          />
+          <Typography.Text>
+            При случайной генерации используй фиксированное начальное состояние
+            генератора, например <Notation>{"random.Random(42)"}</Notation>,
+            чтобы ошибку можно было воспроизвести. Случайные тесты дополняют, а
+            не заменяют специально выбранные границы: число 0 случайно может и
+            не выпасть.
           </Typography.Text>
         </>
       ),
@@ -226,20 +280,20 @@ export const pythonTestingLesson = defineCourseLesson({
               Иногда проверяют не ответ, а свойство, которое ему обязано
               принадлежать.
             </strong>{" "}
-            Иногда полезно проверять общие свойства. После сортировки должны
-            сохраниться количество и набор элементов с учётом повторов. Для
-            перевода основания <Notation>{"int(запись, base)"}</Notation> от
-            записи числа должно давать исходное число. Каждый найденный делитель
-            обязан делить число без остатка, а список делителей должен содержать
-            1 и само положительное число.
+            После сортировки должны сохраниться количество и набор элементов с
+            учётом повторов. Для перевода основания{" "}
+            <Notation>{"int(запись, base)"}</Notation> от записи числа должно
+            давать исходное число. Каждый найденный делитель обязан делить число
+            без остатка, а список делителей должен содержать 1 и само
+            положительное число.
           </Typography.Text>
           <CodeBlock
             code={
               "from collections import Counter\n\ndata = [5, 3, 5, -1, 0]\nresult = sorted(data)\nordered = all(a <= b for a, b in zip(result, result[1:]))\nprint(ordered, Counter(result) == Counter(data))"
             }
-            label={"Программа на Python"}
+            label={"Свойства результата sorted"}
             language="python"
-            fileName="data.py"
+            fileName="main.py"
             output={"True True"}
           />
           <Typography.Text>
@@ -269,6 +323,25 @@ export const pythonTestingLesson = defineCourseLesson({
             пройдёт. Нужны хотя бы простое 2, обычное простое, составное чётное,
             составное нечётное, точный квадрат вроде 49, а также 0, 1 и
             отрицательное число, если функция обещает их обрабатывать.
+          </Typography.Text>
+        </>
+      ),
+    },
+    {
+      id: "t2",
+      prompt: (
+        <>
+          <Typography.Text>
+            Прогон четырёх тестов начался строкой <Notation>{".F.."}</Notation>.
+            Что это значит?
+          </Typography.Text>
+        </>
+      ),
+      reveal: (
+        <>
+          <Typography.Text>
+            Второй тест упал, остальные три прошли. Ниже в отчёте — имя упавшего
+            теста и какие значения не совпали.
           </Typography.Text>
         </>
       ),
@@ -332,48 +405,53 @@ export const pythonTestingLesson = defineCourseLesson({
   ],
   result: (
     <>
+      <Typography.Text>
+        Читаемый код объясняет себя, а тесты проверяют его после каждой правки —
+        быстрее и надёжнее ручных запусков. Вот что понадобится дальше.
+      </Typography.Text>
       <LessonSummary
         items={[
           {
+            key: "Читаемость",
             note: (
-              <>
-                Имена, константы и комментарии объясняют смысл и причины, а не
-                пересказывают код.
-              </>
+              <>Имена и константы говорят о смысле, комментарии — о причинах.</>
             ),
           },
           {
+            key: "Аннотации",
             note: (
               <>
-                Аннотации <Notation>{"list[int]"}</Notation>,{" "}
+                <Notation>{"list[int]"}</Notation>,{" "}
                 <Notation>{"int | None"}</Notation> описывают договорённость;
                 Python их не проверяет.
               </>
             ),
           },
           {
+            key: <Notation>{"unittest"}</Notation>,
             note: (
               <>
-                <Notation>{"unittest"}</Notation>: методы{" "}
-                <Notation>{"test_…"}</Notation> с{" "}
-                <Notation>{"assertEqual"}</Notation>,{" "}
-                <Notation>{"assertIsNone"}</Notation> и другими.
+                Методы <Notation>{"test_…"}</Notation> с{" "}
+                <Notation>{"assertEqual"}</Notation>; точка — прошёл,{" "}
+                <Notation>{"F"}</Notation> — упал.
               </>
             ),
           },
           {
+            key: "Эталон",
             note: (
               <>
-                Быстрое решение сравнивают с медленным эталоном на случайных
-                данных с фиксированным генератором.
+                Быстрое решение сверяют с медленным на случайных данных с
+                фиксированным генератором.
               </>
             ),
           },
           {
+            key: "Свойства",
             note: (
               <>
-                Свойства результата проверяют вместе с полнотой: одно свойство
-                может пропустить ошибку.
+                Проверяют и допустимость ответа, и полноту: одно свойство может
+                пропустить ошибку.
               </>
             ),
           },

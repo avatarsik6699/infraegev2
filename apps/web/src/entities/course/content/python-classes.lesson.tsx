@@ -1,15 +1,21 @@
 import { CodeBlock } from "~/shared/components/code-block";
 import { Notation } from "~/shared/components/notation";
 import { Typography } from "~/shared/components/typography";
-import { LessonSummary } from "~/shared/components/learning-content";
+import {
+  LessonDiagram,
+  LessonSummary,
+  LessonTabs,
+  ProofDisclosure,
+} from "~/shared/components/learning-content";
 import { defineCourseLesson } from "../lib/define-course-lesson";
 import { pythonClassesLessonPublication } from "./course-publication.mjs";
+import { lessonMedia } from "./python-classes.media";
 
 export const pythonClassesLesson = defineCourseLesson({
   ...pythonClassesLessonPublication,
   masteryThreshold: 0.8,
   level: "advanced",
-  learningOutcomes: ["Свои типы", "Self", "Свойства", "Dataclass"],
+  learningOutcomes: ["Свои типы", "self", "Свойства", "dataclass"],
   accessTier: "free",
   theory: [
     {
@@ -24,17 +30,15 @@ export const pythonClassesLesson = defineCourseLesson({
             классы не встречаются. Задачи основных уроков решаются без него.
           </Typography.Text>
           <Typography.Text>
+            Ты читаешь несколько книг и хочешь вести учёт: название, число
+            страниц, текущая страница. Словарь на книгу хранит данные, но
+            правило «продвинуться, не перескочив последнюю страницу» живёт
+            где-то отдельно, и его легко нарушить.{" "}
             <strong>
-              Класс описывает новый тип объектов — какие данные хранит каждый
-              экземпляр и какие действия с ними разрешены
+              Класс описывает новый тип объектов: какие данные хранит каждый
+              объект и какие действия с ними разрешены
             </strong>
-            . Это следующий шаг после словаря-записи: правила изменения данных
-            живут рядом с самими данными. Опора — словари и функции: класс
-            соединяет данные записи и функции, которые её меняют.
-          </Typography.Text>
-          <Typography.Text>
-            Класс построим для прогресса чтения книги: название, число страниц и
-            текущая страница.
+            .
           </Typography.Text>
         </>
       ),
@@ -49,35 +53,43 @@ export const pythonClassesLesson = defineCourseLesson({
               Класс — описание нового типа, экземпляр — конкретный объект этого
               типа.
             </strong>{" "}
-            Словарь способен хранить название книги, число страниц и текущую
-            позицию чтения. Но если таких записей много, хочется одинаково
-            создавать их и одинаково изменять. <strong>Класс</strong> описывает
-            новый тип объектов с данными и связанными действиями.{" "}
-            <strong>Экземпляр</strong> — конкретный объект этого класса.
-          </Typography.Text>
-          <Typography.Text>
-            Это основа{" "}
-            <strong>объектно-ориентированного программирования</strong>,
-            сокращённо ООП. Оно особенно полезно, когда программа моделирует
-            несколько сущностей со своим состоянием. Для суммы чисел отдельный
-            класс обычно не нужен.
+            Опишем класс прогресса чтения и создадим две книги:
           </Typography.Text>
           <CodeBlock
             code={
-              'class ReadingProgress:\n    def __init__(self, title, total_pages):\n        if total_pages <= 0:\n            raise ValueError(\n                "Число страниц должно быть положительным"\n            )\n        self.title = title\n        self.total_pages = total_pages\n        self.current_page = 0\n\n    def advance(self, pages):\n        if pages < 0:\n            raise ValueError(\n                "Нельзя продвинуться "\n                "на отрицательное число страниц"\n            )\n        self.current_page = min(\n            self.total_pages, self.current_page + pages\n        )\n\n    def fraction(self):\n        return self.current_page / self.total_pages\n\nbook = ReadingProgress("Python", 200)\nbook.advance(30)\nprint(book.title, book.current_page)\nprint(book.fraction())'
+              'class ReadingProgress:\n    def __init__(self, title, total_pages):\n        self.title = title\n        self.total_pages = total_pages\n        self.current_page = 0\n\n    def advance(self, pages):\n        self.current_page = min(self.total_pages, self.current_page + pages)\n\nbook = ReadingProgress("Python", 200)\nanother_book = ReadingProgress("Алгоритмы", 300)\nbook.advance(30)\nprint(book.title, book.current_page)\nprint(another_book.title, another_book.current_page)'
             }
-            label={"Для суммы чисел отдельный класс обычно не нужен"}
+            label={"Класс ReadingProgress и два экземпляра"}
             language="python"
-            fileName="reading_progress.py"
-            output={"Python 30\n0.15"}
+            fileName="main.py"
+            output={"Python 30\nАлгоритмы 0"}
           />
           <Typography.Text>
-            Предполагаются целые числа страниц. <Notation>{"class"}</Notation>{" "}
-            определяет класс. <Notation>{"__init__"}</Notation> — специальный
-            метод начальной настройки уже созданного экземпляра. Вызов класса
-            создаёт экземпляр и организует его инициализацию.{" "}
-            <Notation>{"__init__"}</Notation> не должен возвращать вместо него
-            произвольный результат.
+            <Notation>{"class"}</Notation> описывает тип. Вызов{" "}
+            <Notation>{'ReadingProgress("Python", 200)'}</Notation> создаёт
+            новый объект — <strong>экземпляр</strong> — и сразу вызывает для
+            него <Notation>{"__init__"}</Notation>: этот специальный метод
+            задаёт начальные данные. <strong>Метод</strong> — функция внутри
+            класса, как <Notation>{"advance"}</Notation>. У каждого экземпляра
+            свои данные, а методы общие:
+          </Typography.Text>
+          <LessonDiagram
+            {...lessonMedia.classObjects}
+            caption={
+              <>
+                Один класс — сколько угодно экземпляров.{" "}
+                <Notation>{"advance"}</Notation> изменил страницу только у{" "}
+                <Notation>{"book"}</Notation>: при вызове Python передаёт сам
+                объект первым аргументом.
+              </>
+            }
+          />
+          <Typography.Text>
+            Так устроено{" "}
+            <strong>объектно-ориентированное программирование</strong> (ООП):
+            программа описывает сущности со своим состоянием и действиями. Для
+            суммы чисел класс не нужен — он полезен, когда сущностей много и у
+            них есть правила.
           </Typography.Text>
         </>
       ),
@@ -92,35 +104,41 @@ export const pythonClassesLesson = defineCourseLesson({
               <Notation>{"self"}</Notation> — экземпляр, для которого
               выполняется метод.
             </strong>{" "}
-            <Notation>{"self"}</Notation> — обычное имя первого параметра
-            метода, принятое по соглашению. Оно обозначает экземпляр, для
-            которого выполняется действие. При{" "}
-            <Notation>{"book.advance(30)"}</Notation> Python автоматически
-            передаёт <Notation>{"book"}</Notation> первым аргументом. Смысл
-            близок к <Notation>{"ReadingProgress.advance(book, 30)"}</Notation>.
+            При <Notation>{"book.advance(30)"}</Notation> Python подставляет{" "}
+            <Notation>{"book"}</Notation> в первый параметр: вызов означает{" "}
+            <Notation>{"ReadingProgress.advance(book, 30)"}</Notation>. Имя{" "}
+            <Notation>{"self"}</Notation> — соглашение, но его пишут всегда.
           </Typography.Text>
           <Typography.Text>
-            <strong>Атрибут</strong> — именованное значение, связанное с
-            объектом. <Notation>{"self.title"}</Notation> и{" "}
-            <Notation>{"self.current_page"}</Notation> сохраняются внутри
-            экземпляра. Обычная локальная переменная{" "}
-            <Notation>{"pages"}</Notation> существует только во время вызова и
-            сама по себе не запоминается в объекте.
+            <strong>Атрибут</strong> — значение, привязанное к объекту:{" "}
+            <Notation>{"self.title"}</Notation>,{" "}
+            <Notation>{"self.current_page"}</Notation>. Он живёт, пока жив
+            объект. Параметр <Notation>{"pages"}</Notation> — обычная локальная
+            переменная: после вызова её нет.
           </Typography.Text>
           <Typography.Text>
-            Создай второй экземпляр — у него будет независимая текущая страница:
+            Теперь второй шаг: класс сам охраняет свои правила. Число страниц
+            должно быть положительным, читать назад нельзя, а доля прочитанного
+            — новый метод:
           </Typography.Text>
           <CodeBlock
             code={
-              'another_book = ReadingProgress("Алгоритмы", 300)\nprint(another_book.current_page, book.current_page)'
+              'class ReadingProgress:\n    def __init__(self, title, total_pages):\n        if total_pages <= 0:\n            raise ValueError("Страниц должно быть больше нуля")\n        self.title = title\n        self.total_pages = total_pages\n        self.current_page = 0\n\n    def advance(self, pages):\n        if pages < 0:\n            raise ValueError("Нельзя читать назад")\n        self.current_page = min(self.total_pages, self.current_page + pages)\n\n    def fraction(self):\n        return self.current_page / self.total_pages\n\nbook = ReadingProgress("Python", 200)\nbook.advance(30)\nprint(book.fraction())\nbook.advance(-5)'
             }
-            label={
-              "Создай второй экземпляр — у него будет независимая текущая страница"
-            }
+            label={"ReadingProgress с проверками и долей прочитанного"}
+            collapsible={false}
             language="python"
-            fileName="another_book.py"
-            output={"0 30"}
+            fileName="main.py"
+            output={"0.15"}
+            error={"ValueError: Нельзя читать назад"}
           />
+          <Typography.Text>
+            Проверки стоят внутри методов, поэтому их не обойти: любая книга
+            создаётся через <Notation>{"__init__"}</Notation> и продвигается
+            через <Notation>{"advance"}</Notation>. Ошибки — тот же{" "}
+            <Notation>{"raise ValueError"}</Notation>, что в уроке об
+            исключениях.
+          </Typography.Text>
         </>
       ),
     },
@@ -131,29 +149,73 @@ export const pythonClassesLesson = defineCourseLesson({
         <>
           <Typography.Text>
             <strong>
-              Атрибут класса общий для всех экземпляров, атрибут экземпляра — у
-              каждого свой.
+              Атрибут экземпляра у каждого объекта свой, атрибут класса — один
+              на всех.
             </strong>{" "}
-            Переменная в теле класса вне методов относится к классу и может
-            использоваться всеми экземплярами. Это подходит для общей константы.
-            Изменяемый список, который по ошибке объявили там вместо{" "}
-            <Notation>{"self.items = []"}</Notation> в{" "}
-            <Notation>{"__init__"}</Notation>, станет общим для объектов.
+            Атрибут экземпляра создают в <Notation>{"__init__"}</Notation> через{" "}
+            <Notation>{"self"}</Notation>. Переменная в теле класса вне методов
+            — атрибут класса: его видят все экземпляры. Для общей константы это
+            удобно, а для списка — ловушка. Сравни:
           </Typography.Text>
-          <CodeBlock
-            code={
-              'class Notebook:\n    def __init__(self):\n        self.notes = []\n\nfirst = Notebook()\nsecond = Notebook()\nfirst.notes.append("Циклы")\nprint(second.notes)'
-            }
-            label={"Программа на Python"}
-            language="python"
-            fileName="notebook.py"
-            output={"[]"}
+          <LessonTabs
+            label="Где создан список заметок"
+            tabs={[
+              {
+                label: "в __init__",
+                content: (
+                  <>
+                    <CodeBlock
+                      code={
+                        'class Notebook:\n    def __init__(self):\n        self.notes = []\n\nfirst = Notebook()\nsecond = Notebook()\nfirst.notes.append("Циклы")\nprint(second.notes)'
+                      }
+                      label={"Список заметок в __init__"}
+                      language="python"
+                      fileName="main.py"
+                      output={"[]"}
+                    />
+                    <LessonDiagram
+                      {...lessonMedia.notesOwn}
+                      caption={
+                        <>
+                          Каждый вызов <Notation>{"__init__"}</Notation> создал
+                          свой список: заметка попала только к{" "}
+                          <Notation>{"first"}</Notation>.
+                        </>
+                      }
+                    />
+                  </>
+                ),
+              },
+              {
+                label: "в теле класса",
+                content: (
+                  <>
+                    <CodeBlock
+                      code={
+                        'class Notebook:\n    notes = []\n\nfirst = Notebook()\nsecond = Notebook()\nfirst.notes.append("Циклы")\nprint(second.notes)'
+                      }
+                      label={"Список заметок в теле класса"}
+                      language="python"
+                      fileName="main.py"
+                      output={"['Циклы']"}
+                    />
+                    <LessonDiagram
+                      {...lessonMedia.notesShared}
+                      caption={
+                        <>
+                          Список один на класс:{" "}
+                          <Notation>{"first.notes"}</Notation> и{" "}
+                          <Notation>{"second.notes"}</Notation> — два имени
+                          одного объекта, как <Notation>{"b = a"}</Notation> в
+                          уроке о списках.
+                        </>
+                      }
+                    />
+                  </>
+                ),
+              },
+            ]}
           />
-          <Typography.Text>
-            Каждый вызов <Notation>{"__init__"}</Notation> создаёт отдельный
-            список. Это та же идея независимых вложенных списков, а не отдельное
-            исключение ООП.
-          </Typography.Text>
         </>
       ),
     },
@@ -166,19 +228,20 @@ export const pythonClassesLesson = defineCourseLesson({
             <strong>
               Класс держит правила изменения данных рядом с самими данными.
             </strong>{" "}
-            <strong>Инкапсуляция</strong> означает организацию данных и правил
-            обращения с ними так, чтобы остальная программа работала с понятными
-            действиями. Например, <Notation>{"advance"}</Notation> контролирует
-            допустимое изменение позиции вместо разрозненных присваиваний в
-            разных местах.
+            Это и есть <strong>инкапсуляция</strong>: остальная программа меняет
+            страницу через <Notation>{"advance"}</Notation>, а не присваиванием
+            в разных местах. Имя с подчёркиванием, например{" "}
+            <Notation>{"_current_page"}</Notation>, по соглашению значит
+            «внутренняя деталь, снаружи не трогать»; запретом это не является.
           </Typography.Text>
-          <Typography.Text>
-            Имя с одним начальным подчёркиванием, например{" "}
-            <Notation>{"_current_page"}</Notation>, обозначает внутреннюю деталь
-            по соглашению. Это не запрет доступа. Два начальных подчёркивания
-            вызывают преобразование имени для уменьшения случайных конфликтов в
-            наследовании; это тоже не механизм защиты секретных данных.
-          </Typography.Text>
+          <ProofDisclosure summary="Тонкости: два подчёркивания" kind="nuance">
+            <Typography.Text>
+              Имя с двумя начальными подчёркиваниями, например{" "}
+              <Notation>{"__page"}</Notation>, Python переименовывает внутри
+              класса, чтобы оно случайно не совпало с именем в классе-потомке.
+              Защитой секретных данных это тоже не является.
+            </Typography.Text>
+          </ProofDisclosure>
           <Typography.Text>
             <Notation>{"@property"}</Notation> позволяет читать вычисляемое
             свойство как атрибут:
@@ -187,20 +250,16 @@ export const pythonClassesLesson = defineCourseLesson({
             code={
               "class Rectangle:\n    def __init__(self, width, height):\n        self.width = width\n        self.height = height\n\n    @property\n    def area(self):\n        return self.width * self.height\n\nrectangle = Rectangle(3, 5)\nprint(rectangle.area)"
             }
-            label={
-              "@property позволяет читать вычисляемое свойство как атрибут"
-            }
+            label={"Свойство area у прямоугольника"}
             language="python"
-            fileName="rectangle.py"
+            fileName="main.py"
             output={"15"}
           />
           <Typography.Text>
-            <Notation>{"area"}</Notation> читается без скобок. Декоратор
-            преобразует метод в свойство. В приведённой форме присвоить{" "}
-            <Notation>{"rectangle.area = ..."}</Notation> нельзя: способ записи
-            свойства не определён. Ширина и высота здесь не проверяются; при
-            необходимости проверку добавляют в договорённость класса и его
-            реализацию.
+            <Notation>{"area"}</Notation> читается без скобок, но каждый раз
+            вычисляется заново из ширины и высоты. Присвоить{" "}
+            <Notation>{"rectangle.area = 10"}</Notation> нельзя: свойство только
+            для чтения, Python ответит <Notation>{"AttributeError"}</Notation>.
           </Typography.Text>
         </>
       ),
@@ -215,26 +274,38 @@ export const pythonClassesLesson = defineCourseLesson({
               Наследование уточняет поведение, композиция собирает объект из
               других объектов.
             </strong>{" "}
-            <strong>Наследование</strong> создаёт класс на основе другого и
-            позволяет уточнить его поведение. Оно уместно, если новый объект
-            действительно можно использовать вместо объекта базового вида.
+            <strong>Наследование</strong> создаёт класс на основе другого:
+            задача — это именованный предмет, у которого есть ещё отметка о
+            выполнении. Наследование уместно, если новый объект можно
+            использовать везде, где ждут базовый.
           </Typography.Text>
           <CodeBlock
             code={
               'class NamedItem:\n    def __init__(self, name):\n        self.name = name\n\n    def label(self):\n        return self.name\n\nclass Task(NamedItem):\n    def __init__(self, name, done=False):\n        super().__init__(name)\n        self.done = done\n\n    def label(self):\n        mark = "✓" if self.done else "○"\n        return f"{mark} {self.name}"\n\nfor item in [NamedItem("Книга"), Task("Прочитать", True)]:\n    print(item.label())'
             }
-            label={"Программа на Python"}
+            label={"Task наследует NamedItem и меняет label"}
             language="python"
-            fileName="named_item.py"
+            fileName="main.py"
             output={"Книга\n✓ Прочитать"}
           />
           <Typography.Text>
-            <Notation>{"Task(NamedItem)"}</Notation> обозначает наследование.{" "}
-            <Notation>{"super()"}</Notation> в этом простом случае позволяет
-            вызвать реализацию базового класса. Более общий смысл — продолжить
-            поиск по порядку наследования; при сложном множественном
-            наследовании это не просто «всегда прямой родитель».
+            <Notation>{"class Task(NamedItem)"}</Notation> — наследование:{" "}
+            <Notation>{"Task"}</Notation> получает всё от{" "}
+            <Notation>{"NamedItem"}</Notation>.{" "}
+            <Notation>{"super().__init__(name)"}</Notation> вызывает{" "}
+            <Notation>{"__init__"}</Notation> базового класса, чтобы не
+            повторять его код.
           </Typography.Text>
+          <ProofDisclosure
+            summary="Тонкости: super при нескольких родителях"
+            kind="nuance"
+          >
+            <Typography.Text>
+              Класс может наследовать сразу от нескольких. Тогда{" "}
+              <Notation>{"super()"}</Notation> ведёт не обязательно к прямому
+              родителю, а к следующему классу в порядке поиска методов.
+            </Typography.Text>
+          </ProofDisclosure>
           <Typography.Text>
             <Notation>{"label"}</Notation> переопределён: одинаковый вызов на
             разных объектах может выполнять разную реализацию. Это пример{" "}
@@ -261,14 +332,14 @@ export const pythonClassesLesson = defineCourseLesson({
               Специальные методы связывают класс с обычными средствами языка, а{" "}
               <Notation>{"dataclass"}</Notation> пишет типовой код за нас.
             </strong>{" "}
-            Специальные методы связывают класс с обычными средствами языка.{" "}
+            <Notation>{"__init__"}</Notation> — первый из них. Ещё:{" "}
             <Notation>{"__repr__"}</Notation> задаёт представление для
             разработчика, <Notation>{"__str__"}</Notation> — текстовое
             представление, <Notation>{"__len__"}</Notation> — поведение{" "}
             <Notation>{"len"}</Notation>, <Notation>{"__eq__"}</Notation> —
-            сравнение через <Notation>{"=="}</Notation>. Не нужно придумывать
-            произвольные имена с двойными подчёркиваниями: у известных имён есть
-            определённые протоколы.
+            сравнение через <Notation>{"=="}</Notation>. Свои имена с двумя
+            подчёркиваниями с двух сторон не придумывают: Python знает только
+            свой список.
           </Typography.Text>
           <Typography.Text>
             Если класс в основном хранит запись, модуль{" "}
@@ -278,36 +349,36 @@ export const pythonClassesLesson = defineCourseLesson({
             code={
               "from dataclasses import dataclass\n\n@dataclass\nclass Point:\n    x: float\n    y: float\n\np = Point(1.0, 2.0)\nq = Point(1.0, 2.0)\nprint(p)\nprint(p == q)"
             }
-            label={
-              "Если класс в основном хранит запись, модуль dataclasses сокращает однотипный код"
-            }
+            label={"Точка как dataclass"}
             language="python"
-            fileName="point.py"
+            fileName="main.py"
             output={"Point(x=1.0, y=2.0)\nTrue"}
           />
           <Typography.Text>
-            Декоратор создаёт инициализацию и некоторые стандартные методы на
-            основе полей. Записи <Notation>{"x: float"}</Notation> и{" "}
-            <Notation>{"y: float"}</Notation> — аннотации ожидаемых типов,
-            которые объясним в уроке о читаемости кода. Они не преобразуют
-            аргументы автоматически.
+            Декоратор сам пишет <Notation>{"__init__"}</Notation>,{" "}
+            <Notation>{"__repr__"}</Notation> и <Notation>{"__eq__"}</Notation>{" "}
+            по списку полей. Запись <Notation>{"x: float"}</Notation> объявляет
+            поле и ожидаемый тип; подробнее о таких записях — в уроке об
+            аннотациях. Число в <Notation>{"float"}</Notation> она не
+            превращает.
           </Typography.Text>
           <Typography.Text>
-            Для независимого изменяемого поля применяют фабрику:
+            Для поля-списка нужна фабрика, иначе список окажется общим, как
+            атрибут класса выше:
           </Typography.Text>
           <CodeBlock
             code={
-              "from dataclasses import dataclass, field\n\n@dataclass\nclass Course:\n    name: str\n    lessons: list[str] = field(default_factory=list)"
+              'from dataclasses import dataclass, field\n\n@dataclass\nclass Course:\n    name: str\n    lessons: list = field(default_factory=list)\n\npython = Course("Python")\nexcel = Course("Excel")\npython.lessons.append("Циклы")\nprint(python)\nprint(excel.lessons)'
             }
-            label={"Для независимого изменяемого поля применяют фабрику"}
+            label={"Поле-список через default_factory"}
             language="python"
-            fileName="course.py"
+            fileName="main.py"
+            output={"Course(name='Python', lessons=['Циклы'])\n[]"}
           />
           <Typography.Text>
-            <Notation>{"default_factory=list"}</Notation> создаёт новый список
-            для каждого экземпляра. Мы снова видим общую закономерность:
-            изменяемые данные требуют явного решения о совместном или
-            независимом владении.
+            <Notation>{"default_factory=list"}</Notation> вызывает{" "}
+            <Notation>{"list()"}</Notation> для каждого нового экземпляра: у
+            каждого курса свой список уроков.
           </Typography.Text>
         </>
       ),
@@ -406,49 +477,57 @@ export const pythonClassesLesson = defineCourseLesson({
   ],
   result: (
     <>
+      <Typography.Text>
+        Класс собирает данные и правила их изменения в один тип; экземпляров
+        может быть сколько угодно. Вот что понадобится дальше.
+      </Typography.Text>
       <LessonSummary
         items={[
           {
+            key: "Класс и экземпляр",
             note: (
               <>
                 <Notation>{"class"}</Notation> описывает тип; вызов класса
-                создаёт экземпляр, <Notation>{"__init__"}</Notation> его
-                настраивает.
+                создаёт экземпляр, <Notation>{"__init__"}</Notation> задаёт
+                начальные данные.
               </>
             ),
           },
           {
+            key: <Notation>{"self"}</Notation>,
             note: (
               <>
-                <Notation>{"self"}</Notation> — экземпляр, для которого вызван
-                метод; <Notation>{"self.x"}</Notation> — атрибут экземпляра.
+                Экземпляр, для которого вызван метод;{" "}
+                <Notation>{"self.x"}</Notation> — его атрибут.
               </>
             ),
           },
           {
+            key: "Атрибут класса",
             note: (
               <>
-                Изменяемый атрибут класса общий для всех экземпляров; свои
-                данные создают в <Notation>{"__init__"}</Notation>.
+                Один на всех: список в теле класса общий, свои данные создают в{" "}
+                <Notation>{"__init__"}</Notation>.
               </>
             ),
           },
           {
+            key: <Notation>{"@property"}</Notation>,
             note: (
               <>
-                <Notation>{"@property"}</Notation> — вычисляемое свойство без
-                скобок; наследование уточняет поведение, композиция —
-                «содержит».
+                Вычисляемое свойство без скобок; наследование уточняет класс,
+                композиция — «содержит».
               </>
             ),
           },
           {
+            key: <Notation>{"@dataclass"}</Notation>,
             note: (
               <>
-                <Notation>{"@dataclass"}</Notation> создаёт{" "}
                 <Notation>{"__init__"}</Notation>,{" "}
-                <Notation>{"__repr__"}</Notation> и{" "}
-                <Notation>{"__eq__"}</Notation> по полям.
+                <Notation>{"__repr__"}</Notation>,{" "}
+                <Notation>{"__eq__"}</Notation> по полям; список — через{" "}
+                <Notation>{"default_factory"}</Notation>.
               </>
             ),
           },

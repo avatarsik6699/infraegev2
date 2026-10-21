@@ -1845,6 +1845,8 @@ def refs_svg(names, objects, cells=None, old=None, accent=(), tone: str | None =
             for t in targets:
                 pos[t] = (x, below)
                 x += width[t] + 16
+    # name boxes fit the longest name; short names keep the 92 px box
+    nw = max([92] + [round(len(n) * 9.6 + 24) for n, _ in names])
     live = {t for _, t in names} | set(owners)
     bottom = max(y for _, y in pos.values()) + 40
     h = max(bottom, top + len(names) * row_h - 18) + top
@@ -1892,16 +1894,16 @@ def refs_svg(names, objects, cells=None, old=None, accent=(), tone: str | None =
     order = [n for n, _ in names]
     for name, t in old:
         ny = top + order.index(name) * row_h + 20
-        out.append(_arrow(108, ny, *anchor(t, 108, ny), FAINT, dashed=True))
+        out.append(_arrow(16 + nw, ny, *anchor(t, 16 + nw, ny), FAINT, dashed=True))
     for i, (name, t) in enumerate(names):
         y = top + i * row_h
         color = hot if name in accent else INK
         out.append(
-            f'<rect x="16" y="{y}" width="92" height="40" rx="8" fill="#fff" '
+            f'<rect x="16" y="{y}" width="{nw}" height="40" rx="8" fill="#fff" '
             f'stroke="{color}" stroke-width="{2 if name in accent else 1.5}"/>'
         )
-        out.append(_text(62, y + 26, name, 16, color, "middle", 600))
-        out.append(_arrow(108, y + 20, *anchor(t, 108, y + 20), color))
+        out.append(_text(16 + nw / 2, y + 26, name, 16, color, "middle", 600))
+        out.append(_arrow(16 + nw, y + 20, *anchor(t, 16 + nw, y + 20), color))
     out.append("</svg>")
     return "".join(out)
 
@@ -5198,6 +5200,155 @@ def solve_cycle_svg(tone: str | None = None) -> str:
     return "".join(out)
 
 
+def class_objects_svg(tone: str | None = None) -> str:
+    """One class, two instances with their own attributes; a method call
+    passes the instance as self."""
+    accent = accent_of(tone)
+    out = [_svg(330, "Класс ReadingProgress и два его экземпляра")]
+    out.append(_text(16, 20, "класс — описание", 12.5, MUTED))
+    out.append(_box(16, 60, 250, 120, INK, WASH, 8, 1.5))
+    out.append(_mono(30, 86, "class ReadingProgress", 14, INK, weight=600))
+    out.append(_mono(44, 116, "__init__(self, …)", 13, INK))
+    out.append(_mono(44, 140, "advance(self, pages)", 13, INK))
+    out.append(_mono(44, 164, "fraction(self)", 13, INK))
+    out.append(_text(372, 20, "экземпляры — у каждого свои атрибуты", 12.5, MUTED))
+    objects = [
+        (40, "book", ["title = 'Python'", "total_pages = 200", "current_page = 30"], True),
+        (
+            168,
+            "another_book",
+            ["title = 'Алгоритмы'", "total_pages = 300", "current_page = 0"],
+            False,
+        ),
+    ]
+    for y, name, attrs, hot in objects:
+        out.append(_mono(372, y, name, 14, accent if hot else INK, weight=600))
+        out.append(_box(372, y + 8, 270, 92, accent if hot else INK, "#fff", 8, 2 if hot else 1.5))
+        for i, a in enumerate(attrs):
+            out.append(_mono(386, y + 32 + i * 24, a, 13, INK))
+        out.append(_arrow(270, 120, 366, y + 54, MUTED, dashed=True))
+    out.append(_text(16, 290, "вызов метода", 12.5, MUTED))
+    out.append(_mono(16, 316, "book.advance(30)", 14, INK, weight=600))
+    out.append(_mono(170, 316, "→", 14, MUTED))
+    out.append(_mono(194, 316, "ReadingProgress.advance(", 14, INK))
+    out.append(_mono(194 + 24 * 8.4, 316, "self=book", 14, accent, weight=600))
+    out.append(_mono(194 + 33 * 8.4, 316, ", pages=30)", 14, INK))
+    out.append("</svg>")
+    return "".join(out)
+
+
+def closure_cells_svg(tone: str | None = None) -> str:
+    """make_multiplier called twice: two functions, each keeps its own factor."""
+    accent = accent_of(tone)
+    out = [_svg(206, "Замыкание: две функции со своим factor")]
+    for k, (name, factor) in enumerate([("triple", 3), ("double", 2)]):
+        x = 16 + k * 330
+        out.append(_mono(x, 22, f"{name} = make_multiplier({factor})", 13.5, INK, weight=600))
+        out.append(_box(x, 36, 300, 104, INK, "#fff", 8, 1.5))
+        out.append(_mono(x + 14, 62, "def multiply(number):", 13, INK))
+        out.append(_mono(x + 14, 84, "    return number * factor", 13, INK))
+        out.append(_box(x + 14, 98, 150, 30, accent, WASH, 6, 2))
+        out.append(_mono(x + 26, 118, f"factor = {factor}", 13, INK, weight=600))
+        out.append(_text(x + 176, 118, "запомнено", 12.5, accent))
+        out.append(_mono(x, 172, f"{name}(7) → 7 * {factor} = {7 * factor}", 14, INK))
+    out.append(
+        _text(
+            330,
+            200,
+            "внешняя функция закончилась, а её factor живёт в созданной функции",
+            12.5,
+            MUTED,
+            "middle",
+        )
+    )
+    out.append("</svg>")
+    return "".join(out)
+
+
+def decorator_wrap_svg(tone: str | None = None) -> str:
+    """@announce rebinds the name add to wrapper, which calls the original add."""
+    accent = accent_of(tone)
+    out = [_svg(214, "Декоратор: имя add указывает на обёртку")]
+    out.append(_text(16, 22, "без декоратора", 12.5, MUTED))
+    out.append(_mono(16, 62, "add", 15, INK, weight=600))
+    out.append(_arrow(52, 57, 96, 57, INK))
+    out.append(_box(100, 36, 150, 40, INK, "#fff", 8, 1.5))
+    out.append(_mono(114, 61, "функция add", 13, INK))
+    out.append(_text(16, 112, "add(2, 5) сразу считает сумму", 12.5, MUTED))
+    out.append(f'<path d="M 290 12 V 200" stroke="{FAINT}"/>')
+    out.append(_text(310, 22, "с @announce", 12.5, MUTED))
+    out.append(_mono(310, 62, "add", 15, accent, weight=600))
+    out.append(_arrow(346, 57, 386, 57, accent))
+    out.append(_box(390, 36, 250, 112, accent, "#fff", 8, 2))
+    out.append(_mono(404, 60, "wrapper(*args, **kwargs)", 13, INK, weight=600))
+    out.append(_mono(404, 84, 'print("Вызов add")', 12.5, INK))
+    out.append(_mono(404, 106, "result = function(…)", 12.5, INK))
+    out.append(_mono(404, 128, "return result", 12.5, INK))
+    out.append(_arrow(515, 150, 515, 168, MUTED))
+    out.append(_box(440, 170, 150, 26, INK, WASH, 6, 1.25))
+    out.append(_mono(454, 188, "исходная add", 12, INK))
+    out.append(_text(310, 112, "add(2, 5) →", 12.5, MUTED))
+    out.append(_text(310, 130, "wrapper →", 12.5, MUTED))
+    out.append(_text(310, 148, "исходная", 12.5, MUTED))
+    out.append("</svg>")
+    return "".join(out)
+
+
+def async_timeline_svg(tone: str | None = None) -> str:
+    """Two waits of 0.02 s and 0.01 s: one after another take 0.03 s, with
+    gather they overlap and take 0.02 s."""
+    accent = accent_of(tone)
+    L, scale = 150, 14000  # px per second
+    out = [_svg(236, "Ожидания подряд и вместе через gather")]
+    for i in range(4):
+        x = L + i * 0.01 * scale
+        out.append(f'<path d="M {x:.1f} 28 V 206" stroke="{FAINT}"/>')
+        out.append(_text(x, 224, f"{i / 100:.2f} с".replace(".", ","), 12, MUTED, "middle"))
+
+    def bar(y, start, length, label, color):
+        x = L + start * scale
+        w = length * scale
+        out.append(_box(x, y, w, 24, color, WASH, 4, 1.75))
+        out.append(_mono(x + 10, y + 17, label, 13, INK))
+
+    out.append(_text(16, 22, "подряд: await, затем await", 13, INK, weight=600))
+    bar(36, 0, 0.02, "A ждёт", INK)
+    bar(66, 0.02, 0.01, "B", INK)
+    out.append(_text(L + 0.03 * scale + 12, 84, "0,03 с", 13, INK, weight=600))
+    out.append(_text(16, 126, "gather: оба ожидания вместе", 13, accent, weight=600))
+    bar(140, 0, 0.02, "A ждёт", accent)
+    bar(170, 0, 0.01, "B", accent)
+    out.append(_text(L + 0.02 * scale + 12, 158, "0,02 с", 13, accent, weight=600))
+    out.append("</svg>")
+    return "".join(out)
+
+
+def oracle_check_svg(tone: str | None = None) -> str:
+    """A fast function checked against a slow obvious one on random inputs."""
+    accent = accent_of(tone)
+    out = [_svg(196, "Проверка быстрого решения медленным эталоном")]
+    out.append(_box(16, 64, 150, 56, INK, WASH, 8, 1.5))
+    out.append(_mono(28, 88, "random.Random(42)", 12.5, INK, weight=600))
+    out.append(_text(28, 108, "1000 случайных n", 12.5, MUTED))
+    out.append(_arrow(168, 84, 214, 44, MUTED))
+    out.append(_arrow(168, 100, 214, 140, MUTED))
+    out.append(_box(218, 20, 190, 48, accent, "#fff", 8, 2))
+    out.append(_mono(232, 42, "digit_sum(n)", 13, INK, weight=600))
+    out.append(_text(232, 60, "быстрая: % и //", 12, MUTED))
+    out.append(_box(218, 116, 190, 48, INK, "#fff", 8, 1.5))
+    out.append(_mono(232, 138, "digit_sum_slow(n)", 13, INK, weight=600))
+    out.append(_text(232, 156, "эталон: через str", 12, MUTED))
+    out.append(_arrow(410, 44, 462, 84, MUTED))
+    out.append(_arrow(410, 140, 462, 100, MUTED))
+    out.append(f'<circle cx="480" cy="92" r="18" fill="#fff" stroke="{INK}" stroke-width="1.5"/>')
+    out.append(_mono(480, 97, "==", 14, INK, "middle", 600))
+    out.append(_text(508, 84, "равны — следующее n", 12.5, MUTED))
+    out.append(_text(508, 108, "нет — assert", 12.5, ERR))
+    out.append(_text(508, 126, "показывает n", 12.5, ERR))
+    out.append("</svg>")
+    return "".join(out)
+
+
 FIGURES = {
     "rectangles": rectangles_svg,
     "cover": cover_svg,
@@ -5285,6 +5436,11 @@ FIGURES = {
     "program_flow": program_flow_svg,
     "course_task_stepper": course_task_stepper,
     "solve_cycle": solve_cycle_svg,
+    "class_objects": class_objects_svg,
+    "closure_cells": closure_cells_svg,
+    "decorator_wrap": decorator_wrap_svg,
+    "async_timeline": async_timeline_svg,
+    "oracle_check": oracle_check_svg,
 }
 
 # Step-through figures as (svg, caption) frames, for the site media

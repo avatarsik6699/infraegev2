@@ -129979,19 +129979,27 @@
     {
       "task": {
         "id": "python-classes-t02",
-        "title": "После book = ReadingProgress(\"Python\", 200), book.advance(50),…",
+        "title": "Что напечатает программа?",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 1,
         "estimated_minutes": null,
-        "answer_instruction": "Запишите ответы через пробел в порядке вопроса; списки и строки — так, как их печатает Python.",
+        "answer_instruction": "Запишите напечатанные значения через пробел в порядке вывода.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "После `book = ReadingProgress(\"Python\", 200)`, `book.advance(50)`, `book.advance(170)` чему равны `book.current_page` и `book.fraction()`?"
+              "markdown": "Что напечатает программа?"
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "class ReadingProgress:\n    def __init__(self, title, total_pages):\n        self.title = title\n        self.total_pages = total_pages\n        self.current_page = 0\n\n    def advance(self, pages):\n        self.current_page = min(self.total_pages, self.current_page + pages)\n\n    def fraction(self):\n        return self.current_page / self.total_pages\n\nbook = ReadingProgress(\"Python\", 200)\nbook.advance(50)\nbook.advance(170)\nprint(book.current_page, book.fraction())",
+              "caption": null
             }
           }
         ],
@@ -129999,7 +130007,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Классы»: проследи программу по строкам и запиши значения так, как их покажет Python."
+              "markdown": "`min` не даёт перескочить последнюю страницу: 50 + 170 больше 200."
             }
           }
         ],
@@ -130007,7 +130015,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "200 и 1.0: `min` не даёт выйти за последнюю страницу."
+              "markdown": "После второго `advance` страница стала бы 220, но `min(200, 220)` = 200. Доля 200 / 200 = 1.0."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `200 1.0`"
             }
           }
         ],
@@ -130017,8 +130031,7 @@
         "lessons": [
           {
             "position": 0,
-            "material_id": "python-classes",
-            "counts_toward_mastery": false
+            "material_id": "python-classes"
           }
         ],
         "theory_links": [],
@@ -130049,19 +130062,27 @@
     {
       "task": {
         "id": "python-classes-t04",
-        "title": "В классе Bad список notes = [] объявлен в теле класса",
+        "title": "Что напечатает программа?",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 1,
         "estimated_minutes": null,
-        "answer_instruction": "Запишите результат так, как его печатает Python.",
+        "answer_instruction": "Запишите список так, как его печатает Python.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "В классе `Bad` список `notes = []` объявлен в теле класса. После `a = Bad()`, `b = Bad()`, `a.notes.append(1)` чему равно `b.notes`?"
+              "markdown": "Что напечатает программа?"
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "class Bad:\n    notes = []\n\na = Bad()\nb = Bad()\na.notes.append(1)\nprint(b.notes)",
+              "caption": null
             }
           }
         ],
@@ -130069,7 +130090,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Классы»: проследи программу по строкам и запиши значения так, как их покажет Python."
+              "markdown": "Список создан в теле класса, а не в `__init__`: он один на все экземпляры."
             }
           }
         ],
@@ -130077,7 +130098,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "[1]: список один на весь класс."
+              "markdown": "`a.notes` и `b.notes` — два имени одного списка, поэтому добавленная единица видна через `b`."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `[1]`"
             }
           }
         ],
@@ -130087,8 +130114,7 @@
         "lessons": [
           {
             "position": 1,
-            "material_id": "python-classes",
-            "counts_toward_mastery": false
+            "material_id": "python-classes"
           }
         ],
         "theory_links": [],
@@ -130119,7 +130145,7 @@
     {
       "task": {
         "id": "python-classes-t08",
-        "title": "Напиши класс Wallet с атрибутом balance (сначала 0) и методами…",
+        "title": "Напиши класс: кошелёк",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 2,
@@ -130131,7 +130157,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Напиши класс `Wallet` с атрибутом `balance` (сначала 0) и методами `deposit(amount)` и `withdraw(amount)`; `withdraw` вызывает `ValueError`, если денег не хватает. Чему равен баланс после `deposit(100)` и `withdraw(30)`?"
+              "markdown": "Напиши класс `Wallet`: атрибут `balance` (сначала 0), метод `deposit(amount)` пополняет баланс, метод `withdraw(amount)` снимает деньги и вызывает `ValueError`, если их не хватает. Создай кошелёк, выполни `deposit(100)` и `withdraw(30)`, напечатай `balance`, запусти и запиши, что напечатала программа."
             }
           }
         ],
@@ -130139,7 +130165,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Классы»: проследи программу по строкам и запиши значения так, как их покажет Python."
+              "markdown": "Проверка в `withdraw` идёт до изменения баланса: `if amount > self.balance: raise ValueError(…)`."
             }
           }
         ],
@@ -130147,7 +130173,27 @@
           {
             "type": "text",
             "data": {
-              "markdown": "70."
+              "markdown": "Например:"
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "class Wallet:\n    def __init__(self):\n        self.balance = 0\n\n    def deposit(self, amount):\n        self.balance += amount\n\n    def withdraw(self, amount):\n        if amount > self.balance:\n            raise ValueError(\"Недостаточно денег\")\n        self.balance -= amount\n\nwallet = Wallet()\nwallet.deposit(100)\nwallet.withdraw(30)\nprint(wallet.balance)",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "100 − 30 = 70."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `70`"
             }
           }
         ],
@@ -130157,8 +130203,7 @@
         "lessons": [
           {
             "position": 2,
-            "material_id": "python-classes",
-            "counts_toward_mastery": false
+            "material_id": "python-classes"
           }
         ],
         "theory_links": [],
@@ -130189,7 +130234,7 @@
     {
       "task": {
         "id": "python-advanced-features-t02",
-        "title": "Чему равно make_multiplier(5)(4)?",
+        "title": "Что напечатает программа?",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 1,
@@ -130201,7 +130246,15 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Чему равно `make_multiplier(5)(4)`?"
+              "markdown": "Что напечатает программа?"
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "def make_multiplier(factor):\n    def multiply(number):\n        return number * factor\n    return multiply\n\nprint(make_multiplier(5)(4))",
+              "caption": null
             }
           }
         ],
@@ -130209,7 +130262,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Дополнительные механизмы языка»: проследи программу по строкам и запиши значения так, как их покажет Python."
+              "markdown": "Первые скобки создают функцию с `factor = 5`, вторые сразу её вызывают."
             }
           }
         ],
@@ -130217,7 +130270,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "20."
+              "markdown": "`make_multiplier(5)` возвращает `multiply`, которая помнит `factor = 5`; вызов с 4 даёт 20."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `20`"
             }
           }
         ],
@@ -130227,8 +130286,7 @@
         "lessons": [
           {
             "position": 0,
-            "material_id": "python-advanced-features",
-            "counts_toward_mastery": false
+            "material_id": "python-advanced-features"
           }
         ],
         "theory_links": [],
@@ -130259,19 +130317,27 @@
     {
       "task": {
         "id": "python-advanced-features-t05",
-        "title": "Что вернёт обёрнутая функция, если в wrapper убрать return result?",
+        "title": "Что напечатает программа?",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 1,
         "estimated_minutes": null,
-        "answer_instruction": "Введите ответ одним значением, как его покажет Python.",
+        "answer_instruction": "Запишите напечатанные строки через пробел в порядке вывода.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Что вернёт обёрнутая функция, если в `wrapper` убрать `return result`?"
+              "markdown": "Что напечатает программа?"
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "def announce(function):\n    def wrapper(*args, **kwargs):\n        print(function.__name__)\n        function(*args, **kwargs)\n    return wrapper\n\n@announce\ndef add(a, b):\n    return a + b\n\nprint(add(2, 5))",
+              "caption": null
             }
           }
         ],
@@ -130279,7 +130345,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Дополнительные механизмы языка»: проследи программу по строкам и запиши значения так, как их покажет Python."
+              "markdown": "Обёртка вызывает `add`, но не возвращает её результат."
             }
           }
         ],
@@ -130287,7 +130353,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "None при любых аргументах."
+              "markdown": "`wrapper` печатает имя функции и вызывает исходную `add`, но без `return` сама возвращает `None` — его и печатает `print`."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `add None`"
             }
           }
         ],
@@ -130297,8 +130369,7 @@
         "lessons": [
           {
             "position": 1,
-            "material_id": "python-advanced-features",
-            "counts_toward_mastery": false
+            "material_id": "python-advanced-features"
           }
         ],
         "theory_links": [],
@@ -130320,7 +130391,7 @@
         ],
         "checker": {
           "checker_type": "exact_match",
-          "answer_variants": ["None"],
+          "answer_variants": ["add None"],
           "numeric_tolerance": null
         }
       },
@@ -130329,19 +130400,27 @@
     {
       "task": {
         "id": "python-advanced-features-t07",
-        "title": "Чему равны len(\"Hi\".encode(\"utf-8\")) и len(\"Пока\".encode(\"utf-8\"))?",
+        "title": "Что напечатает программа?",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 1,
         "estimated_minutes": null,
-        "answer_instruction": "Запишите ответы через пробел в порядке вопроса; списки и строки — так, как их печатает Python.",
+        "answer_instruction": "Запишите напечатанные числа через пробел в порядке вывода.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Чему равны `len(\"Hi\".encode(\"utf-8\"))` и `len(\"Пока\".encode(\"utf-8\"))`?"
+              "markdown": "Что напечатает программа?"
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "print(len(\"Hi\".encode(\"utf-8\")), len(\"Пока\".encode(\"utf-8\")))",
+              "caption": null
             }
           }
         ],
@@ -130349,7 +130428,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Дополнительные механизмы языка»: проследи программу по строкам и запиши значения так, как их покажет Python."
+              "markdown": "В UTF-8 латинская буква занимает один байт, русская — два."
             }
           }
         ],
@@ -130357,7 +130436,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "2 и 8."
+              "markdown": "«Hi» — 2 байта, «Пока» — 4 · 2 = 8 байтов."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `2 8`"
             }
           }
         ],
@@ -130367,8 +130452,7 @@
         "lessons": [
           {
             "position": 2,
-            "material_id": "python-advanced-features",
-            "counts_toward_mastery": false
+            "material_id": "python-advanced-features"
           }
         ],
         "theory_links": [],
@@ -130399,19 +130483,27 @@
     {
       "task": {
         "id": "python-advanced-features-t08",
-        "title": "В каком порядке gather вернёт результаты report(\"A\", 0.03), report(\"B\",…",
+        "title": "Что напечатает программа?",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 1,
         "estimated_minutes": null,
-        "answer_instruction": "Запишите результат так, как его печатает Python.",
+        "answer_instruction": "Запишите список так, как его печатает Python.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "В каком порядке `gather` вернёт результаты `report(\"A\", 0.03)`, `report(\"B\", 0.01)`, `report(\"C\", 0.02)`?"
+              "markdown": "Что напечатает программа?"
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "import asyncio\n\nasync def report(name, delay):\n    await asyncio.sleep(delay)\n    return name\n\nasync def main():\n    results = await asyncio.gather(\n        report(\"A\", 0.03),\n        report(\"B\", 0.01),\n        report(\"C\", 0.02),\n    )\n    print(results)\n\nasyncio.run(main())",
+              "caption": null
             }
           }
         ],
@@ -130419,7 +130511,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Дополнительные механизмы языка»: проследи программу по строкам и запиши значения так, как их покажет Python."
+              "markdown": "`gather` возвращает результаты в порядке аргументов, а не в порядке завершения."
             }
           }
         ],
@@ -130427,7 +130519,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "['A', 'B', 'C'] — в порядке аргументов."
+              "markdown": "B закончится первой, но в списке результатов стоит на своём месте — второй."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `['A', 'B', 'C']`"
             }
           }
         ],
@@ -130437,8 +130535,7 @@
         "lessons": [
           {
             "position": 3,
-            "material_id": "python-advanced-features",
-            "counts_toward_mastery": false
+            "material_id": "python-advanced-features"
           }
         ],
         "theory_links": [],
@@ -130460,7 +130557,7 @@
         ],
         "checker": {
           "checker_type": "exact_match",
-          "answer_variants": ["['A', 'B', 'C']"],
+          "answer_variants": ["['A', 'B', 'C']", "['A','B','C']"],
           "numeric_tolerance": null
         }
       },
@@ -130469,7 +130566,7 @@
     {
       "task": {
         "id": "python-testing-t02",
-        "title": "Чему равно count_positive([3, -1, 0, 5, 8])?",
+        "title": "Что напечатает программа?",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 1,
@@ -130481,7 +130578,15 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Чему равно `count_positive([3, -1, 0, 5, 8])`?"
+              "markdown": "Что напечатает программа?"
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "def count_positive(numbers: list[int]) -> int:\n    return sum(number > 0 for number in numbers)\n\nprint(count_positive([3, -1, 0, 5, 8]))",
+              "caption": null
             }
           }
         ],
@@ -130489,7 +130594,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Читаемость, аннотации и тесты»: проследи программу по строкам и запиши значения так, как их покажет Python."
+              "markdown": "Каждое истинное сравнение в сумме считается как 1; ноль не положителен."
             }
           }
         ],
@@ -130497,7 +130602,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "3."
+              "markdown": "Положительные — 3, 5 и 8."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `3`"
             }
           }
         ],
@@ -130507,8 +130618,7 @@
         "lessons": [
           {
             "position": 0,
-            "material_id": "python-testing",
-            "counts_toward_mastery": false
+            "material_id": "python-testing"
           }
         ],
         "theory_links": [],
@@ -130539,7 +130649,7 @@
     {
       "task": {
         "id": "python-testing-t03",
-        "title": "Что вернёт maximum_negative([-5, -5, 2])?",
+        "title": "Что напечатает программа?",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 1,
@@ -130551,7 +130661,15 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Что вернёт `maximum_negative([-5, -5, 2])`?"
+              "markdown": "Что напечатает программа?"
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "def maximum_negative(numbers: list[int]) -> int | None:\n    best = None\n    for number in numbers:\n        if number < 0 and (best is None or number > best):\n            best = number\n    return best\n\nprint(maximum_negative([-5, -5, 2]))",
+              "caption": null
             }
           }
         ],
@@ -130559,7 +130677,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Читаемость, аннотации и тесты»: проследи программу по строкам и запиши значения так, как их покажет Python."
+              "markdown": "Отрицательное здесь одно значение, хоть и дважды; 2 не подходит."
             }
           }
         ],
@@ -130567,7 +130685,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "−5."
+              "markdown": "Оба отрицательных числа равны −5, поэтому наибольшее отрицательное — −5."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `-5`"
             }
           }
         ],
@@ -130577,8 +130701,7 @@
         "lessons": [
           {
             "position": 1,
-            "material_id": "python-testing",
-            "counts_toward_mastery": false
+            "material_id": "python-testing"
           }
         ],
         "theory_links": [],
@@ -130609,19 +130732,27 @@
     {
       "task": {
         "id": "python-testing-t04",
-        "title": "Функция def twice(x: int) -> int: return x * 2 вызвана как twice(\"ab\")",
+        "title": "Что напечатает программа?",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 1,
         "estimated_minutes": null,
-        "answer_instruction": "Введите ответ одним значением, как его покажет Python.",
+        "answer_instruction": "Введите то, что напечатала программа.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Функция `def twice(x: int) -> int: return x * 2` вызвана как `twice(\"ab\")`. Что произойдёт?"
+              "markdown": "Что напечатает программа?"
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "def twice(x: int) -> int:\n    return x * 2\n\nprint(twice(\"ab\"))",
+              "caption": null
             }
           }
         ],
@@ -130629,7 +130760,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Читаемость, аннотации и тесты»: проследи программу по строкам и запиши значения так, как их покажет Python."
+              "markdown": "Python не проверяет аннотации при вызове; строку тоже можно умножить на 2."
             }
           }
         ],
@@ -130637,7 +130768,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Вернёт 'abab': аннотации не проверяются при вызове."
+              "markdown": "Аннотация `int` — только описание. `\"ab\" * 2` — строка `abab`."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `abab`"
             }
           }
         ],
@@ -130647,8 +130784,7 @@
         "lessons": [
           {
             "position": 2,
-            "material_id": "python-testing",
-            "counts_toward_mastery": false
+            "material_id": "python-testing"
           }
         ],
         "theory_links": [],
@@ -130679,19 +130815,19 @@
     {
       "task": {
         "id": "python-testing-t08",
-        "title": "Напиши три теста unittest для функции last_digit(n), возвращающей последнюю…",
+        "title": "Напиши функцию и тесты: последняя цифра",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 2,
         "estimated_minutes": null,
-        "answer_instruction": "Запишите ответы через пробел в порядке вопроса; списки и строки — так, как их печатает Python.",
+        "answer_instruction": "Запишите три цифры через пробел в порядке вызовов.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Напиши три теста `unittest` для функции `last_digit(n)`, возвращающей последнюю цифру модуля: обычное число, отрицательное и ноль. Какие значения они ожидают для 47, −123 и 0?"
+              "markdown": "Напиши функцию `last_digit(n)` — последняя цифра модуля числа — и три теста `unittest`: для обычного числа, отрицательного и нуля. Напечатай `last_digit(47)`, `last_digit(-123)` и `last_digit(0)` одним `print`, запусти и запиши, что напечатала программа."
             }
           }
         ],
@@ -130699,7 +130835,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Читаемость, аннотации и тесты»: проследи программу по строкам и запиши значения так, как их покажет Python."
+              "markdown": "`abs(n) % 10`; без `abs` для −123 получилось бы 7."
             }
           }
         ],
@@ -130707,7 +130843,27 @@
           {
             "type": "text",
             "data": {
-              "markdown": "7, 3 и 0."
+              "markdown": "Например:"
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "import unittest\n\ndef last_digit(n):\n    return abs(n) % 10\n\nclass LastDigitTests(unittest.TestCase):\n    def test_positive(self):\n        self.assertEqual(last_digit(47), 7)\n\n    def test_negative(self):\n        self.assertEqual(last_digit(-123), 3)\n\n    def test_zero(self):\n        self.assertEqual(last_digit(0), 0)\n\nprint(last_digit(47), last_digit(-123), last_digit(0))",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Тесты запускают отдельно: `unittest.main()` в конце файла или `python -m unittest`."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `7 3 0`"
             }
           }
         ],
@@ -130717,8 +130873,7 @@
         "lessons": [
           {
             "position": 3,
-            "material_id": "python-testing",
-            "counts_toward_mastery": false
+            "material_id": "python-testing"
           }
         ],
         "theory_links": [],
