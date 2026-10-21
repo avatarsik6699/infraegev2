@@ -202375,6 +202375,12 @@
             "data": {
               "markdown": "4 записи, 2 магазина (M2 и M3), 6 + 4 + 9 + 2 = 21 упаковка."
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `4 2 21`"
+            }
           }
         ],
         "skills": [],
@@ -202389,7 +202395,7 @@
         "theory_links": [
           {
             "label": "Теория",
-            "section": "mnogo-operacij",
+            "section": "stroka-obekt",
             "material_id": "relational-databases"
           }
         ],
@@ -202420,19 +202426,19 @@
     {
       "task": {
         "id": "task-3-1-07",
-        "title": "Операции магазина и магазины района",
+        "title": "Операции магазина M7",
         "short_description": null,
         "explanation_kind": "worked_solution",
         "difficulty": 1,
         "estimated_minutes": 4,
-        "answer_instruction": "Введите два числа через пробел.",
+        "answer_instruction": "Введите число.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "В файле 3-1.xlsx три листа: «Движение товаров», «Товар» и «Магазин». Сколько операций в файле относится к магазину M7 и сколько магазинов справочника находятся в Октябрьском районе? В ответе запишите два числа через пробел."
+              "markdown": "В файле 3-1.xlsx три листа: «Движение товаров», «Товар» и «Магазин». Сколько операций в файле относится к магазину M7?"
             }
           },
           {
@@ -202446,7 +202452,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Операции считают на листе движения, магазины района — в справочнике."
+              "markdown": "Включи фильтр по столбцу «ID магазина»."
             }
           }
         ],
@@ -202454,15 +202460,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "`9 4`: `=СЧЁТЕСЛИ(C2:C161;\"M7\")` на листе операций даёт 9; в справочнике Октябрьского района — M9, M10, M11, M12."
+              "markdown": "На листе «Движение товаров» включи фильтр по столбцу «ID магазина» и оставь M7. Выдели видимые ячейки столбца — строка состояния покажет количество 9."
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "text",
-              "code": "Операции M7: =СЧЁТЕСЛИ(C:C;\"M7\")\nМагазины района: =СЧЁТЕСЛИ('Магазин'!B2:B17;\"Октябрьский\")",
-              "caption": "Формулы в Excel"
+              "code": "Проверка формулой:\n=СЧЁТЕСЛИ(C:C;\"M7\")",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `9`"
             }
           }
         ],
@@ -202509,7 +202521,111 @@
         ],
         "checker": {
           "checker_type": "exact_match",
-          "answer_variants": ["9 4"],
+          "answer_variants": ["9"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "task-3-1-08",
+        "title": "Магазины Октябрьского района",
+        "short_description": null,
+        "explanation_kind": "worked_solution",
+        "difficulty": 1,
+        "estimated_minutes": 4,
+        "answer_instruction": "Введите число.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "В файле 3-1.xlsx три листа: «Движение товаров», «Товар» и «Магазин». Сколько магазинов справочника находятся в Октябрьском районе?"
+            }
+          },
+          {
+            "type": "attachment",
+            "data": {
+              "usage_id": "statement-1"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Отфильтруй столбец «Район» на листе «Магазин»."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "На листе «Магазин» фильтр по столбцу «Район» со значением «Октябрьский» оставляет M9, M10, M11 и M12."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "text",
+              "code": "Проверка формулой:\n=СЧЁТЕСЛИ('Магазин'!B2:B17;\"Октябрьский\")",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `4`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [3],
+        "files": [
+          {
+            "id": "statement-1",
+            "purpose": "attachment",
+            "checksum": "ea9d0de263e1dc8ba0019c27b49640baa929587caa71a2214d3aa683c47a7072",
+            "filename": "3-1.xlsx",
+            "attribution": null,
+            "description": "База данных — Excel-файл, как на экзамене"
+          }
+        ],
+        "lessons": [
+          {
+            "position": 2,
+            "material_id": "relational-databases"
+          }
+        ],
+        "theory_links": [
+          {
+            "label": "Теория",
+            "section": "kniga-i-listy",
+            "material_id": "relational-databases"
+          }
+        ],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["4"],
           "numeric_tolerance": null
         }
       },
@@ -202552,15 +202668,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "40 операций: столбец поставщика `=ВПР(D2;'Товар'!$A$2:$F$37;6;0)` рядом с операциями и `=СЧЁТЕСЛИ(H2:H161;\"Фабрика «Заря»\")`."
+              "markdown": "Допиши поставщика к операциям: ВПР по артикулу (формула ниже) и скопируй вниз. Отфильтруй этот столбец по значению «Фабрика «Заря»» — видимых строк 40."
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "text",
-              "code": "H2: =ВПР(D2;'Товар'!$A:$F;6;0)  — поставщик\n=СЧЁТЕСЛИ(H:H;\"Фабрика «Заря»\")",
-              "caption": "Формулы в Excel"
+              "code": "H2: =ВПР(D2;'Товар'!$A:$F;6;0)  — поставщик",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `40`"
             }
           }
         ],
@@ -202578,7 +202700,7 @@
         ],
         "lessons": [
           {
-            "position": 2,
+            "position": 5,
             "material_id": "relational-databases"
           }
         ],
@@ -202615,6 +202737,191 @@
     },
     {
       "task": {
+        "id": "task-3-2-09",
+        "title": "Операции Октябрьского района",
+        "short_description": null,
+        "explanation_kind": "worked_solution",
+        "difficulty": 1,
+        "estimated_minutes": 4,
+        "answer_instruction": "Введите число.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Сколько операций файла 3-1.xlsx — поступлений и продаж за весь период — проведено в магазинах Октябрьского района?"
+            }
+          },
+          {
+            "type": "attachment",
+            "data": {
+              "usage_id": "statement-1"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Район дописывают к операции через ВПР по ID магазина."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Допиши район к каждой операции: ВПР по ID магазина (формула ниже) и скопируй вниз. Отфильтруй этот столбец по значению «Октябрьский» — видимых строк 37."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "text",
+              "code": "H2: =ВПР(C2;'Магазин'!$A:$C;2;0)  — район",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `37`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [3],
+        "files": [
+          {
+            "id": "statement-1",
+            "purpose": "attachment",
+            "checksum": "ea9d0de263e1dc8ba0019c27b49640baa929587caa71a2214d3aa683c47a7072",
+            "filename": "3-1.xlsx",
+            "attribution": null,
+            "description": "База данных — Excel-файл, как на экзамене"
+          }
+        ],
+        "lessons": [
+          {
+            "position": 4,
+            "material_id": "relational-databases"
+          }
+        ],
+        "theory_links": [
+          {
+            "label": "Теория",
+            "section": "formula-vpr",
+            "material_id": "relational-databases"
+          }
+        ],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["37"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "task-3-2-10",
+        "title": "Район магазина операции",
+        "short_description": null,
+        "explanation_kind": "worked_solution",
+        "difficulty": 1,
+        "estimated_minutes": 2,
+        "answer_instruction": "Введите название района так, как оно записано в базе.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "По листам учебной базы темы найди район магазина, в котором прошла операция 4."
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Найди ID магазина операции и его строку на листе «Магазин»."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "У операции 4 ID магазина M2. На листе «Магазин» у M2 район Южный."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `Южный`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [3],
+        "files": [],
+        "lessons": [
+          {
+            "position": 3,
+            "material_id": "relational-databases"
+          }
+        ],
+        "theory_links": [
+          {
+            "label": "Теория",
+            "section": "harakteristiki-operacii",
+            "material_id": "relational-databases"
+          }
+        ],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["Южный"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
         "id": "task-3-3-08",
         "title": "Продажи зефира на улице Металлургов",
         "short_description": null,
@@ -202642,7 +202949,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "«Все виды» — шаблон по части наименования; адрес — тоже шаблоном."
+              "markdown": "«Все виды» — поиск по части наименования; улицу ищут так же в столбце адресов."
             }
           }
         ],
@@ -202650,15 +202957,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "7 операций: наименование и адрес к операциям через `ВПР`, затем `=СЧЁТЕСЛИМН(H2:H221;\"*зефир*\";I2:I221;\"*Металлургов*\";E2:E221;\"Продажа\";B2:B221;\">=\"&ДАТА(2026;6;10);B2:B221;\"<=\"&ДАТА(2026;6;20))`."
+              "markdown": "Допиши к операциям наименование (ВПР по артикулу, столбец 3) и адрес (ВПР по ID магазина, столбец 3). Фильтры: наименование — поиск «зефир», адрес — поиск «Металлургов», тип — «Продажа», дата — с 10.06 по 20.06. Видимых строк 7."
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "text",
-              "code": "Рядом с операциями — характеристики через ВПР:\nH2: =ВПР(C2;'Магазин'!$A:$C;2;0)  — район\nI2: =ВПР(C2;'Магазин'!$A:$C;3;0)  — адрес\nJ2: =ВПР(D2;'Товар'!$A:$F;3;0)    — наименование\nK2: =ВПР(D2;'Товар'!$A:$F;5;0)    — в упаковке\n=СЧЁТЕСЛИМН(J:J;\"*зефир*\";I:I;\"*Металлургов*\";\n  E:E;\"Продажа\";B:B;\">=\"&ДАТА(2026;6;10);\n  B:B;\"<=\"&ДАТА(2026;6;20))",
-              "caption": "Формулы в Excel"
+              "code": "Рядом с операциями — характеристики через ВПР:\nH2: =ВПР(C2;'Магазин'!$A:$C;2;0)  — район\nI2: =ВПР(C2;'Магазин'!$A:$C;3;0)  — адрес\nJ2: =ВПР(D2;'Товар'!$A:$F;3;0)    — наименование\nK2: =ВПР(D2;'Товар'!$A:$F;5;0)    — в упаковке",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `7`"
             }
           }
         ],
@@ -202676,7 +202989,7 @@
         ],
         "lessons": [
           {
-            "position": 3,
+            "position": 7,
             "material_id": "relational-databases"
           }
         ],
@@ -202748,15 +203061,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "6 операций: отдел (`ВПР` с номером 2) и район к операциям, затем `СЧЁТЕСЛИМН` по отделу «Молоко», району, типу «Поступление» и двум границам дат."
+              "markdown": "Допиши отдел (ВПР по артикулу, столбец 2) и район (ВПР по ID магазина). Фильтры: отдел — «Молоко», район — «Центральный», тип — «Поступление», дата — с 01.06 по 15.06. Видимых строк 6."
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "text",
-              "code": "H2: =ВПР(C2;'Магазин'!$A:$C;2;0)  — район\nL2: =ВПР(D2;'Товар'!$A:$F;2;0)    — отдел\n=СЧЁТЕСЛИМН(L:L;\"Молоко\";H:H;\"Центральный\";\n  E:E;\"Поступление\";B:B;\">=\"&ДАТА(2026;6;1);\n  B:B;\"<=\"&ДАТА(2026;6;15))",
-              "caption": "Формулы в Excel"
+              "code": "H2: =ВПР(C2;'Магазин'!$A:$C;2;0)  — район\nL2: =ВПР(D2;'Товар'!$A:$F;2;0)    — отдел",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `6`"
             }
           }
         ],
@@ -202774,14 +203093,14 @@
         ],
         "lessons": [
           {
-            "position": 4,
+            "position": 8,
             "material_id": "relational-databases"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "priznak-1-0",
+            "section": "filtr",
             "material_id": "relational-databases"
           }
         ],
@@ -202811,6 +203130,87 @@
     },
     {
       "task": {
+        "id": "task-3-3-10",
+        "title": "Продажи фабрики А за весь период",
+        "short_description": null,
+        "explanation_kind": "worked_solution",
+        "difficulty": 1,
+        "estimated_minutes": 2,
+        "answer_instruction": "Введите число.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Сколько операций учебной базы — продажи товаров фабрики А в магазинах Северного района за весь период?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Без условия на даты подходят все дни."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Фабрика А — артикулы 101 и 102, Северный район — магазины M1 и M3, тип — «Продажа». Подходят операции 2, 3, 5, 7, 8, 10 и 12: без ограничения по датам добавились 8 (11 июня) и 12 (31 мая)."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `7`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [3],
+        "files": [],
+        "lessons": [
+          {
+            "position": 6,
+            "material_id": "relational-databases"
+          }
+        ],
+        "theory_links": [
+          {
+            "label": "Теория",
+            "section": "otbor",
+            "material_id": "relational-databases"
+          }
+        ],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["7"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
         "id": "task-3-4-01",
         "title": "Упаковки, записи и магазины",
         "short_description": null,
@@ -202824,7 +203224,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Отбор изменили: продажи товаров фабрики А **во всех районах** с 1 по 10 июня — операции 2, 3, 4, 5, 7, 10. Сколько упаковок продано, сколько это записей и сколько разных магазинов?"
+              "markdown": "Отобраны продажи товаров фабрики А во всех районах учебной базы с 1 по 10 июня — операции 2, 3, 4, 5, 7, 10. Сколько упаковок продано, сколько это записей и сколько разных магазинов?"
             }
           }
         ],
@@ -202842,6 +203242,12 @@
             "data": {
               "markdown": "29 упаковок (добавились 7 упаковок операции 4), 6 записей, 3 магазина — M1, M2, M3."
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `29 6 3`"
+            }
           }
         ],
         "skills": [],
@@ -202849,14 +203255,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 5,
+            "position": 9,
             "material_id": "relational-databases"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "raznye-voprosy",
+            "section": "otbor-i-vychislenie",
             "material_id": "relational-databases"
           }
         ],
@@ -202899,7 +203305,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Сколько килограммов продано по тому же отбору?"
+              "markdown": "Отобраны продажи товаров фабрики А во всех районах учебной базы с 1 по 10 июня — операции 2, 3, 4, 5, 7, 10. Сколько килограммов продано?"
             }
           }
         ],
@@ -202915,7 +203321,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "18 кг: 14,5 + 7 · 0,5."
+              "markdown": "Пять операций задачи темы весят 14,5 кг, операция 4 добавляет 7 · 0,5 = 3,5 кг: всего 18 кг."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `18`"
             }
           }
         ],
@@ -202924,7 +203336,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 6,
+            "position": 10,
             "material_id": "relational-databases"
           }
         ],
@@ -202974,7 +203386,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Какова выручка от этих продаж?"
+              "markdown": "Отобраны продажи товаров фабрики А во всех районах учебной базы с 1 по 10 июня — операции 2, 3, 4, 5, 7, 10. Какова выручка от этих продаж в рублях?"
             }
           }
         ],
@@ -202990,7 +203402,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "2830 рублей: 2270 + 7 · 80."
+              "markdown": "Выручка пяти операций задачи темы — 2270 рублей, операция 4 добавляет 7 · 80 = 560: всего 2830 рублей."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `2830`"
             }
           }
         ],
@@ -202999,7 +203417,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 7,
+            "position": 11,
             "material_id": "relational-databases"
           }
         ],
@@ -203065,7 +203483,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "1980 рублей: 20 · 60 + 12 · 65 (операции 1 и 9)."
+              "markdown": "Поступления товара 101 — операции 1 и 9: 20 · 60 + 12 · 65 = 1200 + 780 = 1980 рублей."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `1980`"
             }
           }
         ],
@@ -203074,14 +203498,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 8,
+            "position": 12,
             "material_id": "relational-databases"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "postupleniya-i-prodazhi",
+            "section": "stoimost",
             "material_id": "relational-databases"
           }
         ],
@@ -203142,6 +203566,12 @@
             "data": {
               "markdown": "12 · 0,25 · 120 = 360 рублей: цена за килограмм умножается на массу, а не на число упаковок."
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `360`"
+            }
           }
         ],
         "skills": [],
@@ -203149,14 +203579,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 9,
+            "position": 13,
             "material_id": "relational-databases"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "edinicy",
+            "section": "stoimost",
             "material_id": "relational-databases"
           }
         ],
@@ -203199,7 +203629,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "В файле 3-3.xlsx три листа: «Движение товаров», «Товар» и «Магазин». Определите общую массу (в кг) всех видов зефира, полученных магазинами, расположенными на проспекте Революции, за период с 5 по 19 августа включительно. В ответе запишите только целую часть числа."
+              "markdown": "В файле 3-3.xlsx три листа: «Движение товаров», «Товар» и «Магазин». Определи общую массу (в кг) всех видов зефира, полученных магазинами, расположенными на проспекте Революции, за период с 5 по 19 августа включительно. В ответе запиши только целую часть числа."
             }
           },
           {
@@ -203221,15 +203651,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "`102`: масса 102,95 кг — сумма упаковок × количество в упаковке по поступлениям трёх видов зефира в магазины на «пр. Революции» (в эти дни — M3 и M10; M15 на той же улице зефир не получал); целая часть — 102."
+              "markdown": "Допиши наименование, адрес и количество в упаковке через ВПР; масса строки — упаковки × количество в упаковке. Фильтры: наименование — поиск «зефир», адрес — поиск «Революции», тип — «Поступление», дата — с 05.08 по 19.08. Сумма видимых масс — 102,95 кг, в ответе целая часть."
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "text",
-              "code": "Рядом с операциями — характеристики через ВПР:\nH2: =ВПР(C2;'Магазин'!$A:$C;2;0)  — район\nI2: =ВПР(C2;'Магазин'!$A:$C;3;0)  — адрес\nJ2: =ВПР(D2;'Товар'!$A:$F;3;0)    — наименование\nK2: =ВПР(D2;'Товар'!$A:$F;5;0)    — в упаковке\nL2: =F2*K2  — масса строки\n=СУММЕСЛИМН(L:L;J:J;\"*зефир*\";I:I;\n  \"*пр. Революции*\";E:E;\"Поступление\";\n  B:B;\">=\"&ДАТА(2026;8;5);B:B;\"<=\"&ДАТА(2026;8;19))",
-              "caption": "Формулы в Excel"
+              "code": "Рядом с операциями — характеристики через ВПР:\nH2: =ВПР(C2;'Магазин'!$A:$C;2;0)  — район\nI2: =ВПР(C2;'Магазин'!$A:$C;3;0)  — адрес\nJ2: =ВПР(D2;'Товар'!$A:$F;3;0)    — наименование\nK2: =ВПР(D2;'Товар'!$A:$F;5;0)    — в упаковке\nL2: =F2*K2  — масса строки",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `102`"
             }
           }
         ],
@@ -203247,14 +203683,14 @@
         ],
         "lessons": [
           {
-            "position": 10,
+            "position": 14,
             "material_id": "relational-databases"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "summeslimn",
+            "section": "massa",
             "material_id": "relational-databases"
           }
         ],
@@ -203297,7 +203733,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Определите общую стоимость (в руб.) упаковок ультрапастеризованного молока всех видов, полученных магазинами Первомайского района за период с 3 по 24 августа включительно. Файл тот же — 3-3.xlsx."
+              "markdown": "Определи общую стоимость (в руб.) упаковок ультрапастеризованного молока всех видов, полученных магазинами Первомайского района за период с 3 по 24 августа включительно. Файл тот же — 3-3.xlsx."
             }
           },
           {
@@ -203319,15 +203755,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "27328 рублей: стоимость каждой строки — упаковки × цена поступления, `СУММЕСЛИМН` по наименованию `\"*ультрапастеризованное*\"`, району, типу «Поступление» и двум границам дат."
+              "markdown": "Допиши наименование и район через ВПР; стоимость строки — упаковки × цена. Фильтры: наименование — поиск «ультрапастеризованное», район — «Первомайский», тип — «Поступление», дата — с 03.08 по 24.08. Сумма видимых стоимостей — 27 328 рублей."
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "text",
-              "code": "Рядом с операциями — характеристики через ВПР:\nH2: =ВПР(C2;'Магазин'!$A:$C;2;0)  — район\nI2: =ВПР(C2;'Магазин'!$A:$C;3;0)  — адрес\nJ2: =ВПР(D2;'Товар'!$A:$F;3;0)    — наименование\nK2: =ВПР(D2;'Товар'!$A:$F;5;0)    — в упаковке\nL2: =F2*G2  — стоимость строки\n=СУММЕСЛИМН(L:L;J:J;\"*ультрапастеризованное*\";\n  H:H;\"Первомайский\";E:E;\"Поступление\";\n  B:B;\">=\"&ДАТА(2026;8;3);B:B;\"<=\"&ДАТА(2026;8;24))",
-              "caption": "Формулы в Excel"
+              "code": "Рядом с операциями — характеристики через ВПР:\nH2: =ВПР(C2;'Магазин'!$A:$C;2;0)  — район\nI2: =ВПР(C2;'Магазин'!$A:$C;3;0)  — адрес\nJ2: =ВПР(D2;'Товар'!$A:$F;3;0)    — наименование\nK2: =ВПР(D2;'Товар'!$A:$F;5;0)    — в упаковке\nL2: =F2*G2  — стоимость строки",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `27328`"
             }
           }
         ],
@@ -203345,17 +203787,11 @@
         ],
         "lessons": [
           {
-            "position": 11,
+            "position": 21,
             "material_id": "relational-databases"
           }
         ],
-        "theory_links": [
-          {
-            "label": "Теория",
-            "section": "stolbec-vklada",
-            "material_id": "relational-databases"
-          }
-        ],
+        "theory_links": [],
         "catalog_visible": false,
         "archived": false,
         "sources": [
@@ -203411,7 +203847,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "10: 20 − 8 − 5 − 7 + 12 − 2 (операции 1, 2, 3, 4, 9, 10)."
+              "markdown": "Операции товара 101 с 1 по 10 июня — 1, 2, 3, 4, 9, 10: +20 − 8 − 5 − 7 + 12 − 2 = 10."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `10`"
             }
           }
         ],
@@ -203420,14 +203862,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 12,
+            "position": 15,
             "material_id": "relational-databases"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "summa-so-znakami",
+            "section": "izmenenie-zapasa",
             "material_id": "relational-databases"
           }
         ],
@@ -203493,21 +203935,10 @@
         "skills": [],
         "exam_numbers": [3],
         "files": [],
-        "lessons": [
-          {
-            "position": 13,
-            "material_id": "relational-databases"
-          }
-        ],
-        "theory_links": [
-          {
-            "label": "Теория",
-            "section": "summa-so-znakami",
-            "material_id": "relational-databases"
-          }
-        ],
+        "lessons": [],
+        "theory_links": [],
         "catalog_visible": false,
-        "archived": false,
+        "archived": true,
         "sources": [
           {
             "url": null,
@@ -203561,7 +203992,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "На 1: изменение равно −1."
+              "markdown": "Операции товара 102 в магазинах M1 и M3 с 1 по 10 июня: продажи 4 (операция 5) и 3 (операция 7), поступление 6 (операция 11). 6 − 4 − 3 = −1 — запас уменьшился на 1."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `1`"
             }
           }
         ],
@@ -203570,14 +204007,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 14,
+            "position": 16,
             "material_id": "relational-databases"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "bolshe-ili-menshe",
+            "section": "izmenenie-zapasa",
             "material_id": "relational-databases"
           }
         ],
@@ -203636,7 +204073,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "−720 рублей: выручка 640 + 450 + 170 = 1260, закупка 1200 + 780 = 1980."
+              "markdown": "Выручка от продаж товара 101 в Северном районе с 1 по 10 июня — 640 + 450 + 170 = 1260 рублей, стоимость поступлений — 1200 + 780 = 1980. Прибыль 1260 − 1980 = −720: потратили больше, чем выручили."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `-720`"
             }
           }
         ],
@@ -203645,14 +204088,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 15,
+            "position": 17,
             "material_id": "relational-databases"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "pribyl",
+            "section": "izmenenie-zapasa",
             "material_id": "relational-databases"
           }
         ],
@@ -203695,7 +204138,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "В файле 3-4.xlsx три листа: «Движение товаров», «Товар» и «Магазин». Определите, на сколько увеличилось количество упаковок сахара песка, имеющихся в наличии в магазинах Октябрьского района, за период с 1 по 12 июня включительно."
+              "markdown": "В файле 3-4.xlsx три листа: «Движение товаров», «Товар» и «Магазин». Определи, на сколько увеличилось количество упаковок сахара песка, имеющихся в наличии в магазинах Октябрьского района, за период с 1 по 12 июня включительно."
             }
           },
           {
@@ -203709,7 +204152,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Знак операции в отдельном столбце; в формуле суммы нет условия на тип."
+              "markdown": "Количество со знаком в отдельном столбце; тип операции не фильтруют."
             }
           }
         ],
@@ -203717,15 +204160,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "172: поступления минус продажи артикула «Сахар песок» в магазинах M9–M12 за 1–12 июня."
+              "markdown": "Допиши наименование и район через ВПР, количество со знаком — в отдельном столбце. Фильтры: наименование — «Сахар песок», район — «Октябрьский», дата — с 01.06 по 12.06; тип операции не фильтруют. Сумма видимых — 172."
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "text",
-              "code": "Рядом с операциями — характеристики через ВПР:\nH2: =ВПР(C2;'Магазин'!$A:$C;2;0)  — район\nI2: =ВПР(C2;'Магазин'!$A:$C;3;0)  — адрес\nJ2: =ВПР(D2;'Товар'!$A:$F;3;0)    — наименование\nK2: =ВПР(D2;'Товар'!$A:$F;5;0)    — в упаковке\nL2: =ЕСЛИ(E2=\"Поступление\";F2;-F2)  — упаковки со знаком\n=СУММЕСЛИМН(L:L;J:J;\"Сахар песок\";\n  H:H;\"Октябрьский\";B:B;\">=\"&ДАТА(2026;6;1);\n  B:B;\"<=\"&ДАТА(2026;6;12))",
-              "caption": "Формулы в Excel"
+              "code": "Рядом с операциями — характеристики через ВПР:\nH2: =ВПР(C2;'Магазин'!$A:$C;2;0)  — район\nI2: =ВПР(C2;'Магазин'!$A:$C;3;0)  — адрес\nJ2: =ВПР(D2;'Товар'!$A:$F;3;0)    — наименование\nK2: =ВПР(D2;'Товар'!$A:$F;5;0)    — в упаковке\nL2: =ЕСЛИ(E2=\"Поступление\";F2;-F2)  — упаковки со знаком",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `172`"
             }
           }
         ],
@@ -203743,14 +204192,14 @@
         ],
         "lessons": [
           {
-            "position": 16,
+            "position": 18,
             "material_id": "relational-databases"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "stolbec-znaka",
+            "section": "izmenenie-zapasa",
             "material_id": "relational-databases"
           }
         ],
@@ -203793,7 +204242,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "На сколько упаковок изменился запас всех видов муки в магазинах Заречного района за период с 3 по 9 июня включительно? В ответе запишите число, равное изменению запаса: росту соответствуют положительные числа, уменьшению — отрицательные. Файл тот же — 3-4.xlsx."
+              "markdown": "На сколько упаковок изменился запас всех видов муки в магазинах Заречного района за период с 3 по 9 июня включительно? В ответе запиши число, равное изменению запаса: росту соответствуют положительные числа, уменьшению — отрицательные. Файл тот же — 3-4.xlsx."
             }
           },
           {
@@ -203807,7 +204256,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Два вида муки — шаблон; уменьшение запаса — отрицательное число."
+              "markdown": "Два вида муки — поиск «мука»; уменьшение запаса — отрицательное число."
             }
           }
         ],
@@ -203815,15 +204264,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "−26: два вида муки (пшеничная и ржаная), шаблон `\"*мука*\"`; продано больше, чем поступило."
+              "markdown": "Допиши наименование и район, количество со знаком — в отдельном столбце. Фильтры: наименование — поиск «мука» (пшеничная и ржаная), район — «Заречный», дата — с 03.06 по 09.06; тип не фильтруют. Сумма видимых −26: продано больше, чем поступило."
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "text",
-              "code": "Рядом с операциями — характеристики через ВПР:\nH2: =ВПР(C2;'Магазин'!$A:$C;2;0)  — район\nI2: =ВПР(C2;'Магазин'!$A:$C;3;0)  — адрес\nJ2: =ВПР(D2;'Товар'!$A:$F;3;0)    — наименование\nK2: =ВПР(D2;'Товар'!$A:$F;5;0)    — в упаковке\nL2: =ЕСЛИ(E2=\"Поступление\";F2;-F2)\n=СУММЕСЛИМН(L:L;J:J;\"*мука*\";\n  H:H;\"Заречный\";B:B;\">=\"&ДАТА(2026;6;3);\n  B:B;\"<=\"&ДАТА(2026;6;9))",
-              "caption": "Формулы в Excel"
+              "code": "Рядом с операциями — характеристики через ВПР:\nH2: =ВПР(C2;'Магазин'!$A:$C;2;0)  — район\nI2: =ВПР(C2;'Магазин'!$A:$C;3;0)  — адрес\nJ2: =ВПР(D2;'Товар'!$A:$F;3;0)    — наименование\nK2: =ВПР(D2;'Товар'!$A:$F;5;0)    — в упаковке\nL2: =ЕСЛИ(E2=\"Поступление\";F2;-F2)",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `-26`"
             }
           }
         ],
@@ -203841,17 +204296,11 @@
         ],
         "lessons": [
           {
-            "position": 17,
+            "position": 22,
             "material_id": "relational-databases"
           }
         ],
-        "theory_links": [
-          {
-            "label": "Теория",
-            "section": "stolbec-znaka",
-            "material_id": "relational-databases"
-          }
-        ],
+        "theory_links": [],
         "catalog_visible": false,
         "archived": false,
         "sources": [
@@ -203914,21 +204363,10 @@
         "skills": [],
         "exam_numbers": [3],
         "files": [],
-        "lessons": [
-          {
-            "position": 18,
-            "material_id": "relational-databases"
-          }
-        ],
-        "theory_links": [
-          {
-            "label": "Теория",
-            "section": "porog-itoga",
-            "material_id": "relational-databases"
-          }
-        ],
+        "lessons": [],
+        "theory_links": [],
         "catalog_visible": false,
-        "archived": false,
+        "archived": true,
         "sources": [
           {
             "url": null,
@@ -203959,14 +204397,14 @@
         "explanation_kind": "worked_solution",
         "difficulty": 2,
         "estimated_minutes": 3,
-        "answer_instruction": "Введите ID магазина и выручку через пробел.",
+        "answer_instruction": "Введите ID магазина так, как он указан в базе.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Какой магазин по тому же отбору получил наименьшую выручку среди продававших и сколько?"
+              "markdown": "Отобраны продажи товаров фабрики А во всех районах учебной базы с 1 по 10 июня — операции 2, 3, 4, 5, 7, 10. Какой магазин получил по ним наименьшую выручку?"
             }
           }
         ],
@@ -203974,7 +204412,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Сначала итог каждого магазина, затем наименьший из них."
+              "markdown": "Сначала выручка каждого магазина, потом наименьшая из них."
             }
           }
         ],
@@ -203982,7 +204420,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "M2, 560 рублей: выручка M1 — 1260, M3 — 1010."
+              "markdown": "Выручка магазинов: M1 — 8 · 80 + 3 · 150 + 2 · 85 = 1260, M2 — 7 · 80 = 560, M3 — 5 · 90 + 4 · 140 = 1010. Наименьшая — у M2."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `M2`"
             }
           }
         ],
@@ -203998,7 +204442,7 @@
         "theory_links": [
           {
             "label": "Теория",
-            "section": "maksimum-chego",
+            "section": "itog-obekta",
             "material_id": "relational-databases"
           }
         ],
@@ -204020,7 +204464,7 @@
         ],
         "checker": {
           "checker_type": "exact_match",
-          "answer_variants": ["M2 560"],
+          "answer_variants": ["M2"],
           "numeric_tolerance": null
         }
       },
@@ -204049,7 +204493,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Объект группы — день; итог дня — сумма выручки его продаж."
+              "markdown": "Сначала выручка каждого дня, потом наибольшая."
             }
           }
         ],
@@ -204057,7 +204501,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "3: 3 июня — 450 + 560 = 1010 рублей; 5 июня — 660, 2 июня — 640."
+              "markdown": "3 июня — 450 + 560 = 1010 рублей; 5 июня — 660, 2 июня — 640."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `3`"
             }
           }
         ],
@@ -204073,7 +204523,7 @@
         "theory_links": [
           {
             "label": "Теория",
-            "section": "rajon-ili-den",
+            "section": "itog-obekta",
             "material_id": "relational-databases"
           }
         ],
@@ -204139,21 +204589,10 @@
         "skills": [],
         "exam_numbers": [3],
         "files": [],
-        "lessons": [
-          {
-            "position": 21,
-            "material_id": "relational-databases"
-          }
-        ],
-        "theory_links": [
-          {
-            "label": "Теория",
-            "section": "porog-itoga",
-            "material_id": "relational-databases"
-          }
-        ],
+        "lessons": [],
+        "theory_links": [],
         "catalog_visible": false,
-        "archived": false,
+        "archived": true,
         "sources": [
           {
             "url": null,
@@ -204191,7 +204630,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "В файле 3-5.xlsx три листа: «Движение товаров», «Товар» и «Магазин». Какой магазин Центрального района получил наибольшую выручку от продажи товаров отдела «Молоко» за период с 10 по 20 июня включительно? В ответе запишите ID магазина так, как он указан в базе."
+              "markdown": "В файле 3-5.xlsx три листа: «Движение товаров», «Товар» и «Магазин». Какой магазин Центрального района получил наибольшую выручку от продажи товаров отдела «Молоко» за период с 10 по 20 июня включительно? В ответе запиши ID магазина так, как он указан в базе."
             }
           },
           {
@@ -204205,7 +204644,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Итоги выручки магазинов района, в ответе — ID магазина."
+              "markdown": "Сравни суммы выручки магазинов района."
             }
           }
         ],
@@ -204213,15 +204652,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "`M6`: итоги выручки магазинов M5–M8 по отделу «Молоко» за 10–20 июня, наибольший — у M6."
+              "markdown": "Допиши отдел и район, стоимость строки — упаковки × цена. Фильтры: отдел — «Молоко», район — «Центральный», тип — «Продажа», дата — с 10.06 по 20.06. Затем оставляй в фильтре по одному магазину района (M5–M8) и сравни суммы в строке состояния — или построй сводную таблицу. Наибольшая выручка — у M6."
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "text",
-              "code": "Рядом с операциями — характеристики через ВПР:\nH2: =ВПР(C2;'Магазин'!$A:$C;2;0)  — район\nI2: =ВПР(C2;'Магазин'!$A:$C;3;0)  — адрес\nJ2: =ВПР(D2;'Товар'!$A:$F;3;0)    — наименование\nK2: =ВПР(D2;'Товар'!$A:$F;5;0)    — в упаковке\nL2: =ВПР(D2;'Товар'!$A:$F;2;0)  — отдел\nM2: =F2*G2                            — выручка строки\nСписок M5…M8, для каждого:\n=СУММЕСЛИМН(M:M;C:C;N2;L:L;\"Молоко\";\n  E:E;\"Продажа\";B:B;\">=\"&ДАТА(2026;6;10);\n  B:B;\"<=\"&ДАТА(2026;6;20))",
-              "caption": "Формулы в Excel"
+              "code": "Рядом с операциями — характеристики через ВПР:\nH2: =ВПР(C2;'Магазин'!$A:$C;2;0)  — район\nI2: =ВПР(C2;'Магазин'!$A:$C;3;0)  — адрес\nJ2: =ВПР(D2;'Товар'!$A:$F;3;0)    — наименование\nK2: =ВПР(D2;'Товар'!$A:$F;5;0)    — в упаковке\nL2: =ВПР(D2;'Товар'!$A:$F;2;0)  — отдел\nM2: =F2*G2                            — выручка строки",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `M6`"
             }
           }
         ],
@@ -204239,17 +204684,11 @@
         ],
         "lessons": [
           {
-            "position": 22,
+            "position": 23,
             "material_id": "relational-databases"
           }
         ],
-        "theory_links": [
-          {
-            "label": "Теория",
-            "section": "chto-v-otvete",
-            "material_id": "relational-databases"
-          }
-        ],
+        "theory_links": [],
         "catalog_visible": false,
         "archived": false,
         "sources": [
@@ -204289,7 +204728,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "В какой день июня в магазинах Первомайского района выручка от продажи товаров отдела «Бакалея» была наибольшей? В ответе запишите целое число от 1 до 30 — число искомой даты. Файл тот же — 3-5.xlsx."
+              "markdown": "В какой день июня в магазинах Первомайского района выручка от продажи товаров отдела «Бакалея» была наибольшей? В ответе запиши целое число от 1 до 30 — число искомой даты. Файл тот же — 3-5.xlsx."
             }
           },
           {
@@ -204303,7 +204742,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Список дат 1–30 июня и итог выручки каждой даты."
+              "markdown": "Итог выручки каждого дня удобно получить сводной таблицей."
             }
           }
         ],
@@ -204311,15 +204750,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "9: список дат 1–30 июня и `СУММЕСЛИМН` выручки по дате, отделу «Бакалея», району и типу «Продажа»; наибольший итог — 9 июня."
+              "markdown": "Допиши отдел и район, стоимость строки — упаковки × цена. Фильтры: отдел — «Бакалея», район — «Первомайский», тип — «Продажа». Сводная таблица с датами в строках и суммой стоимости в значениях показывает наибольший итог 9 июня."
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "text",
-              "code": "L2: =ВПР(D2;'Товар'!$A:$F;2;0)  — отдел\nH2: =ВПР(C2;'Магазин'!$A:$C;2;0)  — район\nM2: =F2*G2                            — выручка строки\nДаты в столбце N, для каждой:\n=СУММЕСЛИМН(M:M;B:B;N2;L:L;\"Бакалея\";\n  H:H;\"Первомайский\";E:E;\"Продажа\")",
-              "caption": "Формулы в Excel"
+              "code": "L2: =ВПР(D2;'Товар'!$A:$F;2;0)  — отдел\nH2: =ВПР(C2;'Магазин'!$A:$C;2;0)  — район\nM2: =F2*G2                            — выручка строки",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `9`"
             }
           }
         ],
@@ -204337,17 +204782,11 @@
         ],
         "lessons": [
           {
-            "position": 23,
+            "position": 24,
             "material_id": "relational-databases"
           }
         ],
-        "theory_links": [
-          {
-            "label": "Теория",
-            "section": "rajon-ili-den",
-            "material_id": "relational-databases"
-          }
-        ],
+        "theory_links": [],
         "catalog_visible": false,
         "archived": false,
         "sources": [
@@ -204387,7 +204826,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Определите количество магазинов, в которых выручка от продажи товаров отдела «Кондитерские изделия» за июнь превысила 20 000 рублей. Файл тот же — 3-5.xlsx."
+              "markdown": "Определи количество магазинов, в которых выручка от продажи товаров отдела «Кондитерские изделия» за июнь превысила 20 000 рублей. Файл тот же — 3-5.xlsx."
             }
           },
           {
@@ -204401,7 +204840,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Итог каждого из 16 магазинов, затем подсчёт итогов больше порога."
+              "markdown": "Итог каждого из 16 магазинов — сводной таблицей."
             }
           }
         ],
@@ -204409,15 +204848,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "8 магазинов: итог выручки каждого из 16 магазинов по отделу за июнь и `=СЧЁТЕСЛИ(…;\">20000\")`."
+              "markdown": "Допиши отдел, стоимость строки — упаковки × цена. Фильтры: отдел — «Кондитерские изделия», тип — «Продажа», весь июнь. Сводная таблица с магазинами в строках: итог больше 20 000 рублей у 8 магазинов из 16."
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "text",
-              "code": "L2: =ВПР(D2;'Товар'!$A:$F;2;0)  — отдел\nM2: =F2*G2                            — выручка строки\nИтог магазина из столбца N:\n=СУММЕСЛИМН(M:M;C:C;N2;\n  L:L;\"Кондитерские изделия\";E:E;\"Продажа\")\n=СЧЁТЕСЛИ(O2:O17;\">20000\")",
-              "caption": "Формулы в Excel"
+              "code": "L2: =ВПР(D2;'Товар'!$A:$F;2;0)  — отдел\nM2: =F2*G2                            — выручка строки",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `8`"
             }
           }
         ],
@@ -204435,17 +204880,11 @@
         ],
         "lessons": [
           {
-            "position": 24,
+            "position": 25,
             "material_id": "relational-databases"
           }
         ],
-        "theory_links": [
-          {
-            "label": "Теория",
-            "section": "gruppirovka",
-            "material_id": "relational-databases"
-          }
-        ],
+        "theory_links": [],
         "catalog_visible": false,
         "archived": false,
         "sources": [
@@ -204508,22 +204947,10 @@
         "skills": [],
         "exam_numbers": [3],
         "files": [],
-        "lessons": [
-          {
-            "position": 25,
-            "material_id": "relational-databases",
-            "counts_toward_mastery": false
-          }
-        ],
-        "theory_links": [
-          {
-            "label": "Теория",
-            "section": "cena-po-tarifu",
-            "material_id": "relational-databases"
-          }
-        ],
+        "lessons": [],
+        "theory_links": [],
         "catalog_visible": false,
-        "archived": false,
+        "archived": true,
         "sources": [
           {
             "url": null,
@@ -204584,22 +205011,10 @@
         "skills": [],
         "exam_numbers": [3],
         "files": [],
-        "lessons": [
-          {
-            "position": 26,
-            "material_id": "relational-databases",
-            "counts_toward_mastery": false
-          }
-        ],
-        "theory_links": [
-          {
-            "label": "Теория",
-            "section": "tablica-svyazej",
-            "material_id": "relational-databases"
-          }
-        ],
+        "lessons": [],
+        "theory_links": [],
         "catalog_visible": false,
-        "archived": false,
+        "archived": true,
         "sources": [
           {
             "url": null,
@@ -204660,22 +205075,10 @@
         "skills": [],
         "exam_numbers": [3],
         "files": [],
-        "lessons": [
-          {
-            "position": 27,
-            "material_id": "relational-databases",
-            "counts_toward_mastery": false
-          }
-        ],
-        "theory_links": [
-          {
-            "label": "Теория",
-            "section": "nalichie-na-datu",
-            "material_id": "relational-databases"
-          }
-        ],
+        "lessons": [],
+        "theory_links": [],
         "catalog_visible": false,
-        "archived": false,
+        "archived": true,
         "sources": [
           {
             "url": null,
@@ -204759,22 +205162,10 @@
             "description": "База данных — Excel-файл, как на экзамене"
           }
         ],
-        "lessons": [
-          {
-            "position": 28,
-            "material_id": "relational-databases",
-            "counts_toward_mastery": false
-          }
-        ],
-        "theory_links": [
-          {
-            "label": "Теория",
-            "section": "ili-v-pole",
-            "material_id": "relational-databases"
-          }
-        ],
+        "lessons": [],
+        "theory_links": [],
         "catalog_visible": false,
-        "archived": false,
+        "archived": true,
         "sources": [
           {
             "url": null,
@@ -204858,22 +205249,10 @@
             "description": "База данных — Excel-файл, как на экзамене"
           }
         ],
-        "lessons": [
-          {
-            "position": 29,
-            "material_id": "relational-databases",
-            "counts_toward_mastery": false
-          }
-        ],
-        "theory_links": [
-          {
-            "label": "Теория",
-            "section": "cena-po-tarifu",
-            "material_id": "relational-databases"
-          }
-        ],
+        "lessons": [],
+        "theory_links": [],
         "catalog_visible": false,
-        "archived": false,
+        "archived": true,
         "sources": [
           {
             "url": null,
@@ -204911,7 +205290,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "По файлу 3-7.xlsx определите общую массу (в кг) всех видов пряников, проданных магазинами, расположенными на Луговой улице, за период с 8 по 21 сентября включительно. В ответе запишите только целую часть числа. (Подтемы 3 и 4.)"
+              "markdown": "По файлу 3-7.xlsx определи общую массу (в кг) всех видов пряников, проданных магазинами, расположенными на Луговой улице, за период с 8 по 21 сентября включительно. В ответе запиши только целую часть числа."
             }
           },
           {
@@ -204933,15 +205312,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "`90`: масса 90,5 кг — продажи двух видов пряников в магазинах на «ул. Луговая» (M2, M7, M14), упаковки × 0,5 кг."
+              "markdown": "Допиши наименование, адрес и количество в упаковке; масса строки — упаковки × количество в упаковке. Фильтры: наименование — поиск «пряник», адрес — поиск «Луговая», тип — «Продажа», дата — с 08.09 по 21.09. Сумма видимых масс — 90,5 кг, в ответе целая часть."
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "text",
-              "code": "Рядом с операциями — характеристики через ВПР:\nH2: =ВПР(C2;'Магазин'!$A:$C;2;0)  — район\nI2: =ВПР(C2;'Магазин'!$A:$C;3;0)  — адрес\nJ2: =ВПР(D2;'Товар'!$A:$F;3;0)    — наименование\nK2: =ВПР(D2;'Товар'!$A:$F;5;0)    — в упаковке\nL2: =F2*K2\n=СУММЕСЛИМН(L:L;J:J;\"*пряники*\";I:I;\"*Луговая*\";\n  E:E;\"Продажа\";B:B;\">=\"&ДАТА(2026;9;8);\n  B:B;\"<=\"&ДАТА(2026;9;21))",
-              "caption": "Формулы в Excel"
+              "code": "Рядом с операциями — характеристики через ВПР:\nH2: =ВПР(C2;'Магазин'!$A:$C;2;0)  — район\nI2: =ВПР(C2;'Магазин'!$A:$C;3;0)  — адрес\nJ2: =ВПР(D2;'Товар'!$A:$F;3;0)    — наименование\nK2: =ВПР(D2;'Товар'!$A:$F;5;0)    — в упаковке\nL2: =F2*K2",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `90`"
             }
           }
         ],
@@ -204959,7 +205344,7 @@
         ],
         "lessons": [
           {
-            "position": 30,
+            "position": 26,
             "material_id": "relational-databases"
           }
         ],
@@ -205003,7 +205388,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "По тому же файлу 3-7.xlsx определите, на сколько увеличилось количество упаковок крупы гречневой, имеющихся в наличии в магазинах Первомайского района, за период с 1 по 15 сентября включительно. (Подтемы 2 и 5.)"
+              "markdown": "По тому же файлу 3-7.xlsx определи, на сколько увеличилось количество упаковок крупы гречневой, имеющихся в наличии в магазинах Первомайского района, за период с 1 по 15 сентября включительно."
             }
           },
           {
@@ -205025,15 +205410,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "`159`: поступления минус продажи артикула «Крупа гречневая» в магазинах M13–M16."
+              "markdown": "Допиши наименование и район, количество со знаком — в отдельном столбце. Фильтры: наименование — «Крупа гречневая», район — «Первомайский», дата — с 01.09 по 15.09; тип не фильтруют. Сумма видимых — 159."
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "text",
-              "code": "Рядом с операциями — характеристики через ВПР:\nH2: =ВПР(C2;'Магазин'!$A:$C;2;0)  — район\nI2: =ВПР(C2;'Магазин'!$A:$C;3;0)  — адрес\nJ2: =ВПР(D2;'Товар'!$A:$F;3;0)    — наименование\nK2: =ВПР(D2;'Товар'!$A:$F;5;0)    — в упаковке\nL2: =ЕСЛИ(E2=\"Поступление\";F2;-F2)\n=СУММЕСЛИМН(L:L;J:J;\"Крупа гречневая\";\n  H:H;\"Первомайский\";B:B;\">=\"&ДАТА(2026;9;1);\n  B:B;\"<=\"&ДАТА(2026;9;15))",
-              "caption": "Формулы в Excel"
+              "code": "Рядом с операциями — характеристики через ВПР:\nH2: =ВПР(C2;'Магазин'!$A:$C;2;0)  — район\nI2: =ВПР(C2;'Магазин'!$A:$C;3;0)  — адрес\nJ2: =ВПР(D2;'Товар'!$A:$F;3;0)    — наименование\nK2: =ВПР(D2;'Товар'!$A:$F;5;0)    — в упаковке\nL2: =ЕСЛИ(E2=\"Поступление\";F2;-F2)",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `159`"
             }
           }
         ],
@@ -205051,7 +205442,7 @@
         ],
         "lessons": [
           {
-            "position": 31,
+            "position": 27,
             "material_id": "relational-databases"
           }
         ],
@@ -205095,7 +205486,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "По тому же файлу 3-7.xlsx определите, на какую сумму (в руб.) было продано сметаны всех видов в магазинах Заречного района за период с 10 по 25 сентября включительно. (Подтемы 3 и 4.)"
+              "markdown": "По тому же файлу 3-7.xlsx определи, на какую сумму (в руб.) было продано сметаны всех видов в магазинах Заречного района за период с 10 по 25 сентября включительно."
             }
           },
           {
@@ -205117,15 +205508,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "`15536`: выручка строк — упаковки × цена, `СУММЕСЛИМН` по `\"*сметана*\"`, району, типу «Продажа» и двум границам дат."
+              "markdown": "Допиши наименование и район, стоимость строки — упаковки × цена. Фильтры: наименование — поиск «сметана», район — «Заречный», тип — «Продажа», дата — с 10.09 по 25.09. Сумма видимых — 15 536 рублей."
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "text",
-              "code": "Рядом с операциями — характеристики через ВПР:\nH2: =ВПР(C2;'Магазин'!$A:$C;2;0)  — район\nI2: =ВПР(C2;'Магазин'!$A:$C;3;0)  — адрес\nJ2: =ВПР(D2;'Товар'!$A:$F;3;0)    — наименование\nK2: =ВПР(D2;'Товар'!$A:$F;5;0)    — в упаковке\nL2: =F2*G2\n=СУММЕСЛИМН(L:L;J:J;\"*сметана*\";H:H;\"Заречный\";\n  E:E;\"Продажа\";B:B;\">=\"&ДАТА(2026;9;10);\n  B:B;\"<=\"&ДАТА(2026;9;25))",
-              "caption": "Формулы в Excel"
+              "code": "Рядом с операциями — характеристики через ВПР:\nH2: =ВПР(C2;'Магазин'!$A:$C;2;0)  — район\nI2: =ВПР(C2;'Магазин'!$A:$C;3;0)  — адрес\nJ2: =ВПР(D2;'Товар'!$A:$F;3;0)    — наименование\nK2: =ВПР(D2;'Товар'!$A:$F;5;0)    — в упаковке\nL2: =F2*G2",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `15536`"
             }
           }
         ],
@@ -205143,7 +205540,7 @@
         ],
         "lessons": [
           {
-            "position": 32,
+            "position": 28,
             "material_id": "relational-databases"
           }
         ],
@@ -205187,7 +205584,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "По файлу 3-8.xlsx определите, в магазины какого района Молокозавод № 2 поставил с 5 по 18 октября включительно товаров на наибольшую сумму. В ответе запишите число — найденное значение наибольшей суммы в рублях. (Подтемы 4 и 6.)"
+              "markdown": "По файлу 3-8.xlsx определи, в магазины какого района Молокозавод № 2 поставил с 5 по 18 октября включительно товаров на наибольшую сумму. В ответе запиши число — найденное значение наибольшей суммы в рублях."
             }
           },
           {
@@ -205201,7 +205598,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Итог стоимости поставок по каждому из четырёх районов."
+              "markdown": "Сравни суммы поставок четырёх районов."
             }
           }
         ],
@@ -205209,15 +205606,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "`97746`: отбор по поставщику (`ВПР` с номером 6) и типу «Поступление», итоги стоимости по четырём районам, наибольший."
+              "markdown": "Допиши поставщика и район, стоимость строки — упаковки × цена. Фильтры: поставщик — «Молокозавод № 2», тип — «Поступление», дата — с 05.10 по 18.10. Сравни суммы четырёх районов — по очереди фильтром района или сводной таблицей. Наибольшая — 97 746 рублей."
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "text",
-              "code": "H2: =ВПР(C2;'Магазин'!$A:$C;2;0)  — район\nL2: =ВПР(D2;'Товар'!$A:$F;6;0)    — поставщик\nM2: =F2*G2                            — стоимость строки\nДля каждого района из списка N2:N5:\n=СУММЕСЛИМН(M:M;H:H;N2;L:L;\n  \"Молокозавод № 2\";E:E;\"Поступление\";\n  B:B;\">=\"&ДАТА(2026;10;5);\n  B:B;\"<=\"&ДАТА(2026;10;18))\n=МАКС(O2:O5)",
-              "caption": "Формулы в Excel"
+              "code": "H2: =ВПР(C2;'Магазин'!$A:$C;2;0)  — район\nL2: =ВПР(D2;'Товар'!$A:$F;6;0)    — поставщик\nM2: =F2*G2                            — стоимость строки",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `97746`"
             }
           }
         ],
@@ -205235,7 +205638,7 @@
         ],
         "lessons": [
           {
-            "position": 33,
+            "position": 29,
             "material_id": "relational-databases"
           }
         ],
@@ -205279,7 +205682,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "По тому же файлу 3-8.xlsx определите, сколько литров молока всех видов получили магазины, расположенные на проспекте Мира, за период с 1 по 20 октября включительно. В ответе запишите только целую часть числа. (Подтемы 3 и 4.)"
+              "markdown": "По тому же файлу 3-8.xlsx определи, сколько литров молока всех видов получили магазины, расположенные на проспекте Мира, за период с 1 по 20 октября включительно. В ответе запиши только целую часть числа."
             }
           },
           {
@@ -205293,7 +205696,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Шаблон адреса «пр. Мира*», иначе попадёт ул. Мирная."
+              "markdown": "Ищи в адресе «пр. Мира»: поиск «Мир» захватит и ул. Мирная."
             }
           }
         ],
@@ -205301,15 +205704,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "`733`: 733,6 л — поступления четырёх видов молока (2,5%, 3,2% и два ультрапастеризованных) в магазины на «пр. Мира» (M5, M9, M13); шаблон `\"*Мир*\"` добавил бы магазины ул. Мирная."
+              "markdown": "Допиши наименование, адрес и количество в упаковке; объём строки — упаковки × количество в упаковке. Фильтры: наименование — поиск «Молоко» (четыре вида), адрес — поиск «пр. Мира» (поиск «Мир» добавил бы магазины ул. Мирная), тип — «Поступление», дата — с 01.10 по 20.10. Сумма видимых — 733,6 л, в ответе целая часть."
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "text",
-              "code": "Рядом с операциями — характеристики через ВПР:\nH2: =ВПР(C2;'Магазин'!$A:$C;2;0)  — район\nI2: =ВПР(C2;'Магазин'!$A:$C;3;0)  — адрес\nJ2: =ВПР(D2;'Товар'!$A:$F;3;0)    — наименование\nK2: =ВПР(D2;'Товар'!$A:$F;5;0)    — в упаковке\nL2: =F2*K2  — литры строки\n=СУММЕСЛИМН(L:L;J:J;\"*молоко*\";I:I;\"пр. Мира*\";\n  E:E;\"Поступление\";B:B;\">=\"&ДАТА(2026;10;1);\n  B:B;\"<=\"&ДАТА(2026;10;20))",
-              "caption": "Формулы в Excel"
+              "code": "Рядом с операциями — характеристики через ВПР:\nH2: =ВПР(C2;'Магазин'!$A:$C;2;0)  — район\nI2: =ВПР(C2;'Магазин'!$A:$C;3;0)  — адрес\nJ2: =ВПР(D2;'Товар'!$A:$F;3;0)    — наименование\nK2: =ВПР(D2;'Товар'!$A:$F;5;0)    — в упаковке\nL2: =F2*K2  — литры строки",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `733`"
             }
           }
         ],
@@ -205327,7 +205736,7 @@
         ],
         "lessons": [
           {
-            "position": 34,
+            "position": 30,
             "material_id": "relational-databases"
           }
         ],
@@ -830733,62 +831142,26 @@
         "odna-bolshaya-tablica",
         "stroka-obekt",
         "klyuch",
-        "kody-v-operacii",
         "svyaz-po-klyuchu",
-        "mnogo-operacij",
         "kniga-i-listy",
         "tablicy-itogo",
         "harakteristiki-operacii",
-        "poisk-rukami",
         "formula-vpr",
         "zakreplenie",
         "drugie-stolbcy",
-        "oshibka-nd",
-        "poisk-i-itog",
         "vpr-itogo",
         "otbor",
-        "pole-i-tablica",
-        "i-ili",
-        "proverka-strok",
         "vklyuchitelno",
-        "priznak-1-0",
         "filtr",
         "vse-vidy",
         "otbor-itogo",
         "otbor-i-vychislenie",
         "massa",
-        "edinicy",
         "stoimost",
-        "postupleniya-i-prodazhi",
-        "raznye-voprosy",
-        "stolbec-vklada",
-        "summeslimn",
-        "forma-otveta",
-        "vklad-itogo",
         "izmenenie-zapasa",
-        "konechnyj-zapas",
-        "bolshe-ili-menshe",
-        "summa-so-znakami",
-        "stolbec-znaka",
-        "pribyl",
-        "zapas-itogo",
         "itog-obekta",
-        "porog-itoga",
-        "gruppirovka",
-        "maksimum-chego",
-        "chto-v-otvete",
-        "rajon-ili-den",
-        "svodnaya-tablica",
-        "itogi-itogo",
-        "dopolnitelnyy-urok-bazy",
-        "shema-bazy",
-        "cena-po-tarifu",
-        "ili-v-pole",
-        "cepochka-klyuchej",
-        "tablica-svyazej",
-        "odna-zapis",
-        "nalichie-na-datu",
-        "bazy-itogo"
+        "forma-otveta",
+        "vklad-itogo"
       ],
       "kind": "topic",
       "status": "published",
@@ -830802,9 +831175,7 @@
             "odna-bolshaya-tablica",
             "stroka-obekt",
             "klyuch",
-            "kody-v-operacii",
             "svyaz-po-klyuchu",
-            "mnogo-operacij",
             "kniga-i-listy",
             "tablicy-itogo"
           ]
@@ -830814,12 +831185,9 @@
           "access": "free",
           "sections": [
             "harakteristiki-operacii",
-            "poisk-rukami",
             "formula-vpr",
             "zakreplenie",
             "drugie-stolbcy",
-            "oshibka-nd",
-            "poisk-i-itog",
             "vpr-itogo"
           ]
         },
@@ -830828,11 +831196,7 @@
           "access": "free",
           "sections": [
             "otbor",
-            "pole-i-tablica",
-            "i-ili",
-            "proverka-strok",
             "vklyuchitelno",
-            "priznak-1-0",
             "filtr",
             "vse-vidy",
             "otbor-itogo"
@@ -830844,56 +831208,11 @@
           "sections": [
             "otbor-i-vychislenie",
             "massa",
-            "edinicy",
             "stoimost",
-            "postupleniya-i-prodazhi",
-            "raznye-voprosy",
-            "stolbec-vklada",
-            "summeslimn",
+            "izmenenie-zapasa",
+            "itog-obekta",
             "forma-otveta",
             "vklad-itogo"
-          ]
-        },
-        {
-          "slug": "izmenenie-zapasa",
-          "access": "free",
-          "sections": [
-            "izmenenie-zapasa",
-            "konechnyj-zapas",
-            "bolshe-ili-menshe",
-            "summa-so-znakami",
-            "stolbec-znaka",
-            "pribyl",
-            "zapas-itogo"
-          ]
-        },
-        {
-          "slug": "itogi-po-obektam",
-          "access": "free",
-          "sections": [
-            "itog-obekta",
-            "porog-itoga",
-            "gruppirovka",
-            "maksimum-chego",
-            "chto-v-otvete",
-            "rajon-ili-den",
-            "svodnaya-tablica",
-            "itogi-itogo"
-          ]
-        },
-        {
-          "slug": "drugie-bazy",
-          "access": "free",
-          "sections": [
-            "dopolnitelnyy-urok-bazy",
-            "shema-bazy",
-            "cena-po-tarifu",
-            "ili-v-pole",
-            "cepochka-klyuchej",
-            "tablica-svyazej",
-            "odna-zapis",
-            "nalichie-na-datu",
-            "bazy-itogo"
           ]
         }
       ],

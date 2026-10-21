@@ -24,7 +24,7 @@ const authoredContent = [
 ];
 
 describe("task 3 linked tables lesson (Change 184)", () => {
-  it("has six core subtopics, one advanced and their self-checks", () => {
+  it("has four core subtopics and their self-checks", () => {
     expect(lesson).toMatchObject({
       id: "relational-databases",
       routeSlug: "3-svyazannye-tablicy",
@@ -39,12 +39,9 @@ describe("task 3 linked tables lesson (Change 184)", () => {
       ["svyaz-listov-vpr", "core"],
       ["otbor-zapisey", "core"],
       ["vklad-zapisi", "core"],
-      ["izmenenie-zapasa", "core"],
-      ["itogi-po-obektam", "core"],
-      ["drugie-bazy", "advanced"],
     ]);
     expect(subtopics.map(({ checkpoint }) => checkpoint?.length ?? 0)).toEqual([
-      6, 7, 7, 2, 3, 2, 3,
+      5, 4, 5, 5,
     ]);
     expect(lesson.examFocus).toBeDefined();
     expect(lesson.result).toBeDefined();
@@ -102,10 +99,10 @@ describe("task 3 linked tables lesson (Change 184)", () => {
     const container = renderAuthoredLessonContent(authoredContent);
     const media = Object.values(lessonMedia);
     const diagrams = media.filter((item) => item.kind === "diagram");
-    // two database schemas, the three illustrative tables of subtopic 1 (T20),
-    // the И/ИЛИ requirements of subtopic 3 (T24), the stock change of
-    // subtopic 5 and the sales by shop of subtopic 6 (T26)
-    expect(diagrams).toHaveLength(8);
+    // the database schema and the three illustrative tables of subtopic 1, the
+    // requirements of subtopic 3, the stock change and the sales by shop of
+    // subtopic 4 (Change 197, T147)
+    expect(diagrams).toHaveLength(7);
     expect(
       container.querySelectorAll("figure[data-lesson-diagram]"),
     ).toHaveLength(diagrams.length);

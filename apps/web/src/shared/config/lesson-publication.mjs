@@ -114,7 +114,7 @@ export const relationalDatabasesLessonPublication = Object.freeze({
   taskNumbers: Object.freeze([3]),
   title: "Реляционные базы данных",
   summary:
-    "Таблицы и ключи, связь листов через ВПР, отбор записей по условию, вклад записи, изменение запаса и прибыль, итоги по объектам — в Excel.",
+    "Три листа базы и связь по ID, ВПР, отбор записей фильтром, масса, стоимость и изменение запаса — в Excel.",
   status: "published",
 });
 

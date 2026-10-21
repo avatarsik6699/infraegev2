@@ -104,6 +104,11 @@ export namespace LessonMediaTypes {
     /** Source cells the learner may retype. */
     edit: readonly string[];
     formulas: readonly SheetFormula[];
+    /**
+     * A range selected as in Excel: its visible cells are shaded and the status
+     * bar under the sheet counts and sums them (filtered rows are skipped).
+     */
+    status?: string;
     /** Walls of a field (topic 18): walled sides of a cell, of «trbl». */
     walls?: Readonly<Record<string, string>>;
   };

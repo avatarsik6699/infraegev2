@@ -15,7 +15,10 @@ import {
   cellViews,
   firstSelection,
   framesOf,
+  inFormulaRange,
   inputOf,
+  shownCell,
+  statusOf,
   visibleRows,
 } from "./sheet-model";
 import styles from "./sheet-block.module.css";
@@ -100,6 +103,11 @@ export const SheetBlock: React.FC<SheetBlockProps> = (props) => {
 
   const book = useMemo(() => bookFor(props, edits), [props, edits]);
   const views = useMemo(() => cellViews(props, book), [props, book]);
+  const statuses = useMemo(
+    () =>
+      new Map(props.sheets.map((part) => [part.name, statusOf(part, book)])),
+    [props, book],
+  );
   const selectedText = inputOf(book, selection.sheet, selection.addr);
   const frames = enhanced
     ? framesOf(selectedText, selection.sheet)
@@ -143,6 +151,33 @@ export const SheetBlock: React.FC<SheetBlockProps> = (props) => {
     cellRefs.current.get(cellKey(selection.sheet, selection.addr))?.focus();
   }, [selection]);
 
+  // the selected cell stays in sight, as in Excel: the grid scrolls sideways
+  // to it (a helper column far to the right is selected first)
+  // a block in a closed tab has no size yet: it scrolls when it is shown
+  useEffect(() => {
+    if (!enhanced) return;
+    const cell = cellRefs.current.get(cellKey(selection.sheet, selection.addr));
+    const box = cell?.closest<HTMLElement>("[data-sheet-name]");
+    if (!cell || !box || box.hidden) return;
+    const reveal = () => {
+      const c = cell.getBoundingClientRect();
+      const b = box.getBoundingClientRect();
+      if (c.right > b.right) box.scrollLeft += c.right - b.right + 8;
+      else if (c.left < b.left) box.scrollLeft -= b.left - c.left + 48;
+    };
+    if (box.clientWidth > 0) {
+      reveal();
+      return;
+    }
+    const watch = new ResizeObserver(() => {
+      if (box.clientWidth === 0) return;
+      watch.disconnect();
+      reveal();
+    });
+    watch.observe(box);
+    return () => watch.disconnect();
+  }, [enhanced, selection, activeSheet]);
+
   const say = (sheet: string, addr: string, tail = "") =>
     setMessage(
       `${addr}: ${views.get(cellKey(sheet, addr))?.shown ?? ""}${tail}`,
@@ -155,9 +190,12 @@ export const SheetBlock: React.FC<SheetBlockProps> = (props) => {
 
   // a formula under the grid: its sheet is shown and its cell selected
   const showFormula = (sheet: string, addr: string) => {
+    const part = props.sheets.find((one) => one.name === sheet);
+    const formula = part?.formulas.find((f) => f.cell === addr);
+    const cell = part && formula ? shownCell(part, formula) : addr;
     setActiveSheet(sheet);
-    select(sheet, addr, false);
-    say(sheet, addr);
+    select(sheet, cell, false);
+    say(sheet, cell);
   };
 
   const move = (d: [number, number], announce: boolean) => {
@@ -459,6 +497,10 @@ export const SheetBlock: React.FC<SheetBlockProps> = (props) => {
                               (enhanced && view?.editable) || undefined
                             }
                             data-selected={selected || undefined}
+                            data-status={
+                              statuses.get(part.name)?.cells.has(key) ||
+                              undefined
+                            }
                             data-wall={part.walls?.[addr]}
                             data-ref={frame?.color}
                             data-edge={frame?.edge}
@@ -543,6 +585,21 @@ export const SheetBlock: React.FC<SheetBlockProps> = (props) => {
           })}
         </div>
       ) : null}
+      {props.sheets.map((part) => {
+        const status = statuses.get(part.name);
+        if (!status || (enhanced && part.name !== activeSheet)) return null;
+        return (
+          <Typography.Text
+            key={part.name}
+            component="span"
+            className={styles.status}
+            data-sheet-status={part.name}
+          >
+            <span>{`Количество: ${String(status.count)}`}</span>
+            <span>{`Сумма: ${status.sum}`}</span>
+          </Typography.Text>
+        );
+      })}
       <FormulaNote
         sheets={props.sheets}
         selected={enhanced ? selection : undefined}
@@ -604,9 +661,10 @@ const FormulaNote: React.FC<{
       <ul className={styles.noteList}>
         {items.map((item) => {
           const at = `${named ? `${item.sheet}!` : ""}${item.cell}`;
+          // the formula's cell or one of its copies (a filter may hide the first)
           const current =
             props.selected?.sheet === item.sheet &&
-            props.selected.addr === item.cell;
+            inFormulaRange(item, props.selected.addr);
           const body = (
             <>
               <span className={styles.noteCell}>

@@ -350,6 +350,23 @@
 /* The formulas of the block (Change 184 F9): one row each — the cell and how
    far it was copied, then the formula broken like the bar; with scripting a
    row selects its cell, and the row of the selected cell is marked. */
+/* a range selected as in Excel and its status bar under the sheet */
+.cell[data-status] {
+  background: var(--color-surface-quiet);
+}
+
+.status {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-2);
+  padding: 0.25rem var(--space-1-5);
+  border-top: 1px solid var(--color-rule);
+  background: var(--color-surface-quiet);
+  font: 500 0.8rem var(--font-ui);
+  color: var(--color-muted);
+  font-variant-numeric: tabular-nums;
+}
+
 .note {
   padding: var(--space-1) var(--space-1-5) var(--space-1-5);
   border-top: 1px solid var(--color-rule);

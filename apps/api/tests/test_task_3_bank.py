@@ -153,39 +153,25 @@ def answers() -> dict[str, str]:
     a["task-3-4-04"] = str(sum(o[5] * o[6] for o in OPS if not o[4] and o[3] == 101))
     a["task-3-4-06"] = ds.num(12 * 0.25 * 120)
     a["task-3-5-01"] = str(sum(o[5] * (-1 if o[4] else 1) for o in OPS if o[3] == 101 and _june(o)))
-    a["task-3-5-02"] = str(
-        sum(o[5] * (-1 if o[4] else 1) for o in OPS if o[3] == 102 and o[2] == "M3")
-    )
     north = [o for o in OPS if SHOP_DISTRICT[o[2]] == "Северный" and _june(o)]
     a["task-3-5-04"] = str(-sum(o[5] * (-1 if o[4] else 1) for o in north if o[3] == 102))
     a["task-3-5-07"] = str(sum(o[5] * o[6] * (1 if o[4] else -1) for o in north if o[3] == 101))
-    a["task-3-6-01"] = (
-        f"{sum(v >= 6.5 for v in by_shop_kg.values())} {sum(v > 6.5 for v in by_shop_kg.values())}"
-    )
-    shop, low = min(by_shop_money.items(), key=lambda kv: kv[1])
-    a["task-3-6-02"] = f"{shop} {low}"
+    a["task-3-6-02"] = min(by_shop_money, key=lambda shop: by_shop_money[shop])
     by_day: dict = defaultdict(int)
     for o in OPS:
         if o[4] and _june(o):
             by_day[o[1]] += o[5] * o[6]
     a["task-3-6-04"] = str(max(by_day, key=lambda d: by_day[d]))
-    main = [o for o in sold_a if SHOP_DISTRICT[o[2]] == "Северный"]
-    main_kg: dict = defaultdict(float)
-    for o in main:
-        main_kg[o[2]] += o[5] * PACK_KG[o[3]]
-    a["task-3-6-05"] = (
-        f"{sum(o[5] * PACK_KG[o[3]] >= 3 for o in main)} {sum(v >= 3 for v in main_kg.values())}"
+    a["task-3-2-10"] = SHOP_DISTRICT[OPS[3][2]]
+    a["task-3-3-10"] = str(
+        sum(1 for o in OPS if o[4] and FACTORY[o[3]] == "А" and SHOP_DISTRICT[o[2]] == "Северный")
     )
-    a["task-3-7-02"] = str(sum(n * 1200 for n in (5, 2)))
-    pairs = [("U1", "K1"), ("U1", "K2"), ("U2", "K1"), ("U3", "K2"), ("U3", "K3")]
-    a["task-3-7-04"] = f"{len({p[0] for p in pairs})} {len({p[1] for p in pairs})} {len(pairs)}"
-    moves = [(5, 10), (12, 4), (12, -3), (20, -6)]
-    a["task-3-7-06"] = str(sum(q for d, q in moves if 5 < d <= 20))
     # the books
     b1 = ds.sbook("3-1")
-    a["task-3-1-07"] = (
-        f"{_total('3-1', {'M7'}, _arts('3-1'), None, None, None, 'rows'):g} "
-        f"{len(_shops('3-1', district='Октябрьский'))}"
+    a["task-3-1-07"] = f"{_total('3-1', {'M7'}, _arts('3-1'), None, None, None, 'rows'):g}"
+    a["task-3-1-08"] = str(len(_shops("3-1", district="Октябрьский")))
+    a["task-3-2-09"] = _g(
+        _total("3-1", _shops("3-1", district="Октябрьский"), _arts("3-1"), None, None, None, "rows")
     )
     assert b1.moves
     a["task-3-2-08"] = _g(
@@ -267,27 +253,6 @@ def answers() -> dict[str, str]:
     a["task-3-6-09"] = str(
         sum(_total("3-5", {s}, sweets, ds.OUT, None, None, "money") > 20000 for s in _shops("3-5"))
     )
-    th = ds.tbook("3-6")
-    plays = {p[0]: p for p in ds.PLAY_LIST}
-    tariff = {t[0]: t for t in ds.TARIFF_LIST}
-    a["task-3-7-07"] = str(
-        sum(
-            s.child * tariff[s.tariff][4]
-            for s in th.sales
-            if plays[s.play][2] == "М. А. Булгаков"
-            and plays[s.play][4] == "драма"
-            and tariff[s.tariff][1] in ("Утренний летний", "Вечерний летний")
-        )
-    )
-    a["task-3-7-08"] = str(
-        sum(
-            s.adult * tariff[s.tariff][2]
-            for s in th.sales
-            if plays[s.play][3] == "Мухина В. Д."
-            and plays[s.play][4] == "комедия"
-            and DAY(2026, 3, 1) <= s.date <= DAY(2026, 5, 31)
-        )
-    )
     m81 = _total(
         "3-7", _shops("3-7", street="Луговая"), _arts("3-7", part="пряники"),
         ds.OUT, DAY(2026, 9, 8), DAY(2026, 9, 21), "mass",
@@ -336,17 +301,20 @@ def answers() -> dict[str, str]:
     return a
 
 
+# book tasks of the topic's final page, beyond the four subtopics
+FINAL = {"task-3-4-09", "task-3-5-09", "task-3-6-07", "task-3-6-08", "task-3-6-09"}
+
+
 def test_every_answer_matches_independent_recomputation(answers: dict[str, str]) -> None:
     tasks = _entries()
     assert sorted(tasks) == sorted(answers)
-    assert sorted(t.lessons[0].position for t in tasks.values()) == list(range(35))
+    assert sorted(t.lessons[0].position for t in tasks.values()) == list(range(31))
     for task_id, task in tasks.items():
         assert task.checker.answer_variants[0] == answers[task_id], task_id
         assert task.exam_numbers == [3] and not task.catalog_visible and not task.archived
-        on_final_page = task_id.startswith("task-3-8-")
+        on_final_page = task_id.startswith("task-3-8-") or task_id in FINAL
         assert bool(task.theory_links) != on_final_page, task_id
-        advanced = task_id.startswith("task-3-7-")
-        assert task.lessons[0].counts_toward_mastery == (not advanced), task_id
+        assert task.lessons[0].counts_toward_mastery, task_id
 
 
 def test_book_tasks_attach_the_book_and_show_the_formulas() -> None:

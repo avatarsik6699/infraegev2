@@ -126,6 +126,61 @@ export function framesOf(text: string, sheet: string): Frames {
   return { parts, cells, tabs };
 }
 
+/**
+ * The status bar of a selected range, as Excel shows it: the visible cells that
+ * are not empty, and the sum of the numbers among them.
+ */
+export function statusOf(
+  part: LessonMediaTypes.SheetPart,
+  book: Book,
+): { cells: Set<string>; count: number; sum: string } | null {
+  if (!part.status) return null;
+  const ref = parseRef(part.status);
+  const visible = new Set(visibleRows(part));
+  const cells = new Set<string>();
+  let count = 0;
+  let sum = 0;
+  for (let r = ref.r1; r <= ref.r2; r++) {
+    if (!visible.has(r)) continue;
+    for (let c = ref.c1; c <= ref.c2; c++) {
+      const addr = address(r, c);
+      cells.add(cellKey(part.name, addr));
+      const value = book.value(part.name, addr);
+      const kind = kindOf(value);
+      if (kind === "empty") continue;
+      count += 1;
+      if (kind === "num") sum += value as number;
+    }
+  }
+  return { cells, count, sum: formatted(Math.round(sum * 1e9) / 1e9) };
+}
+
+/**
+ * The cell that shows a formula in the grid: the cell it was typed into, or,
+ * when a filter hides that row, its copy in the first visible row of the copied
+ * range — as Excel shows only the visible copies.
+ */
+export function shownCell(
+  part: LessonMediaTypes.SheetPart,
+  formula: LessonMediaTypes.SheetFormula,
+): string {
+  const [row, col] = parseAddress(formula.cell);
+  const last = formula.until ? parseAddress(formula.until)[0] : row;
+  const shown = visibleRows(part).find((r) => r >= row && r <= last);
+  return shown === undefined ? formula.cell : address(shown, col);
+}
+
+/** Whether a selected cell is the formula's cell or one of its copies. */
+export function inFormulaRange(
+  formula: LessonMediaTypes.SheetFormula,
+  addr: string,
+): boolean {
+  const [row, col] = parseAddress(formula.cell);
+  const last = formula.until ? parseAddress(formula.until)[0] : row;
+  const [r, c] = parseAddress(addr);
+  return c === col && r >= row && r <= last;
+}
+
 /** Visible rows of a sheet: the filter and hand-hidden rows are skipped. */
 export function visibleRows(part: LessonMediaTypes.SheetPart): number[] {
   const out: number[] = [];
