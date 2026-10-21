@@ -6,133 +6,52 @@ import { Typography } from "~/shared/components/typography";
 import {
   LessonDiagram,
   LessonSummary,
-  LessonTable,
+  LessonTabs,
 } from "~/shared/components/learning-content";
 import type { LessonContent } from "../lib/define-lesson.types";
 import { lessonMedia } from "./executors.paid.ogranicheniya-na-summu.media";
+import { Program } from "./executors.theme";
 import { PythonTerm } from "./python-term";
 
 const content: LessonContent.PaidSubtopicContent = {
   theory: [
     {
       id: "summa-pri-ogranicheniyah",
-      navLabel: "Сумма при ограничениях",
+      navLabel: "Сумма через количества",
       explanation: (
         <>
           <Typography.Text>
-            <strong>
-              Если вопрос — наименьшая или наибольшая сумма при ограничениях на
-              количества или простота суммы, сначала выражают сумму через
-              количества исходных цифр, а потом ищут лучший допустимый состав и
-              строку, которая его даёт.
-            </strong>{" "}
-            Такие вопросы встречаются в 3 задачах из 22. Основные задачи и
-            итоговая страница эту подтему не требуют.
+            Дополнительный урок — для продвинутых: такие вопросы редки.
           </Typography.Text>
           <Typography.Text>
-            Главный пример — однократный проход, который заменяет 3 → 7, 6 → 8,
-            9 → 3. Как читать такую таблицу, известно из подтемы 2; новое —
-            ограничения на количества и простота.
+            Таблица ниже один раз проходит строку из цифр 3, 6, 9 и заменяет 3 →
+            7, 6 → 8, 9 → 3. Как связаны длина входа и сумма цифр результата?
           </Typography.Text>
-        </>
-      ),
-    },
-    {
-      id: "tri-kolichestva",
-      navLabel: "Три количества",
-      explanation: (
-        <>
-          <Typography.Text>
-            <strong>
-              Однократная замена превращает вопрос о строке в вопрос о трёх
-              количествах.
-            </strong>
-          </Typography.Text>
-          <Typography.Text>
-            Головка стартует в ближайшей пустой ячейке справа, в{" "}
-            <Notation>{"q0"}</Notation>; вход — непустая строка из цифр 3, 6, 9:
-          </Typography.Text>
-          <LessonTable
-            label={"Состояние, λ, 3, 6, 9"}
-            columns={[
-              { label: "Состояние" },
-              {
-                label: (
-                  <>
-                    <Notation>{"λ"}</Notation>
-                  </>
-                ),
-              },
-              {
-                label: (
-                  <>
-                    <Notation>{"3"}</Notation>
-                  </>
-                ),
-              },
-              {
-                label: (
-                  <>
-                    <Notation>{"6"}</Notation>
-                  </>
-                ),
-              },
-              {
-                label: (
-                  <>
-                    <Notation>{"9"}</Notation>
-                  </>
-                ),
-              },
-            ]}
+          <Program
+            label={"Таблица замены 3 → 7, 6 → 8, 9 → 3"}
+            symbols={["λ", "3", "6", "9"]}
             rows={[
-              [
-                <>
-                  <Notation>{"q0"}</Notation>
-                </>,
-                <>
-                  <Notation>{"λ, L, q1"}</Notation>
-                </>,
-                "—",
-                "—",
-                "—",
-              ],
-              [
-                <>
-                  <Notation>{"q1"}</Notation>
-                </>,
-                <>
-                  <Notation>{"λ, S, q1"}</Notation>
-                </>,
-                <>
-                  <Notation>{"7, L, q1"}</Notation>
-                </>,
-                <>
-                  <Notation>{"8, L, q1"}</Notation>
-                </>,
-                <>
-                  <Notation>{"3, L, q1"}</Notation>
-                </>,
-              ],
+              ["q0", "λ, L, q1", "—", "—", "—"],
+              ["q1", "λ, S, q1", "7, L, q1", "8, L, q1", "3, L, q1"],
             ]}
           />
           <LessonDiagram
             {...lessonMedia.tmMap39669_376893}
             caption={
               <>
-                Каждая ячейка заменена своей парой: две девятки стали тройками,
-                две шестёрки — восьмёрками, тройка — семёркой.
+                Каждая цифра меняется по своей стрелке, как в подтеме 2: 3 → 7,
+                6 → 8, 9 → 3.
               </>
             }
           />
           <Typography.Text>
-            Пусть во входе a троек, b шестёрок и c девяток. Тогда длина N = a +
-            b + c, а сумма цифр результата
-          </Typography.Text>
-          <Typography.Text>S = 7a + 8b + 3c.</Typography.Text>
-          <Typography.Text>
-            Порядок цифр на сумму и длину не влияет — достаточно перебрать
-            количества a, b, c, а не строки.
+            <strong>
+              При однократной замене сумму результата выражают через количества
+              входа — порядок цифр на неё не влияет.
+            </strong>{" "}
+            Пусть во входе a троек, b шестёрок и c девяток. Длина N = a + b + c,
+            сумма результата S = 7a + 8b + 3c, и S + N = 8a + 9b + 4c. Дальше
+            перебирают количества, а не строки.
           </Typography.Text>
         </>
       ),
@@ -143,29 +62,18 @@ const content: LessonContent.PaidSubtopicContent = {
       explanation: (
         <>
           <Typography.Text>
+            Во входе есть все три цифры, а нечётных (3 и 9) не меньше пяти.
+            Каково наименьшее S + N?
+          </Typography.Text>
+          <Typography.Text>
             <strong>
-              Наименьшая сумма при нижней границе — это граница плюс самый
-              дешёвый способ её выполнить; затем нужен пример.
-            </strong>
-          </Typography.Text>
-          <Typography.Text>
-            Пусть во входе встречается каждая из трёх цифр, а нечётных цифр (3 и
-            9) не меньше пяти. Найдём наименьшее S + N.
-          </Typography.Text>
-          <Typography.Text>
-            S + N = 8a + 9b + 4c. Каждая цифра есть хотя бы раз: a ≥ 1, b ≥ 1, c
-            ≥ 1. Нечётных не меньше пяти: a + c ≥ 5. Шестёрки увеличивают сумму
-            и ничего не дают для условия о нечётных — берём b = 1. Среди
-            нечётных девятка дешевле тройки (4 {"<"} 8) — берём a = 1 и c = 4.
-          </Typography.Text>
-          <Typography.Text>
-            S + N = 8 + 9 + 16 = 33. Пример: <Notation>{"369999"}</Notation> →{" "}
-            <Notation>{"783333"}</Notation>, сумма 27, длина 6, 27 + 6 = 33.
-          </Typography.Text>
-          <Typography.Text>
-            Меньше быть не может: каждая из пяти нечётных цифр добавляет к S + N
-            не меньше 4, хотя бы одна из них — тройка (8), и шестёрка добавляет
-            9: 8 + 4 · 4 + 9 = 33.
+              Наименьшее значение при нижней границе — это граница плюс самый
+              дешёвый способ её выполнить.
+            </strong>{" "}
+            Шестёрка нужна одна (b = 1): она ничего не даёт для условия о
+            нечётных. Из нечётных девятка дешевле тройки (4 против 8), но одна
+            тройка обязательна: a = 1, c = 4. S + N = 8 + 9 + 16 = 33, например{" "}
+            <Notation>{"369999"}</Notation> → <Notation>{"783333"}</Notation>.
           </Typography.Text>
         </>
       ),
@@ -176,64 +84,17 @@ const content: LessonContent.PaidSubtopicContent = {
       explanation: (
         <>
           <Typography.Text>
+            Длина входа не больше 10, нечётных цифр не меньше четырёх. Каково
+            наибольшее S + N?
+          </Typography.Text>
+          <Typography.Text>
             <strong>
-              Наибольшая сумма при ограничении длины — заполнить длину самыми
+              Наибольшее значение при ограничении длины — заполнить её самыми
               дорогими цифрами, оставив ровно столько, сколько требует условие.
-            </strong>
-          </Typography.Text>
-          <Typography.Text>
-            Пусть длина не больше 10, а нечётных цифр во входе не меньше
-            четырёх. Найдём наибольшее S + N.
-          </Typography.Text>
-          <Typography.Text>
-            Самая дорогая цифра — шестёрка (9 к S + N), но она чётная. Значит,
-            ровно четыре места отдаём нечётным, причём выгоднее тройка (8), чем
-            девятка (4): a = 4. Остальные шесть мест — шестёрки: b = 6.
-          </Typography.Text>
-          <Typography.Text>
-            S + N = 8 · 4 + 9 · 6 = 32 + 54 = 86. Пример:{" "}
-            <Notation>{"3333666666"}</Notation> →{" "}
-            <Notation>{"7777888888"}</Notation>, сумма 76, длина 10.
-          </Typography.Text>
-        </>
-      ),
-    },
-    {
-      id: "prostoe-chislo",
-      navLabel: "Простое число",
-      explanation: (
-        <>
-          <Typography.Text>
-            <strong>
-              Простое число — целое больше 1 с двумя делителями; 0 и 1 не
-              простые, а проверять делители достаточно до √x.
-            </strong>
-          </Typography.Text>
-          <Typography.Text>
-            Простое число — целое число больше 1, у которого только два
-            положительных делителя: 1 и оно само. Поэтому 0 и 1 не являются
-            простыми. Чтобы проверить число <Notation>{"x"}</Notation>,
-            достаточно искать делитель от 2, пока{" "}
-            <Notation>{"d · d ≤ x"}</Notation>. Если составное число равно
-            произведению двух множителей, хотя бы один из них не больше
-            квадратного корня: иначе их произведение было бы больше{" "}
-            <Notation>{"x"}</Notation>.
-          </Typography.Text>
-          <CodeBlock
-            code={
-              "def is_prime(x):\n    if x < 2:\n        return False\n    d = 2\n    while d * d <= x:\n        if x % d == 0:\n            return False\n        d += 1\n    return True"
-            }
-            label={"Код на Python: def is_prime(x):"}
-            language="python"
-          />
-          <Typography.Text>
-            <PythonTerm term="def">
-              <Notation>{"def"}</Notation>
-            </PythonTerm>{" "}
-            создаёт функцию, <Notation>{"return"}</Notation> возвращает
-            результат и завершает вызов. <Notation>{"x % d == 0"}</Notation>{" "}
-            означает, что <Notation>{"x"}</Notation> делится на{" "}
-            <Notation>{"d"}</Notation> без остатка.
+            </strong>{" "}
+            Дороже всех шестёрка (9), но она чётная. Ровно четыре места —
+            нечётным, из них дороже тройка (8): a = 4, b = 6. S + N = 32 + 54 =
+            86, например <Notation>{"3333666666"}</Notation>.
           </Typography.Text>
         </>
       ),
@@ -244,37 +105,65 @@ const content: LessonContent.PaidSubtopicContent = {
       explanation: (
         <>
           <Typography.Text>
+            Какова наименьшая длина входа, в котором есть все три цифры,
+            шестёрок чётное число, а сумма результата — простое число?
+          </Typography.Text>
+          <Typography.Text>
             <strong>
-              Когда условие требует простую сумму, простоту проверяют для каждой
-              допустимой суммы; угадывать по нескольким запускам нельзя.
-            </strong>
+              Простоту проверяют для каждой допустимой суммы: простое число
+              больше 1 и делится только на 1 и на себя, а делители достаточно
+              искать до √x.
+            </strong>{" "}
+            При N = 3 шестёрка одна — нечётно. При N = 4 шестёрок две: S = 7 +
+            16 + 3 = 26 — составное. При N = 5 шестёрок две, а троек и девяток 1
+            и 2: S = 7 + 16 + 6 = 29 — простое. Ответ 5, например{" "}
+            <Notation>{"36699"}</Notation>.
           </Typography.Text>
-          <Typography.Text>
-            Найдём наименьшую длину входа, в котором есть все три цифры,
-            количество шестёрок чётное, а сумма результата — простое число.
-          </Typography.Text>
-          <Typography.Text>
-            При N = 3 каждая цифра по одной — шестёрок одна, нечётно. При N = 4
-            шестёрок две, тройка и девятка по одной: S = 7 + 16 + 3 = 26 —
-            составное. При N = 5 шестёрок две, а тройки и девятки — 2 и 1 или 1
-            и 2: S = 33 = 3 · 11 или S = 29 — простое. Ответ: N = 5, например{" "}
-            <Notation>{"36699"}</Notation> → <Notation>{"78833"}</Notation>.
-          </Typography.Text>
-          <Typography.Text>
-            Тот же поиск программой — перебор количеств, а не строк:
-          </Typography.Text>
-          <CodeBlock
-            code={
-              "for n in range(3, 20):\n    found = []\n    for a in range(1, n):\n        for b in range(1, n - a):\n            c = n - a - b\n            s = 7 * a + 8 * b + 3 * c\n            if b % 2 == 0 and is_prime(s):\n                found.append((a, b, c, s))\n    if found:\n        print(n, found)\n        break"
-            }
-            label={"Тот же поиск программой — перебор количеств, а не строк"}
-            language="python"
-            output={"5 [(1, 2, 2, 29)]"}
+          <LessonTabs
+            label={"Способ"}
+            tabs={[
+              {
+                label: "Вручную",
+                content: (
+                  <Typography.Text>
+                    Перебирай длины по возрастанию и для каждой — допустимые
+                    количества. Числа 0 и 1 не простые; 29 проверяется
+                    делителями 2, 3, 4, 5, потому что 6 · 6 = 36 {">"} 29.
+                  </Typography.Text>
+                ),
+              },
+              {
+                label: "Python",
+                content: (
+                  <>
+                    <Typography.Text>
+                      Функция <PythonTerm term="def">is_prime</PythonTerm>{" "}
+                      проверяет делители, пока d · d ≤ x:
+                    </Typography.Text>
+                    <CodeBlock
+                      code={
+                        "def is_prime(x):\n    if x < 2:\n        return False\n    d = 2\n    while d * d <= x:\n        if x % d == 0:\n            return False\n        d += 1\n    return True"
+                      }
+                      label={"Проверка простоты"}
+                      language="python"
+                    />
+                    <Typography.Text>
+                      Перебор количеств, а не строк; внутренний диапазон
+                      оставляет хотя бы одну девятку:
+                    </Typography.Text>
+                    <CodeBlock
+                      code={
+                        "for n in range(3, 20):\n    found = []\n    for a in range(1, n):\n        for b in range(1, n - a):\n            c = n - a - b\n            s = 7 * a + 8 * b + 3 * c\n            if b % 2 == 0 and is_prime(s):\n                found.append((a, b, c, s))\n    if found:\n        print(n, found)\n        break"
+                      }
+                      label={"Наименьшая длина с простой суммой"}
+                      language="python"
+                      output={"5 [(1, 2, 2, 29)]"}
+                    />
+                  </>
+                ),
+              },
+            ]}
           />
-          <Typography.Text>
-            Внутренний диапазон <Notation>{"range(1, n - a)"}</Notation>{" "}
-            оставляет хотя бы одну девятку: c = n − a − b ≥ 1.
-          </Typography.Text>
         </>
       ),
     },
@@ -285,46 +174,13 @@ const content: LessonContent.PaidSubtopicContent = {
         <>
           <LessonSummary
             items={[
+              { key: "Сумма", note: <>через количества: S = 7a + 8b + 3c</> },
+              { key: "Наименьшее", note: <>граница + самые дешёвые цифры</> },
+              { key: "Наибольшее", note: <>длина — самыми дорогими цифрами</> },
+              { key: "Простое", note: <>больше 1, делители до √x</> },
               {
-                note: (
-                  <>
-                    Однократная замена: длина и сумма результата — линейные
-                    выражения от количеств исходных цифр; порядок не важен.
-                  </>
-                ),
-              },
-              {
-                note: (
-                  <>
-                    Минимум при нижней границе: выполнить её самыми дешёвыми
-                    цифрами, остальное — по минимуму; максимум при ограничении
-                    длины — заполнить самыми дорогими.
-                  </>
-                ),
-              },
-              {
-                note: (
-                  <>
-                    Каждую границу подтверждают строкой, на которой она
-                    достигается.
-                  </>
-                ),
-              },
-              {
-                note: (
-                  <>
-                    Простое число больше 1; 0 и 1 не простые; делители проверяют
-                    до √x.
-                  </>
-                ),
-              },
-              {
-                note: (
-                  <>
-                    Простоту проверяют для каждой допустимой суммы —
-                    рассуждением или перебором количеств.
-                  </>
-                ),
+                key: "Пример",
+                note: <>строка, на которой ответ достигается</>,
               },
             ]}
           />
@@ -337,17 +193,39 @@ const content: LessonContent.PaidSubtopicContent = {
       id: "zadacha-1",
       prompt: (
         <>
-          Что вернут <Notation>{"is_prime(1)"}</Notation>,{" "}
-          <Notation>{"is_prime(2)"}</Notation> и{" "}
-          <Notation>{"is_prime(91)"}</Notation>?
+          Таблица замены 3 → 7, 6 → 8, 9 → 3 выдала{" "}
+          <Notation>{"7738"}</Notation>. Какой был вход?
         </>
       ),
       reveal: (
         <>
-          <Notation>{"False"}</Notation>, <Notation>{"True"}</Notation>,{" "}
-          <Notation>{"False"}</Notation>: 1 не простое, 91 = 7 · 13.
+          <Notation>{"3396"}</Notation>: замена обратима, 7 ← 3, 3 ← 9, 8 ← 6.
         </>
       ),
+    },
+    {
+      id: "zadacha-2",
+      prompt: (
+        <>
+          Есть все три цифры, нечётных не меньше шести. Каково наименьшее S + N?
+        </>
+      ),
+      reveal: <>37: a = 1, b = 1, c = 5, 8 + 9 + 20.</>,
+    },
+    {
+      id: "zadacha-3",
+      prompt: (
+        <>
+          Длина не больше 12, нечётных не меньше четырёх. Каково наибольшее S +
+          N?
+        </>
+      ),
+      reveal: <>104: a = 4, b = 8, 32 + 72.</>,
+    },
+    {
+      id: "zadacha-4",
+      prompt: <>Простое ли число 1?</>,
+      reveal: <>Нет: простое число больше 1 и имеет ровно два делителя.</>,
     },
   ],
 };

@@ -4,7 +4,7 @@ The lesson «Исполнение алгоритма для исполнител
 come from the stand's executor (``turing_figures``). Here a number on the tape is
 recomputed by the formula the lesson derives for each table (minus one, 2ᵏ added on the left,
 inversion 2ᵏ − 1 − N, two digits on the right …); steps and inverse questions run a separate
-small simulator over a list tape. A table of the final page is read from the bank task itself
+small simulator over a list tape. The table of every task is read from the bank task itself
 (its ``table`` block).
 """
 
@@ -108,14 +108,12 @@ def _prime(x: int) -> bool:
 def answers() -> dict[str, str]:
     t = _entries()
     a: dict[str, str] = {}
-    word, steps, head = _right("10100", SUB)
-    a["task-12-1-03"] = f"{word} {head} {steps}"
-    word, steps, _ = _right("1000", SUB)
-    a["task-12-1-05"] = f"{word} {int(word, 2)} {steps}"
+    a["task-12-1-03"] = _right("10100", SUB)[0]
+    a["task-12-1-05"] = str(_right("1000", SUB)[1])
     a["task-12-1-07"] = str(37 - 1)
     a["task-12-1-08"] = str(_right(f"{40:b}", SUB)[1])
     # 2.1: 0 → 2, 1 → 0, 2 → 1: zeros came from ones, ones from twos, twos from zeros
-    a["task-12-2-01"] = "2 4 1"
+    a["task-12-2-01"] = "4"  # the question is the ones of the input
     a["task-12-2-02"] = _right("0120", CYCLE)[0]
     low = {"1": 5, "0": 9}
     a["task-12-2-03"] = str(3 * low["1"] + 3 * low["0"])
@@ -127,16 +125,14 @@ def answers() -> dict[str, str]:
     )
     a["task-12-2-07"] = str(max(4 * 7 + 3 * 9, 3 * 7 + 4 * 9))
     a["task-12-3-01"] = str(2 * 37 + 1)
-    word, steps, _ = _right("101", LEFT)
-    a["task-12-3-02"] = f"{word} {int(word, 2)} {steps}"
-    word, steps, _ = _right("101111", PLUS)
-    a["task-12-3-04"] = f"{word} {steps}"
+    a["task-12-3-02"] = str(int(_right("101", LEFT)[0], 2))
+    a["task-12-3-04"] = _right("101111", PLUS)[0]
     a["task-12-3-05"] = str(4 * 45 + 2)
     a["task-12-3-06"] = str(100 + 2 ** len(f"{100:b}"))
     a["task-12-3-07"] = str(50 + 2 ** (len(f"{50:b}") - 1))
-    a["task-12-4-02"] = " ".join(map(str, _range(12, 5, _right, SUB, "0")))
+    a["task-12-4-02"] = str(_range(15, 6, _right, SUB, "0")[0])
     a["task-12-4-03"] = str(_right("1000000", SUB)[1])
-    a["task-12-4-04"] = " ".join(map(str, _range(10, 1, _right, SUB, "0")))
+    a["task-12-4-04"] = str(_range(10, 1, _right, SUB, "0")[1])
     a["task-12-4-05"] = str(_range(7, 0, _right, SUB, "0")[0])
     a["task-12-4-06"] = str(_range(12, 5, _right, SUB, "0", canon=True)[1])
     low4, high4 = _range(10, 4, _left, MIRROR, "1")
@@ -151,7 +147,7 @@ def answers() -> dict[str, str]:
     a["task-12-5-07"] = str(
         next(n for n in range(1, 5000) if 2 ** (len(f"{n:b}") + 1) + 2 * n + 1 > 1000)
     )
-    a["task-12-6-06"] = "0"
+    a["task-12-6-06"] = str(2 ** len(f"{200:b}") - 1 - 200)  # inversion
     a["task-12-6-07"] = str(1000 + 2 ** len(f"{1000:b}"))
     a["task-12-7-02"] = "".join({"7": "3", "8": "6", "3": "9"}[c] for c in "7738")
     triples = [
@@ -208,12 +204,24 @@ def test_every_answer_matches_independent_recomputation(answers: dict[str, str])
         assert task.lessons[0].counts_toward_mastery == (not advanced), task_id
 
 
-def test_final_page_shows_the_program_table() -> None:
-    for task_id, task in _entries().items():
+def test_every_task_shows_its_program_table() -> None:
+    # Change 197: a task is solved without the lesson open, as in the exam.
+    same = [
+        (SUB, ["1-03", "1-05", "1-07", "1-08", "4-02", "4-03", "4-04", "4-05", "4-06"]),
+        (LEFT, ["3-02", "3-06", "6-07"]),
+        (PLUS, ["3-04"]),
+        (MIRROR, ["4-07", "4-08"]),
+        (PHASES, ["5-01", "5-02", "5-06"]),
+        (PARITY, ["5-03", "5-04"]),
+        (CYCLE, ["2-01", "2-02", "2-06"]),
+    ]
+    tasks = _entries()
+    for task_id, task in tasks.items():
         tables = [b for b in task.statement if b.type == "table"]
-        assert (len(tables) == 1) == task_id.startswith("task-12-8-"), task_id
-        if tables:
-            assert tables[0].data.headers[0] == "Состояние", task_id
+        assert len(tables) == 1 and tables[0].data.headers[0] == "Состояние", task_id
+    for rules, ids in same:
+        for short in ids:
+            assert _table(tasks[f"task-12-{short}"]) == rules, short
 
 
 def test_checker_accepts_the_answer_and_rejects_an_off_by_one(answers: dict[str, str]) -> None:
