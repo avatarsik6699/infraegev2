@@ -2,8 +2,10 @@ import { CodeBlock } from "~/shared/components/code-block";
 import { Notation } from "~/shared/components/notation";
 import { Typography } from "~/shared/components/typography";
 import {
+  LessonDiagram,
   LessonStepper,
   LessonSummary,
+  LessonTable,
   ProofDisclosure,
 } from "~/shared/components/learning-content";
 import { defineCourseLesson } from "../lib/define-course-lesson";
@@ -28,18 +30,19 @@ export const pythonFilesLesson = defineCourseLesson({
       explanation: (
         <>
           <Typography.Text>
+            Сумму и наибольшее из 5, −2, 10, 7 мы уже считали: числа вводили с
+            клавиатуры или записывали списком в коде. В задачах ЕГЭ и в жизни
+            чисел тысячи, и они лежат в файле — вводить их руками никто не
+            будет.{" "}
             <strong>
-              Файл — это внешние данные со своим форматом, и программа читает их
-              по этому формату: целиком или по строкам, с заголовком или без
+              Программа может сама прочитать файл: открыть его по имени и
+              получить текст целиком или строку за строкой
             </strong>
-            . Опора — <Notation>{"for"}</Notation> по источнику,{" "}
-            <Notation>{"split"}</Notation> и <Notation>{"int"}</Notation> для
-            разбора строк, <Notation>{"None"}</Notation> как «ответа нет»: файл
-            — ещё один источник строк для того же цикла.
+            .
           </Typography.Text>
           <Typography.Text>
-            Читать будем файл <Notation>{"numbers.txt"}</Notation> с одним целым
-            числом на строке:
+            Пусть те же числа лежат в файле <Notation>{"numbers.txt"}</Notation>
+            , по одному на строке:
           </Typography.Text>
           <CodeBlock
             code={"5\n-2\n10\n7"}
@@ -48,8 +51,8 @@ export const pythonFilesLesson = defineCourseLesson({
             fileName="numbers.txt"
           />
           <Typography.Text>
-            Найдём сумму, количество, отрицательный максимум и разберём, что
-            меняется, если у файла есть заголовок.
+            Посчитаем для него сумму и наибольшее, а потом разберём файлы с
+            заголовком, запись в файл и готовые форматы CSV и JSON.
           </Typography.Text>
         </>
       ),
@@ -64,60 +67,73 @@ export const pythonFilesLesson = defineCourseLesson({
               Чтобы прочитать файл, программа открывает его по пути и в
               кодировке.
             </strong>{" "}
-            Переменные обычного запуска исчезают после завершения процесса.{" "}
-            <strong>Файл</strong> сохраняет байты на носителе. Чтобы прочитать
-            текст, программа должна знать путь к файлу и способ преобразовать
-            байты в символы — <strong>кодировку</strong>.
-          </Typography.Text>
-          <Typography.Text>
-            <strong>Путь</strong> указывает расположение файла. Абсолютный путь
-            задаётся от корня файловой системы. Относительный отсчитывается от
-            текущей рабочей папки процесса. Она может не совпадать с папкой
-            исходного <Notation>{".py"}</Notation>-файла, особенно в IDE.
+            <strong>Путь</strong> говорит, где лежит файл.{" "}
+            <strong>Кодировка</strong> — правило, по которому байты на диске
+            превращаются в буквы; для русского текста это{" "}
+            <Notation>{'"utf-8"'}</Notation>.
           </Typography.Text>
           <CodeBlock
             code={
               'with open("numbers.txt", "r", encoding="utf-8") as file:\n    text = file.read()\nprint(repr(text))'
             }
-            label={
-              "Она может не совпадать с папкой исходного .py-файла, особенно в IDE"
-            }
+            label={"Чтение файла numbers.txt целиком"}
             language="python"
             fileName="main.py"
             output={"'5\\n-2\\n10\\n7\\n'"}
           />
           <Typography.Text>
-            Этот пример требует существующего{" "}
-            <Notation>{"numbers.txt"}</Notation>. <Notation>{"open"}</Notation>{" "}
-            открывает файл. <Notation>{'"r"'}</Notation> означает чтение.{" "}
-            <Notation>{"with"}</Notation> организует работу с ресурсом так,
-            чтобы файл закрылся при выходе из блока, в том числе при обычной
-            ошибке внутри. <Notation>{"as file"}</Notation> даёт имя открытому
-            объекту. <Notation>{"read()"}</Notation> вернул весь текст одной
-            строкой — <Notation>{"repr"}</Notation> показывает в ней переводы
-            строк <Notation>{"\\n"}</Notation>.
+            <Notation>{"open"}</Notation> открывает файл,{" "}
+            <Notation>{'"r"'}</Notation> означает чтение.{" "}
+            <Notation>{"with … as file"}</Notation> даёт открытому файлу имя{" "}
+            <Notation>{"file"}</Notation> и закрывает файл, когда блок кончится.{" "}
+            <Notation>{"read()"}</Notation> вернул весь текст одной строкой, а{" "}
+            <Notation>{"repr"}</Notation>, как в уроке о строках, показал в ней
+            переводы строк <Notation>{"\\n"}</Notation>.
           </Typography.Text>
           <Typography.Text>
-            Если файла нет по указанному пути, программа остановится:
+            Путь <Notation>{'"numbers.txt"'}</Notation> —{" "}
+            <strong>относительный</strong>: Python ищет файл в{" "}
+            <strong>рабочей папке</strong>, откуда запущена программа.{" "}
+            <strong>Абсолютный</strong> путь начинается с диска и находит файл
+            откуда угодно:
+          </Typography.Text>
+          <LessonDiagram
+            {...lessonMedia.folderPaths}
+            caption={
+              <>
+                Два пути ведут к одному файлу: относительный отсчитывается от
+                рабочей папки, абсолютный — от корня диска. В пути Python
+                понимает и прямую косую черту <Notation>{"/"}</Notation>.
+              </>
+            }
+          />
+          <Typography.Text>
+            Проще всего держать <Notation>{"numbers.txt"}</Notation> рядом с{" "}
+            <Notation>{"main.py"}</Notation> в папке проекта: в PyCharm — правой
+            кнопкой по папке проекта, New → File; в VS Code — кнопка New File
+            над списком файлов. Тогда при запуске из IDE файл найдётся. При
+            запуске из терминала сначала перейди в эту папку командой{" "}
+            <Notation>{"cd"}</Notation>, как в первом уроке. Если файла нет по
+            указанному пути, программа остановится:
           </Typography.Text>
           <CodeBlock
             code={
               'with open("missing.txt", encoding="utf-8") as file:\n    print(file.read())'
             }
-            label={"Если файла нет по указанному пути, программа остановится"}
+            label={"Открытие файла, которого нет"}
             language="python"
             fileName="main.py"
             error={
               "FileNotFoundError: [Errno 2] No such file or directory: 'missing.txt'"
             }
           />
-          <Typography.Text>
-            У открытого файла есть <strong>позиция</strong> — место, с которого
-            начнётся следующее чтение. Каждое чтение сдвигает её вперёд. Если
-            вызвать <Notation>{"file.read()"}</Notation> второй раз, получится
-            пустая строка: всё уже прочитано. Можно открыть файл заново либо
-            вернуть позицию к началу: <Notation>{"file.seek(0)"}</Notation>.
-          </Typography.Text>
+          <ProofDisclosure summary="Тонкости: with и ошибки" kind="nuance">
+            <Typography.Text>
+              <Notation>{"with"}</Notation> закрывает файл и тогда, когда внутри
+              блока возникла ошибка. Без него файл закрывают вызовом{" "}
+              <Notation>{"file.close()"}</Notation>, и его легко забыть.
+            </Typography.Text>
+          </ProofDisclosure>
         </>
       ),
     },
@@ -128,57 +144,64 @@ export const pythonFilesLesson = defineCourseLesson({
         <>
           <Typography.Text>
             <strong>Небольшой файл читают целиком, большой — построчно.</strong>{" "}
-            Если файл небольшой и содержит целые числа, разделённые пробельными
-            символами:
+            Целиком: <Notation>{"read()"}</Notation> отдаёт весь текст,{" "}
+            <Notation>{"split()"}</Notation> режет его по пробелам и переводам
+            строк, дальше — знакомые <Notation>{"sum"}</Notation> и{" "}
+            <Notation>{"max"}</Notation>:
           </Typography.Text>
           <CodeBlock
             code={
-              'with open("numbers.txt", encoding="utf-8") as file:\n    numbers = [int(part) for part in file.read().split()]\nprint(sum(numbers))'
+              'with open("numbers.txt", encoding="utf-8") as file:\n    numbers = [int(part) for part in file.read().split()]\nprint(sum(numbers), max(numbers))'
             }
-            label={
-              "Если файл небольшой и содержит целые числа, разделённые пробельными символами"
-            }
+            label={"Сумма и наибольшее: файл целиком"}
             language="python"
             fileName="main.py"
-            output={"20"}
+            output={"20 10"}
           />
           <Typography.Text>
-            <Notation>{"read()"}</Notation> загружает весь текст в память. Если
-            файл большой и одна строка содержит одно число, можно обрабатывать
-            постепенно:
+            Так весь файл сразу оказывается в памяти — для миллиона строк это
+            много. Построчно: цикл <Notation>{"for line in file"}</Notation>{" "}
+            выдаёт строки файла по одной, и сумму с наибольшим можно считать по
+            ходу, как в уроке о <Notation>{"while"}</Notation>.{" "}
+            <Notation>{"best = None"}</Notation> — «наибольшего пока нет», как в
+            уроке о <Notation>{"for"}</Notation>:
           </Typography.Text>
           <CodeBlock
             code={
-              'total = 0\ncount = 0\nwith open("numbers.txt", encoding="utf-8") as file:\n    for line in file:\n        number = int(line)\n        total += number\n        count += 1\nprint(count, total)'
+              'total = 0\nbest = None\nwith open("numbers.txt", encoding="utf-8") as file:\n    for line in file:\n        number = int(line)\n        total += number\n        if best is None or number > best:\n            best = number\nprint(total, best)'
             }
-            label={
-              "Если файл большой и одна строка содержит одно число, можно обрабатывать постепенно"
-            }
+            label={"Сумма и наибольшее: файл по строкам"}
             language="python"
-            fileName="total.py"
-            output={"4 20"}
+            fileName="main.py"
+            output={"20 10"}
           />
           <Typography.Text>
-            Цикл <Notation>{"for line in file"}</Notation> выдаёт строки файла
-            по одной, вместе с переводом строки в конце.{" "}
-            <Notation>{"int"}</Notation> допускает окружающие пробельные
-            символы, включая перевод строки, поэтому{" "}
-            <Notation>{".strip()"}</Notation> здесь не требуется. Пустая строка
-            вызовет ошибку — и это полезно, если формат обещал число на каждой
-            строке. Пропускать пустые или повреждённые данные следует только при
-            явно выбранном правиле.
+            Каждая строка приходит вместе с переводом строки в конце:{" "}
+            <Notation>{"'5\\n'"}</Notation>. <Notation>{"int"}</Notation>{" "}
+            допускает пробелы и перевод строки по краям, поэтому{" "}
+            <Notation>{".strip()"}</Notation> здесь не нужен. Пройди цикл по
+            шагам:
           </Typography.Text>
+          <LessonStepper
+            {...lessonMedia.fileLines}
+            label={"Сумма и наибольшее по строкам файла numbers.txt"}
+          />
           <Typography.Text>
-            В <Notation>{"numbers.txt"}</Notation> лежат те же 5, −2, 10, 7 из
-            сквозной задачи курса. Цикл по файлу устроен так же, как цикл по
-            списку в уроке о списках, — меняется только источник строк.
+            Пустая строка в файле вызовет ошибку <Notation>{"int"}</Notation> —
+            и это полезно, если формат обещал число на каждой строке. Пропускать
+            пустые строки стоит, только если так сказано в условии.
           </Typography.Text>
-          <Typography.Text>
-            Для задач обработки текста не удаляй все пробелы через{" "}
-            <Notation>{".strip()"}</Notation> автоматически: крайние пробелы
-            могут быть частью данных. Если нужно снять только окончание строки,
-            подходит <Notation>{'.rstrip("\\r\\n")'}</Notation>.
-          </Typography.Text>
+          <ProofDisclosure
+            summary="Тонкости: когда strip() вредит"
+            kind="nuance"
+          >
+            <Typography.Text>
+              В задачах на обработку текста пробелы по краям строки бывают
+              частью данных, и <Notation>{".strip()"}</Notation> их уничтожит.
+              Чтобы снять только перевод строки, пиши{" "}
+              <Notation>{'line.rstrip("\\n")'}</Notation>.
+            </Typography.Text>
+          </ProofDisclosure>
         </>
       ),
     },
@@ -191,9 +214,9 @@ export const pythonFilesLesson = defineCourseLesson({
             <strong>
               Заголовок файла — часть формата, а не очередное значение.
             </strong>{" "}
-            Файл может начинаться количеством записей или настройками. Нельзя
-            автоматически считать каждое число полезным измерением. Пусть в
-            файле <Notation>{"header.txt"}</Notation> первая строка — количество
+            Файл может начинаться количеством записей или настройками, и их
+            нельзя складывать с данными. Пусть в файле{" "}
+            <Notation>{"header.txt"}</Notation> первая строка — количество
             чисел:
           </Typography.Text>
           <CodeBlock
@@ -206,22 +229,27 @@ export const pythonFilesLesson = defineCourseLesson({
             code={
               'with open("header.txt", encoding="utf-8") as file:\n    expected_count = int(file.readline())\n    numbers = [int(line) for line in file]\n\nif len(numbers) != expected_count:\n    print("Количество записей не совпадает с заголовком")\nelse:\n    print(sum(numbers))'
             }
-            label={"Пусть в файле header.txt первая строка — количество чисел"}
+            label={"Сумма чисел файла с заголовком"}
             language="python"
             fileName="main.py"
             output={"9"}
           />
           <Typography.Text>
-            <Notation>{"readline()"}</Notation> читает одну строку, дальнейший
-            обход продолжает с текущей позиции. Поэтому 3 не попало в сумму: 4 −
-            1 + 6 = 9. Пройди это чтение по шагам — стрелка показывает позицию:
+            У открытого файла есть <strong>позиция</strong> — место, с которого
+            начнётся следующее чтение. <Notation>{"readline()"}</Notation>{" "}
+            читает одну строку и сдвигает позицию, а цикл по файлу продолжает с
+            того места, где она стоит. Поэтому 3 не попало в сумму: 4 − 1 + 6 =
+            9. Пройди это чтение по шагам:
           </Typography.Text>
           <LessonStepper
             {...lessonMedia.cursor_5435aa}
-            label={
-              "readline() читает одну строку, дальнейший обход продолжает с текущей позиции. Поэтому 3 не попало в сумму: 4 − 1 + 6 = 9. Пройди это чтение по шагам — стрелка показывает позицию:"
-            }
+            label={"Позиция чтения в файле header.txt"}
           />
+          <Typography.Text>
+            Прочитанное второй раз не читается: после{" "}
+            <Notation>{"read()"}</Notation> или цикла до конца новое чтение
+            вернёт пустую строку. Чтобы читать снова, файл открывают заново.
+          </Typography.Text>
           <Typography.Text>
             Если первая строка содержит сразу два числа, сначала разбей её через{" "}
             <Notation>{"split"}</Notation>, затем преобразуй и распакуй:
@@ -230,54 +258,93 @@ export const pythonFilesLesson = defineCourseLesson({
             code={
               'header = "100 2500"\ncount, capacity = [int(part) for part in header.split()]\nprint(count, capacity)'
             }
-            label={"Программа на Python"}
+            label={"Заголовок из двух чисел"}
             language="python"
-            fileName="header.py"
+            fileName="main.py"
             output={"100 2500"}
           />
           <Typography.Text>
-            Реальный формат диктует условие. Иногда заголовка нет вообще. Самая
-            частая ошибка работы с файлами — правильно написать цикл для неверно
-            понятой структуры входа.
+            Формат файла задаёт условие. Иногда заголовка нет вообще. Самая
+            частая ошибка — правильный цикл для неверно понятого формата.
           </Typography.Text>
         </>
       ),
     },
     {
       id: "s4",
-      navLabel: "Режимы открытия",
+      navLabel: "Запись в файл",
       explanation: (
         <>
           <Typography.Text>
             <strong>
               Режим открытия решает, читать, перезаписать или дописать файл.
             </strong>{" "}
-            <Notation>{"r"}</Notation> — читать существующий файл, это режим по
-            умолчанию. <Notation>{"w"}</Notation> — писать заново: файл
-            создаётся, а если он был, его содержимое сразу стирается.{" "}
-            <Notation>{"a"}</Notation> — дописывать в конец, не трогая прежнее.{" "}
-            <Notation>{"x"}</Notation> — создать новый файл и остановиться с
-            ошибкой, если такой уже есть. Буква <Notation>{"b"}</Notation>{" "}
-            добавляется к режиму для работы с байтами, например{" "}
-            <Notation>{"rb"}</Notation>.
+            Его передают вторым аргументом <Notation>{"open"}</Notation>:
+          </Typography.Text>
+          <LessonTable
+            label={"Режимы открытия файла"}
+            columns={[
+              { label: "Режим" },
+              { label: "Что делает" },
+              { label: "Если файла нет" },
+            ]}
+            rows={[
+              [
+                <Notation key="r">{'"r"'}</Notation>,
+                "Читает; режим по умолчанию",
+                "Ошибка FileNotFoundError",
+              ],
+              [
+                <Notation key="w">{'"w"'}</Notation>,
+                "Пишет заново: прежнее содержимое сразу стирается",
+                "Создаёт",
+              ],
+              [
+                <Notation key="a">{'"a"'}</Notation>,
+                "Дописывает в конец, прежнее не трогает",
+                "Создаёт",
+              ],
+            ]}
+          />
+          <Typography.Text>
+            Запишем сумму сквозной задачи в файл{" "}
+            <Notation>{"result.txt"}</Notation>:
           </Typography.Text>
           <CodeBlock
             code={
-              'with open("result.txt", "w", encoding="utf-8") as file:\n    file.write("Готово\\n")\n    file.write(str(42) + "\\n")'
+              'total = 20\nwith open("result.txt", "w", encoding="utf-8") as file:\n    file.write("Сумма: " + str(total) + "\\n")'
             }
-            label={
-              "Буква b добавляется к режиму для работы с байтами, например rb"
-            }
+            label={"Запись суммы в файл result.txt"}
             language="python"
             fileName="main.py"
           />
           <Typography.Text>
-            <Notation>{"write"}</Notation> принимает строку и сам не добавляет
-            перевод строки. Другой способ —{" "}
-            <Notation>{"print(42, file=file)"}</Notation>. Не открывай входной
-            файл в режиме <Notation>{"w"}</Notation>: он будет очищен ещё до
-            записи новых данных.
+            На экран программа ничего не печатает, а рядом с{" "}
+            <Notation>{"main.py"}</Notation> появляется файл:
           </Typography.Text>
+          <CodeBlock
+            code={"Сумма: 20"}
+            label={"Строки файла result.txt"}
+            language="text"
+            fileName="result.txt"
+          />
+          <Typography.Text>
+            <Notation>{"write"}</Notation> принимает только строку и сам не
+            добавляет перевод строки — поэтому <Notation>{"str"}</Notation> и{" "}
+            <Notation>{'"\\n"'}</Notation>. Другой способ —{" "}
+            <Notation>{'print("Сумма:", total, file=file)'}</Notation>: он
+            ставит пробел и перевод строки сам. Не открывай входной файл в
+            режиме <Notation>{'"w"'}</Notation>: он будет очищен ещё до чтения.
+          </Typography.Text>
+          <ProofDisclosure summary="Тонкости: режимы x и b" kind="nuance">
+            <Typography.Text>
+              <Notation>{'"x"'}</Notation> создаёт новый файл и останавливается
+              с ошибкой, если такой уже есть. Буква{" "}
+              <Notation>{"b"}</Notation> добавляется для работы с байтами, а не
+              с текстом: <Notation>{'"rb"'}</Notation>,{" "}
+              <Notation>{'"wb"'}</Notation>.
+            </Typography.Text>
+          </ProofDisclosure>
         </>
       ),
     },
@@ -288,40 +355,37 @@ export const pythonFilesLesson = defineCourseLesson({
         <>
           <Typography.Text>
             <strong>
-              <Notation>{"pathlib"}</Notation> строит пути предсказуемо.
+              <Notation>{"pathlib"}</Notation> собирает путь из частей.
             </strong>{" "}
-            Модуль <Notation>{"pathlib"}</Notation> подключается так же, как{" "}
-            <Notation>{"math"}</Notation> в уроке о модулях:{" "}
-            <Notation>{"from pathlib import Path"}</Notation> делает доступным
-            готовое средство работы с путями.
+            Модуль подключается так же, как <Notation>{"math"}</Notation> в
+            уроке о модулях: <Notation>{"from pathlib import Path"}</Notation>.
           </Typography.Text>
           <CodeBlock
             code={
               'from pathlib import Path\n\npath = Path("data") / "numbers.txt"\nprint(path.resolve())'
             }
-            label={"Программа на Python"}
+            label={"Путь к data/numbers.txt через Path"}
             language="python"
-            fileName="path.py"
+            fileName="main.py"
           />
           <Typography.Text>
-            Знак <Notation>{"/"}</Notation> между объектом{" "}
-            <Notation>{"Path"}</Notation> и строкой соединяет части пути; он не
-            выполняет арифметическое деление. <Notation>{"resolve()"}</Notation>{" "}
-            помогает увидеть абсолютное расположение — у каждого компьютера оно
-            своё, поэтому вывод здесь не показан.
+            Знак <Notation>{"/"}</Notation> между <Notation>{"Path"}</Notation> и
+            строкой соединяет части пути, а не делит.{" "}
+            <Notation>{"resolve()"}</Notation> показывает абсолютный путь — у
+            каждого компьютера он свой, поэтому вывод здесь не показан. Это
+            удобно, когда файл не находится: видно, где Python его искал.
           </Typography.Text>
           <ProofDisclosure
             summary="Тонкости: путь рядом со скриптом"
             kind="nuance"
           >
             <Typography.Text>
-              В обычном скрипте путь рядом с ним можно построить как{" "}
+              Путь к файлу рядом с самим скриптом, откуда бы его ни запустили:{" "}
               <Notation>
                 {'Path(__file__).resolve().parent / "numbers.txt"'}
               </Notation>
-              . Специальное имя <Notation>{"__file__"}</Notation> задаётся для
-              файла модуля; в интерактивной оболочке или ноутбуке его может не
-              быть.
+              . Специальное имя <Notation>{"__file__"}</Notation> — путь к
+              файлу модуля; в интерактивной оболочке его нет.
             </Typography.Text>
           </ProofDisclosure>
         </>
@@ -336,11 +400,10 @@ export const pythonFilesLesson = defineCourseLesson({
             <strong>
               Для таблиц и вложенных записей есть готовые форматы CSV и JSON.
             </strong>{" "}
-            <strong>CSV</strong> — текстовая таблица, где записи занимают
-            строки, а поля разделяются заданным разделителем. Некоторые поля
-            содержат кавычки, разделители и даже переводы строк. Поэтому простое{" "}
-            <Notation>{'split(",")'}</Notation> не является универсальным
-            чтением CSV. В стандартной библиотеке есть модуль{" "}
+            <strong>CSV</strong> — таблица в текстовом файле: запись на строке,
+            поля разделены заданным знаком. Поле может содержать в кавычках сам
+            разделитель, поэтому простое <Notation>{'split(",")'}</Notation>{" "}
+            CSV надёжно не разберёт. В стандартной библиотеке есть модуль{" "}
             <Notation>{"csv"}</Notation>:
           </Typography.Text>
           <CodeBlock
@@ -353,44 +416,42 @@ export const pythonFilesLesson = defineCourseLesson({
             code={
               'import csv\n\nwith open("students.csv", encoding="utf-8", newline="") as file:\n    reader = csv.DictReader(file, delimiter=";")\n    for row in reader:\n        print(row["name"], int(row["score"]))'
             }
-            label={"В стандартной библиотеке есть модуль csv"}
+            label={"Чтение students.csv модулем csv"}
             language="python"
             fileName="main.py"
             output={"Анна 91\nИлья 84\nМарк 88"}
           />
           <Typography.Text>
-            Первая строка файла — заголовок <Notation>{"name;score"}</Notation>.{" "}
-            <Notation>{"DictReader"}</Notation> сопоставляет имена столбцов со
-            строковыми значениями: каждая <Notation>{"row"}</Notation> —
-            словарь. Параметр <Notation>{'newline=""'}</Notation> передаёт
-            обработку переводов строк CSV-модулю.
+            Первая строка файла — заголовок{" "}
+            <Notation>{"name;score"}</Notation>.{" "}
+            <Notation>{"DictReader"}</Notation> превращает каждую следующую
+            строку в словарь: ключи — имена столбцов, значения — строки, поэтому
+            балл переводим через <Notation>{"int"}</Notation>.{" "}
+            <Notation>{'newline=""'}</Notation> оставляет переводы строк модулю{" "}
+            <Notation>{"csv"}</Notation>.
           </Typography.Text>
           <Typography.Text>
-            <strong>JSON</strong> — формат записи вложенных объектов из
-            словарей, списков, строк, чисел и нескольких специальных значений. В
-            JSON нет произвольных объектов Python; например, множества напрямую
-            не сохраняются.
+            <strong>JSON</strong> — текстовая запись словарей, списков, строк и
+            чисел. Модуль <Notation>{"json"}</Notation> превращает их в текст и
+            обратно:
           </Typography.Text>
           <CodeBlock
             code={
-              'import json\n\ndata = {"name": "Анна", "scores": [91, 84]}\ntext = json.dumps(data, ensure_ascii=False, indent=2)\nrestored = json.loads(text)\nprint(restored == data)'
+              'import json\n\ndata = {"name": "Анна", "scores": [91, 84]}\ntext = json.dumps(data, ensure_ascii=False)\nprint(text)\nrestored = json.loads(text)\nprint(restored == data)'
             }
-            label={
-              "В JSON нет произвольных объектов Python; например, множества напрямую не сохраняются"
-            }
+            label={"Словарь в JSON и обратно"}
             language="python"
-            fileName="data.py"
-            output={"True"}
+            fileName="main.py"
+            output={'{"name": "Анна", "scores": [91, 84]}\nTrue'}
           />
           <Typography.Text>
             <Notation>{"dumps"}</Notation> создаёт текст,{" "}
-            <Notation>{"loads"}</Notation> разбирает текст.{" "}
-            <Notation>{"dump"}</Notation> и <Notation>{"load"}</Notation>{" "}
-            работают с файловым объектом. У JSON строковые ключи; JSON-массив
-            восстанавливается как список, даже если перед сохранением
-            использовался кортеж. <Notation>{"ensure_ascii=False"}</Notation>{" "}
-            сохраняет читаемую кириллицу, <Notation>{"indent=2"}</Notation>{" "}
-            добавляет отступы.
+            <Notation>{"loads"}</Notation> разбирает его;{" "}
+            <Notation>{"dump"}</Notation> и <Notation>{"load"}</Notation> делают
+            то же с открытым файлом. <Notation>{"ensure_ascii=False"}</Notation>{" "}
+            оставляет кириллицу читаемой, <Notation>{"indent=2"}</Notation>{" "}
+            разложил бы запись по строкам с отступами. Кортеж JSON запишет как
+            список и вернёт списком, а множество не запишет вовсе.
           </Typography.Text>
         </>
       ),
@@ -402,29 +463,29 @@ export const pythonFilesLesson = defineCourseLesson({
         <>
           <Typography.Text>
             <strong>
-              Отсутствие подходящего элемента обозначают{" "}
-              <Notation>{"None"}</Notation>.
+              Если подходящих строк нет вовсе, <Notation>{"None"}</Notation>{" "}
+              остаётся до конца.
             </strong>{" "}
-            Найдём максимальное отрицательное число файла или сообщим, что
+            Найдём наибольшее отрицательное число файла или сообщим, что
             отрицательных нет:
           </Typography.Text>
           <CodeBlock
             code={
               'best = None\nwith open("numbers.txt", encoding="utf-8") as file:\n    for line in file:\n        value = int(line)\n        if value < 0 and (best is None or value > best):\n            best = value\n\nif best is None:\n    print("Отрицательных чисел нет")\nelse:\n    print(best)'
             }
-            label={
-              "Найдём максимальное отрицательное число файла или сообщим, что отрицательных нет"
-            }
+            label={"Наибольшее отрицательное число файла"}
             language="python"
-            fileName="best.py"
+            fileName="main.py"
             output={"-2"}
           />
           <Typography.Text>
-            <Notation>{"None"}</Notation> явно обозначает отсутствие подходящего
-            элемента. Короткое вычисление <Notation>{"or"}</Notation> не
-            допускает сравнения числа с <Notation>{"None"}</Notation>: при{" "}
+            Это тот же цикл, что для наибольшего, только с условием{" "}
+            <Notation>{"value < 0"}</Notation>. Короткое вычисление{" "}
+            <Notation>{"or"}</Notation> не даёт сравнить число с{" "}
+            <Notation>{"None"}</Notation>: при{" "}
             <Notation>{"best is None"}</Notation> правая часть не вычисляется.
-            При пустом файле программа также даёт осмысленный результат.
+            Для файла без отрицательных чисел или пустого файла программа
+            честно напишет «Отрицательных чисел нет».
           </Typography.Text>
         </>
       ),
@@ -436,10 +497,9 @@ export const pythonFilesLesson = defineCourseLesson({
       prompt: (
         <>
           <Typography.Text>
-            Файл содержит по одному целому числу на строке, без заголовка. Найди
-            наименьшее положительное число или сообщи, что положительных нет.
-            Что выведет программа для <Notation>{"numbers.txt"}</Notation>? А
-            для файла из чисел −3, −8?
+            Напиши программу: найди в файле наименьшее положительное число или
+            сообщи, что положительных нет. Что она напечатает для{" "}
+            <Notation>{"numbers.txt"}</Notation>? А для файла из чисел −3, −8?
           </Typography.Text>
         </>
       ),
@@ -497,16 +557,16 @@ export const pythonFilesLesson = defineCourseLesson({
       prompt: (
         <>
           <Typography.Text>
-            Чем отличаются режимы <Notation>{"w"}</Notation> и{" "}
-            <Notation>{"a"}</Notation> для существующего файла?
+            Чем отличаются режимы <Notation>{'"w"'}</Notation> и{" "}
+            <Notation>{'"a"'}</Notation> для существующего файла?
           </Typography.Text>
         </>
       ),
       reveal: (
         <>
           <Typography.Text>
-            <Notation>{"w"}</Notation> очищает файл перед записью,{" "}
-            <Notation>{"a"}</Notation> дописывает в конец.
+            <Notation>{'"w"'}</Notation> стирает файл перед записью,{" "}
+            <Notation>{'"a"'}</Notation> дописывает в конец.
           </Typography.Text>
         </>
       ),
@@ -516,17 +576,18 @@ export const pythonFilesLesson = defineCourseLesson({
       prompt: (
         <>
           <Typography.Text>
-            Почему строку <Notation>{'"Петров, Иван";90'}</Notation> нельзя
-            надёжно разобрать через <Notation>{'split(",")'}</Notation>?
+            Программа с <Notation>{'open("numbers.txt")'}</Notation> работает в
+            PyCharm, а из терминала падает с{" "}
+            <Notation>{"FileNotFoundError"}</Notation>. Почему?
           </Typography.Text>
         </>
       ),
       reveal: (
         <>
           <Typography.Text>
-            Запятая внутри кавычек — часть поля, а{" "}
-            <Notation>{"split"}</Notation> разрежет по ней; модуль{" "}
-            <Notation>{"csv"}</Notation> учитывает кавычки.
+            Путь относительный, и Python ищет файл в рабочей папке. В терминале
+            программу запустили из другой папки — перейди командой{" "}
+            <Notation>{"cd"}</Notation> в папку проекта.
           </Typography.Text>
         </>
       ),
@@ -534,9 +595,14 @@ export const pythonFilesLesson = defineCourseLesson({
   ],
   result: (
     <>
+      <Typography.Text>
+        Файл — ещё один источник строк для знакомого цикла: открыл, прочитал по
+        формату, посчитал. Вот что понадобится дальше.
+      </Typography.Text>
       <LessonSummary
         items={[
           {
+            key: <Notation>{"with open(…)"}</Notation>,
             note: (
               <>
                 <Notation>
@@ -547,29 +613,45 @@ export const pythonFilesLesson = defineCourseLesson({
             ),
           },
           {
+            key: "Путь",
             note: (
               <>
-                <Notation>{"read()"}</Notation> — весь текст сразу,{" "}
-                <Notation>{"for line in file"}</Notation> — по строке,{" "}
-                <Notation>{"readline()"}</Notation> — одна строка.
+                Относительный — от рабочей папки, абсолютный — от корня диска;
+                файл держат рядом с <Notation>{"main.py"}</Notation>.
               </>
             ),
           },
-          { note: <>Заголовок читают отдельно; остальные строки — данные.</> },
           {
+            key: "Чтение",
             note: (
               <>
-                <Notation>{"w"}</Notation> очищает файл,{" "}
-                <Notation>{"a"}</Notation> дописывает;{" "}
+                <Notation>{"read()"}</Notation> — весь текст,{" "}
+                <Notation>{"for line in file"}</Notation> — строка за строкой,{" "}
+                <Notation>{"readline()"}</Notation> — одна строка; позиция
+                движется только вперёд.
+              </>
+            ),
+          },
+          {
+            key: "Заголовок",
+            note: <>Заголовок читают отдельно; остальные строки — данные.</>,
+          },
+          {
+            key: "Запись",
+            note: (
+              <>
+                <Notation>{'"w"'}</Notation> стирает файл,{" "}
+                <Notation>{'"a"'}</Notation> дописывает;{" "}
                 <Notation>{"write"}</Notation> не добавляет перевод строки.
               </>
             ),
           },
           {
+            key: "CSV и JSON",
             note: (
               <>
-                CSV читают модулем <Notation>{"csv"}</Notation>, вложенные
-                записи сохраняют в JSON.
+                Таблицы читают модулем <Notation>{"csv"}</Notation>, вложенные
+                записи хранят в JSON.
               </>
             ),
           },

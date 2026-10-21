@@ -128,6 +128,9 @@ RECOMPUTED = {
     "python-notation-patterns-t09": lambda: str(sum(bin(n).count("1") == 3 for n in range(1, 101))),
     "python-cost-t02": lambda: str(math.comb(100, 2)),
     "python-cost-t03": lambda: str(math.floor(math.log2(1000))),
+    "python-cost-t05": lambda: "1000",
+    "python-cost-t06": lambda: str(2**20),
+    "python-files-t09": lambda: f"3 {4 - 1 + 6}",
     "python-independent-program-t07": lambda: "4 20 -2 10",
     "python-practice-t01": lambda: f"{pow(7, 4, 10)} {pow(2, 100, 10)}",
     "python-classes-t08": lambda: str(100 - 30),
@@ -235,6 +238,31 @@ PRINTED_LINES = {
     ),
     "python-arguments-t05": (
         "def total_of(*values):\n    return sum(values)\n\nprint(total_of(5))\nprint(total_of(*[1, 2, 3]))"
+    ),
+    "python-files-t06": "import json\n\nprint(json.loads(json.dumps((1, 2))))",
+    "python-exceptions-t02": (
+        'for text in ["-5", " 8 "]:\n    try:\n        number = int(text)\n'
+        '    except ValueError:\n        print("Нужно ввести целое число")\n'
+        "    else:\n        print(number * 2)"
+    ),
+    "python-iterators-generators-t02": 'it = iter("abc")\nnext(it)\nnext(it)\nprint(list(it))',
+    "python-iterators-generators-t03": (
+        'm = map(int, "1 2 3".split())\nprint(sum(m))\nprint(sum(m))'
+    ),
+    "python-iterators-generators-t04": "print(list(filter(lambda x: x % 2, range(10))))",
+    "python-iterators-generators-t06": (
+        "def countdown(n):\n    while n > 0:\n        yield n\n        n -= 1\n\n"
+        "print(list(countdown(3)))"
+    ),
+    "python-standard-library-t05": (
+        "from fractions import Fraction\nfrom decimal import Decimal\n\n"
+        'print(Fraction(1, 4) + Fraction(1, 6))\nprint(Decimal("0.1") * 3)'
+    ),
+    "python-notation-patterns-t02": 'print(bin(10))\nprint(bin(10)[2:])\nprint(format(10, "08b"))',
+    "python-notation-patterns-t04": "print((13).bit_count(), (13).bit_length())",
+    "python-cost-t04": (
+        "n = 50\nsteps = 0\nfor i in range(n):\n"
+        "    for j in range(10):\n        steps += 1\nprint(steps)"
     ),
 }
 

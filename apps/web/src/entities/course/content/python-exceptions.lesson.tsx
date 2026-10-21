@@ -3,7 +3,9 @@ import { Notation } from "~/shared/components/notation";
 import { Typography } from "~/shared/components/typography";
 import {
   CodeRunner,
+  LessonDiagram,
   LessonSummary,
+  ProofDisclosure,
 } from "~/shared/components/learning-content";
 import { defineCourseLesson } from "../lib/define-course-lesson";
 import { pythonExceptionsLessonPublication } from "./course-publication.mjs";
@@ -12,7 +14,11 @@ import { lessonMedia } from "./python-exceptions.media";
 export const pythonExceptionsLesson = defineCourseLesson({
   ...pythonExceptionsLessonPublication,
   masteryThreshold: 0.8,
-  learningOutcomes: ["Try/except", "Raise", "Подбор проверочных примеров"],
+  learningOutcomes: [
+    "Перехватывать ошибки",
+    "Сообщать об ошибке через raise",
+    "Подбирать проверочные примеры",
+  ],
   accessTier: "free",
   theory: [
     {
@@ -22,19 +28,27 @@ export const pythonExceptionsLesson = defineCourseLesson({
       explanation: (
         <>
           <Typography.Text>
-            <strong>
-              Исключение — сигнал, что операция не завершилась обычным образом;
-              ожидаемые сигналы перехватывают точечно, а неожиданные должны
-              остановить программу и указать на ошибку
-            </strong>
-            . Опора — сообщения об ошибках из первого урока и запуск примеров по
-            шагам: теперь ошибки можно перехватывать, а состояние программы —
-            печатать при отладке.
+            Функция <Notation>{"total_and_best"}</Notation> из урока об
+            аргументах считает сумму и наибольшее списка. Если файл с числами
+            пуст, список тоже пуст, и вызов{" "}
+            <Notation>{"total_and_best([])"}</Notation> останавливает программу
+            на <Notation>{"numbers[0]"}</Notation> с ошибкой{" "}
+            <Notation>{"IndexError: list index out of range"}</Notation>.
           </Typography.Text>
           <Typography.Text>
-            Всё покажем на функции среднего значения: научим её сообщать о
-            пустом наборе, проверим <Notation>{"assert"}</Notation> и подберём
-            примеры, которые ловят ошибки.
+            Такое сообщение — <strong>исключение</strong>: сигнал, что операция
+            не смогла выполниться обычным образом.{" "}
+            <strong>
+              Ожидаемое исключение программа может перехватить и обработать, о
+              нарушенной договорённости — сообщить своим понятным исключением, а
+              неожиданное должно остановить программу и показать ошибку
+            </strong>
+            .
+          </Typography.Text>
+          <Typography.Text>
+            Научимся перехватывать ошибку ввода, сделаем понятное сообщение для
+            пустого списка и разберём, как искать ошибки и какими примерами
+            проверять функцию.
           </Typography.Text>
         </>
       ),
@@ -46,60 +60,88 @@ export const pythonExceptionsLesson = defineCourseLesson({
         <>
           <Typography.Text>
             <strong>
-              <Notation>{"try"}</Notation> выполняет рискованное действие,{" "}
-              <Notation>{"except"}</Notation> обрабатывает только ожидаемую
-              проблему.
+              <Notation>{"try"}</Notation> выполняет действие, которое может не
+              получиться, <Notation>{"except"}</Notation> обрабатывает только
+              ожидаемую проблему.
             </strong>{" "}
-            Типы ошибок вроде <Notation>{"ValueError"}</Notation> и{" "}
-            <Notation>{"ZeroDivisionError"}</Notation> мы уже встречали. Теперь
-            научимся их обрабатывать.
+            Ошибки <Notation>{"ValueError"}</Notation> и{" "}
+            <Notation>{"ZeroDivisionError"}</Notation> мы видели с первого
+            урока. Теперь научимся их обрабатывать:
           </Typography.Text>
           <CodeBlock
             code={
               'text = "abc"\ntry:\n    number = int(text)\nexcept ValueError:\n    print("Нужно ввести целое число")\nelse:\n    print(number * 2)'
             }
-            label={"Теперь научимся их обрабатывать"}
+            label={"Перехват ValueError при переводе строки в число"}
             language="python"
-            fileName="text.py"
+            fileName="main.py"
             output={"Нужно ввести целое число"}
           />
           <Typography.Text>
-            <Notation>{"try"}</Notation> выполняет потенциально неуспешное
-            действие. <Notation>{"except ValueError"}</Notation> обрабатывает
-            только ожидаемую проблему преобразования.{" "}
-            <Notation>{"else"}</Notation> выполняется, если блок{" "}
-            <Notation>{"try"}</Notation> завершился без исключения: при{" "}
-            <Notation>{'text = "21"'}</Notation> программа напечатала бы 42.
+            Блок <Notation>{"try"}</Notation> выполняется как обычно. Если в нём
+            возникла ошибка <Notation>{"ValueError"}</Notation>, остаток блока
+            пропускается и выполняется <Notation>{"except ValueError"}</Notation>
+            . <Notation>{"else"}</Notation> выполняется, только если ошибки не
+            было. Схема показывает, какие строки выполнились для двух значений:
+          </Typography.Text>
+          <LessonDiagram
+            {...lessonMedia.tryPaths}
+            caption={
+              <>
+                Для <Notation>{'"abc"'}</Notation> строка с{" "}
+                <Notation>{"int"}</Notation> начинает выполняться и прерывается
+                ошибкой: <Notation>{"number"}</Notation> не получает значения,
+                выполнение переходит к <Notation>{"except"}</Notation>, а{" "}
+                <Notation>{"else"}</Notation> пропускается.
+              </>
+            }
+          />
+          <Typography.Text>
+            Главное применение — повторный ввод: программа просит число, пока не
+            получит целое. <Notation>{"while True"}</Notation> из урока о{" "}
+            <Notation>{"while"}</Notation> повторяет попытку, а{" "}
+            <Notation>{"break"}</Notation> в <Notation>{"else"}</Notation>{" "}
+            завершает цикл после удачного ввода:
+          </Typography.Text>
+          <CodeBlock
+            code={
+              'while True:\n    text = input("Число: ")\n    try:\n        number = int(text)\n    except ValueError:\n        print("Введите целое число")\n    else:\n        break\nprint(number * 2)'
+            }
+            label={"Повторный ввод до целого числа"}
+            language="python"
+            fileName="main.py"
+            output={"Число: ⟪три⟫\nВведите целое число\nЧисло: ⟪3⟫\n6"}
+          />
+          <Typography.Text>
+            Не окружай всю программу <Notation>{"except: pass"}</Notation>: так
+            спрячутся и твои собственные ошибки. Перехватывай конкретное
+            ожидаемое исключение и решай, что делать. Если вход по условию
+            всегда правильный, ошибка чтения должна остановить программу — она
+            укажет на неверно понятый формат.
           </Typography.Text>
           <Typography.Text>
-            Можно добавить <Notation>{"finally"}</Notation>: его код выполняется
-            при выходе из конструкции, включая выход из-за обычного исключения
-            или <Notation>{"return"}</Notation>. Это используют для освобождения
-            ресурсов. <Notation>{"with"}</Notation> для файла уже решает
-            соответствующую задачу закрытия. Аварийное завершение процесса
-            операционной системой — отдельная ситуация, где Python не
-            гарантирует выполнение завершающего кода.
+            После <Notation>{"else"}</Notation> можно добавить{" "}
+            <Notation>{"finally"}</Notation>: его блок выполняется в любом
+            случае — была ошибка или нет. Запусти цикл по шагам: для{" "}
+            <Notation>{'"7"'}</Notation> после <Notation>{"try"}</Notation>{" "}
+            выполняется <Notation>{"else"}</Notation>, для{" "}
+            <Notation>{'"x"'}</Notation> — <Notation>{"except"}</Notation>, а{" "}
+            <Notation>{"finally"}</Notation> — в обоих случаях.
           </Typography.Text>
           <CodeRunner
             {...lessonMedia.runParseNumbers}
-            label={"Программа на Python"}
+            label={"try, except, else и finally в цикле"}
           />
-          <Typography.Text>
-            Не окружай всю программу <Notation>{"except: pass"}</Notation>: это
-            скроет и ошибки автора. Перехватывай конкретные ожидаемые исключения
-            и решай, что делать с причиной. В задаче с гарантированно корректным
-            входом ошибка чтения часто должна остановить программу и обратить
-            внимание на неверный формат.
-          </Typography.Text>
-          <Typography.Text>
-            Запусти цикл по шагам. Для <Notation>{'"7"'}</Notation> после{" "}
-            <Notation>{"try"}</Notation> выполняется{" "}
-            <Notation>{"else"}</Notation>, для <Notation>{'"x"'}</Notation>{" "}
-            строка с <Notation>{"int"}</Notation> прерывается ошибкой,
-            выполнение переходит к <Notation>{"except"}</Notation>, а{" "}
-            <Notation>{"else"}</Notation> пропускается;{" "}
-            <Notation>{"finally"}</Notation> выполняется в обоих случаях.
-          </Typography.Text>
+          <ProofDisclosure summary="Тонкости: зачем finally" kind="nuance">
+            <Typography.Text>
+              <Notation>{"finally"}</Notation> выполняется и при выходе из
+              функции через <Notation>{"return"}</Notation>, поэтому в нём
+              освобождают ресурсы. Для файла это уже делает{" "}
+              <Notation>{"with"}</Notation>. Если процесс аварийно завершила
+              операционная система, Python не гарантирует выполнение{" "}
+              <Notation>{"finally"}</Notation>.
+            </Typography.Text>
+          </ProofDisclosure>
         </>
       ),
     },
@@ -113,28 +155,40 @@ export const pythonExceptionsLesson = defineCourseLesson({
               <Notation>{"raise"}</Notation> сообщает о нарушении договорённости
               функции.
             </strong>{" "}
-            <Notation>{"raise"}</Notation> создаёт исключение, когда нарушена
-            договорённость функции:
+            У пустого списка нет наибольшего, и{" "}
+            <Notation>{"total_and_best"}</Notation> должна сказать об этом
+            понятно, а не <Notation>{"IndexError"}</Notation> из своей середины:
           </Typography.Text>
           <CodeBlock
             code={
-              'def average(numbers):\n    if not numbers:\n        raise ValueError(\n            "Нельзя вычислить среднее пустого набора"\n        )\n    return sum(numbers) / len(numbers)\n\nprint(average([2, 4, 9]))\nprint(average([]))'
+              'def total_and_best(numbers):\n    if not numbers:\n        raise ValueError("Пустой список: наибольшего нет")\n    total = 0\n    best = numbers[0]\n    for x in numbers:\n        total += x\n        if x > best:\n            best = x\n    return total, best\n\nprint(total_and_best([5, -2, 10, 7]))\nprint(total_and_best([]))'
             }
-            label={
-              "raise создаёт исключение, когда нарушена договорённость функции"
-            }
+            label={"total_and_best сообщает о пустом списке"}
             language="python"
-            fileName="average.py"
-            output={"5.0"}
-            error={"ValueError: Нельзя вычислить среднее пустого набора"}
+            fileName="main.py"
+            output={"(20, 10)"}
+            error={"ValueError: Пустой список: наибольшего нет"}
           />
           <Typography.Text>
             <Notation>{"not numbers"}</Notation> истинно для пустого списка:
-            пустые коллекции ложны. Это лучше, чем вернуть 0 и сделать вид,
-            будто пустой набор имеет среднее 0. Но в другой программе
-            договорённость может явно предусматривать{" "}
-            <Notation>{"None"}</Notation> для отсутствующего среднего. Важно
-            выбрать и документировать поведение.
+            пустые коллекции ложны. <Notation>{"raise"}</Notation> создаёт
+            исключение с нашим текстом, и вызов прерывается. Вызывающий код
+            перехватывает его, как любое другое:
+          </Typography.Text>
+          <CodeBlock
+            code={
+              'try:\n    total, best = total_and_best([])\nexcept ValueError:\n    print("Файл пуст")\nelse:\n    print(total, best)'
+            }
+            label={"Перехват ValueError из total_and_best"}
+            language="python"
+            fileName="main.py"
+            output={"Файл пуст"}
+          />
+          <Typography.Text>
+            Можно было вернуть <Notation>{"None"}</Notation> вместо наибольшего
+            — это тоже договорённость. Нельзя молча вернуть 0: пустой список не
+            имеет наибольшего 0. Какое поведение выбрано, пишут в описании
+            функции.
           </Typography.Text>
         </>
       ),
@@ -149,33 +203,32 @@ export const pythonExceptionsLesson = defineCourseLesson({
               Ошибку ищут по состоянию: печатают промежуточные значения или идут
               отладчиком.
             </strong>{" "}
-            <strong>Отладка</strong> — исследование программы для нахождения
-            причин неверной работы. Один способ — временно печатать
-            промежуточные значения:
+            <strong>Отладка</strong> — поиск причины, по которой программа
+            работает неверно. Простой способ — временно печатать значения
+            переменных на каждом шаге:
           </Typography.Text>
           <CodeBlock
             code={
               'numbers = [3, -1, 4]\ntotal = 0\nfor i, value in enumerate(numbers):\n    total += value\n    print("шаг", i, "элемент", value, "сумма", total)'
             }
-            label={"Один способ — временно печатать промежуточные значения"}
+            label={"Отладочная печать суммы по шагам"}
             language="python"
-            fileName="numbers.py"
+            fileName="main.py"
             output={
               "шаг 0 элемент 3 сумма 3\nшаг 1 элемент -1 сумма 2\nшаг 2 элемент 4 сумма 6"
             }
           />
           <Typography.Text>
-            Такая печать показывает то же, что запуск по шагам: значения
-            переменных после каждой итерации. Видно, на каком шаге значение
-            впервые отличается от ожидаемого.
+            Такая печать показывает то же, что запуск по шагам в уроках: значения
+            после каждой итерации. Ищи шаг, на котором значение впервые
+            разошлось с ожидаемым, — ошибка в строках перед ним.
           </Typography.Text>
           <Typography.Text>
-            Другой способ — <strong>отладчик</strong>, инструмент остановки и
-            пошагового выполнения. Точка останова указывает, где приостановить
-            программу; затем можно смотреть значения и выполнять следующую
-            строку. Из Python встроенный <Notation>{"breakpoint()"}</Notation>{" "}
-            обычно открывает отладчик, а многие IDE предлагают графическое
-            управление.
+            Другой способ — <strong>отладчик</strong>. В PyCharm и VS Code
+            щелчок слева от номера строки ставит <strong>точку останова</strong>
+            ; запуск в режиме отладки (значок жука) останавливает программу на
+            ней, показывает значения переменных и выполняет дальше по одной
+            строке.
           </Typography.Text>
           <Typography.Text>
             Перед сдачей решения на автоматическую проверку отладочную печать
@@ -191,29 +244,36 @@ export const pythonExceptionsLesson = defineCourseLesson({
         <>
           <Typography.Text>
             <strong>
-              <Notation>{"assert"}</Notation> проверяет предположение
-              разработчика.
-            </strong>
+              <Notation>{"assert"}</Notation> проверяет предположение автора
+              программы.
+            </strong>{" "}
+            <Notation>{"assert условие"}</Notation> молчит, если условие
+            истинно, и вызывает <Notation>{"AssertionError"}</Notation>, если
+            ложно:
           </Typography.Text>
           <CodeBlock
             code={
               "def double(number):\n    return number * 2\n\nassert double(4) == 8\nassert double(-3) == -6\nassert double(5) == 11"
             }
-            label={"assert проверяет предположение разработчика"}
+            label={"Проверки функции double через assert"}
             language="python"
-            fileName="double.py"
+            fileName="main.py"
             error={"AssertionError"}
           />
           <Typography.Text>
-            <Notation>{"assert condition"}</Notation> при ложном условии
-            вызывает <Notation>{"AssertionError"}</Notation>. Первые две
-            проверки прошли молча, третья — ложна. Он удобен для простых
-            проверок разработчика. При запуске с оптимизацией{" "}
-            <Notation>{"python -O"}</Notation> проверки{" "}
-            <Notation>{"assert"}</Notation> могут отключаться, поэтому они не
-            должны быть единственной защитой для обязательной проверки
-            пользовательского ввода.
+            Первые две проверки прошли молча, третья ложна — в ней ошибся автор
+            проверки: 5 · 2 = 10. Так быстро проверяют свою функцию на
+            нескольких примерах.
           </Typography.Text>
+          <ProofDisclosure summary="Тонкости: assert и python -O" kind="nuance">
+            <Typography.Text>
+              При запуске <Notation>{"python -O"}</Notation> проверки{" "}
+              <Notation>{"assert"}</Notation> отключаются. Поэтому проверять
+              ввод пользователя через <Notation>{"assert"}</Notation> нельзя —
+              для этого <Notation>{"if"}</Notation> и{" "}
+              <Notation>{"raise"}</Notation>.
+            </Typography.Text>
+          </ProofDisclosure>
         </>
       ),
     },
@@ -226,24 +286,14 @@ export const pythonExceptionsLesson = defineCourseLesson({
             <strong>
               Проверочные примеры выбирают так, чтобы каждый ловил свою ошибку.
             </strong>{" "}
-            Проверь обычный случай, минимальные размеры, крайние границы,
-            отсутствие подходящего ответа, повторяющиеся значения и
-            отрицательные числа, если они разрешены. Не надо проверять
-            недопустимые входы, если функция по договорённости их не
-            поддерживает, но эту границу нужно явно понимать.
-          </Typography.Text>
-          <Typography.Text>
-            Для пары соседей — списки длины 0, 1 и 2. Для цикла от{" "}
-            <Notation>{"a"}</Notation> до <Notation>{"b"}</Notation> — случай{" "}
-            <Notation>{"a == b"}</Notation>.
-          </Typography.Text>
-          <Typography.Text>
-            Для функций над списком чисел — среднего, максимума — набор может
-            быть таким:
+            Один удачный пример ничего не доказывает. Проверь обычный случай,
+            самый маленький вход, пустой вход, отрицательные числа и повторы,
+            если они разрешены. Для <Notation>{"total_and_best"}</Notation>{" "}
+            набор может быть таким:
           </Typography.Text>
           <ul>
             <li>
-              <Notation>{"[2, 4, 9]"}</Notation> — обычный случай, ловит
+              <Notation>{"[5, -2, 10, 7]"}</Notation> — обычный случай, ловит
               неверную формулу;
             </li>
             <li>
@@ -251,18 +301,26 @@ export const pythonExceptionsLesson = defineCourseLesson({
               цикла;
             </li>
             <li>
-              <Notation>{"[]"}</Notation> — пустой вход, ловит деление на ноль
-              или неописанное поведение;
+              <Notation>{"[]"}</Notation> — пустой вход, ловит{" "}
+              <Notation>{"IndexError"}</Notation> вместо выбранного{" "}
+              <Notation>{"ValueError"}</Notation>;
             </li>
             <li>
-              <Notation>{"[-4, -2]"}</Notation> — отрицательные числа, ловят
-              начальное значение 0 у максимума или минимума;
+              <Notation>{"[-4, -2]"}</Notation> — только отрицательные, ловят
+              начальное <Notation>{"best = 0"}</Notation>;
             </li>
             <li>
-              <Notation>{"[1, 2]"}</Notation> — дробный ответ, ловит целое
-              деление вместо обычного.
+              <Notation>{"[3, 3]"}</Notation> — повторы, ловят сравнение{" "}
+              <Notation>{">="}</Notation> там, где это важно.
             </li>
           </ul>
+          <Typography.Text>
+            Для цикла от <Notation>{"a"}</Notation> до{" "}
+            <Notation>{"b"}</Notation> добавь случай{" "}
+            <Notation>{"a == b"}</Notation>, для пар соседей — списки длины 0, 1
+            и 2. Входы, которые функция по договорённости не принимает,
+            проверять не нужно, но эту границу надо знать.
+          </Typography.Text>
         </>
       ),
     },
@@ -273,20 +331,38 @@ export const pythonExceptionsLesson = defineCourseLesson({
       prompt: (
         <>
           <Typography.Text>
-            Почему функцию среднего не надо проверять только на{" "}
-            <Notation>{"[2, 4, 6]"}</Notation>? Какие примеры добавить?
+            Почему <Notation>{"total_and_best"}</Notation> мало проверить только
+            на <Notation>{"[1, 2, 3]"}</Notation>? Какие примеры добавить?
           </Typography.Text>
         </>
       ),
       reveal: (
         <>
           <Typography.Text>
-            Этот пример не выявит поведение при одном значении, пустом входе,
-            дробном ответе и отрицательных числах. Добавь{" "}
-            <Notation>{"[5]"}</Notation>, <Notation>{"[1, 2]"}</Notation>,{" "}
-            <Notation>{"[-4, -2]"}</Notation>; для <Notation>{"[]"}</Notation>{" "}
-            проверь именно выбранное поведение, например{" "}
-            <Notation>{"ValueError"}</Notation>.
+            Этот пример не проверит один элемент, пустой вход и отрицательные
+            числа. Добавь <Notation>{"[5]"}</Notation>,{" "}
+            <Notation>{"[-4, -2]"}</Notation> и <Notation>{"[]"}</Notation> —
+            для него ожидается <Notation>{"ValueError"}</Notation>.
+          </Typography.Text>
+        </>
+      ),
+    },
+    {
+      id: "t2",
+      prompt: (
+        <>
+          <Typography.Text>
+            В программе повторного ввода ввели <Notation>{"2.5"}</Notation>,
+            затем <Notation>{"4"}</Notation>. Что она напечатает после этих
+            вводов?
+          </Typography.Text>
+        </>
+      ),
+      reveal: (
+        <>
+          <Typography.Text>
+            «Введите целое число» — <Notation>{'int("2.5")'}</Notation> даёт{" "}
+            <Notation>{"ValueError"}</Notation>; затем 8.
           </Typography.Text>
         </>
       ),
@@ -322,7 +398,7 @@ export const pythonExceptionsLesson = defineCourseLesson({
       reveal: (
         <>
           <Typography.Text>
-            шаг 0 элемент 5 сумма 5 и шаг 1 элемент -5 сумма 0.
+            «шаг 0 элемент 5 сумма 5» и «шаг 1 элемент -5 сумма 0».
           </Typography.Text>
         </>
       ),
@@ -332,19 +408,18 @@ export const pythonExceptionsLesson = defineCourseLesson({
       prompt: (
         <>
           <Typography.Text>
-            Подбери проверочные примеры для функции, которая ищет максимум
-            списка.
+            Чем <Notation>{"raise ValueError(...)"}</Notation> в начале{" "}
+            <Notation>{"total_and_best"}</Notation> лучше, чем{" "}
+            <Notation>{"IndexError"}</Notation> на{" "}
+            <Notation>{"numbers[0]"}</Notation>?
           </Typography.Text>
         </>
       ),
       reveal: (
         <>
           <Typography.Text>
-            Обычный <Notation>{"[3, 9, 4]"}</Notation>, один элемент{" "}
-            <Notation>{"[5]"}</Notation>, отрицательные{" "}
-            <Notation>{"[-9, -2, -7]"}</Notation>, повторы{" "}
-            <Notation>{"[4, 4]"}</Notation>, максимум в начале и в конце; для{" "}
-            <Notation>{"[]"}</Notation> — выбранное поведение.
+            Сообщение называет причину — пустой список, а не индекс в середине
+            функции; вызывающий код перехватывает именно ожидаемую ошибку.
           </Typography.Text>
         </>
       ),
@@ -352,47 +427,62 @@ export const pythonExceptionsLesson = defineCourseLesson({
   ],
   result: (
     <>
+      <Typography.Text>
+        Исключение — сигнал о неудаче: ожидаемое перехватывают, о нарушенной
+        договорённости сообщают сами, а остальное должно остановить программу.
+        Вот что понадобится дальше.
+      </Typography.Text>
       <LessonSummary
         items={[
           {
+            key: (
+              <>
+                <Notation>{"try"}</Notation>/<Notation>{"except"}</Notation>
+              </>
+            ),
             note: (
               <>
-                <Notation>{"try"}</Notation>/<Notation>{"except Тип"}</Notation>{" "}
-                перехватывает только ожидаемую ошибку;{" "}
-                <Notation>{"else"}</Notation> — при успехе,{" "}
+                <Notation>{"except Тип"}</Notation> — только ожидаемая ошибка;{" "}
+                <Notation>{"else"}</Notation> — если ошибки не было,{" "}
                 <Notation>{"finally"}</Notation> — всегда.
               </>
             ),
           },
           {
+            key: "Повторный ввод",
             note: (
               <>
-                <Notation>{"except: pass"}</Notation> прячет ошибки автора; так
-                не делают.
+                <Notation>{"while True"}</Notation> +{" "}
+                <Notation>{"try"}</Notation>, <Notation>{"break"}</Notation> в{" "}
+                <Notation>{"else"}</Notation>; <Notation>{"except: pass"}</Notation>{" "}
+                не пишут.
               </>
             ),
           },
           {
+            key: <Notation>{"raise"}</Notation>,
             note: (
               <>
-                <Notation>{'raise ValueError("…")'}</Notation> сообщает о
-                нарушенной договорённости функции.
+                <Notation>{'raise ValueError("…")'}</Notation> — понятное
+                сообщение о нарушенной договорённости функции.
               </>
             ),
           },
           {
+            key: "Отладка",
             note: (
               <>
-                Отладка — печать состояния по шагам или отладчик; отладочный
-                вывод удаляют.
+                Печать состояния по шагам или точка останова в отладчике;
+                отладочный вывод удаляют.
               </>
             ),
           },
           {
+            key: <Notation>{"assert"}</Notation>,
             note: (
               <>
-                <Notation>{"assert"}</Notation> — проверка разработчика; примеры
-                подбирают на границы, пустой вход и отрицательные числа.
+                Проверка автора; примеры подбирают на один элемент, пустой вход,
+                отрицательные числа и повторы.
               </>
             ),
           },

@@ -5,6 +5,7 @@ import {
   LessonDiagram,
   LessonSummary,
   LessonTable,
+  ProofDisclosure,
 } from "~/shared/components/learning-content";
 import { defineCourseLesson } from "../lib/define-course-lesson";
 import { pythonCostLessonPublication } from "./course-publication.mjs";
@@ -23,17 +24,19 @@ export const pythonCostLesson = defineCourseLesson({
       explanation: (
         <>
           <Typography.Text>
+            Программа проверяет все пары чисел файла. На десяти числах она
+            отвечает мгновенно, на ста тысячах — не дождаться. Код тот же,
+            данные больше.{" "}
             <strong>
               Скорость программы определяется тем, как растёт число действий с
-              ростом данных, а не мелкими сокращениями записи
+              ростом данных, а не тем, насколько коротко она записана
             </strong>
-            . Опора — вложенные циклы, проверка <Notation>{"in"}</Notation> для
-            списка и множества и число вызовов Фибоначчи из урока о рекурсии:
-            здесь эти наблюдения складываются в один способ оценки.
+            .
           </Typography.Text>
           <Typography.Text>
-            Оценивать будем действия над списком из <Notation>{"n"}</Notation>{" "}
-            чисел: один проход по нему, все пары и проверки принадлежности.
+            Научимся оценивать этот рост для одного прохода, всех пар и деления
+            пополам, узнаем цену знакомых операций и памяти и измерим время
+            сами.
           </Typography.Text>
         </>
       ),
@@ -47,19 +50,23 @@ export const pythonCostLesson = defineCourseLesson({
             <strong>
               Временная сложность описывает, как растёт работа с размером входа.
             </strong>{" "}
-            Программа может давать правильный ответ на десяти элементах и быть
-            непригодной для миллиона. Нужно оценить, сколько действий она
-            выполняет при размере входа <Notation>{"n"}</Notation>.
+            Размер входа обозначают <Notation>{"n"}</Notation> — например,
+            число строк файла. Один проход по файлу делает около{" "}
+            <Notation>{"n"}</Notation> действий, и это записывают{" "}
+            <Notation>{"O(n)"}</Notation> — «порядка n». Все пары — около{" "}
+            <Notation>{"n²"}</Notation> действий, <Notation>{"O(n²)"}</Notation>
+            . Это не секунды, а то, во сколько раз вырастет работа, если данных
+            станет больше.
           </Typography.Text>
-          <Typography.Text>
-            <strong>Временная сложность</strong> описывает рост затрат при
-            увеличении входа. Запись <Notation>{"O(n)"}</Notation> означает
-            верхнюю оценку, пропорциональную <Notation>{"n"}</Notation> с
-            точностью до постоянного множителя при достаточно большом{" "}
-            <Notation>{"n"}</Notation>. На практике часто так называют
-            характерный порядок роста конкретного алгоритма. Это не обещание
-            времени в секундах.
-          </Typography.Text>
+          <ProofDisclosure summary="Тонкости: что строго значит O(n)" kind="nuance">
+            <Typography.Text>
+              <Notation>{"O(n)"}</Notation> — верхняя оценка: при достаточно
+              большом <Notation>{"n"}</Notation> число действий не больше{" "}
+              <Notation>{"c · n"}</Notation> для некоторой постоянной{" "}
+              <Notation>{"c"}</Notation>. На практике так называют характерный
+              порядок роста алгоритма.
+            </Typography.Text>
+          </ProofDisclosure>
           <Typography.Text>
             Порядки роста удобно сравнить на одном размере входа. Каждая клетка
             шкалы — в тысячу раз больше предыдущей:
@@ -72,21 +79,14 @@ export const pythonCostLesson = defineCourseLesson({
                 сортировка — около 1,7 миллиона, а все пары — 10 миллиардов.
                 Удвоение n удваивает работу <Notation>{"O(n)"}</Notation> и
                 учетверяет <Notation>{"O(n²)"}</Notation>. Перебор всех
-                подмножеств, <Notation>{"O(2ⁿ)"}</Notation>, и перестановок,{" "}
-                <Notation>{"O(n!)"}</Notation>, растут ещё быстрее: при 30
-                элементах подмножеств больше миллиарда, при 40 — больше
-                триллиона.
+                подмножеств, <Notation>{"O(2ⁿ)"}</Notation>, растёт ещё быстрее:
+                при 30 элементах подмножеств больше миллиарда.
               </>
             }
           />
           <Typography.Text>
-            Такой разрыв важнее любых синтаксических сокращений.
-          </Typography.Text>
-          <Typography.Text>
-            Для пар с <Notation>{"i < j"}</Notation> их вдвое меньше —{" "}
-            <Notation>{"n · (n − 1) / 2"}</Notation>: при 10 элементах это 45,
-            при тысяче — 499 500, при ста тысячах — почти 5 миллиардов. Порядок
-            от этого не меняется.
+            Такой разрыв важнее любых сокращений записи: никакая короткая
+            запись не превратит 10 миллиардов действий в 100 тысяч.
           </Typography.Text>
         </>
       ),
@@ -98,45 +98,57 @@ export const pythonCostLesson = defineCourseLesson({
         <>
           <Typography.Text>
             <strong>Число шагов считают по реальным границам циклов.</strong>{" "}
-            Два вложенных цикла не всегда означают{" "}
-            <Notation>{"O(n²)"}</Notation>. Если внутренний цикл всегда делает
-            10 шагов, общее количество — <Notation>{"10n"}</Notation>, то есть{" "}
-            <Notation>{"O(n)"}</Notation>. Если оба проходят{" "}
-            <Notation>{"n"}</Notation> элементов, получается{" "}
-            <Notation>{"n²"}</Notation>. Если внутренний проходит только
-            значения после <Notation>{"i"}</Notation>, число пар равно{" "}
-            <Notation>{"n(n - 1) / 2"}</Notation>, но порядок всё равно
-            квадратичный.
+            Два вложенных цикла не всегда дают <Notation>{"n²"}</Notation>. Если
+            внутренний всегда делает 10 шагов, всего их{" "}
+            <Notation>{"10n"}</Notation>, то есть <Notation>{"O(n)"}</Notation>
+            . Если внутренний цикл идёт только по номерам после{" "}
+            <Notation>{"i"}</Notation>, каждая пара проверяется один раз:
           </Typography.Text>
           <CodeBlock
             code={
               "n = 1000\nsteps = 0\nfor i in range(n):\n    for j in range(i + 1, n):\n        steps += 1\nprint(steps, n * (n - 1) // 2)"
             }
-            label={"Программа на Python"}
+            label={"Число пар i < j при n = 1000"}
             language="python"
-            fileName="steps.py"
+            fileName="main.py"
             output={"499500 499500"}
           />
           <Typography.Text>
-            Если переменная на каждом шаге делится на 2, после{" "}
-            <Notation>{"k"}</Notation> шагов размер уменьшается примерно в{" "}
-            <Notation>{"2 ** k"}</Notation> раз. Поэтому нужно около{" "}
-            <Notation>{"log₂(n)"}</Notation> шагов. Логарифм здесь возникает из
-            вопроса «сколько раз можно делить пополам», а не из специальной
-            функции Python.
+            Откуда формула, видно на сетке всех пар: пары с{" "}
+            <Notation>{"i < j"}</Notation> — треугольник над диагональю.
+          </Typography.Text>
+          <LessonDiagram
+            {...lessonMedia.pairsTriangle5}
+            caption={
+              <>
+                Из <Notation>{"n · n"}</Notation> клеток убираем диагональ (
+                <Notation>{"n"}</Notation> клеток) и делим остаток пополам: под
+                диагональю те же пары. Пар вдвое меньше, чем{" "}
+                <Notation>{"n²"}</Notation>, но порядок роста тот же —{" "}
+                <Notation>{"O(n²)"}</Notation>.
+              </>
+            }
+          />
+          <Typography.Text>
+            Если на каждом шаге число делится на 2, после{" "}
+            <Notation>{"k"}</Notation> шагов оно уменьшается в{" "}
+            <Notation>{"2 ** k"}</Notation> раз. Поэтому до единицы нужно около{" "}
+            <Notation>{"log₂(n)"}</Notation> шагов — столько раз{" "}
+            <Notation>{"n"}</Notation> можно делить пополам:
           </Typography.Text>
           <CodeBlock
             code={
               "n = 1_000_000\nsteps = 0\nwhile n > 1:\n    n //= 2\n    steps += 1\nprint(steps)"
             }
-            label={"Программа на Python"}
+            label={"Сколько раз миллион делится пополам"}
             language="python"
-            fileName="steps.py"
+            fileName="main.py"
             output={"19"}
           />
           <Typography.Text>
             Миллион делится пополам до единицы всего 19 раз: 2¹⁹ ≈ 524 тысячи,
-            2²⁰ ≈ 1,05 миллиона.
+            2²⁰ ≈ 1,05 миллиона. Запись <Notation>{"1_000_000"}</Notation> —
+            то же число 1000000, подчёркивания только облегчают чтение.
           </Typography.Text>
         </>
       ),
@@ -147,11 +159,12 @@ export const pythonCostLesson = defineCourseLesson({
       explanation: (
         <>
           <Typography.Text>
-            <strong>Стоимость скрыта и внутри отдельных операций.</strong> Для
-            обычных реализаций Python полезны такие ориентиры:
+            <strong>Стоимость скрыта и внутри отдельных операций.</strong> Одна
+            строка кода может пройти весь список. Ориентиры для знакомых
+            операций:
           </Typography.Text>
           <LessonTable
-            label={"Для обычных реализаций Python полезны такие ориентиры"}
+            label={"Стоимость операций Python"}
             columns={[{ label: "Операция" }, { label: "Обычная оценка" }]}
             rows={[
               [
@@ -173,19 +186,11 @@ export const pythonCostLesson = defineCourseLesson({
               ],
               [
                 <>
-                  <Notation>{"list.append(x)"}</Notation>
-                </>,
-                <>
-                  В среднем по длинной серии операций{" "}
-                  <Notation>{"O(1)"}</Notation>
-                </>,
-              ],
-              [
-                <>
+                  <Notation>{"list.append(x)"}</Notation>,{" "}
                   <Notation>{"list.pop()"}</Notation>
                 </>,
                 <>
-                  В среднем по серии операций <Notation>{"O(1)"}</Notation>
+                  <Notation>{"O(1)"}</Notation> в среднем
                 </>,
               ],
               [
@@ -208,13 +213,13 @@ export const pythonCostLesson = defineCourseLesson({
                   <Notation>{"max"}</Notation>
                 </>,
                 <>
-                  <Notation>{"O(n)"}</Notation> прохода
+                  <Notation>{"O(n)"}</Notation> — один проход
                 </>,
               ],
               [
-                "Поиск в dict/set",
+                "Поиск в dict и set",
                 <>
-                  Обычно <Notation>{"O(1)"}</Notation>, в худших случаях хуже
+                  Обычно <Notation>{"O(1)"}</Notation>
                 </>,
               ],
               [
@@ -222,24 +227,29 @@ export const pythonCostLesson = defineCourseLesson({
                   <Notation>{"sorted"}</Notation>
                 </>,
                 <>
-                  В худшем случае <Notation>{"O(n log n)"}</Notation> сравнений,
-                  иногда быстрее
+                  <Notation>{"O(n log n)"}</Notation> сравнений
                 </>,
               ],
             ]}
           />
           <Typography.Text>
-            Эти оценки предполагают, что сами сравнения, хеширование и
-            арифметика рассматриваемых элементов недороги. Для длинных строк,
-            огромных целых или пользовательских объектов это дополнительная
-            работа.
+            Отсюда две частые ошибки. Срез <Notation>{"a[i:i + k]"}</Notation> в
+            цикле каждый раз копирует до <Notation>{"k"}</Notation> элементов.
+            Множество для проверок <Notation>{"in"}</Notation> строят один раз
+            до цикла, а не внутри каждого запроса.
           </Typography.Text>
-          <Typography.Text>
-            Сравнивать <Notation>{"a[i:i + k]"}</Notation> в цикле не бесплатно:
-            каждый срез создаёт до <Notation>{"k"}</Notation> элементов.
-            Повторно строить <Notation>{"set(a)"}</Notation> внутри каждого
-            запроса тоже неудачно — множество нужно построить один раз.
-          </Typography.Text>
+          <ProofDisclosure
+            summary="Тонкости: когда оценки хуже"
+            kind="nuance"
+          >
+            <Typography.Text>
+              Оценки предполагают, что сравнить или захешировать один элемент
+              недорого. Для длинных строк и огромных целых это отдельная работа.
+              Поиск в <Notation>{"dict"}</Notation> и{" "}
+              <Notation>{"set"}</Notation> в редких худших случаях медленнее{" "}
+              <Notation>{"O(1)"}</Notation>.
+            </Typography.Text>
+          </ProofDisclosure>
         </>
       ),
     },
@@ -250,18 +260,40 @@ export const pythonCostLesson = defineCourseLesson({
         <>
           <Typography.Text>
             <strong>Память тоже растёт с данными, если их сохранять.</strong>{" "}
-            <strong>Пространственная сложность</strong> описывает память
-            алгоритма. Проход по файлу с одним счётчиком может использовать
-            почти постоянную дополнительную память. Чтение всех чисел в список
-            требует памяти, растущей с их количеством. Словарь частот требует
-            места по числу различных значений.
+            <strong>Пространственная сложность</strong> описывает, сколько
+            памяти нужно алгоритму. В уроке о файлах сумму и наибольшее считали
+            двумя способами. Первый сохраняет все числа в список — память растёт
+            с числом строк:
           </Typography.Text>
+          <CodeBlock
+            code={
+              'with open("numbers.txt", encoding="utf-8") as file:\n    numbers = [int(line) for line in file]\nprint(sum(numbers), max(numbers))'
+            }
+            label={"Сумма и наибольшее через список"}
+            language="python"
+            fileName="main.py"
+            output={"20 10"}
+          />
           <Typography.Text>
-            Генераторы помогают избежать промежуточных коллекций, но если
-            конечная функция делает <Notation>{"sorted"}</Notation>, все
-            элементы всё равно нужно собрать для сортировки. Рекурсия хранит
-            незавершённые вызовы, а кэш — ранее вычисленные результаты; это тоже
-            память.
+            Второй проходит файл один раз и хранит только{" "}
+            <Notation>{"total"}</Notation> и <Notation>{"best"}</Notation> — два
+            числа при любом размере файла:
+          </Typography.Text>
+          <CodeBlock
+            code={
+              'total = 0\nbest = None\nwith open("numbers.txt", encoding="utf-8") as file:\n    for line in file:\n        number = int(line)\n        total += number\n        if best is None or number > best:\n            best = number\nprint(total, best)'
+            }
+            label={"Сумма и наибольшее за один проход"}
+            language="python"
+            fileName="main.py"
+            output={"20 10"}
+          />
+          <Typography.Text>
+            Время у обоих <Notation>{"O(n)"}</Notation>, а память — растущая и
+            постоянная. Словарь частот занимает место по числу различных
+            значений. Если в конце нужен <Notation>{"sorted"}</Notation>, все
+            элементы всё равно придётся собрать. Рекурсия хранит незавершённые
+            вызовы, кэш — вычисленные результаты; это тоже память.
           </Typography.Text>
         </>
       ),
@@ -275,26 +307,32 @@ export const pythonCostLesson = defineCourseLesson({
             <strong>
               Время измеряют разностью показаний часов, но сначала улучшают
               порядок роста.
-            </strong>
+            </strong>{" "}
+            <Notation>{"perf_counter()"}</Notation> из модуля{" "}
+            <Notation>{"time"}</Notation> возвращает показание часов в секундах.
+            Само показание ничего не значит, важна разность до и после.
+            Проверим таблицу на опыте: ищем отсутствующее число тысячу раз в
+            списке из ста тысяч чисел и в множестве из тех же чисел.
           </Typography.Text>
           <CodeBlock
             code={
-              "from time import perf_counter\n\nstart = perf_counter()\nanswer = sum(range(1_000_000))\nelapsed = perf_counter() - start\nprint(answer, elapsed)"
+              'from time import perf_counter\n\nnumbers = list(range(100_000))\nas_set = set(numbers)\n\nstart = perf_counter()\nfor _ in range(1000):\n    found = -1 in numbers\nprint("список:", perf_counter() - start)\n\nstart = perf_counter()\nfor _ in range(1000):\n    found = -1 in as_set\nprint("множество:", perf_counter() - start)'
             }
-            label={
-              "Время измеряют разностью показаний часов, но сначала улучшают порядок роста"
-            }
+            label={"Опыт: x in для списка и множества"}
             language="python"
-            fileName="start.py"
+            fileName="main.py"
           />
           <Typography.Text>
-            <Notation>{"perf_counter"}</Notation> даёт показания часов для
-            измерения длительности; важна разность, не абсолютное значение.
-            Вывод здесь не показан: время зависит от компьютера и каждый раз
-            немного другое. Один запуск шумный: влияют другие процессы, прогрев
-            и среда. Для небольших повторяемых фрагментов есть{" "}
-            <Notation>{"timeit"}</Notation>. Сначала улучши порядок роста
-            алгоритма, затем измеряй и уточняй узкие места.
+            Запусти у себя и сравни два числа. Множество окажется быстрее в
+            тысячи раз: в списке каждый поиск проходит все сто тысяч чисел, в
+            множестве — сразу смотрит на нужное место. Сами секунды зависят от
+            компьютера и немного меняются от запуска к запуску, поэтому вывод
+            здесь не показан.
+          </Typography.Text>
+          <Typography.Text>
+            Один запуск шумный: влияют другие программы на компьютере. Поэтому
+            сначала улучшают порядок роста алгоритма, а секунды меряют, чтобы
+            найти самое медленное место.
           </Typography.Text>
         </>
       ),
@@ -314,10 +352,9 @@ export const pythonCostLesson = defineCourseLesson({
       reveal: (
         <>
           <Typography.Text>
-            Множество, построенное один раз. При обычных условиях получаем
-            линейную стоимость подготовки и примерно постоянную стоимость
-            каждого поиска. Повторный поиск по всему списку для каждого запроса
-            может потребовать до ста миллиардов сравнений.
+            Множество, построенное один раз: подготовка — один проход, каждый
+            поиск — примерно один шаг. Поиск по списку для каждого запроса может
+            потребовать до ста миллиардов сравнений.
           </Typography.Text>
         </>
       ),
@@ -337,9 +374,9 @@ export const pythonCostLesson = defineCourseLesson({
       reveal: (
         <>
           <Typography.Text>
-            <Notation>{"a[500]"}</Notation>, <Notation>{"d[key]"}</Notation>{" "}
-            (обычно) и <Notation>{"len(a)"}</Notation>;{" "}
-            <Notation>{"x in a"}</Notation> для списка — до n сравнений.
+            <Notation>{"a[500]"}</Notation>, <Notation>{"d[key]"}</Notation> и{" "}
+            <Notation>{"len(a)"}</Notation>; <Notation>{"x in a"}</Notation> для
+            списка — до n сравнений.
           </Typography.Text>
         </>
       ),
@@ -359,7 +396,7 @@ export const pythonCostLesson = defineCourseLesson({
           <Typography.Text>
             Каждый <Notation>{"pop(0)"}</Notation> сдвигает все оставшиеся
             элементы: всего около n²/2 сдвигов;{" "}
-            <Notation>{"deque.popleft"}</Notation> берёт первый сразу.
+            <Notation>{"deque.popleft"}</Notation> забирает первый без сдвига.
           </Typography.Text>
         </>
       ),
@@ -377,8 +414,8 @@ export const pythonCostLesson = defineCourseLesson({
       reveal: (
         <>
           <Typography.Text>
-            Список требует памяти по числу чисел, проход со счётчиком — почти
-            постоянной.
+            Список занимает память по числу чисел, проход со счётчиком —
+            постоянную.
           </Typography.Text>
         </>
       ),
@@ -406,17 +443,17 @@ export const pythonCostLesson = defineCourseLesson({
       prompt: (
         <>
           <Typography.Text>
-            Перебор всех подмножеств 30 предметов: сколько вариантов? Успеет ли
-            такой перебор за разумное время, если за секунду проверяется 10
-            миллионов вариантов?
+            Перебор всех подмножеств 30 предметов: сколько вариантов? Сколько
+            времени он займёт, если за секунду проверяется 10 миллионов
+            вариантов?
           </Typography.Text>
         </>
       ),
       reveal: (
         <>
           <Typography.Text>
-            2³⁰ = 1 073 741 824 варианта — около 107 секунд при 10 миллионах в
-            секунду.
+            2³⁰ = 1 073 741 824 варианта — около 107 секунд. Для 40 предметов —
+            уже больше суток.
           </Typography.Text>
         </>
       ),
@@ -424,48 +461,50 @@ export const pythonCostLesson = defineCourseLesson({
   ],
   result: (
     <>
+      <Typography.Text>
+        Быстрая программа — та, у которой работа медленно растёт с данными.
+        Сначала оценивают порядок роста, потом меряют секунды. Вот что
+        понадобится дальше.
+      </Typography.Text>
       <LessonSummary
         items={[
           {
-            note: (
-              <>
-                Сложность — рост числа действий с размером входа, а не секунды.
-              </>
-            ),
+            key: "Сложность",
+            note: <>Рост числа действий с размером входа, а не секунды.</>,
           },
           {
+            key: "Порядки",
             note: (
               <>
                 Один проход — <Notation>{"O(n)"}</Notation>, все пары —{" "}
                 <Notation>{"O(n²)"}</Notation>, деление пополам —{" "}
-                <Notation>{"O(log n)"}</Notation>.
+                <Notation>{"O(log n)"}</Notation>; пар{" "}
+                <Notation>{"i < j"}</Notation> — n(n − 1)/2.
               </>
             ),
           },
           {
-            note: (
-              <>
-                Шаги считают по реальным границам циклов: пары i {"<"} j — n(n −
-                1)/2.
-              </>
-            ),
-          },
-          {
+            key: "Скрытая цена",
             note: (
               <>
                 <Notation>{"x in list"}</Notation> — до n сравнений,{" "}
                 <Notation>{"x in set"}</Notation> — обычно один шаг;{" "}
-                <Notation>{"pop(0)"}</Notation> у списка — сдвиг всех элементов.
+                <Notation>{"pop(0)"}</Notation> сдвигает весь список.
               </>
             ),
           },
           {
+            key: "Память",
             note: (
               <>
-                Сохранённые данные, рекурсия и кэш занимают память; время
-                измеряют <Notation>{"perf_counter"}</Notation>.
+                Список растёт с данными, проход со счётчиками — нет; рекурсия и
+                кэш тоже занимают память.
               </>
             ),
+          },
+          {
+            key: <Notation>{"perf_counter"}</Notation>,
+            note: <>Разность показаний до и после; один запуск шумный.</>,
           },
         ]}
       />

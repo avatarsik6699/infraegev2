@@ -126874,19 +126874,27 @@
     {
       "task": {
         "id": "python-files-t06",
-        "title": "Что вернёт json.loads(json.dumps((1, 2)))?",
+        "title": "Что напечатает программа?",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 1,
         "estimated_minutes": null,
-        "answer_instruction": "Запишите результат так, как его печатает Python.",
+        "answer_instruction": "Запишите список так, как его печатает Python.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Что вернёт `json.loads(json.dumps((1, 2)))`?"
+              "markdown": "Что напечатает программа?"
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "import json\n\nprint(json.loads(json.dumps((1, 2))))",
+              "caption": null
             }
           }
         ],
@@ -126894,7 +126902,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Файлы и внешние данные»: проследи программу по строкам и запиши значения так, как их покажет Python."
+              "markdown": "В JSON нет кортежей: кортеж записывается как массив и читается обратно списком."
             }
           }
         ],
@@ -126902,7 +126910,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "[1, 2]: кортеж сохраняется как JSON-массив и возвращается списком."
+              "markdown": "`dumps` превращает кортеж `(1, 2)` в текст `[1, 2]`, а `loads` читает этот массив как список."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `[1, 2]`"
             }
           }
         ],
@@ -126911,7 +126925,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 0,
+            "position": 3,
             "material_id": "python-files"
           }
         ],
@@ -126934,7 +126948,7 @@
         ],
         "checker": {
           "checker_type": "exact_match",
-          "answer_variants": ["[1, 2]"],
+          "answer_variants": ["[1, 2]", "[1,2]"],
           "numeric_tolerance": null
         }
       },
@@ -126943,19 +126957,25 @@
     {
       "task": {
         "id": "python-files-t07",
-        "title": "Напиши программу: за один проход по numbers.txt найди минимум и максимум",
+        "title": "Напиши программу: наименьшее и наибольшее за один проход",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 2,
         "estimated_minutes": null,
-        "answer_instruction": "Запишите ответы через пробел в порядке вопроса; списки и строки — так, как их печатает Python.",
+        "answer_instruction": "Запишите два числа через пробел: наименьшее, затем наибольшее.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Напиши программу: за один проход по `numbers.txt` найди минимум и максимум."
+              "markdown": "Скачай файл `numbers.txt` — в нём числа урока, по одному на строке. Напиши программу, которая за один проход по файлу находит наименьшее и наибольшее число и печатает их одним `print`. Запусти её и запиши, что она напечатала."
+            }
+          },
+          {
+            "type": "attachment",
+            "data": {
+              "usage_id": "statement-1"
             }
           }
         ],
@@ -126963,7 +126983,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Файлы и внешние данные»: проследи программу по строкам и запиши значения так, как их покажет Python."
+              "markdown": "Две переменные с `None` в начале, как `best` в уроке, — обнови обе в одном цикле `for line in file`."
             }
           }
         ],
@@ -126971,16 +126991,45 @@
           {
             "type": "text",
             "data": {
-              "markdown": "−2 10."
+              "markdown": "Например:"
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "smallest = None\nlargest = None\nwith open(\"numbers.txt\", encoding=\"utf-8\") as file:\n    for line in file:\n        number = int(line)\n        if smallest is None or number < smallest:\n            smallest = number\n        if largest is None or number > largest:\n            largest = number\nprint(smallest, largest)",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "В файле 5, −2, 10, 7: наименьшее −2, наибольшее 10."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `-2 10`"
             }
           }
         ],
         "skills": [],
         "exam_numbers": [],
-        "files": [],
+        "files": [
+          {
+            "id": "statement-1",
+            "purpose": "attachment",
+            "checksum": "2456e72a30086e9f65136109c9ab2ecd6cf48834aea7121906ce52e5dc3f5faa",
+            "filename": "numbers.txt",
+            "attribution": null,
+            "description": "Числа 5, −2, 10, 7 по одному на строке — файл из урока"
+          }
+        ],
         "lessons": [
           {
-            "position": 1,
+            "position": 0,
             "material_id": "python-files"
           }
         ],
@@ -127012,19 +127061,25 @@
     {
       "task": {
         "id": "python-files-t08",
-        "title": "Напиши программу: прочитай students.csv через csv.DictReader и выведи имя и…",
+        "title": "Напиши программу: лучший ученик из CSV",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 2,
         "estimated_minutes": null,
-        "answer_instruction": "Запишите ответы через пробел в порядке вопроса; списки и строки — так, как их печатает Python.",
+        "answer_instruction": "Запишите имя и балл через пробел, как их напечатала программа.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Напиши программу: прочитай `students.csv` через `csv.DictReader` и выведи имя и балл лучшего ученика."
+              "markdown": "Скачай файл `students.csv` из урока. Напиши программу: прочитай файл через `csv.DictReader` и напечатай одним `print` имя и балл ученика с наибольшим баллом. Запусти её и запиши, что она напечатала."
+            }
+          },
+          {
+            "type": "attachment",
+            "data": {
+              "usage_id": "statement-1"
             }
           }
         ],
@@ -127032,7 +127087,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Файлы и внешние данные»: проследи программу по строкам и запиши значения так, как их покажет Python."
+              "markdown": "Балл из CSV — строка: сравнивай `int(row[\"score\"])`, а не саму строку."
             }
           }
         ],
@@ -127040,16 +127095,45 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Анна 91."
+              "markdown": "Например:"
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "import csv\n\nbest_name = None\nbest_score = None\nwith open(\"students.csv\", encoding=\"utf-8\", newline=\"\") as file:\n    for row in csv.DictReader(file, delimiter=\";\"):\n        score = int(row[\"score\"])\n        if best_score is None or score > best_score:\n            best_name = row[\"name\"]\n            best_score = score\nprint(best_name, best_score)",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Баллы 91, 84, 88 — наибольший у Анны."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `Анна 91`"
             }
           }
         ],
         "skills": [],
         "exam_numbers": [],
-        "files": [],
+        "files": [
+          {
+            "id": "statement-1",
+            "purpose": "attachment",
+            "checksum": "600cb1e08df151d77f1bba75c0af4b9dba10595a1ba8d929b0ec4d34addfa02d",
+            "filename": "students.csv",
+            "attribution": null,
+            "description": "Таблица учеников из урока: имя и балл через точку с запятой"
+          }
+        ],
         "lessons": [
           {
-            "position": 2,
+            "position": 4,
             "material_id": "python-files"
           }
         ],
@@ -127081,19 +127165,27 @@
     {
       "task": {
         "id": "python-exceptions-t02",
-        "title": "Что выведет пример с try/except/else из урока при text = \"-5\" и при text = \"…",
+        "title": "Что напечатает программа?",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 1,
         "estimated_minutes": null,
-        "answer_instruction": "Запишите ответы через пробел в порядке вопроса; списки и строки — так, как их печатает Python.",
+        "answer_instruction": "Запишите напечатанные строки через пробел в порядке вывода.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Что выведет пример с `try`/`except`/`else` из урока при `text = \"-5\"` и при `text = \" 8 \"`?"
+              "markdown": "Что напечатает программа?"
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "for text in [\"-5\", \" 8 \"]:\n    try:\n        number = int(text)\n    except ValueError:\n        print(\"Нужно ввести целое число\")\n    else:\n        print(number * 2)",
+              "caption": null
             }
           }
         ],
@@ -127101,7 +127193,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Исключения и отладка»: проследи программу по строкам и запиши значения так, как их покажет Python."
+              "markdown": "`int` понимает знак минус и пробелы по краям строки — ошибки не будет ни разу."
             }
           }
         ],
@@ -127109,7 +127201,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "−10 и 16: `int` принимает знак и пробелы по краям."
+              "markdown": "`int(\"-5\")` = −5, `int(\" 8 \")` = 8: оба раза выполняется `else` и печатает удвоенное число."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `-10 16`"
             }
           }
         ],
@@ -127150,19 +127248,27 @@
     {
       "task": {
         "id": "python-exceptions-t04",
-        "title": "Что выведут print(average([4])) и print(average([1, 2]))?",
+        "title": "Что напечатает программа?",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 1,
         "estimated_minutes": null,
-        "answer_instruction": "Запишите ответы через пробел в порядке вопроса; списки и строки — так, как их печатает Python.",
+        "answer_instruction": "Запишите напечатанную строку так, как её напечатала программа.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Что выведут `print(average([4]))` и `print(average([1, 2]))`?"
+              "markdown": "Что напечатает программа?"
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "def total_and_best(numbers):\n    if not numbers:\n        raise ValueError(\"Пустой список: наибольшего нет\")\n    total = 0\n    best = numbers[0]\n    for x in numbers:\n        total += x\n        if x > best:\n            best = x\n    return total, best\n\ntry:\n    total, best = total_and_best([])\nexcept ValueError:\n    total, best = 0, None\nprint(total, best)",
+              "caption": null
             }
           }
         ],
@@ -127170,7 +127276,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Исключения и отладка»: проследи программу по строкам и запиши значения так, как их покажет Python."
+              "markdown": "Для пустого списка срабатывает `raise`, и выполняется блок `except`."
             }
           }
         ],
@@ -127178,7 +127284,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "4.0 и 1.5."
+              "markdown": "Список пуст, `not numbers` истинно — функция вызывает `ValueError`. Вызов прерывается, `except` присваивает `total = 0` и `best = None`."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `0 None`"
             }
           }
         ],
@@ -127210,7 +127322,7 @@
         ],
         "checker": {
           "checker_type": "exact_match",
-          "answer_variants": ["4.0 1.5"],
+          "answer_variants": ["0 None"],
           "numeric_tolerance": null
         }
       },
@@ -127219,19 +127331,19 @@
     {
       "task": {
         "id": "python-exceptions-t07",
-        "title": "Напиши программу: вводятся три строки; посчитай сумму тех, что являются…",
+        "title": "Напиши программу: сумма чисел среди ввода",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 2,
         "estimated_minutes": null,
-        "answer_instruction": "Запишите ответы через пробел в порядке вопроса; списки и строки — так, как их печатает Python.",
+        "answer_instruction": "Запишите два числа через пробел: сумму, затем количество нечисел.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Напиши программу: вводятся три строки; посчитай сумму тех, что являются целыми числами, и количество остальных. Проверь на вводе 5, x, 7."
+              "markdown": "Напиши программу: она читает три строки через `input()`, складывает те, что являются целыми числами, считает остальные и печатает сумму и количество остальных одним `print`. Запусти её, введи `5`, `x`, `7` и запиши, что она напечатала."
             }
           }
         ],
@@ -127239,7 +127351,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Исключения и отладка»: проследи программу по строкам и запиши значения так, как их покажет Python."
+              "markdown": "Цикл из трёх шагов, внутри — `try` с `int(input())` и `except ValueError`."
             }
           }
         ],
@@ -127247,7 +127359,27 @@
           {
             "type": "text",
             "data": {
-              "markdown": "12 1."
+              "markdown": "Например:"
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "total = 0\nbad = 0\nfor _ in range(3):\n    try:\n        total += int(input())\n    except ValueError:\n        bad += 1\nprint(total, bad)",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "5 + 7 = 12, строка `x` — одна ошибка."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `12 1`"
             }
           }
         ],
@@ -127288,19 +127420,19 @@
     {
       "task": {
         "id": "python-exceptions-t08",
-        "title": "Напиши функцию safe_div(a, b), которая возвращает a / b или None, если b…",
+        "title": "Напиши функцию: деление без остановки",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 2,
         "estimated_minutes": null,
-        "answer_instruction": "Запишите ответы через пробел в порядке вопроса; списки и строки — так, как их печатает Python.",
+        "answer_instruction": "Запишите два значения через пробел, как их напечатала программа.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Напиши функцию `safe_div(a, b)`, которая возвращает `a / b` или `None`, если `b` равно нулю, перехватывая `ZeroDivisionError`. Чему равны `safe_div(7, 2)` и `safe_div(1, 0)`?"
+              "markdown": "Напиши функцию `safe_div(a, b)`: она возвращает `a / b`, а если `b` равно нулю, перехватывает `ZeroDivisionError` и возвращает `None`. Напечатай `safe_div(7, 2)` и `safe_div(1, 0)` одним `print`, запусти и запиши, что напечатала программа."
             }
           }
         ],
@@ -127308,7 +127440,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Исключения и отладка»: проследи программу по строкам и запиши значения так, как их покажет Python."
+              "markdown": "`return a / b` внутри `try`, `return None` — в блоке `except ZeroDivisionError`."
             }
           }
         ],
@@ -127316,7 +127448,27 @@
           {
             "type": "text",
             "data": {
-              "markdown": "3.5 и None."
+              "markdown": "Например:"
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "def safe_div(a, b):\n    try:\n        return a / b\n    except ZeroDivisionError:\n        return None\n\nprint(safe_div(7, 2), safe_div(1, 0))",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "7 / 2 = 3.5; деление на ноль перехвачено."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `3.5 None`"
             }
           }
         ],
@@ -127357,19 +127509,27 @@
     {
       "task": {
         "id": "python-iterators-generators-t02",
-        "title": "После it = iter(\"abc\") и двух вызовов next(it) что вернёт list(it)?",
+        "title": "Что напечатает программа?",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 1,
         "estimated_minutes": null,
-        "answer_instruction": "Запишите результат так, как его печатает Python.",
+        "answer_instruction": "Запишите список так, как его печатает Python.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "После `it = iter(\"abc\")` и двух вызовов `next(it)` что вернёт `list(it)`?"
+              "markdown": "Что напечатает программа?"
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "it = iter(\"abc\")\nnext(it)\nnext(it)\nprint(list(it))",
+              "caption": null
             }
           }
         ],
@@ -127377,7 +127537,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Итераторы и генераторы»: проследи программу по строкам и запиши значения так, как их покажет Python."
+              "markdown": "Два `next` уже забрали `'a'` и `'b'`."
             }
           }
         ],
@@ -127385,7 +127545,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "['c']."
+              "markdown": "Итератор строки выдаёт символы по одному. После двух `next` позиция стоит перед `'c'`, и `list` забирает только его."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `['c']`"
             }
           }
         ],
@@ -127426,19 +127592,27 @@
     {
       "task": {
         "id": "python-iterators-generators-t03",
-        "title": "Пусть m = map(int, \"1 2 3\".split())",
+        "title": "Что напечатает программа?",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 1,
         "estimated_minutes": null,
-        "answer_instruction": "Запишите ответы через пробел в порядке вопроса; списки и строки — так, как их печатает Python.",
+        "answer_instruction": "Запишите напечатанные строки через пробел в порядке вывода.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Пусть `m = map(int, \"1 2 3\".split())`. Что дадут `sum(m)` и затем ещё раз `sum(m)`?"
+              "markdown": "Что напечатает программа?"
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "m = map(int, \"1 2 3\".split())\nprint(sum(m))\nprint(sum(m))",
+              "caption": null
             }
           }
         ],
@@ -127446,7 +127620,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Итераторы и генераторы»: проследи программу по строкам и запиши значения так, как их покажет Python."
+              "markdown": "`map` одноразовый: второй `sum` получает пустой источник."
             }
           }
         ],
@@ -127454,7 +127628,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "6 и 0: `map` уже исчерпан."
+              "markdown": "Первый `sum` забрал 1, 2, 3 и дал 6. Второму ничего не осталось, а сумма пустого — 0."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `6 0`"
             }
           }
         ],
@@ -127495,19 +127675,27 @@
     {
       "task": {
         "id": "python-iterators-generators-t04",
-        "title": "Что даст list(filter(lambda x: x % 2, range(10)))?",
+        "title": "Что напечатает программа?",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 1,
         "estimated_minutes": null,
-        "answer_instruction": "Запишите результат так, как его печатает Python.",
+        "answer_instruction": "Запишите список так, как его печатает Python.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Что даст `list(filter(lambda x: x % 2, range(10)))`?"
+              "markdown": "Что напечатает программа?"
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "print(list(filter(lambda x: x % 2, range(10))))",
+              "caption": null
             }
           }
         ],
@@ -127515,7 +127703,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Итераторы и генераторы»: проследи программу по строкам и запиши значения так, как их покажет Python."
+              "markdown": "`x % 2` равно 1 для нечётных — это истина, и 0 для чётных — ложь."
             }
           }
         ],
@@ -127523,7 +127711,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "[1, 3, 5, 7, 9]."
+              "markdown": "`filter` оставляет числа, для которых функция вернула истину, — нечётные."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `[1, 3, 5, 7, 9]`"
             }
           }
         ],
@@ -127555,7 +127749,7 @@
         ],
         "checker": {
           "checker_type": "exact_match",
-          "answer_variants": ["[1, 3, 5, 7, 9]"],
+          "answer_variants": ["[1, 3, 5, 7, 9]", "[1,3,5,7,9]"],
           "numeric_tolerance": null
         }
       },
@@ -127564,19 +127758,27 @@
     {
       "task": {
         "id": "python-iterators-generators-t05",
-        "title": "Что получится при a, b = map(int, \"3 4 5\".split())?",
+        "title": "Какой ошибкой остановится программа?",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 1,
         "estimated_minutes": null,
-        "answer_instruction": "Введите ответ одним значением, как его покажет Python.",
+        "answer_instruction": "Введите название исключения.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Что получится при `a, b = map(int, \"3 4 5\".split())`?"
+              "markdown": "Какой ошибкой остановится программа?"
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "a, b = map(int, \"3 4 5\".split())\nprint(a + b)",
+              "caption": null
             }
           }
         ],
@@ -127584,7 +127786,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Итераторы и генераторы»: проследи программу по строкам и запиши значения так, как их покажет Python."
+              "markdown": "Значений три, а имён слева два."
             }
           }
         ],
@@ -127592,7 +127794,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "`ValueError`: трёх значений больше, чем двух имён."
+              "markdown": "Распаковка требует ровно столько значений, сколько имён: `ValueError: too many values to unpack`."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `ValueError`"
             }
           }
         ],
@@ -127624,7 +127832,7 @@
         ],
         "checker": {
           "checker_type": "exact_match",
-          "answer_variants": ["ValueError"],
+          "answer_variants": ["ValueError", "valueerror"],
           "numeric_tolerance": null
         }
       },
@@ -127633,19 +127841,27 @@
     {
       "task": {
         "id": "python-iterators-generators-t06",
-        "title": "Генератор countdown(n) выдаёт n, уменьшает его на 1 и продолжает, пока n > 0",
+        "title": "Что напечатает программа?",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 1,
         "estimated_minutes": null,
-        "answer_instruction": "Запишите результат так, как его печатает Python.",
+        "answer_instruction": "Запишите список так, как его печатает Python.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Генератор `countdown(n)` выдаёт `n`, уменьшает его на 1 и продолжает, пока `n > 0`. Что вернёт `list(countdown(3))`?"
+              "markdown": "Что напечатает программа?"
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "def countdown(n):\n    while n > 0:\n        yield n\n        n -= 1\n\nprint(list(countdown(3)))",
+              "caption": null
             }
           }
         ],
@@ -127653,7 +127869,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Итераторы и генераторы»: проследи программу по строкам и запиши значения так, как их покажет Python."
+              "markdown": "Генератор выдаёт `n`, потом уменьшает его — пока `n > 0`."
             }
           }
         ],
@@ -127661,7 +127877,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "[3, 2, 1]."
+              "markdown": "Выдаются 3, 2, 1; при `n = 0` цикл `while` кончается, и генератор тоже."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `[3, 2, 1]`"
             }
           }
         ],
@@ -127693,7 +127915,7 @@
         ],
         "checker": {
           "checker_type": "exact_match",
-          "answer_variants": ["[3, 2, 1]"],
+          "answer_variants": ["[3, 2, 1]", "[3,2,1]"],
           "numeric_tolerance": null
         }
       },
@@ -127702,7 +127924,7 @@
     {
       "task": {
         "id": "python-iterators-generators-t07",
-        "title": "Найди первое число от 100 до 199, кратное 17, одной записью next(…) с…",
+        "title": "Напиши программу: первое кратное 17",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 1,
@@ -127714,7 +127936,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Найди первое число от 100 до 199, кратное 17, одной записью `next(…)` с генераторным выражением."
+              "markdown": "Напиши одну строку `print(next(…))` с генераторным выражением, которая находит первое число от 100 до 199, кратное 17. Запусти её и запиши, что она напечатала."
             }
           }
         ],
@@ -127722,7 +127944,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Итераторы и генераторы»: проследи программу по строкам и запиши значения так, как их покажет Python."
+              "markdown": "`next` берёт первый элемент генераторного выражения `x for x in range(100, 200) if …`."
             }
           }
         ],
@@ -127730,7 +127952,27 @@
           {
             "type": "text",
             "data": {
-              "markdown": "`next(x for x in range(100, 200) if x % 17 == 0)` — 102."
+              "markdown": "Например:"
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "print(next(x for x in range(100, 200) if x % 17 == 0))",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "17 · 6 = 102 — первое кратное 17 не меньше 100."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `102`"
             }
           }
         ],
@@ -127771,7 +128013,7 @@
     {
       "task": {
         "id": "python-iterators-generators-t08",
-        "title": "Напиши генератор evens(limit), выдающий чётные числа от 2 до limit…",
+        "title": "Напиши генератор: чётные числа",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 2,
@@ -127783,7 +128025,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Напиши генератор `evens(limit)`, выдающий чётные числа от 2 до `limit` включительно, и найди сумму его значений при `limit = 20`."
+              "markdown": "Напиши генератор `evens(limit)`, который выдаёт чётные числа от 2 до `limit` включительно. Напечатай `sum(evens(20))`, запусти и запиши, что напечатала программа."
             }
           }
         ],
@@ -127791,7 +128033,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Итераторы и генераторы»: проследи программу по строкам и запиши значения так, как их покажет Python."
+              "markdown": "Цикл с `yield n` и шагом 2; сумма 2 + 4 + … + 20."
             }
           }
         ],
@@ -127799,7 +128041,27 @@
           {
             "type": "text",
             "data": {
-              "markdown": "110."
+              "markdown": "Например:"
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "def evens(limit):\n    n = 2\n    while n <= limit:\n        yield n\n        n += 2\n\nprint(sum(evens(20)))",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "2 + 4 + … + 20 = 110."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `110`"
             }
           }
         ],
@@ -127840,7 +128102,7 @@
     {
       "task": {
         "id": "python-standard-library-t01",
-        "title": "Сколько двоичных строк длины 4 содержат ровно две единицы?",
+        "title": "Напиши программу: две единицы из четырёх",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 1,
@@ -127852,7 +128114,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Сколько двоичных строк длины 4 содержат ровно две единицы?"
+              "markdown": "Напиши программу: она перебирает через `product(\"01\", repeat=4)` все двоичные строки длины 4 и считает те, в которых ровно две единицы. Запусти её и запиши, что она напечатала."
             }
           }
         ],
@@ -127860,7 +128122,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Стандартная библиотека и перебор комбинаций»: проследи программу по строкам и запиши значения так, как их покажет Python."
+              "markdown": "Склей кортеж в строку через `\"\".join` и проверь `count(\"1\") == 2`."
             }
           }
         ],
@@ -127868,7 +128130,27 @@
           {
             "type": "text",
             "data": {
-              "markdown": "6: выбираем две позиции единиц из четырёх — 01, 02, 03, 12, 13, 23."
+              "markdown": "Например:"
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "from itertools import product\n\ncount = 0\nfor digits in product(\"01\", repeat=4):\n    if \"\".join(digits).count(\"1\") == 2:\n        count += 1\nprint(count)",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Две позиции единиц из четырёх: 0011, 0101, 0110, 1001, 1010, 1100."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `6`"
             }
           }
         ],
@@ -127909,19 +128191,27 @@
     {
       "task": {
         "id": "python-standard-library-t05",
-        "title": "Чему равны Fraction(1, 4) + Fraction(1, 6) и Decimal(\"0.1\") * 3?",
+        "title": "Что напечатает программа?",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 1,
         "estimated_minutes": null,
-        "answer_instruction": "Запишите ответы через пробел в порядке вопроса; списки и строки — так, как их печатает Python.",
+        "answer_instruction": "Запишите напечатанные строки через пробел в порядке вывода.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Чему равны `Fraction(1, 4) + Fraction(1, 6)` и `Decimal(\"0.1\") * 3`?"
+              "markdown": "Что напечатает программа?"
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "from fractions import Fraction\nfrom decimal import Decimal\n\nprint(Fraction(1, 4) + Fraction(1, 6))\nprint(Decimal(\"0.1\") * 3)",
+              "caption": null
             }
           }
         ],
@@ -127929,7 +128219,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Стандартная библиотека и перебор комбинаций»: проследи программу по строкам и запиши значения так, как их покажет Python."
+              "markdown": "Общий знаменатель 12; `Decimal` из строки считает десятичные дроби без погрешности."
             }
           }
         ],
@@ -127937,7 +128227,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "5/12 и 0.3."
+              "markdown": "1/4 + 1/6 = 3/12 + 2/12 = 5/12; 0.1 · 3 = 0.3 точно."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `5/12 0.3`"
             }
           }
         ],
@@ -127978,19 +128274,27 @@
     {
       "task": {
         "id": "python-standard-library-t06",
-        "title": "Сколько элементов дают product(\"AB\", repeat=3), permutations(\"ABCD\", 2) и…",
+        "title": "Что напечатает программа?",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 1,
         "estimated_minutes": null,
-        "answer_instruction": "Запишите ответы через пробел в порядке вопроса; списки и строки — так, как их печатает Python.",
+        "answer_instruction": "Запишите напечатанные строки через пробел в порядке вывода.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Сколько элементов дают `product(\"AB\", repeat=3)`, `permutations(\"ABCD\", 2)` и `combinations(\"ABCD\", 2)`?"
+              "markdown": "Что напечатает программа?"
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "from itertools import combinations, permutations, product\n\nprint(len(list(product(\"AB\", repeat=3))))\nprint(len(list(permutations(\"ABCD\", 2))))\nprint(len(list(combinations(\"ABCD\", 2))))",
+              "caption": null
             }
           }
         ],
@@ -127998,7 +128302,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Стандартная библиотека и перебор комбинаций»: проследи программу по строкам и запиши значения так, как их покажет Python."
+              "markdown": "Слова — 2 · 2 · 2; пары разных букв с порядком — 4 · 3; группы без порядка — вдвое меньше."
             }
           }
         ],
@@ -128006,7 +128310,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "8, 12 и 6."
+              "markdown": "`product`: 2³ = 8; `permutations`: 4 · 3 = 12; `combinations`: 12 / 2 = 6."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `8 12 6`"
             }
           }
         ],
@@ -128047,7 +128357,7 @@
     {
       "task": {
         "id": "python-standard-library-t07",
-        "title": "Сколько двоичных строк длины 4 не содержат двух единиц подряд?",
+        "title": "Напиши программу: без двух единиц подряд",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 1,
@@ -128059,7 +128369,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Сколько двоичных строк длины 4 не содержат двух единиц подряд?"
+              "markdown": "Напиши программу: она перебирает все двоичные строки длины 4 и считает те, в которых нет двух единиц подряд. Запусти её и запиши, что она напечатала."
             }
           }
         ],
@@ -128067,7 +128377,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Стандартная библиотека и перебор комбинаций»: проследи программу по строкам и запиши значения так, как их покажет Python."
+              "markdown": "Строка подходит, если в ней нет подстроки `\"11\"`."
             }
           }
         ],
@@ -128075,7 +128385,27 @@
           {
             "type": "text",
             "data": {
-              "markdown": "8."
+              "markdown": "Например:"
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "from itertools import product\n\ncount = 0\nfor digits in product(\"01\", repeat=4):\n    if \"11\" not in \"\".join(digits):\n        count += 1\nprint(count)",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Подходят 0000, 0001, 0010, 0100, 0101, 1000, 1001, 1010."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `8`"
             }
           }
         ],
@@ -128116,7 +128446,7 @@
     {
       "task": {
         "id": "python-standard-library-t08",
-        "title": "Сколько различных слов получится перестановкой букв слова «ПАПА»?",
+        "title": "Напиши программу: слова из букв «ПАПА»",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 1,
@@ -128128,7 +128458,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Сколько различных слов получится перестановкой букв слова «ПАПА»?"
+              "markdown": "Напиши программу: собери через `permutations` все перестановки букв слова «ПАПА», убери повторы через `set` и напечатай число различных слов. Запусти её и запиши, что она напечатала."
             }
           }
         ],
@@ -128136,7 +128466,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Стандартная библиотека и перебор комбинаций»: проследи программу по строкам и запиши значения так, как их покажет Python."
+              "markdown": "Одинаковые буквы дают одинаковые слова: считай `len(set(...))`."
             }
           }
         ],
@@ -128144,7 +128474,27 @@
           {
             "type": "text",
             "data": {
-              "markdown": "6."
+              "markdown": "Например:"
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "from itertools import permutations\n\nwords = {\"\".join(p) for p in permutations(\"ПАПА\")}\nprint(len(words))",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "4! = 24 перестановки, но каждое слово повторяется 2 · 2 = 4 раза: 24 / 4 = 6."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `6`"
             }
           }
         ],
@@ -128185,19 +128535,27 @@
     {
       "task": {
         "id": "python-notation-patterns-t01",
-        "title": "Чему равны int(\"1011\", 2), int(\"777\", 8) и int(\"1A\", 16)?",
+        "title": "Что напечатает программа?",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 1,
         "estimated_minutes": null,
-        "answer_instruction": "Запишите ответы через пробел в порядке вопроса; списки и строки — так, как их печатает Python.",
+        "answer_instruction": "Запишите напечатанные строки через пробел в порядке вывода.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Чему равны `int(\"1011\", 2)`, `int(\"777\", 8)` и `int(\"1A\", 16)`?"
+              "markdown": "Что напечатает программа?"
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "print(int(\"1011\", 2))\nprint(int(\"777\", 8))\nprint(int(\"1A\", 16))",
+              "caption": null
             }
           }
         ],
@@ -128205,7 +128563,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Записи чисел, биты и текстовые шаблоны»: проследи программу по строкам и запиши значения так, как их покажет Python."
+              "markdown": "Веса разрядов — степени основания: 8, 4, 2, 1; 64, 8, 1; 16, 1. Буква A означает 10."
             }
           }
         ],
@@ -128213,7 +128571,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "11, 511 и 26."
+              "markdown": "8 + 2 + 1 = 11; 7 · 64 + 7 · 8 + 7 = 511; 16 + 10 = 26."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `11 511 26`"
             }
           }
         ],
@@ -128254,19 +128618,27 @@
     {
       "task": {
         "id": "python-notation-patterns-t02",
-        "title": "Что дадут bin(10), bin(10)[2:] и format(10, \"08b\")?",
+        "title": "Что напечатает программа?",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 1,
         "estimated_minutes": null,
-        "answer_instruction": "Запишите ответы через пробел в порядке вопроса; списки и строки — так, как их печатает Python.",
+        "answer_instruction": "Запишите напечатанные строки через пробел в порядке вывода.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Что дадут `bin(10)`, `bin(10)[2:]` и `format(10, \"08b\")`?"
+              "markdown": "Что напечатает программа?"
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "print(bin(10))\nprint(bin(10)[2:])\nprint(format(10, \"08b\"))",
+              "caption": null
             }
           }
         ],
@@ -128274,7 +128646,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Записи чисел, биты и текстовые шаблоны»: проследи программу по строкам и запиши значения так, как их покажет Python."
+              "markdown": "`bin` пишет префикс `0b`, срез `[2:]` его убирает, `\"08b\"` дополняет нулями до восьми знаков."
             }
           }
         ],
@@ -128282,7 +128654,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "0b1010, 1010 и 00001010."
+              "markdown": "10 = 8 + 2, двоичная запись 1010."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `0b1010 1010 00001010`"
             }
           }
         ],
@@ -128323,19 +128701,27 @@
     {
       "task": {
         "id": "python-notation-patterns-t03",
-        "title": "Вычисли 12 & 10, 12 | 10, 12 ^ 10, 3 << 3 и 100 >> 2",
+        "title": "Что напечатает программа?",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 1,
         "estimated_minutes": null,
-        "answer_instruction": "Запишите ответы через пробел в порядке вопроса; списки и строки — так, как их печатает Python.",
+        "answer_instruction": "Запишите напечатанные числа через пробел в порядке вывода.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Вычисли `12 & 10`, `12 | 10`, `12 ^ 10`, `3 << 3` и `100 >> 2`."
+              "markdown": "Что напечатает программа?"
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "print(12 & 10, 12 | 10, 12 ^ 10, 3 << 3, 100 >> 2)",
+              "caption": null
             }
           }
         ],
@@ -128343,7 +128729,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Записи чисел, биты и текстовые шаблоны»: проследи программу по строкам и запиши значения так, как их покажет Python."
+              "markdown": "12 = 1100, 10 = 1010; сдвиг влево на 3 — умножение на 8, вправо на 2 — деление на 4."
             }
           }
         ],
@@ -128351,7 +128737,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "8, 14, 6, 24 и 25."
+              "markdown": "1100 & 1010 = 1000 = 8; | = 1110 = 14; ^ = 0110 = 6; 3 · 8 = 24; 100 // 4 = 25."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `8 14 6 24 25`"
             }
           }
         ],
@@ -128392,19 +128784,27 @@
     {
       "task": {
         "id": "python-notation-patterns-t04",
-        "title": "Чему равны (13).bit_count() и (13).bit_length()?",
+        "title": "Что напечатает программа?",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 1,
         "estimated_minutes": null,
-        "answer_instruction": "Запишите ответы через пробел в порядке вопроса; списки и строки — так, как их печатает Python.",
+        "answer_instruction": "Запишите напечатанные числа через пробел в порядке вывода.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Чему равны `(13).bit_count()` и `(13).bit_length()`?"
+              "markdown": "Что напечатает программа?"
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "print((13).bit_count(), (13).bit_length())",
+              "caption": null
             }
           }
         ],
@@ -128412,7 +128812,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Записи чисел, биты и текстовые шаблоны»: проследи программу по строкам и запиши значения так, как их покажет Python."
+              "markdown": "Переведи 13 в двоичную запись: 8 + 4 + 1."
             }
           }
         ],
@@ -128420,7 +128820,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "3 и 4: 13 = 1101."
+              "markdown": "13 = 1101: три единицы, четыре разряда."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `3 4`"
             }
           }
         ],
@@ -128461,19 +128867,19 @@
     {
       "task": {
         "id": "python-notation-patterns-t08",
-        "title": "Найди все числа меньше 1000, кратные 9 и подходящие под маску \"1?8\"",
+        "title": "Напиши программу: кратные 9 под маской",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 1,
         "estimated_minutes": null,
-        "answer_instruction": "Запишите ответы через пробел в порядке вопроса; списки и строки — так, как их печатает Python.",
+        "answer_instruction": "Запишите числа через пробел по возрастанию.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Найди все числа меньше 1000, кратные 9 и подходящие под маску `\"1?8\"`."
+              "markdown": "Напиши программу: она перебирает числа меньше 1000, кратные 9, и печатает через пробел те, чья запись подходит под маску `1?8` (`fnmatchcase`). Запусти её и запиши, что она напечатала."
             }
           }
         ],
@@ -128481,7 +128887,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Записи чисел, биты и текстовые шаблоны»: проследи программу по строкам и запиши значения так, как их покажет Python."
+              "markdown": "Маска `1?8` — ровно три цифры: 1, любая, 8."
             }
           }
         ],
@@ -128489,7 +128895,27 @@
           {
             "type": "text",
             "data": {
-              "markdown": "108 и 198."
+              "markdown": "Например:"
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "from fnmatch import fnmatchcase\n\nanswers = []\nfor n in range(9, 1000, 9):\n    if fnmatchcase(str(n), \"1?8\"):\n        answers.append(n)\nprint(*answers)",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Сумма цифр числа, кратного 9, делится на 9: 1 + x + 8 делится на 9 при x = 0 и x = 9."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `108 198`"
             }
           }
         ],
@@ -128530,7 +128956,7 @@
     {
       "task": {
         "id": "python-notation-patterns-t09",
-        "title": "Сколько чисел от 1 до 100 имеют ровно три единицы в двоичной записи?",
+        "title": "Напиши программу: три единицы в записи",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 1,
@@ -128542,7 +128968,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Сколько чисел от 1 до 100 имеют ровно три единицы в двоичной записи?"
+              "markdown": "Напиши программу: она считает, сколько чисел от 1 до 100 имеют ровно три единицы в двоичной записи. Запусти её и запиши, что она напечатала."
             }
           }
         ],
@@ -128550,7 +128976,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Записи чисел, биты и текстовые шаблоны»: проследи программу по строкам и запиши значения так, как их покажет Python."
+              "markdown": "`n.bit_count()` считает единицы двоичной записи."
             }
           }
         ],
@@ -128558,7 +128984,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "33."
+              "markdown": "Например:"
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "print(sum(1 for n in range(1, 101) if n.bit_count() == 3))",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `33`"
             }
           }
         ],
@@ -128599,7 +129039,7 @@
     {
       "task": {
         "id": "python-cost-t02",
-        "title": "Сколько раз выполнится тело вложенного цикла по парам i < j при n = 100?",
+        "title": "Что напечатает программа?",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 1,
@@ -128611,7 +129051,15 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Сколько раз выполнится тело вложенного цикла по парам i < j при n = 100?"
+              "markdown": "Что напечатает программа?"
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "n = 100\nsteps = 0\nfor i in range(n):\n    for j in range(i + 1, n):\n        steps += 1\nprint(steps)",
+              "caption": null
             }
           }
         ],
@@ -128619,7 +129067,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Скорость и память программы»: проследи программу по строкам и запиши значения так, как их покажет Python."
+              "markdown": "Пар с `i < j` ровно n · (n − 1) / 2."
             }
           }
         ],
@@ -128627,7 +129075,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "4950."
+              "markdown": "100 · 99 / 2 = 4950."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `4950`"
             }
           }
         ],
@@ -128668,7 +129122,7 @@
     {
       "task": {
         "id": "python-cost-t03",
-        "title": "Сколько делений пополам нужно, чтобы из 1000 получить 1 (while n > 1: n //= 2)?",
+        "title": "Что напечатает программа?",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 1,
@@ -128680,7 +129134,15 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Сколько делений пополам нужно, чтобы из 1000 получить 1 (`while n > 1: n //= 2`)?"
+              "markdown": "Что напечатает программа?"
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "n = 1000\nsteps = 0\nwhile n > 1:\n    n //= 2\n    steps += 1\nprint(steps)",
+              "caption": null
             }
           }
         ],
@@ -128688,7 +129150,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Скорость и память программы»: проследи программу по строкам и запиши значения так, как их покажет Python."
+              "markdown": "Выпиши n по шагам: 1000, 500, 250, 125, …"
             }
           }
         ],
@@ -128696,7 +129158,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "9 делений."
+              "markdown": "1000 → 500 → 250 → 125 → 62 → 31 → 15 → 7 → 3 → 1: девять делений."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `9`"
             }
           }
         ],
@@ -804572,6 +805040,420 @@
         }
       },
       "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "python-files-t09",
+        "title": "Что напечатает программа?",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Запишите напечатанные числа через пробел в порядке вывода.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Скачай файл `header.txt` из урока: первая строка — количество чисел, дальше сами числа. Что напечатает программа?"
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "with open(\"header.txt\", encoding=\"utf-8\") as file:\n    count = int(file.readline())\n    numbers = [int(line) for line in file]\nprint(count, sum(numbers))",
+              "caption": null
+            }
+          },
+          {
+            "type": "attachment",
+            "data": {
+              "usage_id": "statement-1"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "`readline()` забирает только первую строку, цикл по файлу продолжает со второй."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "`readline()` читает заголовок 3; цикл получает остальные строки 4, −1, 6, их сумма 9."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `3 9`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [
+          {
+            "id": "statement-1",
+            "purpose": "attachment",
+            "checksum": "0dd532145f72eda4694c421ff8fd21fe026a0f8a2df7c164838551e45f4b3010",
+            "filename": "header.txt",
+            "attribution": null,
+            "description": "Файл из урока: заголовок 3 и три числа"
+          }
+        ],
+        "lessons": [
+          {
+            "position": 1,
+            "material_id": "python-files"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["3 9"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "python-files-t10",
+        "title": "Что напечатает программа?",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Введите то, что напечатала программа.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Что напечатает программа?"
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "with open(\"log.txt\", \"w\", encoding=\"utf-8\") as file:\n    file.write(\"A\\n\")\nwith open(\"log.txt\", \"a\", encoding=\"utf-8\") as file:\n    file.write(\"B\\n\")\nwith open(\"log.txt\", \"w\", encoding=\"utf-8\") as file:\n    file.write(\"C\\n\")\nwith open(\"log.txt\", encoding=\"utf-8\") as file:\n    print(file.read().strip())",
+              "caption": null
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Режим `\"w\"` стирает прежнее содержимое файла, `\"a\"` дописывает в конец."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "После первых двух блоков в файле строки A и B, но третий блок открывает файл в режиме `\"w\"` и стирает их. Остаётся только C."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `C`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 2,
+            "material_id": "python-files"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["C"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "python-cost-t04",
+        "title": "Что напечатает программа?",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Введите число.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Что напечатает программа?"
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "n = 50\nsteps = 0\nfor i in range(n):\n    for j in range(10):\n        steps += 1\nprint(steps)",
+              "caption": null
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Внутренний цикл всегда делает 10 шагов: всего 10 · n."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "50 · 10 = 500 — это `O(n)`, хотя циклов два."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `500`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 2,
+            "material_id": "python-cost"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["500"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "python-cost-t05",
+        "title": "Сравнения при поиске в списке",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Введите число.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "В списке `numbers` тысяча разных чисел, числа `x` среди них нет. Сколько сравнений сделает `x in numbers`, пока не ответит `False`?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "`in` для списка сравнивает `x` с каждым элементом по очереди и останавливается только на совпадении."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Совпадения нет, поэтому проверяются все 1000 элементов — худший случай `O(n)`."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `1000`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 3,
+            "material_id": "python-cost"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["1000"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "python-cost-t06",
+        "title": "Сколько подмножеств",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Введите число без пробелов.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Сколько подмножеств у набора из 20 предметов, включая пустое и сам набор?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Каждый предмет либо берут, либо нет: 2 · 2 · … · 2, двадцать раз."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "2²⁰ = 1 048 576 — уже миллион вариантов для 20 предметов."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `1048576`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 4,
+            "material_id": "python-cost"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["1048576"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
     }
   ],
   "files": [
@@ -818105,6 +818987,27 @@
       "mime_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
       "size_bytes": 5359,
       "storage_key": "d6e194b7f54befb4e0d8c16e9e4fbf1436979aa5f619eab9e9e0503079cee18b"
+    },
+    {
+      "format": "txt",
+      "checksum": "2456e72a30086e9f65136109c9ab2ecd6cf48834aea7121906ce52e5dc3f5faa",
+      "mime_type": "text/plain",
+      "size_bytes": 10,
+      "storage_key": "2456e72a30086e9f65136109c9ab2ecd6cf48834aea7121906ce52e5dc3f5faa"
+    },
+    {
+      "format": "csv",
+      "checksum": "600cb1e08df151d77f1bba75c0af4b9dba10595a1ba8d929b0ec4d34addfa02d",
+      "mime_type": "text/csv",
+      "size_bytes": 47,
+      "storage_key": "600cb1e08df151d77f1bba75c0af4b9dba10595a1ba8d929b0ec4d34addfa02d"
+    },
+    {
+      "format": "txt",
+      "checksum": "0dd532145f72eda4694c421ff8fd21fe026a0f8a2df7c164838551e45f4b3010",
+      "mime_type": "text/plain",
+      "size_bytes": 9,
+      "storage_key": "0dd532145f72eda4694c421ff8fd21fe026a0f8a2df7c164838551e45f4b3010"
     }
   ],
   "materials": [
