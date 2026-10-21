@@ -1,6 +1,6 @@
 """Independent answer and content checks for the EGE topic 9 lesson «Обработка таблицы чисел».
 
-The lesson solves a row with Counter, sets and sorted copies. Here every answer is
+The lesson solves a row with frequency bands, two lists, sets and sorted copies. Here every answer is
 recomputed another way: repeats from runs of equal values in the sorted row, groups
 from a frequency table built by hand, order by pairwise comparisons, neighbours by
 explicit offsets. The book ``.xlsx`` and the text file of a task must hold the same
@@ -243,24 +243,6 @@ def answers() -> dict[str, str]:
                 lambda a: 2 * max(a) < sum(a) and 2 * max(a) ** 2 > sum(x * x for x in a),
             )
         ),
-        "task-9-7-08": str(
-            _count(
-                t7,
-                lambda a: any(
-                    2 * max(a[k] for k in trio) > sum(a[k] for k in trio)
-                    for trio in ((0, 1, 2), (0, 1, 3), (0, 2, 3), (1, 2, 3))
-                ),
-            )
-        ),
-        "task-9-7-09": str(
-            _count(
-                t9,
-                lambda a: any(
-                    2 * face > a[0] * a[1] + a[0] * a[2] + a[1] * a[2]
-                    for face in (a[0] * a[1], a[0] * a[2], a[1] * a[2])
-                ),
-            )
-        ),
         "task-9-8-01": "19",
         "task-9-8-02": f"{2 + 3 + 1} 3",
         "task-9-8-04": f"{2 * 4} {2 * 4 + 2 * 2} 4",
@@ -318,7 +300,7 @@ def test_every_answer_matches_independent_recomputation(answers: dict[str, str])
     tasks = _entries()
     expected = answers
     assert sorted(tasks) == sorted(expected)
-    assert sorted(task.lessons[0].position for task in tasks.values()) == list(range(43))
+    assert sorted(task.lessons[0].position for task in tasks.values()) == list(range(41))
     sections = next(m for m in _bank().materials if m.id == MATERIAL).sections
     for task_id, task in tasks.items():
         assert task.checker.answer_variants[0] == expected[task_id], task_id
@@ -327,7 +309,7 @@ def test_every_answer_matches_independent_recomputation(answers: dict[str, str])
         on_final_page = task_id.startswith("task-9-9-")
         assert bool(task.theory_links) != on_final_page, task_id
         assert all(link.section in sections for link in task.theory_links)
-        advanced = task_id.startswith(("task-9-7-", "task-9-8-"))
+        advanced = task_id.startswith("task-9-8-")
         assert task.lessons[0].counts_toward_mastery == (not advanced), task_id
 
 

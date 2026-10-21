@@ -66,6 +66,12 @@ function pieces(node: React.ReactNode, out: Piece[] = []): Piece[] {
     out.push({ kind: "text", text: textOf(node.props.children as never) });
     return out;
   }
+  // the panels of LessonTabs are props, not children
+  const tabs = node.props.tabs as { content: React.ReactNode }[] | undefined;
+  if (Array.isArray(tabs)) {
+    for (const tab of tabs) pieces(tab.content, out);
+    return out;
+  }
   return pieces(node.props.children as React.ReactNode, out);
 }
 
@@ -79,8 +85,8 @@ function compiles(code: string): boolean {
   return check.status === 0;
 }
 
-describe("task 9 spreadsheets lesson (Change 184)", () => {
-  it("has six core subtopics, two advanced and their self-checks", () => {
+describe("task 9 spreadsheets lesson (Change 197)", () => {
+  it("has five core subtopics, one advanced and their self-checks", () => {
     expect(lesson).toMatchObject({
       id: "spreadsheets",
       routeSlug: "9-obrabotka-tablicy-chisel",
@@ -95,13 +101,11 @@ describe("task 9 spreadsheets lesson (Change 184)", () => {
       ["summa-krajnie-srednie", "core"],
       ["povtory-v-stroke", "core"],
       ["povtoryayushchiesya-i-odinochnye", "core"],
-      ["chetnost-i-osobye-chisla", "core"],
       ["poryadok-i-nomer-stroki", "core"],
-      ["treugolniki", "advanced"],
       ["yachejka-stolbec-sosedi", "advanced"],
     ]);
     expect(subtopics.map(({ checkpoint }) => checkpoint?.length ?? 0)).toEqual([
-      4, 3, 5, 5, 5, 4, 5, 2,
+      5, 5, 5, 5, 5, 4,
     ]);
     expect(lesson.examFocus).toBeDefined();
     expect(lesson.result).toBeDefined();
@@ -168,7 +172,7 @@ describe("task 9 spreadsheets lesson (Change 184)", () => {
           prelude += piece.code + "\n";
       }
     }
-    expect(ran).toBe(33);
+    expect(ran).toBe(25);
   }, 60_000);
 
   it("keeps spaces around inline code, links and emphasis", () => {
