@@ -628,7 +628,16 @@ export const excelFromTaskToTableLessonPublication = Object.freeze({
   routeSlug: "ot-usloviya-k-tablitse",
   title: "От условия к таблице вычислений",
   summary:
-    "Один объект, вычисление и отбор, проверка на маленьком наборе, ошибки Excel, порядок решения на экзамене.",
+    "Один объект — одна строка, единица ответа, проверка на маленьком наборе, ошибки с сообщением и без.",
+  status: "published",
+});
+
+export const excelSummaryLessonPublication = Object.freeze({
+  id: "excel-summary",
+  routeSlug: "itog-kursa",
+  title: "Итог курса",
+  summary:
+    "Весь курс на одной странице: как росла таблица покупок, карта навыков, порядок работы над задачей, частые ошибки и задания ЕГЭ.",
   status: "published",
 });
 
@@ -775,13 +784,20 @@ export const excelCoursePublication = Object.freeze({
     Object.freeze({
       id: "final",
       title: "Итог",
-      summary: "От условия задачи к таблице вычислений и проверке ответа.",
+      summary:
+        "От условия задачи к таблице вычислений и проверке ответа; весь курс на одной карте.",
       lessonPlan: Object.freeze([
         Object.freeze({
           id: "excel-from-task-to-table",
           title: "От условия к таблице вычислений",
           outcome:
             "Разложить условие на столбцы проверок, найти ошибку по сообщению, проверить ответ вторым способом.",
+        }),
+        Object.freeze({
+          id: "excel-summary",
+          title: "Итог курса",
+          outcome:
+            "Видеть курс целиком: навыки по модулям, порядок работы над задачей, частые ошибки.",
         }),
       ]),
     }),
@@ -852,6 +868,7 @@ export const courseLessonPublications = Object.freeze([
   excelLookupLessonPublication,
   excelNeighbourCellsLessonPublication,
   excelFromTaskToTableLessonPublication,
+  excelSummaryLessonPublication,
   excelTablesPivotsLessonPublication,
 ]);
 

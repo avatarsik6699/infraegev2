@@ -134917,19 +134917,19 @@
     {
       "task": {
         "id": "excel-from-task-to-table-t07",
-        "title": "В таблице покупок урока поставь скидку 50%",
+        "title": "Скидка 50%: сколько покупок",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 1,
         "estimated_minutes": null,
-        "answer_instruction": "Запишите ответы через пробел в порядке вопроса.",
+        "answer_instruction": "Введите число.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "В таблице покупок урока поставь скидку 50%. Сколько покупок дороже 100 рублей и на какую сумму?"
+              "markdown": "В таблице покупок урока (лист «База») поставь в G2 скидку 50%. Сколько покупок теперь стоят после скидки больше 100 рублей?"
             }
           }
         ],
@@ -134937,7 +134937,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «От условия к таблице вычислений»: рассуди по шагам, а затем проверь в Excel."
+              "markdown": "Цена после скидки — половина стоимости. Строгое «больше 100» не берёт ровно 100."
             }
           }
         ],
@@ -134945,7 +134945,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Одна покупка — папки — на 120 рублей: тетради стоят ровно 100, а условие строгое."
+              "markdown": "После скидки: тетради 100, ручки 30, папки 120, карандаши 30. Больше 100 — только папки."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `1`"
             }
           }
         ],
@@ -134977,7 +134983,7 @@
         ],
         "checker": {
           "checker_type": "exact_match",
-          "answer_variants": ["1 120"],
+          "answer_variants": ["1"],
           "numeric_tolerance": null
         }
       },
@@ -134986,19 +134992,19 @@
     {
       "task": {
         "id": "excel-from-task-to-table-t08",
-        "title": "Составь лист: в A2:A7 — баллы 45, 80, 62, 80, 30, 95",
+        "title": "Баллы не меньше 60: два способа",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 2,
         "estimated_minutes": null,
-        "answer_instruction": "Запишите ответы через пробел в порядке вопроса.",
+        "answer_instruction": "Введите число.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Составь лист: в `A2:A7` — баллы 45, 80, 62, 80, 30, 95. Посчитай двумя способами (признаками и `СЧЁТЕСЛИ`), сколько баллов не меньше 60, и найди их среднее."
+              "markdown": "Составь лист: в `A2:A7` — баллы 45, 80, 62, 80, 30, 95. Посчитай двумя способами — признаками и `СЧЁТЕСЛИ`, — сколько баллов не меньше 60."
             }
           },
           {
@@ -135012,7 +135018,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «От условия к таблице вычислений»: рассуди по шагам, а затем проверь в Excel."
+              "markdown": "Признак `=ЕСЛИ(A2>=60;1;0)` и сумма признаков; проверка — `=СЧЁТЕСЛИ(A2:A7;\">=60\")`. Ответы должны совпасть."
             }
           }
         ],
@@ -135020,7 +135026,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "4 балла не меньше 60 — 80, 62, 80, 95; среднее 79,25."
+              "markdown": "Не меньше 60 — баллы 80, 62, 80 и 95. Признаки дают 4, `СЧЁТЕСЛИ` — тоже 4."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `4`"
             }
           }
         ],
@@ -135038,7 +135050,7 @@
         ],
         "lessons": [
           {
-            "position": 1,
+            "position": 7,
             "material_id": "excel-from-task-to-table"
           }
         ],
@@ -135061,7 +135073,7 @@
         ],
         "checker": {
           "checker_type": "exact_match",
-          "answer_variants": ["4 79,25"],
+          "answer_variants": ["4"],
           "numeric_tolerance": null
         }
       },
@@ -811677,6 +811689,981 @@
         }
       },
       "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-from-task-to-table-t09",
+        "title": "Скидка 50%: на какую сумму",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Введите число.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "В таблице покупок урока (лист «База») поставь в G2 скидку 50%. На какую сумму после скидки куплено то, что стоит больше 100 рублей?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Сложи цены после скидки только у покупок с признаком 1."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Больше 100 после скидки стоят только папки: 240 × 0,5 = 120. Тетради стоят ровно 100 и не входят."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `120`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 1,
+            "material_id": "excel-from-task-to-table"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["120"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-from-task-to-table-t10",
+        "title": "Максимум меньше остальных",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Введите число.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Строки чисел: 3, 4, 5, 6; 1, 2, 3, 9; 5, 5, 1, 9; 2, 2, 2, 6; 4, 4, 4, 4. В скольких строках максимум меньше суммы остальных чисел строки?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Для каждой строки: сумма, максимум и сравнение максимума с разностью суммы и максимума. Равенство не подходит."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Сравнения: 6 < 12 — да; 9 < 6 — нет; 9 < 11 — да; 6 < 6 — нет, условие строгое; 4 < 12 — да. Подходят три строки."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `3`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 2,
+            "material_id": "excel-from-task-to-table"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["3"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-from-task-to-table-t11",
+        "title": "Единица ответа: штуки",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Введите число.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Продажи за день: тетрадь 5 штук, ручка 3, тетрадь 2, папка 1, ручка 4, тетрадь 1. Сколько штук продано?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Единица ответа — штуки: нужна сумма количеств, а не число записей."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "5 + 3 + 2 + 1 + 4 + 1 = 16."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `16`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 3,
+            "material_id": "excel-from-task-to-table"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["16"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-from-task-to-table-t12",
+        "title": "Единица ответа: разные товары",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Введите число.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Продажи за день: тетрадь 5 штук, ручка 3, тетрадь 2, папка 1, ручка 4, тетрадь 1. Сколько разных товаров продано?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Единица ответа — разные значения: каждый товар считается один раз, при первом появлении."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Впервые встречаются тетрадь, ручка и папка; повторы тетради и ручки не считаются."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `3`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 4,
+            "material_id": "excel-from-task-to-table"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["3"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-from-task-to-table-t13",
+        "title": "Место больше, чем чисел",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Введите ответ так, как его покажет Excel.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "В A2:A4 стоят числа 7, 3 и 9. Что покажет ячейка с формулой `=НАИБОЛЬШИЙ(A2:A4;4)`?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Четвёртого по величине числа среди трёх нет — такой параметр недопустим."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Мест всего три, а запрошено четвёртое: недопустимый числовой параметр, Excel показывает `#ЧИСЛО!`."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `#ЧИСЛО!`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 5,
+            "material_id": "excel-from-task-to-table"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["#ЧИСЛО!", "#NUM!"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-from-task-to-table-t14",
+        "title": "Пограничная строка",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Введите число.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Строка подходит, если сумма её чисел не меньше 20. Строки: 5, 7, 8; 10, 9, 1; 6, 6, 7; 2, 3, 4. Сколько строк подходят?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "«Не меньше 20» включает и 20: проверь строки, сумма которых ровно 20."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Суммы: 20, 20, 19, 9. Не меньше 20 — первые две; 19 не подходит."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `2`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 6,
+            "material_id": "excel-from-task-to-table"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["2"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-from-task-to-table-t15",
+        "title": "Баллы не меньше 60: среднее",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Введите число; дробную часть — через запятую.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "В `A2:A7` — баллы 45, 80, 62, 80, 30, 95. Найди среднее баллов не меньше 60."
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Сумма подходящих баллов, делённая на их количество, — или `СРЗНАЧЕСЛИ(A2:A7;\">=60\")`."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "(80 + 62 + 80 + 95) / 4 = 317 / 4 = 79,25."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `79,25`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 8,
+            "material_id": "excel-from-task-to-table"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["79,25", "79.25"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-summary-t01",
+        "title": "Формула после копирования",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Введите формулу со знаком =, адреса латиницей.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Формулу `=A2*$B$1` из C2 скопировали в E5. Какая формула получилась в E5?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Относительный адрес сдвигается на столько же столбцов и строк, сколько формула; закреплённый — нет."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Из C2 в E5 — на два столбца вправо и три строки вниз: A2 становится C5, `$B$1` остаётся."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `=C5*$B$1`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 0,
+            "material_id": "excel-summary"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["=C5*$B$1"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-summary-t02",
+        "title": "Что считает СЧЁТ",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Введите число.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "В A1:A6 стоят: 10, текст «нет», пустая ячейка, 20, 0 и «5», введённое как текст. Что вернёт `=СЧЁТ(A1:A6)`?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "`СЧЁТ` считает только ячейки с числами; число, записанное текстом, — это текст."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Числа — 10, 20 и 0. «нет», пустая ячейка и текст «5» не считаются."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `3`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 1,
+            "material_id": "excel-summary"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["3"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-summary-t03",
+        "title": "Промежуток с границами",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Введите число.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Баллы: 59, 60, 75, 90, 91. Сколько из них подходят под условие «от 60 до 90 включительно»?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Оба сравнения нестрогие: `И(A2>=60;A2<=90)`."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Подходят 60, 75 и 90: границы входят. 59 и 91 — за пределами."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `3`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 2,
+            "material_id": "excel-summary"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["3"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-summary-t04",
+        "title": "Полные коробки",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Введите число.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "В коробку помещается 12 тетрадей, а тетрадей 100. Сколько коробок заполнено полностью?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Нужны только полные коробки: дробную часть частного отбрасывают, а не округляют."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "100 / 12 ≈ 8,33; `=ЦЕЛОЕ(100/12)` даёт 8. Остаток `=ОСТАТ(100;12)` = 4 тетради — в девятой, неполной."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `8`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 3,
+            "material_id": "excel-summary"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["8"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-summary-t05",
+        "title": "Сумма по городу",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Введите число.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "В A2:A6 — города Москва, Казань, Москва, Тула, Москва, в B2:B6 — суммы 100, 250, 150, 80, 50. Что вернёт `=СУММЕСЛИ(A2:A6;\"Москва\";B2:B6)`?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "`СУММЕСЛИ` проверяет критерий в первом диапазоне, а складывает соседние ячейки третьего."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Москва в строках 2, 4 и 6: 100 + 150 + 50 = 300."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `300`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 4,
+            "material_id": "excel-summary"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["300"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-summary-t06",
+        "title": "Цена по коду",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Введите число.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "В A2:A5 — коды 101, 102, 103, 104, в B2:B5 — цены 40, 20, 120, 15. Что вернёт `=ВПР(103;A2:B5;2;0)`?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "`ВПР` находит ключ в первом столбце и берёт значение из указанного столбца той же строки."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Код 103 — в третьей строке справочника, второй столбец — цена 120."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `120`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 5,
+            "material_id": "excel-summary"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["120"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
     }
   ],
   "files": [
@@ -826203,7 +827190,7 @@
     },
     {
       "id": "excel-from-task-to-table",
-      "sections": ["intro", "s1", "s2", "s3", "s4", "s5", "s6", "s7"],
+      "sections": ["intro", "s1", "s2", "s3", "s4", "s5", "s6"],
       "kind": "course",
       "status": "published",
       "course_id": "excel",
@@ -826268,6 +827255,14 @@
     {
       "id": "excel-sort-filter",
       "sections": ["intro", "s1", "s2", "s3"],
+      "kind": "course",
+      "status": "published",
+      "course_id": "excel",
+      "access": "paid"
+    },
+    {
+      "id": "excel-summary",
+      "sections": ["intro", "s1", "s2", "s3", "s4", "s5"],
       "kind": "course",
       "status": "published",
       "course_id": "excel",
@@ -830121,6 +831116,7 @@
         "excel-lookup",
         "excel-neighbour-cells",
         "excel-from-task-to-table",
+        "excel-summary",
         "excel-tables-pivots"
       ]
     }

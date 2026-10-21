@@ -59,6 +59,7 @@ export const excelSortFilterLessonPublication: Readonly<CourseLessonPublication>
 export const excelLookupLessonPublication: Readonly<CourseLessonPublication>;
 export const excelNeighbourCellsLessonPublication: Readonly<CourseLessonPublication>;
 export const excelFromTaskToTableLessonPublication: Readonly<CourseLessonPublication>;
+export const excelSummaryLessonPublication: Readonly<CourseLessonPublication>;
 export const excelTablesPivotsLessonPublication: Readonly<CourseLessonPublication>;
 export const pythonCoursePublication: Readonly<CoursePublication>;
 export const excelCoursePublication: Readonly<CoursePublication>;

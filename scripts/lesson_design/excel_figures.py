@@ -1784,6 +1784,227 @@ def vlookup_steps(key: str = "103", col: int = 3) -> str:
     return _stepper(vlookup_frames(key, col))
 
 
+# --- module 5 of the course: the course map (Change 197) ----------------------
+
+COURSE_COLS = {"A": 92, "B": 54, "C": 100, "D": 92, "E": 112, "F": 116, "G": 70}
+COURSE_HEAD = {
+    "A1": "Товар",
+    "B1": "Цена",
+    "C1": "Количество",
+    "D1": "Стоимость",
+    "E1": "После скидки",
+    "F1": "> 100",
+    "G1": "Скидка",
+}
+# the purchase table across the course: lesson, title, cells added or changed,
+# the cell in the formula bar, its content, hidden rows, the caption
+COURSE_TABLE = [
+    (
+        "1.1",
+        "Книга, лист, ячейка, диапазон",
+        {**{k: v for k, v in GOODS_SHEET.items() if k[0] in "ABC"}},
+        ("B2", "40"),
+        (),
+        "одна покупка — одна строка, свойство — столбец",
+    ),
+    (
+        "2.1",
+        "Первые формулы",
+        {"D1": "Стоимость", "D2": "200", "D3": "60", "D4": "240", "D5": "60"},
+        ("D2", "=B2*C2"),
+        (),
+        "стоимость формулой, скопированной вниз",
+    ),
+    (
+        "2.2",
+        "Копирование формул и знак $",
+        {
+            "E1": "После скидки",
+            "E2": "180",
+            "E3": "54",
+            "E4": "216",
+            "E5": "54",
+            "G1": "Скидка",
+            "G2": "10%",
+        },
+        ("E2", "=D2*(1-$G$2)"),
+        (),
+        "скидка в одной ячейке, адрес закреплён знаком $",
+    ),
+    (
+        "2.3",
+        "Функции по диапазону",
+        {"A7": "Итого", "E7": "504"},
+        ("E7", "=СУММ(E2:E5)"),
+        (),
+        "итог всего столбца одной функцией",
+    ),
+    (
+        "3.1",
+        "Проверки и ЕСЛИ",
+        {"F1": "> 100", "F2": "1", "F3": "0", "F4": "1", "F5": "0", "F7": "2"},
+        ("F2", "=ЕСЛИ(E2>100;1;0)"),
+        (),
+        "признак 1/0 для каждой покупки; сумма признаков — сколько покупок дороже 100",
+    ),
+    (
+        "3.3",
+        "Подсчёт и сумма по условию",
+        {"A7": "Ответ", "E7": "396"},
+        ("E7", "=СУММЕСЛИ(F2:F5;1;E2:E5)"),
+        (),
+        "в E7 теперь сумма только тех покупок, у которых признак 1",
+    ),
+    (
+        "4.1",
+        "Сортировка, фильтр, видимые строки",
+        {},
+        ("F1", "> 100"),
+        (3, 5),
+        "фильтр по признаку оставил две строки — столько же, сколько в F7",
+    ),
+    (
+        "5.1",
+        "От условия к таблице вычислений",
+        {"A8": "Проверка", "E8": "396", "F8": "2"},
+        ("F8", '=СЧЁТЕСЛИ(E2:E5;">100")'),
+        (),
+        "второй способ без признаков даёт те же 2 и 396",
+    ),
+]
+
+
+def course_table_frames() -> list[tuple[str, str]]:
+    """The purchase table of the course growing lesson by lesson: a strip of
+    lessons on top, the formula bar with the new formula, the sheet with the new
+    cells washed in the accent; a filter hides rows and colours their numbers."""
+    L, T, rh, rows, W = 40, 120, 30, 8, 680
+    h = T + rows * rh + 14
+    xs, x = {}, L
+    for col, w in COURSE_COLS.items():
+        xs[col] = (x, w)
+        x += w
+    frames, values = [], {}
+    n = len(COURSE_TABLE)
+    for k, (lesson, title, cells, (at, bar), hidden, note) in enumerate(COURSE_TABLE):
+        values.update(cells)
+        out = [_svg(h, f"Таблица покупок после урока {lesson}", W)]
+        # the course as a strip of lessons; this one filled
+        step = (W - 60) / (n - 1)
+        for i, (stop, *_rest) in enumerate(COURSE_TABLE):
+            cx = 30 + i * step
+            on, done = i == k, i <= k
+            if i:
+                out.append(
+                    f'<path d="M {cx - step + 7:.1f} 14 H {cx - 7:.1f}" '
+                    f'stroke="{ACCENT if done else FAINT}" stroke-width="1.5"/>'
+                )
+            out.append(
+                f'<circle cx="{cx:.1f}" cy="14" r="{6 if on else 4}" fill="{ACCENT if on else "#fff"}" '
+                f'stroke="{ACCENT if done else FAINT}" stroke-width="1.5"/>'
+            )
+            out.append(_t(cx, 38, stop, 12, INK if on else MUTED, "middle", 600 if on else 500, True))
+        # the formula bar across the width of the sheet
+        out.append(_box(6, 56, 64, 30, at, size=14, mono=True, color=INK))
+        out.append(_t(84, 76, "fx", 14, MUTED))
+        out.append(_box(104, 56, L + sum(COURSE_COLS.values()) - 104, 30))
+        out.append(_ref_text(114, 76, bar, 15))
+        # the sheet: hidden rows are skipped, the numbers after a gap turn blue
+        for col, (cx, w) in xs.items():
+            out.append(_box(cx, T - 24, w, 24, col, fill=WASH, color=MUTED, size=13, weight=500))
+        y = T
+        for r in range(1, rows + 1):
+            if r in hidden:
+                continue
+            filtered = bool(hidden) and 1 < r <= 5
+            out.append(
+                _box(
+                    L - 34,
+                    y,
+                    34,
+                    rh,
+                    str(r),
+                    fill=WASH,
+                    color=REF_COLORS[0] if filtered else MUTED,
+                    size=13,
+                    weight=600 if filtered else 500,
+                )
+            )
+            for col, (cx, w) in xs.items():
+                addr = f"{col}{r}"
+                out.append(_box(cx, y, w, rh))
+                if addr in cells:
+                    out.append(
+                        f'<rect x="{cx}" y="{y}" width="{w}" height="{rh}" fill="{ACCENT}" fill-opacity="0.13"/>'
+                    )
+                v = values.get(addr, "")
+                if v:
+                    right = typed(v) is not None and not isinstance(typed(v), str)
+                    out.append(
+                        _t(cx + w - 9 if right else cx + 9, y + rh / 2 + 5, v, 14.5, INK, "end" if right else "start")
+                    )
+                if addr == at:
+                    out.append(
+                        f'<rect x="{cx + 1}" y="{y + 1}" width="{w - 2}" height="{rh - 2}" fill="none" '
+                        f'stroke="{ACCENT}" stroke-width="2.5"/>'
+                    )
+                if hidden and addr == "F1":
+                    # the filter button of the column the filter is set on
+                    out.append(_box(cx + w - 21, y + 7, 16, 16, fill="#fff", stroke=REF_COLORS[0]))
+                    out.append(_arrow_head(cx + w - 13, y + 19, 0, 1, REF_COLORS[0]))
+            y += rh
+        out.append("</svg>")
+        caption = f"Урок {lesson}, «{title}»: {note}."
+        if k == 0:
+            caption += " Новые ячейки каждого шага подкрашены."
+        frames.append(("".join(out), caption))
+    return frames
+
+
+def course_table() -> str:
+    from figures import _stepper
+
+    return _stepper(course_table_frames())
+
+
+def exam_order() -> str:
+    """Five steps from the question to a checked answer, with the lessons each
+    comes from; a failed check goes back to the columns on a small set."""
+    steps = [
+        ("Вопрос", ["что найти,", "единица ответа"], "5.1"),
+        ("Файл", ["листы, типы,", "рабочая копия"], "1.2, 1.3"),
+        ("Столбцы", ["проверки", "словами"], "3.1, 5.1"),
+        ("Формулы", ["одна строка,", "затем столбец"], "2.1, 2.2"),
+        ("Проверить", ["другим путём,", "по масштабу"], "4.1, 5.1"),
+    ]
+    w, gap, x0, y, h = 120, 12, 6, 16, 104
+    out = [_svg(206, "Работа над задачей: вопрос, файл, столбцы, формулы, проверка")]
+    for k, (title, lines, lessons) in enumerate(steps):
+        x = x0 + k * (w + gap)
+        key = k == 2
+        out.append(_box(x, y, w, h, stroke=ACCENT if key else INK, sw=2 if key else 1.5, rx=8))
+        out.append(_t(x + w / 2, y + 28, title, 13.5, ACCENT if key else INK, "middle", 600))
+        for i, line in enumerate(lines):
+            out.append(_t(x + w / 2, y + 52 + i * 18, line, 12.5, MUTED, "middle"))
+        out.append(_t(x + w / 2, y + h - 10, lessons, 11, MUTED, "middle", mono=True))
+        if k:
+            out.append(
+                f'<path d="M {x - gap + 2} {y + h / 2} H {x - 8}" stroke="{MUTED}" stroke-width="1.5"/>'
+            )
+            out.append(_arrow_head(x - 2, y + h / 2, 1, 0))
+    right = x0 + 4 * (w + gap) + w / 2
+    left = x0 + 2 * (w + gap) + w / 2
+    bottom = y + h + 30
+    out.append(
+        f'<path d="M {right:.1f} {y + h + 2:.1f} V {bottom} H {left:.1f} V {y + h + 10:.1f}" '
+        f'fill="none" stroke="{MUTED}" stroke-width="1.5"/>'
+    )
+    out.append(_arrow_head(left, y + h + 2, 0, -1))
+    out.append(_t(330, bottom + 24, "не сошлось — назад к столбцам на маленьком наборе", 13, MUTED, "middle"))
+    out.append("</svg>")
+    return "".join(out)
+
+
 def _toned(builder):
     """A course lesson passes ``tone="excel"`` (Change 197): the builder then draws
     its one accent in the course colour instead of the orange of the topics."""
@@ -1825,6 +2046,8 @@ EXCEL_FIGURES = {
         "freq_steps": freq_steps,
         "pairs_arcs": pairs_arcs,
         "grid_paths": grid_paths,
+        "course_table": course_table,
+        "exam_order": exam_order,
     }.items()
 }
 EXCEL_WIDGETS = {"fill_try": "FillSandbox"}
@@ -1840,6 +2063,7 @@ EXCEL_STEPPERS = {
         "fill_down": fill_down_frames,
         "freq_steps": freq_frames,
         "grid_paths": grid_paths_frames,
+        "course_table": course_table_frames,
     }.items()
 }
 EXCEL_SCRIPTS = {"data-fill-try": FILL_TRY_JS}

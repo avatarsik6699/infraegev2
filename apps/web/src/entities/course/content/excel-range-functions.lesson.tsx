@@ -97,7 +97,7 @@ export const excelRangeFunctionsLesson = defineCourseLesson({
               языковых настройках (локали) разделитель аргументов — запятая,
               десятичный — точка, а имена английские:{" "}
               <Notation>{"SUM"}</Notation> вместо <Notation>{"СУММ"}</Notation>.
-              Таблица соответствий — в уроке 5.1. В LibreOffice Calc идеи те же,
+              Таблица соответствий — в уроке 5.2. В LibreOffice Calc идеи те же,
               но отдельные названия и клавиши могут отличаться.
             </Typography.Text>
           </ProofDisclosure>

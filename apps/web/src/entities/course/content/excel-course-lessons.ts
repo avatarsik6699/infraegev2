@@ -13,6 +13,7 @@ import { excelSortFilterLesson } from "./excel-sort-filter.lesson";
 import { excelLookupLesson } from "./excel-lookup.lesson";
 import { excelNeighbourCellsLesson } from "./excel-neighbour-cells.lesson";
 import { excelFromTaskToTableLesson } from "./excel-from-task-to-table.lesson";
+import { excelSummaryLesson } from "./excel-summary.lesson";
 import { excelTablesPivotsLesson } from "./excel-tables-pivots.lesson";
 
 export const excelCourseLessons: readonly CourseTypes.LessonDefinition[] = [
@@ -30,5 +31,6 @@ export const excelCourseLessons: readonly CourseTypes.LessonDefinition[] = [
   excelLookupLesson,
   excelNeighbourCellsLesson,
   excelFromTaskToTableLesson,
+  excelSummaryLesson,
   excelTablesPivotsLesson,
 ];

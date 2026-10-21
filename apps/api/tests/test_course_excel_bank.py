@@ -88,14 +88,23 @@ def _singles_and_repeats(row: list[int]) -> str:
     return f"{singles} {sum(row) - singles}"
 
 
-def _over_100(prices: list[float]) -> str:
-    chosen = [p for p in prices if p > 100]
-    return f"{len(chosen)} {_num(sum(chosen))}"
+def _after_discount(discount: float) -> list[float]:
+    """The purchase table of the course: cost × (1 − discount) per purchase."""
+    return [price * qty * (1 - discount) for price, qty in ((40, 5), (20, 3), (120, 2), (15, 4))]
 
 
-def _count_and_mean(scores: list[int]) -> str:
-    chosen = [s for s in scores if s >= 60]
-    return f"{len(chosen)} {_num(sum(chosen) / len(chosen))}"
+def _shift(formula: str, cols: int, rows: int) -> str:
+    """A formula copied by (cols, rows): the parts without $ move."""
+
+    def move(m: re.Match[str]) -> str:
+        col_fixed, col, row_fixed, row = m.groups()
+        if not col_fixed:
+            col = _column_after(chr(ord(col) + cols - 1))
+        if not row_fixed:
+            row = str(int(row) + rows)
+        return f"{col_fixed}{col}{row_fixed}{row}"
+
+    return re.sub(r"(\$?)([A-Z])(\$?)(\d+)", move, formula)
 
 
 # Answers recomputed by a method other than the lesson's.
@@ -244,8 +253,45 @@ RECOMPUTED = {
     "excel-neighbour-cells-t06": lambda: str(math.comb(1 + 2, 1)),
     "excel-neighbour-cells-t11": lambda: str(math.comb(2 + 3, 2)),
     "excel-neighbour-cells-t07": lambda: str(2**3),
-    "excel-from-task-to-table-t07": lambda: _over_100([200 * 0.5, 60 * 0.5, 240 * 0.5, 60 * 0.5]),
-    "excel-from-task-to-table-t08": lambda: _count_and_mean([45, 80, 62, 80, 30, 95]),
+    "excel-from-task-to-table-t07": lambda: str(sum(v > 100 for v in _after_discount(0.5))),
+    "excel-from-task-to-table-t09": lambda: _num(sum(v for v in _after_discount(0.5) if v > 100)),
+    "excel-from-task-to-table-t10": lambda: str(
+        sum(
+            max(row) < sum(row) - max(row)
+            for row in ((3, 4, 5, 6), (1, 2, 3, 9), (5, 5, 1, 9), (2, 2, 2, 6), (4, 4, 4, 4))
+        )
+    ),
+    "excel-from-task-to-table-t11": lambda: str(sum((5, 3, 2, 1, 4, 1))),
+    "excel-from-task-to-table-t12": lambda: str(
+        len({"тетрадь", "ручка", "тетрадь", "папка", "ручка", "тетрадь"})
+    ),
+    "excel-from-task-to-table-t13": lambda: "#ЧИСЛО!" if 4 > len((7, 3, 9)) else "",
+    "excel-from-task-to-table-t14": lambda: str(
+        sum(sum(row) >= 20 for row in ((5, 7, 8), (10, 9, 1), (6, 6, 7), (2, 3, 4)))
+    ),
+    "excel-from-task-to-table-t08": lambda: str(sum(s >= 60 for s in (45, 80, 62, 80, 30, 95))),
+    "excel-from-task-to-table-t15": lambda: _num(
+        sum(s for s in (45, 80, 62, 80, 30, 95) if s >= 60)
+        / sum(s >= 60 for s in (45, 80, 62, 80, 30, 95))
+    ),
+    "excel-summary-t01": lambda: _shift("=A2*$B$1", 2, 3),
+    "excel-summary-t02": lambda: str(
+        sum(isinstance(v, int) for v in (10, "нет", None, 20, 0, "5"))
+    ),
+    "excel-summary-t03": lambda: str(sum(60 <= s <= 90 for s in (59, 60, 75, 90, 91))),
+    "excel-summary-t04": lambda: str(100 // 12),
+    "excel-summary-t05": lambda: str(
+        sum(
+            v
+            for c, v in zip(
+                ("Москва", "Казань", "Москва", "Тула", "Москва"),
+                (100, 250, 150, 80, 50),
+                strict=True,
+            )
+            if c == "Москва"
+        )
+    ),
+    "excel-summary-t06": lambda: str(dict(zip((101, 102, 103, 104), (40, 20, 120, 15), strict=True))[103]),
     "excel-tables-pivots-t04": lambda: str(300 + 250),
 }
 

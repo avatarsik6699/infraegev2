@@ -970,7 +970,7 @@
     },
     {
       "id": "excel-from-task-to-table",
-      "sections": ["intro", "s1", "s2", "s3", "s4", "s5", "s6", "s7"],
+      "sections": ["intro", "s1", "s2", "s3", "s4", "s5", "s6"],
       "kind": "course",
       "status": "published",
       "course_id": "excel",
@@ -1035,6 +1035,14 @@
     {
       "id": "excel-sort-filter",
       "sections": ["intro", "s1", "s2", "s3"],
+      "kind": "course",
+      "status": "published",
+      "course_id": "excel",
+      "access": "paid"
+    },
+    {
+      "id": "excel-summary",
+      "sections": ["intro", "s1", "s2", "s3", "s4", "s5"],
       "kind": "course",
       "status": "published",
       "course_id": "excel",
@@ -4888,6 +4896,7 @@
         "excel-lookup",
         "excel-neighbour-cells",
         "excel-from-task-to-table",
+        "excel-summary",
         "excel-tables-pivots"
       ]
     }
