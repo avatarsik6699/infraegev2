@@ -88,11 +88,6 @@ def _singles_and_repeats(row: list[int]) -> str:
     return f"{singles} {sum(row) - singles}"
 
 
-def _filtered_sums(sums: list[int], filtered: list[int], hidden: list[int]) -> str:
-    total = sum(sums)
-    return f"{total} {total - sum(filtered)} {total - sum(filtered) - sum(hidden)}"
-
-
 def _over_100(prices: list[float]) -> str:
     chosen = [p for p in prices if p > 100]
     return f"{len(chosen)} {_num(sum(chosen))}"
@@ -221,22 +216,33 @@ RECOMPUTED = {
         if datetime.datetime(2026, 10, 15, 12, 30) <= datetime.datetime(2026, 10, 15)
         else "ЛОЖЬ"
     ),
-    "excel-sort-filter-t02": lambda: _filtered_sums([10, 20, 30, 40, 50, 60], [20, 50], [60]),
+    "excel-sort-filter-t02": lambda: str(sum([10, 20, 30, 40, 50, 60])),
+    "excel-sort-filter-t09": lambda: str(sum(v for v in [10, 20, 30, 40, 50, 60] if v not in (20, 50, 60))),
+    "excel-sort-filter-t10": lambda: str(sum(v for v in [10, 20, 30, 40, 50, 60] if v not in (20, 50))),
+    "excel-sort-filter-t11": lambda: str(100 + 150 + 50),
+    "excel-sort-filter-t12": lambda: str(
+        sum(c == "Москва" and v >= 80 for c, v in (("Москва", 72), ("Москва", 85), ("Москва", 90), ("Казань", 88)))
+    ),
+    "excel-sort-filter-t13": lambda: str(sorted([40, 20, 120, 15])[0]),
     "excel-lookup-t02": lambda: str("CDEF".index("E") + 1),
-    "excel-lookup-t03": lambda: f"{[101, 102, 103, 104].index(104) + 1} Кофе",
-    "excel-lookup-t06": lambda: (
-        f"{sum(q for c, q in ((101, 2), (101, 3), (104, 4), (103, 5)) if c != 103)} "
-        f"{sum(c != 103 for c in (101, 101, 104, 103))}"
+    "excel-lookup-t10": lambda: str(dict(zip((101, 102, 103, 104), (100, 250, 200, 150), strict=True))[103]),
+    "excel-lookup-t11": lambda: "#Н/Д" if 105 not in (101, 102, 103, 104) else "",
+    "excel-lookup-t03": lambda: str([101, 102, 103, 104].index(104) + 1),
+    "excel-lookup-t09": lambda: ["Чай", "Кофе", "Печенье", "Какао"][2 - 1],
+    "excel-lookup-t06": lambda: str(
+        sum(q for c, q in ((101, 2), (101, 3), (104, 4), (103, 5)) if c != 103)
     ),
-    "excel-neighbour-cells-t01": lambda: f"{100 - 1} B{101 - 1}",
-    "excel-neighbour-cells-t02": lambda: " ".join(
-        str(sum([50, 30, 20, 100][: k + 1])) for k in range(4)
-    ),
+    "excel-lookup-t12": lambda: str(sum(c != 103 for c in (101, 101, 104, 103))),
+    "excel-neighbour-cells-t01": lambda: str(100 - 1),
+    "excel-neighbour-cells-t09": lambda: f"B{101 - 1}",
+    "excel-neighbour-cells-t02": lambda: str(sum([50, 30, 20, 100][:3])),
     "excel-neighbour-cells-t04": lambda: str(
         sum(a % 3 == 0 or b % 3 == 0 for a, b in zip([4, 8, 6, 5], [8, 6, 5, 7], strict=True))
     ),
-    "excel-neighbour-cells-t05": lambda: f"{min((4, 9, 15))} {max((4, 9, 15))}",
-    "excel-neighbour-cells-t06": lambda: f"{math.comb(1 + 2, 1)} {math.comb(2 + 3, 2)}",
+    "excel-neighbour-cells-t05": lambda: str(min((4, 9, 15))),
+    "excel-neighbour-cells-t10": lambda: str(max((4, 9, 15))),
+    "excel-neighbour-cells-t06": lambda: str(math.comb(1 + 2, 1)),
+    "excel-neighbour-cells-t11": lambda: str(math.comb(2 + 3, 2)),
     "excel-neighbour-cells-t07": lambda: str(2**3),
     "excel-from-task-to-table-t07": lambda: _over_100([200 * 0.5, 60 * 0.5, 240 * 0.5, 60 * 0.5]),
     "excel-from-task-to-table-t08": lambda: _count_and_mean([45, 80, 62, 80, 30, 95]),

@@ -1290,6 +1290,130 @@ def freq_steps(row: list[int] | tuple = (4, 4, 1, 2, 3, 5)) -> str:
     return _stepper(freq_frames(row))
 
 
+# --- module 4 of the course (Change 197) -------------------------------------------
+
+
+def pairs_arcs(values: list[int] | tuple = (4, 5, 9, 7, 8, 12), k: int = 3) -> str:
+    """Neighbour pairs of a column laid out in a row: n numbers make n − 1 pairs,
+    the formula of pair i stands in the row of its first number; pairs with a
+    multiple of k are marked."""
+    vals = [int(v) for v in values]
+    n = len(vals)
+    cw, gap, L, base = 64, 18, 24, 118
+    out = [_svg(232, f"{n} чисел дают {n - 1} соседних пар")]
+
+    def cx(i):
+        return L + i * (cw + gap) + cw / 2
+
+    for i in range(n - 1):
+        hit = vals[i] % k == 0 or vals[i + 1] % k == 0
+        colour = ACCENT if hit else MUTED
+        x0, x1 = cx(i), cx(i + 1)
+        top = base - 46
+        out.append(
+            f'<path d="M {x0:.1f} {base - 4} C {x0:.1f} {top}, {x1:.1f} {top}, {x1:.1f} {base - 4}" '
+            f'fill="none" stroke="{colour}" stroke-width="{2.5 if hit else 1.5}"/>'
+        )
+        out.append(_t((x0 + x1) / 2, top + 4, f"B{i + 2}", 13.5, INK if hit else MUTED, "middle", 600 if hit else 400, mono=True))
+    for i, v in enumerate(vals):
+        x = L + i * (cw + gap)
+        out.append(_box(x, base, cw, 34, str(v), size=16, rx=6, stroke=MUTED, weight=700 if v % k == 0 else 400))
+        out.append(_t(x + cw / 2, base + 54, f"A{i + 2}", 13, MUTED, "middle", mono=True))
+    out.append(_t(24, 26, f"{n} чисел → {n - 1} пар: формулы в B2:B{n}", 15, INK, weight=600))
+    hits = sum(vals[i] % k == 0 or vals[i + 1] % k == 0 for i in range(n - 1))
+    out.append(
+        _t(24, 214, f"пар с числом, кратным {k}: {hits}; у A{n + 1} пары нет — формула в B{n + 1} лишняя", 14, MUTED)
+    )
+    out.append("</svg>")
+    return "".join(out)
+
+
+def grid_paths_frames(rows: int = 4, cols: int = 4) -> list[tuple[str, str]]:
+    """Paths «only right and down» counted cell by cell: an edge cell has one
+    way in, an inner cell sums its left and upper neighbours."""
+    ways = [[1] * cols for _ in range(rows)]
+    for r in range(1, rows):
+        for c in range(1, cols):
+            ways[r][c] = ways[r][c - 1] + ways[r - 1][c]
+    cw, rh, L, T = 70, 44, 58, 52
+    h = T + rows * rh + 16
+    letters = [col_letters(c + 1) for c in range(cols)]
+    px = L + cols * cw + 34
+
+    def frame(done, at, note):
+        out = [_svg(h, "Число путей вправо и вниз, клетка за клеткой")]
+        for c in range(cols):
+            out.append(_box(L + c * cw, T - 24, cw, 24, letters[c], fill=WASH, color=MUTED, size=13, weight=500))
+        for r in range(rows):
+            out.append(_box(L - 34, T + r * rh, 34, rh, str(r + 1), fill=WASH, color=MUTED, size=13, weight=500))
+            for c in range(cols):
+                shown = str(ways[r][c]) if (r, c) in done else ""
+                edge = r == 0 or c == 0
+                out.append(
+                    _box(L + c * cw, T + r * rh, cw, rh, shown, fill=WASH if edge and shown else "#fff", size=17, weight=700 if (r, c) == at else 400)
+                )
+        if at is not None:
+            r, c = at
+            x, y = L + c * cw, T + r * rh
+            if r and c:
+                for (rr, cc), colour in (((r, c - 1), REF_COLORS[0]), ((r - 1, c), REF_COLORS[1])):
+                    out.append(
+                        f'<rect x="{L + cc * cw + 2}" y="{T + rr * rh + 2}" width="{cw - 4}" height="{rh - 4}" fill="none" stroke="{colour}" stroke-width="2.5"/>'
+                    )
+                out.append(_arrow_head(x + 10, y + rh / 2, 1, 0, REF_COLORS[0]))
+                out.append(_arrow_head(x + cw / 2, y + 10, 0, 1, REF_COLORS[1]))
+                out.append(_t(px, T + 20, f"{letters[c]}{r + 1} = {letters[c - 1]}{r + 1} + {letters[c]}{r}", 16, INK, weight=600, mono=True))
+                out.append(
+                    _t(px, T + 46, f"{ways[r][c - 1]} + {ways[r - 1][c]} = {ways[r][c]}", 16, INK, weight=600, mono=True)
+                )
+                out.append(_t(px, T + 74, "слева", 13.5, REF_COLORS[0], weight=600))
+                out.append(_t(px + 52, T + 74, "сверху", 13.5, REF_COLORS[1], weight=600))
+            out.append(
+                f'<rect x="{x + 1}" y="{y + 1}" width="{cw - 2}" height="{rh - 2}" fill="none" stroke="{ACCENT}" stroke-width="2.5"/>'
+            )
+        out.append("</svg>")
+        return ("".join(out), note)
+
+    frames = []
+    done = {(0, 0)}
+    frames.append(frame(set(done), (0, 0), "A1 — старт: в неё ведёт один путь — стоять на месте."))
+    for c in range(1, cols):
+        done.add((0, c))
+    for r in range(1, rows):
+        done.add((r, 0))
+    frames.append(
+        frame(
+            set(done),
+            None,
+            "Первая строка и первый столбец: туда можно прийти только по прямой — по одному пути.",
+        )
+    )
+    for r in range(1, rows):
+        for c in range(1, cols):
+            done.add((r, c))
+            cell = f"{letters[c]}{r + 1}"
+            note = (
+                f"{cell}: прийти можно слева или сверху, поэтому путей "
+                f"{ways[r][c - 1]} + {ways[r - 1][c]} = {ways[r][c]}."
+            )
+            frames.append(frame(set(done), (r, c), note))
+    last = f"{letters[cols - 1]}{rows}"
+    frames.append(
+        frame(
+            set(done),
+            None,
+            f"Сетка заполнена: в {last} ведут {ways[rows - 1][cols - 1]} путей. Каждая клетка посчитана из уже готовых соседей.",
+        )
+    )
+    return frames
+
+
+def grid_paths(rows: int = 4, cols: int = 4) -> str:
+    from figures import _stepper
+
+    return _stepper(grid_paths_frames(rows, cols))
+
+
 ROUNDERS = [
     ("ОКРУГЛ", "к ближайшему целому", "=ОКРУГЛ({};0)"),
     ("ОКРУГЛВВЕРХ", "от нуля", "=ОКРУГЛВВЕРХ({};0)"),
@@ -1699,6 +1823,8 @@ EXCEL_FIGURES = {
         "interval_logic": interval_logic,
         "groups": groups,
         "freq_steps": freq_steps,
+        "pairs_arcs": pairs_arcs,
+        "grid_paths": grid_paths,
     }.items()
 }
 EXCEL_WIDGETS = {"fill_try": "FillSandbox"}
@@ -1713,6 +1839,7 @@ EXCEL_STEPPERS = {
         "point_entry": point_entry_frames,
         "fill_down": fill_down_frames,
         "freq_steps": freq_frames,
+        "grid_paths": grid_paths_frames,
     }.items()
 }
 EXCEL_SCRIPTS = {"data-fill-try": FILL_TRY_JS}

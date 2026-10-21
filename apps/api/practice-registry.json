@@ -994,7 +994,7 @@
     },
     {
       "id": "excel-neighbour-cells",
-      "sections": ["intro", "s1", "s2", "s3", "s4", "s5", "s6"],
+      "sections": ["intro", "s1", "s2", "s3", "s4", "s5"],
       "kind": "course",
       "status": "published",
       "course_id": "excel",
@@ -1034,7 +1034,7 @@
     },
     {
       "id": "excel-sort-filter",
-      "sections": ["intro", "s1", "s2", "s3", "s4"],
+      "sections": ["intro", "s1", "s2", "s3"],
       "kind": "course",
       "status": "published",
       "course_id": "excel",

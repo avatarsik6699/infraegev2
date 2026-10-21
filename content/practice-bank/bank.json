@@ -134152,19 +134152,19 @@
     {
       "task": {
         "id": "excel-sort-filter-t02",
-        "title": "В таблице 6 строк с суммами 10, 20, 30, 40, 50, 60",
+        "title": "СУММ при фильтре",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 1,
         "estimated_minutes": null,
-        "answer_instruction": "Запишите ответы через пробел в порядке вопроса.",
+        "answer_instruction": "Введите число.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "В таблице 6 строк с суммами 10, 20, 30, 40, 50, 60. Фильтр скрыл строки с суммами 20 и 50, вручную скрыта строка с 60. Что вернут `СУММ`, `ПРОМЕЖУТОЧНЫЕ.ИТОГИ` с кодом 9 и с кодом 109?"
+              "markdown": "В таблице 6 строк с суммами 10, 20, 30, 40, 50, 60. Фильтр скрыл строки с 20 и 50, вручную скрыта строка с 60. Что вернёт `СУММ` по всем шести ячейкам?"
             }
           }
         ],
@@ -134172,7 +134172,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Сортировка, фильтр, видимые строки»: рассуди по шагам, а затем проверь в Excel."
+              "markdown": "`СУММ` не смотрит, какие строки спрятаны."
             }
           }
         ],
@@ -134180,7 +134180,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "210, 140 и 80."
+              "markdown": "Все шесть сумм: 10 + 20 + 30 + 40 + 50 + 60 = 210."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `210`"
             }
           }
         ],
@@ -134212,7 +134218,7 @@
         ],
         "checker": {
           "checker_type": "exact_match",
-          "answer_variants": ["210 140 80"],
+          "answer_variants": ["210"],
           "numeric_tolerance": null
         }
       },
@@ -134221,7 +134227,7 @@
     {
       "task": {
         "id": "excel-lookup-t02",
-        "title": "Справочник лежит в Товары!C10:F40, ключ — в столбце C, категория — в столбце E",
+        "title": "Номер столбца для ВПР",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 1,
@@ -134241,7 +134247,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Поиск по ключу»: рассуди по шагам, а затем проверь в Excel."
+              "markdown": "Столбцы считают внутри диапазона, а не от A."
             }
           }
         ],
@@ -134249,7 +134255,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "3: внутри диапазона `C:F` столбец E — третий."
+              "markdown": "C — первый, D — второй, E — третий."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `3`"
             }
           }
         ],
@@ -134290,19 +134302,19 @@
     {
       "task": {
         "id": "excel-lookup-t03",
-        "title": "Что вернёт =ПОИСКПОЗ(104;Товары!$A$2:$A$5;0)?",
+        "title": "ПОИСКПОЗ",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 1,
         "estimated_minutes": null,
-        "answer_instruction": "Запишите ответы через пробел в порядке вопроса.",
+        "answer_instruction": "Введите число.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Что вернёт `=ПОИСКПОЗ(104;Товары!$A$2:$A$5;0)`? А `=ИНДЕКС(Товары!$B$2:$B$5;2)`?"
+              "markdown": "Справочник урока `Товары!A2:D5`: коды 101–104, названия Чай, Кофе, Печенье, Какао, категории Напитки, Напитки, Выпечка, Напитки, масса 100, 250, 200, 150. Что вернёт `=ПОИСКПОЗ(104;Товары!$A$2:$A$5;0)`?"
             }
           }
         ],
@@ -134310,7 +134322,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Поиск по ключу»: рассуди по шагам, а затем проверь в Excel."
+              "markdown": "Позиция считается внутри диапазона, с 1."
             }
           }
         ],
@@ -134318,7 +134330,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "4 и «Кофе»."
+              "markdown": "104 — четвёртый код в списке."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `4`"
             }
           }
         ],
@@ -134327,7 +134345,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 1,
+            "position": 3,
             "material_id": "excel-lookup"
           }
         ],
@@ -134350,7 +134368,7 @@
         ],
         "checker": {
           "checker_type": "exact_match",
-          "answer_variants": ["4 Кофе"],
+          "answer_variants": ["4"],
           "numeric_tolerance": null
         }
       },
@@ -134359,19 +134377,19 @@
     {
       "task": {
         "id": "excel-lookup-t06",
-        "title": "По операциям с кодами 101, 101, 104 и 103 и количествами 2, 3, 4 и 5 найди,…",
+        "title": "Упаковки напитков",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 1,
         "estimated_minutes": null,
-        "answer_instruction": "Запишите ответы через пробел в порядке вопроса.",
+        "answer_instruction": "Введите число.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "По операциям с кодами 101, 101, 104 и 103 и количествами 2, 3, 4 и 5 найди, сколько упаковок напитков продано и сколько было операций с напитками."
+              "markdown": "Операции с кодами 101, 101, 104 и 103 и количествами 2, 3, 4 и 5; категорию находят по справочнику урока (101 и 104 — напитки, 103 — выпечка). Сколько упаковок напитков продано?"
             }
           }
         ],
@@ -134379,7 +134397,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Поиск по ключу»: рассуди по шагам, а затем проверь в Excel."
+              "markdown": "Сложи количества операций, где товар — напиток."
             }
           }
         ],
@@ -134387,7 +134405,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "9 упаковок и 3 операции: напитки — 101, 101, 104 (2 + 3 + 4)."
+              "markdown": "Напитки — 101, 101, 104: 2 + 3 + 4 = 9."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `9`"
             }
           }
         ],
@@ -134396,7 +134420,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 2,
+            "position": 5,
             "material_id": "excel-lookup"
           }
         ],
@@ -134419,7 +134443,7 @@
         ],
         "checker": {
           "checker_type": "exact_match",
-          "answer_variants": ["9 3"],
+          "answer_variants": ["9"],
           "numeric_tolerance": null
         }
       },
@@ -134428,19 +134452,19 @@
     {
       "task": {
         "id": "excel-neighbour-cells-t01",
-        "title": "В A2:A101 записано 100 чисел",
+        "title": "Сколько пар",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 1,
         "estimated_minutes": null,
-        "answer_instruction": "Запишите ответы через пробел в порядке вопроса.",
+        "answer_instruction": "Введите число.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "В `A2:A101` записано 100 чисел. Сколько соседних пар? До какой строки нужно заполнить формулу, сравнивающую `A2` и `A3`, если первая формула находится в `B2`?"
+              "markdown": "В `A2:A101` записано 100 чисел. Сколько соседних пар?"
             }
           }
         ],
@@ -134448,7 +134472,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Расчёт по соседним ячейкам»: рассуди по шагам, а затем проверь в Excel."
+              "markdown": "n чисел дают n − 1 пар."
             }
           }
         ],
@@ -134456,7 +134480,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Пар 99. Первая использует `A2` и `A3`, последняя — `A100` и `A101`. Формулу в `B2` нужно заполнить до `B100`."
+              "markdown": "Первая пара — A2 и A3, последняя — A100 и A101: 99 пар."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `99`"
             }
           }
         ],
@@ -134488,7 +134518,7 @@
         ],
         "checker": {
           "checker_type": "exact_match",
-          "answer_variants": ["99 B100"],
+          "answer_variants": ["99"],
           "numeric_tolerance": null
         }
       },
@@ -134497,19 +134527,19 @@
     {
       "task": {
         "id": "excel-neighbour-cells-t02",
-        "title": "Расходы по дням: 50, 30, 20, 100",
+        "title": "Сделай сам: накопленный итог",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 2,
         "estimated_minutes": null,
-        "answer_instruction": "Запишите ответы через пробел в порядке вопроса.",
+        "answer_instruction": "Введите число.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Расходы по дням: 50, 30, 20, 100. Каким будет накопленный итог в каждой строке?"
+              "markdown": "Расходы по дням: 50, 30, 20, 100. Каким будет накопленный итог за третий день?"
             }
           },
           {
@@ -134523,7 +134553,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Расчёт по соседним ячейкам»: рассуди по шагам, а затем проверь в Excel."
+              "markdown": "Итог дня — итог предыдущего дня плюс расход этого дня."
             }
           }
         ],
@@ -134531,7 +134561,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "50, 80, 100 и 200."
+              "markdown": "50, затем 50 + 30 = 80, затем 80 + 20 = 100: `=B2+A3` вниз."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `100`"
             }
           }
         ],
@@ -134547,75 +134583,6 @@
             "description": "Задачник курса: лист «Задачи» — данные задачи и жёлтые ячейки для формул, лист «Ответы» — решения формулами"
           }
         ],
-        "lessons": [
-          {
-            "position": 1,
-            "material_id": "excel-neighbour-cells"
-          }
-        ],
-        "theory_links": [],
-        "catalog_visible": false,
-        "archived": false,
-        "sources": [
-          {
-            "url": null,
-            "kind": "original",
-            "role": "original",
-            "year": null,
-            "title": null,
-            "author": null,
-            "primary": true,
-            "is_public": true,
-            "adaptation": null,
-            "original_id": null
-          }
-        ],
-        "checker": {
-          "checker_type": "exact_match",
-          "answer_variants": ["50 80 100 200"],
-          "numeric_tolerance": null
-        }
-      },
-      "solution_revision": 1
-    },
-    {
-      "task": {
-        "id": "excel-neighbour-cells-t04",
-        "title": "Для последовательности 4, 8, 6, 5, 7 посчитай пары соседей, в которых хотя…",
-        "short_description": null,
-        "explanation_kind": "unclassified",
-        "difficulty": 1,
-        "estimated_minutes": null,
-        "answer_instruction": "Введите число.",
-        "interaction_type": "production",
-        "content_schema_version": 1,
-        "statement": [
-          {
-            "type": "text",
-            "data": {
-              "markdown": "Для последовательности 4, 8, 6, 5, 7 посчитай пары соседей, в которых хотя бы одно число кратно 3."
-            }
-          }
-        ],
-        "hint": [
-          {
-            "type": "text",
-            "data": {
-              "markdown": "Опора — урок «Расчёт по соседним ячейкам»: рассуди по шагам, а затем проверь в Excel."
-            }
-          }
-        ],
-        "explanation": [
-          {
-            "type": "text",
-            "data": {
-              "markdown": "Две: (8, 6) и (6, 5) — в обеих есть 6; в парах (4, 8) и (5, 7) кратных 3 нет."
-            }
-          }
-        ],
-        "skills": [],
-        "exam_numbers": [],
-        "files": [],
         "lessons": [
           {
             "position": 2,
@@ -134641,7 +134608,7 @@
         ],
         "checker": {
           "checker_type": "exact_match",
-          "answer_variants": ["2"],
+          "answer_variants": ["100"],
           "numeric_tolerance": null
         }
       },
@@ -134649,20 +134616,20 @@
     },
     {
       "task": {
-        "id": "excel-neighbour-cells-t05",
-        "title": "В столбце D для подходящих строк стоит =СТРОКА(), для остальных \"\"",
+        "id": "excel-neighbour-cells-t04",
+        "title": "Пары с кратным 3",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 1,
         "estimated_minutes": null,
-        "answer_instruction": "Запишите ответы через пробел в порядке вопроса.",
+        "answer_instruction": "Введите число.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "В столбце D для подходящих строк стоит `=СТРОКА()`, для остальных `\"\"`. Подходят строки 4, 9 и 15. Что вернут `=МИН(D2:D20)` и `=МАКС(D2:D20)`?"
+              "markdown": "Для последовательности 4, 8, 6, 5, 7 посчитай соседние пары, в которых хотя бы одно число кратно 3."
             }
           }
         ],
@@ -134670,7 +134637,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Расчёт по соседним ячейкам»: рассуди по шагам, а затем проверь в Excel."
+              "markdown": "Выпиши пары и найди в них 6."
             }
           }
         ],
@@ -134678,7 +134645,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "4 и 15."
+              "markdown": "Пары (8, 6) и (6, 5) содержат 6; в (4, 8) и (5, 7) кратных 3 нет."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `2`"
             }
           }
         ],
@@ -134710,7 +134683,7 @@
         ],
         "checker": {
           "checker_type": "exact_match",
-          "answer_variants": ["4 15"],
+          "answer_variants": ["2"],
           "numeric_tolerance": null
         }
       },
@@ -134718,20 +134691,20 @@
     },
     {
       "task": {
-        "id": "excel-neighbour-cells-t06",
-        "title": "Сколько путей «только вправо и вниз» ведёт из A1 в C2?",
+        "id": "excel-neighbour-cells-t05",
+        "title": "Первая подходящая строка",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 1,
         "estimated_minutes": null,
-        "answer_instruction": "Запишите ответы через пробел в порядке вопроса.",
+        "answer_instruction": "Введите число.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Сколько путей «только вправо и вниз» ведёт из `A1` в `C2`? А в `D3`?"
+              "markdown": "В столбце D для подходящих строк стоит `=СТРОКА()`, для остальных `\"\"`. Подходят строки 4, 9 и 15. Что вернёт `=МИН(D2:D20)`?"
             }
           }
         ],
@@ -134739,7 +134712,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Расчёт по соседним ячейкам»: рассуди по шагам, а затем проверь в Excel."
+              "markdown": "`МИН` пропускает пустой текст."
             }
           }
         ],
@@ -134747,7 +134720,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "3 и 10."
+              "markdown": "Числа 4, 9, 15 — наименьшее 4."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `4`"
             }
           }
         ],
@@ -134779,7 +134758,7 @@
         ],
         "checker": {
           "checker_type": "exact_match",
-          "answer_variants": ["3 10"],
+          "answer_variants": ["4"],
           "numeric_tolerance": null
         }
       },
@@ -134787,8 +134766,8 @@
     },
     {
       "task": {
-        "id": "excel-neighbour-cells-t07",
-        "title": "Сколько строк понадобится, чтобы перебрать все наборы трёх логических…",
+        "id": "excel-neighbour-cells-t06",
+        "title": "Пути в C2",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 1,
@@ -134800,7 +134779,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Сколько строк понадобится, чтобы перебрать все наборы трёх логических переменных?"
+              "markdown": "Сколько путей «только вправо и вниз» ведёт из `A1` в `C2`?"
             }
           }
         ],
@@ -134808,7 +134787,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Расчёт по соседним ячейкам»: рассуди по шагам, а затем проверь в Excel."
+              "markdown": "Заполни сетку: края — по 1, внутри — сумма левого и верхнего."
             }
           }
         ],
@@ -134816,7 +134795,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "8 = 2³."
+              "markdown": "B2 = 2, C2 = B2 + C1 = 2 + 1 = 3."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `3`"
             }
           }
         ],
@@ -134825,7 +134810,82 @@
         "files": [],
         "lessons": [
           {
-            "position": 5,
+            "position": 6,
+            "material_id": "excel-neighbour-cells"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["3"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-neighbour-cells-t07",
+        "title": "Наборы трёх переменных",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Введите число.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Сколько строк нужно, чтобы перебрать все наборы трёх логических переменных?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "У каждой переменной два значения, выборы независимы."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "2 × 2 × 2 = 2³ = 8."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `8`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 8,
             "material_id": "excel-neighbour-cells"
           }
         ],
@@ -810717,6 +810777,906 @@
         }
       },
       "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-sort-filter-t09",
+        "title": "Код 109",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Введите число.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "В таблице 6 строк с суммами 10, 20, 30, 40, 50, 60. Фильтр скрыл строки с 20 и 50, вручную скрыта строка с 60. Что вернёт `ПРОМЕЖУТОЧНЫЕ.ИТОГИ(109;…)` по этим ячейкам?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "109 пропускает и отфильтрованные, и скрытые вручную строки."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Видны только 10, 30 и 40: сумма 80."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `80`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 1,
+            "material_id": "excel-sort-filter"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["80"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-sort-filter-t10",
+        "title": "Код 9",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Введите число.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "В таблице 6 строк с суммами 10, 20, 30, 40, 50, 60. Фильтр скрыл строки с 20 и 50, вручную скрыта строка с 60. Что вернёт `ПРОМЕЖУТОЧНЫЕ.ИТОГИ(9;…)`?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Код 9 пропускает только отфильтрованные строки."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Без 20 и 50, но со скрытой вручную 60: 10 + 30 + 40 + 60 = 140."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `140`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 2,
+            "material_id": "excel-sort-filter"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["140"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-sort-filter-t11",
+        "title": "Строка состояния",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Введите число.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "После фильтра «город — Москва» в столбце сумм видны 100, 150 и 50. Выделили видимые ячейки столбца. Что покажет «Сумма» в строке состояния?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Строка состояния считает только видимые ячейки выделения."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "100 + 150 + 50 = 300."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `300`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 3,
+            "material_id": "excel-sort-filter"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["300"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-sort-filter-t12",
+        "title": "Два фильтра сразу",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Введите число.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "В таблице строки: Москва 72, Москва 85, Москва 90, Казань 88. Фильтр «город — Москва» не сбросили и добавили фильтр «балл не меньше 80». Сколько строк видно?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Фильтры разных столбцов действуют вместе."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Москва и балл не меньше 80: 85 и 90 — две строки."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `2`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 4,
+            "material_id": "excel-sort-filter"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["2"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-sort-filter-t13",
+        "title": "Сортировка одного столбца",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Введите число.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Исходно: Тетрадь 40, Ручка 20, Папка 120, Карандаш 15. Отсортировали по возрастанию только столбец цен, названия остались на месте. Какая цена теперь стоит рядом с тетрадью?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "После сортировки первая цена столбца — наименьшая."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Цены стали 15, 20, 40, 120; тетрадь в первой строке получила 15 — данные перемешались."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `15`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 5,
+            "material_id": "excel-sort-filter"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["15"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-lookup-t10",
+        "title": "ВПР массы",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Введите число.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Справочник урока `Товары!A2:D5`: коды 101–104, названия Чай, Кофе, Печенье, Какао, категории Напитки, Напитки, Выпечка, Напитки, масса 100, 250, 200, 150. Что вернёт `=ВПР(103;Товары!$A$2:$D$5;4;0)`?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Найди строку с кодом 103 и возьми четвёртый столбец."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Код 103 — Печенье, масса 200."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `200`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 1,
+            "material_id": "excel-lookup"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["200"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-lookup-t11",
+        "title": "Кода нет",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Введите ответ так, как его покажет Excel.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Справочник урока `Товары!A2:D5`: коды 101–104, названия Чай, Кофе, Печенье, Какао, категории Напитки, Напитки, Выпечка, Напитки, масса 100, 250, 200, 150. Что вернёт `=ВПР(105;Товары!$A$2:$D$5;3;0)`?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Есть ли код 105 в справочнике?"
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Кода 105 нет, точный поиск даёт `#Н/Д`."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `#Н/Д`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 2,
+            "material_id": "excel-lookup"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["#Н/Д"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-lookup-t09",
+        "title": "ИНДЕКС",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Введите текст без кавычек.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Справочник урока `Товары!A2:D5`: коды 101–104, названия Чай, Кофе, Печенье, Какао, категории Напитки, Напитки, Выпечка, Напитки, масса 100, 250, 200, 150. Что вернёт `=ИНДЕКС(Товары!$B$2:$B$5;2)`?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Второй элемент столбца названий."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Названия Чай, Кофе, … — второе «Кофе»."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `Кофе`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 4,
+            "material_id": "excel-lookup"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["Кофе"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-lookup-t12",
+        "title": "Операции с напитками",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Введите число.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "По тем же операциям: сколько было операций с напитками?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Считай операции, а не упаковки."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Три операции: 101, 101 и 104."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `3`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 6,
+            "material_id": "excel-lookup"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["3"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-neighbour-cells-t09",
+        "title": "До какой строки формула пары",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Введите адрес ячейки латинскими буквами, например A1.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Те же 100 чисел в `A2:A101`, формула пары начинается в `B2`. До какой ячейки её заполнять?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Последняя пара начинается в строке 100."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Пара A100–A101 — последняя, её формула в `B100`."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `B100`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 1,
+            "material_id": "excel-neighbour-cells"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["B100"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-neighbour-cells-t10",
+        "title": "Последняя подходящая строка",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Введите число.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "В том же столбце что вернёт `=МАКС(D2:D20)`?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "`МАКС` тоже пропускает пустой текст."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Наибольший номер строки — 15."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `15`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 5,
+            "material_id": "excel-neighbour-cells"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["15"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-neighbour-cells-t11",
+        "title": "Пути в D3",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Введите число.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Сколько путей «только вправо и вниз» ведёт из `A1` в `D3`?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Строка 2: 1, 2, 3, 4; строка 3 — суммы левого и верхнего."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Строка 3: 1, 3, 6, 10 — в D3 ведут 10 путей."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `10`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 7,
+            "material_id": "excel-neighbour-cells"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["10"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
     }
   ],
   "files": [
@@ -825267,7 +826227,7 @@
     },
     {
       "id": "excel-neighbour-cells",
-      "sections": ["intro", "s1", "s2", "s3", "s4", "s5", "s6"],
+      "sections": ["intro", "s1", "s2", "s3", "s4", "s5"],
       "kind": "course",
       "status": "published",
       "course_id": "excel",
@@ -825307,7 +826267,7 @@
     },
     {
       "id": "excel-sort-filter",
-      "sections": ["intro", "s1", "s2", "s3", "s4"],
+      "sections": ["intro", "s1", "s2", "s3"],
       "kind": "course",
       "status": "published",
       "course_id": "excel",

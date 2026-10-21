@@ -64,3 +64,35 @@ Add exactly two numbered markers (solid dark green #347a66 circles about 30 px, 
 1 — next to the small square fill handle at the bottom-right corner of D2,
 2 — next to the dashed outline at D5.
 No arrows, no captions, no other annotations.
+
+Курс Excel, урок 4.1 (Change 197, 2026-10-21). Два кадра, WebP 1280×800 в apps/web/public/images/lessons/excel-sheet/.
+
+excel-filter-list.webp
+Use case: ui-mockup. Same requirements as excel-window.webp: Windows 11 light theme, EXACT 1280×800, crisp legible text, straight-on screenshot, no watermark, window fills canvas.
+
+Microsoft Excel for Windows (Microsoft 365), RUSSIAN interface. Title bar "Покупки - Excel". Ribbon tab "Данные" is active; in its group "Сортировка и фильтр" the button "Фильтр" is shown pressed. Sheet tab "Покупки" active.
+Grid data exactly (row 1 is the header with the standard filter arrow buttons in A1, B1, C1):
+A1 ID, B1 Город, C1 Сумма
+A2 1, B2 Москва, C2 100
+A3 2, B3 Казань, C3 200
+A4 3, B4 Москва, C4 150
+A5 4, B5 Омск, C5 300
+A6 5, B6 Москва, C6 50
+Numbers right-aligned, text left-aligned, no fills.
+The filter dropdown of column B "Город" is OPEN under B1: the standard Excel AutoFilter menu in Russian with items "Сортировка от А до Я", "Сортировка от Я до А", "Текстовые фильтры", a search box "Поиск", and a checkbox list exactly: "(Выделить все)" (partially checked), "Казань" (unchecked), "Москва" (checked), "Омск" (unchecked); buttons "ОК" and "Отмена" at the bottom.
+Add exactly two numbered markers (solid dark green #347a66 circles about 30 px, white bold digit), each just outside the element, never covering text:
+1 — next to the filter arrow button in B1,
+2 — next to the checkbox "Москва".
+No arrows, no captions, no other annotations.
+
+excel-filter-status.webp
+Use case: ui-mockup. Same requirements as above.
+
+Microsoft Excel for Windows (Microsoft 365), RUSSIAN interface, the same workbook after the filter "Город = Москва" was applied. Ribbon tab "Главная" active. Header row 1 with filter arrow buttons; the arrow in B1 shows the funnel "filter applied" icon.
+Visible rows only (row numbers shown in BLUE as Excel does for filtered rows, with gaps): row 1 header (ID, Город, Сумма), row 2 (1, Москва, 100), row 4 (3, Москва, 150), row 6 (5, Москва, 50), then rows 7, 8, 9… empty. Rows 3 and 5 are hidden (no gap in the grid, only skipped numbers).
+Cells C2, C4, C6 are selected (the visible part of C2:C6, standard green selection).
+The status bar at the bottom right shows exactly: "Среднее: 100", "Количество: 3", "Сумма: 300", next to the view buttons and zoom "100%". Bottom left: "Найдено записей: 3 из 5".
+Add exactly two numbered markers (solid dark green #347a66 circles about 30 px, white bold digit), just outside the elements, never covering text:
+1 — next to the blue row numbers on the left (near row 4),
+2 — next to "Сумма: 300" in the status bar.
+No arrows, no captions, no other annotations.
