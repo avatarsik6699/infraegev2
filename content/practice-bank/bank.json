@@ -181537,19 +181537,19 @@
     {
       "task": {
         "id": "task-10-1-01",
-        "title": "Октет в двоичной записи и обратно",
+        "title": "Октет в двоичной записи",
         "short_description": null,
         "explanation_kind": "worked_solution",
         "difficulty": 1,
         "estimated_minutes": 2,
-        "answer_instruction": "Введите двоичную запись и число через пробел.",
+        "answer_instruction": "Введите восемь битов.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Переведи число 150 в восьмибитную двоичную запись. Переведи `00101101` в десятичную систему."
+              "markdown": "Переведи число 150 в восьмибитную двоичную запись."
             }
           }
         ],
@@ -181557,7 +181557,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Октет записывают ровно восемью битами."
+              "markdown": "Позиции октета — 128, 64, 32, 16, 8, 4, 2, 1; всего ровно восемь битов."
             }
           }
         ],
@@ -181565,15 +181565,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "10010110 и 45: 150 = 128 + 16 + 4 + 2; 00101101₂ = 32 + 8 + 4 + 1."
+              "markdown": "Значения позиций проверяем от большего к меньшему: 150 = 128 + 16 + 4 + 2, поэтому единицы стоят в позициях 128, 16, 4 и 2 — `10010110`."
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "print(f'{150:08b}', int('00101101', 2))",
+              "code": "print(f'{150:08b}')",
               "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `10010110`"
             }
           }
         ],
@@ -181611,7 +181617,7 @@
         ],
         "checker": {
           "checker_type": "exact_match",
-          "answer_variants": ["10010110 45"],
+          "answer_variants": ["10010110"],
           "numeric_tolerance": null
         }
       },
@@ -181625,14 +181631,14 @@
         "explanation_kind": "worked_solution",
         "difficulty": 1,
         "estimated_minutes": 2,
-        "answer_instruction": "Введите маску с точками и число нулей через пробел.",
+        "answer_instruction": "Введите маску с точками, например 255.255.0.0.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Запиши маску `/27` в виде четырёх десятичных чисел. Сколько в ней нулевых битов?"
+              "markdown": "Запиши маску `/27` в виде четырёх десятичных чисел."
             }
           }
         ],
@@ -181648,15 +181654,110 @@
           {
             "type": "text",
             "data": {
-              "markdown": "255.255.255.224 и 5 нулей: первые 24 единицы занимают три полных октета, ещё три единицы дают `11100000`; нулей 32 − 27."
+              "markdown": "Первые 24 единицы занимают три полных октета 255, ещё три единицы дают `11100000` = 224. Маска — 255.255.255.224."
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "from ipaddress import ip_address, ip_network\n\nnet = ip_network('0.0.0.0/27')\nprint(net.netmask, 32 - 27)",
+              "code": "from ipaddress import ip_address, ip_network\n\nprint(ip_network('0.0.0.0/27').netmask)",
               "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `255.255.255.224`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [10],
+        "files": [],
+        "lessons": [
+          {
+            "position": 4,
+            "material_id": "networks"
+          }
+        ],
+        "theory_links": [
+          {
+            "label": "Теория",
+            "section": "dopustimye-maski",
+            "material_id": "networks"
+          }
+        ],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["255.255.255.224"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "task-10-1-04",
+        "title": "Единицы октета 37",
+        "short_description": null,
+        "explanation_kind": "worked_solution",
+        "difficulty": 1,
+        "estimated_minutes": 2,
+        "answer_instruction": "Введите число.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Сколько единиц в двоичной записи октета 37?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Разложи 37 по позициям 128, 64, …, 1."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "37 = 32 + 4 + 1, восемью битами — `00100101`: в записи три единицы."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "print(f'{37:08b}'.count('1'))",
+              "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `3`"
             }
           }
         ],
@@ -181672,7 +181773,7 @@
         "theory_links": [
           {
             "label": "Теория",
-            "section": "maska-po-prefiksu",
+            "section": "32-bita",
             "material_id": "networks"
           }
         ],
@@ -181694,90 +181795,7 @@
         ],
         "checker": {
           "checker_type": "exact_match",
-          "answer_variants": ["255.255.255.224 5"],
-          "numeric_tolerance": null
-        }
-      },
-      "solution_revision": 1
-    },
-    {
-      "task": {
-        "id": "task-10-1-04",
-        "title": "Октет 37",
-        "short_description": null,
-        "explanation_kind": "worked_solution",
-        "difficulty": 1,
-        "estimated_minutes": 2,
-        "answer_instruction": "Введите восемь битов и число единиц через пробел.",
-        "interaction_type": "production",
-        "content_schema_version": 1,
-        "statement": [
-          {
-            "type": "text",
-            "data": {
-              "markdown": "Запиши октет 37 восемью битами. Сколько в нём единиц?"
-            }
-          }
-        ],
-        "hint": [
-          {
-            "type": "text",
-            "data": {
-              "markdown": "37 = 32 + 4 + 1."
-            }
-          }
-        ],
-        "explanation": [
-          {
-            "type": "text",
-            "data": {
-              "markdown": "00100101, 3 единицы: 37 = 32 + 4 + 1."
-            }
-          },
-          {
-            "type": "code_example",
-            "data": {
-              "language": "python",
-              "code": "bits = f'{37:08b}'\nprint(bits, bits.count('1'))",
-              "caption": "Решение программой"
-            }
-          }
-        ],
-        "skills": [],
-        "exam_numbers": [10],
-        "files": [],
-        "lessons": [
-          {
-            "position": 2,
-            "material_id": "networks"
-          }
-        ],
-        "theory_links": [
-          {
-            "label": "Теория",
-            "section": "vosem-bitov",
-            "material_id": "networks"
-          }
-        ],
-        "catalog_visible": false,
-        "archived": false,
-        "sources": [
-          {
-            "url": null,
-            "kind": "original",
-            "role": "original",
-            "year": null,
-            "title": null,
-            "author": null,
-            "primary": true,
-            "is_public": true,
-            "adaptation": null,
-            "original_id": null
-          }
-        ],
-        "checker": {
-          "checker_type": "exact_match",
-          "answer_variants": ["00100101 3"],
+          "answer_variants": ["3"],
           "numeric_tolerance": null
         }
       },
@@ -181786,19 +181804,19 @@
     {
       "task": {
         "id": "task-10-1-05",
-        "title": "Длина префикса маски",
+        "title": "Биты части узла",
         "short_description": null,
         "explanation_kind": "worked_solution",
         "difficulty": 1,
         "estimated_minutes": 2,
-        "answer_instruction": "Введите два числа через пробел в том порядке, в каком их спрашивают.",
+        "answer_instruction": "Введите число.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Маска равна `255.255.254.0`. Найди длину префикса и число битов части узла."
+              "markdown": "Маска равна `255.255.254.0`. Сколько битов в части узла?"
             }
           }
         ],
@@ -181806,7 +181824,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "254 = 11111110."
+              "markdown": "Сосчитай единицы маски; остальные биты из 32 — часть узла."
             }
           }
         ],
@@ -181814,15 +181832,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "p = 23, h = 9: 254 = `11111110`, единиц 8 + 8 + 7."
+              "markdown": "254 = `11111110`, поэтому в маске 8 + 8 + 7 = 23 единицы. Частью узла остаются 32 − 23 = 9 битов."
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "from ipaddress import ip_address, ip_network\n\np = ip_network('0.0.0.0/255.255.254.0').prefixlen\nprint(p, 32 - p)",
+              "code": "from ipaddress import ip_address, ip_network\n\np = ip_network('0.0.0.0/255.255.254.0').prefixlen\nprint(32 - p)",
               "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `9`"
             }
           }
         ],
@@ -181838,7 +181862,7 @@
         "theory_links": [
           {
             "label": "Теория",
-            "section": "oktety-maski",
+            "section": "maska",
             "material_id": "networks"
           }
         ],
@@ -181860,7 +181884,7 @@
         ],
         "checker": {
           "checker_type": "exact_match",
-          "answer_variants": ["23 9"],
+          "answer_variants": ["9"],
           "numeric_tolerance": null
         }
       },
@@ -181889,7 +181913,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Сложите единицы всех четырёх октетов."
+              "markdown": "Запиши каждый октет восемью битами и сложи единицы всех четырёх."
             }
           }
         ],
@@ -181897,7 +181921,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "12 единиц: 2 + 3 + 2 + 5 в октетах `11000000`, `10101000`, `00001010`, `10101101`."
+              "markdown": "Октеты — `11000000`, `10101000`, `00001010` и `10101101`: в них 2, 3, 2 и 5 единиц, всего 12."
             }
           },
           {
@@ -181907,6 +181931,12 @@
               "code": "octets = '192.168.10.173'.split('.')\nbits = ''.join(f'{int(x):08b}' for x in octets)\nprint(bits.count('1'))",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `12`"
+            }
           }
         ],
         "skills": [],
@@ -181914,14 +181944,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 4,
+            "position": 2,
             "material_id": "networks"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "obratnoe-preobrazovanie",
+            "section": "32-bita",
             "material_id": "networks"
           }
         ],
@@ -181972,7 +182002,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "В последнем октете 29 − 24 = 5 единиц."
+              "markdown": "Сколько единиц остаётся на последний октет?"
             }
           }
         ],
@@ -181980,7 +182010,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "X = 248: 29 − 24 = 5 единиц в последнем октете, `11111000`."
+              "markdown": "Первые три октета 255 дают 24 единицы, в последнем октете остаётся 29 − 24 = 5 единиц: `11111000` = 248."
             }
           },
           {
@@ -181989,6 +182019,12 @@
               "language": "python",
               "code": "from ipaddress import ip_address, ip_network\n\nprint(ip_network('0.0.0.0/29').netmask.packed[3])",
               "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `248`"
             }
           }
         ],
@@ -182004,7 +182040,7 @@
         "theory_links": [
           {
             "label": "Теория",
-            "section": "oktety-maski",
+            "section": "dopustimye-maski",
             "material_id": "networks"
           }
         ],
@@ -182055,7 +182091,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "В октете маски после нуля не может стоять единица."
+              "markdown": "В октете маски единицы идут подряд слева."
             }
           }
         ],
@@ -182063,7 +182099,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "9 масок: X — любое из значений таблицы октетов маски, от 0 до 255; после X идёт нулевой октет, и непрерывность не нарушается."
+              "markdown": "Октет X может быть любым из девяти допустимых значений — 0, 128, 192, 224, 240, 248, 252, 254, 255: перед ним идут единицы, после — нулевой октет, и непрерывность не нарушается."
             }
           },
           {
@@ -182072,6 +182108,12 @@
               "language": "python",
               "code": "print(sum(1 for x in range(256) if '01' not in f'{x:08b}'))",
               "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `9`"
             }
           }
         ],
@@ -182087,7 +182129,7 @@
         "theory_links": [
           {
             "label": "Теория",
-            "section": "oktety-maski",
+            "section": "dopustimye-maski",
             "material_id": "networks"
           }
         ],
@@ -182138,7 +182180,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "d = 256 − 224 = 32."
+              "markdown": "Размер блока — 256 минус октет маски."
             }
           }
         ],
@@ -182146,7 +182188,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "10.8.45.192: последний октет маски 224, d = 32, 200 = 6 · 32 + 8, начало блока 192."
+              "markdown": "Последний октет маски 224, блок 256 − 224 = 32. 200 = 6 · 32 + 8, ближайшее кратное 32, не большее 200, — 192. Адрес сети 10.8.45.192."
             }
           },
           {
@@ -182156,6 +182198,12 @@
               "code": "from ipaddress import ip_address, ip_network\n\nnet = ip_network('10.8.45.200/255.255.255.224', strict=False)\nprint(net.network_address)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `10.8.45.192`"
+            }
           }
         ],
         "skills": [],
@@ -182163,7 +182211,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 7,
+            "position": 8,
             "material_id": "networks"
           }
         ],
@@ -182201,19 +182249,19 @@
     {
       "task": {
         "id": "task-10-2-03",
-        "title": "Последний адрес и последний узел",
+        "title": "Наибольший адрес компьютера",
         "short_description": null,
         "explanation_kind": "worked_solution",
         "difficulty": 1,
         "estimated_minutes": 2,
-        "answer_instruction": "Введите два IP-адреса через пробел.",
+        "answer_instruction": "Введите IP-адрес с точками, например 10.0.0.1.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Для адреса 192.168.5.77 и маски `/27` найди широковещательный адрес и наибольший адрес, который можно назначить компьютеру."
+              "markdown": "Для адреса 192.168.5.77 и маски `/27` найди наибольший адрес, который можно назначить компьютеру."
             }
           }
         ],
@@ -182221,7 +182269,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Последний адрес сети — широковещательный, узлу он не назначается."
+              "markdown": "Широковещательный адрес компьютеру не назначают."
             }
           }
         ],
@@ -182229,15 +182277,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "192.168.5.95 и 192.168.5.94: d = 32, 77 лежит в блоке 64–95."
+              "markdown": "Маска /27 — блоки по 32 в последнем октете, 77 лежит в блоке 64–95. Широковещательный адрес 192.168.5.95 компьютеру не назначают, наибольший адрес компьютера на единицу меньше — 192.168.5.94."
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "from ipaddress import ip_address, ip_network\n\nnet = ip_network('192.168.5.77/27', strict=False)\nprint(net.broadcast_address, net.broadcast_address - 1)",
+              "code": "from ipaddress import ip_address, ip_network\n\nnet = ip_network('192.168.5.77/27', strict=False)\nprint(net.broadcast_address - 1)",
               "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `192.168.5.94`"
             }
           }
         ],
@@ -182246,14 +182300,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 8,
+            "position": 11,
             "material_id": "networks"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "shirokoveshchatelnyj",
+            "section": "granicy-seti",
             "material_id": "networks"
           }
         ],
@@ -182275,7 +182329,7 @@
         ],
         "checker": {
           "checker_type": "exact_match",
-          "answer_variants": ["192.168.5.95 192.168.5.94"],
+          "answer_variants": ["192.168.5.94"],
           "numeric_tolerance": null
         }
       },
@@ -182304,7 +182358,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Адрес сети и широковещательный не назначают."
+              "markdown": "Адрес сети и широковещательный компьютерам не назначают."
             }
           }
         ],
@@ -182312,7 +182366,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "14 адресов: h = 4, 2⁴ − 2."
+              "markdown": "240 = `11110000`, свободных битов 4: адресов 2⁴ = 16, компьютерам — 16 − 2 = 14."
             }
           },
           {
@@ -182322,6 +182376,12 @@
               "code": "from ipaddress import ip_address, ip_network\n\nprint(ip_network('0.0.0.0/255.255.255.240').num_addresses - 2)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `14`"
+            }
           }
         ],
         "skills": [],
@@ -182329,14 +182389,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 9,
+            "position": 15,
             "material_id": "networks"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "shirokoveshchatelnyj",
+            "section": "kolichestvo",
             "material_id": "networks"
           }
         ],
@@ -182387,7 +182447,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "d = 64, 130 лежит в блоке 128–191."
+              "markdown": "Найди первый октет маски, меньший 255, и блок в нём."
             }
           }
         ],
@@ -182395,7 +182455,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "81.200.128.0: третий октет маски 192, d = 64, 130 лежит в блоке 128–191."
+              "markdown": "Третий октет маски 192, блок 64: 130 лежит в блоке 128–191. Последний октет маски 0, поэтому адрес сети 81.200.128.0."
             }
           },
           {
@@ -182405,6 +182465,12 @@
               "code": "from ipaddress import ip_address, ip_network\n\nnet = ip_network('81.200.130.9/255.255.192.0', strict=False)\nprint(net.network_address)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `81.200.128.0`"
+            }
           }
         ],
         "skills": [],
@@ -182412,14 +182478,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 10,
+            "position": 9,
             "material_id": "networks"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "tretij-oktet",
+            "section": "razmer-bloka",
             "material_id": "networks"
           }
         ],
@@ -182450,19 +182516,19 @@
     {
       "task": {
         "id": "task-10-2-06",
-        "title": "Адрес сети и широковещательный",
+        "title": "Широковещательный адрес",
         "short_description": null,
         "explanation_kind": "worked_solution",
         "difficulty": 1,
         "estimated_minutes": 2,
-        "answer_instruction": "Введите два IP-адреса через пробел.",
+        "answer_instruction": "Введите IP-адрес с точками, например 10.0.0.1.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Для адреса 46.31.250.17 и маски 255.255.240.0 найди адрес сети и широковещательный адрес."
+              "markdown": "Для адреса 46.31.250.17 и маски 255.255.240.0 найди широковещательный адрес."
             }
           }
         ],
@@ -182470,7 +182536,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "d = 16."
+              "markdown": "В широковещательном адресе вся часть узла — единицы."
             }
           }
         ],
@@ -182478,15 +182544,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "46.31.240.0 и 46.31.255.255: d = 16, 250 лежит в блоке 240–255."
+              "markdown": "Третий октет маски 240, блок 16: 250 лежит в блоке 240–255. В широковещательном адресе вся часть узла — единицы: конец блока 255 и 255 в последнем октете — 46.31.255.255."
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "from ipaddress import ip_address, ip_network\n\nnet = ip_network('46.31.250.17/255.255.240.0', strict=False)\nprint(net.network_address, net.broadcast_address)",
+              "code": "from ipaddress import ip_address, ip_network\n\nnet = ip_network('46.31.250.17/255.255.240.0',\n                 strict=False)\nprint(net.broadcast_address)",
               "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `46.31.255.255`"
             }
           }
         ],
@@ -182495,14 +182567,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 11,
+            "position": 10,
             "material_id": "networks"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "tretij-oktet",
+            "section": "granicy-seti",
             "material_id": "networks"
           }
         ],
@@ -182524,7 +182596,7 @@
         ],
         "checker": {
           "checker_type": "exact_match",
-          "answer_variants": ["46.31.240.0 46.31.255.255"],
+          "answer_variants": ["46.31.255.255"],
           "numeric_tolerance": null
         }
       },
@@ -182553,7 +182625,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Сначала адрес сети, потом буквы по таблице."
+              "markdown": "Сначала найди числовой адрес сети, потом замени октеты буквами."
             }
           }
         ],
@@ -182561,7 +182633,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "FCDA: адрес сети 211.47.152.0, третий октет 155 И 248 = 152."
+              "markdown": "Третий октет маски 248: 155 И 248 = 152, последний октет обнуляется. Адрес сети 211.47.152.0, по таблице: 211 — F, 47 — C, 152 — D, 0 — A."
             }
           },
           {
@@ -182571,6 +182643,12 @@
               "code": "from ipaddress import ip_address, ip_network\n\nnet = ip_network('211.47.155.3/255.255.248.0', strict=False)\ntable = {0: 'A', 3: 'B', 47: 'C', 152: 'D', 155: 'E',\n         211: 'F', 248: 'G', 255: 'H'}\nprint(''.join(table[x] for x in net.network_address.packed))",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `FCDA`"
+            }
           }
         ],
         "skills": [],
@@ -182578,7 +182656,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 12,
+            "position": 13,
             "material_id": "networks"
           }
         ],
@@ -182628,7 +182706,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Узел имеет IP-адрес 157.230.96.214, маска сети равна 255.255.255.248. Определите адрес сети и в ответе запишите сумму значений его октетов."
+              "markdown": "Узел имеет IP-адрес 157.230.96.214, маска сети равна 255.255.255.248. Определи адрес сети и в ответе запиши сумму значений его октетов."
             }
           }
         ],
@@ -182636,7 +182714,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "d = 8."
+              "markdown": "Октеты маски 255 сохраняют адрес; считать нужно только смешанный октет."
             }
           }
         ],
@@ -182644,7 +182722,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "691: адрес сети 157.230.96.208 (d = 8, 214 = 26 · 8 + 6), 157 + 230 + 96 + 208."
+              "markdown": "Последний октет маски 248, блок 256 − 248 = 8. 214 = 26 · 8 + 6, начало блока 208 — адрес сети 157.230.96.208. Сумма октетов 157 + 230 + 96 + 208 = 691."
             }
           },
           {
@@ -182654,6 +182732,12 @@
               "code": "from ipaddress import ip_address, ip_network\n\nnet = ip_network('157.230.96.214/255.255.255.248', strict=False)\nprint(sum(net.network_address.packed))",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `691`"
+            }
           }
         ],
         "skills": [],
@@ -182661,14 +182745,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 13,
+            "position": 7,
             "material_id": "networks"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "forma-otveta",
+            "section": "adres-seti-i",
             "material_id": "networks"
           }
         ],
@@ -182711,7 +182795,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Сеть задана IP-адресом одного из входящих в неё узлов 64.137.205.18 и маской 255.255.252.0. Найдите наибольший IP-адрес, который может быть назначен компьютеру. В ответе запишите сумму значений октетов этого адреса."
+              "markdown": "Сеть задана IP-адресом одного из входящих в неё узлов 64.137.205.18 и маской 255.255.252.0. Найди наибольший IP-адрес, который может быть назначен компьютеру. В ответе запиши сумму значений октетов этого адреса."
             }
           }
         ],
@@ -182719,7 +182803,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "На единицу меньше широковещательного."
+              "markdown": "Наибольший адрес компьютера на единицу меньше широковещательного."
             }
           }
         ],
@@ -182727,7 +182811,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "662: d = 4, 205 лежит в блоке 204–207, широковещательный 64.137.207.255, наибольший адрес компьютера 64.137.207.254, 64 + 137 + 207 + 254."
+              "markdown": "Третий октет маски 252, блок 4: 205 лежит в блоке 204–207. Широковещательный адрес 64.137.207.255, наибольший адрес компьютера 64.137.207.254, сумма октетов 64 + 137 + 207 + 254 = 662."
             }
           },
           {
@@ -182737,6 +182821,12 @@
               "code": "from ipaddress import ip_address, ip_network\n\nnet = ip_network('64.137.205.18/255.255.252.0', strict=False)\nprint(sum((net.broadcast_address - 1).packed))",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `662`"
+            }
           }
         ],
         "skills": [],
@@ -182744,14 +182834,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 14,
+            "position": 12,
             "material_id": "networks"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "forma-otveta",
+            "section": "granicy-seti",
             "material_id": "networks"
           }
         ],
@@ -182782,19 +182872,19 @@
     {
       "task": {
         "id": "task-10-3-01",
-        "title": "Префикс и количество адресов",
+        "title": "Адреса компьютеров при маске /21",
         "short_description": null,
         "explanation_kind": "worked_solution",
         "difficulty": 1,
         "estimated_minutes": 2,
-        "answer_instruction": "Введите три числа через пробел в том порядке, в каком их спрашивают.",
+        "answer_instruction": "Введите число.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Для маски `255.255.248.0` найди длину префикса, количество всех адресов и количество адресов узлов при исключении двух специальных."
+              "markdown": "Сколько адресов можно назначить компьютерам в сети с маской `255.255.248.0`?"
             }
           }
         ],
@@ -182802,7 +182892,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Количество адресов — 2 в степени числа свободных битов."
+              "markdown": "Адреса компьютеров — все адреса без адреса сети и широковещательного."
             }
           }
         ],
@@ -182810,15 +182900,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "p = 21, 2048 и 2046: у 248 запись `11111000`, p = 8 + 8 + 5, свободных битов 11."
+              "markdown": "248 = `11111000`, единиц в маске 8 + 8 + 5 = 21, свободных битов 11. Всего адресов 2¹¹ = 2048, компьютерам — 2048 − 2 = 2046."
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "from ipaddress import ip_address, ip_network\n\nnet = ip_network('0.0.0.0/255.255.248.0')\nprint(net.prefixlen, net.num_addresses, net.num_addresses - 2)",
+              "code": "from ipaddress import ip_address, ip_network\n\nnet = ip_network('0.0.0.0/255.255.248.0')\nprint(net.num_addresses - 2)",
               "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `2046`"
             }
           }
         ],
@@ -182827,14 +182923,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 15,
+            "position": 14,
             "material_id": "networks"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "svobodnye-bity",
+            "section": "kolichestvo",
             "material_id": "networks"
           }
         ],
@@ -182856,7 +182952,7 @@
         ],
         "checker": {
           "checker_type": "exact_match",
-          "answer_variants": ["21 2048 2046"],
+          "answer_variants": ["2046"],
           "numeric_tolerance": null
         }
       },
@@ -182865,19 +182961,19 @@
     {
       "task": {
         "id": "task-10-3-02",
-        "title": "Сеть, последний адрес и номер узла",
+        "title": "Номер узла",
         "short_description": null,
         "explanation_kind": "worked_solution",
         "difficulty": 1,
         "estimated_minutes": 3,
-        "answer_instruction": "Введите два IP-адреса и число через пробел.",
+        "answer_instruction": "Введите число.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Для `192.168.4.207/27` найди адрес сети, последний адрес сети и номер узла."
+              "markdown": "Какой номер у узла 192.168.4.207 в сети с маской `/27`?"
             }
           }
         ],
@@ -182885,7 +182981,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Номер узла — его расстояние от адреса сети."
+              "markdown": "Номер узла — расстояние от адреса сети."
             }
           }
         ],
@@ -182893,15 +182989,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "192.168.4.192, 192.168.4.223 и 15: `/27` оставляет пять свободных битов, блок 2⁵ = 32, 207 лежит между 192 и 223, номер 207 − 192."
+              "markdown": "Маска /27 — блоки по 32 в последнем октете, 207 лежит в блоке 192–223. Адрес сети 192.168.4.192, номер узла — расстояние от него: 207 − 192 = 15."
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "from ipaddress import ip_address, ip_network\n\nnet = ip_network('192.168.4.207/27', strict=False)\nnode = ip_address('192.168.4.207')\nnumber = int(node) - int(net.network_address)\nprint(net.network_address, net.broadcast_address, number)",
+              "code": "from ipaddress import ip_address, ip_network\n\nnet = ip_network('192.168.4.207/27', strict=False)\nnode = ip_address('192.168.4.207')\nprint(int(node) - int(net.network_address))",
               "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `15`"
             }
           }
         ],
@@ -182910,7 +183012,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 16,
+            "position": 20,
             "material_id": "networks"
           }
         ],
@@ -182939,7 +183041,7 @@
         ],
         "checker": {
           "checker_type": "exact_match",
-          "answer_variants": ["192.168.4.192 192.168.4.223 15"],
+          "answer_variants": ["15"],
           "numeric_tolerance": null
         }
       },
@@ -182953,14 +183055,14 @@
         "explanation_kind": "worked_solution",
         "difficulty": 2,
         "estimated_minutes": 4,
-        "answer_instruction": "Введите два IP-адреса и два числа через пробел.",
+        "answer_instruction": "Введите число.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Для `10.5.142.77/21` найди адрес сети, последний адрес, количество адресов и номер узла."
+              "markdown": "Какой номер у узла 10.5.142.77 в сети с маской `/21`?"
             }
           }
         ],
@@ -182968,7 +183070,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Часть узла занимает больше одного октета."
+              "markdown": "Часть узла занимает больше одного октета: третий октет даёт целые сотни по 256."
             }
           }
         ],
@@ -182976,15 +183078,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "10.5.136.0, 10.5.143.255, 2048 и 1613: блок третьего октета 256 − 248 = 8, 142 лежит в блоке 136–143, 2¹¹ адресов, номер (142 − 136) · 256 + 77."
+              "markdown": "Третий октет маски 248, блок 8: 142 лежит в блоке 136–143, адрес сети 10.5.136.0. Номер — (142 − 136) · 256 + 77 = 1613: между соседними значениями третьего октета последний проходит все 256 значений."
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "from ipaddress import ip_address, ip_network\n\nnet = ip_network('10.5.142.77/21', strict=False)\nnode = ip_address('10.5.142.77')\nnumber = int(node) - int(net.network_address)\nprint(net.network_address, net.broadcast_address,\n      net.num_addresses, number)",
+              "code": "from ipaddress import ip_address, ip_network\n\nnet = ip_network('10.5.142.77/21', strict=False)\nnode = ip_address('10.5.142.77')\nprint(int(node) - int(net.network_address))",
               "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `1613`"
             }
           }
         ],
@@ -182993,14 +183101,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 17,
+            "position": 21,
             "material_id": "networks"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "neskolko-oktetov",
+            "section": "nomer-uzla",
             "material_id": "networks"
           }
         ],
@@ -183022,7 +183130,7 @@
         ],
         "checker": {
           "checker_type": "exact_match",
-          "answer_variants": ["10.5.136.0 10.5.143.255 2048 1613"],
+          "answer_variants": ["1613"],
           "numeric_tolerance": null
         }
       },
@@ -183036,14 +183144,14 @@
         "explanation_kind": "worked_solution",
         "difficulty": 1,
         "estimated_minutes": 3,
-        "answer_instruction": "Введите длину префикса и маску с точками через пробел.",
+        "answer_instruction": "Введите маску с точками, например 255.255.0.0.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Нужно разместить не менее 1000 компьютеров. Два специальных адреса использовать нельзя. Найди самую маленькую подходящую сеть: её префикс и маску."
+              "markdown": "Нужно разместить не менее 1000 компьютеров, два специальных адреса использовать нельзя. Найди маску самой маленькой подходящей сети."
             }
           }
         ],
@@ -183051,7 +183159,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Наименьшее h, при котором 2ʰ − 2 не меньше 1000."
+              "markdown": "Подбери наименьшее число свободных битов, при котором 2ʰ − 2 не меньше 1000."
             }
           }
         ],
@@ -183059,15 +183167,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "`/22` = 255.255.252.0: при h = 9 получаем 510 — недостаточно, при h = 10 — 1022, p = 32 − 10."
+              "markdown": "Нужно наименьшее h с 2ʰ − 2 ≥ 1000: при h = 9 получается 510 — мало, при h = 10 — 1022. Длина маски 32 − 10 = 22, маска 255.255.252.0."
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "from ipaddress import ip_address, ip_network\n\nh = 1\nwhile 2 ** h - 2 < 1000:\n    h += 1\np = 32 - h\nprint(p, ip_network(f'0.0.0.0/{p}').netmask)",
+              "code": "from ipaddress import ip_address, ip_network\n\nh = 1\nwhile 2 ** h - 2 < 1000:\n    h += 1\nprint(ip_network(f'0.0.0.0/{32 - h}').netmask)",
               "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `255.255.252.0`"
             }
           }
         ],
@@ -183083,7 +183197,7 @@
         "theory_links": [
           {
             "label": "Теория",
-            "section": "maska-pod-kolichestvo",
+            "section": "set-pod-kompyutery",
             "material_id": "networks"
           }
         ],
@@ -183105,7 +183219,7 @@
         ],
         "checker": {
           "checker_type": "exact_match",
-          "answer_variants": ["22 255.255.252.0"],
+          "answer_variants": ["255.255.252.0"],
           "numeric_tolerance": null
         }
       },
@@ -183119,14 +183233,14 @@
         "explanation_kind": "worked_solution",
         "difficulty": 1,
         "estimated_minutes": 2,
-        "answer_instruction": "Введите два числа через пробел в том порядке, в каком их спрашивают.",
+        "answer_instruction": "Введите число.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Сеть `/24` делят на подсети `/26`. Сколько получится подсетей и сколько адресов в каждой?"
+              "markdown": "Сеть `/24` делят на подсети `/26`. Сколько получится подсетей?"
             }
           }
         ],
@@ -183134,7 +183248,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Перенос границы на два бита."
+              "markdown": "Сколько битов добавилось к сетевой части?"
             }
           }
         ],
@@ -183142,15 +183256,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "4 подсети по 64 адреса: 26 − 24 = 2 бита дают 2² подсетей, в каждой 2⁶ адресов."
+              "markdown": "Граница сдвигается на 26 − 24 = 2 бита, у двух битов 2² = 4 комбинации — четыре подсети по 64 адреса."
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "print(2 ** (26 - 24), 2 ** (32 - 26))",
+              "code": "print(2 ** (26 - 24))",
               "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `4`"
             }
           }
         ],
@@ -183166,7 +183286,7 @@
         "theory_links": [
           {
             "label": "Теория",
-            "section": "podseti",
+            "section": "set-pod-kompyutery",
             "material_id": "networks"
           }
         ],
@@ -183188,7 +183308,7 @@
         ],
         "checker": {
           "checker_type": "exact_match",
-          "answer_variants": ["4 64"],
+          "answer_variants": ["4"],
           "numeric_tolerance": null
         }
       },
@@ -183217,7 +183337,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "1000 = 3 · 256 + 232."
+              "markdown": "Разложи номер на целые 256 и остаток."
             }
           }
         ],
@@ -183225,7 +183345,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "10.40.19.232: 1000 = 3 · 256 + 232, к третьему октету 16 добавляем 3."
+              "markdown": "1000 = 3 · 256 + 232: к третьему октету адреса сети прибавляем 3, последний октет — 232. Получаем 10.40.19.232."
             }
           },
           {
@@ -183235,6 +183355,12 @@
               "code": "from ipaddress import ip_address, ip_network\n\nprint(ip_network('10.40.16.0/20')[1000])",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `10.40.19.232`"
+            }
           }
         ],
         "skills": [],
@@ -183242,14 +183368,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 20,
+            "position": 23,
             "material_id": "networks"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "adres-po-nomeru",
+            "section": "nomer-uzla",
             "material_id": "networks"
           }
         ],
@@ -183300,7 +183426,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Свободных битов 13."
+              "markdown": "Количество адресов — 2 в степени числа свободных битов."
             }
           }
         ],
@@ -183308,7 +183434,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "8192 адреса: 2¹³."
+              "markdown": "Свободных битов 32 − 19 = 13, адресов 2¹³ = 8192."
             }
           },
           {
@@ -183318,6 +183444,12 @@
               "code": "from ipaddress import ip_address, ip_network\n\nprint(ip_network('0.0.0.0/19').num_addresses)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `8192`"
+            }
           }
         ],
         "skills": [],
@@ -183325,14 +183457,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 21,
+            "position": 16,
             "material_id": "networks"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "svobodnye-bity",
+            "section": "kolichestvo",
             "material_id": "networks"
           }
         ],
@@ -183383,7 +183515,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Номер — расстояние от адреса сети."
+              "markdown": "Номер — расстояние от адреса сети, третий октет весит 256."
             }
           }
         ],
@@ -183391,7 +183523,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "2394: адрес сети 118.64.192.0 (d = 16, 201 лежит в блоке 192–207), номер (201 − 192) · 256 + 90."
+              "markdown": "Третий октет маски 240, блок 16: 201 лежит в блоке 192–207, адрес сети 118.64.192.0. Номер (201 − 192) · 256 + 90 = 2394."
             }
           },
           {
@@ -183400,6 +183532,12 @@
               "language": "python",
               "code": "from ipaddress import ip_address, ip_network\n\nnet = ip_network('118.64.201.90/255.255.240.0', strict=False)\nnode = ip_address('118.64.201.90')\nprint(int(node) - int(net.network_address))",
               "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `2394`"
             }
           }
         ],
@@ -183466,7 +183604,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Два специальных адреса не используют."
+              "markdown": "Сначала все адреса, потом без двух специальных."
             }
           }
         ],
@@ -183474,7 +183612,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "126: h = 7, 2⁷ − 2."
+              "markdown": "Маска 255.255.255.128 оставляет 7 свободных битов: 2⁷ = 128 адресов, без двух специальных — 126."
             }
           },
           {
@@ -183484,6 +183622,12 @@
               "code": "from ipaddress import ip_address, ip_network\n\nprint(ip_network('0.0.0.0/255.255.255.128').num_addresses - 2)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `126`"
+            }
           }
         ],
         "skills": [],
@@ -183491,14 +183635,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 23,
+            "position": 17,
             "material_id": "networks"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "svobodnye-bity",
+            "section": "kolichestvo",
             "material_id": "networks"
           }
         ],
@@ -183534,14 +183678,14 @@
         "explanation_kind": "worked_solution",
         "difficulty": 1,
         "estimated_minutes": 3,
-        "answer_instruction": "Введите два числа через пробел в том порядке, в каком их спрашивают.",
+        "answer_instruction": "Введите число.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Для узла с IP-адресом 85.112.43.200 адрес сети равен 85.112.43.192. Чему равно наименьшее возможное значение последнего байта маски? Сколько масок возможно?"
+              "markdown": "Для узла с IP-адресом 85.112.43.200 адрес сети равен 85.112.43.192. Чему равно наименьшее возможное значение последнего байта маски?"
             }
           }
         ],
@@ -183549,7 +183693,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Подходят все длины от L до C."
+              "markdown": "Наименьший октет маски — у самой короткой подходящей маски."
             }
           }
         ],
@@ -183557,15 +183701,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "192, 3 маски: 200 = `11001000`, 192 = `11000000`, L = 26, C = 28, маски `/26`, `/27`, `/28`."
+              "markdown": "200 = `11001000`, 192 = `11000000`: последняя единица сети — на 26-й позиции (L = 26), первое различие — на 29-й (C = 28). Подходят маски /26, /27, /28, наименьший последний байт у /26 — 192."
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "from ipaddress import ip_address, ip_network\n\nps = [p for p in range(33)\n      if ip_network(f'85.112.43.200/{p}', strict=False)\n      .network_address == ip_address('85.112.43.192')]\nlast = [ip_network(f'0.0.0.0/{p}').netmask.packed[3]\n        for p in ps]\nprint(min(last), len(ps))",
+              "code": "from ipaddress import ip_address, ip_network\n\nexpected = ip_address('85.112.43.192')\nps = []\nfor p in range(33):\n    net = ip_network(f'85.112.43.200/{p}', strict=False)\n    if net.network_address == expected:\n        ps.append(p)\nmask = ip_network(f'0.0.0.0/{min(ps)}').netmask\nprint(int(str(mask).split('.')[3]))",
               "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `192`"
             }
           }
         ],
@@ -183574,14 +183724,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 24,
+            "position": 25,
             "material_id": "networks"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "perebor-dlin",
+            "section": "vse-maski",
             "material_id": "networks"
           }
         ],
@@ -183603,7 +183753,7 @@
         ],
         "checker": {
           "checker_type": "exact_match",
-          "answer_variants": ["192 3"],
+          "answer_variants": ["192"],
           "numeric_tolerance": null
         }
       },
@@ -183632,7 +183782,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "C — последняя позиция, где можно оставить сетевой бит."
+              "markdown": "Самая длинная маска доходит до первого различия адреса и сети."
             }
           }
         ],
@@ -183640,7 +183790,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "21: 215 = `11010111`, 208 = `11010000`, L = 20, C = 21."
+              "markdown": "215 = `11010111`, 208 = `11010000`: L = 20, первые 21 бит совпадают — C = 21. Наибольшее число единиц — 21."
             }
           },
           {
@@ -183650,6 +183800,12 @@
               "code": "from ipaddress import ip_address, ip_network\n\nps = [p for p in range(33)\n      if ip_network(f'131.70.215.9/{p}', strict=False)\n      .network_address == ip_address('131.70.208.0')]\nprint(max(ps))",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `21`"
+            }
           }
         ],
         "skills": [],
@@ -183657,14 +183813,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 25,
+            "position": 26,
             "material_id": "networks"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "neravenstvo",
+            "section": "vse-maski",
             "material_id": "networks"
           }
         ],
@@ -183715,7 +183871,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Самая длинная маска."
+              "markdown": "Меньше всего нулей — у самой длинной подходящей маски."
             }
           }
         ],
@@ -183723,7 +183879,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "11 нулей: самая длинная маска `/21`, 32 − 21."
+              "markdown": "Подходят маски /20 и /21. Меньше всего нулей у самой длинной: 32 − 21 = 11."
             }
           },
           {
@@ -183733,6 +183889,12 @@
               "code": "from ipaddress import ip_address, ip_network\n\nps = [p for p in range(33)\n      if ip_network(f'131.70.215.9/{p}', strict=False)\n      .network_address == ip_address('131.70.208.0')]\nprint(32 - max(ps))",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `11`"
+            }
           }
         ],
         "skills": [],
@@ -183740,14 +183902,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 26,
+            "position": 27,
             "material_id": "networks"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "neravenstvo",
+            "section": "vse-maski",
             "material_id": "networks"
           }
         ],
@@ -183798,7 +183960,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Длины от L до C."
+              "markdown": "Подходят все длины от L до C."
             }
           }
         ],
@@ -183806,7 +183968,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "6 масок: 130 = `10000010`, 128 = `10000000`, L = 25, C = 30, длины от 25 до 30."
+              "markdown": "130 = `10000010`, 128 = `10000000`: L = 25, первое различие на 31-й позиции — C = 30. Подходят длины от 25 до 30, это 6 масок."
             }
           },
           {
@@ -183816,6 +183978,12 @@
               "code": "from ipaddress import ip_address, ip_network\n\nps = [p for p in range(33)\n      if ip_network(f'200.15.77.130/{p}', strict=False)\n      .network_address == ip_address('200.15.77.128')]\nprint(len(ps))",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `6`"
+            }
           }
         ],
         "skills": [],
@@ -183823,14 +183991,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 27,
+            "position": 28,
             "material_id": "networks"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "neravenstvo",
+            "section": "vse-maski",
             "material_id": "networks"
           }
         ],
@@ -183873,7 +184041,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Для узла с IP-адресом 74.219.187.66 адрес сети равен 74.219.176.0. Чему равен третий слева байт маски? Ответ запишите в виде десятичного числа."
+              "markdown": "Для узла с IP-адресом 74.219.187.66 адрес сети равен 74.219.176.0. Чему равен третий слева байт маски? Ответ запиши в виде десятичного числа."
             }
           }
         ],
@@ -183881,7 +184049,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Маска здесь одна."
+              "markdown": "Где единица адреса сохранилась — в маске 1, где пропала — 0."
             }
           }
         ],
@@ -183889,7 +184057,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "240: 187 = `10111011`, 176 = `10110000`, L = 20, C = 20 — маска одна, `/20`."
+              "markdown": "187 = `10111011`, 176 = `10110000`: четвёртый бит единица в обоих — маска до него единичная; пятый бит у узла 1, у сети 0 — в маске ноль. Маска одна, третий байт `11110000` = 240."
             }
           },
           {
@@ -183899,6 +184067,12 @@
               "code": "from ipaddress import ip_address, ip_network\n\nps = [p for p in range(33)\n      if ip_network(f'74.219.187.66/{p}', strict=False)\n      .network_address == ip_address('74.219.176.0')]\nprint(ip_network(f'0.0.0.0/{ps[0]}').netmask.packed[2])",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `240`"
+            }
           }
         ],
         "skills": [],
@@ -183906,14 +184080,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 28,
+            "position": 24,
             "material_id": "networks"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "polnaya-programma",
+            "section": "maska-po-bitam",
             "material_id": "networks"
           }
         ],
@@ -183964,7 +184138,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "C — до первой единицы адреса, обнулённой в адресе сети."
+              "markdown": "C — до первой единицы узла, которая в адресе сети стала нулём."
             }
           }
         ],
@@ -183972,7 +184146,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "29: 197 = `11000101`, 192 = `11000000`, L = 26, C = 29."
+              "markdown": "197 = `11000101`, 192 = `11000000`: L = 26, первая единица узла, обнулённая в сети, — на 30-й позиции, C = 29. Наибольшее число единиц — 29."
             }
           },
           {
@@ -183981,6 +184155,12 @@
               "language": "python",
               "code": "from ipaddress import ip_address, ip_network\n\nps = [p for p in range(33)\n      if ip_network(f'141.97.58.197/{p}', strict=False)\n      .network_address == ip_address('141.97.58.192')]\nprint(max(ps))",
               "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `29`"
             }
           }
         ],
@@ -183996,7 +184176,7 @@
         "theory_links": [
           {
             "label": "Теория",
-            "section": "neravenstvo",
+            "section": "vse-maski",
             "material_id": "networks"
           }
         ],
@@ -184039,7 +184219,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Для того же узла 141.97.58.197 и сети 141.97.58.192 найдите наибольшее возможное количество адресов в этой сети."
+              "markdown": "Для того же узла 141.97.58.197 и сети 141.97.58.192 найди наибольшее возможное количество адресов в этой сети."
             }
           }
         ],
@@ -184047,7 +184227,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Самая короткая маска."
+              "markdown": "Больше всего адресов — у самой короткой маски."
             }
           }
         ],
@@ -184055,7 +184235,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "64 адреса: самая короткая маска `/26`, 2⁶."
+              "markdown": "Подходят маски от /26 до /29. Больше всего адресов в сети с самой короткой маской /26: 2⁶ = 64."
             }
           },
           {
@@ -184064,6 +184244,12 @@
               "language": "python",
               "code": "from ipaddress import ip_address, ip_network\n\nps = [p for p in range(33)\n      if ip_network(f'141.97.58.197/{p}', strict=False)\n      .network_address == ip_address('141.97.58.192')]\nprint(2 ** (32 - min(ps)))",
               "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `64`"
             }
           }
         ],
@@ -184079,7 +184265,7 @@
         "theory_links": [
           {
             "label": "Теория",
-            "section": "neravenstvo",
+            "section": "vse-maski",
             "material_id": "networks"
           }
         ],
@@ -184110,19 +184296,19 @@
     {
       "task": {
         "id": "task-10-5-01",
-        "title": "Самая длинная общая и самая короткая разная",
+        "title": "Самая длинная общая маска",
         "short_description": null,
         "explanation_kind": "worked_solution",
         "difficulty": 1,
         "estimated_minutes": 3,
-        "answer_instruction": "Введите два числа через пробел в том порядке, в каком их спрашивают.",
+        "answer_instruction": "Введите число.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Даны `10.30.52.1` и `10.30.55.250`. При какой самой длинной общей маске они ещё находятся в одной сети? При какой самой короткой — уже в разных?"
+              "markdown": "Даны узлы `10.30.52.1` и `10.30.55.250`. Сколько единиц в самой длинной общей маске, при которой они ещё находятся в одной сети?"
             }
           }
         ],
@@ -184130,7 +184316,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Граница маски не должна заходить дальше совпадающих битов."
+              "markdown": "Граница общей маски не может заходить дальше совпадающих начальных битов."
             }
           }
         ],
@@ -184138,15 +184324,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "`/22` = 255.255.252.0 и `/23` = 255.255.254.0: 52 = `00110100`, 55 = `00110111`, первые шесть битов третьего октета совпадают, C = 16 + 6 = 22."
+              "markdown": "52 = `00110100`, 55 = `00110111`: первые шесть битов третьего октета совпадают, C = 16 + 6 = 22. При маске /22 узлы в одной сети, при /23 — уже в разных."
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "from ipaddress import ip_address, ip_network\n\ndef net(node, p):\n    return ip_network(f'{node}/{p}', strict=False)\n\n\ndef ordinary(node, p):\n    n = net(node, p)\n    address = ip_address(node)\n    return address not in (n.network_address,\n                           n.broadcast_address)\n\n\na, b = '10.30.52.1', '10.30.55.250'\nsame = [p for p in range(33) if net(a, p) == net(b, p)]\nprint(max(same), max(same) + 1)",
+              "code": "from ipaddress import ip_address, ip_network\n\nsame = []\nfor p in range(33):\n    a = ip_network(f'10.30.52.1/{p}', strict=False)\n    b = ip_network(f'10.30.55.250/{p}', strict=False)\n    if a == b:\n        same.append(p)\nprint(max(same))",
               "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `22`"
             }
           }
         ],
@@ -184162,7 +184354,7 @@
         "theory_links": [
           {
             "label": "Теория",
-            "section": "pervoe-razlichie",
+            "section": "dva-uzla",
             "material_id": "networks"
           }
         ],
@@ -184184,7 +184376,7 @@
         ],
         "checker": {
           "checker_type": "exact_match",
-          "answer_variants": ["22 23"],
+          "answer_variants": ["22"],
           "numeric_tolerance": null
         }
       },
@@ -184213,7 +184405,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Узел не может быть адресом сети или широковещательным."
+              "markdown": "Проверь, что при самой длинной маске узлы не совпадают с краями сети."
             }
           }
         ],
@@ -184221,7 +184413,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "22: 200 = `11001000`, 203 = `11001011`, C = 16 + 6; при `/22` оба адреса обычные."
+              "markdown": "200 = `11001000`, 203 = `11001011`: C = 16 + 6 = 22. При /22 сеть 90.14.200.0 — 90.14.203.255, и оба узла в ней обычные адреса, поэтому ответ 22."
             }
           },
           {
@@ -184230,6 +184422,12 @@
               "language": "python",
               "code": "from ipaddress import ip_address, ip_network\n\ndef net(node, p):\n    return ip_network(f'{node}/{p}', strict=False)\n\n\ndef ordinary(node, p):\n    n = net(node, p)\n    address = ip_address(node)\n    return address not in (n.network_address,\n                           n.broadcast_address)\n\n\na, b = '90.14.200.33', '90.14.203.140'\nsame = [p for p in range(33) if net(a, p) == net(b, p)]\nprint(max(p for p in same\n          if ordinary(a, p) and ordinary(b, p)))",
               "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `22`"
             }
           }
         ],
@@ -184245,7 +184443,7 @@
         "theory_links": [
           {
             "label": "Теория",
-            "section": "samaya-dlinnaya",
+            "section": "dva-uzla",
             "material_id": "networks"
           }
         ],
@@ -184296,7 +184494,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Самая длинная общая маска."
+              "markdown": "Найди самую длинную общую маску."
             }
           }
         ],
@@ -184304,7 +184502,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "1024 адреса: самая длинная общая маска `/22`, 2¹⁰."
+              "markdown": "Меньше всего адресов — в сети с самой длинной общей маской /22: 2¹⁰ = 1024."
             }
           },
           {
@@ -184313,6 +184511,12 @@
               "language": "python",
               "code": "from ipaddress import ip_address, ip_network\n\ndef net(node, p):\n    return ip_network(f'{node}/{p}', strict=False)\n\n\ndef ordinary(node, p):\n    n = net(node, p)\n    address = ip_address(node)\n    return address not in (n.network_address,\n                           n.broadcast_address)\n\n\na, b = '90.14.200.33', '90.14.203.140'\nsame = [p for p in range(33) if net(a, p) == net(b, p)]\np = max(p for p in same if ordinary(a, p) and ordinary(b, p))\nprint(2 ** (32 - p))",
               "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `1024`"
             }
           }
         ],
@@ -184328,7 +184532,7 @@
         "theory_links": [
           {
             "label": "Теория",
-            "section": "setevye-chasti",
+            "section": "dva-uzla",
             "material_id": "networks"
           }
         ],
@@ -184379,7 +184583,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Разные сети — граница дальше первого различия."
+              "markdown": "Разные сети — граница маски дальше первого различия."
             }
           }
         ],
@@ -184387,7 +184591,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "27: 90 = `01011010`, 120 = `01111000`, C = 24 + 2 = 26, разные сети при p ≥ 27."
+              "markdown": "90 = `01011010`, 120 = `01111000`: совпадают первые два бита последнего октета, C = 24 + 2 = 26. Сети разные, когда граница заходит за первое различие: p ≥ 27."
             }
           },
           {
@@ -184396,6 +184600,12 @@
               "language": "python",
               "code": "from ipaddress import ip_address, ip_network\n\ndef net(node, p):\n    return ip_network(f'{node}/{p}', strict=False)\n\n\ndef ordinary(node, p):\n    n = net(node, p)\n    address = ip_address(node)\n    return address not in (n.network_address,\n                           n.broadcast_address)\n\n\na, b = '156.71.33.90', '156.71.33.120'\nsame = [p for p in range(33) if net(a, p) == net(b, p)]\nprint(max(same) + 1)",
               "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `27`"
             }
           }
         ],
@@ -184411,7 +184621,7 @@
         "theory_links": [
           {
             "label": "Теория",
-            "section": "pervoe-razlichie",
+            "section": "dva-uzla",
             "material_id": "networks"
           }
         ],
@@ -184462,7 +184672,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Адрес 61.5.96.0 при длинной маске становится адресом сети."
+              "markdown": "При длинной маске адрес 61.5.96.0 становится адресом сети — такой маски быть не может."
             }
           }
         ],
@@ -184470,7 +184680,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "18: 96 = `01100000`, 111 = `01101111`, C = 20, но при p = 19 и p = 20 адрес 61.5.96.0 — адрес сети; при p = 18 сеть 61.5.64.0, оба адреса обычные."
+              "markdown": "96 = `01100000`, 111 = `01101111`: C = 16 + 4 = 20. Но при /20 и /19 узел 61.5.96.0 — сам адрес сети. При /18 сеть 61.5.64.0 — 61.5.127.255, оба узла обычные: ответ 18."
             }
           },
           {
@@ -184479,6 +184689,12 @@
               "language": "python",
               "code": "from ipaddress import ip_address, ip_network\n\ndef net(node, p):\n    return ip_network(f'{node}/{p}', strict=False)\n\n\ndef ordinary(node, p):\n    n = net(node, p)\n    address = ip_address(node)\n    return address not in (n.network_address,\n                           n.broadcast_address)\n\n\na, b = '61.5.96.0', '61.5.111.7'\nsame = [p for p in range(33) if net(a, p) == net(b, p)]\nprint(max(p for p in same\n          if ordinary(a, p) and ordinary(b, p)))",
               "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `18`"
             }
           }
         ],
@@ -184494,7 +184710,7 @@
         "theory_links": [
           {
             "label": "Теория",
-            "section": "samaya-dlinnaya",
+            "section": "dva-uzla",
             "material_id": "networks"
           }
         ],
@@ -184537,7 +184753,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Узлы с IP-адресами 18.240.130.5 и 18.240.141.77 находятся в одной сети. Укажите наибольшее возможное значение третьего слева байта маски этой сети."
+              "markdown": "Узлы с IP-адресами 18.240.130.5 и 18.240.141.77 находятся в одной сети. Укажи наибольшее возможное значение третьего слева байта маски этой сети."
             }
           }
         ],
@@ -184545,7 +184761,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Самая длинная общая маска."
+              "markdown": "Найди самую длинную общую маску и её третий байт."
             }
           }
         ],
@@ -184553,7 +184769,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "240: 130 = `10000010`, 141 = `10001101`, C = 16 + 4 = 20."
+              "markdown": "130 = `10000010`, 141 = `10001101`: C = 16 + 4 = 20, оба узла при /20 обычные. Третий байт маски /20 — `11110000` = 240."
             }
           },
           {
@@ -184562,6 +184778,12 @@
               "language": "python",
               "code": "from ipaddress import ip_address, ip_network\n\ndef net(node, p):\n    return ip_network(f'{node}/{p}', strict=False)\n\n\ndef ordinary(node, p):\n    n = net(node, p)\n    address = ip_address(node)\n    return address not in (n.network_address,\n                           n.broadcast_address)\n\n\na, b = '18.240.130.5', '18.240.141.77'\nsame = [p for p in range(33) if net(a, p) == net(b, p)]\np = max(p for p in same if ordinary(a, p) and ordinary(b, p))\nprint(ip_network(f'0.0.0.0/{p}').netmask.packed[2])",
               "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `240`"
             }
           }
         ],
@@ -184577,7 +184799,7 @@
         "theory_links": [
           {
             "label": "Теория",
-            "section": "programma-dvuh-setej",
+            "section": "dva-uzla",
             "material_id": "networks"
           }
         ],
@@ -184620,7 +184842,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Узлы с IP-адресами 205.66.157.48 и 205.66.149.230 находятся в разных сетях, маски которых одинаковы. Укажите наименьшее возможное значение третьего слева байта этой маски. Ответ запишите в виде десятичного числа."
+              "markdown": "Узлы с IP-адресами 205.66.157.48 и 205.66.149.230 находятся в разных сетях, маски которых одинаковы. Укажи наименьшее возможное значение третьего слева байта этой маски. Ответ запиши в виде десятичного числа."
             }
           }
         ],
@@ -184628,7 +184850,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Самая короткая маска, при которой сети разные."
+              "markdown": "Самая короткая маска разных сетей на бит длиннее совпадения."
             }
           }
         ],
@@ -184636,7 +184858,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "248: 157 = `10011101`, 149 = `10010101`, C = 20, разные сети с p = 21 — третий байт `11111000`."
+              "markdown": "157 = `10011101`, 149 = `10010101`: C = 16 + 4 = 20, разные сети начинаются с /21. Третий байт маски /21 — `11111000` = 248."
             }
           },
           {
@@ -184645,6 +184867,12 @@
               "language": "python",
               "code": "from ipaddress import ip_address, ip_network\n\ndef net(node, p):\n    return ip_network(f'{node}/{p}', strict=False)\n\n\ndef ordinary(node, p):\n    n = net(node, p)\n    address = ip_address(node)\n    return address not in (n.network_address,\n                           n.broadcast_address)\n\n\na, b = '205.66.157.48', '205.66.149.230'\nsame = [p for p in range(33) if net(a, p) == net(b, p)]\np = max(same) + 1\nprint(ip_network(f'0.0.0.0/{p}').netmask.packed[2])",
               "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `248`"
             }
           }
         ],
@@ -184660,7 +184888,7 @@
         "theory_links": [
           {
             "label": "Теория",
-            "section": "programma-dvuh-setej",
+            "section": "dva-uzla",
             "material_id": "networks"
           }
         ],
@@ -184703,7 +184931,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Два узла, находящиеся в одной сети, имеют IP-адреса 77.180.12.9 и 77.184.250.4. Укажите наибольшее возможное значение второго слева байта маски сети. Ответ запишите в виде десятичного числа."
+              "markdown": "Два узла, находящиеся в одной сети, имеют IP-адреса 77.180.12.9 и 77.184.250.4. Укажи наибольшее возможное значение второго слева байта маски сети. Ответ запиши в виде десятичного числа."
             }
           }
         ],
@@ -184711,7 +184939,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Первое различие — во втором байте."
+              "markdown": "Узлы различаются уже во втором байте — сравни его биты."
             }
           }
         ],
@@ -184719,7 +184947,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "240: 180 = `10110100`, 184 = `10111000`, C = 8 + 4 = 12, второй байт маски `11110000`."
+              "markdown": "Первое различие — во втором байте: 180 = `10110100`, 184 = `10111000`, совпадают четыре бита, C = 8 + 4 = 12. Второй байт маски /12 — `11110000` = 240."
             }
           },
           {
@@ -184728,6 +184956,12 @@
               "language": "python",
               "code": "from ipaddress import ip_address, ip_network\n\ndef net(node, p):\n    return ip_network(f'{node}/{p}', strict=False)\n\n\ndef ordinary(node, p):\n    n = net(node, p)\n    address = ip_address(node)\n    return address not in (n.network_address,\n                           n.broadcast_address)\n\n\na, b = '77.180.12.9', '77.184.250.4'\nsame = [p for p in range(33) if net(a, p) == net(b, p)]\np = max(p for p in same if ordinary(a, p) and ordinary(b, p))\nprint(ip_network(f'0.0.0.0/{p}').netmask.packed[1])",
               "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `240`"
             }
           }
         ],
@@ -184743,7 +184977,7 @@
         "theory_links": [
           {
             "label": "Теория",
-            "section": "programma-dvuh-setej",
+            "section": "dva-uzla",
             "material_id": "networks"
           }
         ],
@@ -184794,7 +185028,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Фиксированные единицы плюс единицы свободной части."
+              "markdown": "Сначала сосчитай единицы сетевой части — они есть у каждого адреса."
             }
           }
         ],
@@ -184802,7 +185036,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "3: у 192 две единицы, у 168 три, у 1 одна, фиксированные биты последнего октета нулевые — всего шесть; свободных битов три, нужны две единицы: `011`, `101`, `110`."
+              "markdown": "Фиксированная часть: 192 — две единицы, 168 — три, 1 — одна, сетевые биты последнего октета нулевые — всего шесть. Свободных битов три, нужны две единицы: `011`, `101`, `110` — три адреса."
             }
           },
           {
@@ -184811,6 +185045,12 @@
               "language": "python",
               "code": "from ipaddress import ip_address, ip_network\n\ndef ones(address):\n    return bin(int(address)).count('1')\n\n\nnet = ip_network('192.168.1.0/29')\nprint(sum(1 for x in net if ones(x) == 8))",
               "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `3`"
             }
           }
         ],
@@ -184826,7 +185066,7 @@
         "theory_links": [
           {
             "label": "Теория",
-            "section": "chislo-edinic",
+            "section": "fiksirovannye-bity",
             "material_id": "networks"
           }
         ],
@@ -184857,19 +185097,19 @@
     {
       "task": {
         "id": "task-10-6-02",
-        "title": "Чётное число единиц",
+        "title": "Чётное число единиц у компьютеров",
         "short_description": null,
         "explanation_kind": "worked_solution",
         "difficulty": 1,
         "estimated_minutes": 3,
-        "answer_instruction": "Введите два числа через пробел в том порядке, в каком их спрашивают.",
+        "answer_instruction": "Введите число.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "В той же сети сколько адресов содержат чётное число единиц? Как изменится ответ, если считать только обычные узлы?"
+              "markdown": "В сети `192.168.1.0/29` сколько адресов, которые можно назначить компьютерам, содержат чётное число единиц в двоичной записи?"
             }
           }
         ],
@@ -184877,7 +185117,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Проверьте каждый специальный адрес по условию."
+              "markdown": "Проверь каждый специальный адрес по условию, а не вычитай два."
             }
           }
         ],
@@ -184885,15 +185125,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "4 и 3: в свободных битах ноль единиц (один вариант) или две (три варианта); адрес сети с шестью единицами входит в эти четыре, широковещательный с девятью — нет, поэтому для обычных узлов 4 − 1."
+              "markdown": "В сетевой части шесть единиц. Чётное число всего — ноль или две единицы в трёх свободных битах: 1 + 3 = 4 адреса. Среди них адрес сети (шесть единиц) — его исключают; широковещательный (девять единиц) в четвёрку не входил. Остаётся 3."
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "from ipaddress import ip_address, ip_network\n\ndef ones(address):\n    return bin(int(address)).count('1')\n\n\nnet = ip_network('192.168.1.0/29')\neven = [x for x in net if ones(x) % 2 == 0]\nhosts = [x for x in even if x not in (net.network_address,\n                                      net.broadcast_address)]\nprint(len(even), len(hosts))",
+              "code": "from ipaddress import ip_address, ip_network\n\nnet = ip_network('192.168.1.0/29')\ncount = 0\nfor address in net.hosts():\n    if f'{address:b}'.count('1') % 2 == 0:\n        count += 1\nprint(count)",
               "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `3`"
             }
           }
         ],
@@ -184902,14 +185148,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 40,
+            "position": 42,
             "material_id": "networks"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "specialnye-adresa",
+            "section": "chetnost-i-kratnost",
             "material_id": "networks"
           }
         ],
@@ -184931,7 +185177,7 @@
         ],
         "checker": {
           "checker_type": "exact_match",
-          "answer_variants": ["4 3"],
+          "answer_variants": ["3"],
           "numeric_tolerance": null
         }
       },
@@ -184960,7 +185206,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "У 10 две единицы."
+              "markdown": "Сколько единиц уже дают сетевые биты?"
             }
           }
         ],
@@ -184968,7 +185214,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "4: у 10 две единицы, в четырёх свободных битах нужна одна."
+              "markdown": "У 10 = `00001010` две единицы, остальные сетевые биты нулевые. В четырёх свободных битах нужна одна единица — четыре варианта её места."
             }
           },
           {
@@ -184978,6 +185224,12 @@
               "code": "from ipaddress import ip_address, ip_network\n\ndef ones(address):\n    return bin(int(address)).count('1')\n\n\nprint(sum(1 for x in ip_network('10.0.0.0/28') if ones(x) == 3))",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `4`"
+            }
           }
         ],
         "skills": [],
@@ -184985,14 +185237,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 41,
+            "position": 40,
             "material_id": "networks"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "chislo-edinic",
+            "section": "fiksirovannye-bity",
             "material_id": "networks"
           }
         ],
@@ -185043,7 +185295,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Фиксированная часть даёт 8 единиц."
+              "markdown": "Сосчитай единицы сетевой части и реши, сколько нужно в свободных битах."
             }
           }
         ],
@@ -185051,7 +185303,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "21: фиксированная часть 172.16.5.01 даёт 4 + 1 + 2 + 1 = 8 единиц, в шести свободных битах нужно 1 или 4 единицы: 6 + 15."
+              "markdown": "Фиксированная часть 172.16.5 и два сетевых бита `01` дают 4 + 1 + 2 + 1 = 8 единиц. Кратно 3 — 9 или 12 единиц всего, то есть 1 или 4 в шести свободных битах: 6 + 15 = 21."
             }
           },
           {
@@ -185061,6 +185313,12 @@
               "code": "from ipaddress import ip_address, ip_network\n\ndef ones(address):\n    return bin(int(address)).count('1')\n\n\nprint(sum(1 for x in ip_network('172.16.5.64/26')\n          if ones(x) % 3 == 0))",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `21`"
+            }
           }
         ],
         "skills": [],
@@ -185068,14 +185326,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 42,
+            "position": 43,
             "material_id": "networks"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "chislo-edinic",
+            "section": "chetnost-i-kratnost",
             "material_id": "networks"
           }
         ],
@@ -185126,7 +185384,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Широковещательный адрес назначать нельзя."
+              "markdown": "Широковещательный адрес компьютеру не назначают."
             }
           }
         ],
@@ -185134,7 +185392,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "12: c = 2 + 3 = 5, h = 8, у обычного узла не больше c + h − 1."
+              "markdown": "Сетевая часть даёт 2 + 3 = 5 единиц, свободных битов 8. Все восемь единиц — у широковещательного адреса, он компьютеру не достаётся, поэтому наибольшее 5 + 8 − 1 = 12."
             }
           },
           {
@@ -185144,6 +185402,12 @@
               "code": "from ipaddress import ip_address, ip_network\n\ndef ones(address):\n    return bin(int(address)).count('1')\n\n\nnet = ip_network('192.168.0.0/24')\nprint(max(ones(x) for x in net.hosts()))",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `12`"
+            }
           }
         ],
         "skills": [],
@@ -185151,14 +185415,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 43,
+            "position": 41,
             "material_id": "networks"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "dlya-vseh",
+            "section": "fiksirovannye-bity",
             "material_id": "networks"
           }
         ],
@@ -185209,7 +185473,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Условие проверяют на части записи."
+              "markdown": "Условие проверяют только на третьем байте — срезом."
             }
           }
         ],
@@ -185217,7 +185481,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "3840: третий байт `00xxxxxx`, в шести свободных битах нужны четыре единицы — 15 вариантов, и четвёртый байт любой: 15 · 256."
+              "markdown": "При маске /18 третий байт — `00xxxxxx`: два сетевых нуля и шесть свободных битов. Поровну нулей и единиц — четыре единицы в шести битах, 15 вариантов; четвёртый байт любой: 15 · 256 = 3840."
             }
           },
           {
@@ -185227,6 +185491,12 @@
               "code": "from ipaddress import ip_address, ip_network\n\ncount = 0\nfor x in ip_network('10.20.0.0/18'):\n    third = f'{x.packed[2]:08b}'\n    if third.count('1') == third.count('0'):\n        count += 1\nprint(count)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `3840`"
+            }
           }
         ],
         "skills": [],
@@ -185234,7 +185504,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 44,
+            "position": 45,
             "material_id": "networks"
           }
         ],
@@ -185284,7 +185554,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Сеть задана IP-адресом одного из входящих в неё узлов 180.45.101.7 и сетевой маской 255.255.224.0. Найдите наименьший IP-адрес этой сети, который может быть назначен компьютеру и содержит в двоичной записи кратное 4 количество единиц. В ответе укажите адрес без разделителей."
+              "markdown": "Сеть задана IP-адресом одного из входящих в неё узлов 180.45.101.7 и сетевой маской 255.255.224.0. Найди наименьший IP-адрес этой сети, который может быть назначен компьютеру и содержит в двоичной записи кратное 4 количество единиц. В ответе укажи адрес без разделителей."
             }
           }
         ],
@@ -185292,7 +185562,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Перебор по порядку с остановкой."
+              "markdown": "Перебирай адреса компьютеров по порядку и остановись на первом подходящем."
             }
           }
         ],
@@ -185300,7 +185570,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "18045963: сеть 180.45.96.0/19, адрес 180.45.96.3 — первый компьютер, у которого 4 + 4 + 2 + 2 = 12 единиц."
+              "markdown": "Сеть 180.45.96.0/19. Перебираем адреса компьютеров по порядку: первый с числом единиц, кратным 4, — 180.45.96.3 (4 + 4 + 2 + 2 = 12 единиц). Без точек — 18045963."
             }
           },
           {
@@ -185310,6 +185580,12 @@
               "code": "from ipaddress import ip_address, ip_network\n\ndef ones(address):\n    return bin(int(address)).count('1')\n\n\nnet = ip_network('180.45.101.7/255.255.224.0', strict=False)\nfor x in net.hosts():\n    if ones(x) % 4 == 0:\n        print(str(x).replace('.', ''))\n        break",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `18045963`"
+            }
           }
         ],
         "skills": [],
@@ -185317,14 +185593,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 45,
+            "position": 46,
             "material_id": "networks"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "naimenshij-adres",
+            "section": "krajnij-adres",
             "material_id": "networks"
           }
         ],
@@ -185375,7 +185651,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Сначала самая маленькая общая сеть."
+              "markdown": "Наименьшее количество — в самой маленькой допустимой сети."
             }
           }
         ],
@@ -185383,7 +185659,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "462: самая длинная общая маска `/21` (40 = `00101000`, 45 = `00101101`), в сети 52.118.40.0/21 ровно 15 единиц у 462 адресов."
+              "markdown": "Самая длинная общая маска — /21 (40 = `00101000`, 45 = `00101101`): в самой маленькой общей сети 52.118.40.0/21 меньше всего адресов. Ровно 15 единиц у 462 из них."
             }
           },
           {
@@ -185393,6 +185669,12 @@
               "code": "from ipaddress import ip_address, ip_network\n\ndef net(node, p):\n    return ip_network(f'{node}/{p}', strict=False)\n\n\ndef ordinary(node, p):\n    n = net(node, p)\n    address = ip_address(node)\n    return address not in (n.network_address,\n                           n.broadcast_address)\n\n\na, b = '52.118.40.17', '52.118.45.200'\nsame = [p for p in range(33) if net(a, p) == net(b, p)]\ndef ones(address):\n    return bin(int(address)).count('1')\n\n\np = max(p for p in same if ordinary(a, p) and ordinary(b, p))\nprint(sum(1 for x in net(a, p) if ones(x) == 15))",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `462`"
+            }
           }
         ],
         "skills": [],
@@ -185400,14 +185682,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 46,
+            "position": 48,
             "material_id": "networks"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "krajnyaya-maska",
+            "section": "krajnij-adres",
             "material_id": "networks"
           }
         ],
@@ -185450,7 +185732,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Сеть задана IP-адресом 201.33.148.0 и маской сети 255.255.255.240. Сколько в этой сети IP-адресов, для которых количество единиц в двоичной записи не кратно 3? В ответе укажите только число."
+              "markdown": "Сеть задана IP-адресом 201.33.148.0 и маской сети 255.255.255.240. Сколько в этой сети IP-адресов, для которых количество единиц в двоичной записи не кратно 3? В ответе укажи только число."
             }
           }
         ],
@@ -185458,7 +185740,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Из 16 адресов посчитайте неподходящие."
+              "markdown": "Из 16 адресов посчитай те, где условие не выполняется."
             }
           }
         ],
@@ -185466,7 +185748,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "11: из 16 адресов количество единиц кратно 3 у пяти."
+              "markdown": "Перебор 16 адресов сети: у пяти число единиц кратно 3, у остальных 11 — нет."
             }
           },
           {
@@ -185476,6 +185758,12 @@
               "code": "from ipaddress import ip_address, ip_network\n\ndef ones(address):\n    return bin(int(address)).count('1')\n\n\nprint(sum(1 for x in ip_network('201.33.148.0/28')\n          if ones(x) % 3 != 0))",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `11`"
+            }
           }
         ],
         "skills": [],
@@ -185483,14 +185771,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 47,
+            "position": 44,
             "material_id": "networks"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "chislo-edinic",
+            "section": "chetnost-i-kratnost",
             "material_id": "networks"
           }
         ],
@@ -185533,7 +185821,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Сеть задана IP-адресом 115.180.0.0 и сетевой маской 255.252.0.0. Определите наибольшую сумму октетов IP-адреса компьютера из этой сети, у которого количество единиц и количество нулей в двоичной записи одинаково."
+              "markdown": "Сеть задана IP-адресом 115.180.0.0 и сетевой маской 255.252.0.0. Определи наибольшую сумму октетов IP-адреса компьютера из этой сети, у которого количество единиц и количество нулей в двоичной записи одинаково."
             }
           }
         ],
@@ -185541,7 +185829,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Единиц и нулей поровну — по 16."
+              "markdown": "Наибольшую сумму ищи перебором до конца сети, обновляя лучший результат."
             }
           }
         ],
@@ -185549,7 +185837,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "759: сеть 115.180.0.0/14, фиксированная часть даёт 5 + 4 = 9 единиц, в 18 свободных битах нужно 7; перебор обычных узлов программой даёт наибольшую сумму, например у 115.180.240.224: 115 + 180 + 240 + 224."
+              "markdown": "Сеть 115.180.0.0/14: в сетевой части 9 единиц, в 18 свободных битах нужно ещё 7. Перебор адресов компьютеров с обновлением наибольшей суммы даёт 759 — например, у 115.180.240.224."
             }
           },
           {
@@ -185559,6 +185847,12 @@
               "code": "from ipaddress import ip_address, ip_network\n\ndef ones(address):\n    return bin(int(address)).count('1')\n\n\nbest = 0\nfor x in ip_network('115.180.0.0/14').hosts():\n    if ones(x) == 16:\n        best = max(best, sum(x.packed))\nprint(best)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `759`"
+            }
           }
         ],
         "skills": [],
@@ -185566,14 +185860,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 48,
+            "position": 47,
             "material_id": "networks"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "naibolshee-znachenie",
+            "section": "krajnij-adres",
             "material_id": "networks"
           }
         ],
@@ -185624,7 +185918,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "c = 2, h = 5: выбор позиций единиц."
+              "markdown": "Выбери позиции недостающих единиц среди свободных битов."
             }
           }
         ],
@@ -185632,7 +185926,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "10: c = 2 (10 = `00001010`), h = 5, C(5, 2)."
+              "markdown": "У 10 = `00001010` две единицы, свободных битов 5. Нужно ещё 2 единицы: C(5, 2) = 10."
             }
           },
           {
@@ -185641,6 +185935,12 @@
               "language": "python",
               "code": "from math import comb\n\nprint(comb(5, 4 - 2))",
               "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `10`"
             }
           }
         ],
@@ -185708,7 +186008,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Перебор миллиона адресов заменяет формула."
+              "markdown": "Считай формулой C(h, k − c): перебор сети /12 долгий."
             }
           }
         ],
@@ -185716,7 +186016,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "15 504: 172 = `10101100` — четыре единицы, первые четыре бита 16 — `0001`, одна; c = 5, h = 20, C(20, 5)."
+              "markdown": "172 = `10101100` — четыре единицы, первые четыре бита 16 — `0001`, одна: c = 5, h = 20. Нужно ещё 5 единиц: C(20, 5) = 15 504 — без перебора миллиона адресов."
             }
           },
           {
@@ -185725,6 +186025,12 @@
               "language": "python",
               "code": "from ipaddress import ip_address, ip_network\n\ndef ones(address):\n    return bin(int(address)).count('1')\n\n\nfrom math import comb\n\nnet = ip_network('172.16.0.0/12')\nc = ones(net.network_address)\nh = 32 - net.prefixlen\nprint(comb(h, 10 - c))",
               "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `15504`"
             }
           }
         ],
@@ -185741,7 +186047,7 @@
         "theory_links": [
           {
             "label": "Теория",
-            "section": "formula",
+            "section": "podschet-formuloj",
             "material_id": "networks"
           }
         ],
@@ -185792,7 +186098,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Условие проверяют для каждой из 33 длин."
+              "markdown": "Проверь условие для каждой из 33 длин маски."
             }
           }
         ],
@@ -185800,7 +186106,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "35: подходит маска `/25`, в адресе сети семь единиц; h = 7, нужно три единицы, C(7, 3)."
+              "markdown": "Перебор 33 длин находит одну маску /25: в адресе сети семь единиц, в маске семь нулей. Нужно ещё 10 − 7 = 3 единицы в 7 свободных битах: C(7, 3) = 35."
             }
           },
           {
@@ -185809,6 +186115,12 @@
               "language": "python",
               "code": "from ipaddress import ip_address, ip_network\n\ndef ones(address):\n    return bin(int(address)).count('1')\n\n\nfrom math import comb\n\nfor p in range(33):\n    net = ip_network(f'12.34.56.78/{p}', strict=False)\n    c = ones(net.network_address)\n    if c == 32 - p:\n        print(comb(32 - p, 10 - c))",
               "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `35`"
             }
           }
         ],
@@ -185825,7 +186137,7 @@
         "theory_links": [
           {
             "label": "Теория",
-            "section": "maska-po-usloviyu",
+            "section": "maska-po-usloviyu-bit",
             "material_id": "networks"
           }
         ],
@@ -185876,7 +186188,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Условие проверяют для каждой из 33 длин."
+              "markdown": "Проверь условие для каждой из 33 длин маски."
             }
           }
         ],
@@ -185884,7 +186196,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "70: подходит маска `/24`, в адресе сети восемь единиц; h = 8, C(8, 4)."
+              "markdown": "Подходит маска /24: в адресе сети восемь единиц, в маске восемь нулей. Нужно ещё 4 единицы в 8 свободных битах: C(8, 4) = 70."
             }
           },
           {
@@ -185893,6 +186205,12 @@
               "language": "python",
               "code": "from ipaddress import ip_address, ip_network\n\ndef ones(address):\n    return bin(int(address)).count('1')\n\n\nfrom math import comb\n\nfor p in range(33):\n    net = ip_network(f'19.6.140.33/{p}', strict=False)\n    c = ones(net.network_address)\n    if c == 32 - p:\n        print(comb(32 - p, 12 - c))",
               "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `70`"
             }
           }
         ],
@@ -185909,7 +186227,7 @@
         "theory_links": [
           {
             "label": "Теория",
-            "section": "maska-po-usloviyu",
+            "section": "maska-po-usloviyu-bit",
             "material_id": "networks"
           }
         ],
@@ -185960,7 +186278,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Номер узла — его расстояние от адреса сети."
+              "markdown": "Номер узла — расстояние от адреса сети; номеров с c единицами — C(h, c)."
             }
           }
         ],
@@ -185968,7 +186286,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "56: свойство есть только при `/24`, у адреса сети три единицы; C(8, 3)."
+              "markdown": "Свойство выполняется только при /24: у адреса сети три единицы, у номера узла 200 = `11001000` — тоже три. Номеров с тремя единицами среди восьми битов C(8, 3) = 56."
             }
           },
           {
@@ -185977,6 +186295,12 @@
               "language": "python",
               "code": "from ipaddress import ip_address, ip_network\n\ndef ones(address):\n    return bin(int(address)).count('1')\n\n\nfrom math import comb\n\nnode = ip_address('129.0.1.200')\nbest = 0\nfor p in range(33):\n    net = ip_network(f'{node}/{p}', strict=False)\n    c = ones(net.network_address)\n    if ones(int(node) - int(net.network_address)) == c:\n        best = max(best, comb(32 - p, c))\nprint(best)",
               "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `56`"
             }
           }
         ],
@@ -185993,7 +186317,7 @@
         "theory_links": [
           {
             "label": "Теория",
-            "section": "nomer-uzla-uslovie",
+            "section": "maska-po-usloviyu-bit",
             "material_id": "networks"
           }
         ],
@@ -186044,7 +186368,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Проверьте каждую длину префикса."
+              "markdown": "Проверь каждую длину маски формулой C(h, k − c)."
             }
           }
         ],
@@ -186052,7 +186376,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "24: ровно 56 адресов с девятью единицами — только при `/24`, C(8, 3)."
+              "markdown": "Для каждой длины считаем адреса с девятью единицами формулой. Ровно 56 их только при /24: c = 6, h = 8, C(8, 3) = 56."
             }
           },
           {
@@ -186061,6 +186385,12 @@
               "language": "python",
               "code": "from ipaddress import ip_address, ip_network\n\ndef ones(address):\n    return bin(int(address)).count('1')\n\n\nfrom math import comb\n\nfor p in range(33):\n    net = ip_network(f'10.66.129.3/{p}', strict=False)\n    c = ones(net.network_address)\n    if 9 >= c and comb(32 - p, 9 - c) == 56:\n        print(p)",
               "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `24`"
             }
           }
         ],
@@ -186077,7 +186407,7 @@
         "theory_links": [
           {
             "label": "Теория",
-            "section": "rovno-stolko",
+            "section": "maska-po-usloviyu-bit",
             "material_id": "networks"
           }
         ],
@@ -186120,7 +186450,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "В сети узла 61.200.37.5 есть узел, у которого первый байт совпадает с четвёртым, а второй — с третьим. Укажите наименьшее возможное количество адресов этой сети, в двоичной записи которых ровно 12 единиц."
+              "markdown": "В сети узла 61.200.37.5 есть узел, у которого первый байт совпадает с четвёртым, а второй — с третьим. Укажи наименьшее возможное количество адресов этой сети, в двоичной записи которых ровно 12 единиц."
             }
           }
         ],
@@ -186128,7 +186458,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Второй узел: первый байт как четвёртый, второй как третий."
+              "markdown": "Сначала построй второй узел по описанию."
             }
           }
         ],
@@ -186136,7 +186466,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "1820: второй узел — 61.200.200.61, самая маленькая общая сеть 61.200.0.0/16; c = 5 + 3 = 8, h = 16, C(16, 4)."
+              "markdown": "Второй узел — 61.200.200.61. 37 = `00100101` и 200 = `11001000` различаются уже в первом бите третьего байта, самая маленькая общая сеть — 61.200.0.0/16. В ней c = 5 + 3 = 8, h = 16, нужно 4 единицы: C(16, 4) = 1820."
             }
           },
           {
@@ -186145,6 +186475,12 @@
               "language": "python",
               "code": "from ipaddress import ip_address, ip_network\n\ndef net(node, p):\n    return ip_network(f'{node}/{p}', strict=False)\n\n\ndef ordinary(node, p):\n    n = net(node, p)\n    address = ip_address(node)\n    return address not in (n.network_address,\n                           n.broadcast_address)\n\n\na, b = '61.200.37.5', '61.200.200.61'\nsame = [p for p in range(33) if net(a, p) == net(b, p)]\ndef ones(address):\n    return bin(int(address)).count('1')\n\n\nfrom math import comb\n\np = max(p for p in same if ordinary(a, p) and ordinary(b, p))\nc = ones(net(a, p).network_address)\nprint(comb(32 - p, 12 - c))",
               "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `1820`"
             }
           }
         ],
@@ -186161,7 +186497,7 @@
         "theory_links": [
           {
             "label": "Теория",
-            "section": "vtoroj-uzel",
+            "section": "maska-po-usloviyu-bit",
             "material_id": "networks"
           }
         ],
@@ -186204,7 +186540,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Узел имеет IP-адрес 93.180.214.77. Маска сети равна 255.255.255.192. Определите адрес сети и в ответе запишите сумму значений его октетов. (Подтема 2: адрес сети.)"
+              "markdown": "Узел имеет IP-адрес 93.180.214.77. Маска сети равна 255.255.255.192. Определи адрес сети и в ответе запиши сумму значений его октетов."
             }
           }
         ],
@@ -186212,7 +186548,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "77 И 192."
+              "markdown": "Считать нужно только смешанный октет маски."
             }
           }
         ],
@@ -186220,7 +186556,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "551: 77 И 192 = 64, адрес сети 93.180.214.64, 93 + 180 + 214 + 64."
+              "markdown": "Последний октет маски 192: 77 И 192 = 64, адрес сети 93.180.214.64. Сумма октетов 93 + 180 + 214 + 64 = 551."
             }
           },
           {
@@ -186229,6 +186565,12 @@
               "language": "python",
               "code": "from ipaddress import ip_address, ip_network\n\nnet = ip_network('93.180.214.77/255.255.255.192', strict=False)\nprint(sum(net.network_address.packed))",
               "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `551`"
             }
           }
         ],
@@ -186281,7 +186623,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Для узла с IP-адресом 140.33.118.46 адрес сети равен 140.33.112.0. Каково наименьшее возможное количество единиц в разрядах маски? (Подтема 4: L ≤ p ≤ C.)"
+              "markdown": "Для узла с IP-адресом 140.33.118.46 адрес сети равен 140.33.112.0. Каково наименьшее возможное количество единиц в разрядах маски?"
             }
           }
         ],
@@ -186289,7 +186631,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "L ≤ p ≤ C."
+              "markdown": "Подходят все длины от L до C."
             }
           }
         ],
@@ -186297,7 +186639,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "20: 118 = `01110110`, 112 = `01110000`, L = 20, C = 21, маски `/20` и `/21`."
+              "markdown": "118 = `01110110`, 112 = `01110000`: L = 20, C = 21, подходят маски /20 и /21. Меньше всего единиц у /20."
             }
           },
           {
@@ -186306,6 +186648,12 @@
               "language": "python",
               "code": "from ipaddress import ip_address, ip_network\n\nps = [p for p in range(33)\n      if ip_network(f'140.33.118.46/{p}', strict=False)\n      .network_address == ip_address('140.33.112.0')]\nprint(min(ps))",
               "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `20`"
             }
           }
         ],
@@ -186358,7 +186706,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Узлы с IP-адресами 66.12.250.3 и 66.12.236.190 находятся в одной сети. Укажите наибольшее возможное значение третьего слева байта маски этой сети. (Подтема 5: совпадающие биты.)"
+              "markdown": "Узлы с IP-адресами 66.12.250.3 и 66.12.236.190 находятся в одной сети. Укажи наибольшее возможное значение третьего слева байта маски этой сети."
             }
           }
         ],
@@ -186366,7 +186714,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Совпадающие биты третьего октета."
+              "markdown": "Совпадающие начальные биты третьего байта задают самую длинную маску."
             }
           }
         ],
@@ -186374,7 +186722,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "224: 250 = `11111010`, 236 = `11101100`, C = 16 + 3 = 19, маска `/19`."
+              "markdown": "250 = `11111010`, 236 = `11101100`: совпадают три бита, C = 16 + 3 = 19, оба узла при /19 обычные. Третий байт маски /19 — `11100000` = 224."
             }
           },
           {
@@ -186383,6 +186731,12 @@
               "language": "python",
               "code": "from ipaddress import ip_address, ip_network\n\ndef net(node, p):\n    return ip_network(f'{node}/{p}', strict=False)\n\n\ndef ordinary(node, p):\n    n = net(node, p)\n    address = ip_address(node)\n    return address not in (n.network_address,\n                           n.broadcast_address)\n\n\na, b = '66.12.250.3', '66.12.236.190'\nsame = [p for p in range(33) if net(a, p) == net(b, p)]\np = max(p for p in same if ordinary(a, p) and ordinary(b, p))\nprint(ip_network(f'0.0.0.0/{p}').netmask.packed[2])",
               "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `224`"
             }
           }
         ],
@@ -186435,7 +186789,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Сеть задана IP-адресом 150.8.64.0 и маской сети 255.255.255.224. Сколько в этой сети IP-адресов, для которых количество единиц в двоичной записи кратно 5? (Подтема 6: подсчёт по битам.)"
+              "markdown": "Сеть задана IP-адресом 150.8.64.0 и маской сети 255.255.255.224. Сколько в этой сети IP-адресов, для которых количество единиц в двоичной записи кратно 5?"
             }
           }
         ],
@@ -186443,7 +186797,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Фиксированная часть даёт 6 единиц."
+              "markdown": "Сначала сосчитай единицы сетевой части."
             }
           }
         ],
@@ -186451,7 +186805,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "5: в фиксированной части 4 + 1 + 1 = 6 единиц, всего нужно 10, значит, в пяти свободных битах ровно один ноль — пять вариантов его места."
+              "markdown": "В сетевой части 4 + 1 + 1 = 6 единиц, свободных битов 5. Кратно 5 — 10 единиц, то есть в пяти свободных битах четыре единицы и один ноль: пять вариантов места нуля."
             }
           },
           {
@@ -186460,6 +186814,12 @@
               "language": "python",
               "code": "from ipaddress import ip_address, ip_network\n\ndef ones(address):\n    return bin(int(address)).count('1')\n\n\nprint(sum(1 for x in ip_network('150.8.64.0/27')\n          if ones(x) % 5 == 0))",
               "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `5`"
             }
           }
         ],
@@ -186512,7 +186872,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Сеть задана IP-адресом одного из входящих в неё узлов 31.87.140.250 и сетевой маской 255.255.248.0. Найдите наибольший IP-адрес этой сети, который может быть назначен компьютеру. В ответе укажите найденный адрес без разделителей. (Подтема 2: края сети и форма ответа.)"
+              "markdown": "Сеть задана IP-адресом одного из входящих в неё узлов 31.87.140.250 и сетевой маской 255.255.248.0. Найди наибольший IP-адрес этой сети, который может быть назначен компьютеру. В ответе укажи найденный адрес без разделителей."
             }
           }
         ],
@@ -186520,7 +186880,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "На единицу меньше широковещательного."
+              "markdown": "Наибольший адрес компьютера на единицу меньше широковещательного."
             }
           }
         ],
@@ -186528,7 +186888,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "3187143254: d = 8, 140 лежит в блоке 136–143, широковещательный 31.87.143.255, наибольший адрес компьютера 31.87.143.254."
+              "markdown": "Третий октет маски 248, блок 8: 140 лежит в блоке 136–143. Широковещательный адрес 31.87.143.255, наибольший адрес компьютера 31.87.143.254 — без точек 3187143254."
             }
           },
           {
@@ -186537,6 +186897,12 @@
               "language": "python",
               "code": "from ipaddress import ip_address, ip_network\n\nnet = ip_network('31.87.140.250/255.255.248.0', strict=False)\nprint(str(net.broadcast_address - 1).replace('.', ''))",
               "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `3187143254`"
             }
           }
         ],
@@ -191040,14 +191406,14 @@
         "explanation_kind": "worked_solution",
         "difficulty": 1,
         "estimated_minutes": 3,
-        "answer_instruction": "Введите два числа через пробел в том порядке, в каком их спрашивают.",
+        "answer_instruction": "Введите число.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Сколько строк учебной таблицы имеют сумму не меньше 34, а сколько — больше 34?"
+              "markdown": "Сколько строк учебной таблицы имеют сумму чисел не меньше 34?"
             }
           },
           {
@@ -191061,7 +191427,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "«Не меньше 34» допускает сумму, равную 34, а «больше 34» — нет."
+              "markdown": "«Не меньше 34» допускает сумму, равную 34."
             }
           }
         ],
@@ -191069,21 +191435,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Суммы строк учебной таблицы — 36, 30, 34, 33, 30 и 106. Не меньше 34 три из них: 36, 34 и 106. Больше 34 только две: сумма 34 третьей строки подходит под «не меньше», но не под «больше»."
+              "markdown": "Суммы строк учебной таблицы — 36, 30, 34, 33, 30 и 106. Не меньше 34 три из них: 36, 34 и 106. Сумма 34 третьей строки подходит под «не меньше», но не подошла бы под «больше»."
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "at_least = 0\ngreater = 0\nwith open(\"9.txt\") as f:\n    for line in f:\n        a = [int(part) for part in line.split()]\n        if sum(a) >= 34:\n            at_least += 1\n        if sum(a) > 34:\n            greater += 1\nprint(at_least, greater)",
+              "code": "answer = 0\nwith open(\"9.txt\") as f:\n    for line in f:\n        a = [int(part) for part in line.split()]\n        if sum(a) >= 34:\n            answer += 1\nprint(answer)",
               "caption": "Решение программой"
             }
           },
           {
             "type": "text",
             "data": {
-              "markdown": "Ответ: `3 2`"
+              "markdown": "Ответ: `3`"
             }
           }
         ],
@@ -191130,7 +191496,7 @@
         ],
         "checker": {
           "checker_type": "exact_match",
-          "answer_variants": ["3 2"],
+          "answer_variants": ["3"],
           "numeric_tolerance": null
         }
       },
@@ -191144,14 +191510,14 @@
         "explanation_kind": "worked_solution",
         "difficulty": 1,
         "estimated_minutes": 3,
-        "answer_instruction": "Введите два числа через пробел в том порядке, в каком их спрашивают.",
+        "answer_instruction": "Введите число.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Сколько чисел учебной таблицы больше 20 и в скольких строках такие числа есть?"
+              "markdown": "Сколько строк учебной таблицы содержат хотя бы одно число больше 8?"
             }
           },
           {
@@ -191165,7 +191531,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Каждое подходящее число считается отдельно, а строка — один раз, сколько бы в ней ни было подходящих чисел."
+              "markdown": "Строка считается один раз, сколько бы в ней ни было подходящих чисел."
             }
           }
         ],
@@ -191173,21 +191539,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Больше 20 три числа — 22, 24 и 26, и все они в шестой строке. Числа считают каждое, а строку — один раз, поэтому строка одна."
+              "markdown": "Чисел больше 8 в таблице одиннадцать, но строка учитывается один раз, сколько бы в ней ни было подходящих чисел. Такие числа есть во всех строках, кроме пятой (3, 3, 4, 5, 7, 8): 8 не больше 8."
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "numbers = 0\nrows = 0\nwith open(\"9.txt\") as f:\n    for line in f:\n        a = [int(part) for part in line.split()]\n        big = [x for x in a if x > 20]\n        numbers += len(big)\n        if len(big) > 0:\n            rows += 1\nprint(numbers, rows)",
+              "code": "rows = 0\nwith open(\"9.txt\") as f:\n    for line in f:\n        a = [int(part) for part in line.split()]\n        big = [x for x in a if x > 8]\n        if len(big) > 0:\n            rows += 1\nprint(rows)",
               "caption": "Решение программой"
             }
           },
           {
             "type": "text",
             "data": {
-              "markdown": "Ответ: `3 1`"
+              "markdown": "Ответ: `5`"
             }
           }
         ],
@@ -191234,7 +191600,7 @@
         ],
         "checker": {
           "checker_type": "exact_match",
-          "answer_variants": ["3 1"],
+          "answer_variants": ["5"],
           "numeric_tolerance": null
         }
       },
@@ -191484,14 +191850,14 @@
         "explanation_kind": "worked_solution",
         "difficulty": 1,
         "estimated_minutes": 3,
-        "answer_instruction": "Введите два числа через пробел в том порядке, в каком их спрашивают.",
+        "answer_instruction": "Введите число.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Для строки 3, 3, 8, 10, 10 найди S − m − M. Что останется, если убрать все числа, равные минимуму или максимуму?"
+              "markdown": "Для строки 3, 3, 8, 10, 10 найди S − m − M — сумму без одного наименьшего и одного наибольшего числа."
             }
           }
         ],
@@ -191507,21 +191873,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "S = 3 + 3 + 8 + 10 + 10 = 34. S − m − M убирает одну тройку и одну десятку: 34 − 3 − 10 = 21, это 3 + 8 + 10. Если убрать все тройки и десятки, останется только 8."
+              "markdown": "S = 3 + 3 + 8 + 10 + 10 = 34. S − m − M убирает одну тройку и одну десятку: 34 − 3 − 10 = 21, это 3 + 8 + 10. Если бы убрали все тройки и десятки, осталось бы только 8 — это другая операция."
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "a = [3, 3, 8, 10, 10]\nrest = sum(a) - min(a) - max(a)\nmiddle = [x for x in a if x != min(a) and x != max(a)]\nprint(rest, sum(middle))",
+              "code": "a = [3, 3, 8, 10, 10]\nprint(sum(a) - min(a) - max(a))",
               "caption": "Решение программой"
             }
           },
           {
             "type": "text",
             "data": {
-              "markdown": "Ответ: `21 8`"
+              "markdown": "Ответ: `21`"
             }
           }
         ],
@@ -191559,7 +191925,7 @@
         ],
         "checker": {
           "checker_type": "exact_match",
-          "answer_variants": ["21 8"],
+          "answer_variants": ["21"],
           "numeric_tolerance": null
         }
       },
@@ -191573,14 +191939,14 @@
         "explanation_kind": "worked_solution",
         "difficulty": 1,
         "estimated_minutes": 2,
-        "answer_instruction": "Введите два числа через пробел в том порядке, в каком их спрашивают.",
+        "answer_instruction": "Введите число.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Найди второе наибольшее и второе наименьшее число строки 4, 9, 9, 6."
+              "markdown": "Найди второе наибольшее число строки 4, 9, 9, 6."
             }
           }
         ],
@@ -191596,21 +191962,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Упорядоченная строка — 4, 6, 9, 9. Повторяющаяся девятка занимает два последних места, поэтому второе наибольшее — 9, а второе наименьшее — 6."
+              "markdown": "Упорядоченная строка — 4, 6, 9, 9. Повторяющаяся девятка занимает два последних места, поэтому второе наибольшее — тоже 9, а не 6."
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "a = [4, 9, 9, 6]\nb = sorted(a)\nprint(b[-2], b[1])",
+              "code": "a = [4, 9, 9, 6]\nb = sorted(a)\nprint(b[-2])",
               "caption": "Решение программой"
             }
           },
           {
             "type": "text",
             "data": {
-              "markdown": "Ответ: `9 6`"
+              "markdown": "Ответ: `9`"
             }
           }
         ],
@@ -191648,7 +192014,7 @@
         ],
         "checker": {
           "checker_type": "exact_match",
-          "answer_variants": ["9 6"],
+          "answer_variants": ["9"],
           "numeric_tolerance": null
         }
       },
@@ -191662,14 +192028,14 @@
         "explanation_kind": "worked_solution",
         "difficulty": 1,
         "estimated_minutes": 1,
-        "answer_instruction": "Введите два числа через пробел в том порядке, в каком их спрашивают.",
+        "answer_instruction": "Введите число.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Для чисел 3 и 6 найди квадрат суммы и сумму квадратов."
+              "markdown": "На сколько квадрат суммы чисел 3 и 6 больше суммы их квадратов?"
             }
           }
         ],
@@ -191685,21 +192051,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Квадрат суммы: сначала сложить, потом возвести — (3 + 6)² = 81. Сумма квадратов: сначала возвести каждое — 9 + 36 = 45."
+              "markdown": "Квадрат суммы: сначала сложить, потом возвести — (3 + 6)² = 81. Сумма квадратов: сначала возвести каждое — 9 + 36 = 45. Разница 81 − 45 = 36 — это удвоенное произведение 2 · 3 · 6."
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "print((3 + 6) ** 2, 3**2 + 6**2)",
+              "code": "print((3 + 6) ** 2 - (3 ** 2 + 6 ** 2))",
               "caption": "Решение программой"
             }
           },
           {
             "type": "text",
             "data": {
-              "markdown": "Ответ: `81 45`"
+              "markdown": "Ответ: `36`"
             }
           }
         ],
@@ -191737,7 +192103,7 @@
         ],
         "checker": {
           "checker_type": "exact_match",
-          "answer_variants": ["81 45"],
+          "answer_variants": ["36"],
           "numeric_tolerance": null
         }
       },
@@ -192105,14 +192471,14 @@
         "explanation_kind": "worked_solution",
         "difficulty": 1,
         "estimated_minutes": 3,
-        "answer_instruction": "Введите три числа через пробел в том порядке, в каком их спрашивают.",
+        "answer_instruction": "Введите число.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Дана строка 4, 4, 7, 9, 9, 9. Сколько в ней различных значений? Какие числа неповторяющиеся? Чему равна сумма повторяющихся с учётом всех появлений?"
+              "markdown": "Дана строка 4, 4, 7, 9, 9, 9. Чему равна сумма повторяющихся чисел с учётом всех появлений?"
             }
           }
         ],
@@ -192120,7 +192486,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Различные значения считают по одному разу, а сумму повторяющихся — по всем появлениям."
+              "markdown": "Каждое появление повторяющегося числа входит в сумму."
             }
           }
         ],
@@ -192128,21 +192494,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Различных значений три: 4, 7 и 9. Неповторяющееся число одно — 7. Повторяющиеся с учётом всех появлений — 4 + 4 + 9 + 9 + 9 = 35."
+              "markdown": "Повторяющиеся числа — 4, 4, 9, 9, 9, неповторяющееся — только 7. С учётом всех появлений сумма 4 + 4 + 9 + 9 + 9 = 35; без учёта повторений было бы 4 + 9 = 13."
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "a = [4, 4, 7, 9, 9, 9]\nsingle = [x for x in a if a.count(x) == 1]\nrepeated = [x for x in a if a.count(x) > 1]\nprint(len(set(a)), *single, sum(repeated))",
+              "code": "a = [4, 4, 7, 9, 9, 9]\nrepeated = [x for x in a if a.count(x) > 1]\nprint(sum(repeated))",
               "caption": "Решение программой"
             }
           },
           {
             "type": "text",
             "data": {
-              "markdown": "Ответ: `3 7 35`"
+              "markdown": "Ответ: `35`"
             }
           }
         ],
@@ -192180,7 +192546,7 @@
         ],
         "checker": {
           "checker_type": "exact_match",
-          "answer_variants": ["3 7 35"],
+          "answer_variants": ["35"],
           "numeric_tolerance": null
         }
       },
@@ -193001,19 +193367,19 @@
     {
       "task": {
         "id": "task-9-5-01",
-        "title": "Остатки в Python",
+        "title": "Остаток отрицательного числа",
         "short_description": null,
         "explanation_kind": "worked_solution",
         "difficulty": 1,
         "estimated_minutes": 2,
-        "answer_instruction": "Введите три числа через пробел в том порядке, в каком их спрашивают.",
+        "answer_instruction": "Введите число.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Чему равны `23 % 4`, `-7 % 2` и `0 % 2`?"
+              "markdown": "Чему равно `-7 % 2` в Python?"
             }
           }
         ],
@@ -193021,7 +193387,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Остаток от деления на положительное число в Python всегда от 0 до делителя без единицы."
+              "markdown": "Остаток от деления на 2 в Python — 0 или 1, даже у отрицательного числа."
             }
           }
         ],
@@ -193029,21 +193395,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "23 = 4 · 5 + 3, остаток 3. В Python остаток от деления на положительное число неотрицателен: −7 = 2 · (−4) + 1, остаток 1. 0 % 2 = 0 — ноль чётный. Нечётные — 23 и −7."
+              "markdown": "В Python остаток от деления на положительное число неотрицателен: −7 = 2 · (−4) + 1, остаток 1. Поэтому проверка нечётности `x % 2 != 0` работает и для отрицательных чисел."
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "print(23 % 4, -7 % 2, 0 % 2)",
+              "code": "print(-7 % 2)",
               "caption": "Решение программой"
             }
           },
           {
             "type": "text",
             "data": {
-              "markdown": "Ответ: `3 1 0`"
+              "markdown": "Ответ: `1`"
             }
           }
         ],
@@ -193081,7 +193447,7 @@
         ],
         "checker": {
           "checker_type": "exact_match",
-          "answer_variants": ["3 1 0"],
+          "answer_variants": ["1"],
           "numeric_tolerance": null
         }
       },
@@ -193444,19 +193810,19 @@
     {
       "task": {
         "id": "task-9-6-04",
-        "title": "Первая, последняя и сумма номеров",
+        "title": "Первая или последняя из равных",
         "short_description": null,
         "explanation_kind": "worked_solution",
         "difficulty": 2,
         "estimated_minutes": 4,
-        "answer_instruction": "Введите четыре числа через пробел в том порядке, в каком их спрашивают.",
+        "answer_instruction": "Введите число.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Подходящие строки имеют номера 3, 7 и 10, суммы их чисел — 50, 80 и 80. Каков номер подходящей строки с наибольшей суммой, если при равенстве нужна первая такая строка? Если последняя? Какова сумма номеров и сумма чисел последней подходящей строки?"
+              "markdown": "Подходящие строки имеют номера 3, 7 и 10, суммы их чисел — 50, 80 и 80. Программа ищет строку с наибольшей суммой и запоминает новую строку, если `s >= best`. Какой номер она выведет?"
             }
           }
         ],
@@ -193464,7 +193830,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Сравнение «больше» оставляет первую из строк с равной суммой, «больше или равно» — последнюю."
+              "markdown": "Сравнение «больше или равно» заменяет ответ и при равной сумме."
             }
           }
         ],
@@ -193472,21 +193838,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Наибольшая сумма — 80 у строк 7 и 10. Сравнение «больше» оставит первую из них — 7, «больше или равно» — последнюю, 10. Сумма номеров 3 + 7 + 10 = 20, сумма чисел последней подходящей строки — 80."
+              "markdown": "Наибольшая сумма 80 у строк 7 и 10. Сравнение «больше или равно» заменяет ответ и при равной сумме, поэтому остаётся последняя из них — 10. Со сравнением «больше» осталась бы первая — 7."
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "rows = [(3, 50), (7, 80), (10, 80)]\nfirst = None\nlast = None\nbest = 0\nfor number, s in rows:\n    if first is None or s > best:\n        first = number\n        best = s\nfor number, s in rows:\n    if last is None or s >= best:\n        last = number\nprint(first, last, sum(n for n, s in rows), rows[-1][1])",
+              "code": "rows = [(3, 50), (7, 80), (10, 80)]\nbest = None\nanswer = None\nfor number, s in rows:\n    if best is None or s >= best:\n        best = s\n        answer = number\nprint(answer)",
               "caption": "Решение программой"
             }
           },
           {
             "type": "text",
             "data": {
-              "markdown": "Ответ: `7 10 20 80`"
+              "markdown": "Ответ: `10`"
             }
           }
         ],
@@ -193524,7 +193890,7 @@
         ],
         "checker": {
           "checker_type": "exact_match",
-          "answer_variants": ["7 10 20 80"],
+          "answer_variants": ["10"],
           "numeric_tolerance": null
         }
       },
@@ -193533,19 +193899,19 @@
     {
       "task": {
         "id": "task-9-6-05",
-        "title": "Модуль минимума и минимум модулей",
+        "title": "Модуль наименьшего числа",
         "short_description": null,
         "explanation_kind": "worked_solution",
         "difficulty": 1,
         "estimated_minutes": 2,
-        "answer_instruction": "Введите два числа через пробел в том порядке, в каком их спрашивают.",
+        "answer_instruction": "Введите число.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Для чисел −5, −9, 2 найди модуль минимального числа и минимум модулей."
+              "markdown": "Для чисел −5, −9, 2 найди модуль наименьшего числа."
             }
           }
         ],
@@ -193553,7 +193919,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Модуль берут там, где его называет условие: от наименьшего числа или от каждого числа."
+              "markdown": "Сначала найди наименьшее число, потом возьми его модуль."
             }
           }
         ],
@@ -193561,21 +193927,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Наименьшее число −9, его модуль 9. Модули чисел — 5, 9 и 2, наименьший из них 2."
+              "markdown": "Наименьшее число −9, его модуль 9. Наименьший из модулей был бы другим — 2: модуль берут там, где его называет условие."
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "a = [-5, -9, 2]\nprint(abs(min(a)), min(abs(x) for x in a))",
+              "code": "a = [-5, -9, 2]\nprint(abs(min(a)))",
               "caption": "Решение программой"
             }
           },
           {
             "type": "text",
             "data": {
-              "markdown": "Ответ: `9 2`"
+              "markdown": "Ответ: `9`"
             }
           }
         ],
@@ -193613,7 +193979,7 @@
         ],
         "checker": {
           "checker_type": "exact_match",
-          "answer_variants": ["9 2"],
+          "answer_variants": ["9"],
           "numeric_tolerance": null
         }
       },
@@ -194627,14 +194993,14 @@
         "explanation_kind": "worked_solution",
         "difficulty": 1,
         "estimated_minutes": 2,
-        "answer_instruction": "Введите два числа через пробел в том порядке, в каком их спрашивают.",
+        "answer_instruction": "Введите число.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Число 7 встречается в первой строке дважды, во второй — трижды, в третьей ни разу, в четвёртой — один раз. Сколько у него появлений и в скольких строках оно встречается?"
+              "markdown": "Число 7 встречается в первой строке дважды, во второй — трижды, в третьей ни разу, в четвёртой — один раз. В скольких строках оно встречается?"
             }
           }
         ],
@@ -194642,7 +195008,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Строка считается, если число в ней есть хотя бы раз."
+              "markdown": "Строка учитывается, если число в ней есть хотя бы раз."
             }
           }
         ],
@@ -194650,21 +195016,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Появлений 2 + 3 + 1 = 6. Строк с семёркой три: первая, вторая и четвёртая."
+              "markdown": "Строка учитывается, если семёрка в ней есть хотя бы раз: первая, вторая и четвёртая — три строки. Появлений при этом шесть — другая величина."
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "per_row = [2, 3, 0, 1]\nprint(sum(per_row), len([k for k in per_row if k > 0]))",
+              "code": "per_row = [2, 3, 0, 1]\nprint(len([k for k in per_row if k > 0]))",
               "caption": "Решение программой"
             }
           },
           {
             "type": "text",
             "data": {
-              "markdown": "Ответ: `6 3`"
+              "markdown": "Ответ: `3`"
             }
           }
         ],
@@ -194703,7 +195069,7 @@
         ],
         "checker": {
           "checker_type": "exact_match",
-          "answer_variants": ["6 3"],
+          "answer_variants": ["3"],
           "numeric_tolerance": null
         }
       },
@@ -194712,19 +195078,19 @@
     {
       "task": {
         "id": "task-9-8-04",
-        "title": "Сколько соседей у ячеек",
+        "title": "Ячейки с пятью соседями",
         "short_description": null,
         "explanation_kind": "worked_solution",
         "difficulty": 2,
         "estimated_minutes": 4,
-        "answer_instruction": "Введите три числа через пробел в том порядке, в каком их спрашивают.",
+        "answer_instruction": "Введите число.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "В таблице 4 строки и 6 столбцов. Сколько ячеек имеют 8 соседей, сколько — 5 и сколько — 3?"
+              "markdown": "В таблице 4 строки и 6 столбцов, соседними считаются ячейки с общей стороной или углом. Сколько ячеек имеют ровно 5 соседей?"
             }
           }
         ],
@@ -194740,21 +195106,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Внутренних ячеек (4 − 2) · (6 − 2) = 8, у каждой 8 соседей. Угловых 4, у каждой 3 соседа. Остальные 24 − 8 − 4 = 12 ячеек на краю, у них по 5 соседей."
+              "markdown": "Пять соседей у ячеек на краю, кроме угловых. Всего ячеек 24, внутренних (4 − 2) · (6 − 2) = 8 (у них по 8 соседей), угловых 4 (по 3 соседа): 24 − 8 − 4 = 12."
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "rows, cols = 4, 6\ninner = (rows - 2) * (cols - 2)\ncorner = 4\nedge = rows * cols - inner - corner\nprint(inner, edge, corner)",
+              "code": "rows, cols = 4, 6\ninner = (rows - 2) * (cols - 2)\ncorner = 4\nprint(rows * cols - inner - corner)",
               "caption": "Решение программой"
             }
           },
           {
             "type": "text",
             "data": {
-              "markdown": "Ответ: `8 12 4`"
+              "markdown": "Ответ: `12`"
             }
           }
         ],
@@ -194793,7 +195159,7 @@
         ],
         "checker": {
           "checker_type": "exact_match",
-          "answer_variants": ["8 12 4"],
+          "answer_variants": ["12"],
           "numeric_tolerance": null
         }
       },
@@ -830956,69 +831322,31 @@
       "id": "networks",
       "sections": [
         "kak-ustroena-tema-10",
-        "zachem-ip",
         "32-bita",
-        "obratnoe-preobrazovanie",
-        "oktet",
-        "vosem-bitov",
-        "modul-ipaddress",
-        "set-i-uzel",
         "maska",
-        "edinica-v-maske",
-        "oktety-maski",
-        "maska-po-prefiksu",
+        "dopustimye-maski",
         "adres-itogo",
-        "granicy-seti",
-        "adres-seti",
-        "primer-192",
-        "shirokoveshchatelnyj",
-        "ip-network",
-        "tretij-oktet",
+        "adres-seti-i",
         "razmer-bloka",
+        "granicy-seti",
         "forma-otveta",
-        "set-itogo",
-        "kolichestvo-i-nomer",
-        "svobodnye-bity",
-        "maska-pod-kolichestvo",
-        "podseti",
+        "seti-itogo",
+        "kolichestvo",
+        "set-pod-kompyutery",
         "nomer-uzla",
-        "neskolko-oktetov",
-        "adres-kak-chislo",
-        "adres-po-nomeru",
-        "uzel-itogo",
+        "kolichestvo-itogo",
         "maska-po-bitam",
-        "sravnenie-bitov",
-        "odna-poziciya",
-        "neodnoznachnost",
-        "neravenstvo",
-        "perebor-dlin",
-        "polnaya-programma",
+        "vse-maski",
+        "dva-uzla",
         "maska-itogo",
-        "odna-set",
-        "setevye-chasti",
-        "pervoe-razlichie",
-        "programma-dvuh-setej",
-        "samaya-dlinnaya",
-        "dva-itogo",
         "fiksirovannye-bity",
-        "svobodnye-i-fiksirovannye",
-        "chislo-edinic",
-        "chetnost-edinic",
-        "specialnye-adresa",
+        "chetnost-i-kratnost",
         "chast-adresa",
-        "dlya-vseh",
-        "naimenshij-adres",
-        "razmer-perebora",
-        "krajnyaya-maska",
-        "naibolshee-znachenie",
-        "dvoichnaya-itogo",
-        "dopolnitelnyy-urok-maska",
+        "krajnij-adres",
+        "zapis-itogo",
         "vybor-pozicij",
-        "formula",
-        "maska-po-usloviyu",
-        "nomer-uzla-uslovie",
-        "rovno-stolko",
-        "vtoroj-uzel",
+        "podschet-formuloj",
+        "maska-po-usloviyu-bit",
         "usloviya-itogo"
       ],
       "kind": "topic",
@@ -831030,17 +831358,9 @@
           "access": "free",
           "sections": [
             "kak-ustroena-tema-10",
-            "zachem-ip",
             "32-bita",
-            "obratnoe-preobrazovanie",
-            "oktet",
-            "vosem-bitov",
-            "modul-ipaddress",
-            "set-i-uzel",
             "maska",
-            "edinica-v-maske",
-            "oktety-maski",
-            "maska-po-prefiksu",
+            "dopustimye-maski",
             "adres-itogo"
           ]
         },
@@ -831048,87 +831368,46 @@
           "slug": "adres-seti",
           "access": "free",
           "sections": [
-            "granicy-seti",
-            "adres-seti",
-            "primer-192",
-            "shirokoveshchatelnyj",
-            "ip-network",
-            "tretij-oktet",
+            "adres-seti-i",
             "razmer-bloka",
+            "granicy-seti",
             "forma-otveta",
-            "set-itogo"
+            "seti-itogo"
           ]
         },
         {
           "slug": "kolichestvo-i-nomer-uzla",
           "access": "free",
           "sections": [
-            "kolichestvo-i-nomer",
-            "svobodnye-bity",
-            "maska-pod-kolichestvo",
-            "podseti",
+            "kolichestvo",
+            "set-pod-kompyutery",
             "nomer-uzla",
-            "neskolko-oktetov",
-            "adres-kak-chislo",
-            "adres-po-nomeru",
-            "uzel-itogo"
+            "kolichestvo-itogo"
           ]
         },
         {
           "slug": "maska-po-adresu-seti",
           "access": "free",
-          "sections": [
-            "maska-po-bitam",
-            "sravnenie-bitov",
-            "odna-poziciya",
-            "neodnoznachnost",
-            "neravenstvo",
-            "perebor-dlin",
-            "polnaya-programma",
-            "maska-itogo"
-          ]
-        },
-        {
-          "slug": "dva-uzla",
-          "access": "free",
-          "sections": [
-            "odna-set",
-            "setevye-chasti",
-            "pervoe-razlichie",
-            "programma-dvuh-setej",
-            "samaya-dlinnaya",
-            "dva-itogo"
-          ]
+          "sections": ["maska-po-bitam", "vse-maski", "dva-uzla", "maska-itogo"]
         },
         {
           "slug": "dvoichnaya-zapis-adresov",
           "access": "free",
           "sections": [
             "fiksirovannye-bity",
-            "svobodnye-i-fiksirovannye",
-            "chislo-edinic",
-            "chetnost-edinic",
-            "specialnye-adresa",
+            "chetnost-i-kratnost",
             "chast-adresa",
-            "dlya-vseh",
-            "naimenshij-adres",
-            "razmer-perebora",
-            "krajnyaya-maska",
-            "naibolshee-znachenie",
-            "dvoichnaya-itogo"
+            "krajnij-adres",
+            "zapis-itogo"
           ]
         },
         {
           "slug": "maska-po-usloviyu",
           "access": "free",
           "sections": [
-            "dopolnitelnyy-urok-maska",
             "vybor-pozicij",
-            "formula",
-            "maska-po-usloviyu",
-            "nomer-uzla-uslovie",
-            "rovno-stolko",
-            "vtoroj-uzel",
+            "podschet-formuloj",
+            "maska-po-usloviyu-bit",
             "usloviya-itogo"
           ]
         }

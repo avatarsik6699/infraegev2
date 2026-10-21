@@ -3,22 +3,6 @@
 import type { LessonMediaTypes } from "~/shared/components/learning-content";
 
 export const lessonMedia = {
-  // %%ip_bits("192.168.10.173", 26)%%
-  ipBits19216810173_26: {
-    kind: "diagram",
-    svg: '<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" viewBox="0 0 660 142"><text x="82.0" y="40.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="end" style="font-variant-numeric:tabular-nums">адрес</text><text x="157.8" y="20.0" font-family="inherit" font-size="13" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">192</text><text x="299.2" y="20.0" font-family="inherit" font-size="13" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">168</text><text x="440.8" y="20.0" font-family="inherit" font-size="13" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">10</text><text x="582.2" y="20.0" font-family="inherit" font-size="13" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">173</text><rect x="92.0" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="100.2" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="108.4" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="116.7" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="124.9" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="133.1" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="141.3" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="149.5" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="157.8" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="166.0" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="174.2" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="182.4" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="190.6" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="198.8" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="207.1" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="215.3" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="233.5" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="241.7" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="249.9" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="258.2" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="266.4" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="274.6" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="282.8" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="291.0" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="299.2" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="307.5" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="315.7" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="323.9" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="332.1" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="340.3" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="348.6" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="356.8" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="375.0" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="383.2" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="391.4" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="399.7" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="407.9" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="416.1" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="424.3" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="432.5" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="440.8" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="449.0" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="457.2" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="465.4" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="473.6" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="481.8" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="490.1" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="498.3" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="516.5" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="524.7" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="532.9" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="541.2" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="549.4" y="26.0" width="16.4" height="22.0" fill="#f3f3f1" stroke="#d9d9d4" stroke-width="1.0"/><text x="557.6" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="565.8" y="26.0" width="16.4" height="22.0" fill="#f3f3f1" stroke="#d9d9d4" stroke-width="1.0"/><text x="574.0" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="582.2" y="26.0" width="16.4" height="22.0" fill="#f3f3f1" stroke="#d9d9d4" stroke-width="1.0"/><text x="590.5" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="598.7" y="26.0" width="16.4" height="22.0" fill="#f3f3f1" stroke="#d9d9d4" stroke-width="1.0"/><text x="606.9" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="615.1" y="26.0" width="16.4" height="22.0" fill="#f3f3f1" stroke="#d9d9d4" stroke-width="1.0"/><text x="623.3" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="631.6" y="26.0" width="16.4" height="22.0" fill="#f3f3f1" stroke="#d9d9d4" stroke-width="1.0"/><text x="639.8" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><text x="82.0" y="86.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="end" style="font-variant-numeric:tabular-nums">маска</text><text x="157.8" y="66.0" font-family="inherit" font-size="13" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">255</text><text x="299.2" y="66.0" font-family="inherit" font-size="13" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">255</text><text x="440.8" y="66.0" font-family="inherit" font-size="13" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">255</text><text x="582.2" y="66.0" font-family="inherit" font-size="13" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">192</text><rect x="92.0" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="100.2" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="108.4" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="116.7" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="124.9" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="133.1" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="141.3" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="149.5" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="157.8" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="166.0" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="174.2" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="182.4" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="190.6" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="198.8" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="207.1" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="215.3" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="233.5" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="241.7" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="249.9" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="258.2" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="266.4" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="274.6" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="282.8" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="291.0" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="299.2" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="307.5" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="315.7" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="323.9" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="332.1" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="340.3" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="348.6" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="356.8" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="375.0" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="383.2" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="391.4" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="399.7" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="407.9" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="416.1" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="424.3" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="432.5" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="440.8" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="449.0" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="457.2" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="465.4" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="473.6" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="481.8" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="490.1" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="498.3" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="516.5" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="524.7" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="532.9" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="541.2" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="549.4" y="72.0" width="16.4" height="22.0" fill="#f3f3f1" stroke="#d9d9d4" stroke-width="1.0"/><text x="557.6" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="565.8" y="72.0" width="16.4" height="22.0" fill="#f3f3f1" stroke="#d9d9d4" stroke-width="1.0"/><text x="574.0" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="582.2" y="72.0" width="16.4" height="22.0" fill="#f3f3f1" stroke="#d9d9d4" stroke-width="1.0"/><text x="590.5" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="598.7" y="72.0" width="16.4" height="22.0" fill="#f3f3f1" stroke="#d9d9d4" stroke-width="1.0"/><text x="606.9" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="615.1" y="72.0" width="16.4" height="22.0" fill="#f3f3f1" stroke="#d9d9d4" stroke-width="1.0"/><text x="623.3" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="631.6" y="72.0" width="16.4" height="22.0" fill="#f3f3f1" stroke="#d9d9d4" stroke-width="1.0"/><text x="639.8" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><line x1="549.4" y1="22.0" x2="549.4" y2="112.0" stroke="#ff6a00" stroke-width="2.5"/><text x="92.0" y="132.0" font-family="inherit" font-size="13" font-weight="600" fill="#17191e" text-anchor="start" style="font-variant-numeric:tabular-nums">сеть: 26 бит</text><text x="648.0" y="132.0" font-family="inherit" font-size="13" font-weight="600" fill="#17191e" text-anchor="end" style="font-variant-numeric:tabular-nums">узел: 6 бит</text><line x1="92.0" y1="118.0" x2="545.4" y2="118.0" stroke="#4d535e" stroke-width="1.2"/><line x1="553.4" y1="118.0" x2="648.0" y2="118.0" stroke="#4d535e" stroke-width="1.2"/></svg>',
-    width: 660,
-    height: 142,
-    alt: "Адрес 192.168.10.173 и маска /26: 32 бита, граница после 26 бит",
-  },
-  // %%ip_and("192.168.10.173", 26)%%
-  ipAnd19216810173_26: {
-    kind: "diagram",
-    svg: '<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" viewBox="0 0 660 188"><text x="82.0" y="40.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="end" style="font-variant-numeric:tabular-nums">адрес</text><text x="157.8" y="20.0" font-family="inherit" font-size="13" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">192</text><text x="299.2" y="20.0" font-family="inherit" font-size="13" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">168</text><text x="440.8" y="20.0" font-family="inherit" font-size="13" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">10</text><text x="582.2" y="20.0" font-family="inherit" font-size="13" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">173</text><rect x="92.0" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="100.2" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="108.4" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="116.7" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="124.9" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="133.1" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="141.3" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="149.5" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="157.8" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="166.0" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="174.2" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="182.4" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="190.6" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="198.8" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="207.1" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="215.3" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="233.5" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="241.7" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="249.9" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="258.2" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="266.4" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="274.6" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="282.8" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="291.0" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="299.2" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="307.5" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="315.7" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="323.9" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="332.1" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="340.3" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="348.6" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="356.8" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="375.0" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="383.2" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="391.4" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="399.7" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="407.9" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="416.1" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="424.3" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="432.5" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="440.8" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="449.0" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="457.2" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="465.4" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="473.6" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="481.8" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="490.1" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="498.3" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="516.5" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="524.7" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="532.9" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="541.2" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="549.4" y="26.0" width="16.4" height="22.0" fill="#f3f3f1" stroke="#d9d9d4" stroke-width="1.0"/><text x="557.6" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="565.8" y="26.0" width="16.4" height="22.0" fill="#f3f3f1" stroke="#d9d9d4" stroke-width="1.0"/><text x="574.0" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="582.2" y="26.0" width="16.4" height="22.0" fill="#f3f3f1" stroke="#d9d9d4" stroke-width="1.0"/><text x="590.5" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="598.7" y="26.0" width="16.4" height="22.0" fill="#f3f3f1" stroke="#d9d9d4" stroke-width="1.0"/><text x="606.9" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="615.1" y="26.0" width="16.4" height="22.0" fill="#f3f3f1" stroke="#d9d9d4" stroke-width="1.0"/><text x="623.3" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="631.6" y="26.0" width="16.4" height="22.0" fill="#f3f3f1" stroke="#d9d9d4" stroke-width="1.0"/><text x="639.8" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><text x="82.0" y="86.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="end" style="font-variant-numeric:tabular-nums">маска</text><text x="157.8" y="66.0" font-family="inherit" font-size="13" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">255</text><text x="299.2" y="66.0" font-family="inherit" font-size="13" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">255</text><text x="440.8" y="66.0" font-family="inherit" font-size="13" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">255</text><text x="582.2" y="66.0" font-family="inherit" font-size="13" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">192</text><rect x="92.0" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="100.2" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="108.4" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="116.7" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="124.9" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="133.1" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="141.3" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="149.5" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="157.8" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="166.0" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="174.2" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="182.4" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="190.6" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="198.8" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="207.1" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="215.3" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="233.5" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="241.7" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="249.9" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="258.2" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="266.4" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="274.6" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="282.8" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="291.0" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="299.2" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="307.5" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="315.7" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="323.9" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="332.1" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="340.3" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="348.6" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="356.8" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="375.0" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="383.2" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="391.4" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="399.7" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="407.9" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="416.1" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="424.3" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="432.5" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="440.8" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="449.0" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="457.2" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="465.4" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="473.6" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="481.8" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="490.1" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="498.3" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="516.5" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="524.7" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="532.9" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="541.2" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="549.4" y="72.0" width="16.4" height="22.0" fill="#f3f3f1" stroke="#d9d9d4" stroke-width="1.0"/><text x="557.6" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="565.8" y="72.0" width="16.4" height="22.0" fill="#f3f3f1" stroke="#d9d9d4" stroke-width="1.0"/><text x="574.0" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="582.2" y="72.0" width="16.4" height="22.0" fill="#f3f3f1" stroke="#d9d9d4" stroke-width="1.0"/><text x="590.5" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="598.7" y="72.0" width="16.4" height="22.0" fill="#f3f3f1" stroke="#d9d9d4" stroke-width="1.0"/><text x="606.9" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="615.1" y="72.0" width="16.4" height="22.0" fill="#f3f3f1" stroke="#d9d9d4" stroke-width="1.0"/><text x="623.3" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="631.6" y="72.0" width="16.4" height="22.0" fill="#f3f3f1" stroke="#d9d9d4" stroke-width="1.0"/><text x="639.8" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><text x="82.0" y="132.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="end" style="font-variant-numeric:tabular-nums">«И»</text><text x="157.8" y="112.0" font-family="inherit" font-size="13" font-weight="600" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">192</text><text x="299.2" y="112.0" font-family="inherit" font-size="13" font-weight="600" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">168</text><text x="440.8" y="112.0" font-family="inherit" font-size="13" font-weight="600" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">10</text><text x="582.2" y="112.0" font-family="inherit" font-size="13" font-weight="600" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">128</text><rect x="92.0" y="118.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="100.2" y="134.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="600" fill="#17191e" text-anchor="middle">1</text><rect x="108.4" y="118.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="116.7" y="134.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="600" fill="#17191e" text-anchor="middle">1</text><rect x="124.9" y="118.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="133.1" y="134.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="600" fill="#17191e" text-anchor="middle">0</text><rect x="141.3" y="118.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="149.5" y="134.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="600" fill="#17191e" text-anchor="middle">0</text><rect x="157.8" y="118.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="166.0" y="134.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="600" fill="#17191e" text-anchor="middle">0</text><rect x="174.2" y="118.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="182.4" y="134.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="600" fill="#17191e" text-anchor="middle">0</text><rect x="190.6" y="118.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="198.8" y="134.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="600" fill="#17191e" text-anchor="middle">0</text><rect x="207.1" y="118.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="215.3" y="134.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="600" fill="#17191e" text-anchor="middle">0</text><rect x="233.5" y="118.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="241.7" y="134.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="600" fill="#17191e" text-anchor="middle">1</text><rect x="249.9" y="118.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="258.2" y="134.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="600" fill="#17191e" text-anchor="middle">0</text><rect x="266.4" y="118.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="274.6" y="134.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="600" fill="#17191e" text-anchor="middle">1</text><rect x="282.8" y="118.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="291.0" y="134.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="600" fill="#17191e" text-anchor="middle">0</text><rect x="299.2" y="118.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="307.5" y="134.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="600" fill="#17191e" text-anchor="middle">1</text><rect x="315.7" y="118.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="323.9" y="134.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="600" fill="#17191e" text-anchor="middle">0</text><rect x="332.1" y="118.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="340.3" y="134.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="600" fill="#17191e" text-anchor="middle">0</text><rect x="348.6" y="118.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="356.8" y="134.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="600" fill="#17191e" text-anchor="middle">0</text><rect x="375.0" y="118.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="383.2" y="134.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="600" fill="#17191e" text-anchor="middle">0</text><rect x="391.4" y="118.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="399.7" y="134.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="600" fill="#17191e" text-anchor="middle">0</text><rect x="407.9" y="118.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="416.1" y="134.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="600" fill="#17191e" text-anchor="middle">0</text><rect x="424.3" y="118.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="432.5" y="134.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="600" fill="#17191e" text-anchor="middle">0</text><rect x="440.8" y="118.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="449.0" y="134.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="600" fill="#17191e" text-anchor="middle">1</text><rect x="457.2" y="118.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="465.4" y="134.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="600" fill="#17191e" text-anchor="middle">0</text><rect x="473.6" y="118.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="481.8" y="134.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="600" fill="#17191e" text-anchor="middle">1</text><rect x="490.1" y="118.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="498.3" y="134.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="600" fill="#17191e" text-anchor="middle">0</text><rect x="516.5" y="118.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="524.7" y="134.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="600" fill="#17191e" text-anchor="middle">1</text><rect x="532.9" y="118.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="541.2" y="134.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="600" fill="#17191e" text-anchor="middle">0</text><rect x="549.4" y="118.0" width="16.4" height="22.0" fill="#f3f3f1" stroke="#d9d9d4" stroke-width="1.0"/><text x="557.6" y="134.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="600" fill="#17191e" text-anchor="middle">0</text><rect x="565.8" y="118.0" width="16.4" height="22.0" fill="#f3f3f1" stroke="#d9d9d4" stroke-width="1.0"/><text x="574.0" y="134.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="600" fill="#17191e" text-anchor="middle">0</text><rect x="582.2" y="118.0" width="16.4" height="22.0" fill="#f3f3f1" stroke="#d9d9d4" stroke-width="1.0"/><text x="590.5" y="134.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="600" fill="#17191e" text-anchor="middle">0</text><rect x="598.7" y="118.0" width="16.4" height="22.0" fill="#f3f3f1" stroke="#d9d9d4" stroke-width="1.0"/><text x="606.9" y="134.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="600" fill="#17191e" text-anchor="middle">0</text><rect x="615.1" y="118.0" width="16.4" height="22.0" fill="#f3f3f1" stroke="#d9d9d4" stroke-width="1.0"/><text x="623.3" y="134.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="600" fill="#17191e" text-anchor="middle">0</text><rect x="631.6" y="118.0" width="16.4" height="22.0" fill="#f3f3f1" stroke="#d9d9d4" stroke-width="1.0"/><text x="639.8" y="134.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="600" fill="#17191e" text-anchor="middle">0</text><line x1="92.0" y1="97.0" x2="648.0" y2="97.0" stroke="#4d535e" stroke-width="1"/><line x1="549.4" y1="22.0" x2="549.4" y2="158.0" stroke="#ff6a00" stroke-width="2.5"/><text x="92.0" y="178.0" font-family="inherit" font-size="13" font-weight="600" fill="#17191e" text-anchor="start" style="font-variant-numeric:tabular-nums">сеть: 26 бит</text><text x="648.0" y="178.0" font-family="inherit" font-size="13" font-weight="600" fill="#17191e" text-anchor="end" style="font-variant-numeric:tabular-nums">узел: 6 бит</text><line x1="92.0" y1="164.0" x2="545.4" y2="164.0" stroke="#4d535e" stroke-width="1.2"/><line x1="553.4" y1="164.0" x2="648.0" y2="164.0" stroke="#4d535e" stroke-width="1.2"/></svg>',
-    width: 660,
-    height: 188,
-    alt: "192.168.10.173 И маска /26 = 192.168.10.128",
-  },
   // %%ip_bits("172.20.77.140", 22)%%
   ipBits1722077140_22: {
     kind: "diagram",
@@ -43,22 +27,6 @@ export const lessonMedia = {
     height: 228,
     alt: "Сеть 172.20.76.0/22: 4 строк по 256 адресов",
   },
-  // %%ip_pair("172.20.174.93", "172.20.160.0")%%
-  ipPair1722017493_172201600: {
-    kind: "diagram",
-    svg: '<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" viewBox="0 0 660 174"><text x="82.0" y="40.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="end" style="font-variant-numeric:tabular-nums">адрес</text><text x="157.8" y="20.0" font-family="inherit" font-size="13" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">172</text><text x="299.2" y="20.0" font-family="inherit" font-size="13" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">20</text><text x="440.8" y="20.0" font-family="inherit" font-size="13" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">174</text><text x="582.2" y="20.0" font-family="inherit" font-size="13" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">93</text><rect x="92.0" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="100.2" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="108.4" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="116.7" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="124.9" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="133.1" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="141.3" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="149.5" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="157.8" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="166.0" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="174.2" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="182.4" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="190.6" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="198.8" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="207.1" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="215.3" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="233.5" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="241.7" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="249.9" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="258.2" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="266.4" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="274.6" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="282.8" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="291.0" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="299.2" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="307.5" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="315.7" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="323.9" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="332.1" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="340.3" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="348.6" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="356.8" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="375.0" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="383.2" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="391.4" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="399.7" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="407.9" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="416.1" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="424.3" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="432.5" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="440.8" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="449.0" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="457.2" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="465.4" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="473.6" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="481.8" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="490.1" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="498.3" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="516.5" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="524.7" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="532.9" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="541.2" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="549.4" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="557.6" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="565.8" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="574.0" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="582.2" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="590.5" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="598.7" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="606.9" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="615.1" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="623.3" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="631.6" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="639.8" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><text x="82.0" y="86.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="end" style="font-variant-numeric:tabular-nums">сеть</text><text x="157.8" y="66.0" font-family="inherit" font-size="13" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">172</text><text x="299.2" y="66.0" font-family="inherit" font-size="13" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">20</text><text x="440.8" y="66.0" font-family="inherit" font-size="13" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">160</text><text x="582.2" y="66.0" font-family="inherit" font-size="13" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">0</text><rect x="92.0" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="100.2" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="108.4" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="116.7" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="124.9" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="133.1" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="141.3" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="149.5" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="157.8" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="166.0" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="174.2" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="182.4" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="190.6" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="198.8" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="207.1" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="215.3" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="233.5" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="241.7" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="249.9" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="258.2" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="266.4" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="274.6" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="282.8" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="291.0" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="299.2" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="307.5" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="315.7" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="323.9" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="332.1" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="340.3" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="348.6" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="356.8" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="375.0" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="383.2" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="391.4" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="399.7" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="407.9" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="416.1" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="424.3" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="432.5" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="440.8" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="449.0" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="457.2" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="465.4" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="473.6" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="481.8" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="490.1" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="498.3" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="516.5" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="524.7" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="532.9" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="541.2" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="549.4" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="557.6" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="565.8" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="574.0" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="582.2" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="590.5" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="598.7" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="606.9" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="615.1" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="623.3" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="631.6" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="639.8" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="424.3" y="24.0" width="16.4" height="26.0" fill="none" stroke="#ff6a00" stroke-width="2.5"/><rect x="424.3" y="70.0" width="16.4" height="26.0" fill="none" stroke="#ff6a00" stroke-width="2.5"/><text x="424.3" y="118.0" font-family="inherit" font-size="13" font-weight="600" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">L = 19</text><text x="440.8" y="136.0" font-family="inherit" font-size="13" font-weight="600" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">C = 20</text><text x="330.0" y="164.0" font-family="inherit" font-size="14" font-weight="600" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">биты в рамке бывают и сетевыми, и узловыми: 19 ≤ p ≤ 20, маски /19, /20</text></svg>',
-    width: 660,
-    height: 174,
-    alt: "172.20.174.93 и 172.20.160.0 по битам",
-  },
-  // %%ip_pair("172.20.74.10", "172.20.79.200", "two")%%
-  ipPair172207410_1722079200_two: {
-    kind: "diagram",
-    svg: '<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" viewBox="0 0 660 174"><text x="82.0" y="40.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="end" style="font-variant-numeric:tabular-nums">узел 1</text><text x="157.8" y="20.0" font-family="inherit" font-size="13" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">172</text><text x="299.2" y="20.0" font-family="inherit" font-size="13" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">20</text><text x="440.8" y="20.0" font-family="inherit" font-size="13" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">74</text><text x="582.2" y="20.0" font-family="inherit" font-size="13" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">10</text><rect x="92.0" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="100.2" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="108.4" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="116.7" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="124.9" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="133.1" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="141.3" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="149.5" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="157.8" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="166.0" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="174.2" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="182.4" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="190.6" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="198.8" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="207.1" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="215.3" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="233.5" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="241.7" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="249.9" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="258.2" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="266.4" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="274.6" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="282.8" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="291.0" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="299.2" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="307.5" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="315.7" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="323.9" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="332.1" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="340.3" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="348.6" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="356.8" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="375.0" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="383.2" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="391.4" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="399.7" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="407.9" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="416.1" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="424.3" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="432.5" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="440.8" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="449.0" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="457.2" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="465.4" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="473.6" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="481.8" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="490.1" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="498.3" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="516.5" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="524.7" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="532.9" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="541.2" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="549.4" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="557.6" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="565.8" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="574.0" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="582.2" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="590.5" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="598.7" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="606.9" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="615.1" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="623.3" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="631.6" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="639.8" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><text x="82.0" y="86.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="end" style="font-variant-numeric:tabular-nums">узел 2</text><text x="157.8" y="66.0" font-family="inherit" font-size="13" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">172</text><text x="299.2" y="66.0" font-family="inherit" font-size="13" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">20</text><text x="440.8" y="66.0" font-family="inherit" font-size="13" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">79</text><text x="582.2" y="66.0" font-family="inherit" font-size="13" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">200</text><rect x="92.0" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="100.2" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="108.4" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="116.7" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="124.9" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="133.1" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="141.3" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="149.5" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="157.8" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="166.0" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="174.2" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="182.4" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="190.6" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="198.8" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="207.1" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="215.3" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="233.5" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="241.7" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="249.9" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="258.2" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="266.4" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="274.6" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="282.8" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="291.0" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="299.2" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="307.5" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="315.7" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="323.9" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="332.1" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="340.3" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="348.6" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="356.8" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="375.0" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="383.2" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="391.4" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="399.7" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="407.9" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="416.1" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="424.3" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="432.5" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="440.8" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="449.0" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="457.2" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="465.4" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="473.6" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="481.8" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="490.1" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="498.3" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="516.5" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="524.7" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="532.9" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="541.2" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="549.4" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="557.6" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="565.8" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="574.0" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="582.2" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="590.5" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="598.7" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="606.9" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="615.1" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="623.3" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="631.6" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="639.8" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><line x1="457.2" y1="22.0" x2="457.2" y2="52.0" stroke="#ff6a00" stroke-width="2.5"/><line x1="457.2" y1="68.0" x2="457.2" y2="98.0" stroke="#ff6a00" stroke-width="2.5"/><text x="457.2" y="118.0" font-family="inherit" font-size="13" font-weight="600" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">C = 21</text><text x="330.0" y="150.0" font-family="inherit" font-size="14" font-weight="600" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">первые 21 бит совпадают: одна сеть при p ≤ 21, разные при p &gt; 21</text></svg>',
-    width: 660,
-    height: 174,
-    alt: "172.20.74.10 и 172.20.79.200 по битам",
-  },
   // %%ip_bits("172.20.72.0", 21)%%
   ipBits17220720_21: {
     kind: "diagram",
@@ -66,14 +34,6 @@ export const lessonMedia = {
     width: 660,
     height: 142,
     alt: "Адрес 172.20.72.0 и маска /21: 32 бита, граница после 21 бит",
-  },
-  // %%ip_bits("192.168.10.0", 28, False, True)%%
-  ipBits192168100_28_False_True: {
-    kind: "diagram",
-    svg: '<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" viewBox="0 0 660 124"><text x="82.0" y="40.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="end" style="font-variant-numeric:tabular-nums">адрес</text><text x="157.8" y="20.0" font-family="inherit" font-size="13" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">192</text><text x="299.2" y="20.0" font-family="inherit" font-size="13" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">168</text><text x="440.8" y="20.0" font-family="inherit" font-size="13" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">10</text><text x="582.2" y="20.0" font-family="inherit" font-size="13" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">0</text><rect x="92.0" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="100.2" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="108.4" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="116.7" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="124.9" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="133.1" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="141.3" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="149.5" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="157.8" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="166.0" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="174.2" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="182.4" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="190.6" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="198.8" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="207.1" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="215.3" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="233.5" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="241.7" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="249.9" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="258.2" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="266.4" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="274.6" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="282.8" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="291.0" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="299.2" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="307.5" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="315.7" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="323.9" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="332.1" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="340.3" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="348.6" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="356.8" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="375.0" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="383.2" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="391.4" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="399.7" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="407.9" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="416.1" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="424.3" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="432.5" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="440.8" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="449.0" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="457.2" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="465.4" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="473.6" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="481.8" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="490.1" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="498.3" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="516.5" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="524.7" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="532.9" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="541.2" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="549.4" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="557.6" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="565.8" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="574.0" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="582.2" y="26.0" width="16.4" height="22.0" fill="#f3f3f1" stroke="#d9d9d4" stroke-width="1.0"/><text x="590.5" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#4d535e" text-anchor="middle">?</text><rect x="598.7" y="26.0" width="16.4" height="22.0" fill="#f3f3f1" stroke="#d9d9d4" stroke-width="1.0"/><text x="606.9" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#4d535e" text-anchor="middle">?</text><rect x="615.1" y="26.0" width="16.4" height="22.0" fill="#f3f3f1" stroke="#d9d9d4" stroke-width="1.0"/><text x="623.3" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#4d535e" text-anchor="middle">?</text><rect x="631.6" y="26.0" width="16.4" height="22.0" fill="#f3f3f1" stroke="#d9d9d4" stroke-width="1.0"/><text x="639.8" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#4d535e" text-anchor="middle">?</text><line x1="582.2" y1="22.0" x2="582.2" y2="66.0" stroke="#ff6a00" stroke-width="2.5"/><text x="92.0" y="86.0" font-family="inherit" font-size="13" font-weight="600" fill="#17191e" text-anchor="start" style="font-variant-numeric:tabular-nums">сеть: 28 бит</text><text x="648.0" y="86.0" font-family="inherit" font-size="13" font-weight="600" fill="#17191e" text-anchor="end" style="font-variant-numeric:tabular-nums">узел: 4 бит</text><line x1="92.0" y1="72.0" x2="578.2" y2="72.0" stroke="#4d535e" stroke-width="1.2"/><line x1="586.2" y1="72.0" x2="648.0" y2="72.0" stroke="#4d535e" stroke-width="1.2"/><text x="330.0" y="114.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">единиц в сетевой части: 7 у каждого адреса; свободных битов: 4</text></svg>',
-    width: 660,
-    height: 124,
-    alt: "Адрес 192.168.10.0 и маска /28: 32 бита, граница после 28 бит",
   },
   // %%ip_pairs(4, 7)%%
   ipPairs4_7: {
@@ -85,9 +45,9 @@ export const lessonMedia = {
   },
   runOctet: {
     kind: "run",
-    code: "n = 173\nbits = ''\nfor w in [128, 64, 32, 16, 8, 4, 2, 1]:\n    bits += str(n // w)\n    n = n % w\nprint(bits)",
+    code: "n = 140\nbits = ''\nfor w in [128, 64, 32, 16, 8, 4, 2, 1]:\n    bits += str(n // w)\n    n = n % w\nprint(bits)",
     fileName: "octet.py",
-    output: "10101101",
+    output: "10001100",
     steps: [
       {
         line: null,
@@ -99,12 +59,12 @@ export const lessonMedia = {
       },
       {
         line: 1,
-        text: "`n` получает значение `173`.",
+        text: "`n` получает значение `140`.",
         kind: "line",
         frames: [
           {
             title: "программа",
-            names: [{ n: "n", v: "173", ref: null, ch: true }],
+            names: [{ n: "n", v: "140", ref: null, ch: true }],
           },
         ],
         objs: {},
@@ -118,7 +78,7 @@ export const lessonMedia = {
           {
             title: "программа",
             names: [
-              { n: "n", v: "173", ref: null, ch: false },
+              { n: "n", v: "140", ref: null, ch: false },
               { n: "bits", v: "''", ref: null, ch: true },
             ],
           },
@@ -134,7 +94,7 @@ export const lessonMedia = {
           {
             title: "программа",
             names: [
-              { n: "n", v: "173", ref: null, ch: false },
+              { n: "n", v: "140", ref: null, ch: false },
               { n: "bits", v: "''", ref: null, ch: false },
               { n: "w", v: "128", ref: null, ch: true },
             ],
@@ -151,7 +111,7 @@ export const lessonMedia = {
           {
             title: "программа",
             names: [
-              { n: "n", v: "173", ref: null, ch: false },
+              { n: "n", v: "140", ref: null, ch: false },
               { n: "bits", v: "'1'", ref: null, ch: true },
               { n: "w", v: "128", ref: null, ch: false },
             ],
@@ -162,13 +122,13 @@ export const lessonMedia = {
       },
       {
         line: 5,
-        text: "Python вычисляет `n % w` → `45`, и `n` получает это значение. Прежнее значение `173` больше не связано с `n`.",
+        text: "Python вычисляет `n % w` → `12`, и `n` получает это значение. Прежнее значение `140` больше не связано с `n`.",
         kind: "line",
         frames: [
           {
             title: "программа",
             names: [
-              { n: "n", v: "45", ref: null, ch: true },
+              { n: "n", v: "12", ref: null, ch: true },
               { n: "bits", v: "'1'", ref: null, ch: false },
               { n: "w", v: "128", ref: null, ch: false },
             ],
@@ -185,7 +145,7 @@ export const lessonMedia = {
           {
             title: "программа",
             names: [
-              { n: "n", v: "45", ref: null, ch: false },
+              { n: "n", v: "12", ref: null, ch: false },
               { n: "bits", v: "'1'", ref: null, ch: false },
               { n: "w", v: "64", ref: null, ch: true },
             ],
@@ -202,7 +162,7 @@ export const lessonMedia = {
           {
             title: "программа",
             names: [
-              { n: "n", v: "45", ref: null, ch: false },
+              { n: "n", v: "12", ref: null, ch: false },
               { n: "bits", v: "'10'", ref: null, ch: true },
               { n: "w", v: "64", ref: null, ch: false },
             ],
@@ -213,13 +173,13 @@ export const lessonMedia = {
       },
       {
         line: 5,
-        text: "Python вычисляет `n % w` → `45`, и `n` получает это значение.",
+        text: "Python вычисляет `n % w` → `12`, и `n` получает это значение.",
         kind: "line",
         frames: [
           {
             title: "программа",
             names: [
-              { n: "n", v: "45", ref: null, ch: false },
+              { n: "n", v: "12", ref: null, ch: false },
               { n: "bits", v: "'10'", ref: null, ch: false },
               { n: "w", v: "64", ref: null, ch: false },
             ],
@@ -236,7 +196,7 @@ export const lessonMedia = {
           {
             title: "программа",
             names: [
-              { n: "n", v: "45", ref: null, ch: false },
+              { n: "n", v: "12", ref: null, ch: false },
               { n: "bits", v: "'10'", ref: null, ch: false },
               { n: "w", v: "32", ref: null, ch: true },
             ],
@@ -247,14 +207,14 @@ export const lessonMedia = {
       },
       {
         line: 4,
-        text: "`bits += str(n // w)`: значение `bits` увеличилось — было `'10'`, стало `'101'`.",
+        text: "`bits += str(n // w)`: значение `bits` увеличилось — было `'10'`, стало `'100'`.",
         kind: "line",
         frames: [
           {
             title: "программа",
             names: [
-              { n: "n", v: "45", ref: null, ch: false },
-              { n: "bits", v: "'101'", ref: null, ch: true },
+              { n: "n", v: "12", ref: null, ch: false },
+              { n: "bits", v: "'100'", ref: null, ch: true },
               { n: "w", v: "32", ref: null, ch: false },
             ],
           },
@@ -264,14 +224,14 @@ export const lessonMedia = {
       },
       {
         line: 5,
-        text: "Python вычисляет `n % w` → `13`, и `n` получает это значение. Прежнее значение `45` больше не связано с `n`.",
+        text: "Python вычисляет `n % w` → `12`, и `n` получает это значение.",
         kind: "line",
         frames: [
           {
             title: "программа",
             names: [
-              { n: "n", v: "13", ref: null, ch: true },
-              { n: "bits", v: "'101'", ref: null, ch: false },
+              { n: "n", v: "12", ref: null, ch: false },
+              { n: "bits", v: "'100'", ref: null, ch: false },
               { n: "w", v: "32", ref: null, ch: false },
             ],
           },
@@ -287,8 +247,8 @@ export const lessonMedia = {
           {
             title: "программа",
             names: [
-              { n: "n", v: "13", ref: null, ch: false },
-              { n: "bits", v: "'101'", ref: null, ch: false },
+              { n: "n", v: "12", ref: null, ch: false },
+              { n: "bits", v: "'100'", ref: null, ch: false },
               { n: "w", v: "16", ref: null, ch: true },
             ],
           },
@@ -298,14 +258,14 @@ export const lessonMedia = {
       },
       {
         line: 4,
-        text: "`bits += str(n // w)`: значение `bits` увеличилось — было `'101'`, стало `'1010'`.",
+        text: "`bits += str(n // w)`: значение `bits` увеличилось — было `'100'`, стало `'1000'`.",
         kind: "line",
         frames: [
           {
             title: "программа",
             names: [
-              { n: "n", v: "13", ref: null, ch: false },
-              { n: "bits", v: "'1010'", ref: null, ch: true },
+              { n: "n", v: "12", ref: null, ch: false },
+              { n: "bits", v: "'1000'", ref: null, ch: true },
               { n: "w", v: "16", ref: null, ch: false },
             ],
           },
@@ -315,14 +275,14 @@ export const lessonMedia = {
       },
       {
         line: 5,
-        text: "Python вычисляет `n % w` → `13`, и `n` получает это значение.",
+        text: "Python вычисляет `n % w` → `12`, и `n` получает это значение.",
         kind: "line",
         frames: [
           {
             title: "программа",
             names: [
-              { n: "n", v: "13", ref: null, ch: false },
-              { n: "bits", v: "'1010'", ref: null, ch: false },
+              { n: "n", v: "12", ref: null, ch: false },
+              { n: "bits", v: "'1000'", ref: null, ch: false },
               { n: "w", v: "16", ref: null, ch: false },
             ],
           },
@@ -338,8 +298,8 @@ export const lessonMedia = {
           {
             title: "программа",
             names: [
-              { n: "n", v: "13", ref: null, ch: false },
-              { n: "bits", v: "'1010'", ref: null, ch: false },
+              { n: "n", v: "12", ref: null, ch: false },
+              { n: "bits", v: "'1000'", ref: null, ch: false },
               { n: "w", v: "8", ref: null, ch: true },
             ],
           },
@@ -349,14 +309,14 @@ export const lessonMedia = {
       },
       {
         line: 4,
-        text: "`bits += str(n // w)`: значение `bits` увеличилось — было `'1010'`, стало `'10101'`.",
+        text: "`bits += str(n // w)`: значение `bits` увеличилось — было `'1000'`, стало `'10001'`.",
         kind: "line",
         frames: [
           {
             title: "программа",
             names: [
-              { n: "n", v: "13", ref: null, ch: false },
-              { n: "bits", v: "'10101'", ref: null, ch: true },
+              { n: "n", v: "12", ref: null, ch: false },
+              { n: "bits", v: "'10001'", ref: null, ch: true },
               { n: "w", v: "8", ref: null, ch: false },
             ],
           },
@@ -366,14 +326,14 @@ export const lessonMedia = {
       },
       {
         line: 5,
-        text: "Python вычисляет `n % w` → `5`, и `n` получает это значение. Прежнее значение `13` больше не связано с `n`.",
+        text: "Python вычисляет `n % w` → `4`, и `n` получает это значение. Прежнее значение `12` больше не связано с `n`.",
         kind: "line",
         frames: [
           {
             title: "программа",
             names: [
-              { n: "n", v: "5", ref: null, ch: true },
-              { n: "bits", v: "'10101'", ref: null, ch: false },
+              { n: "n", v: "4", ref: null, ch: true },
+              { n: "bits", v: "'10001'", ref: null, ch: false },
               { n: "w", v: "8", ref: null, ch: false },
             ],
           },
@@ -389,8 +349,8 @@ export const lessonMedia = {
           {
             title: "программа",
             names: [
-              { n: "n", v: "5", ref: null, ch: false },
-              { n: "bits", v: "'10101'", ref: null, ch: false },
+              { n: "n", v: "4", ref: null, ch: false },
+              { n: "bits", v: "'10001'", ref: null, ch: false },
               { n: "w", v: "4", ref: null, ch: true },
             ],
           },
@@ -400,14 +360,14 @@ export const lessonMedia = {
       },
       {
         line: 4,
-        text: "`bits += str(n // w)`: значение `bits` увеличилось — было `'10101'`, стало `'101011'`.",
+        text: "`bits += str(n // w)`: значение `bits` увеличилось — было `'10001'`, стало `'100011'`.",
         kind: "line",
         frames: [
           {
             title: "программа",
             names: [
-              { n: "n", v: "5", ref: null, ch: false },
-              { n: "bits", v: "'101011'", ref: null, ch: true },
+              { n: "n", v: "4", ref: null, ch: false },
+              { n: "bits", v: "'100011'", ref: null, ch: true },
               { n: "w", v: "4", ref: null, ch: false },
             ],
           },
@@ -417,14 +377,14 @@ export const lessonMedia = {
       },
       {
         line: 5,
-        text: "Python вычисляет `n % w` → `1`, и `n` получает это значение. Прежнее значение `5` больше не связано с `n`.",
+        text: "Python вычисляет `n % w` → `0`, и `n` получает это значение. Прежнее значение `4` больше не связано с `n`.",
         kind: "line",
         frames: [
           {
             title: "программа",
             names: [
-              { n: "n", v: "1", ref: null, ch: true },
-              { n: "bits", v: "'101011'", ref: null, ch: false },
+              { n: "n", v: "0", ref: null, ch: true },
+              { n: "bits", v: "'100011'", ref: null, ch: false },
               { n: "w", v: "4", ref: null, ch: false },
             ],
           },
@@ -440,8 +400,8 @@ export const lessonMedia = {
           {
             title: "программа",
             names: [
-              { n: "n", v: "1", ref: null, ch: false },
-              { n: "bits", v: "'101011'", ref: null, ch: false },
+              { n: "n", v: "0", ref: null, ch: false },
+              { n: "bits", v: "'100011'", ref: null, ch: false },
               { n: "w", v: "2", ref: null, ch: true },
             ],
           },
@@ -451,14 +411,14 @@ export const lessonMedia = {
       },
       {
         line: 4,
-        text: "`bits += str(n // w)`: значение `bits` увеличилось — было `'101011'`, стало `'1010110'`.",
+        text: "`bits += str(n // w)`: значение `bits` увеличилось — было `'100011'`, стало `'1000110'`.",
         kind: "line",
         frames: [
           {
             title: "программа",
             names: [
-              { n: "n", v: "1", ref: null, ch: false },
-              { n: "bits", v: "'1010110'", ref: null, ch: true },
+              { n: "n", v: "0", ref: null, ch: false },
+              { n: "bits", v: "'1000110'", ref: null, ch: true },
               { n: "w", v: "2", ref: null, ch: false },
             ],
           },
@@ -468,14 +428,14 @@ export const lessonMedia = {
       },
       {
         line: 5,
-        text: "Python вычисляет `n % w` → `1`, и `n` получает это значение.",
+        text: "Python вычисляет `n % w` → `0`, и `n` получает это значение.",
         kind: "line",
         frames: [
           {
             title: "программа",
             names: [
-              { n: "n", v: "1", ref: null, ch: false },
-              { n: "bits", v: "'1010110'", ref: null, ch: false },
+              { n: "n", v: "0", ref: null, ch: false },
+              { n: "bits", v: "'1000110'", ref: null, ch: false },
               { n: "w", v: "2", ref: null, ch: false },
             ],
           },
@@ -491,8 +451,8 @@ export const lessonMedia = {
           {
             title: "программа",
             names: [
-              { n: "n", v: "1", ref: null, ch: false },
-              { n: "bits", v: "'1010110'", ref: null, ch: false },
+              { n: "n", v: "0", ref: null, ch: false },
+              { n: "bits", v: "'1000110'", ref: null, ch: false },
               { n: "w", v: "1", ref: null, ch: true },
             ],
           },
@@ -502,14 +462,14 @@ export const lessonMedia = {
       },
       {
         line: 4,
-        text: "`bits += str(n // w)`: значение `bits` увеличилось — было `'1010110'`, стало `'10101101'`.",
+        text: "`bits += str(n // w)`: значение `bits` увеличилось — было `'1000110'`, стало `'10001100'`.",
         kind: "line",
         frames: [
           {
             title: "программа",
             names: [
-              { n: "n", v: "1", ref: null, ch: false },
-              { n: "bits", v: "'10101101'", ref: null, ch: true },
+              { n: "n", v: "0", ref: null, ch: false },
+              { n: "bits", v: "'10001100'", ref: null, ch: true },
               { n: "w", v: "1", ref: null, ch: false },
             ],
           },
@@ -519,14 +479,14 @@ export const lessonMedia = {
       },
       {
         line: 5,
-        text: "Python вычисляет `n % w` → `0`, и `n` получает это значение. Прежнее значение `1` больше не связано с `n`.",
+        text: "Python вычисляет `n % w` → `0`, и `n` получает это значение.",
         kind: "line",
         frames: [
           {
             title: "программа",
             names: [
-              { n: "n", v: "0", ref: null, ch: true },
-              { n: "bits", v: "'10101101'", ref: null, ch: false },
+              { n: "n", v: "0", ref: null, ch: false },
+              { n: "bits", v: "'10001100'", ref: null, ch: false },
               { n: "w", v: "1", ref: null, ch: false },
             ],
           },
@@ -543,7 +503,7 @@ export const lessonMedia = {
             title: "программа",
             names: [
               { n: "n", v: "0", ref: null, ch: false },
-              { n: "bits", v: "'10101101'", ref: null, ch: false },
+              { n: "bits", v: "'10001100'", ref: null, ch: false },
               { n: "w", v: "1", ref: null, ch: false },
             ],
           },
@@ -553,28 +513,28 @@ export const lessonMedia = {
       },
       {
         line: 6,
-        text: "На экран выводится «10101101».",
+        text: "На экран выводится «10001100».",
         kind: "line",
         frames: [
           {
             title: "программа",
             names: [
               { n: "n", v: "0", ref: null, ch: false },
-              { n: "bits", v: "'10101101'", ref: null, ch: false },
+              { n: "bits", v: "'10001100'", ref: null, ch: false },
               { n: "w", v: "1", ref: null, ch: false },
             ],
           },
         ],
         objs: {},
-        out: "10101101\n",
+        out: "10001100\n",
       },
     ],
   },
   runHosts: {
     kind: "run",
-    code: "need = 500\nh = 0\nwhile 2 ** h - 2 < need:\n    h += 1\nprint(h, 32 - h)",
+    code: "need = 1000\nh = 0\nwhile 2 ** h - 2 < need:\n    h += 1\nprint(h, 32 - h)",
     fileName: "hosts.py",
-    output: "9 23",
+    output: "10 22",
     steps: [
       {
         line: null,
@@ -586,12 +546,12 @@ export const lessonMedia = {
       },
       {
         line: 1,
-        text: "`need` получает значение `500`.",
+        text: "`need` получает значение `1000`.",
         kind: "line",
         frames: [
           {
             title: "программа",
-            names: [{ n: "need", v: "500", ref: null, ch: true }],
+            names: [{ n: "need", v: "1000", ref: null, ch: true }],
           },
         ],
         objs: {},
@@ -605,7 +565,7 @@ export const lessonMedia = {
           {
             title: "программа",
             names: [
-              { n: "need", v: "500", ref: null, ch: false },
+              { n: "need", v: "1000", ref: null, ch: false },
               { n: "h", v: "0", ref: null, ch: true },
             ],
           },
@@ -621,7 +581,7 @@ export const lessonMedia = {
           {
             title: "программа",
             names: [
-              { n: "need", v: "500", ref: null, ch: false },
+              { n: "need", v: "1000", ref: null, ch: false },
               { n: "h", v: "0", ref: null, ch: false },
             ],
           },
@@ -637,7 +597,7 @@ export const lessonMedia = {
           {
             title: "программа",
             names: [
-              { n: "need", v: "500", ref: null, ch: false },
+              { n: "need", v: "1000", ref: null, ch: false },
               { n: "h", v: "1", ref: null, ch: true },
             ],
           },
@@ -653,7 +613,7 @@ export const lessonMedia = {
           {
             title: "программа",
             names: [
-              { n: "need", v: "500", ref: null, ch: false },
+              { n: "need", v: "1000", ref: null, ch: false },
               { n: "h", v: "1", ref: null, ch: false },
             ],
           },
@@ -669,7 +629,7 @@ export const lessonMedia = {
           {
             title: "программа",
             names: [
-              { n: "need", v: "500", ref: null, ch: false },
+              { n: "need", v: "1000", ref: null, ch: false },
               { n: "h", v: "2", ref: null, ch: true },
             ],
           },
@@ -685,7 +645,7 @@ export const lessonMedia = {
           {
             title: "программа",
             names: [
-              { n: "need", v: "500", ref: null, ch: false },
+              { n: "need", v: "1000", ref: null, ch: false },
               { n: "h", v: "2", ref: null, ch: false },
             ],
           },
@@ -701,7 +661,7 @@ export const lessonMedia = {
           {
             title: "программа",
             names: [
-              { n: "need", v: "500", ref: null, ch: false },
+              { n: "need", v: "1000", ref: null, ch: false },
               { n: "h", v: "3", ref: null, ch: true },
             ],
           },
@@ -717,7 +677,7 @@ export const lessonMedia = {
           {
             title: "программа",
             names: [
-              { n: "need", v: "500", ref: null, ch: false },
+              { n: "need", v: "1000", ref: null, ch: false },
               { n: "h", v: "3", ref: null, ch: false },
             ],
           },
@@ -733,7 +693,7 @@ export const lessonMedia = {
           {
             title: "программа",
             names: [
-              { n: "need", v: "500", ref: null, ch: false },
+              { n: "need", v: "1000", ref: null, ch: false },
               { n: "h", v: "4", ref: null, ch: true },
             ],
           },
@@ -749,7 +709,7 @@ export const lessonMedia = {
           {
             title: "программа",
             names: [
-              { n: "need", v: "500", ref: null, ch: false },
+              { n: "need", v: "1000", ref: null, ch: false },
               { n: "h", v: "4", ref: null, ch: false },
             ],
           },
@@ -765,7 +725,7 @@ export const lessonMedia = {
           {
             title: "программа",
             names: [
-              { n: "need", v: "500", ref: null, ch: false },
+              { n: "need", v: "1000", ref: null, ch: false },
               { n: "h", v: "5", ref: null, ch: true },
             ],
           },
@@ -781,7 +741,7 @@ export const lessonMedia = {
           {
             title: "программа",
             names: [
-              { n: "need", v: "500", ref: null, ch: false },
+              { n: "need", v: "1000", ref: null, ch: false },
               { n: "h", v: "5", ref: null, ch: false },
             ],
           },
@@ -797,7 +757,7 @@ export const lessonMedia = {
           {
             title: "программа",
             names: [
-              { n: "need", v: "500", ref: null, ch: false },
+              { n: "need", v: "1000", ref: null, ch: false },
               { n: "h", v: "6", ref: null, ch: true },
             ],
           },
@@ -813,7 +773,7 @@ export const lessonMedia = {
           {
             title: "программа",
             names: [
-              { n: "need", v: "500", ref: null, ch: false },
+              { n: "need", v: "1000", ref: null, ch: false },
               { n: "h", v: "6", ref: null, ch: false },
             ],
           },
@@ -829,7 +789,7 @@ export const lessonMedia = {
           {
             title: "программа",
             names: [
-              { n: "need", v: "500", ref: null, ch: false },
+              { n: "need", v: "1000", ref: null, ch: false },
               { n: "h", v: "7", ref: null, ch: true },
             ],
           },
@@ -845,7 +805,7 @@ export const lessonMedia = {
           {
             title: "программа",
             names: [
-              { n: "need", v: "500", ref: null, ch: false },
+              { n: "need", v: "1000", ref: null, ch: false },
               { n: "h", v: "7", ref: null, ch: false },
             ],
           },
@@ -861,7 +821,7 @@ export const lessonMedia = {
           {
             title: "программа",
             names: [
-              { n: "need", v: "500", ref: null, ch: false },
+              { n: "need", v: "1000", ref: null, ch: false },
               { n: "h", v: "8", ref: null, ch: true },
             ],
           },
@@ -877,7 +837,7 @@ export const lessonMedia = {
           {
             title: "программа",
             names: [
-              { n: "need", v: "500", ref: null, ch: false },
+              { n: "need", v: "1000", ref: null, ch: false },
               { n: "h", v: "8", ref: null, ch: false },
             ],
           },
@@ -893,8 +853,40 @@ export const lessonMedia = {
           {
             title: "программа",
             names: [
-              { n: "need", v: "500", ref: null, ch: false },
+              { n: "need", v: "1000", ref: null, ch: false },
               { n: "h", v: "9", ref: null, ch: true },
+            ],
+          },
+        ],
+        objs: {},
+        out: "",
+      },
+      {
+        line: 3,
+        text: "Проверка `2 ** h - 2 < need` даёт `True` — тело цикла выполняется.",
+        kind: "line",
+        frames: [
+          {
+            title: "программа",
+            names: [
+              { n: "need", v: "1000", ref: null, ch: false },
+              { n: "h", v: "9", ref: null, ch: false },
+            ],
+          },
+        ],
+        objs: {},
+        out: "",
+      },
+      {
+        line: 4,
+        text: "`h += 1`: значение `h` увеличилось — было `9`, стало `10`.",
+        kind: "line",
+        frames: [
+          {
+            title: "программа",
+            names: [
+              { n: "need", v: "1000", ref: null, ch: false },
+              { n: "h", v: "10", ref: null, ch: true },
             ],
           },
         ],
@@ -909,8 +901,8 @@ export const lessonMedia = {
           {
             title: "программа",
             names: [
-              { n: "need", v: "500", ref: null, ch: false },
-              { n: "h", v: "9", ref: null, ch: false },
+              { n: "need", v: "1000", ref: null, ch: false },
+              { n: "h", v: "10", ref: null, ch: false },
             ],
           },
         ],
@@ -919,27 +911,27 @@ export const lessonMedia = {
       },
       {
         line: 5,
-        text: "На экран выводится «9 23».",
+        text: "На экран выводится «10 22».",
         kind: "line",
         frames: [
           {
             title: "программа",
             names: [
-              { n: "need", v: "500", ref: null, ch: false },
-              { n: "h", v: "9", ref: null, ch: false },
+              { n: "need", v: "1000", ref: null, ch: false },
+              { n: "h", v: "10", ref: null, ch: false },
             ],
           },
         ],
         objs: {},
-        out: "9 23\n",
+        out: "10 22\n",
       },
     ],
   },
   runMasks: {
     kind: "run",
-    code: "from ipaddress import ip_address, ip_network\n\nexpected = ip_address('172.20.160.0')\nfound = []\nfor p in range(18, 22):\n    net = ip_network(f'172.20.174.93/{p}', strict=False)\n    if net.network_address == expected:\n        found.append(p)\nprint(found)",
+    code: "from ipaddress import ip_address, ip_network\n\nexpected = ip_address('172.20.76.0')\nfound = []\nfor p in range(21, 25):\n    net = ip_network(f'172.20.77.140/{p}', strict=False)\n    if net.network_address == expected:\n        found.append(p)\nprint(found)",
     fileName: "masks.py",
-    output: "[19, 20]",
+    output: "[22, 23]",
     steps: [
       {
         line: null,
@@ -967,7 +959,7 @@ export const lessonMedia = {
       },
       {
         line: 3,
-        text: "Python вычисляет `ip_address('172.20.160.0')` → `адрес 172.20.160.0`, и `expected` получает это значение.",
+        text: "Python вычисляет `ip_address('172.20.76.0')` → `адрес 172.20.76.0`, и `expected` получает это значение.",
         kind: "line",
         frames: [
           {
@@ -975,7 +967,7 @@ export const lessonMedia = {
             names: [
               { n: "ip_address", v: "функция", ref: null, ch: false },
               { n: "ip_network", v: "функция", ref: null, ch: false },
-              { n: "expected", v: "адрес 172.20.160.0", ref: null, ch: true },
+              { n: "expected", v: "адрес 172.20.76.0", ref: null, ch: true },
             ],
           },
         ],
@@ -992,7 +984,7 @@ export const lessonMedia = {
             names: [
               { n: "ip_address", v: "функция", ref: null, ch: false },
               { n: "ip_network", v: "функция", ref: null, ch: false },
-              { n: "expected", v: "адрес 172.20.160.0", ref: null, ch: false },
+              { n: "expected", v: "адрес 172.20.76.0", ref: null, ch: false },
               { n: "found", v: "[]", ref: 0, ch: true },
             ],
           },
@@ -1002,7 +994,7 @@ export const lessonMedia = {
       },
       {
         line: 5,
-        text: "`for` берёт первое значение: `p` = `18`.",
+        text: "`for` берёт первое значение: `p` = `21`.",
         kind: "line",
         frames: [
           {
@@ -1010,238 +1002,18 @@ export const lessonMedia = {
             names: [
               { n: "ip_address", v: "функция", ref: null, ch: false },
               { n: "ip_network", v: "функция", ref: null, ch: false },
-              { n: "expected", v: "адрес 172.20.160.0", ref: null, ch: false },
+              { n: "expected", v: "адрес 172.20.76.0", ref: null, ch: false },
               { n: "found", v: "[]", ref: 0, ch: false },
-              { n: "p", v: "18", ref: null, ch: true },
-            ],
-          },
-        ],
-        objs: { "0": { v: "[]", ch: false } },
-        out: "",
-      },
-      {
-        line: 6,
-        text: "Python вычисляет `ip_network(f'172.20.174.93/{p}', strict=False)` → `сеть 172.20.128.0/18`, и `net` получает это значение.",
-        kind: "line",
-        frames: [
-          {
-            title: "программа",
-            names: [
-              { n: "ip_address", v: "функция", ref: null, ch: false },
-              { n: "ip_network", v: "функция", ref: null, ch: false },
-              { n: "expected", v: "адрес 172.20.160.0", ref: null, ch: false },
-              { n: "found", v: "[]", ref: 0, ch: false },
-              { n: "p", v: "18", ref: null, ch: false },
-              { n: "net", v: "сеть 172.20.128.0/18", ref: null, ch: true },
-            ],
-          },
-        ],
-        objs: { "0": { v: "[]", ch: false } },
-        out: "",
-      },
-      {
-        line: 7,
-        text: "Проверка `net.network_address == expected` даёт `False` — блок пропускается.",
-        kind: "line",
-        frames: [
-          {
-            title: "программа",
-            names: [
-              { n: "ip_address", v: "функция", ref: null, ch: false },
-              { n: "ip_network", v: "функция", ref: null, ch: false },
-              { n: "expected", v: "адрес 172.20.160.0", ref: null, ch: false },
-              { n: "found", v: "[]", ref: 0, ch: false },
-              { n: "p", v: "18", ref: null, ch: false },
-              { n: "net", v: "сеть 172.20.128.0/18", ref: null, ch: false },
-            ],
-          },
-        ],
-        objs: { "0": { v: "[]", ch: false } },
-        out: "",
-      },
-      {
-        line: 5,
-        text: "`for` берёт следующее значение: `p` = `19`.",
-        kind: "line",
-        frames: [
-          {
-            title: "программа",
-            names: [
-              { n: "ip_address", v: "функция", ref: null, ch: false },
-              { n: "ip_network", v: "функция", ref: null, ch: false },
-              { n: "expected", v: "адрес 172.20.160.0", ref: null, ch: false },
-              { n: "found", v: "[]", ref: 0, ch: false },
-              { n: "p", v: "19", ref: null, ch: true },
-              { n: "net", v: "сеть 172.20.128.0/18", ref: null, ch: false },
-            ],
-          },
-        ],
-        objs: { "0": { v: "[]", ch: false } },
-        out: "",
-      },
-      {
-        line: 6,
-        text: "Python вычисляет `ip_network(f'172.20.174.93/{p}', strict=False)` → `сеть 172.20.160.0/19`, и `net` получает это значение. Прежнее значение `сеть 172.20.128.0/18` больше не связано с `net`.",
-        kind: "line",
-        frames: [
-          {
-            title: "программа",
-            names: [
-              { n: "ip_address", v: "функция", ref: null, ch: false },
-              { n: "ip_network", v: "функция", ref: null, ch: false },
-              { n: "expected", v: "адрес 172.20.160.0", ref: null, ch: false },
-              { n: "found", v: "[]", ref: 0, ch: false },
-              { n: "p", v: "19", ref: null, ch: false },
-              { n: "net", v: "сеть 172.20.160.0/19", ref: null, ch: true },
-            ],
-          },
-        ],
-        objs: { "0": { v: "[]", ch: false } },
-        out: "",
-      },
-      {
-        line: 7,
-        text: "Проверка `net.network_address == expected` даёт `True` — выполняется блок под этим условием.",
-        kind: "line",
-        frames: [
-          {
-            title: "программа",
-            names: [
-              { n: "ip_address", v: "функция", ref: null, ch: false },
-              { n: "ip_network", v: "функция", ref: null, ch: false },
-              { n: "expected", v: "адрес 172.20.160.0", ref: null, ch: false },
-              { n: "found", v: "[]", ref: 0, ch: false },
-              { n: "p", v: "19", ref: null, ch: false },
-              { n: "net", v: "сеть 172.20.160.0/19", ref: null, ch: false },
-            ],
-          },
-        ],
-        objs: { "0": { v: "[]", ch: false } },
-        out: "",
-      },
-      {
-        line: 8,
-        text: "`found.append(p)` меняет сам список, к которому ведёт `found`; новый не создаётся.",
-        kind: "line",
-        frames: [
-          {
-            title: "программа",
-            names: [
-              { n: "ip_address", v: "функция", ref: null, ch: false },
-              { n: "ip_network", v: "функция", ref: null, ch: false },
-              { n: "expected", v: "адрес 172.20.160.0", ref: null, ch: false },
-              { n: "found", v: "[19]", ref: 0, ch: true },
-              { n: "p", v: "19", ref: null, ch: false },
-              { n: "net", v: "сеть 172.20.160.0/19", ref: null, ch: false },
-            ],
-          },
-        ],
-        objs: { "0": { v: "[19]", ch: true } },
-        out: "",
-      },
-      {
-        line: 5,
-        text: "`for` берёт следующее значение: `p` = `20`.",
-        kind: "line",
-        frames: [
-          {
-            title: "программа",
-            names: [
-              { n: "ip_address", v: "функция", ref: null, ch: false },
-              { n: "ip_network", v: "функция", ref: null, ch: false },
-              { n: "expected", v: "адрес 172.20.160.0", ref: null, ch: false },
-              { n: "found", v: "[19]", ref: 0, ch: false },
-              { n: "p", v: "20", ref: null, ch: true },
-              { n: "net", v: "сеть 172.20.160.0/19", ref: null, ch: false },
-            ],
-          },
-        ],
-        objs: { "0": { v: "[19]", ch: false } },
-        out: "",
-      },
-      {
-        line: 6,
-        text: "Python вычисляет `ip_network(f'172.20.174.93/{p}', strict=False)` → `сеть 172.20.160.0/20`, и `net` получает это значение. Прежнее значение `сеть 172.20.160.0/19` больше не связано с `net`.",
-        kind: "line",
-        frames: [
-          {
-            title: "программа",
-            names: [
-              { n: "ip_address", v: "функция", ref: null, ch: false },
-              { n: "ip_network", v: "функция", ref: null, ch: false },
-              { n: "expected", v: "адрес 172.20.160.0", ref: null, ch: false },
-              { n: "found", v: "[19]", ref: 0, ch: false },
-              { n: "p", v: "20", ref: null, ch: false },
-              { n: "net", v: "сеть 172.20.160.0/20", ref: null, ch: true },
-            ],
-          },
-        ],
-        objs: { "0": { v: "[19]", ch: false } },
-        out: "",
-      },
-      {
-        line: 7,
-        text: "Проверка `net.network_address == expected` даёт `True` — выполняется блок под этим условием.",
-        kind: "line",
-        frames: [
-          {
-            title: "программа",
-            names: [
-              { n: "ip_address", v: "функция", ref: null, ch: false },
-              { n: "ip_network", v: "функция", ref: null, ch: false },
-              { n: "expected", v: "адрес 172.20.160.0", ref: null, ch: false },
-              { n: "found", v: "[19]", ref: 0, ch: false },
-              { n: "p", v: "20", ref: null, ch: false },
-              { n: "net", v: "сеть 172.20.160.0/20", ref: null, ch: false },
-            ],
-          },
-        ],
-        objs: { "0": { v: "[19]", ch: false } },
-        out: "",
-      },
-      {
-        line: 8,
-        text: "`found.append(p)` меняет сам список, к которому ведёт `found`; новый не создаётся.",
-        kind: "line",
-        frames: [
-          {
-            title: "программа",
-            names: [
-              { n: "ip_address", v: "функция", ref: null, ch: false },
-              { n: "ip_network", v: "функция", ref: null, ch: false },
-              { n: "expected", v: "адрес 172.20.160.0", ref: null, ch: false },
-              { n: "found", v: "[19, 20]", ref: 0, ch: true },
-              { n: "p", v: "20", ref: null, ch: false },
-              { n: "net", v: "сеть 172.20.160.0/20", ref: null, ch: false },
-            ],
-          },
-        ],
-        objs: { "0": { v: "[19, 20]", ch: true } },
-        out: "",
-      },
-      {
-        line: 5,
-        text: "`for` берёт следующее значение: `p` = `21`.",
-        kind: "line",
-        frames: [
-          {
-            title: "программа",
-            names: [
-              { n: "ip_address", v: "функция", ref: null, ch: false },
-              { n: "ip_network", v: "функция", ref: null, ch: false },
-              { n: "expected", v: "адрес 172.20.160.0", ref: null, ch: false },
-              { n: "found", v: "[19, 20]", ref: 0, ch: false },
               { n: "p", v: "21", ref: null, ch: true },
-              { n: "net", v: "сеть 172.20.160.0/20", ref: null, ch: false },
             ],
           },
         ],
-        objs: { "0": { v: "[19, 20]", ch: false } },
+        objs: { "0": { v: "[]", ch: false } },
         out: "",
       },
       {
         line: 6,
-        text: "Python вычисляет `ip_network(f'172.20.174.93/{p}', strict=False)` → `сеть 172.20.168.0/21`, и `net` получает это значение. Прежнее значение `сеть 172.20.160.0/20` больше не связано с `net`.",
+        text: "Python вычисляет `ip_network(f'172.20.77.140/{p}', strict=False)` → `сеть 172.20.72.0/21`, и `net` получает это значение.",
         kind: "line",
         frames: [
           {
@@ -1249,14 +1021,14 @@ export const lessonMedia = {
             names: [
               { n: "ip_address", v: "функция", ref: null, ch: false },
               { n: "ip_network", v: "функция", ref: null, ch: false },
-              { n: "expected", v: "адрес 172.20.160.0", ref: null, ch: false },
-              { n: "found", v: "[19, 20]", ref: 0, ch: false },
+              { n: "expected", v: "адрес 172.20.76.0", ref: null, ch: false },
+              { n: "found", v: "[]", ref: 0, ch: false },
               { n: "p", v: "21", ref: null, ch: false },
-              { n: "net", v: "сеть 172.20.168.0/21", ref: null, ch: true },
+              { n: "net", v: "сеть 172.20.72.0/21", ref: null, ch: true },
             ],
           },
         ],
-        objs: { "0": { v: "[19, 20]", ch: false } },
+        objs: { "0": { v: "[]", ch: false } },
         out: "",
       },
       {
@@ -1269,14 +1041,234 @@ export const lessonMedia = {
             names: [
               { n: "ip_address", v: "функция", ref: null, ch: false },
               { n: "ip_network", v: "функция", ref: null, ch: false },
-              { n: "expected", v: "адрес 172.20.160.0", ref: null, ch: false },
-              { n: "found", v: "[19, 20]", ref: 0, ch: false },
+              { n: "expected", v: "адрес 172.20.76.0", ref: null, ch: false },
+              { n: "found", v: "[]", ref: 0, ch: false },
               { n: "p", v: "21", ref: null, ch: false },
-              { n: "net", v: "сеть 172.20.168.0/21", ref: null, ch: false },
+              { n: "net", v: "сеть 172.20.72.0/21", ref: null, ch: false },
             ],
           },
         ],
-        objs: { "0": { v: "[19, 20]", ch: false } },
+        objs: { "0": { v: "[]", ch: false } },
+        out: "",
+      },
+      {
+        line: 5,
+        text: "`for` берёт следующее значение: `p` = `22`.",
+        kind: "line",
+        frames: [
+          {
+            title: "программа",
+            names: [
+              { n: "ip_address", v: "функция", ref: null, ch: false },
+              { n: "ip_network", v: "функция", ref: null, ch: false },
+              { n: "expected", v: "адрес 172.20.76.0", ref: null, ch: false },
+              { n: "found", v: "[]", ref: 0, ch: false },
+              { n: "p", v: "22", ref: null, ch: true },
+              { n: "net", v: "сеть 172.20.72.0/21", ref: null, ch: false },
+            ],
+          },
+        ],
+        objs: { "0": { v: "[]", ch: false } },
+        out: "",
+      },
+      {
+        line: 6,
+        text: "Python вычисляет `ip_network(f'172.20.77.140/{p}', strict=False)` → `сеть 172.20.76.0/22`, и `net` получает это значение. Прежнее значение `сеть 172.20.72.0/21` больше не связано с `net`.",
+        kind: "line",
+        frames: [
+          {
+            title: "программа",
+            names: [
+              { n: "ip_address", v: "функция", ref: null, ch: false },
+              { n: "ip_network", v: "функция", ref: null, ch: false },
+              { n: "expected", v: "адрес 172.20.76.0", ref: null, ch: false },
+              { n: "found", v: "[]", ref: 0, ch: false },
+              { n: "p", v: "22", ref: null, ch: false },
+              { n: "net", v: "сеть 172.20.76.0/22", ref: null, ch: true },
+            ],
+          },
+        ],
+        objs: { "0": { v: "[]", ch: false } },
+        out: "",
+      },
+      {
+        line: 7,
+        text: "Проверка `net.network_address == expected` даёт `True` — выполняется блок под этим условием.",
+        kind: "line",
+        frames: [
+          {
+            title: "программа",
+            names: [
+              { n: "ip_address", v: "функция", ref: null, ch: false },
+              { n: "ip_network", v: "функция", ref: null, ch: false },
+              { n: "expected", v: "адрес 172.20.76.0", ref: null, ch: false },
+              { n: "found", v: "[]", ref: 0, ch: false },
+              { n: "p", v: "22", ref: null, ch: false },
+              { n: "net", v: "сеть 172.20.76.0/22", ref: null, ch: false },
+            ],
+          },
+        ],
+        objs: { "0": { v: "[]", ch: false } },
+        out: "",
+      },
+      {
+        line: 8,
+        text: "`found.append(p)` меняет сам список, к которому ведёт `found`; новый не создаётся.",
+        kind: "line",
+        frames: [
+          {
+            title: "программа",
+            names: [
+              { n: "ip_address", v: "функция", ref: null, ch: false },
+              { n: "ip_network", v: "функция", ref: null, ch: false },
+              { n: "expected", v: "адрес 172.20.76.0", ref: null, ch: false },
+              { n: "found", v: "[22]", ref: 0, ch: true },
+              { n: "p", v: "22", ref: null, ch: false },
+              { n: "net", v: "сеть 172.20.76.0/22", ref: null, ch: false },
+            ],
+          },
+        ],
+        objs: { "0": { v: "[22]", ch: true } },
+        out: "",
+      },
+      {
+        line: 5,
+        text: "`for` берёт следующее значение: `p` = `23`.",
+        kind: "line",
+        frames: [
+          {
+            title: "программа",
+            names: [
+              { n: "ip_address", v: "функция", ref: null, ch: false },
+              { n: "ip_network", v: "функция", ref: null, ch: false },
+              { n: "expected", v: "адрес 172.20.76.0", ref: null, ch: false },
+              { n: "found", v: "[22]", ref: 0, ch: false },
+              { n: "p", v: "23", ref: null, ch: true },
+              { n: "net", v: "сеть 172.20.76.0/22", ref: null, ch: false },
+            ],
+          },
+        ],
+        objs: { "0": { v: "[22]", ch: false } },
+        out: "",
+      },
+      {
+        line: 6,
+        text: "Python вычисляет `ip_network(f'172.20.77.140/{p}', strict=False)` → `сеть 172.20.76.0/23`, и `net` получает это значение. Прежнее значение `сеть 172.20.76.0/22` больше не связано с `net`.",
+        kind: "line",
+        frames: [
+          {
+            title: "программа",
+            names: [
+              { n: "ip_address", v: "функция", ref: null, ch: false },
+              { n: "ip_network", v: "функция", ref: null, ch: false },
+              { n: "expected", v: "адрес 172.20.76.0", ref: null, ch: false },
+              { n: "found", v: "[22]", ref: 0, ch: false },
+              { n: "p", v: "23", ref: null, ch: false },
+              { n: "net", v: "сеть 172.20.76.0/23", ref: null, ch: true },
+            ],
+          },
+        ],
+        objs: { "0": { v: "[22]", ch: false } },
+        out: "",
+      },
+      {
+        line: 7,
+        text: "Проверка `net.network_address == expected` даёт `True` — выполняется блок под этим условием.",
+        kind: "line",
+        frames: [
+          {
+            title: "программа",
+            names: [
+              { n: "ip_address", v: "функция", ref: null, ch: false },
+              { n: "ip_network", v: "функция", ref: null, ch: false },
+              { n: "expected", v: "адрес 172.20.76.0", ref: null, ch: false },
+              { n: "found", v: "[22]", ref: 0, ch: false },
+              { n: "p", v: "23", ref: null, ch: false },
+              { n: "net", v: "сеть 172.20.76.0/23", ref: null, ch: false },
+            ],
+          },
+        ],
+        objs: { "0": { v: "[22]", ch: false } },
+        out: "",
+      },
+      {
+        line: 8,
+        text: "`found.append(p)` меняет сам список, к которому ведёт `found`; новый не создаётся.",
+        kind: "line",
+        frames: [
+          {
+            title: "программа",
+            names: [
+              { n: "ip_address", v: "функция", ref: null, ch: false },
+              { n: "ip_network", v: "функция", ref: null, ch: false },
+              { n: "expected", v: "адрес 172.20.76.0", ref: null, ch: false },
+              { n: "found", v: "[22, 23]", ref: 0, ch: true },
+              { n: "p", v: "23", ref: null, ch: false },
+              { n: "net", v: "сеть 172.20.76.0/23", ref: null, ch: false },
+            ],
+          },
+        ],
+        objs: { "0": { v: "[22, 23]", ch: true } },
+        out: "",
+      },
+      {
+        line: 5,
+        text: "`for` берёт следующее значение: `p` = `24`.",
+        kind: "line",
+        frames: [
+          {
+            title: "программа",
+            names: [
+              { n: "ip_address", v: "функция", ref: null, ch: false },
+              { n: "ip_network", v: "функция", ref: null, ch: false },
+              { n: "expected", v: "адрес 172.20.76.0", ref: null, ch: false },
+              { n: "found", v: "[22, 23]", ref: 0, ch: false },
+              { n: "p", v: "24", ref: null, ch: true },
+              { n: "net", v: "сеть 172.20.76.0/23", ref: null, ch: false },
+            ],
+          },
+        ],
+        objs: { "0": { v: "[22, 23]", ch: false } },
+        out: "",
+      },
+      {
+        line: 6,
+        text: "Python вычисляет `ip_network(f'172.20.77.140/{p}', strict=False)` → `сеть 172.20.77.0/24`, и `net` получает это значение. Прежнее значение `сеть 172.20.76.0/23` больше не связано с `net`.",
+        kind: "line",
+        frames: [
+          {
+            title: "программа",
+            names: [
+              { n: "ip_address", v: "функция", ref: null, ch: false },
+              { n: "ip_network", v: "функция", ref: null, ch: false },
+              { n: "expected", v: "адрес 172.20.76.0", ref: null, ch: false },
+              { n: "found", v: "[22, 23]", ref: 0, ch: false },
+              { n: "p", v: "24", ref: null, ch: false },
+              { n: "net", v: "сеть 172.20.77.0/24", ref: null, ch: true },
+            ],
+          },
+        ],
+        objs: { "0": { v: "[22, 23]", ch: false } },
+        out: "",
+      },
+      {
+        line: 7,
+        text: "Проверка `net.network_address == expected` даёт `False` — блок пропускается.",
+        kind: "line",
+        frames: [
+          {
+            title: "программа",
+            names: [
+              { n: "ip_address", v: "функция", ref: null, ch: false },
+              { n: "ip_network", v: "функция", ref: null, ch: false },
+              { n: "expected", v: "адрес 172.20.76.0", ref: null, ch: false },
+              { n: "found", v: "[22, 23]", ref: 0, ch: false },
+              { n: "p", v: "24", ref: null, ch: false },
+              { n: "net", v: "сеть 172.20.77.0/24", ref: null, ch: false },
+            ],
+          },
+        ],
+        objs: { "0": { v: "[22, 23]", ch: false } },
         out: "",
       },
       {
@@ -1289,19 +1281,19 @@ export const lessonMedia = {
             names: [
               { n: "ip_address", v: "функция", ref: null, ch: false },
               { n: "ip_network", v: "функция", ref: null, ch: false },
-              { n: "expected", v: "адрес 172.20.160.0", ref: null, ch: false },
-              { n: "found", v: "[19, 20]", ref: 0, ch: false },
-              { n: "p", v: "21", ref: null, ch: false },
-              { n: "net", v: "сеть 172.20.168.0/21", ref: null, ch: false },
+              { n: "expected", v: "адрес 172.20.76.0", ref: null, ch: false },
+              { n: "found", v: "[22, 23]", ref: 0, ch: false },
+              { n: "p", v: "24", ref: null, ch: false },
+              { n: "net", v: "сеть 172.20.77.0/24", ref: null, ch: false },
             ],
           },
         ],
-        objs: { "0": { v: "[19, 20]", ch: false } },
+        objs: { "0": { v: "[22, 23]", ch: false } },
         out: "",
       },
       {
         line: 9,
-        text: "На экран выводится «[19, 20]».",
+        text: "На экран выводится «[22, 23]».",
         kind: "line",
         frames: [
           {
@@ -1309,23 +1301,23 @@ export const lessonMedia = {
             names: [
               { n: "ip_address", v: "функция", ref: null, ch: false },
               { n: "ip_network", v: "функция", ref: null, ch: false },
-              { n: "expected", v: "адрес 172.20.160.0", ref: null, ch: false },
-              { n: "found", v: "[19, 20]", ref: 0, ch: false },
-              { n: "p", v: "21", ref: null, ch: false },
-              { n: "net", v: "сеть 172.20.168.0/21", ref: null, ch: false },
+              { n: "expected", v: "адрес 172.20.76.0", ref: null, ch: false },
+              { n: "found", v: "[22, 23]", ref: 0, ch: false },
+              { n: "p", v: "24", ref: null, ch: false },
+              { n: "net", v: "сеть 172.20.77.0/24", ref: null, ch: false },
             ],
           },
         ],
-        objs: { "0": { v: "[19, 20]", ch: false } },
-        out: "[19, 20]\n",
+        objs: { "0": { v: "[22, 23]", ch: false } },
+        out: "[22, 23]\n",
       },
     ],
   },
   runDiffer: {
     kind: "run",
-    code: "from ipaddress import ip_network\n\nfor p in range(18, 33):\n    a = ip_network(f'172.20.74.10/{p}', strict=False)\n    b = ip_network(f'172.20.79.200/{p}', strict=False)\n    if a.network_address != b.network_address:\n        break\nprint(p)",
+    code: "from ipaddress import ip_network\n\nfor p in range(20, 33):\n    a = ip_network(f'172.20.77.140/{p}', strict=False)\n    b = ip_network(f'172.20.79.200/{p}', strict=False)\n    if a.network_address != b.network_address:\n        break\nprint(p)",
     fileName: "differ.py",
-    output: "22",
+    output: "23",
     steps: [
       {
         line: null,
@@ -1350,148 +1342,7 @@ export const lessonMedia = {
       },
       {
         line: 3,
-        text: "`for` берёт первое значение: `p` = `18`.",
-        kind: "line",
-        frames: [
-          {
-            title: "программа",
-            names: [
-              { n: "ip_network", v: "функция", ref: null, ch: false },
-              { n: "p", v: "18", ref: null, ch: true },
-            ],
-          },
-        ],
-        objs: {},
-        out: "",
-      },
-      {
-        line: 4,
-        text: "Python вычисляет `ip_network(f'172.20.74.10/{p}', strict=False)` → `сеть 172.20.64.0/18`, и `a` получает это значение.",
-        kind: "line",
-        frames: [
-          {
-            title: "программа",
-            names: [
-              { n: "ip_network", v: "функция", ref: null, ch: false },
-              { n: "p", v: "18", ref: null, ch: false },
-              { n: "a", v: "сеть 172.20.64.0/18", ref: null, ch: true },
-            ],
-          },
-        ],
-        objs: {},
-        out: "",
-      },
-      {
-        line: 5,
-        text: "Python вычисляет `ip_network(f'172.20.79.200/{p}', strict=False)` → `сеть 172.20.64.0/18`, и `b` получает это значение.",
-        kind: "line",
-        frames: [
-          {
-            title: "программа",
-            names: [
-              { n: "ip_network", v: "функция", ref: null, ch: false },
-              { n: "p", v: "18", ref: null, ch: false },
-              { n: "a", v: "сеть 172.20.64.0/18", ref: null, ch: false },
-              { n: "b", v: "сеть 172.20.64.0/18", ref: null, ch: true },
-            ],
-          },
-        ],
-        objs: {},
-        out: "",
-      },
-      {
-        line: 6,
-        text: "Проверка `a.network_address != b.network_address` даёт `False` — блок пропускается.",
-        kind: "line",
-        frames: [
-          {
-            title: "программа",
-            names: [
-              { n: "ip_network", v: "функция", ref: null, ch: false },
-              { n: "p", v: "18", ref: null, ch: false },
-              { n: "a", v: "сеть 172.20.64.0/18", ref: null, ch: false },
-              { n: "b", v: "сеть 172.20.64.0/18", ref: null, ch: false },
-            ],
-          },
-        ],
-        objs: {},
-        out: "",
-      },
-      {
-        line: 3,
-        text: "`for` берёт следующее значение: `p` = `19`.",
-        kind: "line",
-        frames: [
-          {
-            title: "программа",
-            names: [
-              { n: "ip_network", v: "функция", ref: null, ch: false },
-              { n: "p", v: "19", ref: null, ch: true },
-              { n: "a", v: "сеть 172.20.64.0/18", ref: null, ch: false },
-              { n: "b", v: "сеть 172.20.64.0/18", ref: null, ch: false },
-            ],
-          },
-        ],
-        objs: {},
-        out: "",
-      },
-      {
-        line: 4,
-        text: "Python вычисляет `ip_network(f'172.20.74.10/{p}', strict=False)` → `сеть 172.20.64.0/19`, и `a` получает это значение. Прежнее значение `сеть 172.20.64.0/18` больше не связано с `a`.",
-        kind: "line",
-        frames: [
-          {
-            title: "программа",
-            names: [
-              { n: "ip_network", v: "функция", ref: null, ch: false },
-              { n: "p", v: "19", ref: null, ch: false },
-              { n: "a", v: "сеть 172.20.64.0/19", ref: null, ch: true },
-              { n: "b", v: "сеть 172.20.64.0/18", ref: null, ch: false },
-            ],
-          },
-        ],
-        objs: {},
-        out: "",
-      },
-      {
-        line: 5,
-        text: "Python вычисляет `ip_network(f'172.20.79.200/{p}', strict=False)` → `сеть 172.20.64.0/19`, и `b` получает это значение. Прежнее значение `сеть 172.20.64.0/18` больше не связано с `b`.",
-        kind: "line",
-        frames: [
-          {
-            title: "программа",
-            names: [
-              { n: "ip_network", v: "функция", ref: null, ch: false },
-              { n: "p", v: "19", ref: null, ch: false },
-              { n: "a", v: "сеть 172.20.64.0/19", ref: null, ch: false },
-              { n: "b", v: "сеть 172.20.64.0/19", ref: null, ch: true },
-            ],
-          },
-        ],
-        objs: {},
-        out: "",
-      },
-      {
-        line: 6,
-        text: "Проверка `a.network_address != b.network_address` даёт `False` — блок пропускается.",
-        kind: "line",
-        frames: [
-          {
-            title: "программа",
-            names: [
-              { n: "ip_network", v: "функция", ref: null, ch: false },
-              { n: "p", v: "19", ref: null, ch: false },
-              { n: "a", v: "сеть 172.20.64.0/19", ref: null, ch: false },
-              { n: "b", v: "сеть 172.20.64.0/19", ref: null, ch: false },
-            ],
-          },
-        ],
-        objs: {},
-        out: "",
-      },
-      {
-        line: 3,
-        text: "`for` берёт следующее значение: `p` = `20`.",
+        text: "`for` берёт первое значение: `p` = `20`.",
         kind: "line",
         frames: [
           {
@@ -1499,8 +1350,6 @@ export const lessonMedia = {
             names: [
               { n: "ip_network", v: "функция", ref: null, ch: false },
               { n: "p", v: "20", ref: null, ch: true },
-              { n: "a", v: "сеть 172.20.64.0/19", ref: null, ch: false },
-              { n: "b", v: "сеть 172.20.64.0/19", ref: null, ch: false },
             ],
           },
         ],
@@ -1509,7 +1358,7 @@ export const lessonMedia = {
       },
       {
         line: 4,
-        text: "Python вычисляет `ip_network(f'172.20.74.10/{p}', strict=False)` → `сеть 172.20.64.0/20`, и `a` получает это значение. Прежнее значение `сеть 172.20.64.0/19` больше не связано с `a`.",
+        text: "Python вычисляет `ip_network(f'172.20.77.140/{p}', strict=False)` → `сеть 172.20.64.0/20`, и `a` получает это значение.",
         kind: "line",
         frames: [
           {
@@ -1518,7 +1367,6 @@ export const lessonMedia = {
               { n: "ip_network", v: "функция", ref: null, ch: false },
               { n: "p", v: "20", ref: null, ch: false },
               { n: "a", v: "сеть 172.20.64.0/20", ref: null, ch: true },
-              { n: "b", v: "сеть 172.20.64.0/19", ref: null, ch: false },
             ],
           },
         ],
@@ -1527,7 +1375,7 @@ export const lessonMedia = {
       },
       {
         line: 5,
-        text: "Python вычисляет `ip_network(f'172.20.79.200/{p}', strict=False)` → `сеть 172.20.64.0/20`, и `b` получает это значение. Прежнее значение `сеть 172.20.64.0/19` больше не связано с `b`.",
+        text: "Python вычисляет `ip_network(f'172.20.79.200/{p}', strict=False)` → `сеть 172.20.64.0/20`, и `b` получает это значение.",
         kind: "line",
         frames: [
           {
@@ -1581,7 +1429,7 @@ export const lessonMedia = {
       },
       {
         line: 4,
-        text: "Python вычисляет `ip_network(f'172.20.74.10/{p}', strict=False)` → `сеть 172.20.72.0/21`, и `a` получает это значение. Прежнее значение `сеть 172.20.64.0/20` больше не связано с `a`.",
+        text: "Python вычисляет `ip_network(f'172.20.77.140/{p}', strict=False)` → `сеть 172.20.72.0/21`, и `a` получает это значение. Прежнее значение `сеть 172.20.64.0/20` больше не связано с `a`.",
         kind: "line",
         frames: [
           {
@@ -1653,7 +1501,7 @@ export const lessonMedia = {
       },
       {
         line: 4,
-        text: "Python вычисляет `ip_network(f'172.20.74.10/{p}', strict=False)` → `сеть 172.20.72.0/22`, и `a` получает это значение. Прежнее значение `сеть 172.20.72.0/21` больше не связано с `a`.",
+        text: "Python вычисляет `ip_network(f'172.20.77.140/{p}', strict=False)` → `сеть 172.20.76.0/22`, и `a` получает это значение. Прежнее значение `сеть 172.20.72.0/21` больше не связано с `a`.",
         kind: "line",
         frames: [
           {
@@ -1661,7 +1509,7 @@ export const lessonMedia = {
             names: [
               { n: "ip_network", v: "функция", ref: null, ch: false },
               { n: "p", v: "22", ref: null, ch: false },
-              { n: "a", v: "сеть 172.20.72.0/22", ref: null, ch: true },
+              { n: "a", v: "сеть 172.20.76.0/22", ref: null, ch: true },
               { n: "b", v: "сеть 172.20.72.0/21", ref: null, ch: false },
             ],
           },
@@ -1679,8 +1527,80 @@ export const lessonMedia = {
             names: [
               { n: "ip_network", v: "функция", ref: null, ch: false },
               { n: "p", v: "22", ref: null, ch: false },
-              { n: "a", v: "сеть 172.20.72.0/22", ref: null, ch: false },
+              { n: "a", v: "сеть 172.20.76.0/22", ref: null, ch: false },
               { n: "b", v: "сеть 172.20.76.0/22", ref: null, ch: true },
+            ],
+          },
+        ],
+        objs: {},
+        out: "",
+      },
+      {
+        line: 6,
+        text: "Проверка `a.network_address != b.network_address` даёт `False` — блок пропускается.",
+        kind: "line",
+        frames: [
+          {
+            title: "программа",
+            names: [
+              { n: "ip_network", v: "функция", ref: null, ch: false },
+              { n: "p", v: "22", ref: null, ch: false },
+              { n: "a", v: "сеть 172.20.76.0/22", ref: null, ch: false },
+              { n: "b", v: "сеть 172.20.76.0/22", ref: null, ch: false },
+            ],
+          },
+        ],
+        objs: {},
+        out: "",
+      },
+      {
+        line: 3,
+        text: "`for` берёт следующее значение: `p` = `23`.",
+        kind: "line",
+        frames: [
+          {
+            title: "программа",
+            names: [
+              { n: "ip_network", v: "функция", ref: null, ch: false },
+              { n: "p", v: "23", ref: null, ch: true },
+              { n: "a", v: "сеть 172.20.76.0/22", ref: null, ch: false },
+              { n: "b", v: "сеть 172.20.76.0/22", ref: null, ch: false },
+            ],
+          },
+        ],
+        objs: {},
+        out: "",
+      },
+      {
+        line: 4,
+        text: "Python вычисляет `ip_network(f'172.20.77.140/{p}', strict=False)` → `сеть 172.20.76.0/23`, и `a` получает это значение. Прежнее значение `сеть 172.20.76.0/22` больше не связано с `a`.",
+        kind: "line",
+        frames: [
+          {
+            title: "программа",
+            names: [
+              { n: "ip_network", v: "функция", ref: null, ch: false },
+              { n: "p", v: "23", ref: null, ch: false },
+              { n: "a", v: "сеть 172.20.76.0/23", ref: null, ch: true },
+              { n: "b", v: "сеть 172.20.76.0/22", ref: null, ch: false },
+            ],
+          },
+        ],
+        objs: {},
+        out: "",
+      },
+      {
+        line: 5,
+        text: "Python вычисляет `ip_network(f'172.20.79.200/{p}', strict=False)` → `сеть 172.20.78.0/23`, и `b` получает это значение. Прежнее значение `сеть 172.20.76.0/22` больше не связано с `b`.",
+        kind: "line",
+        frames: [
+          {
+            title: "программа",
+            names: [
+              { n: "ip_network", v: "функция", ref: null, ch: false },
+              { n: "p", v: "23", ref: null, ch: false },
+              { n: "a", v: "сеть 172.20.76.0/23", ref: null, ch: false },
+              { n: "b", v: "сеть 172.20.78.0/23", ref: null, ch: true },
             ],
           },
         ],
@@ -1696,9 +1616,9 @@ export const lessonMedia = {
             title: "программа",
             names: [
               { n: "ip_network", v: "функция", ref: null, ch: false },
-              { n: "p", v: "22", ref: null, ch: false },
-              { n: "a", v: "сеть 172.20.72.0/22", ref: null, ch: false },
-              { n: "b", v: "сеть 172.20.76.0/22", ref: null, ch: false },
+              { n: "p", v: "23", ref: null, ch: false },
+              { n: "a", v: "сеть 172.20.76.0/23", ref: null, ch: false },
+              { n: "b", v: "сеть 172.20.78.0/23", ref: null, ch: false },
             ],
           },
         ],
@@ -1714,9 +1634,9 @@ export const lessonMedia = {
             title: "программа",
             names: [
               { n: "ip_network", v: "функция", ref: null, ch: false },
-              { n: "p", v: "22", ref: null, ch: false },
-              { n: "a", v: "сеть 172.20.72.0/22", ref: null, ch: false },
-              { n: "b", v: "сеть 172.20.76.0/22", ref: null, ch: false },
+              { n: "p", v: "23", ref: null, ch: false },
+              { n: "a", v: "сеть 172.20.76.0/23", ref: null, ch: false },
+              { n: "b", v: "сеть 172.20.78.0/23", ref: null, ch: false },
             ],
           },
         ],
@@ -1725,29 +1645,29 @@ export const lessonMedia = {
       },
       {
         line: 8,
-        text: "На экран выводится «22».",
+        text: "На экран выводится «23».",
         kind: "line",
         frames: [
           {
             title: "программа",
             names: [
               { n: "ip_network", v: "функция", ref: null, ch: false },
-              { n: "p", v: "22", ref: null, ch: false },
-              { n: "a", v: "сеть 172.20.72.0/22", ref: null, ch: false },
-              { n: "b", v: "сеть 172.20.76.0/22", ref: null, ch: false },
+              { n: "p", v: "23", ref: null, ch: false },
+              { n: "a", v: "сеть 172.20.76.0/23", ref: null, ch: false },
+              { n: "b", v: "сеть 172.20.78.0/23", ref: null, ch: false },
             ],
           },
         ],
         objs: {},
-        out: "22\n",
+        out: "23\n",
       },
     ],
   },
   runFirst: {
     kind: "run",
-    code: "from ipaddress import ip_network\n\nnet = ip_network('192.168.10.0/28')\nfor address in net.hosts():\n    bits = format(int(address), '032b')\n    if bits.count('1') == 9:\n        break\nprint(address)",
+    code: "from ipaddress import ip_network\n\nnet = ip_network('172.20.76.0/22')\nfor address in net.hosts():\n    if f'{address:b}'.count('1') == 12:\n        break\nprint(address)",
     fileName: "first.py",
-    output: "192.168.10.3",
+    output: "172.20.76.7",
     steps: [
       {
         line: null,
@@ -1772,14 +1692,14 @@ export const lessonMedia = {
       },
       {
         line: 3,
-        text: "Python вычисляет `ip_network('192.168.10.0/28')` → `сеть 192.168.10.0/28`, и `net` получает это значение.",
+        text: "Python вычисляет `ip_network('172.20.76.0/22')` → `сеть 172.20.76.0/22`, и `net` получает это значение.",
         kind: "line",
         frames: [
           {
             title: "программа",
             names: [
               { n: "ip_network", v: "функция", ref: null, ch: false },
-              { n: "net", v: "сеть 192.168.10.0/28", ref: null, ch: true },
+              { n: "net", v: "сеть 172.20.76.0/22", ref: null, ch: true },
             ],
           },
         ],
@@ -1788,15 +1708,15 @@ export const lessonMedia = {
       },
       {
         line: 4,
-        text: "`for` берёт первое значение: `address` = `адрес 192.168.10.1`.",
+        text: "`for` берёт первое значение: `address` = `адрес 172.20.76.1`.",
         kind: "line",
         frames: [
           {
             title: "программа",
             names: [
               { n: "ip_network", v: "функция", ref: null, ch: false },
-              { n: "net", v: "сеть 192.168.10.0/28", ref: null, ch: false },
-              { n: "address", v: "адрес 192.168.10.1", ref: null, ch: true },
+              { n: "net", v: "сеть 172.20.76.0/22", ref: null, ch: false },
+              { n: "address", v: "адрес 172.20.76.1", ref: null, ch: true },
             ],
           },
         ],
@@ -1805,44 +1725,15 @@ export const lessonMedia = {
       },
       {
         line: 5,
-        text: "Python вычисляет `format(int(address), '032b')` → `'11000000101010000000101000000001'`, и `bits` получает это значение.",
+        text: "Проверка `f'{address:b}'.count('1') == 12` даёт `False` — блок пропускается.",
         kind: "line",
         frames: [
           {
             title: "программа",
             names: [
               { n: "ip_network", v: "функция", ref: null, ch: false },
-              { n: "net", v: "сеть 192.168.10.0/28", ref: null, ch: false },
-              { n: "address", v: "адрес 192.168.10.1", ref: null, ch: false },
-              {
-                n: "bits",
-                v: "'11000000101010000000101000000001'",
-                ref: null,
-                ch: true,
-              },
-            ],
-          },
-        ],
-        objs: {},
-        out: "",
-      },
-      {
-        line: 6,
-        text: "Проверка `bits.count('1') == 9` даёт `False` — блок пропускается.",
-        kind: "line",
-        frames: [
-          {
-            title: "программа",
-            names: [
-              { n: "ip_network", v: "функция", ref: null, ch: false },
-              { n: "net", v: "сеть 192.168.10.0/28", ref: null, ch: false },
-              { n: "address", v: "адрес 192.168.10.1", ref: null, ch: false },
-              {
-                n: "bits",
-                v: "'11000000101010000000101000000001'",
-                ref: null,
-                ch: false,
-              },
+              { n: "net", v: "сеть 172.20.76.0/22", ref: null, ch: false },
+              { n: "address", v: "адрес 172.20.76.1", ref: null, ch: false },
             ],
           },
         ],
@@ -1851,21 +1742,15 @@ export const lessonMedia = {
       },
       {
         line: 4,
-        text: "`for` берёт следующее значение: `address` = `адрес 192.168.10.2`.",
+        text: "`for` берёт следующее значение: `address` = `адрес 172.20.76.2`.",
         kind: "line",
         frames: [
           {
             title: "программа",
             names: [
               { n: "ip_network", v: "функция", ref: null, ch: false },
-              { n: "net", v: "сеть 192.168.10.0/28", ref: null, ch: false },
-              { n: "address", v: "адрес 192.168.10.2", ref: null, ch: true },
-              {
-                n: "bits",
-                v: "'11000000101010000000101000000001'",
-                ref: null,
-                ch: false,
-              },
+              { n: "net", v: "сеть 172.20.76.0/22", ref: null, ch: false },
+              { n: "address", v: "адрес 172.20.76.2", ref: null, ch: true },
             ],
           },
         ],
@@ -1874,44 +1759,15 @@ export const lessonMedia = {
       },
       {
         line: 5,
-        text: "Python вычисляет `format(int(address), '032b')` → `'11000000101010000000101000000010'`, и `bits` получает это значение. Прежнее значение `'11000000101010000000101000000001'` больше не связано с `bits`.",
+        text: "Проверка `f'{address:b}'.count('1') == 12` даёт `False` — блок пропускается.",
         kind: "line",
         frames: [
           {
             title: "программа",
             names: [
               { n: "ip_network", v: "функция", ref: null, ch: false },
-              { n: "net", v: "сеть 192.168.10.0/28", ref: null, ch: false },
-              { n: "address", v: "адрес 192.168.10.2", ref: null, ch: false },
-              {
-                n: "bits",
-                v: "'11000000101010000000101000000010'",
-                ref: null,
-                ch: true,
-              },
-            ],
-          },
-        ],
-        objs: {},
-        out: "",
-      },
-      {
-        line: 6,
-        text: "Проверка `bits.count('1') == 9` даёт `False` — блок пропускается.",
-        kind: "line",
-        frames: [
-          {
-            title: "программа",
-            names: [
-              { n: "ip_network", v: "функция", ref: null, ch: false },
-              { n: "net", v: "сеть 192.168.10.0/28", ref: null, ch: false },
-              { n: "address", v: "адрес 192.168.10.2", ref: null, ch: false },
-              {
-                n: "bits",
-                v: "'11000000101010000000101000000010'",
-                ref: null,
-                ch: false,
-              },
+              { n: "net", v: "сеть 172.20.76.0/22", ref: null, ch: false },
+              { n: "address", v: "адрес 172.20.76.2", ref: null, ch: false },
             ],
           },
         ],
@@ -1920,21 +1776,15 @@ export const lessonMedia = {
       },
       {
         line: 4,
-        text: "`for` берёт следующее значение: `address` = `адрес 192.168.10.3`.",
+        text: "`for` берёт следующее значение: `address` = `адрес 172.20.76.3`.",
         kind: "line",
         frames: [
           {
             title: "программа",
             names: [
               { n: "ip_network", v: "функция", ref: null, ch: false },
-              { n: "net", v: "сеть 192.168.10.0/28", ref: null, ch: false },
-              { n: "address", v: "адрес 192.168.10.3", ref: null, ch: true },
-              {
-                n: "bits",
-                v: "'11000000101010000000101000000010'",
-                ref: null,
-                ch: false,
-              },
+              { n: "net", v: "сеть 172.20.76.0/22", ref: null, ch: false },
+              { n: "address", v: "адрес 172.20.76.3", ref: null, ch: true },
             ],
           },
         ],
@@ -1943,21 +1793,151 @@ export const lessonMedia = {
       },
       {
         line: 5,
-        text: "Python вычисляет `format(int(address), '032b')` → `'11000000101010000000101000000011'`, и `bits` получает это значение. Прежнее значение `'11000000101010000000101000000010'` больше не связано с `bits`.",
+        text: "Проверка `f'{address:b}'.count('1') == 12` даёт `False` — блок пропускается.",
         kind: "line",
         frames: [
           {
             title: "программа",
             names: [
               { n: "ip_network", v: "функция", ref: null, ch: false },
-              { n: "net", v: "сеть 192.168.10.0/28", ref: null, ch: false },
-              { n: "address", v: "адрес 192.168.10.3", ref: null, ch: false },
-              {
-                n: "bits",
-                v: "'11000000101010000000101000000011'",
-                ref: null,
-                ch: true,
-              },
+              { n: "net", v: "сеть 172.20.76.0/22", ref: null, ch: false },
+              { n: "address", v: "адрес 172.20.76.3", ref: null, ch: false },
+            ],
+          },
+        ],
+        objs: {},
+        out: "",
+      },
+      {
+        line: 4,
+        text: "`for` берёт следующее значение: `address` = `адрес 172.20.76.4`.",
+        kind: "line",
+        frames: [
+          {
+            title: "программа",
+            names: [
+              { n: "ip_network", v: "функция", ref: null, ch: false },
+              { n: "net", v: "сеть 172.20.76.0/22", ref: null, ch: false },
+              { n: "address", v: "адрес 172.20.76.4", ref: null, ch: true },
+            ],
+          },
+        ],
+        objs: {},
+        out: "",
+      },
+      {
+        line: 5,
+        text: "Проверка `f'{address:b}'.count('1') == 12` даёт `False` — блок пропускается.",
+        kind: "line",
+        frames: [
+          {
+            title: "программа",
+            names: [
+              { n: "ip_network", v: "функция", ref: null, ch: false },
+              { n: "net", v: "сеть 172.20.76.0/22", ref: null, ch: false },
+              { n: "address", v: "адрес 172.20.76.4", ref: null, ch: false },
+            ],
+          },
+        ],
+        objs: {},
+        out: "",
+      },
+      {
+        line: 4,
+        text: "`for` берёт следующее значение: `address` = `адрес 172.20.76.5`.",
+        kind: "line",
+        frames: [
+          {
+            title: "программа",
+            names: [
+              { n: "ip_network", v: "функция", ref: null, ch: false },
+              { n: "net", v: "сеть 172.20.76.0/22", ref: null, ch: false },
+              { n: "address", v: "адрес 172.20.76.5", ref: null, ch: true },
+            ],
+          },
+        ],
+        objs: {},
+        out: "",
+      },
+      {
+        line: 5,
+        text: "Проверка `f'{address:b}'.count('1') == 12` даёт `False` — блок пропускается.",
+        kind: "line",
+        frames: [
+          {
+            title: "программа",
+            names: [
+              { n: "ip_network", v: "функция", ref: null, ch: false },
+              { n: "net", v: "сеть 172.20.76.0/22", ref: null, ch: false },
+              { n: "address", v: "адрес 172.20.76.5", ref: null, ch: false },
+            ],
+          },
+        ],
+        objs: {},
+        out: "",
+      },
+      {
+        line: 4,
+        text: "`for` берёт следующее значение: `address` = `адрес 172.20.76.6`.",
+        kind: "line",
+        frames: [
+          {
+            title: "программа",
+            names: [
+              { n: "ip_network", v: "функция", ref: null, ch: false },
+              { n: "net", v: "сеть 172.20.76.0/22", ref: null, ch: false },
+              { n: "address", v: "адрес 172.20.76.6", ref: null, ch: true },
+            ],
+          },
+        ],
+        objs: {},
+        out: "",
+      },
+      {
+        line: 5,
+        text: "Проверка `f'{address:b}'.count('1') == 12` даёт `False` — блок пропускается.",
+        kind: "line",
+        frames: [
+          {
+            title: "программа",
+            names: [
+              { n: "ip_network", v: "функция", ref: null, ch: false },
+              { n: "net", v: "сеть 172.20.76.0/22", ref: null, ch: false },
+              { n: "address", v: "адрес 172.20.76.6", ref: null, ch: false },
+            ],
+          },
+        ],
+        objs: {},
+        out: "",
+      },
+      {
+        line: 4,
+        text: "`for` берёт следующее значение: `address` = `адрес 172.20.76.7`.",
+        kind: "line",
+        frames: [
+          {
+            title: "программа",
+            names: [
+              { n: "ip_network", v: "функция", ref: null, ch: false },
+              { n: "net", v: "сеть 172.20.76.0/22", ref: null, ch: false },
+              { n: "address", v: "адрес 172.20.76.7", ref: null, ch: true },
+            ],
+          },
+        ],
+        objs: {},
+        out: "",
+      },
+      {
+        line: 5,
+        text: "Проверка `f'{address:b}'.count('1') == 12` даёт `True` — выполняется блок под этим условием.",
+        kind: "line",
+        frames: [
+          {
+            title: "программа",
+            names: [
+              { n: "ip_network", v: "функция", ref: null, ch: false },
+              { n: "net", v: "сеть 172.20.76.0/22", ref: null, ch: false },
+              { n: "address", v: "адрес 172.20.76.7", ref: null, ch: false },
             ],
           },
         ],
@@ -1966,21 +1946,15 @@ export const lessonMedia = {
       },
       {
         line: 6,
-        text: "Проверка `bits.count('1') == 9` даёт `True` — выполняется блок под этим условием.",
+        text: "`break` прерывает цикл.",
         kind: "line",
         frames: [
           {
             title: "программа",
             names: [
               { n: "ip_network", v: "функция", ref: null, ch: false },
-              { n: "net", v: "сеть 192.168.10.0/28", ref: null, ch: false },
-              { n: "address", v: "адрес 192.168.10.3", ref: null, ch: false },
-              {
-                n: "bits",
-                v: "'11000000101010000000101000000011'",
-                ref: null,
-                ch: false,
-              },
+              { n: "net", v: "сеть 172.20.76.0/22", ref: null, ch: false },
+              { n: "address", v: "адрес 172.20.76.7", ref: null, ch: false },
             ],
           },
         ],
@@ -1989,50 +1963,53 @@ export const lessonMedia = {
       },
       {
         line: 7,
-        text: "`break` прерывает цикл.",
+        text: "На экран выводится «172.20.76.7».",
         kind: "line",
         frames: [
           {
             title: "программа",
             names: [
               { n: "ip_network", v: "функция", ref: null, ch: false },
-              { n: "net", v: "сеть 192.168.10.0/28", ref: null, ch: false },
-              { n: "address", v: "адрес 192.168.10.3", ref: null, ch: false },
-              {
-                n: "bits",
-                v: "'11000000101010000000101000000011'",
-                ref: null,
-                ch: false,
-              },
+              { n: "net", v: "сеть 172.20.76.0/22", ref: null, ch: false },
+              { n: "address", v: "адрес 172.20.76.7", ref: null, ch: false },
             ],
           },
         ],
         objs: {},
-        out: "",
-      },
-      {
-        line: 8,
-        text: "На экран выводится «192.168.10.3».",
-        kind: "line",
-        frames: [
-          {
-            title: "программа",
-            names: [
-              { n: "ip_network", v: "функция", ref: null, ch: false },
-              { n: "net", v: "сеть 192.168.10.0/28", ref: null, ch: false },
-              { n: "address", v: "адрес 192.168.10.3", ref: null, ch: false },
-              {
-                n: "bits",
-                v: "'11000000101010000000101000000011'",
-                ref: null,
-                ch: false,
-              },
-            ],
-          },
-        ],
-        objs: {},
-        out: "192.168.10.3\n",
+        out: "172.20.76.7\n",
       },
     ],
+  },
+  // %%ip_and("172.20.77.140", 22)%%
+  ipAnd1722077140_22: {
+    kind: "diagram",
+    svg: '<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" viewBox="0 0 660 188"><text x="82.0" y="40.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="end" style="font-variant-numeric:tabular-nums">адрес</text><text x="157.8" y="20.0" font-family="inherit" font-size="13" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">172</text><text x="299.2" y="20.0" font-family="inherit" font-size="13" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">20</text><text x="440.8" y="20.0" font-family="inherit" font-size="13" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">77</text><text x="582.2" y="20.0" font-family="inherit" font-size="13" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">140</text><rect x="92.0" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="100.2" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="108.4" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="116.7" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="124.9" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="133.1" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="141.3" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="149.5" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="157.8" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="166.0" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="174.2" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="182.4" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="190.6" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="198.8" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="207.1" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="215.3" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="233.5" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="241.7" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="249.9" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="258.2" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="266.4" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="274.6" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="282.8" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="291.0" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="299.2" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="307.5" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="315.7" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="323.9" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="332.1" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="340.3" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="348.6" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="356.8" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="375.0" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="383.2" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="391.4" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="399.7" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="407.9" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="416.1" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="424.3" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="432.5" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="440.8" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="449.0" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="457.2" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="465.4" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="473.6" y="26.0" width="16.4" height="22.0" fill="#f3f3f1" stroke="#d9d9d4" stroke-width="1.0"/><text x="481.8" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="490.1" y="26.0" width="16.4" height="22.0" fill="#f3f3f1" stroke="#d9d9d4" stroke-width="1.0"/><text x="498.3" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="516.5" y="26.0" width="16.4" height="22.0" fill="#f3f3f1" stroke="#d9d9d4" stroke-width="1.0"/><text x="524.7" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="532.9" y="26.0" width="16.4" height="22.0" fill="#f3f3f1" stroke="#d9d9d4" stroke-width="1.0"/><text x="541.2" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="549.4" y="26.0" width="16.4" height="22.0" fill="#f3f3f1" stroke="#d9d9d4" stroke-width="1.0"/><text x="557.6" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="565.8" y="26.0" width="16.4" height="22.0" fill="#f3f3f1" stroke="#d9d9d4" stroke-width="1.0"/><text x="574.0" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="582.2" y="26.0" width="16.4" height="22.0" fill="#f3f3f1" stroke="#d9d9d4" stroke-width="1.0"/><text x="590.5" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="598.7" y="26.0" width="16.4" height="22.0" fill="#f3f3f1" stroke="#d9d9d4" stroke-width="1.0"/><text x="606.9" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="615.1" y="26.0" width="16.4" height="22.0" fill="#f3f3f1" stroke="#d9d9d4" stroke-width="1.0"/><text x="623.3" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="631.6" y="26.0" width="16.4" height="22.0" fill="#f3f3f1" stroke="#d9d9d4" stroke-width="1.0"/><text x="639.8" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><text x="82.0" y="86.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="end" style="font-variant-numeric:tabular-nums">маска</text><text x="157.8" y="66.0" font-family="inherit" font-size="13" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">255</text><text x="299.2" y="66.0" font-family="inherit" font-size="13" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">255</text><text x="440.8" y="66.0" font-family="inherit" font-size="13" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">252</text><text x="582.2" y="66.0" font-family="inherit" font-size="13" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">0</text><rect x="92.0" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="100.2" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="108.4" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="116.7" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="124.9" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="133.1" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="141.3" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="149.5" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="157.8" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="166.0" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="174.2" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="182.4" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="190.6" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="198.8" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="207.1" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="215.3" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="233.5" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="241.7" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="249.9" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="258.2" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="266.4" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="274.6" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="282.8" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="291.0" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="299.2" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="307.5" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="315.7" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="323.9" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="332.1" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="340.3" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="348.6" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="356.8" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="375.0" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="383.2" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="391.4" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="399.7" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="407.9" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="416.1" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="424.3" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="432.5" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="440.8" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="449.0" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="457.2" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="465.4" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="473.6" y="72.0" width="16.4" height="22.0" fill="#f3f3f1" stroke="#d9d9d4" stroke-width="1.0"/><text x="481.8" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="490.1" y="72.0" width="16.4" height="22.0" fill="#f3f3f1" stroke="#d9d9d4" stroke-width="1.0"/><text x="498.3" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="516.5" y="72.0" width="16.4" height="22.0" fill="#f3f3f1" stroke="#d9d9d4" stroke-width="1.0"/><text x="524.7" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="532.9" y="72.0" width="16.4" height="22.0" fill="#f3f3f1" stroke="#d9d9d4" stroke-width="1.0"/><text x="541.2" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="549.4" y="72.0" width="16.4" height="22.0" fill="#f3f3f1" stroke="#d9d9d4" stroke-width="1.0"/><text x="557.6" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="565.8" y="72.0" width="16.4" height="22.0" fill="#f3f3f1" stroke="#d9d9d4" stroke-width="1.0"/><text x="574.0" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="582.2" y="72.0" width="16.4" height="22.0" fill="#f3f3f1" stroke="#d9d9d4" stroke-width="1.0"/><text x="590.5" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="598.7" y="72.0" width="16.4" height="22.0" fill="#f3f3f1" stroke="#d9d9d4" stroke-width="1.0"/><text x="606.9" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="615.1" y="72.0" width="16.4" height="22.0" fill="#f3f3f1" stroke="#d9d9d4" stroke-width="1.0"/><text x="623.3" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="631.6" y="72.0" width="16.4" height="22.0" fill="#f3f3f1" stroke="#d9d9d4" stroke-width="1.0"/><text x="639.8" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><text x="82.0" y="132.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="end" style="font-variant-numeric:tabular-nums">«И»</text><text x="157.8" y="112.0" font-family="inherit" font-size="13" font-weight="600" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">172</text><text x="299.2" y="112.0" font-family="inherit" font-size="13" font-weight="600" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">20</text><text x="440.8" y="112.0" font-family="inherit" font-size="13" font-weight="600" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">76</text><text x="582.2" y="112.0" font-family="inherit" font-size="13" font-weight="600" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">0</text><rect x="92.0" y="118.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="100.2" y="134.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="600" fill="#17191e" text-anchor="middle">1</text><rect x="108.4" y="118.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="116.7" y="134.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="600" fill="#17191e" text-anchor="middle">0</text><rect x="124.9" y="118.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="133.1" y="134.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="600" fill="#17191e" text-anchor="middle">1</text><rect x="141.3" y="118.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="149.5" y="134.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="600" fill="#17191e" text-anchor="middle">0</text><rect x="157.8" y="118.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="166.0" y="134.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="600" fill="#17191e" text-anchor="middle">1</text><rect x="174.2" y="118.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="182.4" y="134.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="600" fill="#17191e" text-anchor="middle">1</text><rect x="190.6" y="118.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="198.8" y="134.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="600" fill="#17191e" text-anchor="middle">0</text><rect x="207.1" y="118.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="215.3" y="134.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="600" fill="#17191e" text-anchor="middle">0</text><rect x="233.5" y="118.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="241.7" y="134.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="600" fill="#17191e" text-anchor="middle">0</text><rect x="249.9" y="118.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="258.2" y="134.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="600" fill="#17191e" text-anchor="middle">0</text><rect x="266.4" y="118.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="274.6" y="134.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="600" fill="#17191e" text-anchor="middle">0</text><rect x="282.8" y="118.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="291.0" y="134.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="600" fill="#17191e" text-anchor="middle">1</text><rect x="299.2" y="118.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="307.5" y="134.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="600" fill="#17191e" text-anchor="middle">0</text><rect x="315.7" y="118.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="323.9" y="134.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="600" fill="#17191e" text-anchor="middle">1</text><rect x="332.1" y="118.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="340.3" y="134.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="600" fill="#17191e" text-anchor="middle">0</text><rect x="348.6" y="118.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="356.8" y="134.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="600" fill="#17191e" text-anchor="middle">0</text><rect x="375.0" y="118.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="383.2" y="134.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="600" fill="#17191e" text-anchor="middle">0</text><rect x="391.4" y="118.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="399.7" y="134.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="600" fill="#17191e" text-anchor="middle">1</text><rect x="407.9" y="118.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="416.1" y="134.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="600" fill="#17191e" text-anchor="middle">0</text><rect x="424.3" y="118.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="432.5" y="134.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="600" fill="#17191e" text-anchor="middle">0</text><rect x="440.8" y="118.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="449.0" y="134.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="600" fill="#17191e" text-anchor="middle">1</text><rect x="457.2" y="118.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="465.4" y="134.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="600" fill="#17191e" text-anchor="middle">1</text><rect x="473.6" y="118.0" width="16.4" height="22.0" fill="#f3f3f1" stroke="#d9d9d4" stroke-width="1.0"/><text x="481.8" y="134.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="600" fill="#17191e" text-anchor="middle">0</text><rect x="490.1" y="118.0" width="16.4" height="22.0" fill="#f3f3f1" stroke="#d9d9d4" stroke-width="1.0"/><text x="498.3" y="134.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="600" fill="#17191e" text-anchor="middle">0</text><rect x="516.5" y="118.0" width="16.4" height="22.0" fill="#f3f3f1" stroke="#d9d9d4" stroke-width="1.0"/><text x="524.7" y="134.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="600" fill="#17191e" text-anchor="middle">0</text><rect x="532.9" y="118.0" width="16.4" height="22.0" fill="#f3f3f1" stroke="#d9d9d4" stroke-width="1.0"/><text x="541.2" y="134.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="600" fill="#17191e" text-anchor="middle">0</text><rect x="549.4" y="118.0" width="16.4" height="22.0" fill="#f3f3f1" stroke="#d9d9d4" stroke-width="1.0"/><text x="557.6" y="134.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="600" fill="#17191e" text-anchor="middle">0</text><rect x="565.8" y="118.0" width="16.4" height="22.0" fill="#f3f3f1" stroke="#d9d9d4" stroke-width="1.0"/><text x="574.0" y="134.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="600" fill="#17191e" text-anchor="middle">0</text><rect x="582.2" y="118.0" width="16.4" height="22.0" fill="#f3f3f1" stroke="#d9d9d4" stroke-width="1.0"/><text x="590.5" y="134.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="600" fill="#17191e" text-anchor="middle">0</text><rect x="598.7" y="118.0" width="16.4" height="22.0" fill="#f3f3f1" stroke="#d9d9d4" stroke-width="1.0"/><text x="606.9" y="134.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="600" fill="#17191e" text-anchor="middle">0</text><rect x="615.1" y="118.0" width="16.4" height="22.0" fill="#f3f3f1" stroke="#d9d9d4" stroke-width="1.0"/><text x="623.3" y="134.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="600" fill="#17191e" text-anchor="middle">0</text><rect x="631.6" y="118.0" width="16.4" height="22.0" fill="#f3f3f1" stroke="#d9d9d4" stroke-width="1.0"/><text x="639.8" y="134.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="600" fill="#17191e" text-anchor="middle">0</text><line x1="92.0" y1="97.0" x2="648.0" y2="97.0" stroke="#4d535e" stroke-width="1"/><line x1="473.6" y1="22.0" x2="473.6" y2="158.0" stroke="#ff6a00" stroke-width="2.5"/><text x="92.0" y="178.0" font-family="inherit" font-size="13" font-weight="600" fill="#17191e" text-anchor="start" style="font-variant-numeric:tabular-nums">сеть: 22 бит</text><text x="648.0" y="178.0" font-family="inherit" font-size="13" font-weight="600" fill="#17191e" text-anchor="end" style="font-variant-numeric:tabular-nums">узел: 10 бит</text><line x1="92.0" y1="164.0" x2="469.6" y2="164.0" stroke="#4d535e" stroke-width="1.2"/><line x1="477.6" y1="164.0" x2="648.0" y2="164.0" stroke="#4d535e" stroke-width="1.2"/></svg>',
+    width: 660,
+    height: 188,
+    alt: "172.20.77.140 И маска /22 = 172.20.76.0",
+  },
+  // %%ip_pair("172.20.77.140", "172.20.76.0")%%
+  ipPair1722077140_17220760: {
+    kind: "diagram",
+    svg: '<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" viewBox="0 0 660 174"><text x="82.0" y="40.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="end" style="font-variant-numeric:tabular-nums">адрес</text><text x="157.8" y="20.0" font-family="inherit" font-size="13" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">172</text><text x="299.2" y="20.0" font-family="inherit" font-size="13" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">20</text><text x="440.8" y="20.0" font-family="inherit" font-size="13" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">77</text><text x="582.2" y="20.0" font-family="inherit" font-size="13" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">140</text><rect x="92.0" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="100.2" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="108.4" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="116.7" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="124.9" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="133.1" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="141.3" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="149.5" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="157.8" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="166.0" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="174.2" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="182.4" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="190.6" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="198.8" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="207.1" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="215.3" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="233.5" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="241.7" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="249.9" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="258.2" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="266.4" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="274.6" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="282.8" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="291.0" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="299.2" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="307.5" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="315.7" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="323.9" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="332.1" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="340.3" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="348.6" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="356.8" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="375.0" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="383.2" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="391.4" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="399.7" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="407.9" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="416.1" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="424.3" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="432.5" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="440.8" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="449.0" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="457.2" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="465.4" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="473.6" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="481.8" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="490.1" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="498.3" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="516.5" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="524.7" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="532.9" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="541.2" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="549.4" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="557.6" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="565.8" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="574.0" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="582.2" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="590.5" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="598.7" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="606.9" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="615.1" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="623.3" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="631.6" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="639.8" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><text x="82.0" y="86.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="end" style="font-variant-numeric:tabular-nums">сеть</text><text x="157.8" y="66.0" font-family="inherit" font-size="13" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">172</text><text x="299.2" y="66.0" font-family="inherit" font-size="13" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">20</text><text x="440.8" y="66.0" font-family="inherit" font-size="13" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">76</text><text x="582.2" y="66.0" font-family="inherit" font-size="13" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">0</text><rect x="92.0" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="100.2" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="108.4" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="116.7" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="124.9" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="133.1" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="141.3" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="149.5" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="157.8" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="166.0" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="174.2" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="182.4" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="190.6" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="198.8" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="207.1" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="215.3" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="233.5" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="241.7" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="249.9" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="258.2" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="266.4" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="274.6" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="282.8" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="291.0" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="299.2" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="307.5" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="315.7" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="323.9" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="332.1" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="340.3" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="348.6" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="356.8" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="375.0" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="383.2" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="391.4" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="399.7" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="407.9" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="416.1" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="424.3" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="432.5" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="440.8" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="449.0" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="457.2" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="465.4" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="473.6" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="481.8" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="490.1" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="498.3" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="516.5" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="524.7" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="532.9" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="541.2" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="549.4" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="557.6" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="565.8" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="574.0" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="582.2" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="590.5" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="598.7" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="606.9" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="615.1" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="623.3" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="631.6" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="639.8" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="473.6" y="24.0" width="16.4" height="26.0" fill="none" stroke="#ff6a00" stroke-width="2.5"/><rect x="473.6" y="70.0" width="16.4" height="26.0" fill="none" stroke="#ff6a00" stroke-width="2.5"/><text x="473.6" y="118.0" font-family="inherit" font-size="13" font-weight="600" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">L = 22</text><text x="490.1" y="136.0" font-family="inherit" font-size="13" font-weight="600" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">C = 23</text><text x="330.0" y="164.0" font-family="inherit" font-size="14" font-weight="600" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">биты в рамке бывают и сетевыми, и узловыми: 22 ≤ p ≤ 23, маски /22, /23</text></svg>',
+    width: 660,
+    height: 174,
+    alt: "172.20.77.140 и 172.20.76.0 по битам",
+  },
+  // %%ip_pair("172.20.77.140", "172.20.79.200", "two")%%
+  ipPair1722077140_1722079200_two: {
+    kind: "diagram",
+    svg: '<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" viewBox="0 0 660 174"><text x="82.0" y="40.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="end" style="font-variant-numeric:tabular-nums">узел 1</text><text x="157.8" y="20.0" font-family="inherit" font-size="13" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">172</text><text x="299.2" y="20.0" font-family="inherit" font-size="13" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">20</text><text x="440.8" y="20.0" font-family="inherit" font-size="13" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">77</text><text x="582.2" y="20.0" font-family="inherit" font-size="13" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">140</text><rect x="92.0" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="100.2" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="108.4" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="116.7" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="124.9" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="133.1" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="141.3" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="149.5" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="157.8" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="166.0" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="174.2" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="182.4" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="190.6" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="198.8" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="207.1" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="215.3" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="233.5" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="241.7" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="249.9" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="258.2" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="266.4" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="274.6" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="282.8" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="291.0" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="299.2" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="307.5" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="315.7" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="323.9" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="332.1" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="340.3" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="348.6" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="356.8" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="375.0" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="383.2" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="391.4" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="399.7" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="407.9" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="416.1" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="424.3" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="432.5" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="440.8" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="449.0" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="457.2" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="465.4" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="473.6" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="481.8" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="490.1" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="498.3" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="516.5" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="524.7" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="532.9" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="541.2" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="549.4" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="557.6" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="565.8" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="574.0" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="582.2" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="590.5" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="598.7" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="606.9" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="615.1" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="623.3" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="631.6" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="639.8" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><text x="82.0" y="86.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="end" style="font-variant-numeric:tabular-nums">узел 2</text><text x="157.8" y="66.0" font-family="inherit" font-size="13" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">172</text><text x="299.2" y="66.0" font-family="inherit" font-size="13" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">20</text><text x="440.8" y="66.0" font-family="inherit" font-size="13" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">79</text><text x="582.2" y="66.0" font-family="inherit" font-size="13" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">200</text><rect x="92.0" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="100.2" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="108.4" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="116.7" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="124.9" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="133.1" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="141.3" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="149.5" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="157.8" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="166.0" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="174.2" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="182.4" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="190.6" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="198.8" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="207.1" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="215.3" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="233.5" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="241.7" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="249.9" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="258.2" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="266.4" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="274.6" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="282.8" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="291.0" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="299.2" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="307.5" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="315.7" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="323.9" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="332.1" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="340.3" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="348.6" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="356.8" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="375.0" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="383.2" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="391.4" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="399.7" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="407.9" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="416.1" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="424.3" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="432.5" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="440.8" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="449.0" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="457.2" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="465.4" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="473.6" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="481.8" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="490.1" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="498.3" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="516.5" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="524.7" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="532.9" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="541.2" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="549.4" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="557.6" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="565.8" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="574.0" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="582.2" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="590.5" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="598.7" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="606.9" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="615.1" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="623.3" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="631.6" y="72.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="639.8" y="88.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><line x1="473.6" y1="22.0" x2="473.6" y2="52.0" stroke="#ff6a00" stroke-width="2.5"/><line x1="473.6" y1="68.0" x2="473.6" y2="98.0" stroke="#ff6a00" stroke-width="2.5"/><text x="473.6" y="118.0" font-family="inherit" font-size="13" font-weight="600" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">C = 22</text><text x="330.0" y="150.0" font-family="inherit" font-size="14" font-weight="600" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">первые 22 бит совпадают: одна сеть при p ≤ 22, разные при p &gt; 22</text></svg>',
+    width: 660,
+    height: 174,
+    alt: "172.20.77.140 и 172.20.79.200 по битам",
+  },
+  // %%ip_bits("172.20.76.0", 22, False, True)%%
+  ipBits17220760_22_False_True: {
+    kind: "diagram",
+    svg: '<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" viewBox="0 0 660 124"><text x="82.0" y="40.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="end" style="font-variant-numeric:tabular-nums">адрес</text><text x="157.8" y="20.0" font-family="inherit" font-size="13" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">172</text><text x="299.2" y="20.0" font-family="inherit" font-size="13" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">20</text><text x="440.8" y="20.0" font-family="inherit" font-size="13" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">76</text><text x="582.2" y="20.0" font-family="inherit" font-size="13" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">0</text><rect x="92.0" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="100.2" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="108.4" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="116.7" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="124.9" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="133.1" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="141.3" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="149.5" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="157.8" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="166.0" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="174.2" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="182.4" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="190.6" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="198.8" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="207.1" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="215.3" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="233.5" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="241.7" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="249.9" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="258.2" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="266.4" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="274.6" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="282.8" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="291.0" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="299.2" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="307.5" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="315.7" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="323.9" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="332.1" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="340.3" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="348.6" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="356.8" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="375.0" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="383.2" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="391.4" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="399.7" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="407.9" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="416.1" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="424.3" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="432.5" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">0</text><rect x="440.8" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="449.0" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="457.2" y="26.0" width="16.4" height="22.0" fill="#fff" stroke="#d9d9d4" stroke-width="1.0"/><text x="465.4" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#17191e" text-anchor="middle">1</text><rect x="473.6" y="26.0" width="16.4" height="22.0" fill="#f3f3f1" stroke="#d9d9d4" stroke-width="1.0"/><text x="481.8" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#4d535e" text-anchor="middle">?</text><rect x="490.1" y="26.0" width="16.4" height="22.0" fill="#f3f3f1" stroke="#d9d9d4" stroke-width="1.0"/><text x="498.3" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#4d535e" text-anchor="middle">?</text><rect x="516.5" y="26.0" width="16.4" height="22.0" fill="#f3f3f1" stroke="#d9d9d4" stroke-width="1.0"/><text x="524.7" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#4d535e" text-anchor="middle">?</text><rect x="532.9" y="26.0" width="16.4" height="22.0" fill="#f3f3f1" stroke="#d9d9d4" stroke-width="1.0"/><text x="541.2" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#4d535e" text-anchor="middle">?</text><rect x="549.4" y="26.0" width="16.4" height="22.0" fill="#f3f3f1" stroke="#d9d9d4" stroke-width="1.0"/><text x="557.6" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#4d535e" text-anchor="middle">?</text><rect x="565.8" y="26.0" width="16.4" height="22.0" fill="#f3f3f1" stroke="#d9d9d4" stroke-width="1.0"/><text x="574.0" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#4d535e" text-anchor="middle">?</text><rect x="582.2" y="26.0" width="16.4" height="22.0" fill="#f3f3f1" stroke="#d9d9d4" stroke-width="1.0"/><text x="590.5" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#4d535e" text-anchor="middle">?</text><rect x="598.7" y="26.0" width="16.4" height="22.0" fill="#f3f3f1" stroke="#d9d9d4" stroke-width="1.0"/><text x="606.9" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#4d535e" text-anchor="middle">?</text><rect x="615.1" y="26.0" width="16.4" height="22.0" fill="#f3f3f1" stroke="#d9d9d4" stroke-width="1.0"/><text x="623.3" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#4d535e" text-anchor="middle">?</text><rect x="631.6" y="26.0" width="16.4" height="22.0" fill="#f3f3f1" stroke="#d9d9d4" stroke-width="1.0"/><text x="639.8" y="42.0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" font-weight="500" fill="#4d535e" text-anchor="middle">?</text><line x1="473.6" y1="22.0" x2="473.6" y2="66.0" stroke="#ff6a00" stroke-width="2.5"/><text x="92.0" y="86.0" font-family="inherit" font-size="13" font-weight="600" fill="#17191e" text-anchor="start" style="font-variant-numeric:tabular-nums">сеть: 22 бит</text><text x="648.0" y="86.0" font-family="inherit" font-size="13" font-weight="600" fill="#17191e" text-anchor="end" style="font-variant-numeric:tabular-nums">узел: 10 бит</text><line x1="92.0" y1="72.0" x2="469.6" y2="72.0" stroke="#4d535e" stroke-width="1.2"/><line x1="477.6" y1="72.0" x2="648.0" y2="72.0" stroke="#4d535e" stroke-width="1.2"/><text x="330.0" y="114.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">единиц в сетевой части: 9 у каждого адреса; свободных битов: 10</text></svg>',
+    width: 660,
+    height: 124,
+    alt: "Адрес 172.20.76.0 и маска /22: 32 бита, граница после 22 бит",
   },
 } as const satisfies Record<string, LessonMediaTypes.Generated>;

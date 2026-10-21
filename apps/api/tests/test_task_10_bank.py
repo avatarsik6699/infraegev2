@@ -93,22 +93,22 @@ def addresses(network: str, p: int, hosts: bool = False) -> range:
 def answers() -> dict[str, str]:
     a: dict[str, str] = {}
     # subtopic 1
-    a["task-10-1-01"] = f"{150:08b} {0b00101101}"
-    a["task-10-1-03"] = f"{text(mask(27))} {32 - 27}"
-    a["task-10-1-04"] = f"{37:08b} {(37).bit_count()}"
+    a["task-10-1-01"] = f"{150:08b}"
+    a["task-10-1-03"] = text(mask(27))
+    a["task-10-1-04"] = str((37).bit_count())
     p = prefix("255.255.254.0")
-    a["task-10-1-05"] = f"{p} {32 - p}"
+    a["task-10-1-05"] = str(32 - p)
     a["task-10-1-07"] = str(ip("192.168.10.173").bit_count())
     a["task-10-1-08"] = str(byte(mask(29), 3))
     a["task-10-1-09"] = str(len({(255 << (8 - k)) & 255 for k in range(9)}))
     # subtopic 2: the block of the last mask octet
     a["task-10-2-01"] = text(net(ip("10.8.45.200"), prefix("255.255.255.224")))
     node = ip("192.168.5.77")
-    a["task-10-2-03"] = f"{text(last(node, 27))} {text(last(node, 27) - 1)}"
+    a["task-10-2-03"] = text(last(node, 27) - 1)
     a["task-10-2-04"] = str(2 ** (32 - prefix("255.255.255.240")) - 2)
     a["task-10-2-05"] = text(net(ip("81.200.130.9"), prefix("255.255.192.0")))
     node, p = ip("46.31.250.17"), prefix("255.255.240.0")
-    a["task-10-2-06"] = f"{text(net(node, p))} {text(last(node, p))}"
+    a["task-10-2-06"] = text(last(node, p))
     letters = {0: "A", 3: "B", 47: "C", 152: "D", 155: "E", 211: "F", 248: "G", 255: "H"}
     network = net(ip("211.47.155.3"), prefix("255.255.248.0"))
     a["task-10-2-07"] = "".join(letters[byte(network, k)] for k in range(4))
@@ -118,16 +118,14 @@ def answers() -> dict[str, str]:
     a["task-10-2-09"] = str(sum(byte(top, k) for k in range(4)))
     # subtopic 3
     p = prefix("255.255.248.0")
-    a["task-10-3-01"] = f"{p} {2 ** (32 - p)} {2 ** (32 - p) - 2}"
+    a["task-10-3-01"] = str(2 ** (32 - p) - 2)
     node = ip("192.168.4.207")
-    a["task-10-3-02"] = f"{text(net(node, 27))} {text(last(node, 27))} {node - net(node, 27)}"
+    a["task-10-3-02"] = str(node - net(node, 27))
     node = ip("10.5.142.77")
-    a["task-10-3-03"] = (
-        f"{text(net(node, 21))} {text(last(node, 21))} {2**11} {node - net(node, 21)}"
-    )
+    a["task-10-3-03"] = str(node - net(node, 21))
     h = next(h for h in range(33) if 2**h - 2 >= 1000)
-    a["task-10-3-04"] = f"{32 - h} {text(mask(32 - h))}"
-    a["task-10-3-05"] = f"{2 ** (26 - 24)} {2 ** (32 - 26)}"
+    a["task-10-3-04"] = text(mask(32 - h))
+    a["task-10-3-05"] = str(2 ** (26 - 24))
     a["task-10-3-06"] = text(ip("10.40.16.0") + 1000)
     a["task-10-3-07"] = str(2**13)
     node = ip("118.64.201.90")
@@ -135,7 +133,7 @@ def answers() -> dict[str, str]:
     a["task-10-3-09"] = str(2 ** (32 - prefix("255.255.255.128")) - 2)
     # subtopic 4: masks by the network
     ps = lengths("85.112.43.200", "85.112.43.192")
-    a["task-10-4-02"] = f"{min(byte(mask(p), 3) for p in ps)} {len(ps)}"
+    a["task-10-4-02"] = str(min(byte(mask(p), 3) for p in ps))
     ps = lengths("131.70.215.9", "131.70.208.0")
     a["task-10-4-03"] = str(max(ps))
     a["task-10-4-04"] = str(32 - max(ps))
@@ -147,7 +145,7 @@ def answers() -> dict[str, str]:
     a["task-10-4-09"] = str(2 ** (32 - min(ps)))
     # subtopic 5: two nodes
     same = shared("10.30.52.1", "10.30.55.250")
-    a["task-10-5-01"] = f"{max(same)} {max(same) + 1}"
+    a["task-10-5-01"] = str(max(same))
     p = longest_ordinary("90.14.200.33", "90.14.203.140")
     a["task-10-5-02"] = str(p)
     a["task-10-5-03"] = str(2 ** (32 - p))
@@ -160,7 +158,7 @@ def answers() -> dict[str, str]:
     a["task-10-6-01"] = str(sum(x.bit_count() == 8 for x in addresses("192.168.1.0", 29)))
     even = [x for x in addresses("192.168.1.0", 29) if x.bit_count() % 2 == 0]
     hosts = [x for x in even if ordinary(x, 29)]
-    a["task-10-6-02"] = f"{len(even)} {len(hosts)}"
+    a["task-10-6-02"] = str(len(hosts))
     a["task-10-6-03"] = str(sum(x.bit_count() == 3 for x in addresses("10.0.0.0", 28)))
     a["task-10-6-04"] = str(sum(x.bit_count() % 3 == 0 for x in addresses("172.16.5.64", 26)))
     a["task-10-6-05"] = str(max(x.bit_count() for x in addresses("192.168.0.0", 24, True)))

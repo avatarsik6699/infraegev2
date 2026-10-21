@@ -1,7 +1,7 @@
 """Independent answer and content checks for the EGE topic 9 lesson «Обработка таблицы чисел».
 
-The lesson solves a row with frequency bands, two lists, sets and sorted copies. Here every answer is
-recomputed another way: repeats from runs of equal values in the sorted row, groups
+The lesson solves a row with frequency bands, two lists, sets and sorted copies. Here every
+answer is recomputed another way: repeats from runs of equal values in the sorted row, groups
 from a frequency table built by hand, order by pairwise comparisons, neighbours by
 explicit offsets. The book ``.xlsx`` and the text file of a task must hold the same
 table, and the bank's own solution programs, run next to the text file, must print
@@ -171,21 +171,19 @@ def answers() -> dict[str, str]:
     )
     last15 = [a for a in t8 if _ascending(a, True)][-1]
     return {
-        "task-9-1-04": f"{_count(TRAINING, lambda a: sum(a) >= 34)} "
-        f"{_count(TRAINING, lambda a: sum(a) > 34)}",
-        "task-9-1-05": f"{sum(x > 20 for a in TRAINING for x in a)} "
-        f"{_count(TRAINING, lambda a: max(a) > 20)}",
+        "task-9-1-04": str(_count(TRAINING, lambda a: sum(a) >= 34)),
+        "task-9-1-05": str(_count(TRAINING, lambda a: max(a) > 8)),
         "task-9-1-07": str(_count(t1, lambda a: sum(a) > 300 and max(a) < 90)),
         "task-9-1-08": str(_count(t1, lambda a: (max(a) > 95) ^ (min(a) < 5))),
-        "task-9-2-02": f"{34 - 3 - 10} 8",
-        "task-9-2-03": "9 6",
-        "task-9-2-04": f"{9 * 9} {9 + 36}",
+        "task-9-2-02": str(34 - 3 - 10),
+        "task-9-2-03": str(sorted([4, 9, 9, 6])[-2]),
+        "task-9-2-04": str(2 * 3 * 6),
         "task-9-2-07": str(
             _count(t1, lambda a: (min(a) + max(a)) ** 2 > sum(x * x for x in sorted(a)[1:-1]))
         ),
         "task-9-2-08": str(_count(t1, lambda a: (min(a) + max(a)) / 2 > sum(sorted(a)[1:-1]) / 4)),
         "task-9-2-09": str(_count(t1, lambda a: max(a) > 3 * (sum(a) - max(a)) / 5)),
-        "task-9-3-01": "3 7 35",
+        "task-9-3-01": str(4 + 4 + 9 + 9 + 9),
         "task-9-3-07": str(
             _count(
                 t2,
@@ -213,7 +211,7 @@ def answers() -> dict[str, str]:
                 lambda a: _shape(a) == [1, 1, 2, 2] and sum(set(_split(a)[0])) > sum(_split(a)[1]),
             )
         ),
-        "task-9-5-01": f"{23 - 4 * 5} {-7 - 2 * (-4)} 0",
+        "task-9-5-01": str(-7 - 2 * (-4)),
         "task-9-5-07": str(
             _count(
                 t5,
@@ -230,8 +228,8 @@ def answers() -> dict[str, str]:
                 lambda a: int(sum(a) / len(a)) in a and any(isqrt(x) ** 2 == x for x in a),
             )
         ),
-        "task-9-6-04": "7 10 20 80",
-        "task-9-6-05": f"{abs(-9)} {abs(2)}",
+        "task-9-6-04": "10",
+        "task-9-6-05": str(abs(-9)),
         "task-9-6-07": str(_count(t7, lambda a: _shape(a) == [1] * 4 and _progression(a))),
         "task-9-6-08": str(_count(t7, lambda a: _two_pairs(a) and not _progression(a))),
         "task-9-6-09": str(last992),
@@ -244,8 +242,8 @@ def answers() -> dict[str, str]:
             )
         ),
         "task-9-8-01": "19",
-        "task-9-8-02": f"{2 + 3 + 1} 3",
-        "task-9-8-04": f"{2 * 4} {2 * 4 + 2 * 2} 4",
+        "task-9-8-02": "3",
+        "task-9-8-04": str(2 * 4 + 2 * 2),
         "task-9-8-06": str(
             _count(
                 t10,
