@@ -5,6 +5,7 @@ import {
   CodeRunner,
   LessonDiagram,
   LessonSummary,
+  ProofDisclosure,
   VariantPicker,
 } from "~/shared/components/learning-content";
 import { defineCourseLesson } from "../lib/define-course-lesson";
@@ -24,14 +25,15 @@ export const pythonListsLesson = defineCourseLesson({
       explanation: (
         <>
           <Typography.Text>
+            В сквозной задаче числа пока были отдельными именами или вводились
+            по одному. Для тысячи измерений нужна одна переменная на все.{" "}
             <strong>
-              Список — изменяемая последовательность, и имя списка — ссылка на
-              один общий объект
+              Список хранит много значений под одним именем и, в отличие от
+              строки, меняется на месте
             </strong>
-            . Отсюда и удобство (метод меняет список на месте), и главная
-            ловушка (присваивание не копирует). Опора — индексы и срезы строк (у
-            списка они те же) и модель «имя ссылается на объект» из урока о
-            значениях: здесь она становится главной.
+            . Отсюда и удобство, и главная ловушка: присваивание списка не
+            копирует его. В уроке о значениях модель «имя ссылается на объект»
+            была уточнением в «Тонкостях» — со списками без неё не обойтись.
           </Typography.Text>
           <Typography.Text>
             Под рукой всё время будет список <Notation>{"[4, 7, 2]"}</Notation>:
@@ -50,9 +52,7 @@ export const pythonListsLesson = defineCourseLesson({
               Список хранит много значений под одним именем и, в отличие от
               строки, изменяется.
             </strong>{" "}
-            Для тысячи измерений неудобно создавать тысячу имён.{" "}
-            <strong>Список</strong> хранит последовательность элементов под
-            одним именем:
+            Элементы списка пишут в квадратных скобках через запятую:
           </Typography.Text>
           <CodeBlock
             code={
@@ -62,7 +62,7 @@ export const pythonListsLesson = defineCourseLesson({
               "Список хранит последовательность элементов под одним именем"
             }
             language="python"
-            fileName="temperatures.py"
+            fileName="main.py"
             output={"21\n4"}
           />
           <Typography.Text>
@@ -74,9 +74,9 @@ export const pythonListsLesson = defineCourseLesson({
             code={
               "numbers = [4, 7, 2]\nnumbers[1] = 10\nnumbers.append(8)\nprint(numbers)"
             }
-            label={"Программа на Python"}
+            label={"Список меняется на месте"}
             language="python"
-            fileName="numbers.py"
+            fileName="main.py"
             output={"[4, 10, 2, 8]"}
           />
           <Typography.Text>
@@ -269,7 +269,9 @@ export const pythonListsLesson = defineCourseLesson({
           <Typography.Text>
             <strong>
               Присваивание не копирует список: два имени смотрят на один объект.
-            </strong>
+            </strong>{" "}
+            Нажми «Запуск» и пройди пример по шагам: после{" "}
+            <Notation>{"b = a"}</Notation> обе стрелки ведут к одному списку.
           </Typography.Text>
           <CodeRunner
             {...lessonMedia.runSharedList}
@@ -289,9 +291,7 @@ export const pythonListsLesson = defineCourseLesson({
           />
           <Typography.Text>
             <Notation>{"a"}</Notation> и <Notation>{"b"}</Notation> — два имени
-            одного объекта. Поэтому изменение видно через оба имени. Запусти
-            пример по шагам: после <Notation>{"b = a"}</Notation> обе стрелки
-            ведут к одному списку, и <Notation>{"append"}</Notation> через{" "}
+            одного объекта, поэтому <Notation>{"append"}</Notation> через{" "}
             <Notation>{"b"}</Notation> меняет то, что видно через{" "}
             <Notation>{"a"}</Notation>. Чтобы создать отдельный внешний список,
             используют <Notation>{"a.copy()"}</Notation>,{" "}
@@ -320,14 +320,27 @@ export const pythonListsLesson = defineCourseLesson({
           />
           <Typography.Text>
             <Notation>{"=="}</Notation> сравнивает содержимое,{" "}
-            <Notation>{"is"}</Notation> — являются ли значения одним и тем же
-            объектом. Два разных списка <Notation>{"[1, 2]"}</Notation> могут
-            быть равны по содержимому. Для чисел и строк сравнивай значения
-            через <Notation>{"=="}</Notation>; детали повторного использования
-            объектов не должны влиять на программу. Уместное применение{" "}
-            <Notation>{"is"}</Notation> — <Notation>{"value is None"}</Notation>
-            .
+            <Notation>{"is"}</Notation> — один ли это список. Два разных списка
+            могут быть равны по содержимому: сразу после копии{" "}
+            <Notation>{"a == b"}</Notation> было бы{" "}
+            <Notation>{"True"}</Notation>, а <Notation>{"a is b"}</Notation> —{" "}
+            <Notation>{"False"}</Notation>. Сравнивай значения через{" "}
+            <Notation>{"=="}</Notation>; <Notation>{"is"}</Notation> нужен для{" "}
+            <Notation>{"value is None"}</Notation> и для вопроса «это тот же
+            список?».
           </Typography.Text>
+          <ProofDisclosure
+            summary="Тонкости: is для чисел и строк"
+            kind="nuance"
+          >
+            <Typography.Text>
+              Python иногда хранит одинаковые небольшие числа и короткие строки
+              одним объектом, а иногда — разными. Поэтому{" "}
+              <Notation>{"is"}</Notation> для чисел и строк может давать разные
+              ответы в разных программах; полагаться на это нельзя. Значения
+              сравнивают только через <Notation>{"=="}</Notation>.
+            </Typography.Text>
+          </ProofDisclosure>
         </>
       ),
     },
@@ -364,7 +377,7 @@ export const pythonListsLesson = defineCourseLesson({
             code={"table = [[0] * 3] * 2\ntable[0][0] = 9\nprint(table)"}
             label={"Особенно опасна запись"}
             language="python"
-            fileName="table.py"
+            fileName="main.py"
             output={"[[9, 0, 0], [9, 0, 0]]"}
           />
           <LessonDiagram
@@ -389,7 +402,7 @@ export const pythonListsLesson = defineCourseLesson({
               "Внешнее умножение повторило ссылку на одну строку. Создай каждую строку отдельно"
             }
             language="python"
-            fileName="table.py"
+            fileName="main.py"
             output={"[[9, 0, 0], [0, 0, 0]]"}
           />
           <LessonDiagram
@@ -446,7 +459,7 @@ export const pythonListsLesson = defineCourseLesson({
             }
             label={"Разберём несколько чисел из одной строки без сокращений"}
             language="python"
-            fileName="line.py"
+            fileName="main.py"
             output={"[10, 20, 30]"}
           />
           <Typography.Text>
@@ -458,7 +471,7 @@ export const pythonListsLesson = defineCourseLesson({
             }
             label={"Обратное соединение строк выполняет join"}
             language="python"
-            fileName="words.py"
+            fileName="main.py"
             output={"Учимся писать программы"}
           />
           <Typography.Text>
@@ -489,7 +502,7 @@ export const pythonListsLesson = defineCourseLesson({
               "Из [5, -2, 0, 8, -1] создадим отдельный список неотрицательных значений"
             }
             language="python"
-            fileName="source.py"
+            fileName="main.py"
             output={"[5, 0, 8]\n[5, -2, 0, 8, -1]"}
           />
           <Typography.Text>
@@ -519,7 +532,7 @@ export const pythonListsLesson = defineCourseLesson({
               "Список хранит их все под одним именем, а for проходит по ним без ручного счётчика"
             }
             language="python"
-            fileName="numbers.py"
+            fileName="main.py"
             output={"20 10"}
           />
           <Typography.Text>
@@ -532,6 +545,66 @@ export const pythonListsLesson = defineCourseLesson({
     },
   ],
   checkpoint: [
+    {
+      id: "t1",
+      prompt: (
+        <>
+          <Typography.Text>Что напечатает программа?</Typography.Text>
+          <CodeBlock
+            code={"a = [1, 2]\nb = a\nb.append(3)\nprint(a)"}
+            label={"Два имени одного списка"}
+            language="python"
+            fileName="main.py"
+          />
+        </>
+      ),
+      reveal: (
+        <>
+          <Typography.Text>
+            [1, 2, 3]: <Notation>{"b = a"}</Notation> не копирует список, оба
+            имени ведут к одному.
+          </Typography.Text>
+        </>
+      ),
+    },
+    {
+      id: "t2",
+      prompt: (
+        <>
+          <Typography.Text>
+            Почему цикл <Notation>{"for value in a: value *= 2"}</Notation> не
+            меняет список <Notation>{"a"}</Notation>? Как удвоить элементы?
+          </Typography.Text>
+        </>
+      ),
+      reveal: (
+        <>
+          <Typography.Text>
+            <Notation>{"value *= 2"}</Notation> связывает с новым числом только
+            имя <Notation>{"value"}</Notation>. Нужен перебор индексов:{" "}
+            <Notation>{"for i in range(len(a)): a[i] *= 2"}</Notation>.
+          </Typography.Text>
+        </>
+      ),
+    },
+    {
+      id: "t3",
+      prompt: (
+        <>
+          <Typography.Text>
+            Что напечатает <Notation>{"print([4, 7, 2].append(5))"}</Notation>?
+          </Typography.Text>
+        </>
+      ),
+      reveal: (
+        <>
+          <Typography.Text>
+            None: <Notation>{"append"}</Notation> меняет список и возвращает{" "}
+            <Notation>{"None"}</Notation>.
+          </Typography.Text>
+        </>
+      ),
+    },
     {
       id: "t6",
       prompt: (
@@ -572,50 +645,78 @@ export const pythonListsLesson = defineCourseLesson({
   ],
   result: (
     <>
+      <Typography.Text>
+        Числа сквозной задачи теперь лежат в одном списке, а программа не
+        зависит от их количества. Вот что из урока понадобится дальше.
+      </Typography.Text>
       <LessonSummary
         items={[
           {
+            key: "Список",
             note: (
               <>
-                Список изменяем: <Notation>{"a[i] = x"}</Notation>,{" "}
-                <Notation>{"append"}</Notation>, <Notation>{"insert"}</Notation>
-                , <Notation>{"pop"}</Notation>, <Notation>{"remove"}</Notation>,{" "}
-                <Notation>{"reverse"}</Notation>.
+                <Notation>{"[4, 7, 2]"}</Notation>: индексы и срезы — как у
+                строк, но элементы можно менять:{" "}
+                <Notation>{"a[i] = x"}</Notation>.
               </>
             ),
           },
           {
+            key: "Методы",
             note: (
               <>
-                Методы, меняющие список, возвращают{" "}
+                <Notation>{"append"}</Notation>, <Notation>{"insert"}</Notation>
+                , <Notation>{"pop"}</Notation>, <Notation>{"remove"}</Notation>,{" "}
+                <Notation>{"reverse"}</Notation> меняют список и возвращают{" "}
                 <Notation>{"None"}</Notation>: не пиши{" "}
                 <Notation>{"a = a.append(x)"}</Notation>.
               </>
             ),
           },
           {
+            key: "Обход",
             note: (
               <>
-                <Notation>{"b = a"}</Notation> — второе имя того же списка;
-                копия — <Notation>{"a.copy()"}</Notation>,{" "}
-                <Notation>{"a[:]"}</Notation>, <Notation>{"list(a)"}</Notation>.
+                <Notation>{"for value in a"}</Notation> — по значениям;{" "}
+                <Notation>{"for i in range(len(a))"}</Notation> — когда нужны
+                позиции или замена.
               </>
             ),
           },
           {
+            key: <Notation>{"b = a"}</Notation>,
             note: (
               <>
-                Копия поверхностная: вложенные списки остаются общими;{" "}
-                <Notation>{"[[0] * 3] * 2"}</Notation> повторяет одну строку.
+                Не копия: два имени одного списка. Копия —{" "}
+                <Notation>{"a.copy()"}</Notation>, <Notation>{"a[:]"}</Notation>
+                , <Notation>{"list(a)"}</Notation>.
               </>
             ),
           },
           {
+            key: <Notation>{"== и is"}</Notation>,
             note: (
               <>
-                <Notation>{"split()"}</Notation> режет по пробелам,{" "}
-                <Notation>{'split(",")'}</Notation> — по запятой с пустыми
-                частями; <Notation>{"join"}</Notation> склеивает строки.
+                <Notation>{"=="}</Notation> — равное содержимое,{" "}
+                <Notation>{"is"}</Notation> — тот же список.
+              </>
+            ),
+          },
+          {
+            key: "Таблица",
+            note: (
+              <>
+                Строки создают отдельно (циклом), а не{" "}
+                <Notation>{"[[0] * 3] * 2"}</Notation>.
+              </>
+            ),
+          },
+          {
+            key: <Notation>{"split и join"}</Notation>,
+            note: (
+              <>
+                <Notation>{"split()"}</Notation> режет строку на части,{" "}
+                <Notation>{'" ".join(words)'}</Notation> склеивает строки.
               </>
             ),
           },

@@ -2,6 +2,7 @@ import { CodeBlock } from "~/shared/components/code-block";
 import { Notation } from "~/shared/components/notation";
 import { Typography } from "~/shared/components/typography";
 import {
+  CodeRunner,
   LessonDiagram,
   LessonSummary,
   ProofDisclosure,
@@ -25,18 +26,20 @@ export const pythonStringsLesson = defineCourseLesson({
       explanation: (
         <>
           <Typography.Text>
+            Программы постоянно работают с текстом: имя, слово, запись числа,
+            строка из файла. В задачах ЕГЭ часто нужно найти в длинной строке
+            символ, кусок или повтор.{" "}
             <strong>
-              Строка — упорядоченная неизменяемая последовательность символов, к
-              частям которой обращаются по индексам и срезам
+              Python берёт из строки символ по номеру, кусок по срезу и строит
+              из старой строки новую
             </strong>
-            . Опора — <Notation>{"for"}</Notation> по строке и правило{" "}
-            <Notation>{"range"}</Notation> «начало включено, остановка нет» из
-            прошлого урока: срезы устроены точно так же.
+            . Срезы устроены как <Notation>{"range"}</Notation> из прошлого
+            урока: начало включено, граница нет.
           </Typography.Text>
           <Typography.Text>
-            Индексы, срезы и неизменяемость разберём на строке{" "}
-            <Notation>{'"ABCDEFG"'}</Notation> и слове{" "}
-            <Notation>{'"PYTHON"'}</Notation>.
+            Индексы и срезы покажем на строках <Notation>{'"PYTHON"'}</Notation>{" "}
+            и <Notation>{'"ABCDEFG"'}</Notation>, а потом соберём новую строку
+            из символов старой.
           </Typography.Text>
         </>
       ),
@@ -50,18 +53,17 @@ export const pythonStringsLesson = defineCourseLesson({
             <strong>
               У строки есть длина и элементы, пронумерованные с нуля.
             </strong>{" "}
-            Строка — упорядоченная последовательность символов. У неё есть
-            длина, элементы и фрагменты. Порядок существенен:{" "}
-            <Notation>{'"кот"'}</Notation> и <Notation>{'"ток"'}</Notation>{" "}
-            состоят из одинаковых букв, но являются разными строками.
+            Порядок символов важен: <Notation>{'"кот"'}</Notation> и{" "}
+            <Notation>{'"ток"'}</Notation> состоят из одинаковых букв, но
+            являются разными строками.
           </Typography.Text>
           <CodeBlock
             code={
               'word = "PYTHON"\nprint(len(word))\nprint(word[0])\nprint(word[2])\nprint(word[-1])'
             }
-            label={"Программа на Python"}
+            label={"Длина и индексы строки"}
             language="python"
-            fileName="word.py"
+            fileName="main.py"
             output={"6\nP\nT\nN"}
           />
           <Typography.Text>
@@ -89,7 +91,7 @@ export const pythonStringsLesson = defineCourseLesson({
             code={'word = "PYTHON"\nprint(word[6])'}
             label={"Обращение к word[6] вызывает ошибку: такой позиции нет"}
             language="python"
-            fileName="word.py"
+            fileName="main.py"
             error={"IndexError: string index out of range"}
           />
           <Typography.Text>
@@ -150,29 +152,35 @@ export const pythonStringsLesson = defineCourseLesson({
               </>
             }
           />
-          <Typography.Text>
-            Важно различать пропущенную границу и явно написанное{" "}
-            <Notation>{"-1"}</Notation>. В <Notation>{"s[5:-1:-1]"}</Notation>{" "}
-            явное <Notation>{"-1"}</Notation> сначала означает последний индекс.
-            При строке длины 7 движение от позиции 5 назад к границе 6 не даёт
-            ни одного элемента. Пропущенная остановка при отрицательном шаге —
-            особое обозначение движения за начало.
-          </Typography.Text>
+          <ProofDisclosure
+            summary="Тонкости: пропущенная граница и −1"
+            kind="nuance"
+          >
+            <Typography.Text>
+              Пропущенная граница и явно написанное <Notation>{"-1"}</Notation>{" "}
+              — не одно и то же. В <Notation>{"s[5:-1:-1]"}</Notation> явное{" "}
+              <Notation>{"-1"}</Notation> означает последний индекс, то есть 6:
+              движение от 5 назад к 6 не даёт ни одного символа, срез пуст.
+              Пропущенная граница при отрицательном шаге означает «до самого
+              начала».
+            </Typography.Text>
+          </ProofDisclosure>
           <Typography.Text>
             Срез за пределами длины обрезается: <Notation>{"s[:100]"}</Notation>{" "}
             вернёт всю строку. Одиночный неверный индекс вызывает ошибку. Срез
             может быть пустым; это нормальный результат. Шаг 0 недопустим.
           </Typography.Text>
           <Typography.Text>
-            Проверь срезы сам: поле start или stop можно оставить пустым, шаг —
-            сделать отрицательным. Номер под буквой — очередь, в которой срез её
-            берёт.
+            Проверь срезы сам. Песочница начинается с{" "}
+            <Notation>{"s[::2]"}</Notation> — каждый второй символ. Поле start
+            или stop можно оставить пустым, шаг — сделать отрицательным. Номер
+            под буквой — очередь, в которой срез её берёт.
           </Typography.Text>
           <RangeSandbox
             mode="slice"
-            start={1}
-            stop={4}
-            step={1}
+            start={null}
+            stop={null}
+            step={2}
             text="ABCDEFG"
           />
         </>
@@ -212,8 +220,55 @@ export const pythonStringsLesson = defineCourseLesson({
           <Typography.Text>
             <Notation>{"+"}</Notation> соединяет строки. Это действие называют{" "}
             <strong>конкатенацией</strong>. <Notation>{'"ab" * 3'}</Notation>{" "}
-            повторяет текст и создаёт <Notation>{'"ababab"'}</Notation>. Старый
-            объект не переписывается, даже если имя переменной осталось прежним.
+            повторяет текст и создаёт <Notation>{'"ababab"'}</Notation>. Старая
+            строка при этом не меняется: имя просто связывается с новой.
+          </Typography.Text>
+        </>
+      ),
+    },
+    {
+      id: "s3-perebor",
+      navLabel: "Перебор и сборка строки",
+      explanation: (
+        <>
+          <Typography.Text>
+            <strong>
+              Новую строку собирают по символам: перебирают старую и добавляют
+              нужные символы к накопителю.
+            </strong>{" "}
+            Строку нельзя изменить, но можно построить новую. Уберём из слова
+            все буквы «а» — пройди программу по шагам и следи за{" "}
+            <Notation>{"result"}</Notation>:
+          </Typography.Text>
+          <CodeRunner
+            {...lessonMedia.runBuild}
+            label={"Новую строку собирают по символам"}
+          />
+          <Typography.Text>
+            <Notation>{"for ch in word"}</Notation> берёт символы по одному, как
+            в уроке о <Notation>{"for"}</Notation>. Накопитель-строка начинается
+            с пустой строки <Notation>{'""'}</Notation> — как сумма с 0, а{" "}
+            <Notation>{"result += ch"}</Notation> дописывает символ в конец.
+          </Typography.Text>
+          <Typography.Text>
+            Когда нужны соседние символы, перебирают индексы. Посчитаем пары
+            одинаковых соседних букв — такие задачи встречаются в ЕГЭ:
+          </Typography.Text>
+          <CodeBlock
+            code={
+              's = "AABBBC"\ncount = 0\nfor i in range(len(s) - 1):\n    if s[i] == s[i + 1]:\n        count += 1\nprint(count)'
+            }
+            label={"Когда нужны соседние символы, перебирают индексы"}
+            language="python"
+            fileName="main.py"
+            output={"3"}
+          />
+          <Typography.Text>
+            У последнего символа соседа справа нет, поэтому индекс{" "}
+            <Notation>{"i"}</Notation> идёт до{" "}
+            <Notation>{"len(s) - 2"}</Notation> включительно — это{" "}
+            <Notation>{"range(len(s) - 1)"}</Notation>. Пары AA, BB и ещё одна
+            BB дают 3.
           </Typography.Text>
         </>
       ),
@@ -350,9 +405,9 @@ export const pythonStringsLesson = defineCourseLesson({
             code={
               's = "  Python  "\nclean = s.strip().lower()\nprint(clean)\nprint("th" in clean, clean.find("th"))\nprint("101".zfill(8))'
             }
-            label={"Программа на Python"}
+            label={"strip, lower, in, find и zfill"}
             language="python"
-            fileName="clean.py"
+            fileName="main.py"
             output={"python\nTrue 2\n00000101"}
           />
           <Typography.Text>
@@ -416,7 +471,7 @@ export const pythonStringsLesson = defineCourseLesson({
             }
             label={"Для подсчёта всех начал можно проверить каждую позицию"}
             language="python"
-            fileName="part.py"
+            fileName="main.py"
             output={"3 2"}
           />
           <Typography.Text>
@@ -492,7 +547,90 @@ export const pythonStringsLesson = defineCourseLesson({
   ],
   checkpoint: [
     {
-      id: "t6",
+      id: "t1",
+      prompt: (
+        <>
+          <Typography.Text>
+            Для <Notation>{'s = "PYTHON"'}</Notation> что дадут{" "}
+            <Notation>{"s[1]"}</Notation>, <Notation>{"s[-2]"}</Notation> и{" "}
+            <Notation>{"s[2:4]"}</Notation>?
+          </Typography.Text>
+        </>
+      ),
+      reveal: (
+        <>
+          <Typography.Text>
+            Y, O и TH: индекс 4 в срез <Notation>{"s[2:4]"}</Notation> не
+            входит.
+          </Typography.Text>
+        </>
+      ),
+    },
+    {
+      id: "t2",
+      prompt: (
+        <>
+          <Typography.Text>
+            Как одной записью развернуть строку? Что даст{" "}
+            <Notation>{'"ABCDEFG"[::3]'}</Notation>?
+          </Typography.Text>
+        </>
+      ),
+      reveal: (
+        <>
+          <Typography.Text>
+            <Notation>{"s[::-1]"}</Notation>; <Notation>{"[::3]"}</Notation>{" "}
+            берёт каждый третий символ — ADG.
+          </Typography.Text>
+        </>
+      ),
+    },
+    {
+      id: "t3",
+      prompt: (
+        <>
+          <Typography.Text>
+            Почему <Notation>{'s[0] = "X"'}</Notation> для{" "}
+            <Notation>{'s = "PYTHON"'}</Notation> останавливает программу? Как
+            получить строку «XYTHON»?
+          </Typography.Text>
+        </>
+      ),
+      reveal: (
+        <>
+          <Typography.Text>
+            Строка неизменяема — <Notation>{"TypeError"}</Notation>. Новая
+            строка: <Notation>{'s = "X" + s[1:]'}</Notation>.
+          </Typography.Text>
+        </>
+      ),
+    },
+    {
+      id: "t4",
+      prompt: (
+        <>
+          <Typography.Text>Что напечатает программа?</Typography.Text>
+          <CodeBlock
+            code={
+              'result = ""\nfor ch in "abc":\n    result = ch + result\nprint(result)'
+            }
+            label={"Сборка строки с добавлением в начало"}
+            language="python"
+            fileName="main.py"
+          />
+        </>
+      ),
+      reveal: (
+        <>
+          <Typography.Text>
+            cba: каждый символ ставится перед уже собранной частью, поэтому
+            строка разворачивается.
+          </Typography.Text>
+        </>
+      ),
+    },
+    {
+      id: "t5",
       prompt: (
         <>
           <Typography.Text>
@@ -506,8 +644,9 @@ export const pythonStringsLesson = defineCourseLesson({
       reveal: (
         <>
           <Typography.Text>
-            2 и −1; <Notation>{"find"}</Notation> вернёт 0 — это найденное
-            начало, но 0 в условии ложен.
+            2 и −1. <Notation>{'s.find("P")'}</Notation> вернёт 0 — это
+            найденное начало, но 0 в условии ложен. Проверяй{" "}
+            <Notation>{'"P" in s'}</Notation>.
           </Typography.Text>
         </>
       ),
@@ -515,48 +654,76 @@ export const pythonStringsLesson = defineCourseLesson({
   ],
   result: (
     <>
+      <Typography.Text>
+        Теперь ты умеешь доставать из строки символы и куски и собирать из неё
+        новые строки. Вот что понадобится дальше — и в задачах ЕГЭ на строки.
+      </Typography.Text>
       <LessonSummary
         items={[
           {
+            key: "Индексы",
             note: (
               <>
-                Индексы с 0 до <Notation>{"len(s) - 1"}</Notation>,
-                отрицательные — с конца; неверный индекс даёт{" "}
-                <Notation>{"IndexError"}</Notation>.
+                От 0 до <Notation>{"len(s) - 1"}</Notation>, отрицательные — с
+                конца; неверный индекс — <Notation>{"IndexError"}</Notation>.
               </>
             ),
           },
           {
+            key: <Notation>{"s[start:stop:step]"}</Notation>,
             note: (
               <>
-                Срез <Notation>{"s[start:stop:step]"}</Notation> не включает{" "}
-                <Notation>{"stop"}</Notation>; <Notation>{"s[::-1]"}</Notation>{" "}
-                разворачивает строку.
+                Граница не входит, как в <Notation>{"range"}</Notation>;{" "}
+                <Notation>{"s[::-1]"}</Notation> разворачивает строку.
               </>
             ),
           },
           {
+            key: "Неизменяемость",
             note: (
               <>
-                Строка неизменяема: методы и <Notation>{"+"}</Notation> создают
-                новые строки.
+                Символ заменить нельзя; <Notation>{"+"}</Notation> и методы
+                строят новую строку.
               </>
             ),
           },
           {
+            key: "Сборка строки",
             note: (
               <>
-                <Notation>{"count"}</Notation> считает без перекрытий; с
-                перекрытием — проверка каждой позиции срезом.
+                <Notation>{'result = ""'}</Notation> и{" "}
+                <Notation>{"result += ch"}</Notation> в цикле{" "}
+                <Notation>{"for ch in s"}</Notation>; соседние символы — через{" "}
+                <Notation>{"range(len(s) - 1)"}</Notation>.
               </>
             ),
           },
           {
+            key: "Методы",
             note: (
               <>
-                <Notation>{"in"}</Notation> проверяет вхождение;{" "}
-                <Notation>{"find"}</Notation> возвращает −1 при отсутствии, а 0
-                — это найденное начало.
+                <Notation>{"lower"}</Notation>, <Notation>{"strip"}</Notation>,{" "}
+                <Notation>{"replace"}</Notation>, <Notation>{"find"}</Notation>,{" "}
+                <Notation>{"count"}</Notation> возвращают новый результат,
+                строку не меняют.
+              </>
+            ),
+          },
+          {
+            key: <Notation>{"in"}</Notation>,
+            note: (
+              <>
+                Есть ли фрагмент; <Notation>{"find"}</Notation> даёт −1 при
+                отсутствии, а 0 — это найденное начало.
+              </>
+            ),
+          },
+          {
+            key: <Notation>{"count"}</Notation>,
+            note: (
+              <>
+                Считает без перекрытий; с перекрытиями — проверка каждой позиции
+                срезом.
               </>
             ),
           },

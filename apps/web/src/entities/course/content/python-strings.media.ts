@@ -3,26 +3,26 @@
 import type { LessonMediaTypes } from "~/shared/components/learning-content";
 
 export const lessonMedia = {
-  // %%slice("PYTHON", 0, 0)%%
+  // %%slice("PYTHON", show=False, tone="python")%%
   slicePYTHON_0_0: {
     kind: "diagram",
-    svg: '<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" viewBox="0 0 660 156"><rect x="30" y="30" width="46" height="46" fill="#fff" stroke="#17191e" stroke-width="1.25"/><text x="53.0" y="60.0" font-family="inherit" font-size="19" font-weight="600" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">P</text><text x="53.0" y="21.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">0</text><text x="53.0" y="96.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">-6</text><rect x="76" y="30" width="46" height="46" fill="#fff" stroke="#17191e" stroke-width="1.25"/><text x="99.0" y="60.0" font-family="inherit" font-size="19" font-weight="600" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">Y</text><text x="99.0" y="21.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">1</text><text x="99.0" y="96.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">-5</text><rect x="122" y="30" width="46" height="46" fill="#fff" stroke="#17191e" stroke-width="1.25"/><text x="145.0" y="60.0" font-family="inherit" font-size="19" font-weight="600" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">T</text><text x="145.0" y="21.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">2</text><text x="145.0" y="96.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">-4</text><rect x="168" y="30" width="46" height="46" fill="#fff" stroke="#17191e" stroke-width="1.25"/><text x="191.0" y="60.0" font-family="inherit" font-size="19" font-weight="600" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">H</text><text x="191.0" y="21.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">3</text><text x="191.0" y="96.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">-3</text><rect x="214" y="30" width="46" height="46" fill="#fff" stroke="#17191e" stroke-width="1.25"/><text x="237.0" y="60.0" font-family="inherit" font-size="19" font-weight="600" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">O</text><text x="237.0" y="21.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">4</text><text x="237.0" y="96.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">-2</text><rect x="260" y="30" width="46" height="46" fill="#fff" stroke="#17191e" stroke-width="1.25"/><text x="283.0" y="60.0" font-family="inherit" font-size="19" font-weight="600" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">N</text><text x="283.0" y="21.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">5</text><text x="283.0" y="96.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">-1</text><text x="332.0" y="42.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">индекс от начала</text><text x="332.0" y="96.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">индекс с конца</text><text x="332.0" y="66.0" font-family="inherit" font-size="15" font-weight="600" fill="#ff6a00" text-anchor="start" style="font-variant-numeric:tabular-nums">s[0:0] → &#x27;&#x27;</text></svg>',
+    svg: '<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" viewBox="0 0 660 112"><rect x="30" y="30" width="46" height="46" fill="#fff" stroke="#17191e" stroke-width="1.25"/><text x="53.0" y="60.0" font-family="inherit" font-size="19" font-weight="600" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">P</text><text x="53.0" y="21.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">0</text><text x="53.0" y="96.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">-6</text><rect x="76" y="30" width="46" height="46" fill="#fff" stroke="#17191e" stroke-width="1.25"/><text x="99.0" y="60.0" font-family="inherit" font-size="19" font-weight="600" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">Y</text><text x="99.0" y="21.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">1</text><text x="99.0" y="96.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">-5</text><rect x="122" y="30" width="46" height="46" fill="#fff" stroke="#17191e" stroke-width="1.25"/><text x="145.0" y="60.0" font-family="inherit" font-size="19" font-weight="600" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">T</text><text x="145.0" y="21.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">2</text><text x="145.0" y="96.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">-4</text><rect x="168" y="30" width="46" height="46" fill="#fff" stroke="#17191e" stroke-width="1.25"/><text x="191.0" y="60.0" font-family="inherit" font-size="19" font-weight="600" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">H</text><text x="191.0" y="21.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">3</text><text x="191.0" y="96.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">-3</text><rect x="214" y="30" width="46" height="46" fill="#fff" stroke="#17191e" stroke-width="1.25"/><text x="237.0" y="60.0" font-family="inherit" font-size="19" font-weight="600" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">O</text><text x="237.0" y="21.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">4</text><text x="237.0" y="96.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">-2</text><rect x="260" y="30" width="46" height="46" fill="#fff" stroke="#17191e" stroke-width="1.25"/><text x="283.0" y="60.0" font-family="inherit" font-size="19" font-weight="600" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">N</text><text x="283.0" y="21.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">5</text><text x="283.0" y="96.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">-1</text><text x="332.0" y="42.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">индекс от начала</text><text x="332.0" y="96.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">индекс с конца</text></svg>',
     width: 660,
-    height: 156,
+    height: 112,
     alt: "Срез строки PYTHON",
   },
-  // %%slice("ABCDEFG", 1, 4)%%
+  // %%slice("ABCDEFG", 1, 4, tone="python")%%
   sliceABCDEFG_1_4: {
     kind: "diagram",
-    svg: '<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" viewBox="0 0 660 156"><rect x="30" y="30" width="46" height="46" fill="#fff" stroke="#17191e" stroke-width="1.25"/><text x="53.0" y="60.0" font-family="inherit" font-size="19" font-weight="600" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">A</text><text x="53.0" y="21.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">0</text><text x="53.0" y="96.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">-7</text><rect x="76" y="30" width="46" height="46" fill="#f3f3f1" stroke="#ff6a00" stroke-width="2"/><text x="99.0" y="60.0" font-family="inherit" font-size="19" font-weight="600" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">B</text><text x="99.0" y="21.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">1</text><text x="99.0" y="96.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">-6</text><text x="99.0" y="120.0" font-family="inherit" font-size="13" font-weight="400" fill="#ff6a00" text-anchor="middle" style="font-variant-numeric:tabular-nums">1-й</text><rect x="122" y="30" width="46" height="46" fill="#f3f3f1" stroke="#ff6a00" stroke-width="2"/><text x="145.0" y="60.0" font-family="inherit" font-size="19" font-weight="600" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">C</text><text x="145.0" y="21.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">2</text><text x="145.0" y="96.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">-5</text><text x="145.0" y="120.0" font-family="inherit" font-size="13" font-weight="400" fill="#ff6a00" text-anchor="middle" style="font-variant-numeric:tabular-nums">2-й</text><rect x="168" y="30" width="46" height="46" fill="#f3f3f1" stroke="#ff6a00" stroke-width="2"/><text x="191.0" y="60.0" font-family="inherit" font-size="19" font-weight="600" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">D</text><text x="191.0" y="21.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">3</text><text x="191.0" y="96.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">-4</text><text x="191.0" y="120.0" font-family="inherit" font-size="13" font-weight="400" fill="#ff6a00" text-anchor="middle" style="font-variant-numeric:tabular-nums">3-й</text><rect x="214" y="30" width="46" height="46" fill="#fff" stroke="#17191e" stroke-width="1.25"/><text x="237.0" y="60.0" font-family="inherit" font-size="19" font-weight="600" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">E</text><text x="237.0" y="21.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">4</text><text x="237.0" y="96.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">-3</text><rect x="260" y="30" width="46" height="46" fill="#fff" stroke="#17191e" stroke-width="1.25"/><text x="283.0" y="60.0" font-family="inherit" font-size="19" font-weight="600" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">F</text><text x="283.0" y="21.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">5</text><text x="283.0" y="96.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">-2</text><rect x="306" y="30" width="46" height="46" fill="#fff" stroke="#17191e" stroke-width="1.25"/><text x="329.0" y="60.0" font-family="inherit" font-size="19" font-weight="600" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">G</text><text x="329.0" y="21.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">6</text><text x="329.0" y="96.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">-1</text><text x="378.0" y="42.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">индекс от начала</text><text x="378.0" y="96.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">индекс с конца</text><text x="378.0" y="66.0" font-family="inherit" font-size="15" font-weight="600" fill="#ff6a00" text-anchor="start" style="font-variant-numeric:tabular-nums">s[1:4] → &#x27;BCD&#x27;</text><line x1="76" y1="26" x2="76" y2="80" stroke="#17191e" stroke-width="2.5"/><line x1="214" y1="26" x2="214" y2="80" stroke="#17191e" stroke-width="2.5"/></svg>',
+    svg: '<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" viewBox="0 0 660 156"><rect x="30" y="30" width="46" height="46" fill="#fff" stroke="#17191e" stroke-width="1.25"/><text x="53.0" y="60.0" font-family="inherit" font-size="19" font-weight="600" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">A</text><text x="53.0" y="21.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">0</text><text x="53.0" y="96.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">-7</text><rect x="76" y="30" width="46" height="46" fill="#f3f3f1" stroke="#3f6aa6" stroke-width="2"/><text x="99.0" y="60.0" font-family="inherit" font-size="19" font-weight="600" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">B</text><text x="99.0" y="21.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">1</text><text x="99.0" y="96.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">-6</text><text x="99.0" y="120.0" font-family="inherit" font-size="13" font-weight="400" fill="#3f6aa6" text-anchor="middle" style="font-variant-numeric:tabular-nums">1-й</text><rect x="122" y="30" width="46" height="46" fill="#f3f3f1" stroke="#3f6aa6" stroke-width="2"/><text x="145.0" y="60.0" font-family="inherit" font-size="19" font-weight="600" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">C</text><text x="145.0" y="21.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">2</text><text x="145.0" y="96.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">-5</text><text x="145.0" y="120.0" font-family="inherit" font-size="13" font-weight="400" fill="#3f6aa6" text-anchor="middle" style="font-variant-numeric:tabular-nums">2-й</text><rect x="168" y="30" width="46" height="46" fill="#f3f3f1" stroke="#3f6aa6" stroke-width="2"/><text x="191.0" y="60.0" font-family="inherit" font-size="19" font-weight="600" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">D</text><text x="191.0" y="21.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">3</text><text x="191.0" y="96.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">-4</text><text x="191.0" y="120.0" font-family="inherit" font-size="13" font-weight="400" fill="#3f6aa6" text-anchor="middle" style="font-variant-numeric:tabular-nums">3-й</text><rect x="214" y="30" width="46" height="46" fill="#fff" stroke="#17191e" stroke-width="1.25"/><text x="237.0" y="60.0" font-family="inherit" font-size="19" font-weight="600" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">E</text><text x="237.0" y="21.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">4</text><text x="237.0" y="96.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">-3</text><rect x="260" y="30" width="46" height="46" fill="#fff" stroke="#17191e" stroke-width="1.25"/><text x="283.0" y="60.0" font-family="inherit" font-size="19" font-weight="600" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">F</text><text x="283.0" y="21.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">5</text><text x="283.0" y="96.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">-2</text><rect x="306" y="30" width="46" height="46" fill="#fff" stroke="#17191e" stroke-width="1.25"/><text x="329.0" y="60.0" font-family="inherit" font-size="19" font-weight="600" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">G</text><text x="329.0" y="21.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">6</text><text x="329.0" y="96.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">-1</text><text x="378.0" y="42.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">индекс от начала</text><text x="378.0" y="96.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">индекс с конца</text><text x="378.0" y="66.0" font-family="inherit" font-size="15" font-weight="600" fill="#3f6aa6" text-anchor="start" style="font-variant-numeric:tabular-nums">s[1:4] → &#x27;BCD&#x27;</text><line x1="76" y1="26" x2="76" y2="80" stroke="#17191e" stroke-width="2.5"/><line x1="214" y1="26" x2="214" y2="80" stroke="#17191e" stroke-width="2.5"/></svg>',
     width: 660,
     height: 156,
     alt: "Срез строки ABCDEFG",
   },
-  // %%slice("ABCDEFG", 5, 1, -1)%%
+  // %%slice("ABCDEFG", 5, 1, -1, tone="python")%%
   sliceABCDEFG_5_1_1: {
     kind: "diagram",
-    svg: '<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" viewBox="0 0 660 156"><rect x="30" y="30" width="46" height="46" fill="#fff" stroke="#17191e" stroke-width="1.25"/><text x="53.0" y="60.0" font-family="inherit" font-size="19" font-weight="600" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">A</text><text x="53.0" y="21.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">0</text><text x="53.0" y="96.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">-7</text><rect x="76" y="30" width="46" height="46" fill="#fff" stroke="#17191e" stroke-width="1.25"/><text x="99.0" y="60.0" font-family="inherit" font-size="19" font-weight="600" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">B</text><text x="99.0" y="21.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">1</text><text x="99.0" y="96.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">-6</text><rect x="122" y="30" width="46" height="46" fill="#f3f3f1" stroke="#ff6a00" stroke-width="2"/><text x="145.0" y="60.0" font-family="inherit" font-size="19" font-weight="600" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">C</text><text x="145.0" y="21.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">2</text><text x="145.0" y="96.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">-5</text><text x="145.0" y="120.0" font-family="inherit" font-size="13" font-weight="400" fill="#ff6a00" text-anchor="middle" style="font-variant-numeric:tabular-nums">4-й</text><rect x="168" y="30" width="46" height="46" fill="#f3f3f1" stroke="#ff6a00" stroke-width="2"/><text x="191.0" y="60.0" font-family="inherit" font-size="19" font-weight="600" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">D</text><text x="191.0" y="21.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">3</text><text x="191.0" y="96.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">-4</text><text x="191.0" y="120.0" font-family="inherit" font-size="13" font-weight="400" fill="#ff6a00" text-anchor="middle" style="font-variant-numeric:tabular-nums">3-й</text><rect x="214" y="30" width="46" height="46" fill="#f3f3f1" stroke="#ff6a00" stroke-width="2"/><text x="237.0" y="60.0" font-family="inherit" font-size="19" font-weight="600" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">E</text><text x="237.0" y="21.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">4</text><text x="237.0" y="96.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">-3</text><text x="237.0" y="120.0" font-family="inherit" font-size="13" font-weight="400" fill="#ff6a00" text-anchor="middle" style="font-variant-numeric:tabular-nums">2-й</text><rect x="260" y="30" width="46" height="46" fill="#f3f3f1" stroke="#ff6a00" stroke-width="2"/><text x="283.0" y="60.0" font-family="inherit" font-size="19" font-weight="600" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">F</text><text x="283.0" y="21.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">5</text><text x="283.0" y="96.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">-2</text><text x="283.0" y="120.0" font-family="inherit" font-size="13" font-weight="400" fill="#ff6a00" text-anchor="middle" style="font-variant-numeric:tabular-nums">1-й</text><rect x="306" y="30" width="46" height="46" fill="#fff" stroke="#17191e" stroke-width="1.25"/><text x="329.0" y="60.0" font-family="inherit" font-size="19" font-weight="600" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">G</text><text x="329.0" y="21.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">6</text><text x="329.0" y="96.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">-1</text><text x="378.0" y="42.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">индекс от начала</text><text x="378.0" y="96.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">индекс с конца</text><text x="378.0" y="66.0" font-family="inherit" font-size="15" font-weight="600" fill="#ff6a00" text-anchor="start" style="font-variant-numeric:tabular-nums">s[5:1:-1] → &#x27;FEDC&#x27;</text></svg>',
+    svg: '<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" viewBox="0 0 660 156"><rect x="30" y="30" width="46" height="46" fill="#fff" stroke="#17191e" stroke-width="1.25"/><text x="53.0" y="60.0" font-family="inherit" font-size="19" font-weight="600" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">A</text><text x="53.0" y="21.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">0</text><text x="53.0" y="96.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">-7</text><rect x="76" y="30" width="46" height="46" fill="#fff" stroke="#17191e" stroke-width="1.25"/><text x="99.0" y="60.0" font-family="inherit" font-size="19" font-weight="600" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">B</text><text x="99.0" y="21.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">1</text><text x="99.0" y="96.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">-6</text><rect x="122" y="30" width="46" height="46" fill="#f3f3f1" stroke="#3f6aa6" stroke-width="2"/><text x="145.0" y="60.0" font-family="inherit" font-size="19" font-weight="600" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">C</text><text x="145.0" y="21.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">2</text><text x="145.0" y="96.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">-5</text><text x="145.0" y="120.0" font-family="inherit" font-size="13" font-weight="400" fill="#3f6aa6" text-anchor="middle" style="font-variant-numeric:tabular-nums">4-й</text><rect x="168" y="30" width="46" height="46" fill="#f3f3f1" stroke="#3f6aa6" stroke-width="2"/><text x="191.0" y="60.0" font-family="inherit" font-size="19" font-weight="600" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">D</text><text x="191.0" y="21.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">3</text><text x="191.0" y="96.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">-4</text><text x="191.0" y="120.0" font-family="inherit" font-size="13" font-weight="400" fill="#3f6aa6" text-anchor="middle" style="font-variant-numeric:tabular-nums">3-й</text><rect x="214" y="30" width="46" height="46" fill="#f3f3f1" stroke="#3f6aa6" stroke-width="2"/><text x="237.0" y="60.0" font-family="inherit" font-size="19" font-weight="600" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">E</text><text x="237.0" y="21.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">4</text><text x="237.0" y="96.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">-3</text><text x="237.0" y="120.0" font-family="inherit" font-size="13" font-weight="400" fill="#3f6aa6" text-anchor="middle" style="font-variant-numeric:tabular-nums">2-й</text><rect x="260" y="30" width="46" height="46" fill="#f3f3f1" stroke="#3f6aa6" stroke-width="2"/><text x="283.0" y="60.0" font-family="inherit" font-size="19" font-weight="600" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">F</text><text x="283.0" y="21.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">5</text><text x="283.0" y="96.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">-2</text><text x="283.0" y="120.0" font-family="inherit" font-size="13" font-weight="400" fill="#3f6aa6" text-anchor="middle" style="font-variant-numeric:tabular-nums">1-й</text><rect x="306" y="30" width="46" height="46" fill="#fff" stroke="#17191e" stroke-width="1.25"/><text x="329.0" y="60.0" font-family="inherit" font-size="19" font-weight="600" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">G</text><text x="329.0" y="21.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">6</text><text x="329.0" y="96.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">-1</text><text x="378.0" y="42.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">индекс от начала</text><text x="378.0" y="96.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">индекс с конца</text><text x="378.0" y="66.0" font-family="inherit" font-size="15" font-weight="600" fill="#3f6aa6" text-anchor="start" style="font-variant-numeric:tabular-nums">s[5:1:-1] → &#x27;FEDC&#x27;</text></svg>',
     width: 660,
     height: 156,
     alt: "Срез строки ABCDEFG",
@@ -34,5 +34,305 @@ export const lessonMedia = {
     width: 660,
     height: 168,
     alt: "Вхождения AA в AAAA",
+  },
+  runBuild: {
+    kind: "run",
+    code: 'word = "банан"\nresult = ""\nfor ch in word:\n    if ch != "а":\n        result += ch\nprint(result)',
+    fileName: "main.py",
+    output: "бнн",
+    steps: [
+      {
+        line: null,
+        text: "Программа ещё не запущена.",
+        kind: "start",
+        frames: [{ title: "программа", names: [] }],
+        objs: {},
+        out: "",
+      },
+      {
+        line: 1,
+        text: "`word` получает значение `'банан'`.",
+        kind: "line",
+        frames: [
+          {
+            title: "программа",
+            names: [{ n: "word", v: "'банан'", ref: null, ch: true }],
+          },
+        ],
+        objs: {},
+        out: "",
+      },
+      {
+        line: 2,
+        text: "`result` получает значение `''`.",
+        kind: "line",
+        frames: [
+          {
+            title: "программа",
+            names: [
+              { n: "word", v: "'банан'", ref: null, ch: false },
+              { n: "result", v: "''", ref: null, ch: true },
+            ],
+          },
+        ],
+        objs: {},
+        out: "",
+      },
+      {
+        line: 3,
+        text: "`for` берёт первое значение: `ch` = `'б'`.",
+        kind: "line",
+        frames: [
+          {
+            title: "программа",
+            names: [
+              { n: "word", v: "'банан'", ref: null, ch: false },
+              { n: "result", v: "''", ref: null, ch: false },
+              { n: "ch", v: "'б'", ref: null, ch: true },
+            ],
+          },
+        ],
+        objs: {},
+        out: "",
+      },
+      {
+        line: 4,
+        text: "Проверка `ch != 'а'` даёт `True` — выполняется блок под этим условием.",
+        kind: "line",
+        frames: [
+          {
+            title: "программа",
+            names: [
+              { n: "word", v: "'банан'", ref: null, ch: false },
+              { n: "result", v: "''", ref: null, ch: false },
+              { n: "ch", v: "'б'", ref: null, ch: false },
+            ],
+          },
+        ],
+        objs: {},
+        out: "",
+      },
+      {
+        line: 5,
+        text: "`result += ch`: значение `result` увеличилось — было `''`, стало `'б'`.",
+        kind: "line",
+        frames: [
+          {
+            title: "программа",
+            names: [
+              { n: "word", v: "'банан'", ref: null, ch: false },
+              { n: "result", v: "'б'", ref: null, ch: true },
+              { n: "ch", v: "'б'", ref: null, ch: false },
+            ],
+          },
+        ],
+        objs: {},
+        out: "",
+      },
+      {
+        line: 3,
+        text: "`for` берёт следующее значение: `ch` = `'а'`.",
+        kind: "line",
+        frames: [
+          {
+            title: "программа",
+            names: [
+              { n: "word", v: "'банан'", ref: null, ch: false },
+              { n: "result", v: "'б'", ref: null, ch: false },
+              { n: "ch", v: "'а'", ref: null, ch: true },
+            ],
+          },
+        ],
+        objs: {},
+        out: "",
+      },
+      {
+        line: 4,
+        text: "Проверка `ch != 'а'` даёт `False` — блок пропускается.",
+        kind: "line",
+        frames: [
+          {
+            title: "программа",
+            names: [
+              { n: "word", v: "'банан'", ref: null, ch: false },
+              { n: "result", v: "'б'", ref: null, ch: false },
+              { n: "ch", v: "'а'", ref: null, ch: false },
+            ],
+          },
+        ],
+        objs: {},
+        out: "",
+      },
+      {
+        line: 3,
+        text: "`for` берёт следующее значение: `ch` = `'н'`.",
+        kind: "line",
+        frames: [
+          {
+            title: "программа",
+            names: [
+              { n: "word", v: "'банан'", ref: null, ch: false },
+              { n: "result", v: "'б'", ref: null, ch: false },
+              { n: "ch", v: "'н'", ref: null, ch: true },
+            ],
+          },
+        ],
+        objs: {},
+        out: "",
+      },
+      {
+        line: 4,
+        text: "Проверка `ch != 'а'` даёт `True` — выполняется блок под этим условием.",
+        kind: "line",
+        frames: [
+          {
+            title: "программа",
+            names: [
+              { n: "word", v: "'банан'", ref: null, ch: false },
+              { n: "result", v: "'б'", ref: null, ch: false },
+              { n: "ch", v: "'н'", ref: null, ch: false },
+            ],
+          },
+        ],
+        objs: {},
+        out: "",
+      },
+      {
+        line: 5,
+        text: "`result += ch`: значение `result` увеличилось — было `'б'`, стало `'бн'`.",
+        kind: "line",
+        frames: [
+          {
+            title: "программа",
+            names: [
+              { n: "word", v: "'банан'", ref: null, ch: false },
+              { n: "result", v: "'бн'", ref: null, ch: true },
+              { n: "ch", v: "'н'", ref: null, ch: false },
+            ],
+          },
+        ],
+        objs: {},
+        out: "",
+      },
+      {
+        line: 3,
+        text: "`for` берёт следующее значение: `ch` = `'а'`.",
+        kind: "line",
+        frames: [
+          {
+            title: "программа",
+            names: [
+              { n: "word", v: "'банан'", ref: null, ch: false },
+              { n: "result", v: "'бн'", ref: null, ch: false },
+              { n: "ch", v: "'а'", ref: null, ch: true },
+            ],
+          },
+        ],
+        objs: {},
+        out: "",
+      },
+      {
+        line: 4,
+        text: "Проверка `ch != 'а'` даёт `False` — блок пропускается.",
+        kind: "line",
+        frames: [
+          {
+            title: "программа",
+            names: [
+              { n: "word", v: "'банан'", ref: null, ch: false },
+              { n: "result", v: "'бн'", ref: null, ch: false },
+              { n: "ch", v: "'а'", ref: null, ch: false },
+            ],
+          },
+        ],
+        objs: {},
+        out: "",
+      },
+      {
+        line: 3,
+        text: "`for` берёт следующее значение: `ch` = `'н'`.",
+        kind: "line",
+        frames: [
+          {
+            title: "программа",
+            names: [
+              { n: "word", v: "'банан'", ref: null, ch: false },
+              { n: "result", v: "'бн'", ref: null, ch: false },
+              { n: "ch", v: "'н'", ref: null, ch: true },
+            ],
+          },
+        ],
+        objs: {},
+        out: "",
+      },
+      {
+        line: 4,
+        text: "Проверка `ch != 'а'` даёт `True` — выполняется блок под этим условием.",
+        kind: "line",
+        frames: [
+          {
+            title: "программа",
+            names: [
+              { n: "word", v: "'банан'", ref: null, ch: false },
+              { n: "result", v: "'бн'", ref: null, ch: false },
+              { n: "ch", v: "'н'", ref: null, ch: false },
+            ],
+          },
+        ],
+        objs: {},
+        out: "",
+      },
+      {
+        line: 5,
+        text: "`result += ch`: значение `result` увеличилось — было `'бн'`, стало `'бнн'`.",
+        kind: "line",
+        frames: [
+          {
+            title: "программа",
+            names: [
+              { n: "word", v: "'банан'", ref: null, ch: false },
+              { n: "result", v: "'бнн'", ref: null, ch: true },
+              { n: "ch", v: "'н'", ref: null, ch: false },
+            ],
+          },
+        ],
+        objs: {},
+        out: "",
+      },
+      {
+        line: 3,
+        text: "Значения закончились — цикл `for` завершён.",
+        kind: "line",
+        frames: [
+          {
+            title: "программа",
+            names: [
+              { n: "word", v: "'банан'", ref: null, ch: false },
+              { n: "result", v: "'бнн'", ref: null, ch: false },
+              { n: "ch", v: "'н'", ref: null, ch: false },
+            ],
+          },
+        ],
+        objs: {},
+        out: "",
+      },
+      {
+        line: 6,
+        text: "На экран выводится «бнн».",
+        kind: "line",
+        frames: [
+          {
+            title: "программа",
+            names: [
+              { n: "word", v: "'банан'", ref: null, ch: false },
+              { n: "result", v: "'бнн'", ref: null, ch: false },
+              { n: "ch", v: "'н'", ref: null, ch: false },
+            ],
+          },
+        ],
+        objs: {},
+        out: "бнн\n",
+      },
+    ],
   },
 } as const satisfies Record<string, LessonMediaTypes.Generated>;

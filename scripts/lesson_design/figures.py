@@ -1805,13 +1805,14 @@ def _arrow(x1, y1, x2, y2, color=INK, dashed=False, width=1.5) -> str:
     )
 
 
-def refs_svg(names, objects, cells=None, old=None, accent=()) -> str:
+def refs_svg(names, objects, cells=None, old=None, accent=(), tone: str | None = None) -> str:
     """Names on the left point to objects; an object with cells (an outer list)
     points from each cell to its element. ``names`` — [name, object index];
     ``objects`` — labels; ``cells`` — {object index: [element indexes]};
     ``old`` — earlier bindings drawn dashed; ``accent`` — names in accent.
     An element shared by several cells sits right under them, so the arrows
     visibly land on one box; separate elements go to the right column."""
+    hot = accent_of(tone)
     cells = {int(k): v for k, v in (cells or {}).items()}
     old = old or []
     row_h, top, cell = 58, 18, 34
@@ -1894,7 +1895,7 @@ def refs_svg(names, objects, cells=None, old=None, accent=()) -> str:
         out.append(_arrow(108, ny, *anchor(t, 108, ny), FAINT, dashed=True))
     for i, (name, t) in enumerate(names):
         y = top + i * row_h
-        color = ACCENT if name in accent else INK
+        color = hot if name in accent else INK
         out.append(
             f'<rect x="16" y="{y}" width="92" height="40" rx="8" fill="#fff" '
             f'stroke="{color}" stroke-width="{2 if name in accent else 1.5}"/>'
@@ -1905,19 +1906,24 @@ def refs_svg(names, objects, cells=None, old=None, accent=()) -> str:
     return "".join(out)
 
 
-def slice_svg(text: str = "ABCDEFG", start=None, stop=None, step=1) -> str:
+def slice_svg(
+    text: str = "ABCDEFG", start=None, stop=None, step=1, show=True, tone: str | None = None
+) -> str:
     """Characters with positive and negative indexes; the slice is marked and
-    its elements numbered in the order the slice takes them."""
-    taken = list(range(*slice(start, stop, step).indices(len(text))))
+    its elements numbered in the order the slice takes them. ``show=False`` draws
+    the indexes only, without a slice."""
+    accent = accent_of(tone)
+    taken = list(range(*slice(start, stop, step).indices(len(text)))) if show else []
     cell, left, top = 46, 30, 30
-    out = [f'<svg viewBox="0 0 660 156" role="img" aria-label="Срез строки {text}">']
+    height = 156 if show else 112  # no order labels under an indexes-only view
+    out = [f'<svg viewBox="0 0 660 {height}" role="img" aria-label="Срез строки {text}">']
     n = len(text)
     for k, ch in enumerate(text):
         x = left + k * cell
         on = k in taken
         out.append(
             f'<rect x="{x}" y="{top}" width="{cell}" height="{cell}" '
-            f'fill="{WASH if on else "#fff"}" stroke="{ACCENT if on else INK}" '
+            f'fill="{WASH if on else "#fff"}" stroke="{accent if on else INK}" '
             f'stroke-width="{2 if on else 1.25}"/>'
         )
         out.append(_text(x + cell / 2, top + 30, ch, 19, INK, "middle", 600))
@@ -1925,14 +1931,15 @@ def slice_svg(text: str = "ABCDEFG", start=None, stop=None, step=1) -> str:
         out.append(_text(x + cell / 2, top + cell + 20, str(k - n), 13, MUTED, "middle"))
         if on:
             order = taken.index(k) + 1
-            out.append(_text(x + cell / 2, top + cell + 44, f"{order}-й", 13, ACCENT, "middle"))
+            out.append(_text(x + cell / 2, top + cell + 44, f"{order}-й", 13, accent, "middle"))
     right = left + n * cell + 26
     out.append(_text(right, top + 12, "индекс от начала", 13, MUTED))
     out.append(_text(right, top + cell + 20, "индекс с конца", 13, MUTED))
     shown = "".join(text[k] for k in taken)
     parts = ["" if v is None else str(v) for v in (start, stop)]
     spec = ":".join(parts) + ("" if step == 1 else f":{step}")
-    out.append(_text(right, top + 36, f"s[{spec}] → {shown!r}", 15, ACCENT, weight=600))
+    if show:
+        out.append(_text(right, top + 36, f"s[{spec}] → {shown!r}", 15, accent, weight=600))
     if step > 0 and taken:
         for k in (taken[0], taken[-1] + 1):  # start and stop boundaries
             x = left + k * cell
@@ -3346,6 +3353,47 @@ def for_while_svg(tone: str | None = None) -> str:
     return "".join(out)
 
 
+def zip_pairs_svg(names, scores, start: int = 1, tone: str | None = None) -> str:
+    """enumerate gives each element its number; zip joins two sources position by
+    position and stops at the shorter one — the leftover element gets no pair."""
+    accent = accent_of(tone)
+    rows = max(len(names), len(scores))
+    top, step = 70, 46
+    out = [_svg(top + rows * step + 24, "enumerate и zip")]
+    # enumerate: a number before every element
+    out.append(_mono(16, 22, f"enumerate(names, start={start})", 13, INK, weight=600))
+    for k, name in enumerate(names):
+        y = top + k * step
+        out.append(f'<circle cx="34" cy="{y}" r="13" fill="{accent}"/>')
+        out.append(_text(34, y + 5, str(start + k), 13, "#fff", "middle", 700))
+        out.append(_arrow(50, y, 76, y, MUTED))
+        out.append(_box(80, y - 16, 96, 32, INK))
+        out.append(_text(128, y + 5, name, 14, INK, "middle"))
+        out.append(_mono(190, y + 5, f"→ ({start + k}, {name!r})", 12, MUTED))
+    out.append(f'<path d="M 330 10 V {top + rows * step + 8}" stroke="{FAINT}"/>')
+    # zip: pairs by position, the longer source is cut
+    out.append(_mono(350, 22, "zip(names, scores)", 13, INK, weight=600))
+    pairs = min(len(names), len(scores))
+    for k in range(rows):
+        y = top + k * step
+        paired = k < pairs
+        color = INK if paired else FAINT
+        if k < len(names):
+            out.append(_box(350, y - 16, 96, 32, color))
+            out.append(_text(398, y + 5, names[k], 14, INK if paired else MUTED, "middle"))
+        if k < len(scores):
+            out.append(_box(500, y - 16, 56, 32, color))
+            out.append(_text(528, y + 5, str(scores[k]), 14, INK if paired else MUTED, "middle"))
+        if paired:
+            out.append(f'<path d="M 446 {y} H 500" stroke="{accent}" stroke-width="2"/>')
+            out.append(_text(570, y + 5, f"пара {k + 1}", 12, MUTED))
+        else:
+            out.append(_text(458, y + 5, "пары нет", 12, MUTED))
+    out.append(_text(350, top + rows * step + 2, "zip остановился на коротком списке", 12, MUTED))
+    out.append("</svg>")
+    return "".join(out)
+
+
 def time_split_svg(seconds: int = 3671, tone: str | None = None) -> str:
     """Seconds split into hours, minutes and seconds by // and %."""
     accent = accent_of(tone)
@@ -3986,6 +4034,7 @@ FIGURES = {
     "code_paths": code_paths_svg,
     "loop_checks": loop_checks_svg,
     "for_while": for_while_svg,
+    "zip_pairs": zip_pairs_svg,
     "loop_grid": loop_grid_svg,
     "venn": venn_svg,
     "loop_to_comp": loop_to_comp_svg,

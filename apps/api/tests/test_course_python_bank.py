@@ -85,7 +85,9 @@ RECOMPUTED = {
     "python-for-range-t09": lambda: str(
         sum(1 for x, y in itertools.product(range(1, 10), repeat=2) if 1 <= 10 - x - y <= 9)
     ),
-    "python-strings-t04": lambda: "2 1 2",
+    "python-strings-t04": lambda: (
+        f"{'банана'.count('ана')} {sum('банана'.startswith('ана', i) for i in range(6))}"
+    ),
     "python-strings-t08": lambda: (
         f"{'AAAAA'.count('AA')} {sum('AAAAA'.startswith('AA', i) for i in range(5))}"
     ),
@@ -216,6 +218,13 @@ PRINTED_LINES = {
         "count = 0\nfor a in range(1, 6):\n    for b in range(1, 6):\n"
         "        if a < b:\n            count += 1\nprint(count)"
     ),
+    "python-strings-t03": 's = "ABCDEFG"\nprint(s[2:5])\nprint(s[:4])\nprint(s[::3])\nprint(s[::-2])',
+    "python-strings-t05": 'print(" Мир ".strip().upper())\nprint("a-b-c".replace("-", "", 1))',
+    "python-lists-t02": (
+        "a = [3, 1, 4]\na.append(1)\na.insert(0, 9)\nx = a.pop()\na.remove(1)\nprint(a)"
+    ),
+    "python-lists-t05": "t = [[0] * 2] * 3\nt[1][0] = 5\nprint(t)",
+    "python-tuples-t06": 'count = 0\nfor pair in zip([1, 2, 3], "ab"):\n    count += 1\nprint(count)',
 }
 
 

@@ -4,6 +4,7 @@ import { Typography } from "~/shared/components/typography";
 import {
   LessonDiagram,
   LessonSummary,
+  ProofDisclosure,
 } from "~/shared/components/learning-content";
 import { defineCourseLesson } from "../lib/define-course-lesson";
 import { pythonTuplesLessonPublication } from "./course-publication.mjs";
@@ -22,12 +23,13 @@ export const pythonTuplesLesson = defineCourseLesson({
       explanation: (
         <>
           <Typography.Text>
+            Результат ученика — это пара «имя и балл», точка на плоскости — пара
+            координат. Такие короткие записи не должны случайно меняться.{" "}
             <strong>
-              Кортеж — короткая неизменяемая запись, а распаковка раздаёт
-              элементы последовательности по именам за одно присваивание
+              Для них есть кортеж — неизменяемая последовательность, а
+              распаковка раздаёт его элементы по именам одним присваиванием
             </strong>
-            . Опора — список прошлого урока: кортеж — его неизменяемый
-            родственник, а распаковка работает для обоих.
+            . Распаковка работает и для списков из прошлого урока.
           </Typography.Text>
           <Typography.Text>
             Данные урока — результаты учеников парами «имя и балл»:{" "}
@@ -44,19 +46,18 @@ export const pythonTuplesLesson = defineCourseLesson({
       explanation: (
         <>
           <Typography.Text>
-            <strong>Кортеж похож на список, но его нельзя изменить.</strong>{" "}
-            <strong>Кортеж</strong> (<Notation>{"tuple"}</Notation>) похож на
-            список, но нельзя заменить его элемент, добавить или удалить
-            позицию. Он подходит для небольшой записи: координат, пары «имя и
-            результат», нескольких возвращаемых значений.
+            <strong>Кортеж похож на список, но его нельзя изменить.</strong> У
+            кортежа (<Notation>{"tuple"}</Notation>) нельзя заменить элемент,
+            добавить или удалить позицию. Он подходит для небольшой записи:
+            координат, пары «имя и результат», нескольких возвращаемых значений.
           </Typography.Text>
           <CodeBlock
             code={
               "point = (3, 5)\nprint(point[0])\nsingle = (8,)\nempty = ()\nprint(type((8)), type(single), len(empty))"
             }
-            label={"Программа на Python"}
+            label={"Кортеж из одного элемента и пустой кортеж"}
             language="python"
-            fileName="point.py"
+            fileName="main.py"
             output={"3\n<class 'int'> <class 'tuple'> 0"}
           />
           <Typography.Text>
@@ -69,13 +70,19 @@ export const pythonTuplesLesson = defineCourseLesson({
             code={"point = (3, 5)\npoint[0] = 4"}
             label={"Попытка заменить элемент остановит программу"}
             language="python"
-            fileName="point.py"
+            fileName="main.py"
             error={"TypeError: 'tuple' object does not support item assignment"}
           />
-          <Typography.Text>
-            Неизменяемость внешнего кортежа не делает неизменяемым список внутри
-            него: содержимое такого списка по-прежнему можно менять.
-          </Typography.Text>
+          <ProofDisclosure
+            summary="Тонкости: список внутри кортежа"
+            kind="nuance"
+          >
+            <Typography.Text>
+              Неизменяемость кортежа не делает неизменяемым список внутри него:
+              в <Notation>{"([1, 2], 3)"}</Notation> заменить список нельзя, а
+              добавить в него элемент можно.
+            </Typography.Text>
+          </ProofDisclosure>
         </>
       ),
     },
@@ -98,7 +105,7 @@ export const pythonTuplesLesson = defineCourseLesson({
               "Распаковка связывает несколько имён с элементами последовательности"
             }
             language="python"
-            fileName="point.py"
+            fileName="main.py"
             output={"3 5\n20 10"}
           />
           <Typography.Text>
@@ -168,7 +175,7 @@ export const pythonTuplesLesson = defineCourseLesson({
             }
             label={"Выведем имена тех, у кого результат не меньше 90"}
             language="python"
-            fileName="students.py"
+            fileName="main.py"
             output={"Анна\nМарк"}
           />
           <Typography.Text>
@@ -200,7 +207,7 @@ export const pythonTuplesLesson = defineCourseLesson({
             }
             label={"enumerate выдаёт пары «номер и элемент»"}
             language="python"
-            fileName="names.py"
+            fileName="main.py"
             output={"1 Анна\n2 Илья\n3 Марк"}
           />
           <Typography.Text>
@@ -214,20 +221,38 @@ export const pythonTuplesLesson = defineCourseLesson({
           </Typography.Text>
           <CodeBlock
             code={
-              'names = ["Анна", "Илья"]\nscores = [91, 84]\nfor name, score in zip(names, scores):\n    print(name, score)'
+              'names = ["Анна", "Илья", "Марк"]\nscores = [91, 84]\nfor name, score in zip(names, scores):\n    print(name, score)'
             }
             label={"zip соединяет несколько источников по позициям"}
             language="python"
-            fileName="names.py"
+            fileName="main.py"
             output={"Анна 91\nИлья 84"}
           />
           <Typography.Text>
-            Обычный <Notation>{"zip"}</Notation> заканчивается при исчерпании
-            самого короткого источника. Если длины по смыслу обязаны совпадать,
-            используй <Notation>{"zip(names, scores, strict=True)"}</Notation> в
-            Python 3.10+ или отдельно проверь длины: так потеря данных не
-            пройдёт незаметно.
+            Балла Марка в списке нет, и <Notation>{"zip"}</Notation> закончился
+            на коротком списке: третьей пары не будет, а программа не сообщит об
+            этом.
           </Typography.Text>
+          <LessonDiagram
+            {...lessonMedia.zipPairs}
+            caption={
+              <>
+                Слева <Notation>{"enumerate"}</Notation> ставит перед каждым
+                именем номер. Справа <Notation>{"zip"}</Notation> собирает пары
+                по позициям: первое имя с первым баллом, второе со вторым; Марку
+                пары не досталось.
+              </>
+            }
+          />
+          <ProofDisclosure summary="Тонкости: zip без потерь" kind="nuance">
+            <Typography.Text>
+              Если длины по смыслу обязаны совпадать, пиши{" "}
+              <Notation>{"zip(names, scores, strict=True)"}</Notation>: при
+              разной длине программа остановится с{" "}
+              <Notation>{"ValueError"}</Notation>, и потеря данных не пройдёт
+              незаметно.
+            </Typography.Text>
+          </ProofDisclosure>
           <Typography.Text>
             Звёздочка в вызове функции означает ещё одно применение распаковки:
           </Typography.Text>
@@ -239,7 +264,7 @@ export const pythonTuplesLesson = defineCourseLesson({
               "Звёздочка в вызове функции означает ещё одно применение распаковки"
             }
             language="python"
-            fileName="numbers.py"
+            fileName="main.py"
             output={"10 20 30\n10, 20, 30"}
           />
           <Typography.Text>
@@ -252,6 +277,71 @@ export const pythonTuplesLesson = defineCourseLesson({
     },
   ],
   checkpoint: [
+    {
+      id: "t1",
+      prompt: (
+        <>
+          <Typography.Text>
+            Чем <Notation>{"(8)"}</Notation> отличается от{" "}
+            <Notation>{"(8,)"}</Notation>?
+          </Typography.Text>
+        </>
+      ),
+      reveal: (
+        <>
+          <Typography.Text>
+            <Notation>{"(8)"}</Notation> — просто число 8 в скобках,{" "}
+            <Notation>{"(8,)"}</Notation> — кортеж из одного элемента: кортеж
+            создаёт запятая.
+          </Typography.Text>
+        </>
+      ),
+    },
+    {
+      id: "t2",
+      prompt: (
+        <>
+          <Typography.Text>
+            Почему строки <Notation>{"a = b"}</Notation> и{" "}
+            <Notation>{"b = a"}</Notation> не меняют значения местами, а{" "}
+            <Notation>{"a, b = b, a"}</Notation> меняет?
+          </Typography.Text>
+        </>
+      ),
+      reveal: (
+        <>
+          <Typography.Text>
+            После <Notation>{"a = b"}</Notation> прежнее значение{" "}
+            <Notation>{"a"}</Notation> потеряно. В{" "}
+            <Notation>{"a, b = b, a"}</Notation> правая часть сначала целиком
+            вычисляется в пару старых значений, и только потом имена связываются
+            с её элементами.
+          </Typography.Text>
+        </>
+      ),
+    },
+    {
+      id: "t3",
+      prompt: (
+        <>
+          <Typography.Text>
+            Что напечатает цикл{" "}
+            <Notation>
+              {'for a, b in zip([1, 2, 3], "xy"): print(a, b)'}
+            </Notation>
+            ?
+          </Typography.Text>
+        </>
+      ),
+      reveal: (
+        <>
+          <Typography.Text>
+            Две строки: «1 x» и «2 y». <Notation>{"zip"}</Notation> закончился
+            на короткой строке, тройке пары не досталось.
+          </Typography.Text>
+        </>
+      ),
+    },
     {
       id: "t4",
       prompt: (
@@ -294,48 +384,56 @@ export const pythonTuplesLesson = defineCourseLesson({
   ],
   result: (
     <>
+      <Typography.Text>
+        Кортежи держат короткие записи, а распаковка,{" "}
+        <Notation>{"enumerate"}</Notation> и <Notation>{"zip"}</Notation> делают
+        перебор пар коротким и понятным. Вот что понадобится дальше.
+      </Typography.Text>
       <LessonSummary
         items={[
           {
+            key: "Кортеж",
             note: (
               <>
-                Кортеж создаёт запятая: <Notation>{"(8,)"}</Notation> — кортеж,{" "}
-                <Notation>{"(8)"}</Notation> — число; элементы менять нельзя.
+                <Notation>{"(3, 5)"}</Notation> — неизменяемая запись; из одного
+                элемента — <Notation>{"(8,)"}</Notation>: кортеж создаёт
+                запятая.
               </>
             ),
           },
           {
+            key: "Распаковка",
             note: (
               <>
-                <Notation>{"x, y = point"}</Notation> раздаёт элементы по
-                именам; число имён должно совпадать.
+                <Notation>{"x, y = point"}</Notation>: имён столько же, сколько
+                элементов; остаток — <Notation>{"*rest"}</Notation>.
               </>
             ),
           },
           {
+            key: <Notation>{"a, b = b, a"}</Notation>,
+            note: <>Обмен: правая часть вычисляется целиком до присваивания.</>,
+          },
+          {
+            key: <Notation>{"for name, score in pairs"}</Notation>,
+            note: <>Пары распаковываются прямо в заголовке цикла.</>,
+          },
+          {
+            key: <Notation>{"enumerate"}</Notation>,
             note: (
               <>
-                <Notation>{"a, b = b, a"}</Notation> меняет значения местами:
-                правая часть вычисляется целиком до присваивания.
+                Пары «номер, элемент»; <Notation>{"start=1"}</Notation> меняет
+                номера, но не индексы.
               </>
             ),
           },
           {
-            note: (
-              <>
-                <Notation>{"for name, score in pairs"}</Notation> распаковывает
-                каждую пару; <Notation>{"enumerate"}</Notation> даёт номер,{" "}
-                <Notation>{"zip"}</Notation> — элементы по позициям.
-              </>
-            ),
+            key: <Notation>{"zip"}</Notation>,
+            note: <>Пары по позициям; останавливается на коротком источнике.</>,
           },
           {
-            note: (
-              <>
-                <Notation>{"print(*items)"}</Notation> передаёт элементы
-                отдельными аргументами.
-              </>
-            ),
+            key: <Notation>{"print(*numbers)"}</Notation>,
+            note: <>Элементы списка передаются в print по отдельности.</>,
           },
         ]}
       />

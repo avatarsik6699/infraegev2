@@ -3139,7 +3139,7 @@
     },
     {
       "id": "python-strings",
-      "sections": ["intro", "s1", "s2", "s3", "s4", "s5", "s6"],
+      "sections": ["intro", "s1", "s2", "s3", "s3-perebor", "s4", "s5", "s6"],
       "kind": "course",
       "status": "published",
       "course_id": "python",
