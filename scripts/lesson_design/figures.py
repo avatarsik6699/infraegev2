@@ -2111,6 +2111,7 @@ def stack_stepper(n: int = 4) -> str:
 
 
 MONO_FONT = "JetBrains Mono, ui-monospace, monospace"
+VIOLET = "#6b4fa0"  # a third mapping colour beside a course blue (≥5:1 on white)
 BLUE = "#1f4fd0"
 GREEN = "#2a6a3a"
 
@@ -2259,8 +2260,9 @@ def loop_grid_svg(
     return "".join(out)
 
 
-def venn_svg(a=(1, 2, 3), b=(3, 4)) -> str:
+def venn_svg(a=(1, 2, 3), b=(3, 4), tone: str | None = None) -> str:
     """Four small Euler diagrams of the same sets: the result of |, &, -, ^ in accent."""
+    accent = accent_of(tone)
     a, b = set(a), set(b)
     ops = [("a | b", a | b), ("a & b", a & b), ("a - b", a - b), ("a ^ b", a ^ b)]
     out = ['<svg viewBox="0 0 660 190" role="img" aria-label="Операции над множествами">']
@@ -2286,28 +2288,31 @@ def venn_svg(a=(1, 2, 3), b=(3, 4)) -> str:
                         y,
                         str(v),
                         17 if on else 15,
-                        ACCENT if on else FAINT,
+                        accent if on else FAINT,
                         "middle",
                         600 if on else 400,
                     )
                 )
         out.append(_mono(cx, 160, label, 15, INK, "middle"))
         shown = "{" + ", ".join(map(str, sorted(res))) + "}"
-        out.append(_mono(cx, 182, shown, 14, ACCENT, "middle"))
+        out.append(_mono(cx, 182, shown, 14, accent, "middle"))
     out.append("</svg>")
     return "".join(out)
 
 
-def loop_to_comp_svg() -> str:
+def loop_to_comp_svg(tone: str | None = None) -> str:
     """The parts of a loop with append and of the same list comprehension,
     matched by colour: what to take, where from, which ones."""
+    # «что взять» takes the course colour; «откуда» then turns violet so the three stay apart
+    what = accent_of(tone)
+    src = BLUE if tone is None else VIOLET
     parts = [
         ("result = []", [("result = []", MUTED)]),
-        ("for n in range(1, 8):", [("for n in range(1, 8):", BLUE)]),
+        ("for n in range(1, 8):", [("for n in range(1, 8):", src)]),
         ("    if n % 2 == 0:", [("    ", INK), ("if n % 2 == 0:", GREEN)]),
         (
             "        result.append(n * n)",
-            [("        result.append(", MUTED), ("n * n", ACCENT), (")", MUTED)],
+            [("        result.append(", MUTED), ("n * n", what), (")", MUTED)],
         ),
     ]
     out = ['<svg viewBox="0 0 660 252" role="img" aria-label="Цикл и списковое включение">']
@@ -2319,9 +2324,9 @@ def loop_to_comp_svg() -> str:
             x += len(text) * char
     comp = [
         ("result = [", MUTED),
-        ("n * n", ACCENT),
+        ("n * n", what),
         (" ", INK),
-        ("for n in range(1, 8)", BLUE),
+        ("for n in range(1, 8)", src),
         (" ", INK),
         ("if n % 2 == 0", GREEN),
         ("]", MUTED),
@@ -2330,10 +2335,10 @@ def loop_to_comp_svg() -> str:
     marks = []
     for text, color in comp:
         out.append(_mono(x, y, text, 15, color))
-        if color in (ACCENT, BLUE, GREEN):
+        if color in (what, src, GREEN):
             marks.append((x, x + len(text) * char, color))
         x += len(text) * char
-    labels = {ACCENT: "что взять", BLUE: "откуда", GREEN: "какие"}
+    labels = {what: "что взять", src: "откуда", GREEN: "какие"}
     for x1, x2, color in marks:
         out.append(_bracket(x1, x2 - 4, y + 10, color))
         out.append(_text((x1 + x2) / 2, y + 38, labels[color], 13, color, "middle"))
@@ -3394,6 +3399,40 @@ def zip_pairs_svg(names, scores, start: int = 1, tone: str | None = None) -> str
     return "".join(out)
 
 
+def freq_table_svg(text: str = "BANANA", tone: str | None = None) -> str:
+    """A frequency table built letter by letter: every letter adds 1 to its key;
+    keys stand in the order of their first appearance."""
+    accent = accent_of(tone)
+    counts: dict = {}
+    seen: dict = {}
+    for i, ch in enumerate(text, 1):
+        counts[ch] = counts.get(ch, 0) + 1
+        seen.setdefault(ch, []).append(i)
+    cell = 40
+    top = 44
+    rows = len(counts)
+    out = [_svg(max(top + rows * 48 + 6, top + 70), f"Частоты букв {text}")]
+    out.append(_text(16, 22, "буквы по очереди", 13, MUTED))
+    for i, ch in enumerate(text):
+        x = 16 + i * cell
+        out.append(_box(x, top, cell, cell, INK, "#fff", rx=0, sw=1.25))
+        out.append(_text(x + cell / 2, top + 26, ch, 18, INK, "middle", 600))
+        out.append(_text(x + cell / 2, top + cell + 18, f"{i + 1}-я", 12, MUTED, "middle"))
+    x0 = 16 + len(text) * cell + 44
+    out.append(_text(x0, 22, "словарь counts", 13, MUTED))
+    for k, (ch, n) in enumerate(counts.items()):
+        y = top + k * 48
+        out.append(_box(x0, y, 48, 36, INK))
+        out.append(_mono(x0 + 24, y + 24, repr(ch), 15, INK, "middle"))
+        out.append(_arrow(x0 + 52, y + 18, x0 + 80, y + 18, MUTED))
+        out.append(_box(x0 + 84, y, 44, 36, accent, WASH, sw=2))
+        out.append(_mono(x0 + 106, y + 24, str(n), 16, INK, "middle", 600))
+        where = ", ".join(map(str, seen[ch]))
+        out.append(_text(x0 + 140, y + 23, f"+1 на буквах {where}", 12, MUTED))
+    out.append("</svg>")
+    return "".join(out)
+
+
 def time_split_svg(seconds: int = 3671, tone: str | None = None) -> str:
     """Seconds split into hours, minutes and seconds by // and %."""
     accent = accent_of(tone)
@@ -4035,6 +4074,7 @@ FIGURES = {
     "loop_checks": loop_checks_svg,
     "for_while": for_while_svg,
     "zip_pairs": zip_pairs_svg,
+    "freq_table": freq_table_svg,
     "loop_grid": loop_grid_svg,
     "venn": venn_svg,
     "loop_to_comp": loop_to_comp_svg,

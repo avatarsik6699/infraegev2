@@ -123571,19 +123571,19 @@
     {
       "task": {
         "id": "python-dictionaries-t01",
-        "title": "По списку ['кот', 'дом', 'кот', 'сад', 'дом'] найди значение с наибольшей…",
+        "title": "Напиши программу: самое частое значение",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 1,
         "estimated_minutes": null,
-        "answer_instruction": "Запишите ответы через пробел в порядке вопроса; списки и строки — так, как их печатает Python.",
+        "answer_instruction": "Запишите четыре значения через пробел: значение и частота для первого списка, затем для второго.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "По списку `['кот', 'дом', 'кот', 'сад', 'дом']` найди значение с наибольшей частотой. При равенстве выбери то, которое впервые встретилось раньше. Какой ответ для `['x', 'y', 'y', 'x']`?"
+              "markdown": "Напиши программу: по списку она находит значение с наибольшей частотой и печатает его и частоту; при равенстве выбирается то, которое встретилось раньше. Запусти её для `['кот', 'дом', 'кот', 'сад', 'дом']` и для `['x', 'y', 'y', 'x']`."
             }
           }
         ],
@@ -123591,7 +123591,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Словари и подсчёт частот»: проследи программу по строкам и запиши значения так, как их покажет Python."
+              "markdown": "Сначала частотная таблица `counts[item] = counts.get(item, 0) + 1`, потом второй проход по `counts.items()` со строгим `>`."
             }
           }
         ],
@@ -123599,7 +123599,27 @@
           {
             "type": "text",
             "data": {
-              "markdown": "кот 2: у «кот» и «дом» по 2, «кот» встретился раньше; для `['x', 'y', 'y', 'x']` — x 2."
+              "markdown": "Например:"
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "items = ['кот', 'дом', 'кот', 'сад', 'дом']\ncounts = {}\nfor item in items:\n    counts[item] = counts.get(item, 0) + 1\nbest_item = None\nbest_count = 0\nfor item, count in counts.items():\n    if count > best_count:\n        best_item = item\n        best_count = count\nprint(best_item, best_count)",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "«кот» и «дом» встречаются по 2 раза, раньше появился «кот». Во втором списке x и y — по 2, раньше x."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `кот 2 x 2`"
             }
           }
         ],
@@ -123640,19 +123660,27 @@
     {
       "task": {
         "id": "python-dictionaries-t03",
-        "title": "Чему равны {\"a\": 1}.get(\"z\", 0) и \"1\" in {1: \"x\"}?",
+        "title": "Что напечатает программа?",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 1,
         "estimated_minutes": null,
-        "answer_instruction": "Запишите ответы через пробел в порядке вопроса; списки и строки — так, как их печатает Python.",
+        "answer_instruction": "Запишите напечатанные строки через пробел в порядке вывода.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Чему равны `{\"a\": 1}.get(\"z\", 0)` и `\"1\" in {1: \"x\"}`?"
+              "markdown": "Что напечатает программа?"
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "print({\"a\": 1}.get(\"z\", 0))\nprint(\"1\" in {1: \"x\"})",
+              "caption": null
             }
           }
         ],
@@ -123660,7 +123688,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Словари и подсчёт частот»: проследи программу по строкам и запиши значения так, как их покажет Python."
+              "markdown": "`get` с запасным значением не останавливает программу. `in` проверяет ключи, а строка «1» — не число 1."
             }
           }
         ],
@@ -123668,7 +123696,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "0 и False: ключ — число 1, а не строка `\"1\"`."
+              "markdown": "Ключа «z» нет — `get` даёт запасное 0. Ключ словаря — число 1, а проверяется строка «1»: False."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `0 False`"
             }
           }
         ],
@@ -123709,7 +123743,7 @@
     {
       "task": {
         "id": "python-dictionaries-t07",
-        "title": "Найди сумму значений словаря {\"x\": 3, \"y\": 5} через .values()",
+        "title": "Что напечатает программа?",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 1,
@@ -123721,7 +123755,15 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Найди сумму значений словаря `{\"x\": 3, \"y\": 5}` через `.values()`."
+              "markdown": "Что напечатает программа?"
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "d = {\"x\": 3, \"y\": 5}\ntotal = 0\nfor value in d.values():\n    total += value\nprint(total)",
+              "caption": null
             }
           }
         ],
@@ -123729,7 +123771,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Словари и подсчёт частот»: проследи программу по строкам и запиши значения так, как их покажет Python."
+              "markdown": "`.values()` перебирает значения словаря, а не ключи."
             }
           }
         ],
@@ -123737,7 +123779,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "8."
+              "markdown": "Значения 3 и 5, сумма 8."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `8`"
             }
           }
         ],
@@ -123778,7 +123826,7 @@
     {
       "task": {
         "id": "python-sets-t02",
-        "title": "Чему равно len(set(\"BANANA\"))?",
+        "title": "Что напечатает программа?",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 1,
@@ -123790,7 +123838,15 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Чему равно `len(set(\"BANANA\"))`?"
+              "markdown": "Что напечатает программа?"
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "print(len(set(\"BANANA\")))",
+              "caption": null
             }
           }
         ],
@@ -123798,7 +123854,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Множества и выбор структуры данных»: проследи программу по строкам и запиши значения так, как их покажет Python."
+              "markdown": "Множество оставляет каждую букву один раз."
             }
           }
         ],
@@ -123806,7 +123862,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "3: B, A, N."
+              "markdown": "Различные буквы — B, A, N."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `3`"
             }
           }
         ],
@@ -123847,19 +123909,19 @@
     {
       "task": {
         "id": "python-sets-t06",
-        "title": "Что выбрать — список, множество или словарь — для задач: число разных слов…",
+        "title": "Что выбрать: список, множество или словарь",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 1,
         "estimated_minutes": null,
-        "answer_instruction": "Запишите ответы через пробел в порядке вопроса; списки и строки — так, как их печатает Python.",
+        "answer_instruction": "Запишите три слова через пробел в порядке задач: «список», «множество» или «словарь».",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Что выбрать — список, множество или словарь — для задач: число разных слов текста; частота каждого слова; все слова по порядку с повторами?"
+              "markdown": "Что выбрать — список, множество или словарь — для задач: 1) число разных слов текста; 2) частота каждого слова; 3) все слова по порядку с повторами?"
             }
           }
         ],
@@ -123867,7 +123929,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Множества и выбор структуры данных»: проследи программу по строкам и запиши значения так, как их покажет Python."
+              "markdown": "Только различные значения — множество; значение по ключу — словарь; порядок и повторы — список."
             }
           }
         ],
@@ -123875,7 +123937,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Множество; словарь; список."
+              "markdown": "Разные слова — множество, частоты — словарь «слово → сколько раз», порядок с повторами хранит только список."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `множество словарь список`"
             }
           }
         ],
@@ -123916,7 +123984,7 @@
     {
       "task": {
         "id": "python-sets-t07",
-        "title": "Сколько различных цифр в записи числа 2026101?",
+        "title": "Что напечатает программа?",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 1,
@@ -123928,7 +123996,15 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Сколько различных цифр в записи числа 2026101?"
+              "markdown": "Что напечатает программа?"
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "print(len(set(\"2026101\")))",
+              "caption": null
             }
           }
         ],
@@ -123936,7 +124012,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Множества и выбор структуры данных»: проследи программу по строкам и запиши значения так, как их покажет Python."
+              "markdown": "Строка из цифр — это символы; множество оставляет каждую цифру один раз."
             }
           }
         ],
@@ -123944,7 +124020,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "4: цифры 0, 1, 2, 6."
+              "markdown": "Различные цифры — 2, 0, 6, 1."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `4`"
             }
           }
         ],
@@ -123985,7 +124067,7 @@
     {
       "task": {
         "id": "python-sets-t08",
-        "title": "Напиши программу: собери множество чисел от 1 до 50, кратных 3, и множество…",
+        "title": "Напиши программу: кратные 3 или 5 до 50",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 2,
@@ -123997,7 +124079,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Напиши программу: собери множество чисел от 1 до 50, кратных 3, и множество кратных 5, объедини их и выведи размер объединения."
+              "markdown": "Напиши программу: собери множество чисел от 1 до 50, кратных 3, и множество кратных 5, объедини их и напечатай размер объединения. Запусти её и запиши ответ."
             }
           }
         ],
@@ -124005,7 +124087,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Множества и выбор структуры данных»: проследи программу по строкам и запиши значения так, как их покажет Python."
+              "markdown": "Множества собери из `range` с шагом: `set(range(3, 51, 3))`; объединение — `|`."
             }
           }
         ],
@@ -124013,7 +124095,27 @@
           {
             "type": "text",
             "data": {
-              "markdown": "23: 16 кратных 3, 10 кратных 5, 3 общих."
+              "markdown": "Например:"
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "threes = set(range(3, 51, 3))\nfives = set(range(5, 51, 5))\nprint(len(threes | fives))",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Кратных 3 — 16, кратных 5 — 10, общих (кратных 15) — 3: 16 + 10 − 3 = 23."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `23`"
             }
           }
         ],
@@ -124054,19 +124156,19 @@
     {
       "task": {
         "id": "python-sets-t09",
-        "title": "Какие буквы слова «программа» не встречаются в слове «информатика»?",
+        "title": "Буквы «программы», которых нет в «информатике»",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 1,
         "estimated_minutes": null,
-        "answer_instruction": "Запишите ответы через пробел в порядке вопроса; списки и строки — так, как их печатает Python.",
+        "answer_instruction": "Запишите буквы через пробел в алфавитном порядке.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Какие буквы слова «программа» не встречаются в слове «информатика»?"
+              "markdown": "Какие буквы слова «программа» не встречаются в слове «информатика»? Подсказка в коде: разность множеств."
             }
           }
         ],
@@ -124074,7 +124176,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Множества и выбор структуры данных»: проследи программу по строкам и запиши значения так, как их покажет Python."
+              "markdown": "`set(\"программа\") - set(\"информатика\")` — буквы первого слова, которых нет во втором."
             }
           }
         ],
@@ -124082,7 +124184,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "г и п."
+              "markdown": "В «программе» буквы п, р, о, г, а, м; в «информатике» есть р, о, а, м. Остаются г и п."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `г п`"
             }
           }
         ],
@@ -124123,7 +124231,7 @@
     {
       "task": {
         "id": "python-comprehensions-t01",
-        "title": "Преобразуй строку \"5 -8 3 0\" в список целых одной понятной записью и найди сумму",
+        "title": "Что напечатает программа?",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 1,
@@ -124135,7 +124243,15 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Преобразуй строку `\"5 -8 3 0\"` в список целых одной понятной записью и найди сумму."
+              "markdown": "Что напечатает программа?"
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "numbers = [int(part) for part in \"5 -8 3 0\".split()]\nprint(sum(numbers))",
+              "caption": null
             }
           }
         ],
@@ -124143,7 +124259,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Включения и функции для коллекций»: проследи программу по строкам и запиши значения так, как их покажет Python."
+              "markdown": "`split` даёт части-строки, `int` превращает каждую в число, `sum` складывает."
             }
           }
         ],
@@ -124151,7 +124267,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "[5, -8, 3, 0], сумма 0."
+              "markdown": "Список [5, -8, 3, 0], сумма 5 − 8 + 3 + 0 = 0."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `0`"
             }
           }
         ],
@@ -124192,19 +124314,27 @@
     {
       "task": {
         "id": "python-comprehensions-t02",
-        "title": "Что даст [n % 3 for n in range(7)]?",
+        "title": "Что напечатает программа?",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 1,
         "estimated_minutes": null,
-        "answer_instruction": "Запишите результат так, как его печатает Python.",
+        "answer_instruction": "Запишите список так, как его печатает Python.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Что даст `[n % 3 for n in range(7)]`?"
+              "markdown": "Что напечатает программа?"
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "print([n % 3 for n in range(7)])",
+              "caption": null
             }
           }
         ],
@@ -124212,7 +124342,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Включения и функции для коллекций»: проследи программу по строкам и запиши значения так, как их покажет Python."
+              "markdown": "Для каждого n от 0 до 6 берётся остаток от деления на 3."
             }
           }
         ],
@@ -124220,7 +124350,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "[0, 1, 2, 0, 1, 2, 0]."
+              "markdown": "Остатки 0, 1, 2 повторяются по кругу."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `[0, 1, 2, 0, 1, 2, 0]`"
             }
           }
         ],
@@ -124252,7 +124388,7 @@
         ],
         "checker": {
           "checker_type": "exact_match",
-          "answer_variants": ["[0, 1, 2, 0, 1, 2, 0]"],
+          "answer_variants": ["[0, 1, 2, 0, 1, 2, 0]", "[0,1,2,0,1,2,0]"],
           "numeric_tolerance": null
         }
       },
@@ -124261,19 +124397,27 @@
     {
       "task": {
         "id": "python-comprehensions-t04",
-        "title": "Что даст [x for x in range(20) if x % 7 == 3]?",
+        "title": "Что напечатает программа?",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 1,
         "estimated_minutes": null,
-        "answer_instruction": "Запишите результат так, как его печатает Python.",
+        "answer_instruction": "Запишите список так, как его печатает Python.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Что даст `[x for x in range(20) if x % 7 == 3]`?"
+              "markdown": "Что напечатает программа?"
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "print([x for x in range(20) if x % 7 == 3])",
+              "caption": null
             }
           }
         ],
@@ -124281,7 +124425,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Включения и функции для коллекций»: проследи программу по строкам и запиши значения так, как их покажет Python."
+              "markdown": "`if` в конце оставляет только числа с остатком 3 от деления на 7."
             }
           }
         ],
@@ -124289,7 +124433,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "[3, 10, 17]."
+              "markdown": "Такие числа до 20 — 3, 10 и 17."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `[3, 10, 17]`"
             }
           }
         ],
@@ -124321,7 +124471,7 @@
         ],
         "checker": {
           "checker_type": "exact_match",
-          "answer_variants": ["[3, 10, 17]"],
+          "answer_variants": ["[3, 10, 17]", "[3,10,17]"],
           "numeric_tolerance": null
         }
       },
@@ -124330,19 +124480,27 @@
     {
       "task": {
         "id": "python-comprehensions-t09",
-        "title": "Напиши программу: для списка [2, 8, -4] проверь через all и any, все ли…",
+        "title": "Что напечатает программа?",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 2,
         "estimated_minutes": null,
-        "answer_instruction": "Запишите ответы через пробел в порядке вопроса; списки и строки — так, как их печатает Python.",
+        "answer_instruction": "Запишите напечатанные строки через пробел в порядке вывода.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Напиши программу: для списка `[2, 8, -4]` проверь через `all` и `any`, все ли числа чётные и есть ли отрицательные."
+              "markdown": "Что напечатает программа?"
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "numbers = [2, 8, -4]\nprint(all([x % 2 == 0 for x in numbers]))\nprint(any([x < 0 for x in numbers]))",
+              "caption": null
             }
           }
         ],
@@ -124350,7 +124508,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Включения и функции для коллекций»: проследи программу по строкам и запиши значения так, как их покажет Python."
+              "markdown": "`all` — все ли истинны, `any` — есть ли хоть одно истинное."
             }
           }
         ],
@@ -124358,7 +124516,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "True True."
+              "markdown": "Все три числа чётные — True; −4 отрицательное — True."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `True True`"
             }
           }
         ],
@@ -124399,7 +124563,7 @@
     {
       "task": {
         "id": "python-comprehensions-t10",
-        "title": "Найди сумму квадратов нечётных чисел от 1 до 9 одним выражением со…",
+        "title": "Напиши выражение: сумма квадратов нечётных",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 1,
@@ -124411,7 +124575,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Найди сумму квадратов нечётных чисел от 1 до 9 одним выражением со включением и `sum`."
+              "markdown": "Напиши одно выражение со включением и `sum`, которое находит сумму квадратов нечётных чисел от 1 до 9, напечатай его и запиши ответ."
             }
           }
         ],
@@ -124419,7 +124583,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Включения и функции для коллекций»: проследи программу по строкам и запиши значения так, как их покажет Python."
+              "markdown": "Нечётные от 1 до 9 — `range(1, 10, 2)`; квадраты — `k * k` в начале включения."
             }
           }
         ],
@@ -124427,7 +124591,27 @@
           {
             "type": "text",
             "data": {
-              "markdown": "165 = 1 + 9 + 25 + 49 + 81."
+              "markdown": "Например:"
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "print(sum([k * k for k in range(1, 10, 2)]))",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "1 + 9 + 25 + 49 + 81 = 165."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `165`"
             }
           }
         ],

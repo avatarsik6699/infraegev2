@@ -4,6 +4,7 @@ import { Typography } from "~/shared/components/typography";
 import {
   LessonDiagram,
   LessonSummary,
+  ProofDisclosure,
 } from "~/shared/components/learning-content";
 import { defineCourseLesson } from "../lib/define-course-lesson";
 import { pythonSetsLessonPublication } from "./course-publication.mjs";
@@ -22,12 +23,15 @@ export const pythonSetsLesson = defineCourseLesson({
       explanation: (
         <>
           <Typography.Text>
+            Сколько разных слов в тексте? Кто есть в обоих списках участников?
+            На такие вопросы неважны порядок и повторы — важно только, какие
+            значения встречаются.{" "}
             <strong>
               Множество хранит только различные значения и быстро отвечает «есть
-              ли элемент», но не хранит порядок и повторы
+              ли элемент»
             </strong>
-            . Опора — ключи словаря: множество — это словарь без значений, с
-            теми же требованиями к элементам.
+            . Это как ключи словаря без значений, с теми же требованиями к
+            элементам.
           </Typography.Text>
           <Typography.Text>
             Возьмём список <Notation>{"[3, 1, 3, 2, 1]"}</Notation> и два списка
@@ -43,18 +47,17 @@ export const pythonSetsLesson = defineCourseLesson({
         <>
           <Typography.Text>
             <strong>Множество оставляет только различные значения.</strong>{" "}
-            <strong>Множество</strong> (<Notation>{"set"}</Notation>) хранит
-            различные хешируемые элементы и удобно для проверки принадлежности.
+            Множество (<Notation>{"set"}</Notation>) хранит каждое значение один
+            раз и быстро проверяет, есть ли оно. Элементами, как и ключами
+            словаря, могут быть числа, строки и кортежи из них.
           </Typography.Text>
           <CodeBlock
             code={
               "values = [3, 1, 3, 2, 1]\nunique = set(values)\nprint(len(unique))\nprint(2 in unique)"
             }
-            label={
-              "Множество (set) хранит различные хешируемые элементы и удобно для проверки принадлежности"
-            }
+            label={"Множество хранит каждое значение один раз"}
             language="python"
-            fileName="values.py"
+            fileName="main.py"
             output={"3\nTrue"}
           />
           <Typography.Text>
@@ -133,15 +136,20 @@ export const pythonSetsLesson = defineCourseLesson({
           />
           <Typography.Text>
             Повторное <Notation>{"add(2)"}</Notation> ничего не изменило:
-            элемент уже есть. <Notation>{"frozenset"}</Notation> — неизменяемое
-            множество, которое может быть ключом словаря.
+            элемент уже есть.
           </Typography.Text>
-          <Typography.Text>
-            У одинакового знака могут быть разные операции для разных типов: для
-            целых <Notation>{"&"}</Notation> работает с битами, для множеств
-            находит пересечение. Значение определяется типами операндов.
-            Логическое <Notation>{"and"}</Notation> — отдельная операция.
-          </Typography.Text>
+          <ProofDisclosure
+            summary="Тонкости: & для чисел и frozenset"
+            kind="nuance"
+          >
+            <Typography.Text>
+              Один и тот же знак означает разное для разных типов: для множеств{" "}
+              <Notation>{"&"}</Notation> — пересечение, для целых чисел —
+              операция над битами (урок о записи чисел), а логическое «и» — это{" "}
+              <Notation>{"and"}</Notation>. <Notation>{"frozenset"}</Notation> —
+              неизменяемое множество; его можно сделать ключом словаря.
+            </Typography.Text>
+          </ProofDisclosure>
         </>
       ),
     },
@@ -187,7 +195,7 @@ export const pythonSetsLesson = defineCourseLesson({
             }
             label={"Пока порядок результата не важен"}
             language="python"
-            fileName="first.py"
+            fileName="main.py"
             output={"{'Илья'}"}
           />
           <Typography.Text>
@@ -200,6 +208,22 @@ export const pythonSetsLesson = defineCourseLesson({
     },
   ],
   checkpoint: [
+    {
+      id: "t2",
+      prompt: (
+        <>
+          <Typography.Text>
+            Что напечатает{" "}
+            <Notation>{"print(len(set([3, 1, 3, 2, 1])))"}</Notation>?
+          </Typography.Text>
+        </>
+      ),
+      reveal: (
+        <>
+          <Typography.Text>3: различные значения — 1, 2 и 3.</Typography.Text>
+        </>
+      ),
+    },
     {
       id: "t1",
       prompt: (
@@ -285,9 +309,14 @@ export const pythonSetsLesson = defineCourseLesson({
   ],
   result: (
     <>
+      <Typography.Text>
+        Множество отвечает на вопросы «есть ли» и «сколько разных», а структуру
+        данных выбирают по нужным действиям. Вот что понадобится дальше.
+      </Typography.Text>
       <LessonSummary
         items={[
           {
+            key: <Notation>{"set(items)"}</Notation>,
             note: (
               <>
                 <Notation>{"set(items)"}</Notation> оставляет различные
@@ -296,6 +325,7 @@ export const pythonSetsLesson = defineCourseLesson({
             ),
           },
           {
+            key: "Пустое множество",
             note: (
               <>
                 <Notation>{"{}"}</Notation> — пустой словарь, пустое множество —{" "}
@@ -304,6 +334,7 @@ export const pythonSetsLesson = defineCourseLesson({
             ),
           },
           {
+            key: "Операции",
             note: (
               <>
                 <Notation>{"|"}</Notation>, <Notation>{"&"}</Notation>,{" "}
@@ -313,6 +344,7 @@ export const pythonSetsLesson = defineCourseLesson({
             ),
           },
           {
+            key: "Изменение",
             note: (
               <>
                 <Notation>{"add"}</Notation>, <Notation>{"update"}</Notation>,{" "}
@@ -323,6 +355,7 @@ export const pythonSetsLesson = defineCourseLesson({
             ),
           },
           {
+            key: "Выбор",
             note: (
               <>Количество разных — множество, частота каждого — словарь.</>
             ),

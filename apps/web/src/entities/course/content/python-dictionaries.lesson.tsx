@@ -3,6 +3,7 @@ import { Notation } from "~/shared/components/notation";
 import { Typography } from "~/shared/components/typography";
 import {
   CodeRunner,
+  LessonDiagram,
   LessonSummary,
   ProofDisclosure,
 } from "~/shared/components/learning-content";
@@ -23,13 +24,14 @@ export const pythonDictionariesLesson = defineCourseLesson({
       explanation: (
         <>
           <Typography.Text>
+            В списке значение ищут по номеру позиции. Но часто нужен ответ на
+            другой вопрос: какой балл у Анны, сколько раз встретилась буква A.{" "}
             <strong>
-              Словарь находит значение по смысловому ключу, а не по номеру
-              позиции, и поэтому естественно хранит частоты
+              Словарь находит значение по смысловому ключу — имени, слову, букве
+              — и поэтому естественно хранит частоты
             </strong>
-            . Опора — счётчик из урока о <Notation>{"while"}</Notation>:
-            частотная таблица — это много счётчиков сразу, по одному на каждое
-            значение.
+            . Частотная таблица — это много счётчиков из урока о{" "}
+            <Notation>{"while"}</Notation> сразу, по одному на каждое значение.
           </Typography.Text>
           <Typography.Text>
             Работать будем с баллами учеников{" "}
@@ -61,7 +63,7 @@ export const pythonDictionariesLesson = defineCourseLesson({
               "Словарь (dict) хранит соответствия между ключами и значениями"
             }
             language="python"
-            fileName="scores.py"
+            fileName="main.py"
             output={"91\n{'Анна': 95, 'Илья': 84, 'Марк': 88}"}
           />
           <Typography.Text>
@@ -75,7 +77,7 @@ export const pythonDictionariesLesson = defineCourseLesson({
               "Чтение отсутствующего ключа через квадратные скобки вызывает ошибку"
             }
             language="python"
-            fileName="scores.py"
+            fileName="main.py"
             error={"KeyError: 'Ольга'"}
           />
           <Typography.Text>Безопасное чтение и проверка ключа:</Typography.Text>
@@ -85,7 +87,7 @@ export const pythonDictionariesLesson = defineCourseLesson({
             }
             label={"Безопасное чтение и проверка ключа"}
             language="python"
-            fileName="scores.py"
+            fileName="main.py"
             output={"0\nTrue\nFalse"}
           />
           <Typography.Text>
@@ -101,21 +103,16 @@ export const pythonDictionariesLesson = defineCourseLesson({
     },
     {
       id: "s2",
-      navLabel: "Хешируемые ключи",
+      navLabel: "Какие бывают ключи",
       explanation: (
         <>
           <Typography.Text>
             <strong>
-              Ключом может быть только хешируемое значение: число, строка,
-              кортеж из таких.
+              Ключом может быть число, строка или кортеж из них; список —
+              нельзя.
             </strong>{" "}
-            Для быстрого поиска словарь вычисляет по ключу число —{" "}
-            <strong>хеш</strong> — и по нему сразу находит место хранения, не
-            перебирая все пары. Поэтому ключ не должен меняться, пока лежит в
-            словаре: иначе изменится его хеш и пара потеряется. Значения, для
-            которых хеш определён, называют <strong>хешируемыми</strong>: это
-            числа, строки и кортежи из хешируемых элементов. Список, словарь и
-            обычное множество изменяемы и ключами быть не могут:
+            Ключ не должен меняться, пока лежит в словаре, поэтому изменяемые
+            значения — список, словарь, множество — ключами быть не могут:
           </Typography.Text>
           <CodeBlock
             code={"d = {[1, 2]: 3}"}
@@ -128,10 +125,20 @@ export const pythonDictionariesLesson = defineCourseLesson({
               "TypeError: cannot use 'list' as a dict key (unhashable type: 'list')"
             }
           />
-          <Typography.Text>
-            Кортеж, содержащий список, тоже не годится: сам кортеж не меняется,
-            но список внутри него может.
-          </Typography.Text>
+          <ProofDisclosure
+            summary="Тонкости: хеш и хешируемые значения"
+            kind="nuance"
+          >
+            <Typography.Text>
+              Для быстрого поиска словарь вычисляет по ключу число —{" "}
+              <strong>хеш</strong> — и по нему сразу находит место хранения, не
+              перебирая все пары. Если бы ключ изменился, изменился бы и хеш, и
+              пара потерялась бы. Значения, у которых есть хеш, называют
+              хешируемыми: числа, строки, кортежи из таких значений. Кортеж,
+              содержащий список, не годится: список внутри него может
+              измениться.
+            </Typography.Text>
+          </ProofDisclosure>
           <Typography.Text>
             Значения словаря такими ограничениями не связаны: можно хранить под
             именем пользователя целый список его результатов.
@@ -158,21 +165,20 @@ export const pythonDictionariesLesson = defineCourseLesson({
               "Словарь обходят по ключам или по парам; порядок — порядок добавления"
             }
             language="python"
-            fileName="scores.py"
+            fileName="main.py"
             output={"Анна\nИлья\nАнна 91\nИлья 84\n175"}
           />
           <Typography.Text>
             <Notation>{".items()"}</Notation> позволяет получать пары,{" "}
             <Notation>{".keys()"}</Notation> — ключи,{" "}
-            <Notation>{".values()"}</Notation> — значения. Это представления
-            данных словаря, а не обязательно отдельные списки.{" "}
+            <Notation>{".values()"}</Notation> — значения;{" "}
             <Notation>{"list(scores)"}</Notation> создаёт список ключей.
           </Typography.Text>
           <Typography.Text>
-            В Python 3.7+ сохраняется порядок добавления ключей. Это не
-            сортировка: ключи не выстраиваются автоматически по алфавиту или
-            величине. Замена значения существующего ключа не переносит его в
-            конец. Не меняй количество ключей во время обхода того же словаря.
+            Ключи идут в порядке добавления. Это не сортировка: по алфавиту или
+            величине они сами не выстраиваются, а замена значения не переносит
+            ключ в конец. Не добавляй и не удаляй ключи во время обхода того же
+            словаря.
           </Typography.Text>
         </>
       ),
@@ -187,7 +193,9 @@ export const pythonDictionariesLesson = defineCourseLesson({
               Частотная таблица — словарь «значение → сколько раз встретилось».
             </strong>{" "}
             <strong>Частота</strong> — число появлений значения. Пройдём по
-            буквам и увеличим соответствующий счётчик:
+            буквам и увеличим соответствующий счётчик. Нажми «Запуск» и пройди
+            подсчёт по шагам: на каждой итерации <Notation>{"for"}</Notation>{" "}
+            берёт очередную букву, а следующая строка увеличивает её счётчик:
           </Typography.Text>
           <CodeRunner
             {...lessonMedia.runLetterCounts}
@@ -201,15 +209,16 @@ export const pythonDictionariesLesson = defineCourseLesson({
             второй A — уже 1, и запись становится{" "}
             <Notation>{"'A': 2"}</Notation>.
           </Typography.Text>
-          <Typography.Text>
-            Инвариант: после обработки первых <Notation>{"k"}</Notation>{" "}
-            символов словарь содержит точные частоты в этой части текста.
-          </Typography.Text>
-          <Typography.Text>
-            Запусти подсчёт по шагам: на каждой итерации{" "}
-            <Notation>{"for"}</Notation> берёт очередную букву, а следующая
-            строка увеличивает её счётчик в словаре.
-          </Typography.Text>
+          <LessonDiagram
+            {...lessonMedia.freqTable}
+            caption={
+              <>
+                Каждая буква прибавляет 1 к своему ключу. Ключи стоят в порядке
+                первого появления: B, затем A, затем N. После любой буквы в
+                словаре лежат точные частоты уже пройденной части слова.
+              </>
+            }
+          />
         </>
       ),
     },
@@ -230,9 +239,9 @@ export const pythonDictionariesLesson = defineCourseLesson({
             code={
               "items = ['a', 'b', 'a', 'c', 'b', 'a']\ncounts = {}\nfor item in items:\n    counts[item] = counts.get(item, 0) + 1\n\nbest_item = None\nbest_count = 0\nfor item, count in counts.items():\n    if count > best_count:\n        best_item = item\n        best_count = count\nprint(best_item, best_count)"
             }
-            label={"Программа на Python"}
+            label={"Самое частое значение"}
             language="python"
-            fileName="items.py"
+            fileName="main.py"
             output={"a 3"}
           />
           <Typography.Text>
@@ -373,48 +382,69 @@ export const pythonDictionariesLesson = defineCourseLesson({
   ],
   result: (
     <>
+      <Typography.Text>
+        Словарь отвечает на вопрос «что лежит под этим ключом», а частотная
+        таблица считает все значения за один проход. Вот что понадобится дальше.
+      </Typography.Text>
       <LessonSummary
         items={[
           {
+            key: <Notation>{'{"Анна": 91}'}</Notation>,
             note: (
               <>
-                <Notation>{"d[key]"}</Notation> читает значение, отсутствующий
-                ключ даёт <Notation>{"KeyError"}</Notation>;{" "}
-                <Notation>{"d.get(key, default)"}</Notation> безопасен.
+                Пары «ключ — значение»; ключ уникален, новое присваивание
+                заменяет значение.
               </>
             ),
           },
           {
+            key: "Чтение",
             note: (
               <>
-                Присваивание по существующему ключу заменяет значение; ключи
-                уникальны.
+                <Notation>{"d[key]"}</Notation> без ключа —{" "}
+                <Notation>{"KeyError"}</Notation>;{" "}
+                <Notation>{"d.get(key, 0)"}</Notation> — значение или запасное.
               </>
             ),
           },
           {
+            key: <Notation>{"in"}</Notation>,
+            note: <>Проверяет ключи, а не значения.</>,
+          },
+          {
+            key: "Ключи",
             note: (
               <>
-                Ключи хешируемые: строки, числа, кортежи из них; список ключом
-                быть не может.
+                Число, строка, кортеж из них; список и другие изменяемые
+                значения — нельзя.
               </>
             ),
           },
           {
+            key: "Обход",
             note: (
               <>
-                <Notation>{"in"}</Notation> проверяет ключи;{" "}
-                <Notation>{".items()"}</Notation> даёт пары,{" "}
-                <Notation>{".values()"}</Notation> — значения; порядок — порядок
-                добавления.
+                <Notation>{"for key in d"}</Notation> — ключи;{" "}
+                <Notation>{"for key, value in d.items()"}</Notation> — пары;
+                порядок — порядок добавления.
               </>
             ),
           },
           {
+            key: "Частоты",
             note: (
               <>
-                Частоты:{" "}
-                <Notation>{"counts[x] = counts.get(x, 0) + 1"}</Notation>.
+                <Notation>{"counts[x] = counts.get(x, 0) + 1"}</Notation> для
+                каждого значения.
+              </>
+            ),
+          },
+          {
+            key: "Самое частое",
+            note: (
+              <>
+                Второй проход по парам; строгое <Notation>{">"}</Notation>{" "}
+                оставляет при равенстве того, кто встретился раньше.
               </>
             ),
           },

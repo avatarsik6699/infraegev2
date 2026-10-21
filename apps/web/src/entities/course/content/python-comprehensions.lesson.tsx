@@ -59,7 +59,7 @@ export const pythonComprehensionsLesson = defineCourseLesson({
             }
             label={"Построим квадраты чисел"}
             language="python"
-            fileName="squares.py"
+            fileName="main.py"
             output={"[1, 4, 9, 16, 25]"}
           />
           <Typography.Text>
@@ -72,7 +72,7 @@ export const pythonComprehensionsLesson = defineCourseLesson({
               "Тот же смысл можно выразить списковым включением — записью правила построения списка"
             }
             language="python"
-            fileName="squares.py"
+            fileName="main.py"
             output={"[1, 4, 9, 16, 25]"}
           />
           <Typography.Text>
@@ -114,7 +114,7 @@ export const pythonComprehensionsLesson = defineCourseLesson({
               "if после источника отбирает элементы, а условное выражение перед for выбирает значение"
             }
             language="python"
-            fileName="even_squares.py"
+            fileName="main.py"
             output={"[4, 16, 36]"}
           />
           <Typography.Text>
@@ -128,7 +128,7 @@ export const pythonComprehensionsLesson = defineCourseLesson({
             }
             label={"Условное выражение перед for решает другую задачу"}
             language="python"
-            fileName="labels.py"
+            fileName="main.py"
             output={"['other', 'other', 'plus']"}
           />
           <Typography.Text>
@@ -157,7 +157,7 @@ export const pythonComprehensionsLesson = defineCourseLesson({
               "Несколько for во включении идут в том же порядке, что вложенные циклы"
             }
             language="python"
-            fileName="pairs.py"
+            fileName="main.py"
             output={"[(0, 0), (0, 1), (0, 2), (1, 0), (1, 1), (1, 2)]"}
           />
           <Typography.Text>
@@ -187,7 +187,7 @@ export const pythonComprehensionsLesson = defineCourseLesson({
             }
             label={"Независимые строки таблицы теперь можно создавать так"}
             language="python"
-            fileName="table.py"
+            fileName="main.py"
             output={"[[9, 0, 0], [0, 0, 0]]"}
           />
           <Typography.Text>
@@ -219,7 +219,7 @@ export const pythonComprehensionsLesson = defineCourseLesson({
               "Бывают включения для множеств и словарей, а частые циклы заменяют готовые функции"
             }
             language="python"
-            fileName="unique_lengths.py"
+            fileName="main.py"
             output={"{3, 4}\n{0: 0, 1: 1, 2: 4, 3: 9}"}
           />
           <Typography.Text>
@@ -236,7 +236,7 @@ export const pythonComprehensionsLesson = defineCourseLesson({
           </Typography.Text>
           <CodeBlock
             code={"print(sum([]))\nprint(min([]))"}
-            label={"Программа на Python"}
+            label={"sum и min для пустого списка"}
             language="python"
             fileName="main.py"
             output={"0"}
@@ -255,9 +255,9 @@ export const pythonComprehensionsLesson = defineCourseLesson({
             code={
               "numbers = [2, 4, 8]\nprint(all([x % 2 == 0 for x in numbers]))\nprint(any([x < 0 for x in numbers]))"
             }
-            label={"Программа на Python"}
+            label={"all и any"}
             language="python"
-            fileName="numbers.py"
+            fileName="main.py"
             output={"True\nFalse"}
           />
           <Typography.Text>
@@ -288,7 +288,7 @@ export const pythonComprehensionsLesson = defineCourseLesson({
               'Преобразуем строку "10 -2 7" в список целых одной понятной записью'
             }
             language="python"
-            fileName="line.py"
+            fileName="main.py"
             output={"[10, -2, 7]\n15 -2 10"}
           />
           <Typography.Text>
@@ -493,9 +493,14 @@ export const pythonComprehensionsLesson = defineCourseLesson({
   ],
   result: (
     <>
+      <Typography.Text>
+        Включения и готовые функции заменяют самые частые циклы одной понятной
+        записью. Вот что понадобится дальше.
+      </Typography.Text>
       <LessonSummary
         items={[
           {
+            key: "Включение",
             note: (
               <>
                 <Notation>{"[выражение for x in источник]"}</Notation> — тот же
@@ -504,6 +509,7 @@ export const pythonComprehensionsLesson = defineCourseLesson({
             ),
           },
           {
+            key: "Фильтр и выбор",
             note: (
               <>
                 <Notation>{"if"}</Notation> в конце отбирает элементы;{" "}
@@ -513,6 +519,7 @@ export const pythonComprehensionsLesson = defineCourseLesson({
             ),
           },
           {
+            key: "Несколько for",
             note: (
               <>
                 Несколько <Notation>{"for"}</Notation> — вложенные циклы в том
@@ -521,6 +528,7 @@ export const pythonComprehensionsLesson = defineCourseLesson({
             ),
           },
           {
+            key: "Множество и словарь",
             note: (
               <>
                 <Notation>{"{x for …}"}</Notation> — множество,{" "}
@@ -529,6 +537,7 @@ export const pythonComprehensionsLesson = defineCourseLesson({
             ),
           },
           {
+            key: "Готовые функции",
             note: (
               <>
                 <Notation>{"sum"}</Notation> пустого — 0,{" "}

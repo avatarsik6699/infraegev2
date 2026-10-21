@@ -225,6 +225,9 @@ PRINTED_LINES = {
     ),
     "python-lists-t05": "t = [[0] * 2] * 3\nt[1][0] = 5\nprint(t)",
     "python-tuples-t06": 'count = 0\nfor pair in zip([1, 2, 3], "ab"):\n    count += 1\nprint(count)',
+    "python-dictionaries-t03": 'print({"a": 1}.get("z", 0))\nprint("1" in {1: "x"})',
+    "python-sets-t02": 'print(len(set("BANANA")))',
+    "python-comprehensions-t04": "print([x for x in range(20) if x % 7 == 3])",
 }
 
 
