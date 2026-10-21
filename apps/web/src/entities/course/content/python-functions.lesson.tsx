@@ -3,7 +3,9 @@ import { Notation } from "~/shared/components/notation";
 import { Typography } from "~/shared/components/typography";
 import {
   CodeRunner,
+  LessonDiagram,
   LessonSummary,
+  ProofDisclosure,
 } from "~/shared/components/learning-content";
 import { defineCourseLesson } from "../lib/define-course-lesson";
 import { pythonFunctionsLessonPublication } from "./course-publication.mjs";
@@ -22,20 +24,21 @@ export const pythonFunctionsLesson = defineCourseLesson({
       explanation: (
         <>
           <Typography.Text>
+            Ты уже вызывал готовые действия: <Notation>{"print"}</Notation>,{" "}
+            <Notation>{"len"}</Notation>, <Notation>{"max"}</Notation>. Когда
+            одно и то же вычисление нужно в нескольких местах, его хочется
+            записать один раз и вызывать по имени.{" "}
             <strong>
-              Функция — именованное действие: параметры получают входные данные,{" "}
-              <Notation>{"return"}</Notation> отдаёт результат туда, где
-              произошёл вызов, а имена внутри функции живут отдельно от внешних
+              Функция — именованное действие: ей передают входные данные, она
+              возвращает результат туда, где её вызвали
             </strong>
-            . Опора — <Notation>{"print"}</Notation>,{" "}
-            <Notation>{"len"}</Notation> и методы, которые ты уже вызывал, и
-            модель «имя ссылается на объект»: теперь ты сам создаёшь такие
-            действия.
+            .
           </Typography.Text>
           <Typography.Text>
-            Всё покажем на прямоугольнике 3 × 5: функция вычислит его площадь, а
-            потом на нём же разберём <Notation>{"return"}</Notation>, локальные
-            имена и изменение переданных данных.
+            Начнём с площади прямоугольника 3 × 5, затем разберём, чем{" "}
+            <Notation>{"return"}</Notation> отличается от{" "}
+            <Notation>{"print"}</Notation>, почему имена внутри функции не
+            мешают внешним и что бывает, когда функция получает список.
           </Typography.Text>
         </>
       ),
@@ -49,18 +52,15 @@ export const pythonFunctionsLesson = defineCourseLesson({
             <strong>
               Функция даёт имя действию с входными данными и результатом.
             </strong>{" "}
-            Если одну проверку приходится повторять или её смысл теряется среди
-            остальных строк, полезно дать ей имя. <strong>Функция</strong>{" "}
-            объединяет инструкции в действие с входными данными и, возможно,
-            возвращаемым результатом.
+            Посчитаем площадь прямоугольника функцией:
           </Typography.Text>
           <CodeBlock
             code={
               "def rectangle_area(width, height):\n    return width * height\n\narea = rectangle_area(3, 5)\nprint(area)\nprint(rectangle_area(2, 10))"
             }
-            label={"Программа на Python"}
+            label={"Функция площади прямоугольника"}
             language="python"
-            fileName="rectangle_area.py"
+            fileName="main.py"
             output={"15\n20"}
           />
           <Typography.Text>
@@ -72,13 +72,34 @@ export const pythonFunctionsLesson = defineCourseLesson({
             конкретные переданные значения.
           </Typography.Text>
           <Typography.Text>
-            При выполнении определения тело не запускается. Оно выполняется при
-            вызове. Поэтому одинаковую функцию можно вызвать много раз с разными
-            аргументами: здесь второй вызов дал 20. Программа должна успеть
-            выполнить определение до момента вызова; определение другой функции
-            может находиться ниже, если до реального вызова оно уже будет
-            выполнено.
+            При выполнении <Notation>{"def"}</Notation> тело не запускается: оно
+            выполняется при каждом вызове. Поэтому одну функцию можно вызвать
+            много раз с разными аргументами: второй вызов дал 20. Вот что
+            происходит при вызове <Notation>{"rectangle_area(3, 5)"}</Notation>:
           </Typography.Text>
+          <LessonDiagram
+            {...lessonMedia.callFlow}
+            caption={
+              <>
+                Аргументы 3 и 5 становятся значениями параметров{" "}
+                <Notation>{"width"}</Notation> и <Notation>{"height"}</Notation>
+                , тело вычисляет 15, а <Notation>{"return"}</Notation> отдаёт
+                его в строку вызова — она становится{" "}
+                <Notation>{"area = 15"}</Notation>.
+              </>
+            }
+          />
+          <ProofDisclosure
+            summary="Тонкости: где писать определение"
+            kind="nuance"
+          >
+            <Typography.Text>
+              Определение должно выполниться раньше вызова. Функция может
+              вызывать другую функцию, определённую ниже в файле, — если к
+              моменту реального вызова обе <Notation>{"def"}</Notation> уже
+              выполнены. Проще всего писать все функции в начале файла.
+            </Typography.Text>
+          </ProofDisclosure>
         </>
       ),
     },
@@ -95,7 +116,8 @@ export const pythonFunctionsLesson = defineCourseLesson({
             <Notation>{"return"}</Notation> завершает текущий вызов и передаёт
             значение тому месту, где он произошёл.{" "}
             <Notation>{"print"}</Notation> показывает текст, но не делает этот
-            текст возвращаемым результатом.
+            текст возвращаемым результатом. Нажми «Запуск» и пройди программу по
+            шагам:
           </Typography.Text>
           <CodeRunner
             {...lessonMedia.runSquare}
@@ -104,10 +126,9 @@ export const pythonFunctionsLesson = defineCourseLesson({
             }
           />
           <Typography.Text>
-            Запусти программу по шагам. При вызове у функции появляются свои
-            переменные — рамка «вызов square(4)» внутри программы; после{" "}
-            <Notation>{"return"}</Notation> она исчезает, а значение
-            возвращается в строку, где был вызов.
+            При вызове у функции появляются свои переменные — рамка «вызов
+            square(4)» внутри программы; после <Notation>{"return"}</Notation>{" "}
+            она исчезает, а значение возвращается в строку, где был вызов.
           </Typography.Text>
           <Typography.Text>
             Если вместо <Notation>{"return"}</Notation> поставить{" "}
@@ -119,9 +140,9 @@ export const pythonFunctionsLesson = defineCourseLesson({
             code={
               "def square(number):\n    print(number * number)\n\nresult = square(4)\nprint(result)"
             }
-            label={"Программа на Python"}
+            label={"print вместо return"}
             language="python"
-            fileName="square.py"
+            fileName="main.py"
             output={"16\nNone"}
           />
           <Typography.Text>
@@ -139,7 +160,7 @@ export const pythonFunctionsLesson = defineCourseLesson({
               "Инструкции после выполненного return в этом вызове уже не исполняются"
             }
             language="python"
-            fileName="describe_sign.py"
+            fileName="main.py"
             output={"отрицательное ноль"}
           />
           <Typography.Text>
@@ -162,23 +183,17 @@ export const pythonFunctionsLesson = defineCourseLesson({
             <strong>Область видимости</strong> — часть программы, в которой имя
             разрешается определённым способом. Параметры и присваивания внутри
             функции обычно создают локальные имена, существующие для данного
-            вызова.
+            вызова. Пройди программу по шагам:
           </Typography.Text>
           <CodeRunner
             {...lessonMedia.runLocalNames}
-            label={"Программа на Python"}
+            label={"Локальное x не заменяет внешнее"}
           />
           <Typography.Text>
-            Внутреннее <Notation>{"x"}</Notation> не заменяет внешнее. При
-            поиске имени Python рассматривает локальную область, окружающие
-            области функций, область модуля и встроенные имена. Этот порядок
-            часто сокращают как LEGB; полезнее понимать сами уровни, чем
-            заучивать буквы.
-          </Typography.Text>
-          <Typography.Text>
-            Запусти программу выше по шагам: <Notation>{"x = 3"}</Notation>{" "}
-            появляется в рамке вызова <Notation>{"calculate"}</Notation>, а
-            внешнее <Notation>{"x"}</Notation> в программе остаётся 10.
+            <Notation>{"x = 3"}</Notation> появляется в рамке вызова{" "}
+            <Notation>{"calculate"}</Notation>, а внешнее{" "}
+            <Notation>{"x"}</Notation> в программе остаётся 10: внутреннее имя
+            не заменяет внешнее.
           </Typography.Text>
           <Typography.Text>
             Если внутри функции есть присваивание имени, Python обычно считает
@@ -191,7 +206,7 @@ export const pythonFunctionsLesson = defineCourseLesson({
               "Поэтому попытка сначала прочитать его, а потом присвоить приводит к ошибке"
             }
             language="python"
-            fileName="show.py"
+            fileName="main.py"
             error={
               "UnboundLocalError: cannot access local variable 'x' where it is not associated with a value"
             }
@@ -200,11 +215,21 @@ export const pythonFunctionsLesson = defineCourseLesson({
             Строка <Notation>{"x = 3"}</Notation> сделала{" "}
             <Notation>{"x"}</Notation> локальным во всей функции, и{" "}
             <Notation>{"print(x)"}</Notation> обратился к локальному имени,
-            которое ещё не получило значения. Конструкции{" "}
-            <Notation>{"global"}</Notation> и <Notation>{"nonlocal"}</Notation>{" "}
-            позволяют явно выбрать внешнюю область, но для первых программ чаще
-            проще передать нужное значение параметром и вернуть новое.
+            которое ещё не получило значения. Нужно внешнее значение — передай
+            его параметром и верни новое.
           </Typography.Text>
+          <ProofDisclosure
+            summary="Тонкости: порядок поиска имён, global и nonlocal"
+            kind="nuance"
+          >
+            <Typography.Text>
+              Имя Python ищет по уровням: сначала в текущем вызове, затем в
+              окружающих функциях, затем в файле, затем среди встроенных имён —
+              сокращённо LEGB. <Notation>{"global"}</Notation> и{" "}
+              <Notation>{"nonlocal"}</Notation> позволяют функции менять имя
+              внешнего уровня, но программу с ними труднее читать.
+            </Typography.Text>
+          </ProofDisclosure>
           <Typography.Text>
             У <Notation>{"if"}</Notation> и <Notation>{"for"}</Notation> нет
             собственной отдельной области имён, как у функции. Переменная,
@@ -224,7 +249,8 @@ export const pythonFunctionsLesson = defineCourseLesson({
               Присвоить параметру и изменить переданный объект — разные
               действия.
             </strong>{" "}
-            Аргументы передаются как объекты, а параметры связываются с ними.
+            Параметр — ещё одно имя того объекта, который передали. Нажми
+            «Запуск» и пройди программу по шагам:
           </Typography.Text>
           <CodeRunner
             {...lessonMedia.runRebindMutate}
@@ -242,8 +268,7 @@ export const pythonFunctionsLesson = defineCourseLesson({
             тоже побочные эффекты.
           </Typography.Text>
           <Typography.Text>
-            Запусти программу по шагам. Пока выполняется{" "}
-            <Notation>{"rebind"}</Notation>, стрелки от{" "}
+            Пока выполняется <Notation>{"rebind"}</Notation>, стрелки от{" "}
             <Notation>{"a"}</Notation> и <Notation>{"items"}</Notation> сначала
             ведут к одному списку, а после <Notation>{"items = [99]"}</Notation>{" "}
             — к разным. В <Notation>{"mutate"}</Notation> обе стрелки ведут к
@@ -259,7 +284,69 @@ export const pythonFunctionsLesson = defineCourseLesson({
   ],
   checkpoint: [
     {
-      id: "t5",
+      id: "t1",
+      prompt: (
+        <>
+          <Typography.Text>
+            В вызове <Notation>{"rectangle_area(4, 7)"}</Notation> что здесь
+            аргументы, а что параметры? Что вернёт вызов?
+          </Typography.Text>
+        </>
+      ),
+      reveal: (
+        <>
+          <Typography.Text>
+            4 и 7 — аргументы, <Notation>{"width"}</Notation> и{" "}
+            <Notation>{"height"}</Notation> — параметры. Вызов вернёт 28.
+          </Typography.Text>
+        </>
+      ),
+    },
+    {
+      id: "t2",
+      prompt: (
+        <>
+          <Typography.Text>Что напечатает программа?</Typography.Text>
+          <CodeBlock
+            code={
+              "def double(n):\n    print(n * 2)\n\nresult = double(5)\nprint(result)"
+            }
+            label={"print внутри функции"}
+            language="python"
+            fileName="main.py"
+          />
+        </>
+      ),
+      reveal: (
+        <>
+          <Typography.Text>
+            10 и None: функция печатает 10, но ничего не возвращает.
+          </Typography.Text>
+        </>
+      ),
+    },
+    {
+      id: "t3",
+      prompt: (
+        <>
+          <Typography.Text>
+            Что вернёт <Notation>{"describe_sign(5)"}</Notation> из урока и
+            какие строки функции при этом выполнятся?
+          </Typography.Text>
+        </>
+      ),
+      reveal: (
+        <>
+          <Typography.Text>
+            «положительное»: первая проверка истинна, первый{" "}
+            <Notation>{"return"}</Notation> завершает вызов, и остальные строки
+            не выполняются.
+          </Typography.Text>
+        </>
+      ),
+    },
+    {
+      id: "t4",
       prompt: (
         <>
           <Typography.Text>
@@ -280,49 +367,78 @@ export const pythonFunctionsLesson = defineCourseLesson({
         </>
       ),
     },
+    {
+      id: "t5",
+      prompt: (
+        <>
+          <Typography.Text>
+            Функция <Notation>{"add_zero(items)"}</Notation> выполняет{" "}
+            <Notation>{"items.append(0)"}</Notation>. Чему равен{" "}
+            <Notation>{"a"}</Notation> после <Notation>{"a = [1]"}</Notation> и{" "}
+            <Notation>{"add_zero(a)"}</Notation>?
+          </Typography.Text>
+        </>
+      ),
+      reveal: (
+        <>
+          <Typography.Text>
+            [1, 0]: параметр <Notation>{"items"}</Notation> — ещё одно имя того
+            же списка, и <Notation>{"append"}</Notation> меняет его.
+          </Typography.Text>
+        </>
+      ),
+    },
   ],
   result: (
     <>
+      <Typography.Text>
+        Теперь ты умеешь давать вычислению имя и вызывать его сколько угодно
+        раз. Вот что из урока понадобится дальше.
+      </Typography.Text>
       <LessonSummary
         items={[
           {
+            key: <Notation>{"def имя(параметры):"}</Notation>,
+            note: <>Создаёт функцию; тело выполняется только при вызове.</>,
+          },
+          {
+            key: "Аргумент и параметр",
             note: (
               <>
-                <Notation>{"def имя(параметры):"}</Notation> создаёт функцию;
-                тело выполняется только при вызове.
+                В вызове <Notation>{"rectangle_area(3, 5)"}</Notation> 3 и 5 —
+                аргументы, они становятся значениями параметров.
               </>
             ),
           },
           {
+            key: <Notation>{"return"}</Notation>,
             note: (
               <>
-                <Notation>{"return"}</Notation> отдаёт значение и завершает
-                вызов; без него функция возвращает <Notation>{"None"}</Notation>
-                .
+                Отдаёт значение в место вызова и завершает вызов; без него
+                функция возвращает <Notation>{"None"}</Notation>.
               </>
             ),
           },
           {
+            key: <Notation>{"print"}</Notation>,
+            note: (
+              <>Только показывает текст, результатом функции не становится.</>
+            ),
+          },
+          {
+            key: "Локальные имена",
             note: (
               <>
-                Присваивание внутри функции создаёт локальное имя; внешнее не
-                меняется.
+                Присваивание внутри функции создаёт своё имя; чтение до
+                присваивания — <Notation>{"UnboundLocalError"}</Notation>.
               </>
             ),
           },
           {
+            key: "Параметр-список",
             note: (
               <>
-                Чтение имени до его присваивания в той же функции —{" "}
-                <Notation>{"UnboundLocalError"}</Notation>.
-              </>
-            ),
-          },
-          {
-            note: (
-              <>
-                Параметр — ещё одно имя переданного объекта:{" "}
-                <Notation>{"append"}</Notation> меняет внешний список,
+                <Notation>{"append"}</Notation> меняет переданный список,
                 присваивание параметру — нет.
               </>
             ),

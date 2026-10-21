@@ -2,8 +2,10 @@ import { CodeBlock } from "~/shared/components/code-block";
 import { Notation } from "~/shared/components/notation";
 import { Typography } from "~/shared/components/typography";
 import {
+  LessonDiagram,
   LessonStepper,
   LessonSummary,
+  ProofDisclosure,
 } from "~/shared/components/learning-content";
 import { defineCourseLesson } from "../lib/define-course-lesson";
 import { pythonRecursionLessonPublication } from "./course-publication.mjs";
@@ -22,15 +24,17 @@ export const pythonRecursionLesson = defineCourseLesson({
       explanation: (
         <>
           <Typography.Text>
+            Факториал 4 — это 4, умноженное на факториал 3. Сумма цифр числа —
+            последняя цифра плюс сумма цифр остальных. Многие задачи сами
+            сводятся к такой же задаче поменьше.{" "}
             <strong>
-              Рекурсивная функция сводит задачу к меньшему случаю той же задачи;
+              Рекурсивная функция вызывает саму себя для меньшего случая;
               незавершённые вызовы ждут в стеке, а{" "}
               <Notation>{"@cache"}</Notation> запоминает уже найденные ответы
             </strong>
-            . Опора — рамка вызова из урока о функциях: каждый незавершённый
-            вызов хранит свои переменные в своей рамке, и рекурсия просто
-            складывает такие рамки стопкой. Алгоритмы на рекурсии разобраны в
-            темах экзамена; здесь — механизм языка.
+            . Каждый вызов — та же рамка, что в уроке о функциях, только рамки
+            одной функции складываются стопкой. Алгоритмы на рекурсии разобраны
+            в темах экзамена; здесь — механизм языка.
           </Typography.Text>
           <Typography.Text>
             Проследим, как рекурсия считает факториал 4! = 1 · 2 · 3 · 4 = 24.
@@ -61,11 +65,11 @@ export const pythonRecursionLesson = defineCourseLesson({
           </Typography.Text>
           <CodeBlock
             code={
-              'def factorial(n):\n    if n < 0:\n        raise ValueError(\n            "Факториал здесь определён для n >= 0"\n        )\n    if n == 0:\n        return 1\n    return n * factorial(n - 1)\n\nprint(factorial(4))'
+              "def factorial(n):\n    if n == 0:\n        return 1\n    return n * factorial(n - 1)\n\nprint(factorial(4))"
             }
             label={"при n > 0"}
             language="python"
-            fileName="factorial.py"
+            fileName="main.py"
             output={"24"}
           />
           <Typography.Text>
@@ -74,11 +78,17 @@ export const pythonRecursionLesson = defineCourseLesson({
             Остальное — переход к меньшему случаю. Для корректности нужно
             убедиться, что переходы обязательно приводят к базе:{" "}
             <Notation>{"n"}</Notation> каждый раз уменьшается на 1 и от
-            неотрицательного числа дойдёт до 0. Строка с{" "}
-            <Notation>{"raise"}</Notation> останавливает программу с понятным
-            сообщением, если договорённость нарушена; подробно{" "}
-            <Notation>{"raise"}</Notation> разберём в уроке об исключениях.
+            неотрицательного числа дойдёт до 0.
           </Typography.Text>
+          <ProofDisclosure summary="Тонкости: отрицательное n" kind="nuance">
+            <Typography.Text>
+              Для отрицательного <Notation>{"n"}</Notation> база не наступит
+              никогда. Надёжная функция проверяет это первой строкой и
+              останавливает программу с понятным сообщением:{" "}
+              <Notation>{'raise ValueError("нужно n >= 0")'}</Notation>.
+              Подробно <Notation>{"raise"}</Notation> — в уроке об исключениях.
+            </Typography.Text>
+          </ProofDisclosure>
         </>
       ),
     },
@@ -123,7 +133,7 @@ export const pythonRecursionLesson = defineCourseLesson({
             code={"def down(n):\n    return down(n - 1)\n\ndown(5)"}
             label={"Если базовый случай недостижим, стек переполняется"}
             language="python"
-            fileName="down.py"
+            fileName="main.py"
             error={"RecursionError: maximum recursion depth exceeded"}
           />
           <Typography.Text>
@@ -172,7 +182,7 @@ export const pythonRecursionLesson = defineCourseLesson({
             }
             label={"Посчитаем вызовы"}
             language="python"
-            fileName="fibonacci_slow.py"
+            fileName="main.py"
             output={"6765 21891"}
           />
           <Typography.Text>
@@ -180,8 +190,19 @@ export const pythonRecursionLesson = defineCourseLesson({
             внешний счётчик. Для 21 различного значения F(0)…F(20) понадобилось
             почти 22 тысячи вызовов. Число вызовов растёт очень быстро: для n =
             10 их 177, для 20 — 21 891, для 25 — 242 785, а для 30 — уже 2 692
-            537.
+            537. Откуда столько? Вот все вызовы уже для F(5):
           </Typography.Text>
+          <LessonDiagram
+            {...lessonMedia.fibTree}
+            caption={
+              <>
+                Каждый вызов порождает два новых. F(3) вычисляется дважды, F(2)
+                — трижды, и с ростом n повторов становится всё больше. Если
+                запомнить однажды найденное F(k), каждое значение понадобится
+                вычислить один раз.
+              </>
+            }
+          />
           <Typography.Text>
             <strong>Мемоизация</strong> — сохранение результата для уже
             рассмотренных аргументов. При следующем таком же запросе результат
@@ -192,23 +213,31 @@ export const pythonRecursionLesson = defineCourseLesson({
           </Typography.Text>
           <CodeBlock
             code={
-              'from functools import cache\n\n@cache\ndef fibonacci(n):\n    if n < 0:\n        raise ValueError("Нужен неотрицательный индекс")\n    if n < 2:\n        return n\n    return fibonacci(n - 1) + fibonacci(n - 2)\n\nprint(fibonacci(10), fibonacci(90))'
+              "from functools import cache\n\n@cache\ndef fibonacci(n):\n    if n < 2:\n        return n\n    return fibonacci(n - 1) + fibonacci(n - 2)\n\nprint(fibonacci(10), fibonacci(90))"
             }
-            label={"Программа на Python"}
+            label={"Fibonacci с @cache"}
             language="python"
-            fileName="fibonacci.py"
+            fileName="main.py"
             output={"55 2880067194370816120"}
           />
           <Typography.Text>
-            Запись <Notation>{"@cache"}</Notation> — применение{" "}
-            <strong>декоратора</strong>, средства, которое получает функцию и
-            возвращает обёрнутую версию с дополнительным поведением. Здесь
-            дополнительное поведение — поиск результата в памяти и его
-            сохранение. Смысл близок к{" "}
-            <Notation>{"fibonacci = cache(fibonacci)"}</Notation> после
-            определения. Механизм собственных декораторов рассмотрим в
-            дополнительном уроке.
+            Строка <Notation>{"@cache"}</Notation> над{" "}
+            <Notation>{"def"}</Notation> добавляет функции память: перед
+            вычислением она ищет ответ для этого аргумента, а после — сохраняет
+            его.
           </Typography.Text>
+          <ProofDisclosure
+            summary="Тонкости: что такое декоратор"
+            kind="nuance"
+          >
+            <Typography.Text>
+              <Notation>{"@cache"}</Notation> — <strong>декоратор</strong>:
+              функция, которая получает функцию и возвращает её обёрнутую
+              версию. Запись означает почти то же, что{" "}
+              <Notation>{"fibonacci = cache(fibonacci)"}</Notation> после
+              определения. Свои декораторы — в дополнительном уроке.
+            </Typography.Text>
+          </ProofDisclosure>
           <Typography.Text>
             Теперь каждое F(k) вычисляется один раз: для F(n) нужно всего n + 1
             разных вычислений. Поэтому F(90) считается мгновенно. Но глубина
@@ -216,10 +245,10 @@ export const pythonRecursionLesson = defineCourseLesson({
             не устраняет ограничения рекурсивной глубины.
           </Typography.Text>
           <Typography.Text>
-            Аргументы кэшируемой функции должны быть хешируемыми. Результат
-            должен определяться аргументами. Если функция зависит от
-            изменяющейся глобальной переменной, файла или времени, кэш может
-            возвращать устаревшие данные. Очистить его можно{" "}
+            Аргументы кэшируемой функции — числа, строки, кортежи; список
+            передать нельзя. Результат должен определяться аргументами. Если
+            функция зависит от изменяющейся глобальной переменной, файла или
+            времени, кэш может возвращать устаревшие данные. Очистить его можно{" "}
             <Notation>{"fibonacci.cache_clear()"}</Notation>.
           </Typography.Text>
         </>
@@ -327,7 +356,7 @@ export const pythonRecursionLesson = defineCourseLesson({
       reveal: (
         <>
           <Typography.Text>
-            Список нехешируем, кэш не может сделать его ключом — будет{" "}
+            Список нельзя сделать ключом кэша, как и ключом словаря — будет{" "}
             <Notation>{"TypeError"}</Notation>.
           </Typography.Text>
         </>
@@ -336,9 +365,15 @@ export const pythonRecursionLesson = defineCourseLesson({
   ],
   result: (
     <>
+      <Typography.Text>
+        Рекурсия сводит задачу к меньшей такой же, стек хранит ждущие вызовы, а
+        кэш убирает повторные вычисления. Вот что понадобится дальше — и в темах
+        ЕГЭ о рекурсии.
+      </Typography.Text>
       <LessonSummary
         items={[
           {
+            key: "Рекурсия",
             note: (
               <>
                 Рекурсивная функция: базовый случай без вызова и переход к
@@ -347,6 +382,7 @@ export const pythonRecursionLesson = defineCourseLesson({
             ),
           },
           {
+            key: "Стек вызовов",
             note: (
               <>
                 Незавершённые вызовы ждут в стеке; первым завершается самый
@@ -355,6 +391,7 @@ export const pythonRecursionLesson = defineCourseLesson({
             ),
           },
           {
+            key: <Notation>{"RecursionError"}</Notation>,
             note: (
               <>
                 Недостижимая база — <Notation>{"RecursionError"}</Notation>;
@@ -364,6 +401,7 @@ export const pythonRecursionLesson = defineCourseLesson({
             ),
           },
           {
+            key: <Notation>{"@cache"}</Notation>,
             note: (
               <>
                 Повторные вычисления делают прямую рекурсию медленной;{" "}
@@ -373,10 +411,11 @@ export const pythonRecursionLesson = defineCourseLesson({
             ),
           },
           {
+            key: "Ограничения кэша",
             note: (
               <>
-                Кэш требует хешируемых аргументов и не убирает ограничение
-                глубины.
+                Аргументы кэша — числа, строки, кортежи, не списки; кэш не
+                убирает ограничение глубины.
               </>
             ),
           },

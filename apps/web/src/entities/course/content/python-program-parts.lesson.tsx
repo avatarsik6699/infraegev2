@@ -2,12 +2,14 @@ import { CodeBlock } from "~/shared/components/code-block";
 import { Notation } from "~/shared/components/notation";
 import { Typography } from "~/shared/components/typography";
 import {
+  LessonDiagram,
   LessonSummary,
   ProofDisclosure,
   TerminalCommand,
 } from "~/shared/components/learning-content";
 import { defineCourseLesson } from "../lib/define-course-lesson";
 import { pythonProgramPartsLessonPublication } from "./course-publication.mjs";
+import { lessonMedia } from "./python-program-parts.media";
 
 export const pythonProgramPartsLesson = defineCourseLesson({
   ...pythonProgramPartsLessonPublication,
@@ -22,14 +24,15 @@ export const pythonProgramPartsLesson = defineCourseLesson({
       explanation: (
         <>
           <Typography.Text>
+            Наибольший общий делитель, точный квадратный корень, округление
+            вверх — писать такие функции самому каждый раз незачем: они уже
+            написаны и лежат в стандартной поставке Python.{" "}
             <strong>
-              Готовые средства лежат в модулях, и{" "}
-              <Notation>{"import"}</Notation> делает их имена доступными в
-              программе; свой код тоже удобно делить на части по задачам
+              Готовые функции лежат в модулях, и <Notation>{"import"}</Notation>{" "}
+              делает их доступными в программе
             </strong>
-            . Опора — функции двух прошлых уроков: модуль — это файл с такими же
-            определениями, и дальше в курсе готовые модули будут подключаться
-            постоянно.
+            . Модуль — это файл с такими же определениями, как в двух прошлых
+            уроках, и свой код тоже удобно делить на части.
           </Typography.Text>
           <Typography.Text>
             Начнём с модуля <Notation>{"math"}</Notation> и наибольшего общего
@@ -48,20 +51,15 @@ export const pythonProgramPartsLesson = defineCourseLesson({
               Модуль — файл с готовыми определениями;{" "}
               <Notation>{"import"}</Notation> подключает его по имени.
             </strong>{" "}
-            <strong>Модуль</strong> обычно соответствует Python-файлу с
-            определениями и инструкциями. <strong>Библиотека</strong> — набор
-            готовых средств для решения задач.{" "}
-            <strong>Стандартная библиотека</strong> поставляется вместе с
-            Python; сторонние библиотеки устанавливаются отдельно.{" "}
-            <strong>Пакет</strong> организует связанные модули под общим именем;
-            в обычном варианте это папка с файлом{" "}
-            <Notation>{"__init__.py"}</Notation>.
+            Модули, которые приходят вместе с Python, составляют{" "}
+            <strong>стандартную библиотеку</strong>; другие библиотеки ставят
+            отдельно.
           </Typography.Text>
           <CodeBlock
             code={
               "import math\n\nprint(math.isqrt(50))\nprint(math.gcd(18, 24))"
             }
-            label={"Программа на Python"}
+            label={"isqrt и gcd из math"}
             language="python"
             fileName="main.py"
             output={"7\n6"}
@@ -70,8 +68,8 @@ export const pythonProgramPartsLesson = defineCourseLesson({
             <Notation>{"import math"}</Notation> делает доступным имя модуля.
             Точка выбирает средство внутри него. <Notation>{"isqrt"}</Notation>{" "}
             возвращает точную целую часть квадратного корня неотрицательного
-            целого: 7² = 49 ≤ 50 {"<"} 64. <Notation>{"gcd"}</Notation> находит
-            наибольший общий делитель.
+            целого: 7² = 49 не больше 50, а 8² = 64 уже больше.{" "}
+            <Notation>{"gcd"}</Notation> находит наибольший общий делитель.
           </Typography.Text>
           <Typography.Text>Другая форма импорта:</Typography.Text>
           <CodeBlock
@@ -89,6 +87,18 @@ export const pythonProgramPartsLesson = defineCourseLesson({
             <Notation>{"from module import *"}</Notation>: становится труднее
             понимать происхождение имён и конфликты.
           </Typography.Text>
+          <LessonDiagram
+            {...lessonMedia.importNames}
+            caption={
+              <>
+                <Notation>{"import math"}</Notation> даёт программе одно имя —
+                модуль целиком, поэтому функции зовут через точку:{" "}
+                <Notation>{"math.isqrt"}</Notation>.{" "}
+                <Notation>{"from math import isqrt"}</Notation> берёт из модуля
+                одно имя, и его зовут напрямую.
+              </>
+            }
+          />
           <Typography.Text>
             В <Notation>{"math"}</Notation> есть и округления, и точное сложение
             дробных чисел. <Notation>{"floor"}</Notation> округляет вниз,{" "}
@@ -99,16 +109,14 @@ export const pythonProgramPartsLesson = defineCourseLesson({
             code={
               "from math import ceil, floor, fsum\n\nprint(floor(-2.5), ceil(-2.5))\ntotal = 0\nfor _ in range(10):\n    total += 0.1\nprint(total, fsum([0.1] * 10))"
             }
-            label={"Программа на Python"}
+            label={"floor, ceil и fsum"}
             language="python"
-            fileName="total.py"
+            fileName="main.py"
             output={"-3 -2\n0.9999999999999999 1.0"}
           />
           <Typography.Text>
             Цикл-накопитель десять раз прибавлял приближённое 0.1, и погрешности
             сложились. <Notation>{"fsum"}</Notation> учитывает их и даёт 1.0.
-            Встроенный <Notation>{"sum"}</Notation> в Python 3.12+ тоже
-            складывает дробные числа точнее простого цикла.
           </Typography.Text>
           <Typography.Text>
             Не называй свой файл <Notation>{"math.py"}</Notation>,{" "}
@@ -136,7 +144,7 @@ export const pythonProgramPartsLesson = defineCourseLesson({
             code={"def square(number):\n    return number * number"}
             label={"Файл calculations.py может содержать"}
             language="python"
-            fileName="square.py"
+            fileName="main.py"
           />
           <Typography.Text>
             В соседнем <Notation>{"main.py"}</Notation>:
@@ -158,13 +166,31 @@ export const pythonProgramPartsLesson = defineCourseLesson({
             <Notation>{"main.py"}</Notation> напечатает 49, а импорт{" "}
             <Notation>{"main"}</Notation> из другого файла ничего не напечатает.
           </Typography.Text>
-          <Typography.Text>
-            При первом импорте в обычном процессе выполняется код верхнего
-            уровня модуля. Повторный импорт обычно использует уже загруженный
-            модуль. Определения функций выполняются, но их тела ждут вызова.
-            Поэтому нежелательные <Notation>{"input()"}</Notation> на верхнем
-            уровне могут неожиданно остановить даже импорт.
-          </Typography.Text>
+          <LessonDiagram
+            {...lessonMedia.nameMain}
+            caption={
+              <>
+                Один и тот же файл <Notation>{"calculations.py"}</Notation>.
+                Запущенный напрямую, он видит{" "}
+                <Notation>{'__name__ == "__main__"'}</Notation> и выполняет блок
+                под условием. Импортированный — видит своё имя модуля, и блок
+                пропускается.
+              </>
+            }
+          />
+          <ProofDisclosure
+            summary="Тонкости: что выполняется при импорте и что такое пакет"
+            kind="nuance"
+          >
+            <Typography.Text>
+              При первом импорте выполняется весь код модуля без отступа;
+              повторный импорт берёт уже загруженный модуль. Поэтому{" "}
+              <Notation>{"input()"}</Notation> на верхнем уровне модуля может
+              остановить даже импорт. Связанные модули объединяют в{" "}
+              <strong>пакет</strong> — папку с файлом{" "}
+              <Notation>{"__init__.py"}</Notation>.
+            </Typography.Text>
+          </ProofDisclosure>
         </>
       ),
     },
@@ -241,13 +267,22 @@ export const pythonProgramPartsLesson = defineCourseLesson({
             подготовки файлов. Не нужно создавать десятки модулей ради десяти
             строк: разделяй по реальным самостоятельным задачам.
           </Typography.Text>
+          <LessonDiagram
+            {...lessonMedia.programSplit}
+            caption={
+              <>
+                Вычисление — отдельная функция: её можно вызвать с готовыми
+                числами и сравнить ответ, не вводя данных и не читая вывод.
+              </>
+            }
+          />
           <CodeBlock
             code={
               'def count_multiples(a, b, d):\n    count = 0\n    for n in range(a, b + 1):\n        if n % d == 0:\n            count += 1\n    return count\n\ndef main():\n    print(count_multiples(1, 100, 7))\n\nif __name__ == "__main__":\n    main()'
             }
-            label={"Программа на Python"}
+            label={"Счётчик кратных функцией"}
             language="python"
-            fileName="count_multiples.py"
+            fileName="main.py"
             output={"14"}
           />
           <Typography.Text>
@@ -348,9 +383,14 @@ export const pythonProgramPartsLesson = defineCourseLesson({
   ],
   result: (
     <>
+      <Typography.Text>
+        Готовые модули избавляют от лишней работы, а деление на функции делает
+        программу проверяемой. Вот что понадобится дальше.
+      </Typography.Text>
       <LessonSummary
         items={[
           {
+            key: "import",
             note: (
               <>
                 <Notation>{"import math"}</Notation> — доступ через{" "}
@@ -360,6 +400,7 @@ export const pythonProgramPartsLesson = defineCourseLesson({
             ),
           },
           {
+            key: "Модуль math",
             note: (
               <>
                 <Notation>{"math.isqrt"}</Notation>,{" "}
@@ -369,8 +410,12 @@ export const pythonProgramPartsLesson = defineCourseLesson({
               </>
             ),
           },
-          { note: <>Свой файл не называют как стандартный модуль.</> },
           {
+            key: "Имя файла",
+            note: <>Свой файл не называют как стандартный модуль.</>,
+          },
+          {
+            key: <Notation>{"__main__"}</Notation>,
             note: (
               <>
                 <Notation>{'if __name__ == "__main__":'}</Notation> выполняет
@@ -379,6 +424,7 @@ export const pythonProgramPartsLesson = defineCourseLesson({
             ),
           },
           {
+            key: "Части программы",
             note: (
               <>
                 Программу делят на чтение, вычисление и вывод; вычисление

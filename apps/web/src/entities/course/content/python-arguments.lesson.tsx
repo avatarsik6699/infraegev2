@@ -3,7 +3,9 @@ import { Notation } from "~/shared/components/notation";
 import { Typography } from "~/shared/components/typography";
 import {
   CodeRunner,
+  LessonDiagram,
   LessonSummary,
+  ProofDisclosure,
 } from "~/shared/components/learning-content";
 import { defineCourseLesson } from "../lib/define-course-lesson";
 import { pythonArgumentsLessonPublication } from "./course-publication.mjs";
@@ -22,18 +24,20 @@ export const pythonArgumentsLesson = defineCourseLesson({
       explanation: (
         <>
           <Typography.Text>
+            Цену со скидкой считают постоянно, но скидка есть не всегда. Писать
+            каждый раз <Notation>{"final_price(200, 0)"}</Notation> неудобно, а
+            иногда функция должна вернуть сразу два ответа.{" "}
             <strong>
-              У функции есть договорённость — какие аргументы она принимает, что
-              возвращает и меняет ли данные; значения по умолчанию, именованные
-              аргументы и кортеж результатов делают эту договорённость удобной
+              У функции есть договорённость — что она принимает, что возвращает
+              и меняет ли данные; значения по умолчанию, именованные аргументы и
+              несколько результатов делают её удобной
             </strong>
-            . Опора — функции прошлого урока и распаковка кортежа: несколько
-            результатов функции — это один кортеж.
+            .
           </Typography.Text>
           <Typography.Text>
-            Разбирать договорённость будем на функции цены со скидкой{" "}
-            <Notation>{"final_price(price, discount=0)"}</Notation> и функции
-            суммы цифр, которую в конце оформим по всем правилам.
+            Разберём это на цене со скидкой{" "}
+            <Notation>{"final_price(price, discount=0)"}</Notation>, а в конце
+            оформим функцией сквозную задачу курса.
           </Typography.Text>
         </>
       ),
@@ -57,15 +61,28 @@ export const pythonArgumentsLesson = defineCourseLesson({
               "Параметр со значением по умолчанию можно не передавать, а аргумент можно назвать по имени"
             }
             language="python"
-            fileName="final_price.py"
+            fileName="main.py"
             output={"200.0\n180.0\n180.0"}
           />
           <Typography.Text>
             <Notation>{"discount=0"}</Notation> в определении — значение по
             умолчанию. В вызове именованные аргументы уточняют, какому параметру
-            соответствует значение. Обычные позиционные аргументы записывают
-            перед именованными. Одному параметру нельзя передать значение
-            дважды:
+            соответствует значение. Вот как параметры получают значения в трёх
+            вызовах:
+          </Typography.Text>
+          <LessonDiagram
+            {...lessonMedia.argBinding}
+            caption={
+              <>
+                По позиции значение идёт в параметр на том же месте, по имени —
+                в параметр с этим именем. Если значения нет,{" "}
+                <Notation>{"discount"}</Notation> берёт значение по умолчанию 0.
+              </>
+            }
+          />
+          <Typography.Text>
+            Обычные позиционные аргументы записывают перед именованными. Одному
+            параметру нельзя передать значение дважды:
           </Typography.Text>
           <CodeBlock
             code={
@@ -73,7 +90,7 @@ export const pythonArgumentsLesson = defineCourseLesson({
             }
             label={"Одному параметру нельзя передать значение дважды"}
             language="python"
-            fileName="final_price.py"
+            fileName="main.py"
             error={
               "TypeError: final_price() got multiple values for argument 'price'"
             }
@@ -91,10 +108,10 @@ export const pythonArgumentsLesson = defineCourseLesson({
           />
           <Typography.Text>
             Второй вызов увидел единицу из первого: список по умолчанию создан
-            один раз. Запусти программу по шагам: во втором вызове{" "}
-            <Notation>{"items"}</Notation> ведёт к тому же списку, что и в
-            первом, — он создан, когда выполнилось <Notation>{"def"}</Notation>,
-            и уже содержит 1.
+            один раз. Нажми «Запуск» и пройди программу по шагам: во втором
+            вызове <Notation>{"items"}</Notation> ведёт к тому же списку, что и
+            в первом, — он создан, когда выполнилось{" "}
+            <Notation>{"def"}</Notation>, и уже содержит 1.
           </Typography.Text>
           <Typography.Text>
             Правильный приём — <Notation>{"None"}</Notation> по умолчанию и
@@ -106,7 +123,7 @@ export const pythonArgumentsLesson = defineCourseLesson({
             }
             label={"Правильный приём — None по умолчанию и новый список внутри"}
             language="python"
-            fileName="add_item.py"
+            fileName="main.py"
             output={"[1]\n[2]"}
           />
           <Typography.Text>
@@ -137,7 +154,7 @@ export const pythonArgumentsLesson = defineCourseLesson({
               "Функция может вернуть несколько значений — на самом деле один кортеж"
             }
             language="python"
-            fileName="quotient_and_remainder.py"
+            fileName="main.py"
             output={"4 3"}
           />
           <Typography.Text>
@@ -146,33 +163,45 @@ export const pythonArgumentsLesson = defineCourseLesson({
             <Notation>{"divmod(a, b)"}</Notation>, но пример показывает общую
             механику.
           </Typography.Text>
-          <Typography.Text>
-            Параметр <Notation>{"*values"}</Notation> собирает произвольное
-            число позиционных аргументов в кортеж.{" "}
-            <Notation>{"**options"}</Notation> так же собирает именованные
-            аргументы в словарь. Звёздочки здесь — не умножение и не степень: в
-            списке параметров у них свой смысл.
-          </Typography.Text>
-          <CodeBlock
-            code={
-              "def total_of(*values):\n    return sum(values)\n\nprint(total_of(2, 3, 5))\nprint(total_of())"
+          <LessonDiagram
+            {...lessonMedia.tupleReturn}
+            caption={
+              <>
+                <Notation>{"return"}</Notation> отдаёт два значения как один
+                кортеж <Notation>{"(4, 3)"}</Notation>, а строка вызова
+                раскладывает его: <Notation>{"q"}</Notation> получает 4,{" "}
+                <Notation>{"r"}</Notation> — 3.
+              </>
             }
-            label={
-              "Звёздочки здесь — не умножение и не степень: в списке параметров у них свой смысл"
-            }
-            language="python"
-            fileName="total_of.py"
-            output={"10\n0"}
           />
-          <Typography.Text>
-            Звёздочка без имени в списке параметров заставляет последующие
-            параметры передавать по имени:{" "}
-            <Notation>{'def show(value, *, label="Результат"):'}</Notation>.
-            Символ <Notation>{"/"}</Notation> в списке параметров означает, что
-            предшествующие параметры только позиционные. Эти формы полезно
-            узнавать в документации; для собственных первых функций они не
-            обязательны.
-          </Typography.Text>
+          <ProofDisclosure
+            summary="Тонкости: звёздочки и косая черта в параметрах"
+            kind="nuance"
+          >
+            <Typography.Text>
+              Параметр <Notation>{"*values"}</Notation> собирает сколько угодно
+              позиционных аргументов в кортеж,{" "}
+              <Notation>{"**options"}</Notation> — именованные аргументы в
+              словарь. Звёздочки здесь — не умножение и не степень:
+            </Typography.Text>
+            <CodeBlock
+              code={
+                "def total_of(*values):\n    return sum(values)\n\nprint(total_of(2, 3, 5))\nprint(total_of())"
+              }
+              label={"*values собирает аргументы в кортеж"}
+              language="python"
+              fileName="main.py"
+              output={"10\n0"}
+            />
+            <Typography.Text>
+              Звёздочка без имени заставляет следующие параметры передавать по
+              имени:{" "}
+              <Notation>{'def show(value, *, label="Результат"):'}</Notation>.
+              Косая черта <Notation>{"/"}</Notation> делает предыдущие параметры
+              только позиционными. Такие формы встречаются в документации; для
+              своих первых функций они не нужны.
+            </Typography.Text>
+          </ProofDisclosure>
         </>
       ),
     },
@@ -198,7 +227,7 @@ export const pythonArgumentsLesson = defineCourseLesson({
               "Без скобок это сама функция; со скобками — результат её вызова"
             }
             language="python"
-            fileName="last_digit.py"
+            fileName="main.py"
             output={"7\n3"}
           />
           <Typography.Text>
@@ -211,6 +240,17 @@ export const pythonArgumentsLesson = defineCourseLesson({
             <Notation>{"lambda"}</Notation> передают другой функции — например,
             как правило сортировки в уроке о сортировке.
           </Typography.Text>
+          <LessonDiagram
+            {...lessonMedia.functionNames}
+            caption={
+              <>
+                <Notation>{"rule = last_digit"}</Notation> — второе имя той же
+                функции, как <Notation>{"b = a"}</Notation> у списков. Функция
+                из <Notation>{"lambda"}</Notation> собственного имени не имеет,
+                её связали с именем <Notation>{"short_rule"}</Notation>.
+              </>
+            }
+          />
         </>
       ),
     },
@@ -237,7 +277,7 @@ export const pythonArgumentsLesson = defineCourseLesson({
               "Например: «принимает целое число, возвращает сумму цифр его модуля»"
             }
             language="python"
-            fileName="digit_sum.py"
+            fileName="main.py"
             output={"14 0"}
           />
           <Typography.Text>
@@ -270,7 +310,7 @@ export const pythonArgumentsLesson = defineCourseLesson({
               "Напишем count_even(numbers), возвращающую количество чётных элементов без изменения списка"
             }
             language="python"
-            fileName="count_even.py"
+            fileName="main.py"
             output={"2\n0"}
           />
           <Typography.Text>
@@ -281,8 +321,98 @@ export const pythonArgumentsLesson = defineCourseLesson({
         </>
       ),
     },
+    {
+      id: "s6-skvoznaya",
+      navLabel: "Сквозная задача",
+      explanation: (
+        <>
+          <Typography.Text>
+            <strong>
+              Сквозная задача курса: сумма и наибольшее — одной функцией с двумя
+              результатами.
+            </strong>{" "}
+            Цикл из урока о списках оформим функцией с договорённостью
+            «принимает непустой список чисел, возвращает сумму и наибольшее»:
+          </Typography.Text>
+          <CodeBlock
+            code={
+              "def total_and_best(numbers):\n    total = 0\n    best = numbers[0]\n    for x in numbers:\n        total += x\n        if x > best:\n            best = x\n    return total, best\n\ntotal, best = total_and_best([5, -2, 10, 7])\nprint(total, best)"
+            }
+            label={"Сумма и наибольшее одной функцией"}
+            language="python"
+            fileName="main.py"
+            output={"20 10"}
+          />
+          <Typography.Text>
+            <Notation>{"return total, best"}</Notation> возвращает один кортеж,
+            а строка вызова раскладывает его на два имени. Слово «непустой» в
+            договорённости важно: для пустого списка{" "}
+            <Notation>{"numbers[0]"}</Notation> остановит программу с{" "}
+            <Notation>{"IndexError"}</Notation>. Теперь функцию можно вызвать
+            для любого списка — из ввода, из файла, из другой функции.
+          </Typography.Text>
+        </>
+      ),
+    },
   ],
   checkpoint: [
+    {
+      id: "t1",
+      prompt: (
+        <>
+          <Typography.Text>
+            Что вернут <Notation>{"final_price(300)"}</Notation> и{" "}
+            <Notation>{"final_price(300, discount=50)"}</Notation>?
+          </Typography.Text>
+        </>
+      ),
+      reveal: (
+        <>
+          <Typography.Text>
+            300.0 и 150.0: без второго аргумента скидка по умолчанию 0.
+          </Typography.Text>
+        </>
+      ),
+    },
+    {
+      id: "t2",
+      prompt: (
+        <>
+          <Typography.Text>
+            Что напечатает{" "}
+            <Notation>{"total, best = total_and_best([3, 9, -1])"}</Notation>, а
+            затем <Notation>{"print(total, best)"}</Notation>?
+          </Typography.Text>
+        </>
+      ),
+      reveal: (
+        <>
+          <Typography.Text>
+            11 9: функция вернула кортеж (11, 9), и он разложился на два имени.
+          </Typography.Text>
+        </>
+      ),
+    },
+    {
+      id: "t4",
+      prompt: (
+        <>
+          <Typography.Text>
+            Чем отличаются <Notation>{"rule = len"}</Notation> и{" "}
+            <Notation>{"rule = len('abc')"}</Notation>?
+          </Typography.Text>
+        </>
+      ),
+      reveal: (
+        <>
+          <Typography.Text>
+            В первом случае <Notation>{"rule"}</Notation> — сама функция{" "}
+            <Notation>{"len"}</Notation>, её можно вызвать. Во втором —
+            результат вызова, число 3.
+          </Typography.Text>
+        </>
+      ),
+    },
     {
       id: "t3",
       prompt: (
@@ -330,9 +460,15 @@ export const pythonArgumentsLesson = defineCourseLesson({
   ],
   result: (
     <>
+      <Typography.Text>
+        Договорённость функции — что она принимает, что возвращает и меняет ли
+        данные — делает её удобной для любого вызова. Вот что понадобится
+        дальше.
+      </Typography.Text>
       <LessonSummary
         items={[
           {
+            key: "По умолчанию",
             note: (
               <>
                 <Notation>{"def f(a, b=0)"}</Notation> —{" "}
@@ -342,6 +478,7 @@ export const pythonArgumentsLesson = defineCourseLesson({
             ),
           },
           {
+            key: "Список по умолчанию",
             note: (
               <>
                 Изменяемое значение по умолчанию общее для всех вызовов:
@@ -350,6 +487,7 @@ export const pythonArgumentsLesson = defineCourseLesson({
             ),
           },
           {
+            key: "Два результата",
             note: (
               <>
                 <Notation>{"return a, b"}</Notation> возвращает кортеж, его
@@ -358,14 +496,17 @@ export const pythonArgumentsLesson = defineCourseLesson({
             ),
           },
           {
+            key: <Notation>{"total_and_best"}</Notation>,
             note: (
               <>
-                <Notation>{"*values"}</Notation> собирает лишние позиционные
-                аргументы в кортеж.
+                Сквозная задача функцией:{" "}
+                <Notation>{"return total, best"}</Notation>, вызов раскладывает
+                результат на два имени.
               </>
             ),
           },
           {
+            key: "Функция как значение",
             note: (
               <>
                 Функцию передают без скобок;{" "}

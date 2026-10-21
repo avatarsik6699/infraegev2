@@ -1,9 +1,15 @@
 import { CodeBlock } from "~/shared/components/code-block";
 import { Notation } from "~/shared/components/notation";
 import { Typography } from "~/shared/components/typography";
-import { LessonSummary } from "~/shared/components/learning-content";
+import {
+  LessonDiagram,
+  LessonStepper,
+  LessonSummary,
+  LessonTabs,
+} from "~/shared/components/learning-content";
 import { defineCourseLesson } from "../lib/define-course-lesson";
 import { pythonSortingSearchLessonPublication } from "./course-publication.mjs";
+import { lessonMedia } from "./python-sorting-search.media";
 
 export const pythonSortingSearchLesson = defineCourseLesson({
   ...pythonSortingSearchLessonPublication,
@@ -18,15 +24,15 @@ export const pythonSortingSearchLesson = defineCourseLesson({
       explanation: (
         <>
           <Typography.Text>
+            Таблица результатов олимпиады: сначала по убыванию балла, при равном
+            балле — по алфавиту. Слова — по длине. Строки с числами — как числа,
+            а не как текст.{" "}
             <strong>
-              Сортировка сравнивает не сами элементы, а их ключи, поэтому любой
-              порядок задаётся функцией-ключом, а несколько критериев — кортежем
-              ключей
+              Сортировка сравнивает не сами элементы, а их ключи: любой порядок
+              задаётся функцией-ключом, а несколько критериев — кортежем ключей
             </strong>
-            . Опора — передача функции без скобок и{" "}
-            <Notation>{"lambda"}</Notation> из урока о договорённости функции:
-            ключ сортировки — это функция, которую{" "}
-            <Notation>{"sorted"}</Notation> вызывает для каждого элемента.
+            . Ключ — это функция, которую <Notation>{"sorted"}</Notation>{" "}
+            вызывает для каждого элемента, как в уроке о функции как значении.
           </Typography.Text>
           <Typography.Text>
             Сортировать будем слова{" "}
@@ -105,17 +111,79 @@ export const pythonSortingSearchLesson = defineCourseLesson({
               "Ключ сортировки — значение, по которому сравнивают элемент; сам элемент не меняется"
             }
             language="python"
-            fileName="words.py"
+            fileName="main.py"
             output={"['кот', 'дом', 'окно', 'арбуз']"}
           />
           <Typography.Text>
             Передаётся функция <Notation>{"len"}</Notation>, а не результат{" "}
             <Notation>{"len(...)"}</Notation>. При сортировке Python применяет
             функцию ключа к каждому элементу и использует полученные значения
-            для упорядочивания. Здесь ключи такие: у «арбуз» — 5, у «кот» и
-            «дом» — 3, у «окно» — 4. Упорядочены ключи 3, 3, 4, 5, а в
-            результате стоят сами слова.
+            для упорядочивания. Посмотри по шагам, как это происходит:
           </Typography.Text>
+          <LessonStepper
+            {...lessonMedia.sortStepper}
+            label={"sorted(words, key=len) по шагам"}
+          />
+          <Typography.Text>
+            Ключ решает всё: меняется ключ — меняется порядок, а сами слова
+            остаются теми же. Переключай правила и сравни результаты:
+          </Typography.Text>
+          <LessonTabs
+            label="Правило сортировки"
+            tabs={[
+              {
+                label: "key=len",
+                content: (
+                  <LessonDiagram
+                    {...lessonMedia.sortResultLen}
+                    caption={<>По длине: 3, 3, 4, 5.</>}
+                  />
+                ),
+              },
+              {
+                label: "без key",
+                content: (
+                  <LessonDiagram
+                    {...lessonMedia.sortResultPlain}
+                    caption={
+                      <>
+                        Без ключа слова сравниваются сами — по алфавиту, буква
+                        за буквой.
+                      </>
+                    }
+                  />
+                ),
+              },
+              {
+                label: "reverse=True",
+                content: (
+                  <LessonDiagram
+                    {...lessonMedia.sortResultLenReverse}
+                    caption={
+                      <>
+                        Тот же ключ, обратный порядок: от длинных к коротким.
+                        Равные «кот» и «дом» по-прежнему в исходном порядке.
+                      </>
+                    }
+                  />
+                ),
+              },
+              {
+                label: "последняя буква",
+                content: (
+                  <LessonDiagram
+                    {...lessonMedia.sortResultLast}
+                    caption={
+                      <>
+                        Ключ <Notation>{"lambda w: w[-1]"}</Notation> —
+                        последняя буква: «з» раньше «м», «о» и «т».
+                      </>
+                    }
+                  />
+                ),
+              },
+            ]}
+          />
         </>
       ),
     },
@@ -141,15 +209,20 @@ export const pythonSortingSearchLesson = defineCourseLesson({
               "Это похоже на порядок слов в словаре, но применяется к любым сравнимым элементам"
             }
             language="python"
-            fileName="students.py"
+            fileName="main.py"
             output={"[('Анна', 91), ('Марк', 91), ('Илья', 84)]"}
           />
           <Typography.Text>
             Балл сортируется по убыванию благодаря минусу: 91 превращается в
             −91, что меньше −84. При равных баллах имя сортируется по
             возрастанию. <Notation>{"reverse=True"}</Notation> для всего кортежа
-            развернул бы оба критерия, поэтому это не то же самое.
+            развернул бы оба критерия, поэтому это не то же самое. Как кортежи
+            ключей решают порядок — по шагам:
           </Typography.Text>
+          <LessonStepper
+            {...lessonMedia.tupleSortStepper}
+            label={"Сортировка по кортежу ключей по шагам"}
+          />
         </>
       ),
     },
@@ -179,16 +252,20 @@ export const pythonSortingSearchLesson = defineCourseLesson({
               "Если нужен только лучший элемент, нет необходимости сортировать всё"
             }
             language="python"
-            fileName="words.py"
+            fileName="main.py"
             output={"арбуз\nNone"}
           />
           <Typography.Text>
-            При одинаковом максимальном ключе <Notation>{"max"}</Notation>{" "}
-            вернёт первый встретившийся элемент. Для возможно пустого источника
-            можно указать <Notation>{"default=None"}</Notation>. Аргумент{" "}
-            <Notation>{"default"}</Notation> применяется к форме с одним
-            перебираемым источником.
+            <Notation>{"max"}</Notation> проходит элементы один раз и помнит
+            лучший; при одинаковом ключе лучшим остаётся первый. Для возможно
+            пустого источника можно указать{" "}
+            <Notation>{"default=None"}</Notation>. Как{" "}
+            <Notation>{"max"}</Notation> выбирает — по шагам:
           </Typography.Text>
+          <LessonStepper
+            {...lessonMedia.maxStepper}
+            label={"max(words, key=len) по шагам"}
+          />
           <Typography.Text>
             Сквозная задача курса получает продолжение: не одно наибольшее, а
             два. Для <Notation>{"[5, -2, 10, 7]"}</Notation> выражение{" "}
@@ -220,10 +297,14 @@ export const pythonSortingSearchLesson = defineCourseLesson({
             code={
               "prices = [50, 20, 70, 10, 40]\nbudget = 100\ncount = 0\nspent = 0\nfor price in sorted(prices):\n    if spent + price > budget:\n        break\n    spent += price\n    count += 1\nprint(count, spent)"
             }
-            label={"Программа на Python"}
+            label={"Жадная покупка самых дешёвых"}
             language="python"
-            fileName="prices.py"
+            fileName="main.py"
             output={"3 70"}
+          />
+          <LessonStepper
+            {...lessonMedia.greedyStepper}
+            label={"Жадная покупка по шагам"}
           />
           <Typography.Text>
             Самые дешёвые 10, 20 и 40 стоят 70; следующая цена 50 уже не
@@ -346,9 +427,14 @@ export const pythonSortingSearchLesson = defineCourseLesson({
   ],
   result: (
     <>
+      <Typography.Text>
+        Любой порядок задаётся ключом, а несколько критериев — кортежем ключей.
+        Вот что понадобится дальше — и в задачах ЕГЭ с сортировкой.
+      </Typography.Text>
       <LessonSummary
         items={[
           {
+            key: <Notation>{"sorted и sort"}</Notation>,
             note: (
               <>
                 <Notation>{"sorted(x)"}</Notation> создаёт новый список,{" "}
@@ -360,6 +446,7 @@ export const pythonSortingSearchLesson = defineCourseLesson({
             ),
           },
           {
+            key: <Notation>{"key=функция"}</Notation>,
             note: (
               <>
                 <Notation>{"key=функция"}</Notation> сортирует по значению
@@ -368,6 +455,7 @@ export const pythonSortingSearchLesson = defineCourseLesson({
             ),
           },
           {
+            key: "Несколько критериев",
             note: (
               <>
                 Несколько критериев — кортеж ключей; минус перед числом даёт
@@ -376,6 +464,7 @@ export const pythonSortingSearchLesson = defineCourseLesson({
             ),
           },
           {
+            key: "Лучший без сортировки",
             note: (
               <>
                 Сортировка устойчива; один лучший элемент —{" "}
@@ -385,6 +474,7 @@ export const pythonSortingSearchLesson = defineCourseLesson({
             ),
           },
           {
+            key: "Жадный выбор",
             note: (
               <>Жадный выбор после сортировки верен только с доказательством.</>
             ),

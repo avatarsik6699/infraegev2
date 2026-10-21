@@ -2046,14 +2046,14 @@ def digits_stepper(number: int = 5072, tone: str | None = None) -> str:
     return _stepper(digits_frames(number, tone))
 
 
-def _stack_frame(stack, note) -> str:
+def _stack_frame(stack, note, accent=ACCENT) -> str:
     out = ['<svg viewBox="0 0 660 330" role="img" aria-hidden="true">']
     for k, (call, wait, value) in enumerate(stack):
         y = 290 - (k + 1) * 50
         top = k == len(stack) - 1
         out.append(
             f'<rect x="16" y="{y}" width="330" height="42" rx="8" fill="{WASH if top else "#fff"}" '
-            f'stroke="{ACCENT if top else INK}" stroke-width="{2 if top else 1.25}"/>'
+            f'stroke="{accent if top else INK}" stroke-width="{2 if top else 1.25}"/>'
         )
         out.append(_text(30, y + 27, call, 16, INK, weight=600))
         out.append(
@@ -2062,7 +2062,7 @@ def _stack_frame(stack, note) -> str:
                 y + 27,
                 wait if value is None else f"→ {value}",
                 15,
-                MUTED if value is None else ACCENT,
+                MUTED if value is None else accent,
             )
         )
     out.append(_text(16, 318, "дно стека — первый вызов", 13, MUTED))
@@ -2072,7 +2072,7 @@ def _stack_frame(stack, note) -> str:
     return "".join(out)
 
 
-def stack_frames(n: int = 4) -> list[tuple[str, str]]:
+def stack_frames(n: int = 4, tone: str | None = None) -> list[tuple[str, str]]:
     """factorial(n): calls pile up to the base case, then return in reverse."""
     frames, stack = [], []
     for k in range(n, -1, -1):
@@ -2080,7 +2080,7 @@ def stack_frames(n: int = 4) -> list[tuple[str, str]]:
         stack.append([f"factorial({k})", wait, None])
         frames.append(
             (
-                _stack_frame(stack, ("вызов", f"глубина {len(stack)}")),
+                _stack_frame(stack, ("вызов", f"глубина {len(stack)}"), accent_of(tone)),
                 f"factorial({k}) "
                 + (
                     f"ждёт результат factorial({k - 1})."
@@ -2095,7 +2095,7 @@ def stack_frames(n: int = 4) -> list[tuple[str, str]]:
         stack[-1][2] = value
         frames.append(
             (
-                _stack_frame(stack, ("возврат", f"factorial({k}) = {value}")),
+                _stack_frame(stack, ("возврат", f"factorial({k}) = {value}"), accent_of(tone)),
                 f"factorial({k}) возвращает {value}"
                 + (f" = {k} × {value // k}." if k else ".")
                 + (" Вызов снимается со стека." if k < n else " Стек пуст — ответ готов."),
@@ -2105,9 +2105,9 @@ def stack_frames(n: int = 4) -> list[tuple[str, str]]:
     return frames
 
 
-def stack_stepper(n: int = 4) -> str:
+def stack_stepper(n: int = 4, tone: str | None = None) -> str:
     """The call stack of factorial(n), call by call."""
-    return _stepper(stack_frames(n))
+    return _stepper(stack_frames(n, tone))
 
 
 MONO_FONT = "JetBrains Mono, ui-monospace, monospace"
@@ -3433,6 +3433,460 @@ def freq_table_svg(text: str = "BANANA", tone: str | None = None) -> str:
     return "".join(out)
 
 
+def call_flow_svg(tone: str | None = None) -> str:
+    """A call of rectangle_area(3, 5): the arguments become the parameters, the body
+    runs, and return puts its value back where the call stood."""
+    accent = accent_of(tone)
+    size = 15
+    cw = size * CH
+    x0 = 40
+    call = "area = rectangle_area(3, 5)"
+    head = "def rectangle_area(width, height):"
+    body = "    return width * height"
+    out = [_svg(300, "Вызов функции rectangle_area(3, 5)")]
+    out.append(_text(x0, 20, "строка с вызовом", 12, MUTED))
+    out.append(_mono(x0, 50, call, size, INK, weight=600))
+    # the call itself, which return replaces with a value
+    out.append(_box(x0 + 7 * cw - 4, 30, 20 * cw + 8, 28, accent, "none", rx=5, dashed=True))
+    out.append(_box(x0 - 14, 118, 440, 104, FAINT, WASH, rx=10))
+    out.append(_text(x0, 110, "функция", 12, MUTED))
+    out.append(_mono(x0, 152, head, size))
+    out.append(_mono(x0, 192, body, size))
+    for arg_idx, par_idx, par_len in ((22, 19, 5), (25, 26, 6)):
+        ax = x0 + arg_idx * cw + cw / 2
+        px = x0 + (par_idx + par_len / 2) * cw
+        out.append(_box(x0 + par_idx * cw - 2, 134, par_len * cw + 4, 24, accent, "none", rx=4))
+        out.append(_arrow(ax, 58, px, 130, accent, width=1.75))
+    out.append(_text(x0 + 300, 92, "3 → width, 5 → height", 12, MUTED))
+    # return: the value goes back to the call
+    out.append(_box(x0 + 4 * cw - 3, 174, 21 * cw + 6, 25, INK, "none", rx=4))
+    bx, by = 560, 186
+    out.append(f'<circle cx="{bx}" cy="{by}" r="20" fill="{WASH}" stroke="{accent}" stroke-width="2"/>')
+    out.append(_mono(bx, by + 5, "15", 15, INK, "middle", 600))
+    out.append(_arrow(x0 + 25 * cw + 8, by, bx - 24, by, MUTED))
+    out.append(
+        f'<path d="M {bx} {by - 22} V 44 H {x0 + 27 * cw + 12}" fill="none" stroke="{accent}" '
+        f'stroke-width="1.75"/>'
+    )
+    out.append(f'<path d="M {x0 + 27 * cw + 6} 44 l 8 -4 v 8 z" fill="{accent}"/>')
+    out.append(_text(x0, 262, "return отдаёт 15 в место вызова: строка становится area = 15", 13, INK))
+    out.append(_text(x0, 284, "тело выполняется при каждом вызове, а не при def", 12, MUTED))
+    out.append("</svg>")
+    return "".join(out)
+
+
+def fib_tree_svg(n: int = 5, tone: str | None = None) -> str:
+    """All calls of the plain recursive Fibonacci for n: the values that are
+    computed again and again are marked."""
+    accent = accent_of(tone)
+
+    def build(k):
+        return (k, [] if k < 2 else [build(k - 1), build(k - 2)])
+
+    tree = build(n)
+    counts: dict = {}
+
+    def count(t):
+        counts[t[0]] = counts.get(t[0], 0) + 1
+        for c in t[1]:
+            count(c)
+
+    count(tree)
+    leaves: list = []
+
+    def place(t, depth):
+        if not t[1]:
+            leaves.append(t)
+            return (len(leaves) - 1, depth, t, [])
+        kids = [place(c, depth + 1) for c in t[1]]
+        return (sum(p[0] for p in kids) / len(kids), depth, t, kids)
+
+    root = place(tree, 0)
+    gap = 600 / max(len(leaves) - 1, 1)
+    top, step = 52, 54
+
+    def depth_of(p):
+        return max([p[1]] + [depth_of(c) for c in p[3]])
+
+    height = top + depth_of(root) * step + 40
+    total = sum(counts.values())
+    out = [_svg(height, f"Вызовы fibonacci_slow({n})")]
+    out.append(_text(16, 22, f"fibonacci_slow({n}): {total} вызовов", 14, INK, weight=600))
+    repeats = ", ".join(f"F({k}) — {c} раза" for k, c in sorted(counts.items(), reverse=True) if c > 1 and k >= 2)
+    out.append(_text(644, 22, f"повторы: {repeats}", 12, accent, "end"))
+
+    def draw(p):
+        pos, depth, (k, _), kids = p
+        x, y = 30 + pos * gap, top + depth * step
+        for c in kids:
+            out.append(
+                f'<line x1="{x:.1f}" y1="{y + 14}" x2="{30 + c[0] * gap:.1f}" '
+                f'y2="{top + c[1] * step - 14}" stroke="{FAINT}" stroke-width="1.5"/>'
+            )
+            draw(c)
+        again = counts[k] > 1 and k >= 2
+        out.append(
+            f'<rect x="{x - 24:.1f}" y="{y - 14}" width="48" height="28" rx="14" '
+            f'fill="{WASH if again else "#fff"}" stroke="{accent if again else INK}" '
+            f'stroke-width="{2 if again else 1.25}"/>'
+        )
+        out.append(_mono(x, y + 5, f"F({k})", 13, INK, "middle", 600 if again else 500))
+
+    draw(root)
+    out.append("</svg>")
+    return "".join(out)
+
+
+def _key_of(key):
+    """A key for the sorting figures: its function and how it is written."""
+    if key == "len":
+        return len, "len"
+    if key == "last":
+        return (lambda w: w[-1]), "lambda w: w[-1]"
+    return (lambda w: w), None
+
+
+def _word_card(out, cx, y, word, stroke=INK, fill="#fff", sw=1.5, w=96):
+    out.append(_box(cx - w / 2, y, w, 34, stroke, fill, sw=sw))
+    out.append(_text(cx, y + 23, word, 15, INK, "middle"))
+
+
+def sort_frames(items, key="len", tone: str | None = None) -> list[tuple[str, str]]:
+    """sorted(items, key=…) step by step: the key of every element, then the
+    elements in the order of their keys; equal keys keep their order."""
+    accent = accent_of(tone)
+    fn, shown = _key_of(key)
+    keys = [fn(w) for w in items]
+    order = sorted(range(len(items)), key=lambda k: keys[k])
+    step = 620 / len(items)
+    xs = [20 + step * k + step / 2 for k in range(len(items))]
+    call = f"sorted(words, key={shown})" if shown else "sorted(words)"
+    frames = []
+
+    def frame(known, result, current=None):
+        out = [_svg(262, "Сортировка по ключу")]
+        out.append(_mono(16, 22, "words", 13, MUTED))
+        for k, w in enumerate(items):
+            hot = k == current
+            _word_card(out, xs[k], 34, w, accent if hot else INK, WASH if hot else "#fff", 2 if hot else 1.5)
+            if k in known:
+                out.append(_text(xs[k], 90, f"ключ {keys[k]!r}" if not isinstance(keys[k], int) else f"ключ {keys[k]}", 13, accent, "middle", 600))
+        if not result:
+            out.append(_text(330, 190, "результат появится, когда известны все ключи", 12, FAINT, "middle"))
+        if result:
+            out.append(_mono(16, 136, call, 13, MUTED))
+            for slot, k in enumerate(order):
+                _word_card(out, xs[slot], 150, items[k], INK, WASH)
+                out.append(_text(xs[slot], 206, f"ключ {keys[k]}" if isinstance(keys[k], int) else f"ключ {keys[k]!r}", 12, accent, "middle", 600))
+                out.append(_text(xs[slot], 226, f"было место {k + 1}", 12, MUTED, "middle"))
+        out.append("</svg>")
+        return "".join(out)
+
+    frames.append((frame(set(), False), "Исходный список. sorted сначала вычисляет ключ каждого элемента."))
+    for k, w in enumerate(items):
+        frames.append(
+            (
+                frame(set(range(k + 1)), False, k),
+                f"Ключ слова «{w}»: {shown}(«{w}») = {keys[k]!r}." if shown else f"Без key сравниваются сами слова: «{w}».",
+            )
+        )
+    ties = [w for w in items if [fn(x) for x in items].count(fn(w)) > 1]
+    note = " Слова с равным ключом — " + ", ".join(f"«{w}»" for w in ties) + " — сохранили исходный порядок." if ties else ""
+    frames.append((frame(set(range(len(items))), True), "Слова встали в порядке ключей." + note))
+    return frames
+
+
+def sort_stepper(items, key="len", tone: str | None = None) -> str:
+    """sorted with a key, frame by frame."""
+    return _stepper(sort_frames(items, key, tone))
+
+
+def sort_result_svg(items, key="len", reverse=False, tone: str | None = None) -> str:
+    """The result of one sorting rule: sorted elements with their keys and the
+    places they came from."""
+    accent = accent_of(tone)
+    fn, shown = _key_of(key)
+    order = sorted(range(len(items)), key=lambda k: fn(items[k]), reverse=reverse)
+    step = 620 / len(items)
+    parts = ["words"] + ([f"key={shown}"] if shown else []) + (["reverse=True"] if reverse else [])
+    out = [_svg(130, "Результат сортировки")]
+    out.append(_mono(16, 22, f"sorted({', '.join(parts)})", 13, MUTED))
+    for slot, k in enumerate(order):
+        cx = 20 + step * slot + step / 2
+        value = fn(items[k])
+        out.append(_text(cx, 50, f"ключ {value!r}" if not isinstance(value, int) else f"ключ {value}", 12, accent, "middle", 600))
+        _word_card(out, cx, 60, items[k], INK, WASH)
+        out.append(_text(cx, 116, f"было место {k + 1}", 12, MUTED, "middle"))
+    out.append("</svg>")
+    return "".join(out)
+
+
+def tuple_sort_frames(students, tone: str | None = None) -> list[tuple[str, str]]:
+    """Sorting records by the key (-score, name): first components decide,
+    equal first components pass the decision to the second."""
+    accent = accent_of(tone)
+    keys = [(-score, name) for name, score in students]
+    order = sorted(range(len(students)), key=lambda k: keys[k])
+    step = 620 / len(students)
+    xs = [20 + step * k + step / 2 for k in range(len(students))]
+    top_score = -min(k[0] for k in keys)
+    tied = [k for k in range(len(students)) if -keys[k][0] == top_score]
+
+    def frame(stage):
+        out = [_svg(262, "Сортировка по кортежу ключей")]
+        out.append(_mono(16, 22, "students", 13, MUTED))
+        for k, (name, score) in enumerate(students):
+            hot = (stage == 2 and k in tied) or (stage == 3 and k in tied)
+            _word_card(out, xs[k], 34, f"{name} {score}", accent if hot else INK, WASH if hot else "#fff", 2 if hot else 1.5, w=120)
+            if stage >= 1:
+                first, second = keys[k]
+                out.append(_mono(xs[k], 92, f"({first}, {second!r})", 13, INK, "middle"))
+                if stage == 2:
+                    out.append(_bracket(xs[k] - 46, xs[k] - 18, 100, accent))
+                if stage == 3 and k in tied:
+                    out.append(_bracket(xs[k] - 8, xs[k] + 50, 100, accent))
+        if stage == 4:
+            out.append(_mono(16, 136, "sorted(students, key=lambda s: (-s[1], s[0]))", 13, MUTED))
+            for slot, k in enumerate(order):
+                name, score = students[k]
+                _word_card(out, xs[slot], 150, f"{name} {score}", INK, WASH, w=120)
+                out.append(_mono(xs[slot], 206, f"({keys[k][0]}, {keys[k][1]!r})", 12, accent, "middle"))
+        out.append("</svg>")
+        return "".join(out)
+
+    names = " и ".join(students[k][0] for k in tied)
+    return [
+        (frame(0), "Исходные записи: имя и балл."),
+        (frame(1), "Ключ каждой записи — кортеж: минус балл и имя."),
+        (frame(2), f"Сначала сравниваются первые элементы: −{top_score} меньше остальных, поэтому {names} будут впереди."),
+        (frame(3), f"У {names} первые элементы равны — решает второй: имена сравниваются по алфавиту."),
+        (frame(4), "Итог: по убыванию балла, при равном балле — по алфавиту."),
+    ]
+
+
+def tuple_sort_stepper(students, tone: str | None = None) -> str:
+    """Sorting by a tuple key, frame by frame."""
+    return _stepper(tuple_sort_frames(students, tone))
+
+
+def max_frames(items, tone: str | None = None) -> list[tuple[str, str]]:
+    """max(items, key=len) element by element: the best so far changes only on
+    a strictly greater key, so on a tie the first one stays."""
+    accent = accent_of(tone)
+    step = 620 / len(items)
+    xs = [20 + step * k + step / 2 for k in range(len(items))]
+    frames = []
+    best = None
+    for k, w in enumerate(items):
+        if best is None:
+            best, note = k, f"«{w}»: длина {len(w)} — первый элемент, пока лучший."
+        elif len(w) > len(items[best]):
+            note = f"«{w}»: {len(w)} > {len(items[best])} — новый лучший."
+            best = k
+        elif len(w) == len(items[best]):
+            note = f"«{w}»: {len(w)} не больше {len(items[best])} — лучшим остаётся «{items[best]}»."
+        else:
+            note = f"«{w}»: {len(w)} < {len(items[best])} — лучшим остаётся «{items[best]}»."
+        out = [_svg(150, "Поиск наибольшего по ключу")]
+        out.append(_mono(16, 22, "max(words, key=len)", 13, MUTED))
+        for j, word in enumerate(items):
+            seen = j <= k
+            is_best = j == best
+            stroke = accent if j == k else (INK if seen else FAINT)
+            _word_card(out, xs[j], 40, word, stroke, WASH if is_best else "#fff", 2 if j == k else 1.5)
+            if seen:
+                out.append(_text(xs[j], 96, f"ключ {len(word)}", 12, accent if is_best else MUTED, "middle", 600 if is_best else 400))
+            if is_best:
+                out.append(_text(xs[j], 120, "лучший пока", 12, accent, "middle", 600))
+        out.append("</svg>")
+        frames.append(("".join(out), note))
+    frames.append((frames[-1][0], f"Список кончился: max вернул «{items[best]}»."))
+    return frames
+
+
+def max_stepper(items, tone: str | None = None) -> str:
+    """max with a key, element by element."""
+    return _stepper(max_frames(items, tone))
+
+
+def greedy_frames(prices, budget, tone: str | None = None) -> list[tuple[str, str]]:
+    """Buying the cheapest first: the budget bar fills price by price until the
+    next price does not fit."""
+    accent = accent_of(tone)
+    order = sorted(prices)
+    scale = 600 / (budget + max(order))  # room for a price that does not fit
+    frames = []
+    spent = 0
+    taken = []
+
+    def frame(trying=None):
+        out = [_svg(186, "Жадная покупка в пределах бюджета")]
+        out.append(_mono(16, 22, f"sorted(prices) = {order}", 13, MUTED))
+        x0, y = 40, 70
+        out.append(_box(x0, y, budget * scale, 34, INK, "#fff", rx=4))
+        out.append(_text(x0 + budget * scale, y - 8, f"бюджет {budget}", 12, MUTED, "end"))
+        x = x0
+        for p in taken:
+            out.append(_box(x, y, p * scale, 34, accent, WASH, rx=4, sw=1.5))
+            out.append(_text(x + p * scale / 2, y + 22, str(p), 13, INK, "middle", 600))
+            x += p * scale
+        if trying is not None:
+            fits = spent + trying <= budget
+            color = accent if fits else ERR
+            out.append(_box(x, y + 44, trying * scale, 30, color, "#fff", rx=4, sw=1.5, dashed=not fits))
+            out.append(_text(x + trying * scale / 2, y + 64, str(trying), 13, color, "middle", 600))
+        out.append(_text(x0, y + 104, f"куплено {len(taken)}, потрачено {spent}", 13, INK, weight=600))
+        out.append("</svg>")
+        return "".join(out)
+
+    frames.append((frame(), "Цены по возрастанию: выгоднее всего брать самые дешёвые."))
+    for p in order:
+        if spent + p > budget:
+            frames.append((frame(p), f"{spent} + {p} = {spent + p} > {budget}: не помещается — break."))
+            break
+        frames.append((frame(p), f"Пробуем {p}: {spent} + {p} = {spent + p} — помещается."))
+        spent += p
+        taken.append(p)
+        frames.append((frame(), f"Купили {p}: потрачено {spent}."))
+    frames.append((frame(), f"Итог: {len(taken)} предмета за {spent}."))
+    return frames
+
+
+def greedy_stepper(prices, budget, tone: str | None = None) -> str:
+    """The greedy purchase, frame by frame."""
+    return _stepper(greedy_frames(prices, budget, tone))
+
+
+def arg_binding_svg(tone: str | None = None) -> str:
+    """Three calls of final_price(price, discount=0): which value each
+    parameter gets — by position, by name or by default."""
+    accent = accent_of(tone)
+    rows = [
+        ("final_price(200)", [("price", "200", "по позиции"), ("discount", "0", "по умолчанию")]),
+        ("final_price(200, 10)", [("price", "200", "по позиции"), ("discount", "10", "по позиции")]),
+        ("final_price(discount=10, price=200)", [("price", "200", "по имени"), ("discount", "10", "по имени")]),
+    ]
+    out = [_svg(262, "Как параметры получают значения")]
+    out.append(_mono(16, 22, "def final_price(price, discount=0):", 13, MUTED))
+    for i, (call, params) in enumerate(rows):
+        y = 52 + i * 70
+        out.append(_mono(16, y + 22, call, 13, INK, weight=600))
+        for j, (name, value, how) in enumerate(params):
+            x = 360 + j * 150
+            default = how == "по умолчанию"
+            out.append(_box(x, y, 136, 34, accent if not default else FAINT, WASH if not default else "#fff", dashed=default))
+            out.append(_mono(x + 68, y + 22, f"{name} = {value}", 13, INK, "middle"))
+            out.append(_text(x + 68, y + 52, how, 12, accent if not default else MUTED, "middle"))
+    out.append("</svg>")
+    return "".join(out)
+
+
+def tuple_return_svg(tone: str | None = None) -> str:
+    """return a // b, a % b: two values leave the function as one tuple and are
+    unpacked into two names at the call."""
+    accent = accent_of(tone)
+    out = [_svg(150, "Несколько результатов — один кортеж")]
+    out.append(_text(16, 22, "функция при a = 23, b = 5", 12, MUTED))
+    out.append(_box(16, 34, 236, 40, FAINT, WASH, rx=8))
+    out.append(_mono(28, 59, "return a // b, a % b", 14, INK))
+    out.append(_arrow(256, 54, 292, 54, MUTED))
+    out.append(f'<rect x="296" y="32" width="104" height="44" rx="22" fill="{WASH}" stroke="{accent}" stroke-width="2"/>')
+    out.append(_mono(348, 59, "(4, 3)", 15, INK, "middle", 600))
+    out.append(_text(348, 22, "один кортеж", 12, accent, "middle"))
+    out.append(_arrow(404, 46, 470, 36, accent, width=1.5))
+    out.append(_arrow(404, 62, 470, 76, accent, width=1.5))
+    for y, label in ((18, "q = 4"), (60, "r = 3")):
+        out.append(_box(474, y, 90, 32, INK))
+        out.append(_mono(519, y + 21, label, 14, INK, "middle", 600))
+    out.append(_text(16, 118, "строка вызова раскладывает кортеж на два имени:", 13, INK))
+    out.append(_mono(16, 140, "q, r = quotient_and_remainder(23, 5)", 13, MUTED))
+    out.append("</svg>")
+    return "".join(out)
+
+def import_names_svg(tone: str | None = None) -> str:
+    """import math gives the program the name of the module; from math import
+    isqrt gives the name of one function inside it."""
+    accent = accent_of(tone)
+    out = [_svg(250, "import и from … import")]
+    funcs = ["isqrt", "gcd", "floor", "ceil", "fsum"]
+    for k, (title, name, target, call) in enumerate(
+        (("import math", "math", None, "math.isqrt(50)"), ("from math import isqrt", "isqrt", 0, "isqrt(50)"))
+    ):
+        x0 = k * 330 + 16
+        out.append(_mono(x0, 22, title, 14, INK, weight=600))
+        out.append(_text(x0, 44, "имена программы", 12, MUTED))
+        out.append(_box(x0, 54, 90, 34, accent, WASH, sw=2))
+        out.append(_mono(x0 + 45, 76, name, 14, INK, "middle", 600))
+        mx, my = x0 + 140, 54
+        out.append(_text(mx, 44, "модуль math", 12, MUTED))
+        out.append(_box(mx, my, 150, 30 + len(funcs) * 24, INK, "#fff", rx=10))
+        for i, fn_name in enumerate(funcs):
+            hot = target == i
+            out.append(_mono(mx + 16, my + 26 + i * 24, fn_name, 13, accent if hot else INK, weight=600 if hot else 500))
+        if target is None:
+            out.append(_arrow(x0 + 90, 71, mx - 2, 71, accent, width=1.75))
+        else:
+            out.append(_arrow(x0 + 90, 71, mx + 12, my + 22 + target * 24, accent, width=1.75))
+        out.append(_text(x0, 222, "вызов:", 12, MUTED))
+        out.append(_mono(x0 + 48, 222, call, 14, INK, weight=600))
+        if k == 0:
+            out.append(f'<path d="M 322 10 V 236" stroke="{FAINT}"/>')
+    out.append("</svg>")
+    return "".join(out)
+
+
+def name_main_svg(tone: str | None = None) -> str:
+    """The same calculations.py run directly and imported: __name__ decides
+    whether the block under if __name__ == "__main__" runs."""
+    accent = accent_of(tone)
+    code = ["def square(number):", "    return number * number", "", 'if __name__ == "__main__":', "    print(square(7))"]
+    cases = [
+        ("python calculations.py", '"__main__"', True, "блок выполнен: печатает 49"),
+        ("from calculations import square", '"calculations"', False, "блок пропущен: только определения"),
+    ]
+    out = [_svg(254, "__name__ при запуске и при импорте")]
+    for k, (how, value, runs, note) in enumerate(cases):
+        x0 = k * 330 + 16
+        out.append(_mono(x0, 22, how, 12.5, INK, weight=600))
+        out.append(_mono(x0, 46, f"__name__ == {value}", 13, accent, weight=600))
+        for i, line in enumerate(code):
+            y = 82 + i * 24
+            block = i == 4
+            color = (INK if runs else FAINT) if block else INK
+            if block and runs:
+                out.append(f'<circle cx="{x0 + 4}" cy="{y - 5}" r="3.5" fill="{accent}"/>')
+            out.append(_mono(x0 + 14, y, line, 13, color))
+        out.append(_text(x0, 226, note, 13, accent if runs else MUTED, weight=600 if runs else 400))
+        if k == 0:
+            out.append(f'<path d="M 322 10 V 240" stroke="{FAINT}"/>')
+    out.append("</svg>")
+    return "".join(out)
+
+
+def program_split_svg(tone: str | None = None) -> str:
+    """A small program in three parts: reading, computing, printing; the
+    computing function is checked on its own."""
+    accent = accent_of(tone)
+    parts = [("чтение", "input() или файл"), ("вычисление", "count_multiples(a, b, d)"), ("вывод", "print(...)")]
+    out = [_svg(196, "Чтение, вычисление и вывод")]
+    widths = [150, 230, 150]
+    x = 16
+    for k, ((title, sub), w) in enumerate(zip(parts, widths, strict=True)):
+        hot = k == 1
+        out.append(_box(x, 30, w, 64, accent if hot else INK, WASH if hot else "#fff", sw=2 if hot else 1.5))
+        out.append(_text(x + w / 2, 56, title, 14, INK, "middle", 600))
+        out.append(_mono(x + w / 2, 80, sub, 12, MUTED, "middle"))
+        if k:
+            out.append(_arrow(x - 24, 62, x - 4, 62, MUTED))
+        if hot:
+            out.append(f'<path d="M {x + w / 2} 98 V 128" stroke="{accent}" stroke-dasharray="4 3"/>')
+            out.append(_mono(x + w / 2, 150, "count_multiples(1, 100, 7) → 14", 13, INK, "middle", 600))
+            out.append(_text(x + w / 2, 174, "проверка без ввода и вывода", 12, accent, "middle"))
+        x += w + 28
+    out.append("</svg>")
+    return "".join(out)
+
+
 def time_split_svg(seconds: int = 3671, tone: str | None = None) -> str:
     """Seconds split into hours, minutes and seconds by // and %."""
     accent = accent_of(tone)
@@ -4075,6 +4529,18 @@ FIGURES = {
     "for_while": for_while_svg,
     "zip_pairs": zip_pairs_svg,
     "freq_table": freq_table_svg,
+    "call_flow": call_flow_svg,
+    "fib_tree": fib_tree_svg,
+    "sort_stepper": sort_stepper,
+    "sort_result": sort_result_svg,
+    "tuple_sort_stepper": tuple_sort_stepper,
+    "max_stepper": max_stepper,
+    "greedy_stepper": greedy_stepper,
+    "arg_binding": arg_binding_svg,
+    "tuple_return": tuple_return_svg,
+    "import_names": import_names_svg,
+    "name_main": name_main_svg,
+    "program_split": program_split_svg,
     "loop_grid": loop_grid_svg,
     "venn": venn_svg,
     "loop_to_comp": loop_to_comp_svg,
@@ -4118,6 +4584,10 @@ STEPPERS = {
     "topo_stepper": topo_frames,
     "digits_stepper": digits_frames,
     "stack_stepper": stack_frames,
+    "sort_stepper": sort_frames,
+    "tuple_sort_stepper": tuple_sort_frames,
+    "max_stepper": max_frames,
+    "greedy_stepper": greedy_frames,
     "cursor": cursor_frames,
 }
 

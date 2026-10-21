@@ -2937,7 +2937,7 @@
     },
     {
       "id": "python-arguments",
-      "sections": ["intro", "s1", "s2", "s3", "s4", "s5"],
+      "sections": ["intro", "s1", "s2", "s3", "s4", "s5", "s6-skvoznaya"],
       "kind": "course",
       "status": "published",
       "course_id": "python",

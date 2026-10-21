@@ -124652,7 +124652,7 @@
     {
       "task": {
         "id": "python-functions-t01",
-        "title": "Напиши функцию perimeter(width, height), возвращающую периметр прямоугольника",
+        "title": "Напиши функцию: периметр прямоугольника",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 2,
@@ -124664,7 +124664,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Напиши функцию `perimeter(width, height)`, возвращающую периметр прямоугольника. Чему равно `perimeter(3, 5)`?"
+              "markdown": "Напиши функцию `perimeter(width, height)`, которая возвращает периметр прямоугольника. Вызови её для 3 и 5, напечатав результат и запиши, что напечатала программа."
             }
           }
         ],
@@ -124672,7 +124672,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Функции: def, return и область видимости»: проследи программу по строкам и запиши значения так, как их покажет Python."
+              "markdown": "Периметр — удвоенная сумма сторон; верни его через `return`."
             }
           }
         ],
@@ -124680,7 +124680,27 @@
           {
             "type": "text",
             "data": {
-              "markdown": "`return 2 * (width + height)`; perimeter(3, 5) = 16."
+              "markdown": "Например:"
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "def perimeter(width, height):\n    return 2 * (width + height)\n\nprint(perimeter(3, 5))",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "2 · (3 + 5) = 16."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `16`"
             }
           }
         ],
@@ -124721,19 +124741,27 @@
     {
       "task": {
         "id": "python-functions-t02",
-        "title": "Функция f(n) содержит только print(n * 2)",
+        "title": "Что напечатает программа?",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 1,
         "estimated_minutes": null,
-        "answer_instruction": "Запишите ответы через пробел в порядке вопроса; списки и строки — так, как их печатает Python.",
+        "answer_instruction": "Запишите напечатанные строки через пробел в порядке вывода.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Функция `f(n)` содержит только `print(n * 2)`. Что выведет программа `r = f(3)`, `print(r)`?"
+              "markdown": "Что напечатает программа?"
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "def f(n):\n    print(n * 2)\n\nr = f(3)\nprint(r)",
+              "caption": null
             }
           }
         ],
@@ -124741,7 +124769,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Функции: def, return и область видимости»: проследи программу по строкам и запиши значения так, как их покажет Python."
+              "markdown": "`print` внутри функции печатает, но функция без `return` возвращает `None`."
             }
           }
         ],
@@ -124749,7 +124777,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "6, затем None: функция печатает, но ничего не возвращает."
+              "markdown": "Вызов печатает 6, а `r` получает `None`."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `6 None`"
             }
           }
         ],
@@ -124790,19 +124824,27 @@
     {
       "task": {
         "id": "python-functions-t03",
-        "title": "Перепиши describe_sign так, чтобы ноль отсекался первой же проверкой",
+        "title": "Что напечатает программа?",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 1,
         "estimated_minutes": null,
-        "answer_instruction": "Запишите ответы через пробел в порядке вопроса; списки и строки — так, как их печатает Python.",
+        "answer_instruction": "Запишите напечатанные строки через пробел в порядке вывода.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Перепиши `describe_sign` так, чтобы ноль отсекался первой же проверкой. Что вернут `describe_sign(7)` и `describe_sign(-0.5)`?"
+              "markdown": "Что напечатает программа?"
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "def describe_sign(number):\n    if number > 0:\n        return \"положительное\"\n    if number < 0:\n        return \"отрицательное\"\n    return \"ноль\"\n\nprint(describe_sign(7))\nprint(describe_sign(-0.5))",
+              "caption": null
             }
           }
         ],
@@ -124810,7 +124852,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Функции: def, return и область видимости»: проследи программу по строкам и запиши значения так, как их покажет Python."
+              "markdown": "Первый выполненный `return` завершает вызов."
             }
           }
         ],
@@ -124818,7 +124860,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Первой строкой тела `if number == 0: return \"ноль\"`; положительное и отрицательное."
+              "markdown": "7 больше нуля — первый `return`. −0.5 меньше нуля — второй."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `положительное отрицательное`"
             }
           }
         ],
@@ -124859,19 +124907,19 @@
     {
       "task": {
         "id": "python-functions-t04",
-        "title": "Что выведет программа?",
+        "title": "Что напечатает программа?",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 1,
         "estimated_minutes": null,
-        "answer_instruction": "Запишите ответы через пробел в порядке вопроса; списки и строки — так, как их печатает Python.",
+        "answer_instruction": "Запишите напечатанные строки через пробел в порядке вывода.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Что выведет программа?"
+              "markdown": "Что напечатает программа?"
             }
           },
           {
@@ -124887,7 +124935,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Функции: def, return и область видимости»: проследи программу по строкам и запиши значения так, как их покажет Python."
+              "markdown": "Присваивание внутри функции создаёт своё локальное `x`."
             }
           }
         ],
@@ -124895,7 +124943,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "2 1: внутреннее `x` локально."
+              "markdown": "`g()` возвращает своё локальное 2, внешнее `x` осталось 1."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `2 1`"
             }
           }
         ],
@@ -124936,19 +124990,27 @@
     {
       "task": {
         "id": "python-functions-t06",
-        "title": "Функция h(a) выполняет a.append(0), затем a = [5], затем a.append(1)",
+        "title": "Что напечатает программа?",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 1,
         "estimated_minutes": null,
-        "answer_instruction": "Запишите результат так, как его печатает Python.",
+        "answer_instruction": "Запишите список так, как его печатает Python.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Функция `h(a)` выполняет `a.append(0)`, затем `a = [5]`, затем `a.append(1)`. Чему равен список `lst` после `lst = [9]` и `h(lst)`?"
+              "markdown": "Что напечатает программа?"
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "def h(a):\n    a.append(0)\n    a = [5]\n    a.append(1)\n\nlst = [9]\nh(lst)\nprint(lst)",
+              "caption": null
             }
           }
         ],
@@ -124956,7 +125018,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Функции: def, return и область видимости»: проследи программу по строкам и запиши значения так, как их покажет Python."
+              "markdown": "Пока `a` и `lst` — имена одного списка, `append` меняет его. После `a = [5]` имя `a` ведёт к новому списку."
             }
           }
         ],
@@ -124964,7 +125026,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "[9, 0]: `append(0)` изменил внешний список, а после `a = [5]` параметр смотрит на новый список."
+              "markdown": "Первый `append` добавил 0 в общий список. Потом `a` связали с новым списком, и второй `append` менял уже его."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `[9, 0]`"
             }
           }
         ],
@@ -124996,7 +125064,7 @@
         ],
         "checker": {
           "checker_type": "exact_match",
-          "answer_variants": ["[9, 0]"],
+          "answer_variants": ["[9, 0]", "[9,0]"],
           "numeric_tolerance": null
         }
       },
@@ -125005,7 +125073,7 @@
     {
       "task": {
         "id": "python-functions-t07",
-        "title": "Напиши функцию last_digit(n), возвращающую последнюю цифру модуля числа",
+        "title": "Напиши функцию: последняя цифра",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 2,
@@ -125017,7 +125085,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Напиши функцию `last_digit(n)`, возвращающую последнюю цифру модуля числа. Чему равна сумма `last_digit(47) + last_digit(-123) + last_digit(50)`?"
+              "markdown": "Напиши функцию `last_digit(n)`, которая возвращает последнюю цифру модуля числа. Вызови её так: `print(last_digit(47) + last_digit(-123) + last_digit(50))` и запиши, что напечатала программа."
             }
           }
         ],
@@ -125025,7 +125093,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Функции: def, return и область видимости»: проследи программу по строкам и запиши значения так, как их покажет Python."
+              "markdown": "Последняя цифра — `abs(n) % 10`."
             }
           }
         ],
@@ -125033,7 +125101,27 @@
           {
             "type": "text",
             "data": {
-              "markdown": "10 = 7 + 3 + 0."
+              "markdown": "Например:"
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "def last_digit(n):\n    return abs(n) % 10\n\nprint(last_digit(47) + last_digit(-123) + last_digit(50))",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "7 + 3 + 0 = 10."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `10`"
             }
           }
         ],
@@ -125074,7 +125162,7 @@
     {
       "task": {
         "id": "python-functions-t08",
-        "title": "Напиши функцию is_even(n), возвращающую True или False, и с её помощью…",
+        "title": "Напиши функцию: чётные числа",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 2,
@@ -125086,7 +125174,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Напиши функцию `is_even(n)`, возвращающую `True` или `False`, и с её помощью посчитай чётные числа в списке `[3, 8, 0, -6, 7]`."
+              "markdown": "Напиши функцию `is_even(n)`, которая возвращает `True` или `False`, и с её помощью посчитай чётные числа в списке `[3, 8, 0, -6, 7]`. Вызови её в цикле по списку, напечатав количество и запиши, что напечатала программа."
             }
           }
         ],
@@ -125094,7 +125182,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Функции: def, return и область видимости»: проследи программу по строкам и запиши значения так, как их покажет Python."
+              "markdown": "`is_even` возвращает `n % 2 == 0`; в цикле прибавляй 1, когда она вернула `True`."
             }
           }
         ],
@@ -125102,7 +125190,27 @@
           {
             "type": "text",
             "data": {
-              "markdown": "3: числа 8, 0 и −6."
+              "markdown": "Например:"
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "def is_even(n):\n    return n % 2 == 0\n\ncount = 0\nfor x in [3, 8, 0, -6, 7]:\n    if is_even(x):\n        count += 1\nprint(count)",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Чётные — 8, 0 и −6."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `3`"
             }
           }
         ],
@@ -125143,7 +125251,7 @@
     {
       "task": {
         "id": "python-functions-t09",
-        "title": "Напиши функцию max_of_three(a, b, c) без max и проверь её на −5, −2, −9",
+        "title": "Напиши функцию: наибольшее из трёх",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 2,
@@ -125155,7 +125263,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Напиши функцию `max_of_three(a, b, c)` без `max` и проверь её на −5, −2, −9."
+              "markdown": "Напиши функцию `max_of_three(a, b, c)` без `max`. Вызови её для −5, −2 и −9, напечатав результат и запиши, что напечатала программа."
             }
           }
         ],
@@ -125163,7 +125271,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Функции: def, return и область видимости»: проследи программу по строкам и запиши значения так, как их покажет Python."
+              "markdown": "Начни с `best = a` и сравни с ним `b` и `c` отдельными `if`."
             }
           }
         ],
@@ -125171,7 +125279,27 @@
           {
             "type": "text",
             "data": {
-              "markdown": "−2."
+              "markdown": "Например:"
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "def max_of_three(a, b, c):\n    best = a\n    if b > best:\n        best = b\n    if c > best:\n        best = c\n    return best\n\nprint(max_of_three(-5, -2, -9))",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Наибольшее из −5, −2, −9 — −2."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `-2`"
             }
           }
         ],
@@ -125212,19 +125340,19 @@
     {
       "task": {
         "id": "python-arguments-t01",
-        "title": "Напиши count_negative(numbers), возвращающую количество отрицательных…",
+        "title": "Напиши функцию: отрицательные элементы",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 2,
         "estimated_minutes": null,
-        "answer_instruction": "Запишите ответы через пробел в порядке вопроса; списки и строки — так, как их печатает Python.",
+        "answer_instruction": "Запишите два числа через пробел: для первого списка, затем для пустого.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Напиши `count_negative(numbers)`, возвращающую количество отрицательных элементов без изменения списка. Чему она равна для `[0, -3, 4, -7]` и для `[]`?"
+              "markdown": "Напиши функцию `count_negative(numbers)`, которая возвращает количество отрицательных элементов и не меняет список. Вызови её для `[0, -3, 4, -7]` и для `[]`, напечатав оба результата через запятую в одном `print` и запиши, что напечатала программа."
             }
           }
         ],
@@ -125232,7 +125360,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Аргументы, несколько результатов и lambda»: проследи программу по строкам и запиши значения так, как их покажет Python."
+              "markdown": "Счётчик внутри функции, `return` — после цикла."
             }
           }
         ],
@@ -125240,7 +125368,27 @@
           {
             "type": "text",
             "data": {
-              "markdown": "2 и 0."
+              "markdown": "Например:"
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "def count_negative(numbers):\n    count = 0\n    for x in numbers:\n        if x < 0:\n            count += 1\n    return count\n\nprint(count_negative([0, -3, 4, -7]), count_negative([]))",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Отрицательные −3 и −7; в пустом списке их нет."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `2 0`"
             }
           }
         ],
@@ -125281,19 +125429,27 @@
     {
       "task": {
         "id": "python-arguments-t02",
-        "title": "Чему равны final_price(500, 20) и final_price(discount=50, price=80)?",
+        "title": "Что напечатает программа?",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 1,
         "estimated_minutes": null,
-        "answer_instruction": "Запишите ответы через пробел в порядке вопроса; списки и строки — так, как их печатает Python.",
+        "answer_instruction": "Запишите напечатанные строки через пробел в порядке вывода.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Чему равны `final_price(500, 20)` и `final_price(discount=50, price=80)`?"
+              "markdown": "Что напечатает программа?"
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "def final_price(price, discount=0):\n    return price * (100 - discount) / 100\n\nprint(final_price(500, 20))\nprint(final_price(discount=50, price=80))",
+              "caption": null
             }
           }
         ],
@@ -125301,7 +125457,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Аргументы, несколько результатов и lambda»: проследи программу по строкам и запиши значения так, как их покажет Python."
+              "markdown": "Именованные аргументы можно писать в любом порядке; `/` даёт дробное число."
             }
           }
         ],
@@ -125309,7 +125465,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "400.0 и 40.0."
+              "markdown": "500 · 80 / 100 = 400.0; 80 · 50 / 100 = 40.0."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `400.0 40.0`"
             }
           }
         ],
@@ -125350,19 +125512,27 @@
     {
       "task": {
         "id": "python-arguments-t04",
-        "title": "Что вернёт quotient_and_remainder(-7, 3)?",
+        "title": "Что напечатает программа?",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 1,
         "estimated_minutes": null,
-        "answer_instruction": "Запишите результат так, как его печатает Python.",
+        "answer_instruction": "Запишите кортеж так, как его печатает Python.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Что вернёт `quotient_and_remainder(-7, 3)`?"
+              "markdown": "Что напечатает программа?"
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "def quotient_and_remainder(a, b):\n    return a // b, a % b\n\nprint(quotient_and_remainder(-7, 3))",
+              "caption": null
             }
           }
         ],
@@ -125370,7 +125540,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Аргументы, несколько результатов и lambda»: проследи программу по строкам и запиши значения так, как их покажет Python."
+              "markdown": "`//` округляет вниз, остаток согласован с частным: −7 = 3 · частное + остаток."
             }
           }
         ],
@@ -125378,7 +125548,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "(−3, 2): −7 = 3·(−3) + 2."
+              "markdown": "−7 // 3 = −3, −7 % 3 = 2; функция возвращает кортеж."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `(-3, 2)`"
             }
           }
         ],
@@ -125410,7 +125586,7 @@
         ],
         "checker": {
           "checker_type": "exact_match",
-          "answer_variants": ["(-3, 2)", "(−3, 2)"],
+          "answer_variants": ["(-3, 2)", "(−3, 2)", "(-3,2)"],
           "numeric_tolerance": null
         }
       },
@@ -125419,19 +125595,27 @@
     {
       "task": {
         "id": "python-arguments-t05",
-        "title": "Чему равны total_of(5) и total_of(*[1, 2, 3])?",
+        "title": "Что напечатает программа?",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 1,
         "estimated_minutes": null,
-        "answer_instruction": "Запишите ответы через пробел в порядке вопроса; списки и строки — так, как их печатает Python.",
+        "answer_instruction": "Запишите напечатанные строки через пробел в порядке вывода.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Чему равны `total_of(5)` и `total_of(*[1, 2, 3])`?"
+              "markdown": "Что напечатает программа?"
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "def total_of(*values):\n    return sum(values)\n\nprint(total_of(5))\nprint(total_of(*[1, 2, 3]))",
+              "caption": null
             }
           }
         ],
@@ -125439,7 +125623,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Аргументы, несколько результатов и lambda»: проследи программу по строкам и запиши значения так, как их покажет Python."
+              "markdown": "`*values` собирает аргументы в кортеж; `*[1, 2, 3]` в вызове раскладывает список на отдельные аргументы."
             }
           }
         ],
@@ -125447,7 +125631,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "5 и 6."
+              "markdown": "Первый вызов получает кортеж (5,), второй — (1, 2, 3)."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `5 6`"
             }
           }
         ],
@@ -125488,7 +125678,7 @@
     {
       "task": {
         "id": "python-arguments-t07",
-        "title": "Чему равно (lambda a, b: a % b)(17, 5)?",
+        "title": "Что напечатает программа?",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 1,
@@ -125500,7 +125690,15 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Чему равно `(lambda a, b: a % b)(17, 5)`?"
+              "markdown": "Что напечатает программа?"
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "print((lambda a, b: a % b)(17, 5))",
+              "caption": null
             }
           }
         ],
@@ -125508,7 +125706,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Аргументы, несколько результатов и lambda»: проследи программу по строкам и запиши значения так, как их покажет Python."
+              "markdown": "`lambda` создаёт функцию, следующие скобки её сразу вызывают."
             }
           }
         ],
@@ -125516,7 +125714,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "2."
+              "markdown": "17 % 5 = 2."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `2`"
             }
           }
         ],
@@ -125557,7 +125761,7 @@
     {
       "task": {
         "id": "python-arguments-t08",
-        "title": "Чему равно digit_sum(-9051)?",
+        "title": "Что напечатает программа?",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 1,
@@ -125569,7 +125773,15 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Чему равно `digit_sum(-9051)`?"
+              "markdown": "Что напечатает программа?"
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "def digit_sum(number):\n    number = abs(number)\n    total = 0\n    while number > 0:\n        total += number % 10\n        number //= 10\n    return total\n\nprint(digit_sum(-9051))",
+              "caption": null
             }
           }
         ],
@@ -125577,7 +125789,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Аргументы, несколько результатов и lambda»: проследи программу по строкам и запиши значения так, как их покажет Python."
+              "markdown": "Функция сначала берёт модуль, потом складывает цифры."
             }
           }
         ],
@@ -125585,7 +125797,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "15."
+              "markdown": "9 + 0 + 5 + 1 = 15."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `15`"
             }
           }
         ],
@@ -125626,19 +125844,19 @@
     {
       "task": {
         "id": "python-arguments-t09",
-        "title": "Напиши функцию count_divisible(numbers, d=3), возвращающую количество чисел,…",
+        "title": "Напиши функцию: делящиеся на d",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 2,
         "estimated_minutes": null,
-        "answer_instruction": "Запишите ответы через пробел в порядке вопроса; списки и строки — так, как их печатает Python.",
+        "answer_instruction": "Запишите два числа через пробел: с d по умолчанию, затем с d=7.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Напиши функцию `count_divisible(numbers, d=3)`, возвращающую количество чисел, делящихся на `d`. Проверь на `[3, 5, 9, 12, 14]` без второго аргумента и с `d=7`."
+              "markdown": "Напиши функцию `count_divisible(numbers, d=3)`, которая возвращает количество чисел, делящихся на `d`. Вызови её для `[3, 5, 9, 12, 14]` без второго аргумента и с `d=7`, напечатав оба результата в одном `print` и запиши, что напечатала программа."
             }
           }
         ],
@@ -125646,7 +125864,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Аргументы, несколько результатов и lambda»: проследи программу по строкам и запиши значения так, как их покажет Python."
+              "markdown": "Значение по умолчанию `d=3` подставляется, если второй аргумент не передан."
             }
           }
         ],
@@ -125654,7 +125872,27 @@
           {
             "type": "text",
             "data": {
-              "markdown": "3 и 1."
+              "markdown": "Например:"
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "def count_divisible(numbers, d=3):\n    count = 0\n    for x in numbers:\n        if x % d == 0:\n            count += 1\n    return count\n\nnumbers = [3, 5, 9, 12, 14]\nprint(count_divisible(numbers), count_divisible(numbers, d=7))",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "На 3 делятся 3, 9, 12; на 7 — только 14."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `3 1`"
             }
           }
         ],
@@ -125695,19 +125933,27 @@
     {
       "task": {
         "id": "python-program-parts-t02",
-        "title": "Чему равны math.isqrt(99) и math.gcd(84, 36)?",
+        "title": "Что напечатает программа?",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 1,
         "estimated_minutes": null,
-        "answer_instruction": "Запишите ответы через пробел в порядке вопроса; списки и строки — так, как их печатает Python.",
+        "answer_instruction": "Запишите напечатанные строки через пробел в порядке вывода.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Чему равны `math.isqrt(99)` и `math.gcd(84, 36)`?"
+              "markdown": "Что напечатает программа?"
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "import math\n\nprint(math.isqrt(99))\nprint(math.gcd(84, 36))",
+              "caption": null
             }
           }
         ],
@@ -125715,7 +125961,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Модули и части программы»: проследи программу по строкам и запиши значения так, как их покажет Python."
+              "markdown": "`isqrt` — целая часть квадратного корня; `gcd` — наибольший общий делитель."
             }
           }
         ],
@@ -125723,7 +125969,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "9 и 12."
+              "markdown": "9² = 81 ≤ 99 < 100 = 10²; НОД(84, 36) = 12."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `9 12`"
             }
           }
         ],
@@ -125764,19 +126016,27 @@
     {
       "task": {
         "id": "python-program-parts-t04",
-        "title": "Чему равны floor(2.7), ceil(2.1), floor(-0.5)?",
+        "title": "Что напечатает программа?",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 1,
         "estimated_minutes": null,
-        "answer_instruction": "Запишите ответы через пробел в порядке вопроса; списки и строки — так, как их печатает Python.",
+        "answer_instruction": "Запишите напечатанные строки через пробел в порядке вывода.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Чему равны `floor(2.7)`, `ceil(2.1)`, `floor(-0.5)`?"
+              "markdown": "Что напечатает программа?"
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "from math import ceil, floor\n\nprint(floor(2.7))\nprint(ceil(2.1))\nprint(floor(-0.5))",
+              "caption": null
             }
           }
         ],
@@ -125784,7 +126044,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Модули и части программы»: проследи программу по строкам и запиши значения так, как их покажет Python."
+              "markdown": "`floor` — вниз, к меньшему целому; `ceil` — вверх."
             }
           }
         ],
@@ -125792,7 +126052,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "2, 3 и −1."
+              "markdown": "Вниз от 2.7 — 2, вверх от 2.1 — 3, вниз от −0.5 — −1."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `2 3 -1`"
             }
           }
         ],
@@ -125833,7 +126099,7 @@
     {
       "task": {
         "id": "python-program-parts-t07",
-        "title": "Напиши функцию наименьшего общего кратного через gcd: НОК(a, b) = a · b //…",
+        "title": "Напиши функцию: НОК через gcd",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 2,
@@ -125845,7 +126111,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Напиши функцию наименьшего общего кратного через `gcd`: НОК(a, b) = a · b // НОД(a, b). Чему равно НОК(12, 18)?"
+              "markdown": "Напиши функцию `lcm(a, b)` для наименьшего общего кратного: НОК(a, b) = a · b // НОД(a, b), где НОД — `math.gcd`. Вызови её для 12 и 18, напечатав результат и запиши, что напечатала программа."
             }
           }
         ],
@@ -125853,7 +126119,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Модули и части программы»: проследи программу по строкам и запиши значения так, как их покажет Python."
+              "markdown": "Импортируй `gcd` из `math`; верни `a * b // gcd(a, b)`."
             }
           }
         ],
@@ -125861,7 +126127,27 @@
           {
             "type": "text",
             "data": {
-              "markdown": "36."
+              "markdown": "Например:"
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "from math import gcd\n\ndef lcm(a, b):\n    return a * b // gcd(a, b)\n\nprint(lcm(12, 18))",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "12 · 18 // 6 = 36."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `36`"
             }
           }
         ],
@@ -125902,7 +126188,7 @@
     {
       "task": {
         "id": "python-program-parts-t08",
-        "title": "Сколько чисел от 1 до 1000 делятся на 7, но не на 5?",
+        "title": "Напиши программу: делится на 7, но не на 5",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 1,
@@ -125914,7 +126200,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Сколько чисел от 1 до 1000 делятся на 7, но не на 5? Используй функцию `count_multiples` из урока дважды."
+              "markdown": "Сколько чисел от 1 до 1000 делятся на 7, но не на 5? Используй функцию `count_multiples(a, b, d)` из урока дважды. Посчитай кратные 7 и вычти кратные 35, запусти программу и запиши, что она напечатала."
             }
           }
         ],
@@ -125922,7 +126208,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Модули и части программы»: проследи программу по строкам и запиши значения так, как их покажет Python."
+              "markdown": "Делящиеся на 7 и на 5 — это кратные 35: их нужно вычесть."
             }
           }
         ],
@@ -125930,7 +126216,27 @@
           {
             "type": "text",
             "data": {
-              "markdown": "114: 142 кратных 7 минус 28 кратных 35."
+              "markdown": "Например:"
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "def count_multiples(a, b, d):\n    count = 0\n    for n in range(a, b + 1):\n        if n % d == 0:\n            count += 1\n    return count\n\nprint(count_multiples(1, 1000, 7) - count_multiples(1, 1000, 35))",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Кратных 7 — 142, кратных 35 — 28: 142 − 28 = 114."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `114`"
             }
           }
         ],
@@ -125971,19 +126277,27 @@
     {
       "task": {
         "id": "python-sorting-search-t01",
-        "title": "Отсортируй [31, 22, 13, 42, 11] по последней цифре, а при равенстве — по…",
+        "title": "Что напечатает программа?",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 1,
         "estimated_minutes": null,
-        "answer_instruction": "Запишите результат так, как его печатает Python.",
+        "answer_instruction": "Запишите список так, как его печатает Python.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Отсортируй `[31, 22, 13, 42, 11]` по последней цифре, а при равенстве — по самому числу."
+              "markdown": "Что напечатает программа?"
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "numbers = [31, 22, 13, 42, 11]\nprint(sorted(numbers, key=lambda n: (n % 10, n)))",
+              "caption": null
             }
           }
         ],
@@ -125991,7 +126305,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Сортировка и выбор лучших элементов»: проследи программу по строкам и запиши значения так, как их покажет Python."
+              "markdown": "Ключ — кортеж: сначала последняя цифра, при равенстве — само число."
             }
           }
         ],
@@ -125999,7 +126313,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "[11, 31, 22, 42, 13]."
+              "markdown": "Последние цифры: 1 у 11 и 31, 2 у 22 и 42, 3 у 13."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `[11, 31, 22, 42, 13]`"
             }
           }
         ],
@@ -126031,7 +126351,7 @@
         ],
         "checker": {
           "checker_type": "exact_match",
-          "answer_variants": ["[11, 31, 22, 42, 13]"],
+          "answer_variants": ["[11, 31, 22, 42, 13]", "[11,31,22,42,13]"],
           "numeric_tolerance": null
         }
       },
@@ -126040,19 +126360,19 @@
     {
       "task": {
         "id": "python-sorting-search-t06",
-        "title": "Цены [30, 5, 25, 15, 60], бюджет 50",
+        "title": "Напиши программу: сколько предметов на бюджет",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 1,
         "estimated_minutes": null,
-        "answer_instruction": "Запишите ответы через пробел в порядке вопроса; списки и строки — так, как их печатает Python.",
+        "answer_instruction": "Запишите два числа через пробел: количество, затем потраченную сумму.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Цены `[30, 5, 25, 15, 60]`, бюджет 50. Сколько предметов можно купить и сколько потратить?"
+              "markdown": "Цены `[30, 5, 25, 15, 60]`, бюджет 50. Напиши программу, которая покупает самые дешёвые предметы, пока хватает денег, и печатает количество и потраченную сумму. Запусти её и запиши, что она напечатала."
             }
           }
         ],
@@ -126060,7 +126380,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Сортировка и выбор лучших элементов»: проследи программу по строкам и запиши значения так, как их покажет Python."
+              "markdown": "Перебирай `sorted(prices)` и останови цикл, когда следующая цена не помещается в бюджет."
             }
           }
         ],
@@ -126068,7 +126388,27 @@
           {
             "type": "text",
             "data": {
-              "markdown": "3 предмета, 45: 5 + 15 + 25."
+              "markdown": "Например:"
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "prices = [30, 5, 25, 15, 60]\nbudget = 50\ncount = 0\nspent = 0\nfor price in sorted(prices):\n    if spent + price > budget:\n        break\n    spent += price\n    count += 1\nprint(count, spent)",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "5 + 15 + 25 = 45; следующая цена 30 уже не помещается."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `3 45`"
             }
           }
         ],
@@ -126109,19 +126449,19 @@
     {
       "task": {
         "id": "python-sorting-search-t08",
-        "title": "Напиши программу: отсортируй [15, 7, 22, 9, 30, 4] по сумме цифр, а при…",
+        "title": "Напиши программу: сортировка по сумме цифр",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 2,
         "estimated_minutes": null,
-        "answer_instruction": "Запишите результат так, как его печатает Python.",
+        "answer_instruction": "Запишите список так, как его печатает Python.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Напиши программу: отсортируй `[15, 7, 22, 9, 30, 4]` по сумме цифр, а при равенстве — по самому числу."
+              "markdown": "Напиши программу, которая сортирует `[15, 7, 22, 9, 30, 4]` по сумме цифр, а при равенстве — по самому числу, и печатает результат. Запусти её и запиши, что она напечатала."
             }
           }
         ],
@@ -126129,7 +126469,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Сортировка и выбор лучших элементов»: проследи программу по строкам и запиши значения так, как их покажет Python."
+              "markdown": "Ключ — кортеж `(сумма цифр, число)`; сумму цифр удобно взять функцией."
             }
           }
         ],
@@ -126137,7 +126477,27 @@
           {
             "type": "text",
             "data": {
-              "markdown": "[30, 4, 22, 15, 7, 9]: суммы цифр 3, 4, 4, 6, 7, 9."
+              "markdown": "Например:"
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "def digit_sum(n):\n    total = 0\n    while n > 0:\n        total += n % 10\n        n //= 10\n    return total\n\nprint(sorted([15, 7, 22, 9, 30, 4], key=lambda n: (digit_sum(n), n)))",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Суммы цифр: 30 — 3, 4 — 4, 22 — 4, 15 — 6, 7 — 7, 9 — 9."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `[30, 4, 22, 15, 7, 9]`"
             }
           }
         ],
@@ -126169,7 +126529,7 @@
         ],
         "checker": {
           "checker_type": "exact_match",
-          "answer_variants": ["[30, 4, 22, 15, 7, 9]"],
+          "answer_variants": ["[30, 4, 22, 15, 7, 9]", "[30,4,22,15,7,9]"],
           "numeric_tolerance": null
         }
       },
@@ -126178,19 +126538,19 @@
     {
       "task": {
         "id": "python-recursion-t03",
-        "title": "Сколько вызовов сделает fibonacci_slow(5) из урока?",
+        "title": "Вызовы fibonacci_slow(5)",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 1,
         "estimated_minutes": null,
-        "answer_instruction": "Запишите ответы через пробел в порядке вопроса; списки и строки — так, как их печатает Python.",
+        "answer_instruction": "Запишите два числа через пробел: всего вызовов, затем сколько раз вычисляется F(2).",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Сколько вызовов сделает `fibonacci_slow(5)` из урока? Перечисли, сколько раз вычисляется F(2)."
+              "markdown": "Сколько всего вызовов сделает `fibonacci_slow(5)` из урока и сколько раз среди них вычисляется F(2)? Посмотри на дерево вызовов в уроке."
             }
           }
         ],
@@ -126198,7 +126558,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Рекурсия и запоминание»: проследи программу по строкам и запиши значения так, как их покажет Python."
+              "markdown": "Каждый вызов F(n) при n ≥ 2 порождает два новых: F(n − 1) и F(n − 2)."
             }
           }
         ],
@@ -126206,7 +126566,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "15 вызовов; F(2) вычисляется 3 раза."
+              "markdown": "Дерево вызовов F(5) содержит 15 узлов; F(2) встречается в нём трижды."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `15 3`"
             }
           }
         ],
@@ -126247,19 +126613,27 @@
     {
       "task": {
         "id": "python-recursion-t04",
-        "title": "Функция power(a, n) возвращает 1 при n == 0 и a * power(a, n - 1) иначе",
+        "title": "Глубина рекурсии power(3, 4)",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 1,
         "estimated_minutes": null,
-        "answer_instruction": "Запишите ответы через пробел в порядке вопроса; списки и строки — так, как их печатает Python.",
+        "answer_instruction": "Запишите два числа через пробел: результат, затем наибольшее число вызовов в стеке одновременно.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Функция `power(a, n)` возвращает 1 при `n == 0` и `a * power(a, n - 1)` иначе. Чему равно `power(3, 4)` и какова глубина вызовов?"
+              "markdown": "Функция `power(a, n)` возвращает 1 при `n == 0` и `a * power(a, n - 1)` иначе. Чему равно `power(3, 4)` и сколько вызовов `power` лежит в стеке одновременно в самый глубокий момент?"
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "def power(a, n):\n    if n == 0:\n        return 1\n    return a * power(a, n - 1)\n\nprint(power(3, 4))",
+              "caption": null
             }
           }
         ],
@@ -126267,7 +126641,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Рекурсия и запоминание»: проследи программу по строкам и запиши значения так, как их покажет Python."
+              "markdown": "Вызовы идут для n = 4, 3, 2, 1, 0 и ждут друг друга, пока не дойдут до базы."
             }
           }
         ],
@@ -126275,7 +126649,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "81; глубина 5 вызовов: n = 4, 3, 2, 1, 0."
+              "markdown": "3⁴ = 81. В самый глубокий момент ждут вызовы для n = 4, 3, 2, 1 и выполняется вызов для n = 0 — пять."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `81 5`"
             }
           }
         ],
@@ -126316,7 +126696,7 @@
     {
       "task": {
         "id": "python-recursion-t07",
-        "title": "Функция F(n) = F(n - 1) + 2 * F(n - 2) при F(0) = 0, F(1) = 1",
+        "title": "Напиши функцию с @cache: F(10)",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 1,
@@ -126328,7 +126708,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Функция `F(n) = F(n - 1) + 2 * F(n - 2)` при `F(0) = 0`, `F(1) = 1`. Напиши её с `@cache` и найди F(10)."
+              "markdown": "Функция задана так: `F(n) = F(n - 1) + 2 * F(n - 2)`, `F(0) = 0`, `F(1) = 1`. Напиши её с `@cache`. Вызови её для 10, напечатав результат и запиши, что напечатала программа."
             }
           }
         ],
@@ -126336,7 +126716,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Рекурсия и запоминание»: проследи программу по строкам и запиши значения так, как их покажет Python."
+              "markdown": "База — `n < 2`, вернуть `n`; иначе — формула из условия."
             }
           }
         ],
@@ -126344,7 +126724,27 @@
           {
             "type": "text",
             "data": {
-              "markdown": "341."
+              "markdown": "Например:"
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "from functools import cache\n\n@cache\ndef F(n):\n    if n < 2:\n        return n\n    return F(n - 1) + 2 * F(n - 2)\n\nprint(F(10))",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Значения: 0, 1, 1, 3, 5, 11, 21, 43, 85, 171, 341."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `341`"
             }
           }
         ],
@@ -126385,7 +126785,7 @@
     {
       "task": {
         "id": "python-recursion-t08",
-        "title": "Напиши рекурсивную функцию суммы цифр: сумма цифр n равна n % 10 плюс сумма…",
+        "title": "Напиши рекурсивную функцию: сумма цифр",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 2,
@@ -126397,7 +126797,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Напиши рекурсивную функцию суммы цифр: сумма цифр `n` равна `n % 10` плюс сумма цифр `n // 10`, а для 0 она равна 0. Проверь на 9051."
+              "markdown": "Напиши рекурсивную функцию суммы цифр: сумма цифр `n` равна `n % 10` плюс сумма цифр `n // 10`, а для 0 она равна 0. Вызови её для 9051, напечатав результат и запиши, что напечатала программа."
             }
           }
         ],
@@ -126405,7 +126805,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Рекурсия и запоминание»: проследи программу по строкам и запиши значения так, как их покажет Python."
+              "markdown": "База — `n == 0`; переход — `n % 10 + digit_sum(n // 10)`."
             }
           }
         ],
@@ -126413,7 +126813,27 @@
           {
             "type": "text",
             "data": {
-              "markdown": "15."
+              "markdown": "Например:"
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "def digit_sum(n):\n    if n == 0:\n        return 0\n    return n % 10 + digit_sum(n // 10)\n\nprint(digit_sum(9051))",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "1 + 5 + 0 + 9 = 15."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `15`"
             }
           }
         ],
@@ -820624,7 +821044,7 @@
     },
     {
       "id": "python-arguments",
-      "sections": ["intro", "s1", "s2", "s3", "s4", "s5"],
+      "sections": ["intro", "s1", "s2", "s3", "s4", "s5", "s6-skvoznaya"],
       "kind": "course",
       "status": "published",
       "course_id": "python",

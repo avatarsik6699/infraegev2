@@ -228,6 +228,14 @@ PRINTED_LINES = {
     "python-dictionaries-t03": 'print({"a": 1}.get("z", 0))\nprint("1" in {1: "x"})',
     "python-sets-t02": 'print(len(set("BANANA")))',
     "python-comprehensions-t04": "print([x for x in range(20) if x % 7 == 3])",
+    "python-functions-t02": "def f(n):\n    print(n * 2)\n\nr = f(3)\nprint(r)",
+    "python-functions-t04": "x = 1\n\ndef g():\n    x = 2\n    return x\n\nprint(g(), x)",
+    "python-functions-t06": (
+        "def h(a):\n    a.append(0)\n    a = [5]\n    a.append(1)\n\nlst = [9]\nh(lst)\nprint(lst)"
+    ),
+    "python-arguments-t05": (
+        "def total_of(*values):\n    return sum(values)\n\nprint(total_of(5))\nprint(total_of(*[1, 2, 3]))"
+    ),
 }
 
 
