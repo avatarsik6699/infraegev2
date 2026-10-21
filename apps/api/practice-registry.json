@@ -2729,7 +2729,6 @@
         "perevod-deleniem",
         "dlina-zapisi",
         "chislo-i-stroka",
-        "operacii",
         "gotovye-funkcii",
         "svoya-funkciya",
         "zapis-itogo",
@@ -2737,43 +2736,33 @@
         "sdvig-razryadov",
         "neskolko-cifr",
         "dopisyvanie-sleva",
-        "poslednie-cifry",
         "soedinenie-strok",
         "blok-po-usloviyu",
         "rezultat-vychisleniya",
         "dopisyvanie-itogo",
         "zamena-cifr",
-        "udalit-i-vstavit",
         "indeksy-i-srezy",
         "sborka-iz-srezov",
         "perevernut-i-invertirovat",
         "odni-edinicy",
         "odnovremennaya-zamena",
         "vedushchie-nuli",
-        "chasti-itogo",
-        "chetnost",
         "poslednyaya-cifra",
-        "drugie-sistemy",
         "kakaya-zapis",
         "povtornyj-shag",
         "desyatichnaya-zapis",
-        "summa-itogo",
-        "chto-minimizirovat",
+        "chasti-itogo",
+        "shablon-perebora",
         "vopros-poiska",
         "ostanovka-perebora",
         "granicy-perebora",
         "dve-proverki",
-        "po-vetvyam",
-        "ot-rezultata",
         "zadan-rezultat",
         "troichnyj-algoritm",
-        "oba-chisla",
         "poisk-itogo",
-        "rassuzhdenie",
-        "zamena-bez-perebora",
-        "monotonnost-vetvi",
-        "kolichestvo-rezultatov",
-        "rassuzhdenie-itogo"
+        "obratnyj-hod",
+        "ot-rezultata",
+        "rezultat-itogo"
       ],
       "kind": "topic",
       "status": "published",
@@ -2789,7 +2778,6 @@
             "perevod-deleniem",
             "dlina-zapisi",
             "chislo-i-stroka",
-            "operacii",
             "gotovye-funkcii",
             "svoya-funkciya",
             "zapis-itogo"
@@ -2803,7 +2791,6 @@
             "sdvig-razryadov",
             "neskolko-cifr",
             "dopisyvanie-sleva",
-            "poslednie-cifry",
             "soedinenie-strok",
             "blok-po-usloviyu",
             "rezultat-vychisleniya",
@@ -2815,56 +2802,37 @@
           "access": "free",
           "sections": [
             "zamena-cifr",
-            "udalit-i-vstavit",
             "indeksy-i-srezy",
             "sborka-iz-srezov",
             "perevernut-i-invertirovat",
             "odni-edinicy",
             "odnovremennaya-zamena",
             "vedushchie-nuli",
-            "chasti-itogo"
-          ]
-        },
-        {
-          "slug": "summa-cifr",
-          "access": "free",
-          "sections": [
-            "chetnost",
             "poslednyaya-cifra",
-            "drugie-sistemy",
             "kakaya-zapis",
             "povtornyj-shag",
             "desyatichnaya-zapis",
-            "summa-itogo"
+            "chasti-itogo"
           ]
         },
         {
           "slug": "poisk-otveta",
           "access": "free",
           "sections": [
-            "chto-minimizirovat",
+            "shablon-perebora",
             "vopros-poiska",
             "ostanovka-perebora",
             "granicy-perebora",
             "dve-proverki",
-            "po-vetvyam",
-            "ot-rezultata",
             "zadan-rezultat",
             "troichnyj-algoritm",
-            "oba-chisla",
             "poisk-itogo"
           ]
         },
         {
-          "slug": "rassuzhdenie-vmesto-perebora",
+          "slug": "ot-rezultata",
           "access": "free",
-          "sections": [
-            "rassuzhdenie",
-            "zamena-bez-perebora",
-            "monotonnost-vetvi",
-            "kolichestvo-rezultatov",
-            "rassuzhdenie-itogo"
-          ]
+          "sections": ["obratnyj-hod", "ot-rezultata", "rezultat-itogo"]
         }
       ],
       "final_access": "free"

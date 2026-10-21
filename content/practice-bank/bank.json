@@ -145311,7 +145311,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Делите на основание и собирайте остатки справа налево."
+              "markdown": "Дели на основание и собирай остатки справа налево."
             }
           }
         ],
@@ -145328,6 +145328,12 @@
               "language": "python",
               "code": "def to_base(n, q):\n    if n == 0:\n        return '0'\n\n    s = ''\n    x = n\n\n    while x > 0:\n        digit = x % q\n        s = str(digit) + s\n        x = x // q\n\n    return s\n\n\nprint(bin(22)[2:], to_base(22, 3))",
               "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `10110 211`"
             }
           }
         ],
@@ -145412,6 +145418,12 @@
               "code": "print(int('10011', 2), int('2101', 3), int('147', 8))",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `19 64 103`"
+            }
           }
         ],
         "skills": [],
@@ -145477,7 +145489,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Шестизначные двоичные записи: 2⁵ ≤ N < 2⁶. Введите наименьшее, наибольшее и количество."
+              "markdown": "Шестизначные двоичные записи: 2⁵ ≤ N < 2⁶. Наименьшее, наибольшее и количество."
             }
           }
         ],
@@ -145494,6 +145506,12 @@
               "language": "python",
               "code": "low = 2 ** 5\nhigh = 2 ** 6 - 1\nprint(low, high, high - low + 1)",
               "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `32 63 32`"
             }
           }
         ],
@@ -145560,7 +145578,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Найдите степени двойки, между которыми лежит 1000."
+              "markdown": "Найди степени двойки, между которыми лежит 1000."
             }
           }
         ],
@@ -145568,7 +145586,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "10 цифр: 2⁹ = 512 ≤ 1000 < 1024 = 2¹⁰."
+              "markdown": "1000 лежит между 2⁹ = 512 и 2¹⁰ = 1024, поэтому в его двоичной записи 10 цифр."
             }
           },
           {
@@ -145577,6 +145595,12 @@
               "language": "python",
               "code": "print(len(bin(1000)) - 2)",
               "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `10`"
             }
           }
         ],
@@ -145659,7 +145683,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "`5 101 10`: двоичная запись, десятичная запись и троичная 9 + 0 + 1."
+              "markdown": "Двоичная запись, десятичная запись и троичная 9 + 0 + 1."
             }
           },
           {
@@ -145668,6 +145692,12 @@
               "language": "python",
               "code": "print(int('101', 2), int('101'), int('101', 3))",
               "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `5 101 10`"
             }
           }
         ],
@@ -145742,7 +145772,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "162: пятизначные троичные записи — числа от 3⁴ = 81 до 3⁵ − 1 = 242, все они лежат в [50; 300]."
+              "markdown": "Пятизначные троичные записи — числа от 3⁴ = 81 до 3⁵ − 1 = 242, все они лежат в [50; 300]."
             }
           },
           {
@@ -145751,6 +145781,12 @@
               "language": "python",
               "code": "def to_base(n, q):\n    if n == 0:\n        return '0'\n\n    s = ''\n    x = n\n\n    while x > 0:\n        digit = x % q\n        s = str(digit) + s\n        x = x // q\n\n    return s\n\n\ncount = 0\nfor n in range(50, 301):\n    if len(to_base(n, 3)) == 5:\n        count += 1\nprint(count)",
               "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `162`"
             }
           }
         ],
@@ -145825,7 +145861,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "81: такие записи от 20000₃ = 162 до 22222₃ = 242, все не больше 500."
+              "markdown": "Такие записи от 20000₃ = 162 до 22222₃ = 242, все не больше 500."
             }
           },
           {
@@ -145834,6 +145870,12 @@
               "language": "python",
               "code": "def to_base(n, q):\n    if n == 0:\n        return '0'\n\n    s = ''\n    x = n\n\n    while x > 0:\n        digit = x % q\n        s = str(digit) + s\n        x = x // q\n\n    return s\n\n\ncount = 0\nfor n in range(1, 501):\n    s = to_base(n, 3)\n    if len(s) == 5 and s[0] == '2':\n        count += 1\nprint(count)",
               "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `81`"
             }
           }
         ],
@@ -145908,7 +145950,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "89: 11 · 8 + 1, блок `001` занимает три разряда."
+              "markdown": "Блок `001` занимает три разряда: старое число умножается на 8 и к нему прибавляется значение блока 1. R = 11 · 8 + 1 = 89."
             }
           },
           {
@@ -145917,6 +145959,12 @@
               "language": "python",
               "code": "print(int(bin(11)[2:] + '001', 2))",
               "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `89`"
             }
           }
         ],
@@ -145991,7 +146039,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "45: 2 · 16 + 13, у записи 1101 четыре разряда."
+              "markdown": "У записи 13 = `1101` четыре разряда, поэтому блок `10` слева встаёт над ними с весом 2⁴: R = 2 · 16 + 13 = 45."
             }
           },
           {
@@ -146001,6 +146049,12 @@
               "code": "print(int('10' + bin(13)[2:], 2))",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `45`"
+            }
           }
         ],
         "skills": [],
@@ -146008,7 +146062,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 8,
+            "position": 9,
             "material_id": "preobrazovanie-zapisey-chisel"
           }
         ],
@@ -146074,7 +146128,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "23: 47 = 2 · 23 + 1."
+              "markdown": "Дописанная справа единица даёт R = 2N + 1. Из 47 = 2 · 23 + 1 получаем N = 23."
             }
           },
           {
@@ -146084,6 +146138,12 @@
               "code": "for n in range(1, 47):\n    if int(bin(n)[2:] + '1', 2) == 47:\n        print(n)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `23`"
+            }
           }
         ],
         "skills": [],
@@ -146091,14 +146151,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 9,
+            "position": 31,
             "material_id": "preobrazovanie-zapisey-chisel"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "dopisyvanie-sprava",
+            "section": "obratnyj-hod",
             "material_id": "preobrazovanie-zapisey-chisel"
           }
         ],
@@ -146157,7 +146217,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "68: 7 · 9 + 5, блок `12` занимает два троичных разряда и равен 5."
+              "markdown": "7 · 9 + 5, блок `12` занимает два троичных разряда и равен 5."
             }
           },
           {
@@ -146167,6 +146227,12 @@
               "code": "def to_base(n, q):\n    if n == 0:\n        return '0'\n\n    s = ''\n    x = n\n\n    while x > 0:\n        digit = x % q\n        s = str(digit) + s\n        x = x // q\n\n    return s\n\n\nprint(int(to_base(7, 3) + '12', 3))",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `68`"
+            }
           }
         ],
         "skills": [],
@@ -146174,7 +146240,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 10,
+            "position": 8,
             "material_id": "preobrazovanie-zapisey-chisel"
           }
         ],
@@ -146240,7 +146306,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "365: 45 = 101101₂, последние три цифры `101` = 5, R = 45 · 8 + 5."
+              "markdown": "45 = 101101₂, последние три цифры `101` = 5, R = 45 · 8 + 5."
             }
           },
           {
@@ -146250,6 +146316,12 @@
               "code": "s = bin(45)[2:]\nprint(int(s + s[-3:], 2))",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `365`"
+            }
           }
         ],
         "skills": [],
@@ -146257,14 +146329,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 11,
+            "position": 13,
             "material_id": "preobrazovanie-zapisey-chisel"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "poslednie-cifry",
+            "section": "sborka-iz-srezov",
             "material_id": "preobrazovanie-zapisey-chisel"
           }
         ],
@@ -146323,7 +146395,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "53: запись `101` — три разряда, R = 6 · 8 + 5; `110101`₂ = 53."
+              "markdown": "Запись `101` — три разряда, R = 6 · 8 + 5; `110101`₂ = 53."
             }
           },
           {
@@ -146333,6 +146405,12 @@
               "code": "print(int(bin(6)[2:] + bin(5)[2:], 2))",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `53`"
+            }
           }
         ],
         "skills": [],
@@ -146340,7 +146418,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 12,
+            "position": 10,
             "material_id": "preobrazovanie-zapisey-chisel"
           }
         ],
@@ -146390,7 +146468,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "На вход алгоритма подаётся натуральное число N. Строится двоичная запись N. Если N чётное, слева к ней дописывается `1`, а справа — `0`; если нечётное, слева дописывается `11`, а справа — `1`. Полученная запись — двоичная запись числа R. Укажите наименьшее N, для которого R больше 200."
+              "markdown": "На вход алгоритма подаётся натуральное число N. Строится двоичная запись N. Если N чётное, слева к ней дописывается `1`, а справа — `0`; если нечётное, слева дописывается `11`, а справа — `1`. Полученная запись — двоичная запись числа R. Укажи наименьшее N, для которого R больше 200."
             }
           }
         ],
@@ -146398,7 +146476,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Перебирайте N по возрастанию и стройте запись по ветви чётности."
+              "markdown": "Перебирай N по возрастанию и строй запись по ветви чётности."
             }
           }
         ],
@@ -146406,7 +146484,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "17: 17 = 10001₂, получаем `11100011`₂ = 227. При N = 16 получается 96, при N = 15 — 127."
+              "markdown": "17 = 10001₂, получаем `11100011`₂ = 227. При N = 16 получается 96, при N = 15 — 127."
             }
           },
           {
@@ -146416,6 +146494,12 @@
               "code": "n = 1\nwhile True:\n    s = bin(n)[2:]\n    if n % 2 == 0:\n        s = '1' + s + '0'\n    else:\n        s = '11' + s + '1'\n    if int(s, 2) > 200:\n        print(n)\n        break\n    n += 1",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `17`"
+            }
           }
         ],
         "skills": [],
@@ -146423,7 +146507,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 13,
+            "position": 11,
             "material_id": "preobrazovanie-zapisey-chisel"
           }
         ],
@@ -146473,7 +146557,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "На вход алгоритма подаётся натуральное число N. Строится троичная запись N. Если N делится на 3, справа к ней дописываются две последние троичные цифры этой записи; иначе остаток от деления N на 3 умножается на 8, переводится в троичную систему и дописывается справа. Полученная запись — троичная запись числа R. Укажите наименьшее N, для которого R больше 500."
+              "markdown": "На вход алгоритма подаётся натуральное число N. Строится троичная запись N. Если N делится на 3, справа к ней дописываются две последние троичные цифры этой записи; иначе остаток от деления N на 3 умножается на 8, переводится в троичную систему и дописывается справа. Полученная запись — троичная запись числа R. Укажи наименьшее N, для которого R больше 500."
             }
           }
         ],
@@ -146489,7 +146573,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "20: 20 = 202₃, остаток 2, 2 · 8 = 16 = 121₃, R = 202121₃ = 556. Все N от 1 до 19 дают R не больше 500."
+              "markdown": "20 = 202₃, остаток 2, 2 · 8 = 16 = 121₃, R = 202121₃ = 556. Все N от 1 до 19 дают R не больше 500."
             }
           },
           {
@@ -146499,6 +146583,12 @@
               "code": "def to_base(n, q):\n    if n == 0:\n        return '0'\n\n    s = ''\n    x = n\n\n    while x > 0:\n        digit = x % q\n        s = str(digit) + s\n        x = x // q\n\n    return s\n\n\nn = 1\nwhile True:\n    s = to_base(n, 3)\n    if n % 3 == 0:\n        s = s + s[-2:]\n    else:\n        s = s + to_base(n % 3 * 8, 3)\n    if int(s, 3) > 500:\n        print(n)\n        break\n    n += 1",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `20`"
+            }
           }
         ],
         "skills": [],
@@ -146506,7 +146596,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 14,
+            "position": 12,
             "material_id": "preobrazovanie-zapisey-chisel"
           }
         ],
@@ -146572,7 +146662,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "9: `10110 → 01001`; 31 − 22 = 9."
+              "markdown": "22 = `10110`, после инверсии `01001` = 9. Проверка: в каждом разряде одна единица, 22 + 9 = 31 = `11111`."
             }
           },
           {
@@ -146582,6 +146672,12 @@
               "code": "s = bin(22)[2:]\nt = ''\nfor c in s:\n    t += '1' if c == '0' else '0'\nprint(int(t, 2))",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `9`"
+            }
           }
         ],
         "skills": [],
@@ -146589,14 +146685,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 15,
+            "position": 17,
             "material_id": "preobrazovanie-zapisey-chisel"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "perevernut-i-invertirovat",
+            "section": "odni-edinicy",
             "material_id": "preobrazovanie-zapisey-chisel"
           }
         ],
@@ -146655,7 +146751,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "109: получается `1101101`."
+              "markdown": "Первые две цифры `10` удаляются, остаётся `1101`, слева встаёт `110`: получается `1101101` = 64 + 32 + 8 + 4 + 1 = 109."
             }
           },
           {
@@ -146665,6 +146761,12 @@
               "code": "s = '101101'\nprint(int('110' + s[2:], 2))",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `109`"
+            }
           }
         ],
         "skills": [],
@@ -146672,14 +146774,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 16,
+            "position": 14,
             "material_id": "preobrazovanie-zapisey-chisel"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "udalit-i-vstavit",
+            "section": "sborka-iz-srezov",
             "material_id": "preobrazovanie-zapisey-chisel"
           }
         ],
@@ -146738,7 +146840,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "2 и 250: 7 − 5 = 2; 255 − 5 = 250."
+              "markdown": "Трёхзначная запись `101` после инверсии — `010` = 2, а восьмизначная `00000101` — `11111010` = 250."
             }
           },
           {
@@ -146748,6 +146850,12 @@
               "code": "def invert(s):\n    t = ''\n    for c in s:\n        t += '1' if c == '0' else '0'\n    return t\n\n\ns = bin(5)[2:]\nprint(int(invert(s), 2), int(invert(s.zfill(8)), 2))",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `2 250`"
+            }
           }
         ],
         "skills": [],
@@ -146755,7 +146863,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 17,
+            "position": 18,
             "material_id": "preobrazovanie-zapisey-chisel"
           }
         ],
@@ -146821,7 +146929,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "44: 23 = 10111₂ → `1011` + `00` = `101100`₂, то есть 23 // 2 · 4 + 0."
+              "markdown": "23 = 10111₂ → `1011` + `00` = `101100`₂, то есть 23 // 2 · 4 + 0."
             }
           },
           {
@@ -146831,6 +146939,12 @@
               "code": "s = bin(23)[2:]\nprint(int(s[:-1] + '00', 2))",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `44`"
+            }
           }
         ],
         "skills": [],
@@ -146838,14 +146952,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 18,
+            "position": 15,
             "material_id": "preobrazovanie-zapisey-chisel"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "udalit-i-vstavit",
+            "section": "sborka-iz-srezov",
             "material_id": "preobrazovanie-zapisey-chisel"
           }
         ],
@@ -146904,7 +147018,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "11: 52 = 110100₂ → `001011` → `1011`₂."
+              "markdown": "52 = `110100`, перевёрнутая запись `001011`; ведущие нули не меняют число: `1011` = 11."
             }
           },
           {
@@ -146913,6 +147027,12 @@
               "language": "python",
               "code": "print(int(bin(52)[2:][::-1], 2))",
               "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `11`"
             }
           }
         ],
@@ -146979,7 +147099,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Меняйте цифры за один проход, иначе вторая замена испортит первую."
+              "markdown": "Меняй цифры за один проход, иначе вторая замена испортит первую."
             }
           }
         ],
@@ -146987,7 +147107,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "34: 46 = 1201₃ → 1021₃ = 27 + 6 + 1; по формуле 3⁴ − 1 − 46 = 80 − 46."
+              "markdown": "46 = 1201₃ → 1021₃ = 27 + 6 + 1; по формуле 3⁴ − 1 − 46 = 80 − 46."
             }
           },
           {
@@ -146996,6 +147116,12 @@
               "language": "python",
               "code": "def to_base(n, q):\n    if n == 0:\n        return '0'\n\n    s = ''\n    x = n\n\n    while x > 0:\n        digit = x % q\n        s = str(digit) + s\n        x = x // q\n\n    return s\n\n\nswap = {'0': '2', '1': '1', '2': '0'}\nt = ''\nfor c in to_base(46, 3):\n    t += swap[c]\nprint(int(t, 3))",
               "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `34`"
             }
           }
         ],
@@ -147054,7 +147180,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "На вход алгоритма подаётся натуральное число N ≥ 4. Строится двоичная запись N. Две первые цифры записи переносятся в её конец в том же порядке, затем каждая цифра полученной записи заменяется на противоположную. Получившаяся запись (ведущие нули отбрасываются) — двоичная запись числа R. Укажите наименьшее N, для которого R больше 40."
+              "markdown": "На вход алгоритма подаётся натуральное число N ≥ 4. Строится двоичная запись N. Две первые цифры записи переносятся в её конец в том же порядке, затем каждая цифра полученной записи заменяется на противоположную. Получившаяся запись (ведущие нули отбрасываются) — двоичная запись числа R. Укажи наименьшее N, для которого R больше 40."
             }
           }
         ],
@@ -147062,7 +147188,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Результат не растёт вместе с N: проверьте и длину записи, и её вид."
+              "markdown": "Результат не растёт вместе с N: проверь и длину записи, и её вид."
             }
           }
         ],
@@ -147070,7 +147196,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "32: 32 = 100000₂ → `000010` → `111101`₂ = 61. Пятизначные записи (N от 16 до 31) дают не больше 29, меньшие N — ещё меньше."
+              "markdown": "32 = 100000₂ → `000010` → `111101`₂ = 61. Пятизначные записи (N от 16 до 31) дают не больше 29, меньшие N — ещё меньше."
             }
           },
           {
@@ -147080,6 +147206,12 @@
               "code": "n = 4\nwhile True:\n    s = bin(n)[2:]\n    s = s[2:] + s[:2]\n    t = ''\n    for c in s:\n        t += '1' if c == '0' else '0'\n    if int(t, 2) > 40:\n        print(n)\n        break\n    n += 1",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `32`"
+            }
           }
         ],
         "skills": [],
@@ -147087,7 +147219,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 21,
+            "position": 16,
             "material_id": "preobrazovanie-zapisey-chisel"
           }
         ],
@@ -147153,7 +147285,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "30: `111 → 1111 → 11110`."
+              "markdown": "7 = `111`: единиц три — дописываем 1, получаем `1111`; теперь единиц четыре — дописываем 0: `11110` = 30."
             }
           },
           {
@@ -147163,6 +147295,12 @@
               "code": "s = bin(7)[2:]\nfor _ in range(2):\n    s += str(s.count('1') % 2)\nprint(int(s, 2))",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `30`"
+            }
           }
         ],
         "skills": [],
@@ -147170,7 +147308,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 22,
+            "position": 21,
             "material_id": "preobrazovanie-zapisey-chisel"
           }
         ],
@@ -147236,7 +147374,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "1 и 3: 100 = 1100100₂."
+              "markdown": "Сумма десятичных цифр 100: 1 + 0 + 0 = 1. Двоичная запись 100 = `1100100`, в ней три единицы — сумма 3."
             }
           },
           {
@@ -147245,6 +147383,12 @@
               "language": "python",
               "code": "digits = 0\nfor c in str(100):\n    digits += int(c)\nprint(digits, bin(100).count('1'))",
               "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `1 3`"
             }
           }
         ],
@@ -147303,7 +147447,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "На вход алгоритма подаётся натуральное число N. Строится двоичная запись N. Затем три раза подряд к текущей записи справа дописывается остаток от деления суммы её цифр на 2. Полученная запись — двоичная запись числа R. Укажите наименьшее N, для которого R больше 300."
+              "markdown": "На вход алгоритма подаётся натуральное число N. Строится двоичная запись N. Затем три раза подряд к текущей записи справа дописывается остаток от деления суммы её цифр на 2. Полученная запись — двоичная запись числа R. Укажи наименьшее N, для которого R больше 300."
             }
           }
         ],
@@ -147319,7 +147463,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "38: 38 = 100110₂, три единицы, хвост `100`, R = 8 · 38 + 4 = 308. При N = 37 получается ровно 300."
+              "markdown": "38 = 100110₂, три единицы, хвост `100`, R = 8 · 38 + 4 = 308. При N = 37 получается ровно 300."
             }
           },
           {
@@ -147329,6 +147473,12 @@
               "code": "n = 1\nwhile True:\n    s = bin(n)[2:]\n    for _ in range(3):\n        s += str(s.count('1') % 2)\n    if int(s, 2) > 300:\n        print(n)\n        break\n    n += 1",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `38`"
+            }
           }
         ],
         "skills": [],
@@ -147336,7 +147486,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 24,
+            "position": 22,
             "material_id": "preobrazovanie-zapisey-chisel"
           }
         ],
@@ -147386,7 +147536,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "На вход алгоритма подаётся натуральное число N > 1000. Все пары соседних цифр десятичной записи N рассматриваются как двузначные числа (возможно, с ведущим нулём). Результат R — сумма наибольшего и наименьшего из этих чисел. Укажите наименьшее N, для которого R = 100."
+              "markdown": "На вход алгоритма подаётся натуральное число N > 1000. Все пары соседних цифр десятичной записи N рассматриваются как двузначные числа (возможно, с ведущим нулём). Результат R — сумма наибольшего и наименьшего из этих чисел. Укажи наименьшее N, для которого R = 100."
             }
           }
         ],
@@ -147402,7 +147552,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "1091: пары 10, 09 и 91; 91 + 9 = 100."
+              "markdown": "Для 1091 пары `10`, `09` и `91` — числа 10, 9 и 91; наибольшее плюс наименьшее: 91 + 9 = 100. Меньшие N > 1000 так не дают — это проверяет программа."
             }
           },
           {
@@ -147412,6 +147562,12 @@
               "code": "n = 1001\nwhile True:\n    s = str(n)\n    pairs = []\n    for i in range(len(s) - 1):\n        pairs.append(int(s[i:i + 2]))\n    if max(pairs) + min(pairs) == 100:\n        print(n)\n        break\n    n += 1",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `1091`"
+            }
           }
         ],
         "skills": [],
@@ -147419,7 +147575,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 25,
+            "position": 24,
             "material_id": "preobrazovanie-zapisey-chisel"
           }
         ],
@@ -147495,6 +147651,12 @@
               "code": "n = 1\nwhile True:\n    s = bin(n)[2:]\n    s += '10' if n % 2 == 0 else '01'\n    if int(s, 2) > 100:\n        print(n)\n        break\n    n += 1",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `25`"
+            }
           }
         ],
         "skills": [],
@@ -147568,7 +147730,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "392: 14 = 112₃, дописываем `112`; 14 · 27 + 14 = 392."
+              "markdown": "14 = 112₃, дописываем `112`; 14 · 27 + 14 = 392."
             }
           },
           {
@@ -147578,6 +147740,12 @@
               "code": "def to_base(n, q):\n    if n == 0:\n        return '0'\n\n    s = ''\n    x = n\n\n    while x > 0:\n        digit = x % q\n        s = str(digit) + s\n        x = x // q\n\n    return s\n\n\nn = 14\ns = to_base(n, 3)\nif n % 3 == 0:\n    s += s[-2:]\nelse:\n    s += to_base(7 * (n % 3), 3)\nprint(int(s, 3))",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `392`"
+            }
           }
         ],
         "skills": [],
@@ -147585,7 +147753,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 27,
+            "position": 29,
             "material_id": "preobrazovanie-zapisey-chisel"
           }
         ],
@@ -147643,7 +147811,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Блоки разной длины: R не растёт вместе с N. Сохраняйте R и N вместе."
+              "markdown": "Блоки разной длины: R не растёт вместе с N. Сохраняй R и N вместе."
             }
           }
         ],
@@ -147661,6 +147829,12 @@
               "code": "best_r = None\nbest_n = None\nfor n in range(1, 31):\n    s = bin(n)[2:]\n    s += '111' if n % 2 == 0 else '0'\n    r = int(s, 2)\n    if r > 30 and (best_r is None or r < best_r):\n        best_r = r\n        best_n = n\nprint(best_r, best_n)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `34 17`"
+            }
           }
         ],
         "skills": [],
@@ -147668,7 +147842,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 28,
+            "position": 25,
             "material_id": "preobrazovanie-zapisey-chisel"
           }
         ],
@@ -147718,7 +147892,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "На вход алгоритма подаётся натуральное число N > 1. Строится двоичная запись N. Если N делится на 3, справа к ней дописываются две её последние цифры; иначе остаток от деления N на 3 умножается на 3, и двоичная запись произведения дописывается слева. Полученная запись — двоичная запись числа R. Укажите наибольшее R, не превышающее 200."
+              "markdown": "На вход алгоритма подаётся натуральное число N > 1. Строится двоичная запись N. Если N делится на 3, справа к ней дописываются две её последние цифры; иначе остаток от деления N на 3 умножается на 3, и двоичная запись произведения дописывается слева. Полученная запись — двоичная запись числа R. Укажи наибольшее R, не превышающее 200."
             }
           }
         ],
@@ -147744,6 +147918,12 @@
               "code": "best = 0\nfor n in range(2, 201):\n    s = bin(n)[2:]\n    if n % 3 == 0:\n        s = s + s[-2:]\n    else:\n        s = bin(n % 3 * 3)[2:] + s\n    r = int(s, 2)\n    if r <= 200:\n        best = max(best, r)\nprint(best)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `192`"
+            }
           }
         ],
         "skills": [],
@@ -147751,7 +147931,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 29,
+            "position": 27,
             "material_id": "preobrazovanie-zapisey-chisel"
           }
         ],
@@ -147801,7 +147981,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "На вход алгоритма подаётся натуральное число N. Строится троичная запись N. Если сумма её цифр чётная, справа дописывается `1`; иначе слева дописывается `2`. Полученная запись — троичная запись числа R. Укажите такое N, при котором R — наименьшее среди чисел, больших 1000."
+              "markdown": "На вход алгоритма подаётся натуральное число N. Строится троичная запись N. Если сумма её цифр чётная, справа дописывается `1`; иначе слева дописывается `2`. Полученная запись — троичная запись числа R. Укажи такое N, при котором R — наименьшее среди чисел, больших 1000."
             }
           }
         ],
@@ -147809,7 +147989,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "В ответе — N, а сравнивать нужно R: храните оба числа."
+              "markdown": "В ответе — N, а сравнивать нужно R: храни оба числа."
             }
           }
         ],
@@ -147817,7 +147997,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "334: 334 = 110101₃, сумма цифр 4, R = 1101011₃ = 1003. R ≥ N, поэтому входы больше 1003 проверять не нужно."
+              "markdown": "334 = 110101₃, сумма цифр 4, R = 1101011₃ = 1003. R ≥ N, поэтому входы больше 1003 проверять не нужно."
             }
           },
           {
@@ -147826,6 +148006,12 @@
               "language": "python",
               "code": "def to_base(n, q):\n    if n == 0:\n        return '0'\n\n    s = ''\n    x = n\n\n    while x > 0:\n        digit = x % q\n        s = str(digit) + s\n        x = x // q\n\n    return s\n\n\nbest_r = None\nbest_n = None\nfor n in range(1, 1004):\n    s = to_base(n, 3)\n    total = 0\n    for c in s:\n        total += int(c)\n    if total % 2 == 0:\n        s = s + '1'\n    else:\n        s = '2' + s\n    r = int(s, 3)\n    if r > 1000 and (best_r is None or r < best_r):\n        best_r = r\n        best_n = n\nprint(best_n)",
               "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `334`"
             }
           }
         ],
@@ -147841,7 +148027,7 @@
         "theory_links": [
           {
             "label": "Теория",
-            "section": "oba-chisla",
+            "section": "vopros-poiska",
             "material_id": "preobrazovanie-zapisey-chisel"
           }
         ],
@@ -147900,7 +148086,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "50: у чётного N в конце записи ноль, после переворота он становится ведущим и отбрасывается — 2N даёт тот же R, что и N."
+              "markdown": "У чётного N в конце записи ноль, после переворота он становится ведущим и отбрасывается — 2N даёт тот же R, что и N."
             }
           },
           {
@@ -147910,6 +148096,12 @@
               "code": "results = set()\nfor n in range(1, 101):\n    results.add(int(bin(n)[2:][::-1], 2))\nprint(len(results))",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `50`"
+            }
           }
         ],
         "skills": [],
@@ -147917,7 +148109,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 31,
+            "position": 28,
             "material_id": "preobrazovanie-zapisey-chisel"
           }
         ],
@@ -147998,22 +148190,10 @@
         "skills": [],
         "exam_numbers": [5],
         "files": [],
-        "lessons": [
-          {
-            "position": 32,
-            "material_id": "preobrazovanie-zapisey-chisel",
-            "counts_toward_mastery": false
-          }
-        ],
-        "theory_links": [
-          {
-            "label": "Теория",
-            "section": "zamena-bez-perebora",
-            "material_id": "preobrazovanie-zapisey-chisel"
-          }
-        ],
+        "lessons": [],
+        "theory_links": [],
         "catalog_visible": false,
-        "archived": false,
+        "archived": true,
         "sources": [
           {
             "url": null,
@@ -148082,22 +148262,10 @@
         "skills": [],
         "exam_numbers": [5],
         "files": [],
-        "lessons": [
-          {
-            "position": 33,
-            "material_id": "preobrazovanie-zapisey-chisel",
-            "counts_toward_mastery": false
-          }
-        ],
-        "theory_links": [
-          {
-            "label": "Теория",
-            "section": "zamena-bez-perebora",
-            "material_id": "preobrazovanie-zapisey-chisel"
-          }
-        ],
+        "lessons": [],
+        "theory_links": [],
         "catalog_visible": false,
-        "archived": false,
+        "archived": true,
         "sources": [
           {
             "url": null,
@@ -148166,22 +148334,10 @@
         "skills": [],
         "exam_numbers": [5],
         "files": [],
-        "lessons": [
-          {
-            "position": 34,
-            "material_id": "preobrazovanie-zapisey-chisel",
-            "counts_toward_mastery": false
-          }
-        ],
-        "theory_links": [
-          {
-            "label": "Теория",
-            "section": "kolichestvo-rezultatov",
-            "material_id": "preobrazovanie-zapisey-chisel"
-          }
-        ],
+        "lessons": [],
+        "theory_links": [],
         "catalog_visible": false,
-        "archived": false,
+        "archived": true,
         "sources": [
           {
             "url": null,
@@ -148219,7 +148375,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "На вход алгоритма подаётся натуральное число N. Строится двоичная запись N. Если N чётное, слева к ней дописывается `10`; если нечётное, слева дописывается `1`, а справа — `11`. Полученная запись — двоичная запись числа R. Укажите наибольшее R, не превышающее 150. (Подтемы 2 и 5: граница перебора.)"
+              "markdown": "На вход алгоритма подаётся натуральное число N. Строится двоичная запись N. Если N чётное, слева к ней дописывается `10`; если нечётное, слева дописывается `1`, а справа — `11`. Полученная запись — двоичная запись числа R. Укажи наибольшее R, не превышающее 150."
             }
           }
         ],
@@ -148245,6 +148401,12 @@
               "code": "best = 0\nfor n in range(1, 151):\n    s = bin(n)[2:]\n    if n % 2 == 0:\n        s = '10' + s\n    else:\n        s = '1' + s + '11'\n    r = int(s, 2)\n    if r <= 150:\n        best = max(best, r)\nprint(best)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `127`"
+            }
           }
         ],
         "skills": [],
@@ -148252,7 +148414,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 35,
+            "position": 34,
             "material_id": "preobrazovanie-zapisey-chisel"
           }
         ],
@@ -148296,7 +148458,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "На вход алгоритма подаётся натуральное число N. Строится троичная запись N. Затем два раза подряд к текущей записи справа дописывается остаток от деления суммы её цифр на 3. Полученная запись — троичная запись числа R. Укажите наименьшее N, для которого R больше 400. (Подтема 4.)"
+              "markdown": "На вход алгоритма подаётся натуральное число N. Строится троичная запись N. Затем два раза подряд к текущей записи справа дописывается остаток от деления суммы её цифр на 3. Полученная запись — троичная запись числа R. Укажи наименьшее N, для которого R больше 400."
             }
           }
         ],
@@ -148312,7 +148474,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "45: 45 = 1200₃, сумма цифр 3, дважды дописывается `0`, R = 120000₃ = 405."
+              "markdown": "45 = 1200₃, сумма цифр 3, дважды дописывается `0`, R = 120000₃ = 405."
             }
           },
           {
@@ -148322,6 +148484,12 @@
               "code": "def to_base(n, q):\n    if n == 0:\n        return '0'\n\n    s = ''\n    x = n\n\n    while x > 0:\n        digit = x % q\n        s = str(digit) + s\n        x = x // q\n\n    return s\n\n\nn = 1\nwhile True:\n    s = to_base(n, 3)\n    for _ in range(2):\n        total = 0\n        for c in s:\n            total += int(c)\n        s += str(total % 3)\n    if int(s, 3) > 400:\n        print(n)\n        break\n    n += 1",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `45`"
+            }
           }
         ],
         "skills": [],
@@ -148329,7 +148497,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 36,
+            "position": 35,
             "material_id": "preobrazovanie-zapisey-chisel"
           }
         ],
@@ -148373,7 +148541,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "На вход алгоритма подаётся натуральное число N. Двоичная запись N переворачивается (читается справа налево), затем справа дописывается `1`. Полученная запись — двоичная запись числа R. Укажите наименьшее N, для которого R больше 1000. (Подтемы 3 и 5: результат не растёт вместе с N.)"
+              "markdown": "На вход алгоритма подаётся натуральное число N. Двоичная запись N переворачивается (читается справа налево), затем справа дописывается `1`. Полученная запись — двоичная запись числа R. Укажи наименьшее N, для которого R больше 1000."
             }
           }
         ],
@@ -148389,7 +148557,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "319: R больше 1000 только у записей из 10 и более цифр, то есть у N ≥ 256. 319 = 100111111₂ → `1111110011`₂ = 1011."
+              "markdown": "R больше 1000 только у записей из 10 и более цифр, то есть у N ≥ 256. 319 = 100111111₂ → `1111110011`₂ = 1011."
             }
           },
           {
@@ -148399,6 +148567,12 @@
               "code": "n = 1\nwhile True:\n    s = bin(n)[2:][::-1] + '1'\n    if int(s, 2) > 1000:\n        print(n)\n        break\n    n += 1",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `319`"
+            }
           }
         ],
         "skills": [],
@@ -148406,7 +148580,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 37,
+            "position": 36,
             "material_id": "preobrazovanie-zapisey-chisel"
           }
         ],
@@ -148450,7 +148624,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "На вход алгоритма подаётся натуральное число N. Строится восьмеричная запись N. Если N чётное, справа к ней дописывается её первая цифра; иначе остаток от деления N на 5 записывается в восьмеричной системе и дописывается слева. Полученная запись — восьмеричная запись числа R. Укажите такое N, при котором R — наименьшее среди чисел, больших 600. (Подтемы 1 и 5: храните и N, и R.)"
+              "markdown": "На вход алгоритма подаётся натуральное число N. Строится восьмеричная запись N. Если N чётное, справа к ней дописывается её первая цифра; иначе остаток от деления N на 5 записывается в восьмеричной системе и дописывается слева. Полученная запись — восьмеричная запись числа R. Укажи такое N, при котором R — наименьшее среди чисел, больших 600."
             }
           }
         ],
@@ -148458,7 +148632,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Восьмеричная запись — `oct(n)[2:]`; храните и N, и R."
+              "markdown": "Восьмеричная запись — `oct(n)[2:]`; храни и N, и R."
             }
           }
         ],
@@ -148466,7 +148640,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "91: 91 = 133₈, нечётное, 91 mod 5 = 1, R = 1133₈ = 603. R ≥ N, поэтому входы больше 603 не нужны."
+              "markdown": "91 = 133₈, нечётное, 91 mod 5 = 1, R = 1133₈ = 603. R ≥ N, поэтому входы больше 603 не нужны."
             }
           },
           {
@@ -148476,6 +148650,12 @@
               "code": "best_r = None\nbest_n = None\nfor n in range(1, 604):\n    s = oct(n)[2:]\n    if n % 2 == 0:\n        s = s + s[0]\n    else:\n        s = oct(n % 5)[2:] + s\n    r = int(s, 8)\n    if r > 600 and (best_r is None or r < best_r):\n        best_r = r\n        best_n = n\nprint(best_n)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `91`"
+            }
           }
         ],
         "skills": [],
@@ -148483,7 +148663,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 38,
+            "position": 37,
             "material_id": "preobrazovanie-zapisey-chisel"
           }
         ],
@@ -148527,7 +148707,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "На вход алгоритма подаётся натуральное число N ≥ 10. Из десятичной записи N удаляются все нули, оставшиеся цифры записываются в обратном порядке, и получившаяся запись — десятичная запись числа R. Сколько различных значений R получается при N от 10 до 999? (Подтемы 3 и 4: множество различных результатов.)"
+              "markdown": "На вход алгоритма подаётся натуральное число N ≥ 10. Из десятичной записи N удаляются все нули, оставшиеся цифры записываются в обратном порядке, и получившаяся запись — десятичная запись числа R. Сколько различных значений R получается при N от 10 до 999?"
             }
           }
         ],
@@ -148543,7 +148723,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "819."
+              "markdown": "Программа ниже строит R для каждого N от 10 до 999 и складывает результаты в множество: одинаковые значения учитываются один раз. Различных результатов 819."
             }
           },
           {
@@ -148553,6 +148733,12 @@
               "code": "results = set()\nfor n in range(10, 1000):\n    s = str(n).replace('0', '')[::-1]\n    results.add(int(s))\nprint(len(results))",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `819`"
+            }
           }
         ],
         "skills": [],
@@ -148560,7 +148746,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 39,
+            "position": 38,
             "material_id": "preobrazovanie-zapisey-chisel"
           }
         ],
@@ -148584,6 +148770,184 @@
         "checker": {
           "checker_type": "exact_match",
           "answer_variants": ["819"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "task-5-8-01",
+        "title": "Вход по результату 189",
+        "short_description": null,
+        "explanation_kind": "worked_solution",
+        "difficulty": 1,
+        "estimated_minutes": 1,
+        "answer_instruction": "Введите число.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "На вход алгоритма подаётся натуральное число N. Строится его двоичная запись; если N чётное, справа дописывается `10`, если нечётное — `01`. Полученная запись — двоичная запись числа R. Получилось R = 189. Найди N."
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Раздели запись 189 на хвост из двух цифр и оставшуюся часть."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "189 = `101111|01`: хвост `01`, слева `101111` = 47 — нечётное, а нечётным как раз дописывают `01`. Значит, N = 47."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "for n in range(1, 190):\n    s = bin(n)[2:]\n    if n % 2 == 0:\n        s = s + '10'\n    else:\n        s = s + '01'\n    if int(s, 2) == 189:\n        print(n)",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `47`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [5],
+        "files": [],
+        "lessons": [
+          {
+            "position": 32,
+            "material_id": "preobrazovanie-zapisey-chisel"
+          }
+        ],
+        "theory_links": [
+          {
+            "label": "Теория",
+            "section": "obratnyj-hod",
+            "material_id": "preobrazovanie-zapisey-chisel"
+          }
+        ],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["47"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "task-5-8-02",
+        "title": "Наименьший результат больше 200",
+        "short_description": null,
+        "explanation_kind": "worked_solution",
+        "difficulty": 1,
+        "estimated_minutes": 1,
+        "answer_instruction": "Введите число.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "На вход алгоритма подаётся натуральное число N. Строится его двоичная запись; если N чётное, справа дописывается `10`, если нечётное — `01`. Полученная запись — двоичная запись числа R. Найди наименьшее R, большее 200."
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Проверяй числа 201, 202, … : хвост записи должен совпасть с дописанным блоком."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "201 = `110010|01`: слева 50 — чётное, а `01` дописывают к нечётным, не подходит. 202 = `110010|10`: 50 чётное, дописано `10` — подходит."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "best = 10 ** 9\nfor n in range(1, 201):\n    s = bin(n)[2:]\n    if n % 2 == 0:\n        s = s + '10'\n    else:\n        s = s + '01'\n    r = int(s, 2)\n    if r > 200:\n        best = min(best, r)\nprint(best)",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `202`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [5],
+        "files": [],
+        "lessons": [
+          {
+            "position": 33,
+            "material_id": "preobrazovanie-zapisey-chisel"
+          }
+        ],
+        "theory_links": [
+          {
+            "label": "Теория",
+            "section": "ot-rezultata",
+            "material_id": "preobrazovanie-zapisey-chisel"
+          }
+        ],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["202"],
           "numeric_tolerance": null
         }
       },
@@ -830342,7 +830706,6 @@
         "perevod-deleniem",
         "dlina-zapisi",
         "chislo-i-stroka",
-        "operacii",
         "gotovye-funkcii",
         "svoya-funkciya",
         "zapis-itogo",
@@ -830350,43 +830713,33 @@
         "sdvig-razryadov",
         "neskolko-cifr",
         "dopisyvanie-sleva",
-        "poslednie-cifry",
         "soedinenie-strok",
         "blok-po-usloviyu",
         "rezultat-vychisleniya",
         "dopisyvanie-itogo",
         "zamena-cifr",
-        "udalit-i-vstavit",
         "indeksy-i-srezy",
         "sborka-iz-srezov",
         "perevernut-i-invertirovat",
         "odni-edinicy",
         "odnovremennaya-zamena",
         "vedushchie-nuli",
-        "chasti-itogo",
-        "chetnost",
         "poslednyaya-cifra",
-        "drugie-sistemy",
         "kakaya-zapis",
         "povtornyj-shag",
         "desyatichnaya-zapis",
-        "summa-itogo",
-        "chto-minimizirovat",
+        "chasti-itogo",
+        "shablon-perebora",
         "vopros-poiska",
         "ostanovka-perebora",
         "granicy-perebora",
         "dve-proverki",
-        "po-vetvyam",
-        "ot-rezultata",
         "zadan-rezultat",
         "troichnyj-algoritm",
-        "oba-chisla",
         "poisk-itogo",
-        "rassuzhdenie",
-        "zamena-bez-perebora",
-        "monotonnost-vetvi",
-        "kolichestvo-rezultatov",
-        "rassuzhdenie-itogo"
+        "obratnyj-hod",
+        "ot-rezultata",
+        "rezultat-itogo"
       ],
       "kind": "topic",
       "status": "published",
@@ -830402,7 +830755,6 @@
             "perevod-deleniem",
             "dlina-zapisi",
             "chislo-i-stroka",
-            "operacii",
             "gotovye-funkcii",
             "svoya-funkciya",
             "zapis-itogo"
@@ -830416,7 +830768,6 @@
             "sdvig-razryadov",
             "neskolko-cifr",
             "dopisyvanie-sleva",
-            "poslednie-cifry",
             "soedinenie-strok",
             "blok-po-usloviyu",
             "rezultat-vychisleniya",
@@ -830428,56 +830779,37 @@
           "access": "free",
           "sections": [
             "zamena-cifr",
-            "udalit-i-vstavit",
             "indeksy-i-srezy",
             "sborka-iz-srezov",
             "perevernut-i-invertirovat",
             "odni-edinicy",
             "odnovremennaya-zamena",
             "vedushchie-nuli",
-            "chasti-itogo"
-          ]
-        },
-        {
-          "slug": "summa-cifr",
-          "access": "free",
-          "sections": [
-            "chetnost",
             "poslednyaya-cifra",
-            "drugie-sistemy",
             "kakaya-zapis",
             "povtornyj-shag",
             "desyatichnaya-zapis",
-            "summa-itogo"
+            "chasti-itogo"
           ]
         },
         {
           "slug": "poisk-otveta",
           "access": "free",
           "sections": [
-            "chto-minimizirovat",
+            "shablon-perebora",
             "vopros-poiska",
             "ostanovka-perebora",
             "granicy-perebora",
             "dve-proverki",
-            "po-vetvyam",
-            "ot-rezultata",
             "zadan-rezultat",
             "troichnyj-algoritm",
-            "oba-chisla",
             "poisk-itogo"
           ]
         },
         {
-          "slug": "rassuzhdenie-vmesto-perebora",
+          "slug": "ot-rezultata",
           "access": "free",
-          "sections": [
-            "rassuzhdenie",
-            "zamena-bez-perebora",
-            "monotonnost-vetvi",
-            "kolichestvo-rezultatov",
-            "rassuzhdenie-itogo"
-          ]
+          "sections": ["obratnyj-hod", "ot-rezultata", "rezultat-itogo"]
         }
       ],
       "final_access": "free"

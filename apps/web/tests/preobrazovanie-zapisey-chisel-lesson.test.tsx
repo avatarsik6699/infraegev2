@@ -86,7 +86,7 @@ function compiles(code: string): boolean {
 }
 
 describe("task 5 number records lesson (Change 184)", () => {
-  it("has five core subtopics, one advanced and their self-checks", () => {
+  it("has five core subtopics and their self-checks", () => {
     expect(lesson).toMatchObject({
       id: "preobrazovanie-zapisey-chisel",
       routeSlug: "5-preobrazovanie-zapisey-chisel",
@@ -100,12 +100,11 @@ describe("task 5 number records lesson (Change 184)", () => {
       ["chislo-i-zapis", "core"],
       ["dopisyvanie", "core"],
       ["chasti-zapisi", "core"],
-      ["summa-cifr", "core"],
       ["poisk-otveta", "core"],
-      ["rassuzhdenie-vmesto-perebora", "advanced"],
+      ["ot-rezultata", "core"],
     ]);
     expect(subtopics.map(({ checkpoint }) => checkpoint?.length ?? 0)).toEqual([
-      2, 1, 2, 5, 3, 3,
+      5, 4, 5, 4, 4,
     ]);
     expect(lesson.examFocus).toBeDefined();
     expect(lesson.result).toBeDefined();
@@ -189,7 +188,7 @@ describe("task 5 number records lesson (Change 184)", () => {
           prelude += piece.code + "\n";
       }
     }
-    expect(ran).toBe(24);
+    expect(ran).toBe(18);
   }, 60_000);
 
   it("keeps spaces around inline code, links and emphasis", () => {
@@ -213,7 +212,7 @@ describe("task 5 number records lesson (Change 184)", () => {
       container.querySelectorAll("figure[data-lesson-diagram]"),
     ).toHaveLength(diagrams.length);
     expect(media.filter((item) => item.kind === "stepper")).toHaveLength(1);
-    expect(media.filter((item) => item.kind === "run")).toHaveLength(7);
+    expect(media.filter((item) => item.kind === "run")).toHaveLength(6);
     expect(container.querySelectorAll("img, video")).toHaveLength(0);
     expect(container.querySelectorAll("[data-topic-cheat-sheet]")).toHaveLength(
       1,

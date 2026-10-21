@@ -9,7 +9,6 @@ answers.
 
 import subprocess
 import sys
-from bisect import bisect_left, bisect_right
 from pathlib import Path
 
 import pytest
@@ -167,14 +166,13 @@ def answers() -> dict[str, str]:
 
     a["task-5-5-08"] = str(min((r, n) for n in range(1, 2000) if (r := by_sum(n)) > 1000)[1])
     a["task-5-5-09"] = str(len({_reverse(n, 2) for n in range(1, 101)}))
-    # subtopic 6: formulas instead of search
-    a["task-5-6-01"] = str(_first(1, lambda n: abs(2 * n - (3 ** _length(n, 3) - 1)) == 12))
-    a["task-5-6-03"] = str(_first(1, lambda n: abs(n - _swap02(n)) == 40))
-    low, high = 123_456_789, 987_654_321
-    inputs = range(1, high)
-    first = bisect_left(inputs, low, key=lambda n: 4 * n + n % 3)
-    last = bisect_right(inputs, high, key=lambda n: 4 * n + n % 3)
-    a["task-5-6-06"] = str(last - first)
+    # subtopic 4: from the result back to N (Change 197)
+
+    def tail(n: int) -> int:
+        return int(bin(n)[2:] + ("10" if n % 2 == 0 else "01"), 2)
+
+    a["task-5-8-01"] = str(_first(1, lambda n: tail(n) == 189))
+    a["task-5-8-02"] = str(min(r for n in range(1, 201) if (r := tail(n)) > 200))
     # Практика и итог
 
     def left_right(n: int) -> int:
@@ -203,14 +201,13 @@ def answers() -> dict[str, str]:
 def test_every_answer_matches_independent_recomputation(answers: dict[str, str]) -> None:
     tasks = _entries()
     assert sorted(tasks) == sorted(answers)
-    assert sorted(t.lessons[0].position for t in tasks.values()) == list(range(40))
+    assert sorted(t.lessons[0].position for t in tasks.values()) == list(range(39))
     for task_id, task in tasks.items():
         assert task.checker.answer_variants[0] == answers[task_id], task_id
         assert task.exam_numbers == [5] and not task.catalog_visible and not task.archived
         on_final_page = task_id.startswith("task-5-7-")
         assert bool(task.theory_links) != on_final_page, task_id
-        advanced = task_id.startswith("task-5-6-")
-        assert task.lessons[0].counts_toward_mastery == (not advanced), task_id
+        assert task.lessons[0].counts_toward_mastery, task_id
 
 
 def test_tasks_of_the_retired_lesson_are_archived() -> None:
