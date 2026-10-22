@@ -15,7 +15,7 @@ from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.config import settings
-from app.core.database import database_engine
+from app.core.database import request_engine
 from app.modules.account import service as account_service
 from app.modules.account.api import raw_session_token
 from app.modules.billing.models import AccessGrant
@@ -71,21 +71,19 @@ async def resolve(request: Request) -> AccessState:
     token = raw_session_token(request)
     if not token:
         return AccessState(None, None)
-    engine = None
     try:
-        async with asyncio.timeout(5):
-            engine = database_engine(settings.account_database_url, role="infraege_app")
-            async with AsyncSession(engine) as db:
-                current = await account_service.current_session(db, token)
-                if current is None:
-                    return AccessState(None, None)
-                return AccessState(current.user_id, await access_until(db, current.user_id))
+        async with (
+            asyncio.timeout(5),
+            request_engine(request, settings.account_database_url, role="infraege_app") as engine,
+            AsyncSession(engine) as db,
+        ):
+            current = await account_service.current_session(db, token)
+            if current is None:
+                return AccessState(None, None)
+            return AccessState(current.user_id, await access_until(db, current.user_id))
     except (OSError, TimeoutError, SQLAlchemyError, PostgresError, ValueError) as exc:
         logger.error("entitlement.database_unavailable", error_type=type(exc).__name__)
         raise AccessUnavailable("access unavailable") from exc
-    finally:
-        if engine is not None:
-            await engine.dispose()
 
 
 class Viewer:

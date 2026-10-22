@@ -36,6 +36,8 @@ venv = ".venv"
 include = ["app", "tests", "migrations"]
 
 [tool.pytest.ini_options]
+# The bank tests copy the 1.2 GB task files into tmp_path; keep only failed runs' copies.
+tmp_path_retention_policy = "failed"
 markers = [
   "pure: deterministic API or protocol contract with no Docker or PostgreSQL fixture",
   "db: isolated PostgreSQL integration contract; starts a disposable pinned database",

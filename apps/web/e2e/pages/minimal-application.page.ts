@@ -23,7 +23,7 @@ const firstTopicSubtopicByRouteSlug: Readonly<Record<string, string>> = {
   "12-ispolnenie-algoritma-dlya-ispolnitelya": "lenta-i-komanda",
   "13-analiz-hoda-ispolneniya-algoritma": "komandy-i-derevo",
   "14-sistemy-schisleniya": "zapis-i-znachenie",
-  "15-zakony-matematicheskoj-logiki": "parametr-i-lozhnyj-sluchaj",
+  "15-zakony-matematicheskoj-logiki": "formula-i-parametr",
   "16-rekursiya": "funktsiya-cherez-sebya",
   "17-chislovye-posledovatelnosti": "chisla-i-proverki",
   "18-robot-sborshchik-monet": "luchshaya-summa-do-kletki",

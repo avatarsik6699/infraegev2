@@ -34,7 +34,7 @@ const subtopicFacts: Readonly<
   "simple-algorithms": { count: 7, first: "sostoyanie-i-komandy" },
   executors: { count: 7, first: "lenta-i-komanda" },
   "branching-and-enumeration": { count: 8, first: "komandy-i-derevo" },
-  "logic-transformations": { count: 7, first: "parametr-i-lozhnyj-sluchaj" },
+  "logic-transformations": { count: 7, first: "formula-i-parametr" },
   "parallel-computing": { count: 8, first: "process-i-zavisimost" },
 };
 

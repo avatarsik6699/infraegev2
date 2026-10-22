@@ -91,7 +91,7 @@ function compiles(code: string): boolean {
 }
 
 describe("task 15 laws of logic lesson (Change 190)", () => {
-  it("has six core subtopics, one advanced and their self-checks", () => {
+  it("has five core subtopics, one advanced and their self-checks", () => {
     expect(lesson).toMatchObject({
       id: "logic-transformations",
       routeSlug: "15-zakony-matematicheskoj-logiki",
@@ -102,16 +102,15 @@ describe("task 15 laws of logic lesson (Change 190)", () => {
     });
     const subtopics = lessonSubtopics(lesson);
     expect(subtopics.map(({ slug, level }) => [slug, level])).toEqual([
-      ["parametr-i-lozhnyj-sluchaj", "core"],
-      ["prinadlezhnost-i-oblast", "core"],
-      ["bity-i-maski", "core"],
-      ["opasnaya-oblast", "core"],
-      ["delimost-i-smeshannye-usloviya", "core"],
-      ["konechnaya-proverka", "core"],
-      ["novye-predikaty", "advanced"],
+      ["formula-i-parametr", "core"],
+      ["otrezki-i-mnozhestva", "core"],
+      ["koordinatnaya-ploskost", "core"],
+      ["delimost", "core"],
+      ["porazryadnaya-konyunkciya", "core"],
+      ["novye-usloviya", "advanced"],
     ]);
     expect(subtopics.map(({ checkpoint }) => checkpoint?.length ?? 0)).toEqual([
-      2, 1, 1, 1, 0, 5, 1,
+      5, 5, 5, 5, 5, 4,
     ]);
     expect(lesson.examFocus).toBeDefined();
     expect(lesson.result).toBeDefined();
@@ -134,7 +133,7 @@ describe("task 15 laws of logic lesson (Change 190)", () => {
       status: "published",
     });
     expect(publicPaths).toContain(
-      "/ege/15-zakony-matematicheskoj-logiki/parametr-i-lozhnyj-sluchaj",
+      "/ege/15-zakony-matematicheskoj-logiki/formula-i-parametr",
     );
     expect(publicPaths).toContain(
       "/ege/15-zakony-matematicheskoj-logiki/praktika",
@@ -195,7 +194,7 @@ describe("task 15 laws of logic lesson (Change 190)", () => {
           prelude += piece.code + "\n";
       }
     }
-    expect(ran).toBe(7);
+    expect(ran).toBe(4);
   }, 60_000);
 
   it("keeps spaces around inline code, links and emphasis", () => {

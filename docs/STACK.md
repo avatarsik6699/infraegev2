@@ -89,6 +89,10 @@ CLI, locked vault or incomplete credentials fails before Docker changes anything
 manifest the no-mail development path remains. `athanor.yaml` and `secrets.enc.yaml` are ignored
 local files, never release inputs; no plaintext SMTP secret is written to a tracked file.
 
+The running API keeps one pooled engine per database URL and role (`EnginePool`, made in the
+FastAPI lifespan, closed on shutdown): a new connection costs ~20 ms against ~0.3 ms for a query.
+Operator tools, imports and jobs keep one-off `NullPool` engines (Change 197).
+
 Lesson practice and the checker read only PostgreSQL through the API; web SSR uses the owning typed
 adapter and `API_INTERNAL_URL` (`http://api:8000` in Compose). Topic and Course theory are
 content-as-code. Only `/` and `/ege` are prerendered; DB-dependent pages are SSR. Legacy

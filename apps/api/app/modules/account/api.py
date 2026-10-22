@@ -19,7 +19,7 @@ from sqlalchemy.exc import IntegrityError, SQLAlchemyError
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.config import settings
-from app.core.database import database_engine
+from app.core.database import request_engine
 from app.modules.account import service
 from app.modules.account.mail import MailUnavailable, send_account_mail
 from app.modules.account.models import (
@@ -106,14 +106,15 @@ def require_origin(request: Request) -> None:
         raise HTTPException(403, "origin not allowed")
 
 
-async def account_db(response: Response) -> AsyncIterator[AsyncSession]:
+async def account_db(request: Request, response: Response) -> AsyncIterator[AsyncSession]:
     response.headers["Cache-Control"] = "no-store"
-    engine = None
     try:
-        async with asyncio.timeout(8):
-            engine = database_engine(settings.account_database_url, role="infraege_app")
-            async with AsyncSession(engine) as db:
-                yield db
+        async with (
+            asyncio.timeout(8),
+            request_engine(request, settings.account_database_url, role="infraege_app") as engine,
+            AsyncSession(engine) as db,
+        ):
+            yield db
     except (OSError, TimeoutError, SQLAlchemyError, PostgresError, ValueError) as exc:
         origin = getattr(exc, "orig", exc)
         logger.error(
@@ -122,9 +123,6 @@ async def account_db(response: Response) -> AsyncIterator[AsyncSession]:
             sqlstate=getattr(origin, "sqlstate", None),
         )
         raise HTTPException(503, "account service unavailable") from exc
-    finally:
-        if engine is not None:
-            await engine.dispose()
 
 
 AccountDb = Annotated[AsyncSession, Depends(account_db)]

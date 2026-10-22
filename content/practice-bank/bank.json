@@ -119849,7 +119849,7 @@
         ],
         "checker": {
           "checker_type": "exact_match",
-          "answer_variants": ["0 ZeroDivisionError"],
+          "answer_variants": ["0"],
           "numeric_tolerance": null
         }
       },
@@ -130031,7 +130031,8 @@
         "lessons": [
           {
             "position": 0,
-            "material_id": "python-classes"
+            "material_id": "python-classes",
+            "counts_toward_mastery": false
           }
         ],
         "theory_links": [],
@@ -130114,7 +130115,8 @@
         "lessons": [
           {
             "position": 1,
-            "material_id": "python-classes"
+            "material_id": "python-classes",
+            "counts_toward_mastery": false
           }
         ],
         "theory_links": [],
@@ -130203,7 +130205,8 @@
         "lessons": [
           {
             "position": 2,
-            "material_id": "python-classes"
+            "material_id": "python-classes",
+            "counts_toward_mastery": false
           }
         ],
         "theory_links": [],
@@ -130286,7 +130289,8 @@
         "lessons": [
           {
             "position": 0,
-            "material_id": "python-advanced-features"
+            "material_id": "python-advanced-features",
+            "counts_toward_mastery": false
           }
         ],
         "theory_links": [],
@@ -130369,7 +130373,8 @@
         "lessons": [
           {
             "position": 1,
-            "material_id": "python-advanced-features"
+            "material_id": "python-advanced-features",
+            "counts_toward_mastery": false
           }
         ],
         "theory_links": [],
@@ -130452,7 +130457,8 @@
         "lessons": [
           {
             "position": 2,
-            "material_id": "python-advanced-features"
+            "material_id": "python-advanced-features",
+            "counts_toward_mastery": false
           }
         ],
         "theory_links": [],
@@ -130535,7 +130541,8 @@
         "lessons": [
           {
             "position": 3,
-            "material_id": "python-advanced-features"
+            "material_id": "python-advanced-features",
+            "counts_toward_mastery": false
           }
         ],
         "theory_links": [],
@@ -130618,7 +130625,8 @@
         "lessons": [
           {
             "position": 0,
-            "material_id": "python-testing"
+            "material_id": "python-testing",
+            "counts_toward_mastery": false
           }
         ],
         "theory_links": [],
@@ -130701,7 +130709,8 @@
         "lessons": [
           {
             "position": 1,
-            "material_id": "python-testing"
+            "material_id": "python-testing",
+            "counts_toward_mastery": false
           }
         ],
         "theory_links": [],
@@ -130784,7 +130793,8 @@
         "lessons": [
           {
             "position": 2,
-            "material_id": "python-testing"
+            "material_id": "python-testing",
+            "counts_toward_mastery": false
           }
         ],
         "theory_links": [],
@@ -130873,7 +130883,8 @@
         "lessons": [
           {
             "position": 3,
-            "material_id": "python-testing"
+            "material_id": "python-testing",
+            "counts_toward_mastery": false
           }
         ],
         "theory_links": [],
@@ -133837,7 +133848,7 @@
         "lessons": [],
         "theory_links": [],
         "catalog_visible": false,
-        "archived": false,
+        "archived": true,
         "sources": [
           {
             "url": null,
@@ -133901,7 +133912,7 @@
         "lessons": [],
         "theory_links": [],
         "catalog_visible": false,
-        "archived": false,
+        "archived": true,
         "sources": [
           {
             "url": null,
@@ -760894,7 +760905,7 @@
     {
       "task": {
         "id": "task-15-1-01",
-        "title": "Импликация при ложной предпосылке",
+        "title": "Импликация 0 → 0",
         "short_description": null,
         "explanation_kind": "worked_solution",
         "difficulty": 1,
@@ -760906,7 +760917,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "При p=0,q=0 вычисли p → q. Объясни результат словами."
+              "markdown": "Чему равно значение импликации p → q при p = 0 и q = 0?"
             }
           }
         ],
@@ -760914,7 +760925,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Стрелка ложна только при 1 → 0."
+              "markdown": "Импликация ложна только в одном случае: слева 1, справа 0."
             }
           }
         ],
@@ -760922,7 +760933,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "1: предпосылка ложна, запрета нет."
+              "markdown": "Левая часть ложна, поэтому импликация ничего не нарушает: 0 → 0 = 1. Ложной она бывает только при p = 1 и q = 0."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `1`"
             }
           }
         ],
@@ -760981,7 +760998,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Найди наименьшее целое A, при котором (x < 12) → (x ≤ A) истинно для всех неотрицательных целых x."
+              "markdown": "Для какого наименьшего целого числа A формула (x < 12) → (x ≤ A) тождественно истинна, то есть принимает значение 1 при любом неотрицательном целом x?"
             }
           }
         ],
@@ -760989,7 +761006,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Ложный случай: x < 12 и x > A."
+              "markdown": "Всё решает A там, где левая часть истинна: при x от 0 до 11."
             }
           }
         ],
@@ -760997,7 +761014,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "11: при x = 11 левая часть истинна, нужно 11 ≤ A; при A = 11 подходят все x."
+              "markdown": "При x ≥ 12 левая часть ложна, и формула истинна сама. При x от 0 до 11 нужно x ≤ A — значит, A не меньше самого большого из этих x, то есть 11. При A = 10 формула ложна при x = 11."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "def imp(p, q):\n    return (not p) or q\n\n\ndef f(x, A):\n    return imp(x < 12, x <= A)\n\n\nfor A in range(-100, 1000):\n    if all(f(x, A) for x in range(0, 1000)):\n        print(A)\n        break",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `11`"
             }
           }
         ],
@@ -761013,7 +761044,7 @@
         "theory_links": [
           {
             "label": "Теория",
-            "section": "minimum-i-maksimum",
+            "section": "kogda-reshaet-a",
             "material_id": "logic-transformations"
           }
         ],
@@ -761056,7 +761087,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Найди наибольшее целое A, при котором (x ≥ 5) → (x > A) истинно для всех натуральных x."
+              "markdown": "Для какого наибольшего целого числа A формула (x ≥ 5) → (x > A) тождественно истинна при любом натуральном x?"
             }
           }
         ],
@@ -761064,7 +761095,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опасны x ≥ 5."
+              "markdown": "Всё решает A при x ≥ 5; самый трудный из них — самый маленький."
             }
           }
         ],
@@ -761072,7 +761103,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "4: при x = 5 нужно 5 > A; при A = 4 все x ≥ 5 больше A."
+              "markdown": "При x от 1 до 4 левая часть ложна, формула истинна сама. При x ≥ 5 нужно x > A, и труднее всего при x = 5: 5 > A, то есть A ≤ 4. Наибольшее A — 4."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "def imp(p, q):\n    return (not p) or q\n\n\ndef f(x, A):\n    return imp(x >= 5, x > A)\n\n\nanswer = None\nfor A in range(-100, 1000):\n    if all(f(x, A) for x in range(1, 1000)):\n        answer = A\nprint(answer)",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `4`"
             }
           }
         ],
@@ -761088,7 +761133,7 @@
         "theory_links": [
           {
             "label": "Теория",
-            "section": "minimum-i-maksimum",
+            "section": "kogda-reshaet-a",
             "material_id": "logic-transformations"
           }
         ],
@@ -761119,7 +761164,7 @@
     {
       "task": {
         "id": "task-15-1-06",
-        "title": "Формула ложна всегда",
+        "title": "Формула ложна при любом x",
         "short_description": null,
         "explanation_kind": "worked_solution",
         "difficulty": 2,
@@ -761131,7 +761176,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Формула (x < 6) ∧ (x > A) должна быть ложной при всех натуральных x. Найди наименьшее целое A."
+              "markdown": "Формула (x < 6) ∧ (x > A) должна быть ложной при любом натуральном x. Найди наименьшее целое A, при котором это так."
             }
           }
         ],
@@ -761139,7 +761184,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Отрицание должно быть истинно при всех x."
+              "markdown": "Найди x, при которых формула могла бы стать истинной."
             }
           }
         ],
@@ -761147,7 +761192,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "5: отрицание (x ≥ 6) ∨ (x ≤ A) должно быть истинно при x = 1 … 5, значит, A ≥ 5."
+              "markdown": "Формула истинна, когда x < 6 и x > A. Для x от 1 до 5 это нужно запретить: каждое из них должно быть не больше A. Значит, A ≥ 5, наименьшее A = 5. При A = 4 формула истинна при x = 5."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "def f(x, A):\n    return not (x < 6 and x > A)\n\n\nfor A in range(-100, 1000):\n    if all(f(x, A) for x in range(1, 1000)):\n        print(A)\n        break",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `5`"
             }
           }
         ],
@@ -761156,14 +761215,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 3,
+            "position": 12,
             "material_id": "logic-transformations"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "formula-lozhna-vsegda",
+            "section": "lozhna-pri-lyubom-x",
             "material_id": "logic-transformations"
           }
         ],
@@ -761206,7 +761265,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Для какого наименьшего целого A формула (x ≤ 8) → (3x < A) тождественно истинна, то есть принимает значение 1 при любом натуральном значении переменной x?"
+              "markdown": "Для какого наименьшего целого числа A формула (x ≤ 8) → (3x < A) тождественно истинна при любом натуральном x?"
             }
           }
         ],
@@ -761214,7 +761273,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опасны x = 1 … 8."
+              "markdown": "Найди самое большое значение 3x при x от 1 до 8."
             }
           }
         ],
@@ -761222,7 +761281,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "25: опасны x = 1 … 8, наибольшее 3x = 24, нужно 24 < A."
+              "markdown": "Всё решает A при x от 1 до 8: там нужно 3x < A. Самое большое 3x на них — 24 при x = 8. Нужно 24 < A, наименьшее целое A = 25."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "def imp(p, q):\n    return (not p) or q\n\n\ndef f(x, A):\n    return imp(x <= 8, 3 * x < A)\n\n\nfor A in range(-100, 1000):\n    if all(f(x, A) for x in range(1, 1000)):\n        print(A)\n        break",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `25`"
             }
           }
         ],
@@ -761231,14 +761304,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 4,
+            "position": 3,
             "material_id": "logic-transformations"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "lozhnyj-sluchaj",
+            "section": "kogda-reshaet-a",
             "material_id": "logic-transformations"
           }
         ],
@@ -761269,7 +761342,7 @@
     {
       "task": {
         "id": "task-15-2-01",
-        "title": "Минимальная длина: общая часть",
+        "title": "Наименьшая длина: общая часть P и Q",
         "short_description": null,
         "explanation_kind": "worked_solution",
         "difficulty": 1,
@@ -761281,13 +761354,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "P=[1;13], Q=[8;18]. Найди минимальную длину A для"
-            }
-          },
-          {
-            "type": "text",
-            "data": {
-              "markdown": "¬(x ∈ A) → ((x ∈ P) → ¬(x ∈ Q))."
+              "markdown": "На числовой прямой даны отрезки P = [1; 13] и Q = [8; 18]. Укажи наименьшую возможную длину отрезка A, при котором формула ¬(x ∈ A) → ((x ∈ P) → ¬(x ∈ Q)) тождественно истинна при любом x."
             }
           }
         ],
@@ -761295,7 +761362,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "A закрывает P ∩ Q."
+              "markdown": "Замени стрелки: получится A ∨ ¬P ∨ ¬Q."
             }
           }
         ],
@@ -761303,7 +761370,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "5: A = [8; 13]."
+              "markdown": "¬A → (P → ¬Q) = A ∨ ¬P ∨ ¬Q. Части без A ложны, когда x лежит и в P, и в Q — на общей части [8; 13]. Её A обязан накрыть, наименьший A = [8; 13], длина 13 − 8 = 5."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `5`"
             }
           }
         ],
@@ -761312,14 +761385,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 5,
+            "position": 6,
             "material_id": "logic-transformations"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "peresechenie-p-i-q",
+            "section": "otrezok-naimenshej-dliny",
             "material_id": "logic-transformations"
           }
         ],
@@ -761350,7 +761423,7 @@
     {
       "task": {
         "id": "task-15-2-02",
-        "title": "Максимальная длина внутри P ∪ Q",
+        "title": "Наибольшая длина: внутри P или Q",
         "short_description": null,
         "explanation_kind": "worked_solution",
         "difficulty": 1,
@@ -761362,13 +761435,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "P=[2;7], Q=[11;20]. Найди максимальную длину A для"
-            }
-          },
-          {
-            "type": "text",
-            "data": {
-              "markdown": "((x ∈ A) → (x ∈ P)) ∨ (x ∈ Q)."
+              "markdown": "На числовой прямой даны отрезки P = [2; 7] и Q = [11; 20]. Укажи наибольшую возможную длину отрезка A, при котором формула ((x ∈ A) → (x ∈ P)) ∨ (x ∈ Q) тождественно истинна при любом x."
             }
           }
         ],
@@ -761376,7 +761443,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "A — внутри одной части."
+              "markdown": "A стоит с отрицанием: найди, где ему быть нельзя."
             }
           }
         ],
@@ -761384,7 +761451,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "9: A = [11; 20]."
+              "markdown": "(A → P) ∨ Q = ¬A ∨ P ∨ Q. Вне P и Q нужно ¬A = 1 — там A быть не может. Отрезок A помещается целиком в P или в Q; длиннее Q = [11; 20], его длина 9."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `9`"
             }
           }
         ],
@@ -761393,14 +761466,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 6,
+            "position": 8,
             "material_id": "logic-transformations"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "vnutri-p-q",
+            "section": "otrezok-naibolshej-dliny",
             "material_id": "logic-transformations"
           }
         ],
@@ -761431,7 +761504,7 @@
     {
       "task": {
         "id": "task-15-2-03",
-        "title": "Минимальная длина: обе части",
+        "title": "Наименьшая длина: две части",
         "short_description": null,
         "explanation_kind": "worked_solution",
         "difficulty": 2,
@@ -761443,13 +761516,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "P=[3;6], Q=[14;19]. Найди минимальную длину A для"
-            }
-          },
-          {
-            "type": "text",
-            "data": {
-              "markdown": "((x ∈ P) ∨ (x ∈ Q)) → (x ∈ A)."
+              "markdown": "На числовой прямой даны отрезки P = [2; 5] и Q = [12; 20]. Укажи наименьшую возможную длину отрезка A, при котором формула ((x ∈ P) ∨ (x ∈ Q)) → (x ∈ A) тождественно истинна при любом x."
             }
           }
         ],
@@ -761457,7 +761524,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "A покрывает и промежуток."
+              "markdown": "A обязан накрыть и P, и Q, а отрезок — один кусок без дыр."
             }
           }
         ],
@@ -761465,7 +761532,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "16: A = [3; 19]."
+              "markdown": "(P ∨ Q) → A = ¬(P ∨ Q) ∨ A. Часть без A ложна в точках P и Q — их A обязан накрыть. Одним отрезком это [2; 20] вместе с промежутком, длина 20 − 2 = 18."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `18`"
             }
           }
         ],
@@ -761474,14 +761547,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 7,
+            "position": 11,
             "material_id": "logic-transformations"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "promezhutok-mezhdu-chastyami",
+            "section": "dve-chasti",
             "material_id": "logic-transformations"
           }
         ],
@@ -761503,7 +761576,7 @@
         ],
         "checker": {
           "checker_type": "exact_match",
-          "answer_variants": ["16"],
+          "answer_variants": ["18"],
           "numeric_tolerance": null
         }
       },
@@ -761512,7 +761585,7 @@
     {
       "task": {
         "id": "task-15-2-04",
-        "title": "Максимальная длина: сложная формула",
+        "title": "Наибольшая длина: три стрелки",
         "short_description": null,
         "explanation_kind": "worked_solution",
         "difficulty": 2,
@@ -761524,13 +761597,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "P=[2;9], Q=[10;17]. Найди максимальную длину A для"
-            }
-          },
-          {
-            "type": "text",
-            "data": {
-              "markdown": "(¬(x ∈ A) → (x ∈ P)) → ((x ∈ A) → (x ∈ Q))."
+              "markdown": "На числовой прямой даны отрезки P = [2; 9] и Q = [10; 17]. Укажи наибольшую возможную длину отрезка A, при котором формула (¬(x ∈ A) → (x ∈ P)) → ((x ∈ A) → (x ∈ Q)) тождественно истинна при любом x."
             }
           }
         ],
@@ -761538,7 +761605,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Подставьте a = 0 и a = 1."
+              "markdown": "Замени все стрелки на ¬p ∨ q и упрости."
             }
           }
         ],
@@ -761546,7 +761613,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "7: A ⊆ Q."
+              "markdown": "¬A → P = A ∨ P, A → Q = ¬A ∨ Q. Вся формула: ¬(A ∨ P) ∨ ¬A ∨ Q = (¬A ∧ ¬P) ∨ ¬A ∨ Q = ¬A ∨ Q. Значит, A может лежать только в Q, наибольший A = [10; 17] длины 7."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `7`"
             }
           }
         ],
@@ -761555,14 +761628,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 8,
+            "position": 10,
             "material_id": "logic-transformations"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "slozhnaya-formula",
+            "section": "otrezok-naibolshej-dliny",
             "material_id": "logic-transformations"
           }
         ],
@@ -761593,161 +761666,11 @@
     {
       "task": {
         "id": "task-15-2-06",
-        "title": "Наибольшее количество и сумма",
+        "title": "Наибольшая сумма A",
         "short_description": null,
         "explanation_kind": "worked_solution",
         "difficulty": 2,
         "estimated_minutes": 3,
-        "answer_instruction": "Введите два числа через пробел в том порядке, в каком их спрашивают.",
-        "interaction_type": "production",
-        "content_schema_version": 1,
-        "statement": [
-          {
-            "type": "text",
-            "data": {
-              "markdown": "P = {−4, 1, 6}, Q = {1, 3}, x — любое целое, A — конечное множество целых. Для всех x должно выполняться ((x ∈ A) → (x ∈ P)) ∨ (x ∈ Q). Найди наибольшее количество элементов A и наибольшую сумму его элементов."
-            }
-          }
-        ],
-        "hint": [
-          {
-            "type": "text",
-            "data": {
-              "markdown": "Количество и сумма — разные цели."
-            }
-          }
-        ],
-        "explanation": [
-          {
-            "type": "text",
-            "data": {
-              "markdown": "4 элемента; сумма 10: A ⊆ {−4, 1, 3, 6}, для суммы −4 не берём."
-            }
-          }
-        ],
-        "skills": [],
-        "exam_numbers": [15],
-        "files": [],
-        "lessons": [
-          {
-            "position": 9,
-            "material_id": "logic-transformations"
-          }
-        ],
-        "theory_links": [
-          {
-            "label": "Теория",
-            "section": "kolichestvo-i-summa",
-            "material_id": "logic-transformations"
-          }
-        ],
-        "catalog_visible": false,
-        "archived": false,
-        "sources": [
-          {
-            "url": null,
-            "kind": "original",
-            "role": "original",
-            "year": null,
-            "title": null,
-            "author": null,
-            "primary": true,
-            "is_public": true,
-            "adaptation": null,
-            "original_id": null
-          }
-        ],
-        "checker": {
-          "checker_type": "exact_match",
-          "answer_variants": ["4 10"],
-          "numeric_tolerance": null
-        }
-      },
-      "solution_revision": 1
-    },
-    {
-      "task": {
-        "id": "task-15-2-07",
-        "title": "Наименьшая и наибольшая сумма",
-        "short_description": null,
-        "explanation_kind": "worked_solution",
-        "difficulty": 2,
-        "estimated_minutes": 3,
-        "answer_instruction": "Введите два числа через пробел в том порядке, в каком их спрашивают.",
-        "interaction_type": "production",
-        "content_schema_version": 1,
-        "statement": [
-          {
-            "type": "text",
-            "data": {
-              "markdown": "Те же P и Q. Теперь для всех x должно выполняться ((x ∈ P) → (x ∈ A)) ∧ ((x ∈ A) → ((x ∈ P) ∨ (x ∈ Q))). Найди наименьшую и наибольшую сумму элементов A."
-            }
-          }
-        ],
-        "hint": [
-          {
-            "type": "text",
-            "data": {
-              "markdown": "Обязательные элементы плюс свободные."
-            }
-          }
-        ],
-        "explanation": [
-          {
-            "type": "text",
-            "data": {
-              "markdown": "3 и 6: обязательны −4, 1, 6 (сумма 3), свободно 3."
-            }
-          }
-        ],
-        "skills": [],
-        "exam_numbers": [15],
-        "files": [],
-        "lessons": [
-          {
-            "position": 10,
-            "material_id": "logic-transformations"
-          }
-        ],
-        "theory_links": [
-          {
-            "label": "Теория",
-            "section": "kolichestvo-i-summa",
-            "material_id": "logic-transformations"
-          }
-        ],
-        "catalog_visible": false,
-        "archived": false,
-        "sources": [
-          {
-            "url": null,
-            "kind": "original",
-            "role": "original",
-            "year": null,
-            "title": null,
-            "author": null,
-            "primary": true,
-            "is_public": true,
-            "adaptation": null,
-            "original_id": null
-          }
-        ],
-        "checker": {
-          "checker_type": "exact_match",
-          "answer_variants": ["3 6"],
-          "numeric_tolerance": null
-        }
-      },
-      "solution_revision": 1
-    },
-    {
-      "task": {
-        "id": "task-15-2-08",
-        "title": "Наименьшая длина A",
-        "short_description": null,
-        "explanation_kind": "worked_solution",
-        "difficulty": 1,
-        "estimated_minutes": 3,
         "answer_instruction": "Введите число.",
         "interaction_type": "production",
         "content_schema_version": 1,
@@ -761755,7 +761678,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "На числовой прямой даны два отрезка: P = [10; 40] и Q = [25; 55]. Укажите наименьшую возможную длину такого отрезка A, что формула (x ∈ P) → ((x ∈ Q) → (x ∈ A)) истинна (т. е. принимает значение 1) при любом значении переменной x."
+              "markdown": "Элементами множеств P, Q и A являются целые числа: P = {−4, 1, 6}, Q = {1, 3}, A — конечное множество. Формула ((x ∈ A) → (x ∈ P)) ∨ (x ∈ Q) тождественно истинна при любом целом x. Какую наибольшую сумму могут иметь элементы A?"
             }
           }
         ],
@@ -761763,7 +761686,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Обязательна общая часть P и Q."
+              "markdown": "A может брать только числа из P и Q; отрицательные числа сумму уменьшают."
             }
           }
         ],
@@ -761771,157 +761694,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "15: обязательна общая часть [25; 40]."
+              "markdown": "(A → P) ∨ Q = ¬A ∨ P ∨ Q: в A разрешены только числа P и Q — это −4, 1, 3, 6. Для наибольшей суммы −4 не берём: 1 + 3 + 6 = 10."
             }
-          }
-        ],
-        "skills": [],
-        "exam_numbers": [15],
-        "files": [],
-        "lessons": [
+          },
           {
-            "position": 11,
-            "material_id": "logic-transformations"
-          }
-        ],
-        "theory_links": [
-          {
-            "label": "Теория",
-            "section": "peresechenie-p-i-q",
-            "material_id": "logic-transformations"
-          }
-        ],
-        "catalog_visible": false,
-        "archived": false,
-        "sources": [
-          {
-            "url": null,
-            "kind": "original",
-            "role": "original",
-            "year": null,
-            "title": null,
-            "author": null,
-            "primary": true,
-            "is_public": true,
-            "adaptation": null,
-            "original_id": null
-          }
-        ],
-        "checker": {
-          "checker_type": "exact_match",
-          "answer_variants": ["15"],
-          "numeric_tolerance": null
-        }
-      },
-      "solution_revision": 1
-    },
-    {
-      "task": {
-        "id": "task-15-2-09",
-        "title": "Наибольшая длина A",
-        "short_description": null,
-        "explanation_kind": "worked_solution",
-        "difficulty": 1,
-        "estimated_minutes": 3,
-        "answer_instruction": "Введите число.",
-        "interaction_type": "production",
-        "content_schema_version": 1,
-        "statement": [
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "P = {-4, 1, 6}\nQ = {1, 3}\nallowed = P | Q\nprint(sum(v for v in allowed if v > 0))",
+              "caption": null
+            }
+          },
           {
             "type": "text",
             "data": {
-              "markdown": "На числовой прямой даны два отрезка: P = [5; 20] и Q = [30; 45]. Укажите наибольшую возможную длину такого отрезка A, что формула ((x ∈ A) → (x ∈ P)) ∨ (x ∈ Q) истинна при любом значении переменной x."
-            }
-          }
-        ],
-        "hint": [
-          {
-            "type": "text",
-            "data": {
-              "markdown": "A целиком в P или в Q."
-            }
-          }
-        ],
-        "explanation": [
-          {
-            "type": "text",
-            "data": {
-              "markdown": "15: A внутри [5; 20] или [30; 45]."
-            }
-          }
-        ],
-        "skills": [],
-        "exam_numbers": [15],
-        "files": [],
-        "lessons": [
-          {
-            "position": 12,
-            "material_id": "logic-transformations"
-          }
-        ],
-        "theory_links": [
-          {
-            "label": "Теория",
-            "section": "vnutri-p-q",
-            "material_id": "logic-transformations"
-          }
-        ],
-        "catalog_visible": false,
-        "archived": false,
-        "sources": [
-          {
-            "url": null,
-            "kind": "original",
-            "role": "original",
-            "year": null,
-            "title": null,
-            "author": null,
-            "primary": true,
-            "is_public": true,
-            "adaptation": null,
-            "original_id": null
-          }
-        ],
-        "checker": {
-          "checker_type": "exact_match",
-          "answer_variants": ["15"],
-          "numeric_tolerance": null
-        }
-      },
-      "solution_revision": 1
-    },
-    {
-      "task": {
-        "id": "task-15-3-01",
-        "title": "26 & 13",
-        "short_description": null,
-        "explanation_kind": "worked_solution",
-        "difficulty": 1,
-        "estimated_minutes": 1,
-        "answer_instruction": "Введите число.",
-        "interaction_type": "production",
-        "content_schema_version": 1,
-        "statement": [
-          {
-            "type": "text",
-            "data": {
-              "markdown": "Вычисли 26&13 вручную, записав оба числа в двоичной системе."
-            }
-          }
-        ],
-        "hint": [
-          {
-            "type": "text",
-            "data": {
-              "markdown": "Сравните разряды."
-            }
-          }
-        ],
-        "explanation": [
-          {
-            "type": "text",
-            "data": {
-              "markdown": "8."
+              "markdown": "Ответ: `10`"
             }
           }
         ],
@@ -761937,7 +761724,7 @@
         "theory_links": [
           {
             "label": "Теория",
-            "section": "porazryadnoe-i",
+            "section": "konechnye-mnozhestva",
             "material_id": "logic-transformations"
           }
         ],
@@ -761959,7 +761746,347 @@
         ],
         "checker": {
           "checker_type": "exact_match",
-          "answer_variants": ["8"],
+          "answer_variants": ["10"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "task-15-2-07",
+        "title": "Наименьшая сумма A",
+        "short_description": null,
+        "explanation_kind": "worked_solution",
+        "difficulty": 2,
+        "estimated_minutes": 3,
+        "answer_instruction": "Введите число.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Элементами множеств P, Q и A являются целые числа: P = {−4, 1, 6}, Q = {1, 3}, A — конечное множество. Формула ((x ∈ P) → (x ∈ A)) ∧ ((x ∈ A) → ((x ∈ P) ∨ (x ∈ Q))) тождественно истинна при любом целом x. Какую наименьшую сумму могут иметь элементы A?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Первая часть говорит, какие числа обязательны, вторая — какие разрешены."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "(P → A) требует, чтобы все числа P были в A: −4, 1, 6. (A → (P ∨ Q)) разрешает брать только числа P и Q — ещё можно 3, но оно увеличит сумму. Наименьшая сумма: −4 + 1 + 6 = 3."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "P = {-4, 1, 6}\nprint(sum(P))",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `3`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [15],
+        "files": [],
+        "lessons": [
+          {
+            "position": 14,
+            "material_id": "logic-transformations"
+          }
+        ],
+        "theory_links": [
+          {
+            "label": "Теория",
+            "section": "konechnye-mnozhestva",
+            "material_id": "logic-transformations"
+          }
+        ],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["3"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "task-15-2-08",
+        "title": "Наименьшая длина: две стрелки",
+        "short_description": null,
+        "explanation_kind": "worked_solution",
+        "difficulty": 1,
+        "estimated_minutes": 3,
+        "answer_instruction": "Введите число.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "На числовой прямой даны отрезки P = [12; 40] и Q = [28; 60]. Укажи наименьшую возможную длину отрезка A, при котором формула (x ∈ P) → ((x ∈ Q) → (x ∈ A)) тождественно истинна при любом x."
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "A обязан накрыть точки, которые лежат и в P, и в Q."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "P → (Q → A) = ¬P ∨ ¬Q ∨ A. Части без A ложны на общей части P и Q — отрезке [28; 40]. Наименьший A — он сам, длина 40 − 28 = 12."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `12`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [15],
+        "files": [],
+        "lessons": [
+          {
+            "position": 7,
+            "material_id": "logic-transformations"
+          }
+        ],
+        "theory_links": [
+          {
+            "label": "Теория",
+            "section": "otrezok-naimenshej-dliny",
+            "material_id": "logic-transformations"
+          }
+        ],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["12"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "task-15-2-09",
+        "title": "Наибольшая длина: промежуток между P и Q",
+        "short_description": null,
+        "explanation_kind": "worked_solution",
+        "difficulty": 1,
+        "estimated_minutes": 3,
+        "answer_instruction": "Введите число.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "На числовой прямой даны отрезки P = [6; 24] и Q = [31; 45]. Укажи наибольшую возможную длину отрезка A, при котором формула ((x ∈ A) → (x ∈ P)) ∨ (x ∈ Q) тождественно истинна при любом x."
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Отрезок A не может перепрыгнуть промежуток между P и Q."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Формула равна ¬A ∨ P ∨ Q: A может занимать только точки P и Q. Промежуток (24; 31) запрещён, поэтому A лежит целиком в P (длина 18) или в Q (длина 14). Наибольшая длина — 18."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `18`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [15],
+        "files": [],
+        "lessons": [
+          {
+            "position": 9,
+            "material_id": "logic-transformations"
+          }
+        ],
+        "theory_links": [
+          {
+            "label": "Теория",
+            "section": "otrezok-naibolshej-dliny",
+            "material_id": "logic-transformations"
+          }
+        ],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["18"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "task-15-3-01",
+        "title": "27 & 14",
+        "short_description": null,
+        "explanation_kind": "worked_solution",
+        "difficulty": 1,
+        "estimated_minutes": 1,
+        "answer_instruction": "Введите число.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Обозначим через m & n поразрядную конъюнкцию неотрицательных целых чисел m и n. Чему равно 27 & 14?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Запиши оба числа в двоичной системе друг под другом."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "27 = 11011₂, 14 = 01110₂. Единицы у обоих — в разрядах 8 и 2: 01010₂ = 10."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "print(27 & 14)",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `10`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [15],
+        "files": [],
+        "lessons": [
+          {
+            "position": 27,
+            "material_id": "logic-transformations"
+          }
+        ],
+        "theory_links": [
+          {
+            "label": "Теория",
+            "section": "operaciya-i",
+            "material_id": "logic-transformations"
+          }
+        ],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["10"],
           "numeric_tolerance": null
         }
       },
@@ -761980,13 +762107,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Найди наименьшее A для формулы"
-            }
-          },
-          {
-            "type": "text",
-            "data": {
-              "markdown": "(x&26 ≠ 0) → ((x&12=0) → (x&A ≠ 0))."
+              "markdown": "Обозначим через m & n поразрядную конъюнкцию неотрицательных целых чисел m и n. Для какого наименьшего неотрицательного целого числа A формула (x & 26 ≠ 0) → ((x & 12 = 0) → (x & A ≠ 0)) тождественно истинна при любом неотрицательном целом x?"
             }
           }
         ],
@@ -761994,7 +762115,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Обязательные биты."
+              "markdown": "Найди веса, которые есть в 26, но нет в 12."
             }
           }
         ],
@@ -762002,7 +762123,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "18."
+              "markdown": "26 = 16 + 8 + 2, 12 = 8 + 4. Всё решает A при x без весов 8 и 4, но с весом 16 или 2. x = 16 и x = 2 требуют, чтобы эти веса были в A. Наименьшее A = 16 + 2 = 18."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "def imp(p, q):\n    return (not p) or q\n\n\ndef f(x, A):\n    return imp(x & 26 != 0, imp(x & 12 == 0, x & A != 0))\n\n\nfor A in range(0, 256):\n    if all(f(x, A) for x in range(0, 256)):\n        print(A)\n        break",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `18`"
             }
           }
         ],
@@ -762011,14 +762146,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 14,
+            "position": 28,
             "material_id": "logic-transformations"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "naimenshee-a",
+            "section": "naimenshee-a-bity",
             "material_id": "logic-transformations"
           }
         ],
@@ -762061,13 +762196,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Найди наибольшее A для формулы"
-            }
-          },
-          {
-            "type": "text",
-            "data": {
-              "markdown": "(x&A ≠ 0) → ((x&6=0) → (x&9 ≠ 0))."
+              "markdown": "Обозначим через m & n поразрядную конъюнкцию неотрицательных целых чисел m и n. Для какого наибольшего неотрицательного целого числа A формула (x & A ≠ 0) → ((x & 6 = 0) → (x & 9 ≠ 0)) тождественно истинна при любом неотрицательном целом x?"
             }
           }
         ],
@@ -762075,7 +762204,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Разрешённые биты."
+              "markdown": "A может брать только веса, которые есть в 6 или в 9."
             }
           }
         ],
@@ -762083,7 +762212,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "15."
+              "markdown": "Формула равна (x & A = 0) ∨ (x & 6 ≠ 0) ∨ (x & 9 ≠ 0). При x без весов 6 = 4 + 2 и 9 = 8 + 1 нужно x & A = 0, поэтому другие веса в A брать нельзя. Разрешены 8, 4, 2, 1: A = 15."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "def imp(p, q):\n    return (not p) or q\n\n\ndef f(x, A):\n    return imp(x & A != 0, imp(x & 6 == 0, x & 9 != 0))\n\n\nanswer = None\nfor A in range(0, 256):\n    if all(f(x, A) for x in range(0, 256)):\n        answer = A\nprint(answer)",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `15`"
             }
           }
         ],
@@ -762092,14 +762235,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 15,
+            "position": 31,
             "material_id": "logic-transformations"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "naibolshee-a",
+            "section": "naibolshee-a-bity",
             "material_id": "logic-transformations"
           }
         ],
@@ -762142,7 +762285,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Найди наименьшее неотрицательное целое A, при котором для всех неотрицательных целых x истинно (x & 28 ≠ 0) → ((x & 12 = 0) → (x & A ≠ 0))."
+              "markdown": "Обозначим через m & n поразрядную конъюнкцию неотрицательных целых чисел m и n. Найди наименьшее неотрицательное целое A, при котором формула (x & 28 ≠ 0) → ((x & 12 = 0) → (x & A ≠ 0)) истинна при любом неотрицательном целом x."
             }
           }
         ],
@@ -762150,7 +762293,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Бит обязателен, если он есть в 28, но не в 12."
+              "markdown": "Веса 28, которых нет в 12, обязаны быть в A."
             }
           }
         ],
@@ -762158,7 +762301,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "16: у 28 веса 16, 8, 4, у 12 — 8, 4; обязателен только бит 16."
+              "markdown": "28 = 16 + 8 + 4, 12 = 8 + 4. В 28, но не в 12 — только вес 16. x = 16 требует его в A, а другие веса не нужны: A = 16."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "def imp(p, q):\n    return (not p) or q\n\n\ndef f(x, A):\n    return imp(x & 28 != 0, imp(x & 12 == 0, x & A != 0))\n\n\nfor A in range(0, 256):\n    if all(f(x, A) for x in range(0, 256)):\n        print(A)\n        break",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `16`"
             }
           }
         ],
@@ -762167,14 +762324,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 16,
+            "position": 29,
             "material_id": "logic-transformations"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "naimenshee-a",
+            "section": "naimenshee-a-bity",
             "material_id": "logic-transformations"
           }
         ],
@@ -762217,7 +762374,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Найди наибольшее неотрицательное целое A, при котором для всех неотрицательных целых x истинно (x & A ≠ 0) → ((x & 20 = 0) → (x & 3 ≠ 0))."
+              "markdown": "Обозначим через m & n поразрядную конъюнкцию неотрицательных целых чисел m и n. Найди наибольшее неотрицательное целое A, при котором формула (x & A ≠ 0) → ((x & 20 = 0) → (x & 3 ≠ 0)) истинна при любом неотрицательном целом x."
             }
           }
         ],
@@ -762225,7 +762382,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Разрешены биты масок 20 и 3."
+              "markdown": "Собери все веса масок 20 и 3."
             }
           }
         ],
@@ -762233,7 +762390,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "23: разрешены веса 16, 4 (маска 20) и 2, 1 (маска 3)."
+              "markdown": "Разрешены только веса, которые есть в 20 = 16 + 4 или в 3 = 2 + 1. Все вместе: 16 + 4 + 2 + 1 = 23."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "def imp(p, q):\n    return (not p) or q\n\n\ndef f(x, A):\n    return imp(x & A != 0, imp(x & 20 == 0, x & 3 != 0))\n\n\nanswer = None\nfor A in range(0, 256):\n    if all(f(x, A) for x in range(0, 256)):\n        answer = A\nprint(answer)",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `23`"
             }
           }
         ],
@@ -762242,14 +762413,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 17,
+            "position": 32,
             "material_id": "logic-transformations"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "naibolshee-a",
+            "section": "naibolshee-a-bity",
             "material_id": "logic-transformations"
           }
         ],
@@ -762292,7 +762463,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Обозначим через m & n поразрядную конъюнкцию неотрицательных целых чисел m и n. Для какого наименьшего неотрицательного целого числа A формула (x & 50 ≠ 0) → ((x & 22 = 0) → (x & A ≠ 0)) тождественно истинна (т. е. принимает значение 1 при любом неотрицательном целом значении переменной x)?"
+              "markdown": "Обозначим через m & n поразрядную конъюнкцию неотрицательных целых чисел m и n. Для какого наименьшего неотрицательного целого числа A формула (x & 50 ≠ 0) → ((x & 22 = 0) → (x & A ≠ 0)) тождественно истинна при любом неотрицательном целом x?"
             }
           }
         ],
@@ -762300,7 +762471,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Разложите маски на биты."
+              "markdown": "Разложи 50 и 22 по весам."
             }
           }
         ],
@@ -762308,7 +762479,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "32: у 50 веса 32, 16, 2, у 22 — 16, 4, 2; обязателен бит 32."
+              "markdown": "50 = 32 + 16 + 2, 22 = 16 + 4 + 2. В 50, но не в 22 — только вес 32. Он обязан быть в A, наименьшее A = 32."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "def imp(p, q):\n    return (not p) or q\n\n\ndef f(x, A):\n    return imp(x & 50 != 0, imp(x & 22 == 0, x & A != 0))\n\n\nfor A in range(0, 256):\n    if all(f(x, A) for x in range(0, 256)):\n        print(A)\n        break",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `32`"
             }
           }
         ],
@@ -762317,14 +762502,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 18,
+            "position": 30,
             "material_id": "logic-transformations"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "naimenshee-a",
+            "section": "naimenshee-a-bity",
             "material_id": "logic-transformations"
           }
         ],
@@ -762367,7 +762552,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Для какого наибольшего неотрицательного целого числа A формула (x & A ≠ 0) → ((x & 41 = 0) → (x & 15 ≠ 0)) тождественно истинна при любом неотрицательном целом x?"
+              "markdown": "Обозначим через m & n поразрядную конъюнкцию неотрицательных целых чисел m и n. Для какого наибольшего неотрицательного целого числа A формула (x & A ≠ 0) → ((x & 41 = 0) → (x & 15 ≠ 0)) тождественно истинна при любом неотрицательном целом x?"
             }
           }
         ],
@@ -762375,7 +762560,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Все разрешённые биты."
+              "markdown": "Общий вес двух масок считается один раз."
             }
           }
         ],
@@ -762383,7 +762568,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "47: разрешены веса 32, 8, 1 (маска 41) и 8, 4, 2, 1 (маска 15)."
+              "markdown": "41 = 32 + 8 + 1, 15 = 8 + 4 + 2 + 1. Разрешены веса 32, 8, 4, 2, 1 — вес 8 и вес 1 есть в обеих масках, но в A каждый входит один раз: 32 + 8 + 4 + 2 + 1 = 47."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "def imp(p, q):\n    return (not p) or q\n\n\ndef f(x, A):\n    return imp(x & A != 0, imp(x & 41 == 0, x & 15 != 0))\n\n\nanswer = None\nfor A in range(0, 256):\n    if all(f(x, A) for x in range(0, 256)):\n        answer = A\nprint(answer)",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `47`"
             }
           }
         ],
@@ -762392,14 +762591,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 19,
+            "position": 33,
             "material_id": "logic-transformations"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "naibolshee-a",
+            "section": "naibolshee-a-bity",
             "material_id": "logic-transformations"
           }
         ],
@@ -762442,7 +762641,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Найди наименьшее целое A, при котором (x<5) → (x² ≤ A) истинно для всех неотрицательных целых x."
+              "markdown": "Для какого наименьшего целого числа A формула (x < 5) → (x · x ≤ A) тождественно истинна при любом неотрицательном целом x?"
             }
           }
         ],
@@ -762450,7 +762649,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Наибольший квадрат на опасной области."
+              "markdown": "Всё решает A при x от 0 до 4."
             }
           }
         ],
@@ -762458,7 +762657,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "16."
+              "markdown": "При x ≥ 5 левая часть ложна. При x от 0 до 4 нужно x · x ≤ A, а самое большое x · x среди них — 16 при x = 4. Знак нестрогий, поэтому A = 16 подходит, а 15 — уже нет."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "def imp(p, q):\n    return (not p) or q\n\n\ndef f(x, A):\n    return imp(x < 5, x * x <= A)\n\n\nfor A in range(-100, 1000):\n    if all(f(x, A) for x in range(0, 1000)):\n        print(A)\n        break",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `16`"
             }
           }
         ],
@@ -762467,14 +762680,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 20,
+            "position": 4,
             "material_id": "logic-transformations"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "naibolshee-znachenie",
+            "section": "kogda-reshaet-a",
             "material_id": "logic-transformations"
           }
         ],
@@ -762505,7 +762718,7 @@
     {
       "task": {
         "id": "task-15-4-02",
-        "title": "Две ложные части",
+        "title": "Наименьшее A: самый большой y",
         "short_description": null,
         "explanation_kind": "worked_solution",
         "difficulty": 2,
@@ -762517,13 +762730,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Найди минимальное целое A для всех натуральных x,y:"
-            }
-          },
-          {
-            "type": "text",
-            "data": {
-              "markdown": "(x+y ≥ 18) ∨ (x<y) ∨ (y<A)."
+              "markdown": "Для какого наименьшего целого числа A формула (x + y ≥ 18) ∨ (x < y) ∨ (y < A) тождественно истинна при любых натуральных x и y?"
             }
           }
         ],
@@ -762531,7 +762738,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опасны пары с x + y < 18 и x ≥ y."
+              "markdown": "Всё решает A при x + y ≤ 17 и x ≥ y. Найди там самый большой y."
             }
           }
         ],
@@ -762539,7 +762746,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "9."
+              "markdown": "Части без A ложны, когда x + y ≤ 17 и y ≤ x. Тогда 2y ≤ x + y ≤ 17, то есть y ≤ 8; y = 8 достигается при x = 8 или 9. Нужно y < A для всех таких точек: 8 < A, наименьшее A = 9."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "def f(x, y, A):\n    return x + y >= 18 or x < y or y < A\n\n\nfor A in range(-100, 1000):\n    if all(f(x, y, A) for x in range(1, 100) for y in range(1, 100)):\n        print(A)\n        break",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `9`"
             }
           }
         ],
@@ -762548,14 +762769,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 21,
+            "position": 15,
             "material_id": "logic-transformations"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "vse-lozhnye-chasti",
+            "section": "tochki-ploskosti",
             "material_id": "logic-transformations"
           }
         ],
@@ -762586,7 +762807,7 @@
     {
       "task": {
         "id": "task-15-4-03",
-        "title": "Наибольшее x + y",
+        "title": "Наименьшее A: наибольшее x + y",
         "short_description": null,
         "explanation_kind": "worked_solution",
         "difficulty": 2,
@@ -762598,13 +762819,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Найди минимальное целое A для всех натуральных x,y:"
-            }
-          },
-          {
-            "type": "text",
-            "data": {
-              "markdown": "(3x+2y ≥ 24) ∨ (x+y<A)."
+              "markdown": "Для какого наименьшего целого числа A формула (3x + 2y ≥ 24) ∨ (x + y < A) тождественно истинна при любых натуральных x и y?"
             }
           }
         ],
@@ -762612,7 +762827,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опасна область 3x + 2y < 24."
+              "markdown": "Для каждого x возьми самый большой y, при котором 3x + 2y < 24."
             }
           }
         ],
@@ -762620,7 +762835,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "12."
+              "markdown": "Всё решает A при 3x + 2y < 24. Выгоднее маленький x: при x = 1 самый большой y = 10 (3 + 20 = 23), x + y = 11. При x = 2 — y = 8, сумма 10, дальше меньше. Наибольшее x + y = 11, нужно 11 < A — наименьшее A = 12."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "def f(x, y, A):\n    return 3 * x + 2 * y >= 24 or x + y < A\n\n\nfor A in range(-100, 1000):\n    if all(f(x, y, A) for x in range(1, 100) for y in range(1, 100)):\n        print(A)\n        break",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `12`"
             }
           }
         ],
@@ -762629,14 +762858,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 22,
+            "position": 16,
             "material_id": "logic-transformations"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "naibolshee-znachenie",
+            "section": "naibolshee-ne-v-uglu",
             "material_id": "logic-transformations"
           }
         ],
@@ -762667,94 +762896,7 @@
     {
       "task": {
         "id": "task-15-4-04",
-        "title": "Все допустимые A",
-        "short_description": null,
-        "explanation_kind": "worked_solution",
-        "difficulty": 2,
-        "estimated_minutes": 4,
-        "answer_instruction": "Введите наибольшее допустимое A и количество допустимых A через пробел.",
-        "interaction_type": "production",
-        "content_schema_version": 1,
-        "statement": [
-          {
-            "type": "text",
-            "data": {
-              "markdown": "Для всех неотрицательных целых x,y должно выполняться"
-            }
-          },
-          {
-            "type": "text",
-            "data": {
-              "markdown": "((x ≤ 5) → (x² ≤ A)) ∧ ((y² ≤ A) → (y ≤ 5))."
-            }
-          },
-          {
-            "type": "text",
-            "data": {
-              "markdown": "Найди все целые A, наибольшее из них и их количество."
-            }
-          }
-        ],
-        "hint": [
-          {
-            "type": "text",
-            "data": {
-              "markdown": "Нижняя граница из первой части, верхняя — из второй."
-            }
-          }
-        ],
-        "explanation": [
-          {
-            "type": "text",
-            "data": {
-              "markdown": "A = 25, 26, …, 35; максимум 35; количество 11."
-            }
-          }
-        ],
-        "skills": [],
-        "exam_numbers": [15],
-        "files": [],
-        "lessons": [
-          {
-            "position": 23,
-            "material_id": "logic-transformations"
-          }
-        ],
-        "theory_links": [
-          {
-            "label": "Теория",
-            "section": "dve-chasti-i",
-            "material_id": "logic-transformations"
-          }
-        ],
-        "catalog_visible": false,
-        "archived": false,
-        "sources": [
-          {
-            "url": null,
-            "kind": "original",
-            "role": "original",
-            "year": null,
-            "title": null,
-            "author": null,
-            "primary": true,
-            "is_public": true,
-            "adaptation": null,
-            "original_id": null
-          }
-        ],
-        "checker": {
-          "checker_type": "exact_match",
-          "answer_variants": ["35 11"],
-          "numeric_tolerance": null
-        }
-      },
-      "solution_revision": 1
-    },
-    {
-      "task": {
-        "id": "task-15-4-06",
-        "title": "Параметр множителем",
+        "title": "Наибольшее A: две части через И",
         "short_description": null,
         "explanation_kind": "worked_solution",
         "difficulty": 2,
@@ -762766,7 +762908,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Найди наименьшее целое A, при котором (y ≥ 10) ∨ (A·x ≥ 2y + 5) истинно для всех натуральных x, y."
+              "markdown": "Для какого наибольшего целого числа A формула ((x ≤ 5) → (x · x ≤ A)) ∧ ((y · y ≤ A) → (y ≤ 5)) тождественно истинна при любых неотрицательных целых x и y?"
             }
           }
         ],
@@ -762774,7 +762916,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "При A ≤ 0 формула ложна."
+              "markdown": "Обе части И должны быть истинны: первая даёт нижнюю границу A, вторая — верхнюю."
             }
           }
         ],
@@ -762782,7 +762924,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "23: при A ≤ 0 формула ложна; иначе самый трудный случай x = 1, y = 9."
+              "markdown": "Первая часть: при x от 0 до 5 нужно x · x ≤ A, то есть A ≥ 25. Вторая ложна, если y ≥ 6, а y · y ≤ A; самый маленький такой квадрат — 36, поэтому нужно 36 > A. Подходят A от 25 до 35, наибольшее — 35."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "def imp(p, q):\n    return (not p) or q\n\n\ndef f(x, y, A):\n    return imp(x <= 5, x * x <= A) and imp(y * y <= A, y <= 5)\n\n\nanswer = None\nfor A in range(-100, 1000):\n    if all(f(x, y, A) for x in range(0, 100) for y in range(0, 100)):\n        answer = A\nprint(answer)",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `35`"
             }
           }
         ],
@@ -762791,14 +762947,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 24,
+            "position": 19,
             "material_id": "logic-transformations"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "parametr-mnozhitelem",
+            "section": "naibolshee-a-ploskost",
             "material_id": "logic-transformations"
           }
         ],
@@ -762820,7 +762976,96 @@
         ],
         "checker": {
           "checker_type": "exact_match",
-          "answer_variants": ["23"],
+          "answer_variants": ["35"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "task-15-4-06",
+        "title": "A множителем",
+        "short_description": null,
+        "explanation_kind": "worked_solution",
+        "difficulty": 2,
+        "estimated_minutes": 4,
+        "answer_instruction": "Введите число.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Для какого наименьшего целого числа A формула (y ≥ 8) ∨ (A · x ≥ 3y + 4) тождественно истинна при любых натуральных x и y?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Сначала выясни знак A, потом найди самую трудную точку."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Всё решает A при y ≤ 7. Если A ≤ 0, левая часть не больше 0, а правая положительна — формула ложна. При A > 0 левая часть меньше всего при x = 1, правая больше всего при y = 7: 3 · 7 + 4 = 25. Нужно A ≥ 25."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "def f(x, y, A):\n    return y >= 8 or A * x >= 3 * y + 4\n\n\nfor A in range(-100, 1000):\n    if all(f(x, y, A) for x in range(1, 100) for y in range(1, 100)):\n        print(A)\n        break",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `25`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [15],
+        "files": [],
+        "lessons": [
+          {
+            "position": 20,
+            "material_id": "logic-transformations"
+          }
+        ],
+        "theory_links": [
+          {
+            "label": "Теория",
+            "section": "a-mnozhitelem",
+            "material_id": "logic-transformations"
+          }
+        ],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["25"],
           "numeric_tolerance": null
         }
       },
@@ -762841,7 +763086,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Найди наибольшее натуральное A, при котором (xy < 40) ∨ (x ≥ A) ∨ (y ≥ A) истинно для всех натуральных x, y."
+              "markdown": "Для какого наибольшего натурального числа A формула (x · y < 40) ∨ (x ≥ A) ∨ (y ≥ A) тождественно истинна при любых натуральных x и y?"
             }
           }
         ],
@@ -762849,7 +763094,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опасны x, y < A."
+              "markdown": "При x < A и y < A самое большое произведение — (A − 1) · (A − 1)."
             }
           }
         ],
@@ -762857,7 +763102,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "7: (A − 1)² < 40 при A = 7, а при A = 8 пара (7; 7) даёт 49."
+              "markdown": "Всё решает A при x ≤ A − 1 и y ≤ A − 1: там нужно x · y < 40. Самое большое произведение — (A − 1)². При A = 7 это 36 < 40 — подходит. При A = 8 точка (7; 7) даёт 49 — формула ложна. Ответ — 7."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "def f(x, y, A):\n    return x * y < 40 or x >= A or y >= A\n\n\nanswer = None\nfor A in range(1, 1000):\n    if all(f(x, y, A) for x in range(1, 100) for y in range(1, 100)):\n        answer = A\nprint(answer)",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `7`"
             }
           }
         ],
@@ -762866,14 +763125,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 25,
+            "position": 18,
             "material_id": "logic-transformations"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "napravlenie-vliyaniya",
+            "section": "naibolshee-a-ploskost",
             "material_id": "logic-transformations"
           }
         ],
@@ -762916,7 +763175,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Укажите наименьшее целое значение A, при котором выражение (3x + y ≥ 33) ∨ (x + y < A) истинно для любых натуральных значений x и y."
+              "markdown": "Укажи наименьшее целое значение A, при котором выражение (3x + y ≥ 33) ∨ (x + y < A) истинно при любых натуральных значениях x и y."
             }
           }
         ],
@@ -762924,7 +763183,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Наибольшее x + y на опасной области."
+              "markdown": "Строгий знак: из 3x + y < 33 для целых чисел следует 3x + y ≤ 32."
             }
           }
         ],
@@ -762932,7 +763191,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "31: на опасной области 3x + y ≤ 32 наибольшее x + y = 30 при x = 1, y = 29."
+              "markdown": "Всё решает A при 3x + y ≤ 32. Сумма x + y наибольшая при x = 1: y ≤ 29, x + y = 30. Нужно 30 < A — наименьшее целое A = 31; при A = 30 точка (1; 29) нарушает формулу."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "def f(x, y, A):\n    return 3 * x + y >= 33 or x + y < A\n\n\nfor A in range(-100, 1000):\n    if all(f(x, y, A) for x in range(1, 100) for y in range(1, 100)):\n        print(A)\n        break",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `31`"
             }
           }
         ],
@@ -762941,14 +763214,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 26,
+            "position": 17,
             "material_id": "logic-transformations"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "naibolshee-znachenie",
+            "section": "strogie-znaki",
             "material_id": "logic-transformations"
           }
         ],
@@ -762991,13 +763264,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Найди максимальное натуральное A для всех натуральных x:"
-            }
-          },
-          {
-            "type": "text",
-            "data": {
-              "markdown": "¬ДЕЛ(x,A) → (ДЕЛ(x,8) → ¬ДЕЛ(x,12))."
+              "markdown": "Обозначим через ДЕЛ(n, m) утверждение «натуральное число n делится без остатка на натуральное число m». Для какого наибольшего натурального числа A формула ¬ДЕЛ(x, A) → (ДЕЛ(x, 8) → ¬ДЕЛ(x, 12)) тождественно истинна при любом натуральном x?"
             }
           }
         ],
@@ -763005,7 +763272,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "A делит все опасные числа — их НОД."
+              "markdown": "Замени стрелки: всё решает A, когда x делится и на 8, и на 12."
             }
           }
         ],
@@ -763013,7 +763280,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "24."
+              "markdown": "¬ДЕЛ(x, A) → (ДЕЛ(x, 8) → ¬ДЕЛ(x, 12)) = ДЕЛ(x, A) ∨ ¬ДЕЛ(x, 8) ∨ ¬ДЕЛ(x, 12). Части без A ложны при x, кратных и 8, и 12, — то есть кратных НОК(8, 12) = 24. Все они должны делиться на A, наибольшее A = 24."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "def f(x, A):\n    return x % A == 0 or x % 8 != 0 or x % 12 != 0\n\n\nanswer = None\nfor A in range(1, 1000):\n    if all(f(x, A) for x in range(1, 5000)):\n        answer = A\nprint(answer)",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `24`"
             }
           }
         ],
@@ -763022,14 +763303,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 27,
+            "position": 21,
             "material_id": "logic-transformations"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "naibolshee-a-2",
+            "section": "nok",
             "material_id": "logic-transformations"
           }
         ],
@@ -763072,13 +763353,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Найди максимальное натуральное A для всех натуральных x:"
-            }
-          },
-          {
-            "type": "text",
-            "data": {
-              "markdown": "ДЕЛ(60,A) ∧ (¬ДЕЛ(x,A) → (ДЕЛ(x,8) → ¬ДЕЛ(x,18)))."
+              "markdown": "Обозначим через ДЕЛ(n, m) утверждение «натуральное число n делится без остатка на натуральное число m». Для какого наибольшего натурального числа A формула ДЕЛ(60, A) ∧ (¬ДЕЛ(x, A) → (ДЕЛ(x, 8) → ¬ДЕЛ(x, 18))) тождественно истинна при любом натуральном x?"
             }
           }
         ],
@@ -763086,7 +763361,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Сначала делимость, потом ограничение."
+              "markdown": "A должно делить и 60, и все кратные НОК(8, 18)."
             }
           }
         ],
@@ -763094,7 +763369,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "12."
+              "markdown": "Вторая часть: всё решает A при x, кратных 8 и 18, то есть кратных 72; A должно делить 72. Первая часть требует, чтобы A делило 60. Наибольший общий делитель 72 и 60 — 12."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "def f(x, A):\n    return 60 % A == 0 and (x % A == 0 or x % 8 != 0 or x % 18 != 0)\n\n\nanswer = None\nfor A in range(1, 1000):\n    if all(f(x, A) for x in range(1, 5000)):\n        answer = A\nprint(answer)",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `12`"
             }
           }
         ],
@@ -763103,14 +763392,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 28,
+            "position": 23,
             "material_id": "logic-transformations"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "dopolnitelnoe-ogranichenie",
+            "section": "neskolko-kratnyh",
             "material_id": "logic-transformations"
           }
         ],
@@ -763153,13 +763442,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Найди минимальное натуральное A для всех натуральных x:"
-            }
-          },
-          {
-            "type": "text",
-            "data": {
-              "markdown": "ДЕЛ(A,20) ∧ (ДЕЛ(84,x) → (¬ДЕЛ(A,x) → ¬ДЕЛ(126,x)))."
+              "markdown": "Обозначим через ДЕЛ(n, m) утверждение «натуральное число n делится без остатка на натуральное число m». Для какого наименьшего натурального числа A формула ДЕЛ(A, 20) ∧ (ДЕЛ(84, x) → (¬ДЕЛ(A, x) → ¬ДЕЛ(126, x))) тождественно истинна при любом натуральном x?"
             }
           }
         ],
@@ -763167,7 +763450,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Общие делители 84 и 126 делят A."
+              "markdown": "Здесь x — делитель: ДЕЛ(84, x) значит «x делит 84»."
             }
           }
         ],
@@ -763175,7 +763458,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "420."
+              "markdown": "Вторая часть равна ¬ДЕЛ(84, x) ∨ ДЕЛ(A, x) ∨ ¬ДЕЛ(126, x). Всё решает A при общих делителях 84 и 126 — это делители НОД(84, 126) = 42. Каждый из них должен делить A, значит, A кратно 42. Ещё A кратно 20, поэтому A кратно НОК(42, 20) = 420."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "def f(x, A):\n    return A % 20 == 0 and (84 % x != 0 or A % x == 0 or 126 % x != 0)\n\n\nfor A in range(1, 2000):\n    if all(f(x, A) for x in range(1, 200)):\n        print(A)\n        break",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `420`"
             }
           }
         ],
@@ -763184,14 +763481,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 29,
+            "position": 22,
             "material_id": "logic-transformations"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "obshchie-deliteli",
+            "section": "nok",
             "material_id": "logic-transformations"
           }
         ],
@@ -763222,7 +763519,7 @@
     {
       "task": {
         "id": "task-15-5-04",
-        "title": "Некратные 3 в отрезке",
+        "title": "Некратные 6 на отрезке",
         "short_description": null,
         "explanation_kind": "worked_solution",
         "difficulty": 1,
@@ -763234,7 +763531,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Найди наименьшее натуральное A, при котором для всех натуральных x истинно (x ∈ [10; 40]) → (ДЕЛ(x, 3) ∨ (x < A))."
+              "markdown": "Обозначим через ДЕЛ(n, m) утверждение «натуральное число n делится без остатка на натуральное число m». Для какого наименьшего натурального числа A формула (x ∈ [20; 54]) → (ДЕЛ(x, 6) ∨ (x < A)) тождественно истинна при любом натуральном x?"
             }
           }
         ],
@@ -763242,7 +763539,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Последнее некратное в отрезке."
+              "markdown": "Найди самое большое число отрезка, которое не делится на 6. Проверь конец отрезка."
             }
           }
         ],
@@ -763250,7 +763547,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "41: последнее некратное 3 в отрезке — 40."
+              "markdown": "Всё решает A при числах отрезка, не кратных 6: каждое должно быть меньше A. Конец 54 делится на 6, поэтому самое большое такое число — 53. Нужно 53 < A, наименьшее A = 54."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "def imp(p, q):\n    return (not p) or q\n\n\ndef f(x, A):\n    return imp(20 <= x <= 54, x % 6 == 0 or x < A)\n\n\nfor A in range(1, 1000):\n    if all(f(x, A) for x in range(1, 1000)):\n        print(A)\n        break",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `54`"
             }
           }
         ],
@@ -763259,14 +763570,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 30,
+            "position": 24,
             "material_id": "logic-transformations"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "nekratnye-chisla",
+            "section": "a-granica",
             "material_id": "logic-transformations"
           }
         ],
@@ -763288,7 +763599,7 @@
         ],
         "checker": {
           "checker_type": "exact_match",
-          "answer_variants": ["41"],
+          "answer_variants": ["54"],
           "numeric_tolerance": null
         }
       },
@@ -763309,7 +763620,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Найди наименьшее натуральное A, при котором для всех натуральных x истинно (x < 50) → (¬(ДЕЛ(x, 6) ∧ ¬ДЕЛ(x, 4)) ∨ (x < A))."
+              "markdown": "Обозначим через ДЕЛ(n, m) утверждение «натуральное число n делится без остатка на натуральное число m». Для какого наименьшего натурального числа A формула (x < 50) → (¬(ДЕЛ(x, 6) ∧ ¬ДЕЛ(x, 4)) ∨ (x < A)) тождественно истинна при любом натуральном x?"
             }
           }
         ],
@@ -763317,7 +763628,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опасный набор с исключением."
+              "markdown": "Всё решает A при x < 50, которые делятся на 6, но не делятся на 4."
             }
           }
         ],
@@ -763325,7 +763636,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "43: опасны 6, 18, 30, 42."
+              "markdown": "Части без A ложны, когда x < 50, x кратно 6 и не кратно 4: это 6, 18, 30, 42 (12, 24, 36, 48 делятся на 4). Самое большое — 42, нужно 42 < A, наименьшее A = 43."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "def imp(p, q):\n    return (not p) or q\n\n\ndef f(x, A):\n    return imp(x < 50, not (x % 6 == 0 and x % 4 != 0) or x < A)\n\n\nfor A in range(1, 1000):\n    if all(f(x, A) for x in range(1, 1000)):\n        print(A)\n        break",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `43`"
             }
           }
         ],
@@ -763334,14 +763659,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 31,
+            "position": 25,
             "material_id": "logic-transformations"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "kratno-no-ne-drugomu",
+            "section": "a-granica",
             "material_id": "logic-transformations"
           }
         ],
@@ -763372,7 +763697,7 @@
     {
       "task": {
         "id": "task-15-5-06",
-        "title": "Наименьшее множество A",
+        "title": "A — набор чисел",
         "short_description": null,
         "explanation_kind": "worked_solution",
         "difficulty": 1,
@@ -763384,7 +763709,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "A — конечное множество натуральных чисел. Для всех натуральных x истинно (x ∈ [10; 40]) → (ДЕЛ(x, 5) ∨ (x ∈ A)). Какое наименьшее количество элементов может быть в A?"
+              "markdown": "Обозначим через ДЕЛ(n, m) утверждение «натуральное число n делится без остатка на натуральное число m». A — конечное множество натуральных чисел, и формула (x ∈ [20; 60]) → (ДЕЛ(x, 4) ∨ (x ∈ A)) тождественно истинна при любом натуральном x. Какое наименьшее количество элементов может быть в A?"
             }
           }
         ],
@@ -763392,7 +763717,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "В A — все опасные числа."
+              "markdown": "В A обязаны войти все числа отрезка, которые не делятся на 4."
             }
           }
         ],
@@ -763400,7 +763725,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "24: некратных 5 в отрезке 31 − 7 = 24."
+              "markdown": "На отрезке [20; 60] 60 − 20 + 1 = 41 число. Кратных 4 среди них (60 − 20) / 4 + 1 = 11. Остальные 41 − 11 = 30 чисел обязаны лежать в A — это наименьшее A."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "print(len([x for x in range(20, 61) if x % 4 != 0]))",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `30`"
             }
           }
         ],
@@ -763409,14 +763748,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 32,
+            "position": 26,
             "material_id": "logic-transformations"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "konechnoe-mnozhestvo-a",
+            "section": "a-nabor-chisel",
             "material_id": "logic-transformations"
           }
         ],
@@ -763438,7 +763777,7 @@
         ],
         "checker": {
           "checker_type": "exact_match",
-          "answer_variants": ["24"],
+          "answer_variants": ["30"],
           "numeric_tolerance": null
         }
       },
@@ -763459,7 +763798,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Обозначим через ДЕЛ(n, m) утверждение «натуральное число n делится без остатка на натуральное число m». Для какого наибольшего натурального числа A формула ДЕЛ(x, A) ∨ ((x ∈ [40; 50]) → ¬ДЕЛ(x, 12)) тождественно истинна (то есть принимает значение 1 при любом натуральном значении переменной x)?"
+              "markdown": "Обозначим через ДЕЛ(n, m) утверждение «натуральное число n делится без остатка на натуральное число m». Для какого наибольшего натурального числа A формула ДЕЛ(x, A) ∨ ((x ∈ [40; 50]) → ¬ДЕЛ(x, 12)) тождественно истинна при любом натуральном x?"
             }
           }
         ],
@@ -763467,7 +763806,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Выпишите опасный набор."
+              "markdown": "Как в задаче темы: найди кратные 12 на отрезке [40; 50]."
             }
           }
         ],
@@ -763475,7 +763814,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "48: единственное опасное число — 48, A должно его делить."
+              "markdown": "Стрелку заменяем: ДЕЛ(x, A) ∨ ¬(x ∈ [40; 50]) ∨ ¬ДЕЛ(x, 12). Части без A ложны, когда x на отрезке и кратно 12 — это только 48 (36 и 60 вне отрезка). Значит, 48 должно делиться на A. Наибольший делитель 48 — оно само."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "def imp(p, q):\n    return (not p) or q\n\n\ndef f(x, A):\n    return x % A == 0 or imp(40 <= x <= 50, x % 12 != 0)\n\n\nanswer = None\nfor A in range(1, 1000):\n    if all(f(x, A) for x in range(1, 1000)):\n        answer = A\nprint(answer)",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `48`"
             }
           }
         ],
@@ -763484,14 +763837,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 33,
+            "position": 5,
             "material_id": "logic-transformations"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "konechnyj-opasnyj-nabor",
+            "section": "zadacha-temy-programmoj",
             "material_id": "logic-transformations"
           }
         ],
@@ -763522,7 +763875,7 @@
     {
       "task": {
         "id": "task-15-6-03",
-        "title": "Первый контрпример",
+        "title": "Первый x, где формула ложна",
         "short_description": null,
         "explanation_kind": "worked_solution",
         "difficulty": 1,
@@ -763534,7 +763887,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Для формулы (x & 28 ≠ 0) → ((x & 12 = 0) → (x & A ≠ 0)) и A = 8 найди первый контрпример функцией `counterexample`."
+              "markdown": "Обозначим через m & n поразрядную конъюнкцию неотрицательных целых чисел m и n. При A = 8 формула (x & 28 ≠ 0) → ((x & 12 = 0) → (x & A ≠ 0)) ложна при некоторых неотрицательных целых x. Найди наименьшее такое x."
             }
           }
         ],
@@ -763542,7 +763895,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Перебирайте x по возрастанию."
+              "markdown": "Формула ложна, когда у x есть вес из 28, нет весов 12 и нет общих единиц с 8."
             }
           }
         ],
@@ -763550,7 +763903,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "16: бит 16 есть, битов 8 и 4 нет, а у A = 8 бита 16 нет."
+              "markdown": "28 = 16 + 8 + 4, 12 = 8 + 4. Формула ложна, когда у x есть вес 16, нет весов 8 и 4 и нет общей единицы с A = 8. Наименьшее такое x — 16. Программа перебирает x по возрастанию и останавливается на первом, где формула ложна."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "def imp(p, q):\n    return (not p) or q\n\n\ndef f(x, A):\n    return imp(x & 28 != 0, imp(x & 12 == 0, x & A != 0))\n\n\nfor x in range(0, 256):\n    if not f(x, 8):\n        print(x)\n        break",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `16`"
             }
           }
         ],
@@ -763566,7 +763933,7 @@
         "theory_links": [
           {
             "label": "Теория",
-            "section": "snachala-kontrprimer",
+            "section": "bity-programmoj",
             "material_id": "logic-transformations"
           }
         ],
@@ -763609,7 +763976,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Найди наибольшее целое A, при котором ¬T(x, 3, 8) ∨ (x > A) истинно для всех натуральных x."
+              "markdown": "Обозначим через T(a, b, c) утверждение «существует невырожденный треугольник со сторонами a, b, c». Для какого наибольшего целого числа A формула ¬T(x, 3, 8) ∨ (x > A) тождественно истинна при любом натуральном x?"
             }
           }
         ],
@@ -763617,7 +763984,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Треугольник: каждая сторона меньше суммы двух других."
+              "markdown": "Выпиши x, при которых треугольник со сторонами x, 3, 8 существует."
             }
           }
         ],
@@ -763625,7 +763992,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "5: треугольник существует при x = 6 … 10, нужно x > A для них."
+              "markdown": "Треугольник существует при 8 − 3 < x < 8 + 3, то есть x от 6 до 10. При них нужно x > A, самый трудный — x = 6: A < 6, наибольшее A = 5."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "def T(a, b, c):\n    return a < b + c and b < a + c and c < a + b\n\n\nanswer = None\nfor A in range(-100, 100):\n    if all(not T(x, 3, 8) or x > A for x in range(1, 100)):\n        answer = A\nprint(answer)",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `5`"
             }
           }
         ],
@@ -763642,7 +764023,7 @@
         "theory_links": [
           {
             "label": "Теория",
-            "section": "predikat-po-opredeleniyu",
+            "section": "treugolnik",
             "material_id": "logic-transformations"
           }
         ],
@@ -763685,7 +764066,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Найди наименьшее целое A, при котором (MAX(x, 12) < A) ∨ (x ≥ 30) истинно для всех натуральных x."
+              "markdown": "Обозначим через MAX(a, b) большее из чисел a и b. Для какого наименьшего целого числа A формула (MAX(x, 12) < A) ∨ (x ≥ 30) тождественно истинна при любом натуральном x?"
             }
           }
         ],
@@ -763693,7 +764074,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Разберите случаи: какое из чисел больше."
+              "markdown": "Всё решает A при x ≤ 29. Найди там самое большое MAX(x, 12)."
             }
           }
         ],
@@ -763701,7 +764082,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "30: опасны x ≤ 29, наибольшее MAX(x, 12) = 29."
+              "markdown": "При x ≥ 30 формула истинна сама. При x от 1 до 29 нужно MAX(x, 12) < A. Самое большое значение — 29 при x = 29. Нужно 29 < A, наименьшее A = 30."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "def f(x, A):\n    return max(x, 12) < A or x >= 30\n\n\nfor A in range(-100, 1000):\n    if all(f(x, A) for x in range(1, 1000)):\n        print(A)\n        break",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `30`"
             }
           }
         ],
@@ -763718,7 +764113,7 @@
         "theory_links": [
           {
             "label": "Теория",
-            "section": "max",
+            "section": "max-dvuh-chisel",
             "material_id": "logic-transformations"
           }
         ],
@@ -763761,7 +764156,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Найди наименьшее целое A, при котором (MAX(x, y) ≤ 6) → (x + y < A) истинно для всех натуральных x, y."
+              "markdown": "Обозначим через MAX(a, b) большее из чисел a и b. Для какого наименьшего целого числа A формула (MAX(x, y) ≤ 6) → (x + y < A) тождественно истинна при любых натуральных x и y?"
             }
           }
         ],
@@ -763769,7 +764164,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опасны x, y ≤ 6."
+              "markdown": "MAX(x, y) ≤ 6 значит: и x ≤ 6, и y ≤ 6."
             }
           }
         ],
@@ -763777,7 +764172,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "13: опасны x, y ≤ 6, наибольшее x + y = 12."
+              "markdown": "Всё решает A, когда оба числа не больше 6. Самая большая сумма — 6 + 6 = 12. Нужно 12 < A, наименьшее A = 13."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "def imp(p, q):\n    return (not p) or q\n\n\ndef f(x, y, A):\n    return imp(max(x, y) <= 6, x + y < A)\n\n\nfor A in range(-100, 1000):\n    if all(f(x, y, A) for x in range(1, 100) for y in range(1, 100)):\n        print(A)\n        break",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `13`"
             }
           }
         ],
@@ -763794,7 +764203,7 @@
         "theory_links": [
           {
             "label": "Теория",
-            "section": "max",
+            "section": "max-dvuh-chisel",
             "material_id": "logic-transformations"
           }
         ],
@@ -763837,7 +764246,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Найди наибольшее натуральное A ≤ 200, при котором для всех натуральных x истинно (ДЕЛ(A, x) ∧ ДЕЛ(x, 3)) → ДЕЛ(90, x)."
+              "markdown": "Обозначим через ДЕЛ(n, m) утверждение «натуральное число n делится без остатка на натуральное число m». Для какого наибольшего натурального числа A, не превосходящего 200, формула (ДЕЛ(A, x) ∧ ДЕЛ(x, 3)) → ДЕЛ(90, x) тождественно истинна при любом натуральном x?"
             }
           }
         ],
@@ -763845,7 +764254,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опасный набор зависит от A."
+              "markdown": "Если у A нет делителей, кратных 3, формула истинна при любом x."
             }
           }
         ],
@@ -763853,7 +764262,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "200: у 200 нет делителей, кратных 3, — опасный набор пуст."
+              "markdown": "Всё решает A при делителях A, кратных 3, которые не делят 90. У 200 = 2³ · 5² делителей, кратных 3, нет вовсе — левая часть всегда ложна, и формула истинна. Значит, подходит само 200."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "def imp(p, q):\n    return (not p) or q\n\n\ndef f(x, A):\n    return imp(A % x == 0 and x % 3 == 0, 90 % x == 0)\n\n\nanswer = None\nfor A in range(1, 201):\n    if all(f(x, A) for x in range(1, 1000)):\n        answer = A\nprint(answer)",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `200`"
             }
           }
         ],
@@ -763862,7 +764285,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 38,
+            "position": 39,
             "material_id": "logic-transformations",
             "counts_toward_mastery": false
           }
@@ -763870,7 +764293,7 @@
         "theory_links": [
           {
             "label": "Теория",
-            "section": "svyazannye-delimosti",
+            "section": "delimost-a",
             "material_id": "logic-transformations"
           }
         ],
@@ -763906,14 +764329,14 @@
         "explanation_kind": "worked_solution",
         "difficulty": 2,
         "estimated_minutes": 3,
-        "answer_instruction": "Введите два числа через пробел в том порядке, в каком их спрашивают.",
+        "answer_instruction": "Введите число.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Отрезок [A; A + 4] не должен содержать кратных 6. Найди наибольшее натуральное A ≤ 40 и количество подходящих натуральных A ≤ 40."
+              "markdown": "Обозначим через ДЕЛ(n, m) утверждение «натуральное число n делится без остатка на натуральное число m». Для какого наибольшего натурального числа A, не превосходящего 40, формула (x ∈ [A; A + 4]) → ¬ДЕЛ(x, 6) тождественно истинна при любом натуральном x?"
             }
           }
         ],
@@ -763921,7 +764344,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Посмотрите на остаток A при делении на 6."
+              "markdown": "Пять чисел подряд обходят кратное 6, только если начинаются сразу после него."
             }
           }
         ],
@@ -763929,7 +764352,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "37 и 7: A при делении на 6 даёт остаток 1 — 1, 7, …, 37."
+              "markdown": "Среди чисел A, …, A + 4 не должно быть кратного 6. Из шести чисел подряд одно кратно 6, поэтому пять обходят его, только если A при делении на 6 даёт остаток 1: A = 1, 7, …, 37. Наибольшее A ≤ 40 — 37: числа от 37 до 41 на 6 не делятся."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "def imp(p, q):\n    return (not p) or q\n\n\ndef f(x, A):\n    return imp(A <= x <= A + 4, x % 6 != 0)\n\n\nanswer = None\nfor A in range(1, 41):\n    if all(f(x, A) for x in range(1, 100)):\n        answer = A\nprint(answer)",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `37`"
             }
           }
         ],
@@ -763938,7 +764375,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 39,
+            "position": 38,
             "material_id": "logic-transformations",
             "counts_toward_mastery": false
           }
@@ -763946,7 +764383,7 @@
         "theory_links": [
           {
             "label": "Теория",
-            "section": "nabor-zavisit-ot-a",
+            "section": "otrezok-s-a",
             "material_id": "logic-transformations"
           }
         ],
@@ -763968,7 +764405,7 @@
         ],
         "checker": {
           "checker_type": "exact_match",
-          "answer_variants": ["37 7"],
+          "answer_variants": ["37"],
           "numeric_tolerance": null
         }
       },
@@ -763989,7 +764426,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Для какого наименьшего целого числа A формула (x ≤ 12) → (x · x < A) тождественно истинна, то есть принимает значение 1 при любом натуральном значении переменной x? (Подтема 1.)"
+              "markdown": "Для какого наименьшего целого числа A формула (x ≤ 12) → (x · x < A) тождественно истинна, то есть принимает значение 1 при любом натуральном значении переменной x?"
             }
           }
         ],
@@ -763997,7 +764434,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Подтема 1."
+              "markdown": "Всё решает A при x от 1 до 12. Найди самое большое x · x."
             }
           }
         ],
@@ -764005,7 +764442,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "145: опасны x = 1 … 12, наибольший квадрат 144, нужно 144 < A."
+              "markdown": "При x ≥ 13 левая часть ложна. При x от 1 до 12 нужно x · x < A, самое большое значение — 144. Нужно 144 < A, наименьшее A = 145."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "def imp(p, q):\n    return (not p) or q\n\n\ndef f(x, A):\n    return imp(x <= 12, x * x < A)\n\n\nfor A in range(-100, 1000):\n    if all(f(x, A) for x in range(1, 1000)):\n        print(A)\n        break",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `145`"
             }
           }
         ],
@@ -764058,7 +764509,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "На числовой прямой даны два отрезка: P = [15; 40] и Q = [21; 63]. Укажите наименьшую возможную длину такого отрезка A, что формула (x ∈ P) → (((x ∈ Q) ∧ ¬(x ∈ A)) → ¬(x ∈ P)) истинна при любом значении переменной x. (Подтема 2.)"
+              "markdown": "На числовой прямой даны два отрезка: P = [15; 40] и Q = [21; 63]. Укажи наименьшую возможную длину такого отрезка A, что формула (x ∈ P) → (((x ∈ Q) ∧ ¬(x ∈ A)) → ¬(x ∈ P)) истинна при любом значении переменной x."
             }
           }
         ],
@@ -764066,7 +764517,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Подтема 2."
+              "markdown": "Замени стрелки и найди точки, где всё решает A."
             }
           }
         ],
@@ -764074,7 +764525,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "19: обязательна общая часть [21; 40]."
+              "markdown": "Заменим стрелки: ¬P ∨ ¬(Q ∧ ¬A) ∨ ¬P = ¬P ∨ ¬Q ∨ A. Всё решает A на общей части P и Q — отрезке [21; 40]. Наименьший A — он сам, длина 40 − 21 = 19."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `19`"
             }
           }
         ],
@@ -764127,7 +764584,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Обозначим через m & n поразрядную конъюнкцию неотрицательных целых чисел m и n. Для какого наименьшего неотрицательного целого числа A формула (x & 29 ≠ 0) → ((x & 17 = 0) → (x & A ≠ 0)) тождественно истинна при любом неотрицательном целом x? (Подтема 3.)"
+              "markdown": "Обозначим через m & n поразрядную конъюнкцию неотрицательных целых чисел m и n. Для какого наименьшего неотрицательного целого числа A формула (x & 29 ≠ 0) → ((x & 17 = 0) → (x & A ≠ 0)) тождественно истинна при любом неотрицательном целом x?"
             }
           }
         ],
@@ -764135,7 +764592,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Подтема 3."
+              "markdown": "Найди веса, которые есть в 29, но нет в 17."
             }
           }
         ],
@@ -764143,7 +764600,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "12: у 29 веса 16, 8, 4, 1, у 17 — 16 и 1; обязательны 8 и 4."
+              "markdown": "29 = 16 + 8 + 4 + 1, 17 = 16 + 1. В 29, но не в 17 — веса 8 и 4. Оба обязаны быть в A: наименьшее A = 12."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "def imp(p, q):\n    return (not p) or q\n\n\ndef f(x, A):\n    return imp(x & 29 != 0, imp(x & 17 == 0, x & A != 0))\n\n\nfor A in range(0, 256):\n    if all(f(x, A) for x in range(0, 256)):\n        print(A)\n        break",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `12`"
             }
           }
         ],
@@ -764196,7 +764667,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Укажите наибольшее целое значение A, при котором выражение (2x + y ≠ 70) ∨ (x < y) ∨ (A < x) истинно для любых натуральных x и y. (Подтема 4.)"
+              "markdown": "Укажи наибольшее целое значение A, при котором выражение (2x + y ≠ 70) ∨ (x < y) ∨ (A < x) истинно для любых натуральных x и y."
             }
           }
         ],
@@ -764204,7 +764675,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Подтема 4."
+              "markdown": "Всё решает A на точках прямой 2x + y = 70, где x ≥ y."
             }
           }
         ],
@@ -764212,7 +764683,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "23: опасны пары с 2x + y = 70 и x ≥ y, у них x от 24 до 34; нужно A < 24."
+              "markdown": "Части без A ложны, когда 2x + y = 70 и x ≥ y. Тогда 3x ≥ 70, x ≥ 24; а y ≥ 1 даёт x ≤ 34. На этих точках нужно A < x, самый трудный — x = 24. A < 24, наибольшее A = 23."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "def f(x, y, A):\n    return 2 * x + y != 70 or x < y or A < x\n\n\nanswer = None\nfor A in range(-100, 1000):\n    if all(f(x, y, A) for x in range(1, 100) for y in range(1, 100)):\n        answer = A\nprint(answer)",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `23`"
             }
           }
         ],
@@ -764265,7 +764750,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Обозначим через ДЕЛ(n, m) утверждение «натуральное число n делится без остатка на натуральное число m». Для какого наименьшего натурального числа A формула (x ∈ [20; 50]) → (ДЕЛ(x, 4) ∨ (x < A)) тождественно истинна при любом натуральном x? (Подтема 5.)"
+              "markdown": "Обозначим через ДЕЛ(n, m) утверждение «натуральное число n делится без остатка на натуральное число m». Для какого наименьшего натурального числа A формула (x ∈ [20; 50]) → (ДЕЛ(x, 4) ∨ (x < A)) тождественно истинна при любом натуральном x?"
             }
           }
         ],
@@ -764273,7 +764758,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Подтема 5."
+              "markdown": "Всё решает A при числах отрезка, не кратных 4. Проверь конец отрезка."
             }
           }
         ],
@@ -764281,7 +764766,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "51: опасны некратные 4 числа отрезка, последнее — 50."
+              "markdown": "Части без A ложны при числах отрезка [20; 50], которые не делятся на 4. Конец 50 на 4 не делится — он самый большой. Нужно 50 < A, наименьшее A = 51."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "def imp(p, q):\n    return (not p) or q\n\n\ndef f(x, A):\n    return imp(20 <= x <= 50, x % 4 == 0 or x < A)\n\n\nfor A in range(1, 1000):\n    if all(f(x, A) for x in range(1, 1000)):\n        print(A)\n        break",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `51`"
             }
           }
         ],
@@ -832002,7 +832501,7 @@
         },
         {
           "slug": "etapy-i-zaprety",
-          "access": "free",
+          "access": "paid",
           "sections": [
             "obyazatelnoe-chislo",
             "zapreshchennoe-chislo",
@@ -833158,202 +833657,116 @@
       "id": "logic-transformations",
       "sections": [
         "kak-ustroena-tema-15",
-        "parametr-vybirayut-odin-raz",
-        "kontrprimer-i-dokazatelstvo",
-        "oblast-znachenij",
-        "logicheskie-bukvy",
+        "logicheskie-operacii",
         "implikaciya",
-        "skobki",
-        "otricanie",
-        "lozhnyj-sluchaj",
-        "minimum-i-maksimum",
-        "formula-lozhna-vsegda",
-        "parametr-itogo",
-        "sudba-kazhdoj-tochki",
-        "prinadlezhnost",
-        "podstanovki-0-i-1",
-        "kolichestvo-i-summa",
-        "dlina-otrezka",
-        "peresechenie-p-i-q",
-        "vnutri-p-q",
-        "promezhutok-mezhdu-chastyami",
-        "slozhnaya-formula",
-        "koncy-otrezkov",
-        "ekvivalentnost",
-        "poryadok-resheniya",
-        "oblast-itogo",
-        "bity-parametra",
-        "razryady-i-vesa",
-        "porazryadnoe-i",
-        "naimenshee-a",
-        "naibolshee-a",
-        "dostatochnost",
-        "konechnaya-proverka",
-        "bity-poryadok",
-        "bity-itogo",
-        "opasnaya-oblast",
-        "tochki-reshetki",
-        "odna-chast-s-a",
-        "vse-lozhnye-chasti",
-        "naibolshee-znachenie",
-        "dve-chasti-i",
-        "strogij-znak",
-        "napravlenie-vliyaniya",
-        "oblast-poryadok",
-        "parametr-mnozhitelem",
-        "opasnaya-itogo",
-        "opasnyj-nabor",
-        "del",
-        "nod-i-nok",
-        "delimost-v-strelke",
-        "naibolshee-a-2",
-        "dopolnitelnoe-ogranichenie",
-        "obshchie-deliteli",
-        "napravlenie-delimosti",
-        "period",
-        "delimost-poryadok",
-        "konechnyj-opasnyj-nabor",
-        "nekratnye-chisla",
-        "kratno-no-ne-drugomu",
-        "konechnoe-mnozhestvo-a",
+        "kogda-reshaet-a",
+        "zadacha-temy-programmoj",
+        "formula-itogo",
+        "otrezok-naimenshej-dliny",
+        "otrezok-naibolshej-dliny",
+        "dve-chasti",
+        "lozhna-pri-lyubom-x",
+        "konechnye-mnozhestva",
+        "otrezki-itogo",
+        "tochki-ploskosti",
+        "naibolshee-ne-v-uglu",
+        "strogie-znaki",
+        "naibolshee-a-ploskost",
+        "a-mnozhitelem",
+        "ploskost-programmoj",
+        "ploskost-itogo",
+        "del-kto-na-kogo",
+        "nok",
+        "neskolko-kratnyh",
+        "a-granica",
+        "a-nabor-chisel",
+        "delimost-programmoj",
         "delimost-itogo",
-        "programma-proveryaet-model",
-        "poisk-kontrprimera",
-        "formula-na-python",
-        "kazhdoe-znachenie-x",
-        "snachala-kontrprimer",
-        "proverka-otrezkov",
-        "proverka-na-ploskosti",
-        "period-delimosti",
-        "proverka-itogo",
-        "novoe-uslovie",
-        "predikat-po-opredeleniyu",
-        "obychnaya-chast-formuly",
-        "max",
-        "nabor-zavisit-ot-a",
-        "svyazannye-delimosti",
-        "predikaty-itogo"
+        "operaciya-i",
+        "naimenshee-a-bity",
+        "naibolshee-a-bity",
+        "bity-programmoj",
+        "bity-itogo",
+        "treugolnik",
+        "max-dvuh-chisel",
+        "otrezok-s-a",
+        "delimost-a",
+        "usloviya-itogo"
       ],
       "kind": "topic",
       "status": "published",
       "course_id": null,
       "subtopics": [
         {
-          "slug": "parametr-i-lozhnyj-sluchaj",
+          "slug": "formula-i-parametr",
           "access": "free",
           "sections": [
             "kak-ustroena-tema-15",
-            "parametr-vybirayut-odin-raz",
-            "kontrprimer-i-dokazatelstvo",
-            "oblast-znachenij",
-            "logicheskie-bukvy",
+            "logicheskie-operacii",
             "implikaciya",
-            "skobki",
-            "otricanie",
-            "lozhnyj-sluchaj",
-            "minimum-i-maksimum",
-            "formula-lozhna-vsegda",
-            "parametr-itogo"
+            "kogda-reshaet-a",
+            "zadacha-temy-programmoj",
+            "formula-itogo"
           ]
         },
         {
-          "slug": "prinadlezhnost-i-oblast",
+          "slug": "otrezki-i-mnozhestva",
           "access": "free",
           "sections": [
-            "sudba-kazhdoj-tochki",
-            "prinadlezhnost",
-            "podstanovki-0-i-1",
-            "kolichestvo-i-summa",
-            "dlina-otrezka",
-            "peresechenie-p-i-q",
-            "vnutri-p-q",
-            "promezhutok-mezhdu-chastyami",
-            "slozhnaya-formula",
-            "koncy-otrezkov",
-            "ekvivalentnost",
-            "poryadok-resheniya",
-            "oblast-itogo"
+            "otrezok-naimenshej-dliny",
+            "otrezok-naibolshej-dliny",
+            "dve-chasti",
+            "lozhna-pri-lyubom-x",
+            "konechnye-mnozhestva",
+            "otrezki-itogo"
           ]
         },
         {
-          "slug": "bity-i-maski",
+          "slug": "koordinatnaya-ploskost",
           "access": "paid",
           "sections": [
-            "bity-parametra",
-            "razryady-i-vesa",
-            "porazryadnoe-i",
-            "naimenshee-a",
-            "naibolshee-a",
-            "dostatochnost",
-            "konechnaya-proverka",
-            "bity-poryadok",
-            "bity-itogo"
+            "tochki-ploskosti",
+            "naibolshee-ne-v-uglu",
+            "strogie-znaki",
+            "naibolshee-a-ploskost",
+            "a-mnozhitelem",
+            "ploskost-programmoj",
+            "ploskost-itogo"
           ]
         },
         {
-          "slug": "opasnaya-oblast",
+          "slug": "delimost",
           "access": "paid",
           "sections": [
-            "opasnaya-oblast",
-            "tochki-reshetki",
-            "odna-chast-s-a",
-            "vse-lozhnye-chasti",
-            "naibolshee-znachenie",
-            "dve-chasti-i",
-            "strogij-znak",
-            "napravlenie-vliyaniya",
-            "oblast-poryadok",
-            "parametr-mnozhitelem",
-            "opasnaya-itogo"
-          ]
-        },
-        {
-          "slug": "delimost-i-smeshannye-usloviya",
-          "access": "paid",
-          "sections": [
-            "opasnyj-nabor",
-            "del",
-            "nod-i-nok",
-            "delimost-v-strelke",
-            "naibolshee-a-2",
-            "dopolnitelnoe-ogranichenie",
-            "obshchie-deliteli",
-            "napravlenie-delimosti",
-            "period",
-            "delimost-poryadok",
-            "konechnyj-opasnyj-nabor",
-            "nekratnye-chisla",
-            "kratno-no-ne-drugomu",
-            "konechnoe-mnozhestvo-a",
+            "del-kto-na-kogo",
+            "nok",
+            "neskolko-kratnyh",
+            "a-granica",
+            "a-nabor-chisel",
+            "delimost-programmoj",
             "delimost-itogo"
           ]
         },
         {
-          "slug": "konechnaya-proverka",
+          "slug": "porazryadnaya-konyunkciya",
           "access": "paid",
           "sections": [
-            "programma-proveryaet-model",
-            "poisk-kontrprimera",
-            "formula-na-python",
-            "kazhdoe-znachenie-x",
-            "snachala-kontrprimer",
-            "proverka-otrezkov",
-            "proverka-na-ploskosti",
-            "period-delimosti",
-            "proverka-itogo"
+            "operaciya-i",
+            "naimenshee-a-bity",
+            "naibolshee-a-bity",
+            "bity-programmoj",
+            "bity-itogo"
           ]
         },
         {
-          "slug": "novye-predikaty",
+          "slug": "novye-usloviya",
           "access": "paid",
           "sections": [
-            "novoe-uslovie",
-            "predikat-po-opredeleniyu",
-            "obychnaya-chast-formuly",
-            "max",
-            "nabor-zavisit-ot-a",
-            "svyazannye-delimosti",
-            "predikaty-itogo"
+            "treugolnik",
+            "max-dvuh-chisel",
+            "otrezok-s-a",
+            "delimost-a",
+            "usloviya-itogo"
           ]
         }
       ],

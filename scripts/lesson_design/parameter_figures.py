@@ -14,6 +14,7 @@ that must belong to A, must not, or are free (two substitutions a = 0, a = 1).
 ``pf_bits(rows, nbits, hot)`` — binary digits of masks under their weights.
 ``pf_plane(cond, xmax, ymax, witness)`` — natural lattice, dangerous points.
 ``pf_set(lo, hi, pred, seg)`` — integers of a range, the dangerous ones marked.
+``pf_euler(P, Q, hot)`` — two finite sets as Euler circles, the numbers in their regions.
 """
 
 from __future__ import annotations
@@ -191,7 +192,7 @@ def pf_line(P, Q, expr: str, lo, hi, A=None, height: int = 190) -> str:
 def pf_bits(rows, nbits: int = 5, hot=(), height: int | None = None) -> str:
     """rows: (label, value); hot — weights whose column is framed."""
     cw = 52
-    x0 = W - 30 - nbits * cw
+    x0 = (W + 90 - nbits * cw) / 2  # the grid with its row labels in the middle
     rh = 34
     height = height or 50 + rh * len(rows) + 10
     out = [f'<svg viewBox="0 0 {W} {height}" role="img" aria-label="Двоичные разряды">']
@@ -268,7 +269,9 @@ def pf_plane(
         out.append(
             _text(cx + 12, cy - 8, f"({witness[0]}; {witness[1]})", 13, ACCENT, "start", 700)
         )
-    out.append(_text(W / 2, height - 12, note or f"опасных точек: {n}", 13, MUTED, "middle"))
+    out.append(
+        _text(W / 2, height - 12, note or f"точек, где всё решает A: {n}", 13, MUTED, "middle")
+    )
     out.append("</svg>")
     return "".join(out)
 
@@ -276,8 +279,14 @@ def pf_plane(
 # --- integers of a range -------------------------------------------------------------
 
 
-def pf_set(lo: int, hi: int, pred: str, seg=None, note: str = "", height: int = 150) -> str:
-    """Integers lo..hi as ticks; those where pred(x) is true are the dangerous set."""
+def pf_set(
+    lo: int, hi: int, pred: str, seg=None, note: str = "", grey: str = "", height: int = 150
+) -> str:
+    """Integers lo..hi as ticks; those where pred(x) is true are the dangerous set.
+
+    ``grey`` — another predicate: its numbers that are not dangerous are drawn in grey
+    (multiples outside the segment, say), to show why they do not count.
+    """
     sx = (W - 80) / (hi - lo)
 
     def X(v):
@@ -287,12 +296,19 @@ def pf_set(lo: int, hi: int, pred: str, seg=None, note: str = "", height: int = 
     out = [f'<svg viewBox="0 0 {W} {height}" role="img" aria-label="Опасные числа">']
     out.append(f'<line x1="30" y1="{y}" x2="{W - 30}" y2="{y}" stroke="{MUTED}"/>')
     hot = [v for v in range(lo, hi + 1) if _ev(pred, x=v)]
+    cold = [v for v in range(lo, hi + 1) if grey and v not in hot and _ev(grey, x=v)]
     for v in range(lo, hi + 1):
         out.append(
             f'<line x1="{X(v):.1f}" y1="{y - 4}" x2="{X(v):.1f}" y2="{y + 4}" stroke="{FAINT}"/>'
         )
-    for v in (lo, hi):
-        out.append(_text(X(v), y + 22, str(v), 13, MUTED, "middle"))
+    many = len(hot) > 12  # too many to label: small dots, only the ends signed
+    labelled = set(cold) | (set() if many else set(hot))
+    for v in (lo, hi, *(seg or ())):
+        if v not in labelled:
+            color = ACCENT if many and v in hot else MUTED
+            out.append(
+                _text(X(v), y + 22, str(v), 13, color, "middle", 700 if color == ACCENT else 400)
+            )
     if seg:
         out.append(
             f'<path d="M {X(seg[0]):.1f} {y - 24} v -8 H {X(seg[1]):.1f} v 8" fill="none" stroke="{INK}" stroke-width="1.6"/>'
@@ -302,13 +318,74 @@ def pf_set(lo: int, hi: int, pred: str, seg=None, note: str = "", height: int = 
                 (X(seg[0]) + X(seg[1])) / 2, y - 38, f"[{seg[0]}; {seg[1]}]", 13, INK, "middle", 600
             )
         )
+    for v in cold:
+        out.append(
+            f'<circle cx="{X(v):.1f}" cy="{y}" r="5" fill="#fff" stroke="{MUTED}" stroke-width="1.6"/>'
+        )
+        out.append(_text(X(v), y + 22, str(v), 13, MUTED, "middle", 600))
     for v in hot:
+        if many:
+            out.append(f'<circle cx="{X(v):.1f}" cy="{y}" r="3.6" fill="{ACCENT}"/>')
+            continue
         out.append(
             f'<circle cx="{X(v):.1f}" cy="{y}" r="5.5" fill="#fff" stroke="{ACCENT}" stroke-width="2.4"/>'
         )
-        if len(hot) <= 12:
-            out.append(_text(X(v), y + 22, str(v), 13, ACCENT, "middle", 700))
-    out.append(_text(W / 2, height - 12, note or f"опасных чисел: {len(hot)}", 13, MUTED, "middle"))
+        out.append(_text(X(v), y + 22, str(v), 13, ACCENT, "middle", 700))
+    out.append(
+        _text(
+            W / 2, height - 12, note or f"чисел, где всё решает A: {len(hot)}", 13, MUTED, "middle"
+        )
+    )
+    out.append("</svg>")
+    return "".join(out)
+
+
+# --- two finite sets -----------------------------------------------------------------
+
+
+def pf_euler(P, Q, hot=(), note: str = "", height: int = 240) -> str:
+    """Two overlapping circles with the numbers of P and Q in their regions; ``hot``
+    numbers in accent."""
+    r, cy, gap = 92, 112, 112
+    lx, rx = W / 2 - gap / 2, W / 2 + gap / 2
+    out = [f'<svg viewBox="0 0 {W} {height}" role="img" aria-label="Круги Эйлера для P и Q">']
+    for cx in (lx, rx):
+        out.append(
+            f'<circle cx="{cx:.1f}" cy="{cy}" r="{r}" fill="none" stroke="{INK}" stroke-width="1.6"/>'
+        )
+    out.append(_text(lx - r * 0.72, cy - r * 0.78, "P", 15, INK, "end", 700))
+    out.append(_text(rx + r * 0.72, cy - r * 0.78, "Q", 15, INK, "start", 700))
+    P, Q = list(P), list(Q)
+    regions = (
+        ([v for v in P if v not in Q], lx - r * 0.5),
+        ([v for v in P if v in Q], W / 2),
+        ([v for v in Q if v not in P], rx + r * 0.5),
+    )
+    for k, (values, x) in enumerate(regions):
+        per = 1 if k == 1 else 2  # the lens between the circles is narrow
+        rows = [values[i : i + per] for i in range(0, len(values), per)] or [[]]
+        y0 = cy - (len(rows) - 1) * 14
+        for i, row in enumerate(rows):
+            for j, v in enumerate(row):
+                vx = x + (j - (len(row) - 1) / 2) * 30
+                vy = y0 + i * 28 + 5
+                if v in hot:
+                    out.append(
+                        f'<circle cx="{vx:.1f}" cy="{vy - 5:.1f}" r="12" fill="#fff" stroke="{ACCENT}" stroke-width="2"/>'
+                    )
+                out.append(
+                    _text(
+                        vx,
+                        vy,
+                        str(v),
+                        14,
+                        ACCENT if v in hot else INK,
+                        "middle",
+                        700 if v in hot else 500,
+                    )
+                )
+    if note:
+        out.append(_text(W / 2, height - 12, note, 13, MUTED, "middle"))
     out.append("</svg>")
     return "".join(out)
 
@@ -319,6 +396,7 @@ PARAMETER_FIGURES: dict = {
     "pf_bits": pf_bits,
     "pf_plane": pf_plane,
     "pf_set": pf_set,
+    "pf_euler": pf_euler,
 }
 PARAMETER_STEPPERS: dict = {}
 PARAMETER_WIDGETS: dict = {}

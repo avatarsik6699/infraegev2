@@ -14,7 +14,7 @@ from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.config import settings
-from app.core.database import database_engine
+from app.core.database import request_engine
 from app.modules.entitlement.registry import task_access
 from app.modules.entitlement.service import SUBSCRIPTION_REQUIRED, Viewer, task_is_paid
 from app.modules.practice import catalog, readers
@@ -25,14 +25,16 @@ from app.modules.practice.service import Conflict
 router = APIRouter()
 
 
-async def session(response: Response) -> AsyncIterator[AsyncSession]:
+async def session(request: Request, response: Response) -> AsyncIterator[AsyncSession]:
     response.headers["Cache-Control"] = "no-store"
-    engine = None
     try:
-        async with asyncio.timeout(5):
-            engine = database_engine(settings.database_url, role="infraege_runtime")
-            async with AsyncSession(engine) as connection, connection.begin():
-                yield connection
+        async with (
+            asyncio.timeout(5),
+            request_engine(request, settings.database_url, role="infraege_runtime") as engine,
+            AsyncSession(engine) as connection,
+            connection.begin(),
+        ):
+            yield connection
     except readers.Unavailable as exc:
         raise HTTPException(404, "task or material unavailable") from exc
     except readers.InvalidAnswer as exc:
@@ -41,9 +43,6 @@ async def session(response: Response) -> AsyncIterator[AsyncSession]:
         raise HTTPException(409, "refresh the task") from exc
     except (OSError, TimeoutError, SQLAlchemyError, PostgresError, ValueError) as exc:
         raise HTTPException(503, "practice unavailable") from exc
-    finally:
-        if engine is not None:
-            await engine.dispose()
 
 
 Session = Annotated[AsyncSession, Depends(session)]

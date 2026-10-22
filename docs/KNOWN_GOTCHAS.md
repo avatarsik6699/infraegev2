@@ -145,6 +145,14 @@ use `InfoPopover inline` (native `button popovertarget` + `span popover`).
 
 ## Testing and tooling
 
+### Bank tests fill the WSL disk through `tmp_path`
+
+- **Symptoms:** API tests take ten minutes, then outputs vanish with `ENOSPC` and runs stop.
+- **Cause:** two `test_minimal_bank.py` tests copy the 1.2 GB of task files into `tmp_path`, and
+  pytest used to keep the last three runs (~11 GB).
+- **Fix:** `tmp_path_retention_policy = "failed"` in `apps/api/pyproject.toml`; the validate test
+  links `files` instead of copying. Clear `/tmp/pytest-of-$USER` after a failed run.
+
 ### Long Playwright crawls exhaust Vite dev hydration
 
 - **Symptoms:** `Failed to fetch dynamically imported module ... client.tsx` or Chromium

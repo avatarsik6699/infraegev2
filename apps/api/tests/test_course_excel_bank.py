@@ -209,17 +209,27 @@ RECOMPUTED = {
     "excel-numbers-t16": lambda: str(abs(-127) % 10),
     "excel-conditional-count-t10": lambda: str(sum(v > 5 for v in (5, 7, 10, 5, 8, 3))),
     "excel-conditional-count-t11": lambda: str(sum(v >= 7 for v in (5, 7, 10, 5, 8, 3))),
-    "excel-conditional-count-t12": lambda: str(sum(60 <= v <= 80 for v in (72, 85, 55, 60, 64, 90))),
-    "excel-conditional-count-t09": lambda: str(
-        sum(d for c, d in zip(("Книги", "Еда", "Книги", "Игрушки"), (100, 50, 200, 300), strict=True) if c == "Книги")
+    "excel-conditional-count-t12": lambda: str(
+        sum(60 <= v <= 80 for v in (72, 85, 55, 60, 64, 90))
     ),
-    "excel-conditional-count-t13": lambda: "#ДЕЛ/0!" if not [v for v in (10, 15, 20, 25) if v > 30] else "",
+    "excel-conditional-count-t09": lambda: str(
+        sum(
+            d
+            for c, d in zip(("Книги", "Еда", "Книги", "Игрушки"), (100, 50, 200, 300), strict=True)
+            if c == "Книги"
+        )
+    ),
+    "excel-conditional-count-t13": lambda: (
+        "#ДЕЛ/0!" if not [v for v in (10, 15, 20, 25) if v > 30] else ""
+    ),
     "excel-conditional-count-t04": lambda: str(sum(n % 2 == 0 or n % 3 == 0 for n in (2, 3, 6, 7))),
     "excel-conditional-count-t05": lambda: str([7, 7, 2, 2, 5, 9].count(2)),
     "excel-conditional-count-t14": lambda: str(
         len({v for v in [7, 7, 2, 2, 5, 9] if [7, 7, 2, 2, 5, 9].count(v) > 1})
     ),
-    "excel-conditional-count-t15": lambda: str(sum(k > 1 for k in _frequencies([7, 7, 2, 2, 5, 9]))),
+    "excel-conditional-count-t15": lambda: str(
+        sum(k > 1 for k in _frequencies([7, 7, 2, 2, 5, 9]))
+    ),
     "excel-conditional-count-t06": lambda: _singles_and_repeats([6, 6, 1, 2, 3, 9]).split()[0],
     "excel-conditional-count-t16": lambda: _singles_and_repeats([6, 6, 1, 2, 3, 9]).split()[1],
     "excel-text-dates-t01": lambda: "Москва"[:3],
@@ -228,7 +238,9 @@ RECOMPUTED = {
     "excel-text-dates-t02": lambda: str(len(" да ")),
     "excel-text-dates-t11": lambda: str(len(" да ".strip())),
     "excel-text-dates-t12": lambda: "12-34-5".replace("-", ""),
-    "excel-text-dates-t13": lambda: str((datetime.date(2026, 3, 2) - datetime.date(2026, 2, 27)).days),
+    "excel-text-dates-t13": lambda: str(
+        (datetime.date(2026, 3, 2) - datetime.date(2026, 2, 27)).days
+    ),
     "excel-text-dates-t14": lambda: str(datetime.date(2027, 1, 1).month),
     "excel-text-dates-t15": lambda: (
         "ИСТИНА"
@@ -236,15 +248,24 @@ RECOMPUTED = {
         else "ЛОЖЬ"
     ),
     "excel-sort-filter-t02": lambda: str(sum([10, 20, 30, 40, 50, 60])),
-    "excel-sort-filter-t09": lambda: str(sum(v for v in [10, 20, 30, 40, 50, 60] if v not in (20, 50, 60))),
-    "excel-sort-filter-t10": lambda: str(sum(v for v in [10, 20, 30, 40, 50, 60] if v not in (20, 50))),
+    "excel-sort-filter-t09": lambda: str(
+        sum(v for v in [10, 20, 30, 40, 50, 60] if v not in (20, 50, 60))
+    ),
+    "excel-sort-filter-t10": lambda: str(
+        sum(v for v in [10, 20, 30, 40, 50, 60] if v not in (20, 50))
+    ),
     "excel-sort-filter-t11": lambda: str(100 + 150 + 50),
     "excel-sort-filter-t12": lambda: str(
-        sum(c == "Москва" and v >= 80 for c, v in (("Москва", 72), ("Москва", 85), ("Москва", 90), ("Казань", 88)))
+        sum(
+            c == "Москва" and v >= 80
+            for c, v in (("Москва", 72), ("Москва", 85), ("Москва", 90), ("Казань", 88))
+        )
     ),
     "excel-sort-filter-t13": lambda: str(sorted([40, 20, 120, 15])[0]),
     "excel-lookup-t02": lambda: str("CDEF".index("E") + 1),
-    "excel-lookup-t10": lambda: str(dict(zip((101, 102, 103, 104), (100, 250, 200, 150), strict=True))[103]),
+    "excel-lookup-t10": lambda: str(
+        dict(zip((101, 102, 103, 104), (100, 250, 200, 150), strict=True))[103]
+    ),
     "excel-lookup-t11": lambda: "#Н/Д" if 105 not in (101, 102, 103, 104) else "",
     "excel-lookup-t03": lambda: str([101, 102, 103, 104].index(104) + 1),
     "excel-lookup-t09": lambda: ["Чай", "Кофе", "Печенье", "Какао"][2 - 1],
@@ -273,7 +294,7 @@ RECOMPUTED = {
     ),
     "excel-from-task-to-table-t11": lambda: str(sum((5, 3, 2, 1, 4, 1))),
     "excel-from-task-to-table-t12": lambda: str(
-        len({"тетрадь", "ручка", "тетрадь", "папка", "ручка", "тетрадь"})
+        len(set(["тетрадь", "ручка", "тетрадь", "папка", "ручка", "тетрадь"]))
     ),
     "excel-from-task-to-table-t13": lambda: "#ЧИСЛО!" if 4 > len((7, 3, 9)) else "",
     "excel-from-task-to-table-t14": lambda: str(
@@ -301,15 +322,15 @@ RECOMPUTED = {
             if c == "Москва"
         )
     ),
-    "excel-summary-t06": lambda: str(dict(zip((101, 102, 103, 104), (40, 20, 120, 15), strict=True))[103]),
+    "excel-summary-t06": lambda: str(
+        dict(zip((101, 102, 103, 104), (40, 20, 120, 15), strict=True))[103]
+    ),
     "excel-tables-pivots-t05": lambda: "=СУММ($A2:$F2)>50",
     "excel-tables-pivots-t06": lambda: str(
         sum(sum(row) > 50 for row in ((9,) * 6, (10, 10, 10, 10, 10, 0), (20, 20, 5, 1, 1, 4)))
     ),
     "excel-tables-pivots-t07": lambda: "=СУММ(" + _shift("A2:F2", 3, 0) + ")>50",
-    "excel-tables-pivots-t08": lambda: str(
-        sum(v for c, _, v in _PURCHASES if c == "Москва")
-    ),
+    "excel-tables-pivots-t08": lambda: str(sum(v for c, _, v in _PURCHASES if c == "Москва")),
     "excel-tables-pivots-t09": lambda: str(sum(c == "Москва" for c, _, _ in _PURCHASES)),
     "excel-tables-pivots-t04": lambda: str(
         sum(v for c, g, v in _PURCHASES if c == "Москва" and g != "какао")

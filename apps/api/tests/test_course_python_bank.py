@@ -215,19 +215,27 @@ PRINTED_LINES = {
     "python-logic-t02": "print(7 > 3 and 2 > 5)\nprint(7 > 3 or 2 > 5)\nprint(not 7 > 3)",
     "python-logic-t05": "print(0 and 10 / 0)",
     "python-logic-t06": 'print(bool(""))\nprint(bool("0"))\nprint(bool(0))\nprint(bool(" "))',
-    "python-while-t02": "i = 1\ntotal = 0\nwhile i <= 5:\n    total += i * i\n    i += 1\nprint(total)",
-    "python-while-t03": "i = 10\ncount = 0\nwhile i > 0:\n    i -= 3\n    count += 1\nprint(count, i)",
+    "python-while-t02": (
+        "i = 1\ntotal = 0\nwhile i <= 5:\n    total += i * i\n    i += 1\nprint(total)"
+    ),
+    "python-while-t03": (
+        "i = 10\ncount = 0\nwhile i > 0:\n    i -= 3\n    count += 1\nprint(count, i)"
+    ),
     "python-for-range-t04": (
         "count = 0\nfor a in range(1, 6):\n    for b in range(1, 6):\n"
         "        if a < b:\n            count += 1\nprint(count)"
     ),
-    "python-strings-t03": 's = "ABCDEFG"\nprint(s[2:5])\nprint(s[:4])\nprint(s[::3])\nprint(s[::-2])',
+    "python-strings-t03": (
+        's = "ABCDEFG"\nprint(s[2:5])\nprint(s[:4])\nprint(s[::3])\nprint(s[::-2])'
+    ),
     "python-strings-t05": 'print(" Мир ".strip().upper())\nprint("a-b-c".replace("-", "", 1))',
     "python-lists-t02": (
         "a = [3, 1, 4]\na.append(1)\na.insert(0, 9)\nx = a.pop()\na.remove(1)\nprint(a)"
     ),
     "python-lists-t05": "t = [[0] * 2] * 3\nt[1][0] = 5\nprint(t)",
-    "python-tuples-t06": 'count = 0\nfor pair in zip([1, 2, 3], "ab"):\n    count += 1\nprint(count)',
+    "python-tuples-t06": (
+        'count = 0\nfor pair in zip([1, 2, 3], "ab"):\n    count += 1\nprint(count)'
+    ),
     "python-dictionaries-t03": 'print({"a": 1}.get("z", 0))\nprint("1" in {1: "x"})',
     "python-sets-t02": 'print(len(set("BANANA")))',
     "python-comprehensions-t04": "print([x for x in range(20) if x % 7 == 3])",
@@ -237,7 +245,8 @@ PRINTED_LINES = {
         "def h(a):\n    a.append(0)\n    a = [5]\n    a.append(1)\n\nlst = [9]\nh(lst)\nprint(lst)"
     ),
     "python-arguments-t05": (
-        "def total_of(*values):\n    return sum(values)\n\nprint(total_of(5))\nprint(total_of(*[1, 2, 3]))"
+        "def total_of(*values):\n    return sum(values)\n\n"
+        "print(total_of(5))\nprint(total_of(*[1, 2, 3]))"
     ),
     "python-files-t06": "import json\n\nprint(json.loads(json.dumps((1, 2))))",
     "python-exceptions-t02": (

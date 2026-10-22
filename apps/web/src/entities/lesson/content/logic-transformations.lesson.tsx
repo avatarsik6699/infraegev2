@@ -1,345 +1,290 @@
+import { CodeBlock } from "~/shared/components/code-block";
+import { Notation } from "~/shared/components/notation";
 import { Typography } from "~/shared/components/typography";
 import {
   LessonDiagram,
   LessonSummary,
   LessonTable,
+  ProofDisclosure,
 } from "~/shared/components/learning-content";
 import { logicTransformationsLessonPublication } from "~/shared/config/lesson-publication.mjs";
 import { defineLesson } from "../lib/define-lesson";
 import { lessonMedia } from "./logic-transformations.media";
+import { PythonTerm } from "./python-term";
+import { SubtopicLink } from "./subtopic-link";
+
+const THEME_TASK = (
+  <>
+    «Обозначим через ДЕЛ(n, m) утверждение «натуральное число n делится без
+    остатка на натуральное число m». Для какого наибольшего натурального числа A
+    формула ДЕЛ(x, A) ∨ ((x ∈ [50; 70]) → ¬ДЕЛ(x, 15)) тождественно истинна (то
+    есть принимает значение 1 при любом натуральном значении переменной x)?»
+  </>
+);
+
+const R = "15-zakony-matematicheskoj-logiki";
 
 export const logicTransformationsLesson = defineLesson({
   ...logicTransformationsLessonPublication,
   masteryThreshold: 0.8,
   learningOutcomes: [
-    "Искать ложный случай формулы и выбирать параметр, который устраняет каждый контрпример",
-    "Решать задачи на отрезки: обязательные и запрещённые точки, длина и количество",
-    "Собирать параметр-маску по битам: обязательные и разрешённые разряды",
-    "Находить опасную область формулы с двумя переменными и её экстремум",
-    "Решать задачи с ДЕЛ через НОД и НОК и проверять модель конечным перебором",
-    "Для редких задач — новые предикаты: треугольник, MAX, набор, зависящий от A (дополнительный урок)",
+    "Заменять импликацию на ¬p ∨ q и находить x, при которых всё решает A, — вручную и программой",
+    "Находить отрезок A наименьшей или наибольшей длины и собирать конечное множество A",
+    "Находить наибольшее или наименьшее значение выражения в области на плоскости",
+    "Решать задачи с ДЕЛ через делители, НОК и НОД",
+    "Собирать A по битам для формул с поразрядной конъюнкцией",
+    "Для редких задач — треугольник, MAX и условия, зависящие от A (дополнительный урок)",
   ],
   accessTier: "paid",
   subtopics: [
     {
-      slug: "parametr-i-lozhnyj-sluchaj",
-      title: "Параметр и ложный случай",
-      lead: "Переменные и параметр, «при любом» и «хотя бы при одном», область значений, отрицание всей формулы и ложный случай импликации.",
+      slug: "formula-i-parametr",
+      title: "Формула с параметром A",
+      lead: "Что спрашивают в задании 15, как вычислить формулу при конкретном x и как найти A — вручную и программой.",
       conceptIds: [
         "kak-ustroena-tema-15",
-        "parametr-vybirayut-odin-raz",
-        "kontrprimer-i-dokazatelstvo",
-        "oblast-znachenij",
-        "logicheskie-bukvy",
+        "logicheskie-operacii",
         "implikaciya",
-        "skobki",
-        "otricanie",
-        "lozhnyj-sluchaj",
-        "minimum-i-maksimum",
-        "formula-lozhna-vsegda",
-        "parametr-itogo",
+        "kogda-reshaet-a",
+        "zadacha-temy-programmoj",
+        "formula-itogo",
       ],
       checkpoint: [
+        {
+          id: "zadacha-1",
+          prompt: (
+            <>Чему равно (x ∈ [50; 70]) ∧ ДЕЛ(x, 15) при x = 45?</>
+          ),
+          reveal: (
+            <>0: 45 делится на 15, но лежит вне отрезка — первая часть ложна.</>
+          ),
+        },
+        {
+          id: "zadacha-2",
+          prompt: <>Когда импликация p → q ложна?</>,
+          reveal: <>Только при p = 1 и q = 0.</>,
+        },
+        {
+          id: "zadacha-3",
+          prompt: <>Чему равно 0 → 0?</>,
+          reveal: <>1: левая часть ложна — нарушения нет.</>,
+        },
+        {
+          id: "zadacha-4",
+          prompt: <>Как записать p → q без стрелки?</>,
+          reveal: <>¬p ∨ q.</>,
+        },
+        {
+          id: "zadacha-5",
+          prompt: (
+            <>
+              В задаче темы делитель 15 заменили на 25. Какое наибольшее A
+              теперь?
+            </>
+          ),
+          reveal: (
+            <>
+              50: на отрезке [50; 70] единственное кратное 25 — его левый конец
+              50, а 75 уже вне отрезка.
+            </>
+          ),
+        },
+      ],
+    },
+    {
+      slug: "otrezki-i-mnozhestva",
+      title: "Отрезки и множества",
+      lead: "Когда A — отрезок или набор чисел: какую часть прямой он обязан накрыть, где ему нельзя быть и какие числа в него взять.",
+      conceptIds: [
+        "otrezok-naimenshej-dliny",
+        "otrezok-naibolshej-dliny",
+        "dve-chasti",
+        "lozhna-pri-lyubom-x",
+        "konechnye-mnozhestva",
+        "otrezki-itogo",
+      ],
+      checkpoint: [
+        {
+          id: "zadacha-1",
+          prompt: <>Какова длина отрезка [12; 30]?</>,
+          reveal: <>18 = 30 − 12.</>,
+        },
         {
           id: "zadacha-2",
           prompt: (
             <>
-              Запиши отрицание (x ≤ 4) ∨ (y{">"}9) без отрицания перед скобкой.
+              P = [4; 16], Q = [9; 25]. Какая наименьшая длина A, при которой (x
+              ∈ P) → ((x ∈ Q) → (x ∈ A)) тождественно истинна?
             </>
           ),
-          reveal: <>(x {">"} 4) ∧ (y ≤ 9).</>,
+          reveal: <>7: A должен накрыть общую часть [9; 16].</>,
         },
         {
           id: "zadacha-3",
           prompt: (
             <>
-              Подбери значения p,q,r, показывающие, что p → (q → r) и (p → q) →
-              r различаются.
+              P = [1; 9], Q = [12; 30]. Какая наибольшая длина A, при которой ((x
+              ∈ A) → (x ∈ P)) ∨ (x ∈ Q) тождественно истинна?
             </>
           ),
-          reveal: <>Например, p = q = r = 0.</>,
+          reveal: <>18: A лежит внутри P или внутри Q, а Q длиннее.</>,
         },
-      ],
-    },
-    {
-      slug: "prinadlezhnost-i-oblast",
-      title: "Принадлежность и обязательная область",
-      lead: "Две подстановки a = 0 и a = 1, обязательные, запрещённые и свободные точки, длина отрезка A, мощность и сумма конечного A.",
-      conceptIds: [
-        "sudba-kazhdoj-tochki",
-        "prinadlezhnost",
-        "podstanovki-0-i-1",
-        "kolichestvo-i-summa",
-        "dlina-otrezka",
-        "peresechenie-p-i-q",
-        "vnutri-p-q",
-        "promezhutok-mezhdu-chastyami",
-        "slozhnaya-formula",
-        "koncy-otrezkov",
-        "ekvivalentnost",
-        "poryadok-resheniya",
-        "oblast-itogo",
-      ],
-      checkpoint: [
+        {
+          id: "zadacha-4",
+          prompt: <>Может ли отрезок A накрыть [1; 2] и [4; 5], не накрыв 3?</>,
+          reveal: <>Нет: у отрезка нет дыр, он накроет и всё между ними.</>,
+        },
         {
           id: "zadacha-5",
           prompt: (
             <>
-              Может ли один отрезок содержать [1;2] ∪ [4;5] и одновременно
-              полностью лежать в [1;3] ∪ [4;5]?
+              P = {"{1, 3, 5, 7}"}, Q = {"{5, 7, 9}"}. Какое наименьшее
+              количество элементов A, при котором ((x ∈ P) ∧ (x ∈ Q)) → (x ∈ A)
+              тождественно истинна?
             </>
           ),
-          reveal: <>Нет: отрезок через 2 и 4 содержит 3,5.</>,
+          reveal: <>2: обязаны войти 5 и 7 — они есть и в P, и в Q.</>,
         },
       ],
     },
     {
-      slug: "bity-i-maski",
-      title: "Биты: необходимые и разрешённые разряды",
-      lead: "Двоичные разряды и операция &, обязательные биты для наименьшей маски, разрешённые для наибольшей и проверка старших разрядов.",
+      slug: "koordinatnaya-ploskost",
+      title: "Координатная плоскость",
+      lead: "Формулы с x и y: в каких точках всё решает A, где выражение наибольшее, строгие знаки и A множителем.",
       access: "paid",
       conceptIds: [
-        "bity-parametra",
-        "razryady-i-vesa",
-        "porazryadnoe-i",
-        "naimenshee-a",
-        "naibolshee-a",
-        "dostatochnost",
-        "konechnaya-proverka",
-        "bity-poryadok",
-        "bity-itogo",
+        "tochki-ploskosti",
+        "naibolshee-ne-v-uglu",
+        "strogie-znaki",
+        "naibolshee-a-ploskost",
+        "a-mnozhitelem",
+        "ploskost-programmoj",
+        "ploskost-itogo",
       ],
       paid: {
         outline: [
-          { id: "bity-parametra", navLabel: "Биты параметра" },
-          { id: "razryady-i-vesa", navLabel: "Разряды и веса" },
-          { id: "porazryadnoe-i", navLabel: "Поразрядное И" },
-          { id: "naimenshee-a", navLabel: "Наименьшее A" },
-          { id: "naibolshee-a", navLabel: "Наибольшее A" },
-          { id: "dostatochnost", navLabel: "Достаточность" },
-          { id: "konechnaya-proverka", navLabel: "Конечная проверка" },
-          { id: "bity-poryadok", navLabel: "Порядок решения" },
-          { id: "bity-itogo", navLabel: "Итого" },
+          { id: "tochki-ploskosti", navLabel: "Точки, где всё решает A" },
+          { id: "naibolshee-ne-v-uglu", navLabel: "Не прямоугольная область" },
+          { id: "strogie-znaki", navLabel: "Строгие знаки" },
+          { id: "naibolshee-a-ploskost", navLabel: "Наибольшее A" },
+          { id: "a-mnozhitelem", navLabel: "A множителем" },
+          { id: "ploskost-programmoj", navLabel: "Программой" },
+          { id: "ploskost-itogo", navLabel: "Итого" },
         ],
         preview: (
           <>
             <Typography.Text>
-              <strong>
-                В побитовых формулах A собирают по разрядам: одни биты обязаны
-                быть в A, другие запрещены, и ответ — сумма весов нужных битов.
-              </strong>{" "}
-              Побитовая конъюнкция встречается в 11 задачах подборок.
+              Что меняется, когда в формуле две переменные — x и y? Например:
+              для какого наименьшего целого A формула (x ≥ 12) ∨ (y {">"} 5) ∨
+              (A {">"} x · y) истинна при любых натуральных x и y?
             </Typography.Text>
           </>
         ),
-        selfCheck: 1,
-        load: () => import("./logic-transformations.paid.bity-i-maski"),
+        selfCheck: 5,
+        load: () =>
+          import("./logic-transformations.paid.koordinatnaya-ploskost"),
       },
     },
     {
-      slug: "opasnaya-oblast",
-      title: "Опасная область на плоскости",
-      lead: "Опасные клетки на натуральной решётке, наибольшее значение выражения, строгий знак и целый порог, параметр-коэффициент.",
+      slug: "delimost",
+      title: "Делимость",
+      lead: "ДЕЛ в обе стороны, общие кратные и НОК, несколько кратных на отрезке, A как граница и как набор чисел.",
       access: "paid",
       conceptIds: [
-        "opasnaya-oblast",
-        "tochki-reshetki",
-        "odna-chast-s-a",
-        "vse-lozhnye-chasti",
-        "naibolshee-znachenie",
-        "dve-chasti-i",
-        "strogij-znak",
-        "napravlenie-vliyaniya",
-        "oblast-poryadok",
-        "parametr-mnozhitelem",
-        "opasnaya-itogo",
-      ],
-      paid: {
-        outline: [
-          { id: "opasnaya-oblast", navLabel: "Опасная область" },
-          { id: "tochki-reshetki", navLabel: "Точки решётки" },
-          { id: "odna-chast-s-a", navLabel: "Одна часть с A" },
-          { id: "vse-lozhnye-chasti", navLabel: "Все ложные части" },
-          { id: "naibolshee-znachenie", navLabel: "Наибольшее значение" },
-          { id: "dve-chasti-i", navLabel: "Две части И" },
-          { id: "strogij-znak", navLabel: "Строгий знак" },
-          { id: "napravlenie-vliyaniya", navLabel: "Направление влияния" },
-          { id: "oblast-poryadok", navLabel: "Порядок решения" },
-          { id: "parametr-mnozhitelem", navLabel: "Параметр множителем" },
-          { id: "opasnaya-itogo", navLabel: "Итого" },
-        ],
-        preview: (
-          <>
-            <Typography.Text>
-              <strong>
-                Для формул с двумя переменными ищут опасную область — точки, где
-                формула держится только на части с A, — и наибольшее или
-                наименьшее значение выражения на ней; A должно его превзойти.
-              </strong>{" "}
-              Такие задачи — 37 из 90 подборок; в задаче ЕГЭ-2026 параметр стоит
-              множителем при x.
-            </Typography.Text>
-          </>
-        ),
-        selfCheck: 1,
-        load: () => import("./logic-transformations.paid.opasnaya-oblast"),
-      },
-    },
-    {
-      slug: "delimost-i-smeshannye-usloviya",
-      title: "Делимость и смешанный опасный набор",
-      lead: "Направление ДЕЛ, НОД и НОК, кратные и некратные внутри отрезка, числовой порог и мощность конечного A.",
-      access: "paid",
-      conceptIds: [
-        "opasnyj-nabor",
-        "del",
-        "nod-i-nok",
-        "delimost-v-strelke",
-        "naibolshee-a-2",
-        "dopolnitelnoe-ogranichenie",
-        "obshchie-deliteli",
-        "napravlenie-delimosti",
-        "period",
-        "delimost-poryadok",
-        "konechnyj-opasnyj-nabor",
-        "nekratnye-chisla",
-        "kratno-no-ne-drugomu",
-        "konechnoe-mnozhestvo-a",
+        "del-kto-na-kogo",
+        "nok",
+        "neskolko-kratnyh",
+        "a-granica",
+        "a-nabor-chisel",
+        "delimost-programmoj",
         "delimost-itogo",
       ],
       paid: {
         outline: [
-          { id: "opasnyj-nabor", navLabel: "Опасный набор" },
-          { id: "del", navLabel: "ДЕЛ" },
-          { id: "nod-i-nok", navLabel: "НОД и НОК" },
-          { id: "delimost-v-strelke", navLabel: "Делимость в стрелке" },
-          { id: "naibolshee-a-2", navLabel: "Наибольшее A" },
-          {
-            id: "dopolnitelnoe-ogranichenie",
-            navLabel: "Дополнительное ограничение",
-          },
-          { id: "obshchie-deliteli", navLabel: "Общие делители" },
-          { id: "napravlenie-delimosti", navLabel: "Направление делимости" },
-          { id: "period", navLabel: "Период" },
-          { id: "delimost-poryadok", navLabel: "Порядок решения" },
-          { id: "konechnyj-opasnyj-nabor", navLabel: "Конечный опасный набор" },
-          { id: "nekratnye-chisla", navLabel: "Некратные числа" },
-          { id: "kratno-no-ne-drugomu", navLabel: "Кратно, но не другому" },
-          { id: "konechnoe-mnozhestvo-a", navLabel: "Конечное множество A" },
+          { id: "del-kto-na-kogo", navLabel: "Кто на кого делится" },
+          { id: "nok", navLabel: "Делится на оба" },
+          { id: "neskolko-kratnyh", navLabel: "Несколько кратных" },
+          { id: "a-granica", navLabel: "A — граница" },
+          { id: "a-nabor-chisel", navLabel: "A — набор чисел" },
+          { id: "delimost-programmoj", navLabel: "Программой" },
           { id: "delimost-itogo", navLabel: "Итого" },
         ],
         preview: (
           <>
             <Typography.Text>
-              <strong>
-                В формулах с ДЕЛ опасный набор — это кратные, делители или числа
-                отрезка с нужным признаком делимости; A должно делить их все или
-                делиться на них, и ответ даёт НОД или НОК именно этого набора.
-              </strong>{" "}
-              Делимость встречается в 16 задачах подборок, четыре из пяти задач
-              ЕГЭ-2026 этой темы — на делимость; задание 15 демоверсии 2027 года
-              сочетает делимость с отрезком.
-            </Typography.Text>
-          </>
-        ),
-        selfCheck: 0,
-        load: () =>
-          import("./logic-transformations.paid.delimost-i-smeshannye-usloviya"),
-      },
-    },
-    {
-      slug: "konechnaya-proverka",
-      title: "Проверка конечным перебором",
-      lead: "Предикат формулы в Python, поиск контрпримера, доказанные границы перебора, период и точные представители отрезков.",
-      access: "paid",
-      conceptIds: [
-        "programma-proveryaet-model",
-        "poisk-kontrprimera",
-        "formula-na-python",
-        "kazhdoe-znachenie-x",
-        "snachala-kontrprimer",
-        "proverka-otrezkov",
-        "proverka-na-ploskosti",
-        "period-delimosti",
-        "proverka-itogo",
-      ],
-      paid: {
-        outline: [
-          {
-            id: "programma-proveryaet-model",
-            navLabel: "Программа проверяет модель",
-          },
-          { id: "poisk-kontrprimera", navLabel: "Поиск контрпримера" },
-          { id: "formula-na-python", navLabel: "Формула на Python" },
-          { id: "kazhdoe-znachenie-x", navLabel: "Каждое значение x" },
-          { id: "snachala-kontrprimer", navLabel: "Сначала контрпример" },
-          { id: "proverka-otrezkov", navLabel: "Проверка отрезков" },
-          { id: "proverka-na-ploskosti", navLabel: "Проверка на плоскости" },
-          { id: "period-delimosti", navLabel: "Период делимости" },
-          { id: "proverka-itogo", navLabel: "Итого" },
-        ],
-        preview: (
-          <>
-            <Typography.Text>
-              <strong>
-                Программа проверяет уже доказанную модель: она перебирает
-                конечный набор значений, который рассуждение сделало
-                достаточным, и возвращает контрпример, если кандидат A не
-                подходит.
-              </strong>{" "}
-              Это проверка для всех 86 основных задач, а не новый тип: сам
-              перебор без обоснования границ ничего не доказывает.
+              Чем ДЕЛ(x, 15) отличается от ДЕЛ(15, x) и что делать, если x
+              должен делиться сразу на два числа?
             </Typography.Text>
           </>
         ),
         selfCheck: 5,
-        load: () => import("./logic-transformations.paid.konechnaya-proverka"),
+        load: () => import("./logic-transformations.paid.delimost"),
       },
     },
     {
-      slug: "novye-predikaty",
-      title: "Новые предикаты и зависимые ограничения",
-      lead: "Предикат «треугольник существует», функция MAX, связанные делимости и опасный набор, который меняется вместе с параметром.",
-      level: "advanced",
+      slug: "porazryadnaya-konyunkciya",
+      title: "Поразрядная конъюнкция",
+      lead: "Что делает x & M, какие биты обязаны быть в наименьшем A и какие разрешены наибольшему.",
       access: "paid",
       conceptIds: [
-        "novoe-uslovie",
-        "predikat-po-opredeleniyu",
-        "obychnaya-chast-formuly",
-        "max",
-        "nabor-zavisit-ot-a",
-        "svyazannye-delimosti",
-        "predikaty-itogo",
+        "operaciya-i",
+        "naimenshee-a-bity",
+        "naibolshee-a-bity",
+        "bity-programmoj",
+        "bity-itogo",
       ],
       paid: {
         outline: [
-          { id: "novoe-uslovie", navLabel: "Новое условие" },
-          {
-            id: "predikat-po-opredeleniyu",
-            navLabel: "Предикат по определению",
-          },
-          { id: "obychnaya-chast-formuly", navLabel: "Обычная часть формулы" },
-          { id: "max", navLabel: "MAX" },
-          { id: "nabor-zavisit-ot-a", navLabel: "Набор зависит от A" },
-          { id: "svyazannye-delimosti", navLabel: "Связанные делимости" },
-          { id: "predikaty-itogo", navLabel: "Итого" },
+          { id: "operaciya-i", navLabel: "Операция &" },
+          { id: "naimenshee-a-bity", navLabel: "Наименьшее A" },
+          { id: "naibolshee-a-bity", navLabel: "Наибольшее A" },
+          { id: "bity-programmoj", navLabel: "Программой" },
+          { id: "bity-itogo", navLabel: "Итого" },
         ],
         preview: (
           <>
             <Typography.Text>
-              <strong>
-                Незнакомое условие в формуле — «треугольник существует», MAX,
-                делитель параметра — сначала переводят в знакомые неравенства
-                или делимость по его определению, а потом решают как обычно:
-                ищут ложный случай.
-              </strong>{" "}
-              Такие условия встречаются в 4 задачах подборок из 90; основные
-              задачи и итоговая страница эту подтему не требуют.
+              Что значит x & 22 и как собрать A по двоичным разрядам, чтобы
+              формула с & была истинна при любом x?
             </Typography.Text>
           </>
         ),
-        selfCheck: 1,
-        load: () => import("./logic-transformations.paid.novye-predikaty"),
+        selfCheck: 5,
+        load: () =>
+          import("./logic-transformations.paid.porazryadnaya-konyunkciya"),
+      },
+    },
+    {
+      slug: "novye-usloviya",
+      title: "Треугольник, MAX и условия с A",
+      lead: "Незнакомые условия в формуле: существование треугольника, большее из двух чисел, отрезок и делимость, которые зависят от самого A.",
+      level: "advanced",
+      access: "paid",
+      conceptIds: [
+        "treugolnik",
+        "max-dvuh-chisel",
+        "otrezok-s-a",
+        "delimost-a",
+        "usloviya-itogo",
+      ],
+      paid: {
+        outline: [
+          { id: "treugolnik", navLabel: "Треугольник существует" },
+          { id: "max-dvuh-chisel", navLabel: "MAX" },
+          { id: "otrezok-s-a", navLabel: "Отрезок с концом A" },
+          { id: "delimost-a", navLabel: "Делители самого A" },
+          { id: "usloviya-itogo", navLabel: "Итого" },
+        ],
+        preview: (
+          <>
+            <Typography.Text>
+              Что делать, если в формуле встречается незнакомое условие —
+              например, «треугольник со сторонами x, 4 и 7 существует»?
+            </Typography.Text>
+          </>
+        ),
+        selfCheck: 4,
+        load: () => import("./logic-transformations.paid.novye-usloviya"),
       },
     },
   ],
@@ -350,230 +295,142 @@ export const logicTransformationsLesson = defineLesson({
       explanation: (
         <>
           <Typography.Text>
+            В задании 15 дана логическая формула с неизвестным числом A. Нужно
+            найти A, при котором формула истинна при любом x. Вот задача,
+            которую мы будем решать всю тему:
+          </Typography.Text>
+          <Typography.Text>{THEME_TASK}</Typography.Text>
+          <Typography.Text>
             <strong>
-              В задании 15 ищут одно значение параметра A, при котором формула
-              истинна для всех допустимых значений переменных; поэтому решают не
-              «где формула истинна», а «где она может стать ложной» — и
-              закрывают каждый такой случай.
+              Перебирать все x вручную не нужно: почти при любом x формула
+              истинна и без A. Достаточно найти те немногие x, при которых всё
+              решает A.
             </strong>{" "}
-            Этот способ нужен во всех 90 задачах подборок формата 2027 года.
+            Сначала разберём, что сказано в условии:
           </Typography.Text>
-          <Typography.Text>
-            Главный пример — формула (x ≤ 7) → (x ≤ A) на неотрицательных целых
-            x: найдём контрпример для неподходящего A и докажем, что найденное A
-            подходит для всех x.
-          </Typography.Text>
-        </>
-      ),
-    },
-    {
-      id: "parametr-vybirayut-odin-raz",
-      navLabel: "Параметр выбирают один раз",
-      explanation: (
-        <>
-          <Typography.Text>
-            <strong>
-              Параметр A выбирают один раз, а потом формула должна выполняться
-              при всех значениях переменных.
-            </strong>
-          </Typography.Text>
-          <Typography.Text>
-            Высказывание - утверждение, которому можно поставить в соответствие
-            одно из двух значений: истина или ложь. Например, «8 больше 5»
-            истинно, а «8 делится на 3 без остатка» ложно. Для краткости истину
-            обозначают 1, ложь - 0.
-          </Typography.Text>
-          <Typography.Text>
-            Фраза «x больше 5» пока не имеет одного определённого значения. При
-            x=8 она истинна, при x=2 ложна. Утверждение, истинность которого
-            зависит от переменной, называют <strong>предикатом</strong>. В
-            задачах это обычные условия: x{"<"}10, x ∈ P, x&A=0, «x делится на
-            A».
-          </Typography.Text>
-          <Typography.Text>
-            Параметр - число или объект, который мы выбираем перед проверкой
-            выражения. В задании 15 это обычно A. Переменные x, y затем могут
-            принимать любые разрешённые значения, но выбранное A уже
-            фиксировано.
-          </Typography.Text>
-          <Typography.Text>
-            Например, требуется найти наименьшее целое A, при котором
-          </Typography.Text>
-          <Typography.Text>(x ≤ 7) → (x ≤ A)</Typography.Text>
-          <Typography.Text>
-            истинно для каждого неотрицательного целого x.
-          </Typography.Text>
-          <Typography.Text>
-            Если выбрать A=6, при x=7 левая часть истинна, правая ложна. Условие
-            нарушено. При A=7 числа 0,1,…,7 удовлетворяют правой части; при
-            больших x левая часть уже ложна, и импликация истинна. Наименьшее
-            подходящее A равно 7.
-          </Typography.Text>
-          <LessonDiagram
-            {...lessonMedia.pfGridimpx7xA_0_11}
-            caption={
-              <>
-                Формула (x ≤ 7) → (x ≤ A) для каждого x от 0 до 11: при A = 6
-                один нуль — x = 7, это контрпример; при A = 7 нулей нет. При x{" "}
-                {">"} 7 левая часть ложна, и формула истинна при любом A.
-              </>
-            }
-          />
-          <Typography.Text>
-            Нельзя для x=7 выбрать одно A, а для x=100 другое. Нужно одно
-            значение, подходящее всем.
-          </Typography.Text>
-        </>
-      ),
-    },
-    {
-      id: "kontrprimer-i-dokazatelstvo",
-      navLabel: "Контрпример и доказательство",
-      explanation: (
-        <>
-          <Typography.Text>
-            <strong>
-              Чтобы опровергнуть A, хватит одного контрпримера; чтобы доказать,
-              что A подходит, нужно объяснить, почему контрпримера нет вообще.
-            </strong>
-          </Typography.Text>
-          <Typography.Text>
-            Запись ∀ x читается «для всех x». Запись ∃ x читается «существует
-            хотя бы одно x». Эти обозначения называются кванторами: они
-            указывают, скольких значений касается утверждение.
-          </Typography.Text>
-          <Typography.Text>Условие задания обычно имеет вид</Typography.Text>
-          <Typography.Text>∀ x F(x,A)=1.</Typography.Text>
-          <Typography.Text>
-            Чтобы опровергнуть подходящее значение A, достаточно одного
-            допустимого x, для которого F(x,A)=0. Такое значение называют{" "}
-            <strong>контрпримером</strong>. Чтобы доказать, что A подходит,
-            одного удачного x недостаточно: нужно объяснить, почему контрпример
-            невозможен вообще.
-          </Typography.Text>
-          <Typography.Text>
-            Выражение, истинное при всех разрешённых значениях переменных, в
-            условиях задания называют тождественно истинным. Здесь истинность
-            рассматривается именно в указанной области значений. Формула может
-            выполняться для всех натуральных чисел и нарушаться для
-            отрицательного или дробного числа.
-          </Typography.Text>
-        </>
-      ),
-    },
-    {
-      id: "oblast-znachenij",
-      navLabel: "Область значений",
-      explanation: (
-        <>
-          <Typography.Text>
-            <strong>
-              Область значений — часть условия: натуральные, неотрицательные
-              целые и вещественные числа дают разные ответы.
-            </strong>
-          </Typography.Text>
-          <Typography.Text>Различай следующие множества:</Typography.Text>
           <LessonTable
-            label={"Различай следующие множества"}
-            columns={[{ label: "Условие" }, { label: "Допустимые значения" }]}
+            label={"Условие задачи темы по частям"}
+            columns={[{ label: "В условии" }, { label: "Что это значит" }]}
             rows={[
+              ["ДЕЛ(x, A)", "x делится на A без остатка"],
               [
-                "Положительные целые, натуральные при таком соглашении",
-                "1,2,3,…",
+                "x ∈ [50; 70]",
+                "x лежит на отрезке от 50 до 70, концы тоже входят",
               ],
-              ["Неотрицательные целые", "0,1,2,3,…"],
-              ["Все целые", "…,-2,-1,0,1,2,…"],
+              ["¬, ∨, →", "логические НЕ, ИЛИ и «если …, то» — разберём ниже"],
               [
-                "Вещественные числа",
-                "Включая отрицательные и дробные: -2.3, 0, 0.5, √2, ...",
+                "тождественно истинна",
+                "истинна при каждом натуральном x: 1, 2, 3, …",
               ],
+              ["наибольшее натуральное A", "из всех подходящих A — самое большое"],
             ]}
           />
           <Typography.Text>
-            Слово «натуральные» в разных источниках используют с разными
-            соглашениями о нуле. Следуй конкретному условию. В задачах на
-            делимость делитель равным нулю не бывает: выражение «делится на 0»
-            не определено.
+            Тема состоит из шести подтем — у каждой своя страница. Идём по ним
+            по порядку:
           </Typography.Text>
+          <ol>
+            <li>
+              <strong>Формула с параметром A</strong> — ты сейчас здесь. Здесь
+              же решим задачу темы: ответ 60.
+            </li>
+            <li>
+              <SubtopicLink routeSlug={R} subtopic="otrezki-i-mnozhestva">
+                Отрезки и множества
+              </SubtopicLink>{" "}
+              — A не число, а отрезок или набор чисел.
+            </li>
+            <li>
+              <SubtopicLink routeSlug={R} subtopic="koordinatnaya-ploskost">
+                Координатная плоскость
+              </SubtopicLink>{" "}
+              — две переменные x и y; самый частый вид задачи.
+            </li>
+            <li>
+              <SubtopicLink routeSlug={R} subtopic="delimost">
+                Делимость
+              </SubtopicLink>{" "}
+              — ДЕЛ и общие кратные, как в задаче темы.
+            </li>
+            <li>
+              <SubtopicLink routeSlug={R} subtopic="porazryadnaya-konyunkciya">
+                Поразрядная конъюнкция
+              </SubtopicLink>{" "}
+              — операция & над двоичными записями.
+            </li>
+            <li>
+              <SubtopicLink routeSlug={R} subtopic="novye-usloviya">
+                Треугольник, MAX и условия с A
+              </SubtopicLink>{" "}
+              — дополнительный урок для редких задач.
+            </li>
+          </ol>
           <Typography.Text>
-            Например, при натуральном x условие x{"<"}4 означает x=1,2,3. При
-            вещественном x оно означает все числа левее 4; наибольшего такого
-            числа нет. При неотрицательном целом x добавляется 0.
-          </Typography.Text>
-          <Typography.Text>
-            Проверяй отдельно область переменных и область параметра. Вполне
-            возможно, что x,y натуральные, а A - любое целое. В таком случае
-            отрицательные A нельзя исключать только потому, что переменные
-            положительные.
+            Почти любую задачу можно решить и вручную, и программой. На экзамене
+            подойдёт любой способ, а второй пригодится для проверки.
           </Typography.Text>
         </>
       ),
     },
     {
-      id: "logicheskie-bukvy",
-      navLabel: "Логические буквы",
+      id: "logicheskie-operacii",
+      navLabel: "Логические операции",
       explanation: (
         <>
           <Typography.Text>
+            Как узнать, истинна ли формула при конкретном x?
+          </Typography.Text>
+          <Typography.Text>
             <strong>
-              Условия временно заменяют логическими буквами, чтобы видеть только
-              их истинность.
-            </strong>
-          </Typography.Text>
-          <Typography.Text>
-            Пусть p означает «x{"<"}10», а q означает «x чётно». В логическом
-            рассуждении временно важно не само число x, а истинны ли p и q. Если
-            x=8, получаем p=1, q=1; если x=11, получаем p=0, q=0.
-          </Typography.Text>
-          <Typography.Text>
-            Такая замена разгружает запись. После преобразования нужно вернуться
-            к исходному смыслу букв. Не смешивай логическую букву a=(x ∈ A) с
-            самим множеством A.
-          </Typography.Text>
-          <Typography.Text>
-            <strong>НЕ, И, ИЛИ.</strong>
-          </Typography.Text>
-          <Typography.Text>
-            <strong>Отрицание</strong> ¬p означает «неверно, что p». Оно меняет
-            1 на 0 и 0 на 1. Если p есть x ≤ 10, то ¬p есть x{">"}10.
-          </Typography.Text>
-          <Typography.Text>
-            <strong>Конъюнкция</strong> p ∧ q - логическое И. Для истинности
-            должны одновременно выполняться оба условия. Если хотя бы одно не
-            выполняется, всё И ложно.
-          </Typography.Text>
-          <Typography.Text>
-            <strong>Дизъюнкция</strong> p ∨ q - логическое ИЛИ. Достаточно хотя
-            бы одного истинного условия. Случай, когда истинны оба, тоже
-            подходит. Это включающее ИЛИ.
+              При конкретном x каждое условие либо истинно, либо ложно. Истину
+              записывают 1, ложь — 0, а логические операции соединяют эти 0 и 1
+              в значение всей формулы.
+            </strong>{" "}
+            Возьмём x = 55: условие x ∈ [50; 70] истинно — 1, а ДЕЛ(55, 15)
+            ложно — 0, ведь 55 на 15 не делится.
           </Typography.Text>
           <LessonTable
-            label={"Это включающее ИЛИ"}
+            label={"Логические операции"}
             columns={[
-              { label: "p" },
-              { label: "q" },
-              { label: "¬p" },
-              { label: "p ∧ q" },
-              { label: "p ∨ q" },
+              { label: "Запись" },
+              { label: "Истинна, когда" },
+              { label: "При x = 55" },
             ]}
             rows={[
-              ["0", "0", "1", "0", "0"],
-              ["0", "1", "1", "0", "1"],
-              ["1", "0", "0", "0", "1"],
-              ["1", "1", "0", "1", "1"],
+              ["¬p — «не p»", "p ложно", "¬ДЕЛ(x, 15) = ¬0 = 1"],
+              [
+                "p ∧ q — «p и q»",
+                "истинны обе части",
+                "(x ∈ [50; 70]) ∧ ДЕЛ(x, 15) = 1 ∧ 0 = 0",
+              ],
+              [
+                "p ∨ q — «p или q»",
+                "истинна хотя бы одна часть",
+                "(x ∈ [50; 70]) ∨ ДЕЛ(x, 15) = 1 ∨ 0 = 1",
+              ],
+              [
+                "p → q — «если p, то q»",
+                "всегда, кроме случая 1 → 0",
+                "(x ∈ [50; 70]) → ДЕЛ(x, 15) = 1 → 0 = 0",
+              ],
+              [
+                "p ≡ q — «p равносильно q»",
+                "значения частей одинаковы",
+                "(x ∈ [50; 70]) ≡ ДЕЛ(x, 15) = 1 ≡ 0 = 0",
+              ],
             ]}
           />
           <Typography.Text>
-            Таблица истинности перечисляет возможные сочетания логических
-            значений и результат операции. Для двух независимых условий
-            сочетаний четыре: у каждого два значения, поэтому 2·2=4.
+            С ¬, ∧ и ∨ всё как в обычной речи. На стрелке → ошибаются чаще всего
+            — разберём её отдельно.
           </Typography.Text>
-          <Typography.Text>
-            Для конкретных предикатов некоторые сочетания могут быть невозможны.
-            Например, при p=(x{"<"}3) и q=(x{"<"}10) строка p=1,q=0 не
-            реализуется ни при каком x. Общая таблица описывает операцию, а
-            условие задачи определяет достижимые строки.
-          </Typography.Text>
+          <ProofDisclosure kind="nuance" summary="Тонкости: порядок действий">
+            <Typography.Text>
+              Без скобок сначала выполняют ¬, затем ∧, затем ∨, и только потом →
+              и ≡. Скобки меняют порядок, как в арифметике. В условиях ЕГЭ
+              скобки обычно расставлены полностью — следуй им.
+            </Typography.Text>
+          </ProofDisclosure>
         </>
       ),
     },
@@ -582,407 +439,235 @@ export const logicTransformationsLesson = defineLesson({
       navLabel: "Импликация",
       explanation: (
         <>
+          <Typography.Text>Когда ложна формула «если p, то q»?</Typography.Text>
           <Typography.Text>
             <strong>
-              Импликация запрещает ровно одно сочетание: истинная левая часть и
-              ложная правая.
+              Импликация p → q ложна только в одном случае: p истинно, а q
+              ложно. Во всех остальных случаях она истинна.
+            </strong>{" "}
+            Это как обещание «если сдашь экзамен, получишь подарок». Оно
+            нарушено, только если экзамен сдан, а подарка нет. Если экзамен не
+            сдан, обещание не нарушено — будет подарок или нет.
+          </Typography.Text>
+          <LessonTable
+            label={"Значения p → q"}
+            columns={[{ label: "p" }, { label: "q" }, { label: "p → q" }]}
+            rows={[
+              ["0", "0", "1"],
+              ["0", "1", "1"],
+              ["1", "0", "0 — единственная ложь"],
+              ["1", "1", "1"],
+            ]}
+          />
+          <Typography.Text>
+            Отсюда удобная замена:{" "}
+            <strong>p → q — то же самое, что ¬p ∨ q.</strong> Обе формулы ложны
+            только при p = 1 и q = 0. Заменим так стрелку в задаче темы:
+          </Typography.Text>
+          <Typography.Text>
+            (x ∈ [50; 70]) → ¬ДЕЛ(x, 15) = ¬(x ∈ [50; 70]) ∨ ¬ДЕЛ(x, 15).
+          </Typography.Text>
+          <Typography.Text>
+            Теперь вся формула задачи — три части, соединённые через ИЛИ:
+            ДЕЛ(x, A) ∨ ¬(x ∈ [50; 70]) ∨ ¬ДЕЛ(x, 15).
+          </Typography.Text>
+          <ProofDisclosure kind="nuance" summary="Тонкости: отрицание скобки">
+            <Typography.Text>
+              Отрицание скобки меняет ∧ на ∨ и наоборот — это законы де Моргана:
+              ¬(p ∧ q) = ¬p ∨ ¬q и ¬(p ∨ q) = ¬p ∧ ¬q. Например, «неверно, что x
+              на отрезке и делится на 15» — это «x вне отрезка или не делится на
+              15». А два отрицания подряд снимают друг друга: ¬¬p = p.
+            </Typography.Text>
+          </ProofDisclosure>
+        </>
+      ),
+    },
+    {
+      id: "kogda-reshaet-a",
+      navLabel: "Когда всё решает A",
+      explanation: (
+        <>
+          <Typography.Text>
+            Как найти A, не проверяя все x подряд?
+          </Typography.Text>
+          <Typography.Text>
+            <strong>
+              Формула из частей через ИЛИ истинна, если истинна хоть одна часть.
+              Поэтому A влияет на ответ только при тех x, где все части без A
+              ложны: там часть с A обязана быть истинной.
             </strong>
           </Typography.Text>
           <Typography.Text>
-            Запись p → q называется <strong>импликацией</strong> и читается
-            «если p, то q». Она запрещает только ситуацию, когда p выполнено, а
-            q не выполнено.
+            В задаче темы части без A — ¬(x ∈ [50; 70]) и ¬ДЕЛ(x, 15). Обе ложны,
+            когда x лежит на отрезке и делится на 15. Такое x одно — 60: соседние
+            кратные 45 и 75 лежат вне отрезка.
           </Typography.Text>
-          <LessonTable
-            label={
-              "Она запрещает только ситуацию, когда p выполнено, а q не выполнено"
+          <LessonDiagram
+            {...lessonMedia.pfSet45_75_50x70andDELx15_6cca78}
+            caption={
+              <>
+                Кратные 15 рядом с отрезком [50; 70]. 45 и 75 лежат вне его — для
+                них формула истинна и без A. На отрезке только 60.
+              </>
             }
-            columns={[
-              { label: "p" },
-              { label: "q" },
-              { label: "p → q" },
-              { label: "Что происходит" },
-            ]}
-            rows={[
-              ["0", "0", "1", "Требование при p не активировалось"],
-              ["0", "1", "1", "Требование при p не активировалось"],
-              ["1", "0", "0", "Условие есть, обязательного следствия нет"],
-              ["1", "1", "1", "Условие и требуемое следствие выполнены"],
-            ]}
           />
-          <Typography.Text>
-            Это логическое правило, а не утверждение о причинности или
-            последовательности во времени. Из истинности p → q не следует, что p
-            фактически произошло. Не следует и обратное q → p.
-          </Typography.Text>
-          <Typography.Text>
-            Например, «если число делится на 4, то оно чётно» истинно для всех
-            целых. Но «если число чётно, то оно делится на 4» нарушается при 6.
-          </Typography.Text>
-          <Typography.Text>Из таблицы видно:</Typography.Text>
-          <Typography.Text>p → q ≡ ¬p ∨ q.</Typography.Text>
-          <Typography.Text>
-            Знак ≡ между формулами в таком преобразовании означает одинаковые
-            результаты при любых значениях логических букв. Если p ложно,
-            работает ¬p. Если q истинно, работает q. Ложный результат получается
-            только при p=1,q=0.
-          </Typography.Text>
-          <Typography.Text>Поэтому</Typography.Text>
-          <Typography.Text>¬(p → q) ≡ p ∧ ¬q.</Typography.Text>
-          <Typography.Text>
-            Практический смысл: «формула никогда не должна быть ложной» означает
-            «нельзя допустить одновременно истинную левую часть и ложную
-            правую».
-          </Typography.Text>
-          <Typography.Text>
-            <strong>Эквивалентность и исключающее ИЛИ.</strong>
-          </Typography.Text>
-          <Typography.Text>
-            <strong>Эквивалентность</strong> p ≡ q истинна, когда логические
-            значения совпадают: оба 1 или оба 0. Её также обозначают p ↔ q.
-          </Typography.Text>
-          <Typography.Text>
-            <strong>Исключающее ИЛИ</strong> p ⊕ q истинно, когда значения
-            различаются: ровно одно 1. Это отрицание эквивалентности.
-          </Typography.Text>
           <LessonTable
-            label={"Это отрицание эквивалентности"}
+            label={"Что формула требует от A при разных x"}
             columns={[
-              { label: "p" },
-              { label: "q" },
-              { label: "p ≡ q" },
-              { label: "p ⊕ q" },
+              { label: "x" },
+              { label: "Части без A" },
+              { label: "Что нужно от A" },
             ]}
             rows={[
-              ["0", "0", "1", "0"],
-              ["0", "1", "0", "1"],
-              ["1", "0", "0", "1"],
-              ["1", "1", "1", "0"],
+              ["7", "¬(7 ∈ [50; 70]) = 1", "ничего: формула уже истинна"],
+              ["55", "¬ДЕЛ(55, 15) = 1", "ничего"],
+              ["75", "¬(75 ∈ [50; 70]) = 1", "ничего"],
+              ["60", "обе равны 0", "ДЕЛ(60, A) = 1: 60 делится на A"],
             ]}
           />
-          <Typography.Text>Полезные записи:</Typography.Text>
-          <Typography.Text>p ≡ q ≡ (p ∧ q) ∨ (¬p ∧ ¬q),</Typography.Text>
-          <Typography.Text>p ≡ q ≡ (p → q) ∧ (q → p).</Typography.Text>
           <Typography.Text>
-            В задачах на отрезки p ≡ q выполняется и внутри обоих отрезков, и
-            вне обоих. Если забыть внешние области, можно разрешить для A
-            запрещённую часть прямой.
+            <strong>Значит, A должно быть делителем 60.</strong> Самый большой
+            делитель 60 — само 60. Ответ задачи темы — 60.
+          </Typography.Text>
+          <Typography.Text>
+            Проверим. При A = 60 формула истинна при x = 60, а при всех
+            остальных x её делают истинной части без A. А любое A больше 60 не
+            делит 60 — при x = 60 формула ложна.
           </Typography.Text>
         </>
       ),
     },
     {
-      id: "skobki",
-      navLabel: "Скобки",
+      id: "zadacha-temy-programmoj",
+      navLabel: "Задача темы программой",
       explanation: (
         <>
           <Typography.Text>
-            <strong>
-              Скобки решают, к чему относится стрелка: p → (q → r) и (p → q) → r
-              — разные формулы.
-            </strong>
+            Как получить тот же ответ программой?
           </Typography.Text>
-          <Typography.Text>
-            Для стандартной записи обычно используют порядок: отрицание, И, ИЛИ,
-            импликация, эквивалентность. Скобки всегда имеют преимущество. При
-            неоднозначной записи с несколькими стрелками следуй скобкам и
-            принятому в условии соглашению; полезнее восстановить явные скобки,
-            чем угадывать.
-          </Typography.Text>
-          <Typography.Text>Особенно важно:</Typography.Text>
-          <Typography.Text>p → (q → r) и (p → q) → r</Typography.Text>
-          <Typography.Text>
-            не равны. При p=q=r=0 первая формула истинна, вторая ложна: в первой
-            левая часть внешней стрелки равна 0, во второй p → q=1, а r=0.
-          </Typography.Text>
-          <Typography.Text>Для первой формулы:</Typography.Text>
-          <Typography.Text>
-            p → (q → r) ≡ ¬p ∨ ¬q ∨ r ≡ (p ∧ q) → r.
-          </Typography.Text>
-          <Typography.Text>
-            Её ложный случай: p=1, q=1, r=0. Скобки показывают, к какому целому
-            выражению относится внешняя стрелка.
-          </Typography.Text>
-        </>
-      ),
-    },
-    {
-      id: "otricanie",
-      navLabel: "Отрицание",
-      explanation: (
-        <>
           <Typography.Text>
             <strong>
-              Отрицание должно забрать все случаи, где условие ложно: отрицание
-              x {"<"} 5 — это x ≥ 5, а не x {">"} 5.
-            </strong>
+              Программа делает то, что написано в условии: для каждого
+              кандидата A проверяет формулу при всех x из большого диапазона и
+              запоминает подходящие A.
+            </strong>{" "}
+            Сначала формулу переводят на Python — каждому знаку соответствует
+            своя запись:
           </Typography.Text>
           <LessonTable
-            label={
-              "Отрицание должно забрать все случаи, где условие ложно: отрицание x  5"
+            label={"Запись формулы на Python"}
+            columns={[{ label: "В условии" }, { label: "На Python" }]}
+            rows={[
+              ["ДЕЛ(x, A)", <Notation key="del">{"x % A == 0"}</Notation>],
+              [
+                "¬ДЕЛ(x, 15)",
+                <Notation key="notdel">{"x % 15 != 0"}</Notation>,
+              ],
+              [
+                "x ∈ [50; 70]",
+                <Notation key="seg">{"50 <= x <= 70"}</Notation>,
+              ],
+              ["¬p", <Notation key="not">{"not p"}</Notation>],
+              ["p ∧ q", <Notation key="and">{"p and q"}</Notation>],
+              ["p ∨ q", <Notation key="or">{"p or q"}</Notation>],
+              ["p → q", <Notation key="imp">{"imp(p, q)"}</Notation>],
+              ["p ≡ q", <Notation key="eq">{"p == q"}</Notation>],
+            ]}
+          />
+          <Typography.Text>
+            Для стрелки готового знака нет, поэтому заведём{" "}
+            <PythonTerm term="def">функцию</PythonTerm>{" "}
+            <Notation>{"imp(p, q)"}</Notation> — она возвращает ¬p ∨ q. Формулу
+            задачи запишем функцией <Notation>{"f(x, A)"}</Notation>:
+          </Typography.Text>
+          <CodeBlock
+            code={
+              "def imp(p, q):\n    return (not p) or q\n\n\ndef f(x, A):\n    return x % A == 0 or imp(50 <= x <= 70, x % 15 != 0)"
             }
-            columns={[
-              { label: "Исходное условие" },
-              { label: "Его отрицание" },
-            ]}
-            rows={[
-              [<>x{"<"}t</>, "x ≥ t"],
-              ["x ≤ t", <>x{">"}t</>],
-              ["x=t", "x ≠ t"],
-              ["x ∈ P", "x ∉ P"],
-              ["x&M=0", "x&M ≠ 0"],
-              ["ДЕЛ(x,m)", "x не делится на m"],
-            ]}
+            label={"Формула задачи темы"}
+            language="python"
           />
           <Typography.Text>
-            Почему отрицание x{"<"}5 не равно x{">"}5? Потому что x=5 тоже не
-            удовлетворяет исходному условию. Отрицание обязано включить все
-            случаи, где исходное условие ложно, без пропусков.
+            Теперь переберём кандидатов A и для каждого проверим все x:
           </Typography.Text>
-          <Typography.Text>
-            Только после определения области можно заменить x{">"}5 на x ≥ 6, и
-            только для целого x. Для вещественного x=5.2 первое условие
-            выполнено, второе - нет.
-          </Typography.Text>
-          <Typography.Text>
-            <strong>Законы де Моргана.</strong> Чтобы отрицать «выполнены оба»,
-            достаточно того, что хотя бы одно не выполнено:
-          </Typography.Text>
-          <Typography.Text>¬(p ∧ q) ≡ ¬p ∨ ¬q.</Typography.Text>
-          <Typography.Text>
-            Чтобы отрицать «выполнено хотя бы одно», должны не выполняться оба:
-          </Typography.Text>
-          <Typography.Text>¬(p ∨ q) ≡ ¬p ∧ ¬q.</Typography.Text>
-          <Typography.Text>
-            Эти равенства называют законами де Моргана. Например, отрицание 3 ≤
-            x ≤ 8, то есть (x ≥ 3) ∧ (x ≤ 8), есть (x{"<"}3) ∨ (x{">"}8).
-            Внутренняя область превращилась в две внешние.
-          </Typography.Text>
-          <Typography.Text>
-            Не меняй знаки внутри длинной формулы наугад: отрицай целый узел,
-            меняй И на ИЛИ или ИЛИ на И и затем отрицай каждую его часть.
-          </Typography.Text>
-          <Typography.Text>
-            <strong>Простые равенства и их причины.</strong>
-          </Typography.Text>
-          <LessonTable
-            label={"Простые равенства и их причины"}
-            columns={[{ label: "Равенство" }, { label: "Объяснение" }]}
-            rows={[
-              ["p ∨ 0 ≡ p, p ∧ 1 ≡ p", "0 не помогает ИЛИ, 1 не мешает И"],
-              [
-                "p ∨ 1 ≡ 1, p ∧ 0 ≡ 0",
-                "Одной 1 хватает для ИЛИ; один 0 разрушает И",
-              ],
-              [
-                "p ∨ p ≡ p, p ∧ p ≡ p",
-                "Повторение того же требования ничего не меняет",
-              ],
-              ["p ∨ ¬p ≡ 1", "Одно из двух всегда истинно"],
-              ["p ∧ ¬p ≡ 0", "Оба одновременно истинными не бывают"],
-              ["¬¬p ≡ p", "Дважды меняем логическое значение"],
-              [
-                "p ∨ (p ∧ q) ≡ p",
-                "Если p=1, уже достаточно; если p=0, обе части ложны",
-              ],
-              [
-                "p ∧ (p ∨ q) ≡ p",
-                "При p=0 всё ложно; при p=1 обе части истинны",
-              ],
-            ]}
+          <CodeBlock
+            code={
+              "answer = 0\nfor A in range(1, 1000):\n    if all(f(x, A) for x in range(1, 1000)):\n        answer = A\nprint(answer)"
+            }
+            label={"Задача темы перебором A и x"}
+            language="python"
+            output={"60"}
           />
           <Typography.Text>
-            Последние два равенства называют поглощением. Распределительные
-            законы работают так:
-          </Typography.Text>
-          <Typography.Text>p ∧ (q ∨ r) ≡ (p ∧ q) ∨ (p ∧ r),</Typography.Text>
-          <Typography.Text>p ∨ (q ∧ r) ≡ (p ∨ q) ∧ (p ∨ r).</Typography.Text>
-          <Typography.Text>
-            Если первое условие p обязательно и дополнительно нужен один из
-            вариантов q,r, это то же самое, что выбрать один из двух вариантов:
-            «p и q» либо «p и r». Вторая формула тоже проверяется рассмотрением
-            p=0 и p=1.
+            <PythonTerm term="anyall">
+              <Notation>{"all(...)"}</Notation>
+            </PythonTerm>{" "}
+            истинно, только если <Notation>{"f(x, A)"}</Notation> истинна при
+            каждом x от 1 до 999. Кандидаты A идут по возрастанию, поэтому
+            последнее запомненное A — наибольшее.
           </Typography.Text>
           <Typography.Text>
-            Полезна <strong>контрапозиция</strong>:
+            Почему x до 999 хватает? Вне отрезка [50; 70] формула истинна сама
+            — все x, где решает A, лежат внутри диапазона. Диапазон берут с
+            запасом, чтобы он накрыл все числа условия.
           </Typography.Text>
-          <Typography.Text>p → q ≡ ¬q → ¬p.</Typography.Text>
-          <Typography.Text>
-            Обе стороны запрещают p=1,q=0. Например, «если число кратно 4, оно
-            чётно» равносильно «если число нечётно, оно не кратно 4».
-            Перестановка без отрицаний такого свойства не имеет.
-          </Typography.Text>
+          <ProofDisclosure
+            kind="nuance"
+            summary="Тонкости: наименьшее A и запись через <="
+          >
+            <Typography.Text>
+              Если спрашивают наименьшее A, печатают первое подходящее и
+              останавливают цикл:
+            </Typography.Text>
+            <CodeBlock
+              code={
+                "for A in range(1, 1000):\n    if all(f(x, A) for x in range(1, 1000)):\n        print(A)\n        break"
+              }
+              label={"Первое подходящее A"}
+              language="python"
+            />
+            <Typography.Text>
+              В разборах стрелку часто пишут как{" "}
+              <Notation>{"p <= q"}</Notation>: для True и False это совпадает с
+              импликацией. Но сравнение выполняется раньше not, and и or, и без
+              лишних скобок легко ошибиться — функция{" "}
+              <Notation>{"imp"}</Notation> надёжнее.
+            </Typography.Text>
+          </ProofDisclosure>
         </>
       ),
     },
     {
-      id: "lozhnyj-sluchaj",
-      navLabel: "Ложный случай",
-      explanation: (
-        <>
-          <Typography.Text>
-            <strong>
-              Главный метод — искать, когда формула ложна: так видно, какие
-              точки обязаны попасть в A и какие нельзя пускать.
-            </strong>
-          </Typography.Text>
-          <Typography.Text>
-            Для истинности ИЛИ нужно, чтобы не были ложными все части
-            одновременно. Для истинности И нужны истинными все части. Для
-            импликации нужно исключить сочетание 1 слева и 0 справа.
-          </Typography.Text>
-          <Typography.Text>Поэтому формула</Typography.Text>
-          <Typography.Text>p ∨ q ∨ a</Typography.Text>
-          <Typography.Text>
-            заставляет a быть истинным только там, где p=q=0. Там, где хотя бы
-            одна из первых двух частей истинна, a может быть любым.
-          </Typography.Text>
-          <Typography.Text>А формула</Typography.Text>
-          <Typography.Text>a → (p ∨ q)</Typography.Text>
-          <Typography.Text>
-            запрещает истинность a там, где p=q=0. Это противоположное
-            ограничение: в первом случае определённые точки обязательно входят в
-            A, во втором обязательно не входят.
-          </Typography.Text>
-          <Typography.Text>
-            Сложные вложенные стрелки удобно разбирать снаружи. Например,
-          </Typography.Text>
-          <Typography.Text>¬a → (p → ¬q)</Typography.Text>
-          <Typography.Text>
-            ложна, если ¬a=1 и внутренняя стрелка ложна. Внутренняя стрелка
-            ложна при p=1,q=1. Получаем запрещённую комбинацию a=0,p=1,q=1.
-            Следовательно, во всех точках, где p=q=1, требуется a=1.
-          </Typography.Text>
-          <Typography.Text>Это же получается преобразованием:</Typography.Text>
-          <Typography.Text>¬a → (p → ¬q) ≡ a ∨ ¬p ∨ ¬q.</Typography.Text>
-          <Typography.Text>
-            Один способ показывает опасный случай, другой даёт короткую запись.
-            Можно выбирать удобный и проверять себя вторым.
-          </Typography.Text>
-        </>
-      ),
-    },
-    {
-      id: "minimum-i-maksimum",
-      navLabel: "Минимум и максимум",
-      explanation: (
-        <>
-          <Typography.Text>
-            <strong>
-              Ответ о минимуме или максимуме — две мысли: найденное A подходит,
-              а соседнее — нет.
-            </strong>
-          </Typography.Text>
-          <Typography.Text>
-            Условие <strong>необходимо</strong>, если без него формула
-            обязательно нарушится. Условие <strong>достаточно</strong>, если при
-            его выполнении формула точно не нарушается.
-          </Typography.Text>
-          <Typography.Text>
-            Если удалось показать только «A должно быть не меньше 20», ответ 20
-            пока не доказан. Может оказаться, что другая часть формулы требует A
-            ≥ 25. Нужно проверить кандидата полностью.
-          </Typography.Text>
-          <Typography.Text>
-            Полный ответ о минимуме содержит две мысли: выбранное значение
-            подходит; любое меньшее значение не подходит. Для максимума:
-            выбранное значение подходит; любое большее не подходит.
-          </Typography.Text>
-          <Typography.Text>
-            Пример: требуется истинность (x{"<"}4) → (x²{"<"}A) для всех
-            натуральных x и целого A. Опасны только x=1,2,3. Самый большой
-            квадрат равен 9. Необходимо A{">"}9, то есть A ≥ 10. Достаточно: все
-            квадраты в опасной области не превосходят 9, а вне области левая
-            часть ложна. Поэтому минимум равен 10.
-          </Typography.Text>
-        </>
-      ),
-    },
-    {
-      id: "formula-lozhna-vsegda",
-      navLabel: "Формула ложна всегда",
-      explanation: (
-        <>
-          <Typography.Text>
-            <strong>
-              Если формула должна быть ложной при всех значениях, требуют
-              истинности её отрицания — целиком.
-            </strong>
-          </Typography.Text>
-          <Typography.Text>
-            Если по условию выражение должно быть{" "}
-            <strong>ложным при всех значениях</strong>, нужно исключать случаи
-            его истинности. Можно равносильно потребовать, чтобы отрицание всей
-            формулы было истинным для всех значений. Например,
-          </Typography.Text>
-          <Typography.Text>(x ∈ P) ∧ (x ∈ Q) ∧ ¬(x ∈ A)</Typography.Text>
-          <Typography.Text>
-            всегда ложно тогда и только тогда, когда каждая общая точка P,Q
-            включена в A: иначе эта точка сделает все три части истинными.
-            Нельзя подменять «всегда ложно» поиском хотя бы одного ложного
-            случая.
-          </Typography.Text>
-        </>
-      ),
-    },
-    {
-      id: "parametr-itogo",
+      id: "formula-itogo",
       navLabel: "Итого",
       explanation: (
         <>
           <LessonSummary
             items={[
               {
-                note: (
-                  <>
-                    A выбирают один раз; формула должна выполняться при всех x
-                    из области — одного удачного x мало, одного контрпримера
-                    достаточно.
-                  </>
-                ),
+                key: "Формула при x",
+                note: <>каждое условие — 1 или 0</>,
+              },
+              { key: "p → q", note: <>ложна только при 1 → 0; это ¬p ∨ q</> },
+              {
+                key: "Части через ИЛИ",
+                note: <>истинна, если истинна хоть одна часть</>,
               },
               {
-                note: (
-                  <>Область переменных и область параметра — часть условия.</>
-                ),
+                key: "Когда решает A",
+                note: <>все части без A ложны — часть с A обязана быть 1</>,
               },
               {
-                note: (
-                  <>
-                    p → q ложна только при p = 1, q = 0; p → q ≡ ¬p ∨ q, ¬(p →
-                    q) ≡ p ∧ ¬q.
-                  </>
-                ),
+                key: "Задача темы",
+                note: <>решает только x = 60 → A делит 60 → 60</>,
               },
               {
+                key: "Python",
                 note: (
                   <>
-                    Отрицание забирает все случаи: ¬(x {"<"} t) — x ≥ t; де
-                    Морган меняет И на ИЛИ.
-                  </>
-                ),
-              },
-              {
-                note: (
-                  <>
-                    Исследуют ложность формулы: она показывает, какие случаи A
-                    обязано закрыть.
-                  </>
-                ),
-              },
-              {
-                note: (
-                  <>
-                    Ответ о минимуме или максимуме: кандидат подходит, соседнее
-                    значение — нет.
-                  </>
-                ),
-              },
-              {
-                note: (
-                  <>
-                    «Всегда ложно» — значит, отрицание всей формулы всегда
-                    истинно.
+                    <Notation>{"imp"}</Notation>,{" "}
+                    <Notation>{"f(x, A)"}</Notation>,{" "}
+                    <Notation>{"all(...)"}</Notation> по всем x
                   </>
                 ),
               },
@@ -992,600 +677,243 @@ export const logicTransformationsLesson = defineLesson({
       ),
     },
     {
-      id: "sudba-kazhdoj-tochki",
-      navLabel: "Судьба каждой точки",
+      id: "otrezok-naimenshej-dliny",
+      navLabel: "Наименьший отрезок",
       explanation: (
         <>
           <Typography.Text>
-            <strong>
-              Когда параметр — множество A, формула решает судьбу каждой точки:
-              одни точки обязаны войти в A, другие не могут, третьи свободны;
-              ответ ищут между «обязательно» и «разрешено».
-            </strong>{" "}
-            Отрезки и конечные множества встречаются в 27 задачах подборок
-            формата 2027 года.
+            Что делать, если A — не число, а отрезок на числовой прямой?
+            Например:
           </Typography.Text>
           <Typography.Text>
-            Главный пример — отрезки P = [4; 18] и Q = [11; 26]: сначала
-            обязательная общая часть, затем формулы, которые разрешают одну из
-            частей. После отрезков те же включения — на конечных множествах.
+            «На числовой прямой даны отрезки P = [10; 40] и Q = [25; 55].
+            Укажите наименьшую возможную длину такого отрезка A, что формула (x
+            ∈ P) → ((x ∈ Q) → (x ∈ A)) тождественно истинна — при любом x».
           </Typography.Text>
-        </>
-      ),
-    },
-    {
-      id: "prinadlezhnost",
-      navLabel: "Принадлежность",
-      explanation: (
-        <>
           <Typography.Text>
             <strong>
-              Принадлежность переводит логику на язык множеств: (x ∈ P) → (x ∈
-              A) для всех x — это P ⊆ A.
+              Вопрос тот же — при каких x всё решает A. Только теперь x — любое
+              число на прямой, и ответ — участок прямой, который A обязан
+              накрыть.
             </strong>
           </Typography.Text>
           <Typography.Text>
-            Множество - совокупность объектов. Например, P={"{"}2,4,6{"}"}.
-            Запись x ∈ P означает «x принадлежит P», запись x ∉ P - «не
-            принадлежит». Отрезок тоже множество: [2;6] содержит все
-            вещественные числа от 2 до 6 включительно.
-          </Typography.Text>
-          <Typography.Text>
-            <strong>Пересечение</strong> P ∩ Q содержит общие элементы.{" "}
-            <strong>Объединение</strong> P ∪ Q содержит элементы хотя бы одного
-            из множеств. <strong>Разность</strong> P ∖ Q содержит элементы P,
-            которых нет в Q. <strong>Включение</strong> P ⊆ Q означает, что
-            каждый элемент P есть и в Q; равенство тоже разрешено.
-          </Typography.Text>
-          <Typography.Text>
-            Дополнение ¯ P - элементы рассматриваемой области, не входящие в P.
-            Нужно знать, относительно какой области берётся дополнение: всех
-            вещественных, натуральных или, например, конкретного конечного
-            множества.
-          </Typography.Text>
-          <LessonTable
-            label={"Логическое условие, Множество подходящих точек"}
-            columns={[
-              { label: "Логическое условие" },
-              { label: "Множество подходящих точек" },
-            ]}
-            rows={[
-              ["(x ∈ P) ∧ (x ∈ Q)", "P ∩ Q"],
-              ["(x ∈ P) ∨ (x ∈ Q)", "P ∪ Q"],
-              ["(x ∈ P) ∧ (x ∉ Q)", "P ∖ Q"],
-              ["¬(x ∈ P)", "¯ P"],
-            ]}
-          />
-          <Typography.Text>
-            Формула (x ∈ P) → (x ∈ A) для всех x означает P ⊆ A. Формула (x ∈ A)
-            → (x ∈ P) означает A ⊆ P. Стрелка показывает, элементы какого
-            множества обязаны принадлежать другому.
-          </Typography.Text>
-        </>
-      ),
-    },
-    {
-      id: "podstanovki-0-i-1",
-      navLabel: "Подстановки 0 и 1",
-      explanation: (
-        <>
-          <Typography.Text>
-            <strong>
-              Если A входит в формулу только как x ∈ A, в каждой точке считают
-              формулу дважды — при a = 0 и при a = 1.
-            </strong>
-          </Typography.Text>
-          <Typography.Text>
-            Если параметр встречается только как принадлежность a=(x ∈ A), для
-            каждой области прямой или каждой строки остальных условий посчитай
-            формулу дважды: при a=0 и при a=1.
-          </Typography.Text>
-          <LessonTable
-            label={"F при a=0, F при a=1, Что требуется от A"}
-            columns={[
-              { label: "F при a=0" },
-              { label: "F при a=1" },
-              { label: "Что требуется от A" },
-            ]}
-            rows={[
-              ["0", "1", "Точка обязательно входит в A"],
-              ["1", "0", "Точка обязательно не входит в A"],
-              ["1", "1", "Точку можно включить или не включить"],
-              ["0", "0", "Ни один выбор A не спасает эту точку"],
-            ]}
-          />
-          <Typography.Text>
-            Обозначим через D все точки, которые обязательно должны входить в A,
-            а через B - все точки, которые обязательно не должны входить. Тогда
-            условие имеет вид
-          </Typography.Text>
-          <Typography.Text>D ⊆ A, A ∩ B=∅.</Typography.Text>
-          <Typography.Text>
-            Знак ∅ обозначает пустое множество. Если U - все разрешённые для
-            включения точки, то U является дополнением B, и можно записать
-          </Typography.Text>
-          <Typography.Text>D ⊆ A ⊆ U.</Typography.Text>
-          <Typography.Text>
-            Если возникла хотя бы одна точка с результатами 0 и 0, решения нет.
-            Даже если такой точки нет, решение может не существовать из-за формы
-            A: например, A должно быть одним отрезком, а обязательные части
-            разделяет запрещённая точка. Это геометрическое ограничение
-            проверяется после логического.
-          </Typography.Text>
-          <Typography.Text>
-            Метод применим к любому количеству вхождений одного и того же
-            условия x ∈ A в формулу. Но если A входит также в неравенство x{"<"}
-            A или в условие x+A{">"}10, просто подставить один независимый флаг
-            a уже недостаточно: там параметр меняет несколько разных условий.
-          </Typography.Text>
-        </>
-      ),
-    },
-    {
-      id: "kolichestvo-i-summa",
-      navLabel: "Количество и сумма",
-      explanation: (
-        <>
-          <Typography.Text>
-            <strong>
-              У конечного множества количество элементов и сумма — разные цели:
-              сначала обязательные, запрещённые и свободные элементы, потом
-              выбор.
-            </strong>
-          </Typography.Text>
-          <Typography.Text>
-            <strong>
-              У конечного множества количество элементов и их сумма — разные
-              цели.
-            </strong>{" "}
-            Множество записывают в фигурных скобках. Например, {"{"}2,5,7{"}"}{" "}
-            содержит три числа; числа 3, 4 и 6 в него не входят. Требования
-            включать промежуточные точки здесь нет: оно было свойством отрезка.
-          </Typography.Text>
-          <Typography.Text>
-            Пусть x — любое целое число, P={"{"}-3,2,5{"}"}, Q={"{"}2,7{"}"}, а
-            A — конечное множество целых чисел. Требуется, чтобы для каждого x
-            выполнялось:
-          </Typography.Text>
-          <Typography.Text>((x ∈ A) → (x ∈ P)) ∨ (x ∈ Q).</Typography.Text>
-          <Typography.Text>
-            После раскрытия стрелки получается ¬a ∨ p ∨ q. Если x включён в A,
-            он обязан принадлежать хотя бы одному из P,Q. Поэтому:
-          </Typography.Text>
-          <Typography.Text>
-            A ⊆ P ∪ Q={"{"}-3,2,5,7{"}"}.
-          </Typography.Text>
-          <Typography.Text>
-            Это необходимо: число вне объединения, попавшее в A, делает все три
-            части ложными. Этого достаточно: внутри любого выбранного
-            подмножества работает p или q, а вне A работает ¬a.
-          </Typography.Text>
-          <Typography.Text>
-            Чтобы <strong>количество элементов</strong> было наибольшим,
-            включаем все четыре разрешённых числа. Чтобы{" "}
-            <strong>сумма элементов</strong> была наибольшей, включаем 2, 5 и 7,
-            а -3 не включаем: оно уменьшило бы сумму. Получаем 2+5+7=14, хотя
-            элементов теперь три. Ноль не менял бы сумму, но увеличивал бы
-            количество элементов.
-          </Typography.Text>
-          <Typography.Text>
-            Если формула требует обязательных отрицательных элементов, удалять
-            их ради большей суммы нельзя. Сначала определяются обязательные,
-            запрещённые и свободные элементы, затем выбираются только свободные.
-            В примере обязательных элементов нет. Длина отрезка, количество
-            элементов и сумма элементов — три разных вопроса.
-          </Typography.Text>
-        </>
-      ),
-    },
-    {
-      id: "dlina-otrezka",
-      navLabel: "Длина отрезка",
-      explanation: (
-        <>
-          <Typography.Text>
-            <strong>
-              Длина отрезка — расстояние между концами, а не количество целых
-              точек в нём.
-            </strong>
-          </Typography.Text>
-          <Typography.Text>
-            Отрезок [l;r] содержит все вещественные x, для которых l ≤ x ≤ r.
-            Квадратные скобки означают включённые границы. Интервал (l;r) не
-            включает границы. Полуинтервал [l;r) включает левую, но исключает
-            правую.
-          </Typography.Text>
-          <Typography.Text>
-            Длина любого такого ограниченного промежутка равна r-l. Это
-            расстояние между концами, а не количество целых чисел внутри.
-            Например, длина [3;8] равна 5, а целых чисел в нём шесть:
-            3,4,5,6,7,8. Число вещественных точек бесконечно.
-          </Typography.Text>
-          <Typography.Text>
-            Запись [l;l] описывает одну точку и имеет длину 0. Это вырожденный
-            отрезок. Если условие требует положительную длину, он не
-            допускается. Пустое множество и одноточечный отрезок - разные
-            объекты.
-          </Typography.Text>
-          <Typography.Text>
-            На прямой полезно отмечать включённый конец закрашенной точкой,
-            исключённый - пустой. Такое различие не меняет расстояние между
-            заданными концами, но меняет допустимость промежутка.
-          </Typography.Text>
-        </>
-      ),
-    },
-    {
-      id: "peresechenie-p-i-q",
-      navLabel: "Пересечение P и Q",
-      explanation: (
-        <>
-          <Typography.Text>
-            <strong>
-              Если формула требует закрыть общую часть P и Q, минимальный A —
-              это их пересечение.
-            </strong>
-          </Typography.Text>
-          <Typography.Text>
-            Пусть P=[4;18], Q=[11;26]. Требуется минимальная длина отрезка A,
-            при котором для всех вещественных x истинно
-          </Typography.Text>
-          <Typography.Text>¬(x ∈ A) → ((x ∈ P) → ¬(x ∈ Q)).</Typography.Text>
-          <Typography.Text>
-            Обозначим a=(x ∈ A), p=(x ∈ P), q=(x ∈ Q). Получаем
-          </Typography.Text>
-          <Typography.Text>¬a → (p → ¬q) ≡ a ∨ ¬p ∨ ¬q.</Typography.Text>
-          <Typography.Text>
-            Без помощи a формула ложна только при p=q=1. Значит, каждая общая
-            точка P,Q обязательно должна войти в A:
-          </Typography.Text>
-          <Typography.Text>P ∩ Q ⊆ A.</Typography.Text>
-          <Typography.Text>
-            Пересечение равно [11;18]. Отрезок A должен иметь левый конец не
-            правее 11 и правый конец не левее 18. Его длина не меньше 18-11=7.
-          </Typography.Text>
-          <Typography.Text>
-            Выбор A=[11;18] достаточен: в общей области a=1, вне неё хотя бы
-            одно из ¬p,¬q истинно. Поэтому минимальная длина равна 7.
+            Для краткости пишут P вместо x ∈ P, так же Q и A. Заменим обе
+            стрелки: P → (Q → A) = ¬P ∨ ¬Q ∨ A. Части без A ложны, когда x
+            лежит и в P, и в Q — на их общей части [25; 40]. Там x обязан
+            лежать в A.
           </Typography.Text>
           <LessonDiagram
-            {...lessonMedia.pfLine418_1126_aornotpornotq_0_30_ce12d8}
+            {...lessonMedia.pfLine1040_2555_aornotpornotq_0_60_05a39d}
             caption={
               <>
-                Подстановки a = 0 и a = 1 в каждой части прямой: обязательна
-                только общая часть [11; 18], всё остальное свободно.
+                Над осью — отрезки P и Q, под осью — что формула требует от A.
+                Обязательна общая часть [25; 40]; в остальных точках A может
+                быть, а может не быть.
               </>
             }
           />
           <Typography.Text>
-            Почему не объединение? Проверим x=6: точка входит в P, но не в Q,
-            поэтому ¬q=1 и формуле не нужна помощь A. Обязательно закрывать надо
-            только одновременное попадание в оба отрезка.
+            Наименьший отрезок, который накрывает [25; 40], — он сам.{" "}
+            <strong>Длина отрезка — разность его концов</strong>: 40 − 25 = 15.
+            Ответ — 15.
           </Typography.Text>
+          <ProofDisclosure
+            kind="nuance"
+            summary="Тонкости: длина и целые точки, концы отрезков"
+          >
+            <Typography.Text>
+              На отрезке [25; 40] шестнадцать целых чисел, но длина у него 15 —
+              в задании спрашивают именно длину. Концы входят в отрезок: точка
+              25 лежит и в P, и в Q, поэтому тоже обязана быть в A.
+            </Typography.Text>
+          </ProofDisclosure>
         </>
       ),
     },
     {
-      id: "vnutri-p-q",
-      navLabel: "Внутри P ∪ Q",
+      id: "otrezok-naibolshej-dliny",
+      navLabel: "Наибольший отрезок",
       explanation: (
         <>
           <Typography.Text>
+            А если A стоит слева от стрелки и спрашивают наибольшую длину?
+            Пусть P = [5; 20], Q = [30; 50], а формула ((x ∈ A) → (x ∈ P)) ∨ (x
+            ∈ Q) должна быть истинна при любом x.
+          </Typography.Text>
+          <Typography.Text>
             <strong>
-              Если A разрешено жить только внутри P ∪ Q, максимальный A — самая
-              длинная связная часть объединения.
+              Когда A стоит в формуле с отрицанием, в точках, где всё решает A,
+              оно должно быть ложным: такие точки в A брать нельзя. Тогда ищут,
+              где A разрешено быть.
             </strong>
           </Typography.Text>
-          <Typography.Text>Пусть P=[3;12], Q=[8;20] и</Typography.Text>
-          <Typography.Text>((x ∈ A) → (x ∈ P)) ∨ (x ∈ Q)</Typography.Text>
           <Typography.Text>
-            должно выполняться для всех вещественных x. После раскрытия стрелки
-            получаем
-          </Typography.Text>
-          <Typography.Text>¬a ∨ p ∨ q.</Typography.Text>
-          <Typography.Text>
-            Если точка включена в A, нужно хотя бы одно из p,q. Иначе все три
-            части ложны. Значит,
-          </Typography.Text>
-          <Typography.Text>A ⊆ P ∪ Q.</Typography.Text>
-          <Typography.Text>
-            Отрезки перекрываются, и объединение равно [3;20]. Самый длинный
-            допустимый отрезок A=[3;20], длина 17. Достаточность очевидна по
-            формуле: внутри A работает p или q, вне A работает ¬a.
-          </Typography.Text>
-          <Typography.Text>
-            Если изменить отрезки на P=[3;8], Q=[12;20], разрешённая область
-            состоит из двух частей. A должно лежать внутри одной из них, потому
-            что один отрезок не может перескочить запрещённый промежуток (8;12).
-            Максимальная длина равна max(8-3,20-12)=8, а не 13 и не 17.
+            Заменим стрелку: ¬A ∨ P ∨ Q. Части без A ложны, когда x не лежит ни
+            в P, ни в Q. Там нужно ¬A = 1, то есть x не лежит в A. Значит, A
+            может занимать только точки из P и Q.
           </Typography.Text>
           <LessonDiagram
-            {...lessonMedia.pfLine38_1220_notaorporq_0_24_d83368}
+            {...lessonMedia.pfLine520_3050_notaorporq_0_56_dffc43}
             caption={
               <>
-                Разрешены две части: [3; 8] и [12; 20]; между ними и снаружи A
-                запрещено. Один отрезок помещается только в одну часть —
-                максимум 8.
+                Пунктир — точки, где A быть не может. Отрезок A помещается
+                целиком в P или целиком в Q; Q длиннее.
               </>
             }
           />
           <Typography.Text>
-            Итак, для одного отрезка нельзя складывать длины несвязанных
-            разрешённых частей.
+            Отрезок не может перепрыгнуть промежуток между P и Q — тогда он
+            захватит запрещённые точки. Наибольший подходящий отрезок — Q = [30;
+            50] длины 20. Ответ — 20.
           </Typography.Text>
         </>
       ),
     },
     {
-      id: "promezhutok-mezhdu-chastyami",
-      navLabel: "Промежуток между частями",
+      id: "dve-chasti",
+      navLabel: "Две обязательные части",
       explanation: (
         <>
           <Typography.Text>
+            Что, если обязательных участков два и они не касаются? Пусть P = [3;
+            6], Q = [14; 19], и при любом x истинна формула ((x ∈ P) ∨ (x ∈ Q))
+            → (x ∈ A). Найдём наименьшую длину A.
+          </Typography.Text>
+          <Typography.Text>
             <strong>
-              Если обязательные точки лежат в двух частях, A покрывает и
-              промежуток между ними.
+              Отрезок A — один кусок без дыр. Если он обязан накрыть две части,
+              он накрывает и промежуток между ними.
             </strong>
           </Typography.Text>
           <Typography.Text>
-            Пусть P=[2;5], Q=[10;14], а формула имеет вид
-          </Typography.Text>
-          <Typography.Text>((x ∈ P) ∨ (x ∈ Q)) → (x ∈ A).</Typography.Text>
-          <Typography.Text>
-            Она требует P ∪ Q ⊆ A. Отрезок обязан покрыть обе части и промежуток
-            между ними. Минимально подходит [2;14] с длиной 12. Сумма длин
-            исходных отрезков равна 7, но она не является длиной одного
-            покрывающего отрезка.
-          </Typography.Text>
-          <Typography.Text>
-            Самый короткий отрезок, содержащий заданную совокупность точек,
-            можно описать словами: от самой левой обязательной точки до самой
-            правой. Иногда его называют выпуклой оболочкой на прямой. Термин
-            необязателен; важно, что вместе с концами отрезок автоматически
-            включает всё между ними.
-          </Typography.Text>
-          <Typography.Text>
-            Если дополнительно требуется A ⊆ [1;7] ∪ [9;15], решения уже нет:
-            обязательные точки 5 и 10 заставляют включить 8, но 8 запрещена.
-          </Typography.Text>
-        </>
-      ),
-    },
-    {
-      id: "slozhnaya-formula",
-      navLabel: "Сложная формула",
-      explanation: (
-        <>
-          <Typography.Text>
-            <strong>
-              В сложной формуле подстановки a = 0 и a = 1 сразу показывают,
-              какое ограничение осталось, — даже если один из отрезков из него
-              исчез.
-            </strong>
-          </Typography.Text>
-          <Typography.Text>Пусть P=[6;19], Q=[13;24]. Разберём</Typography.Text>
-          <Typography.Text>(¬a → p) → (a → q).</Typography.Text>
-          <Typography.Text>
-            При a=0 внутренняя левая стрелка превращается в 1 → p, то есть в p.
-            Правая - в 0 → q=1. Внешняя формула p → 1 всегда истинна.
-          </Typography.Text>
-          <Typography.Text>
-            При a=1 левая стрелка равна 0 → p=1, правая равна 1 → q=q. Внешняя
-            формула 1 → q равна q.
-          </Typography.Text>
-          <LessonTable
-            label={
-              "При a=1 левая стрелка равна 0 → p=1, правая равна 1 → q=q. Внешняя формула 1 → q равна q"
-            }
-            columns={[
-              { label: "a" },
-              { label: "¬a → p" },
-              { label: "a → q" },
-              { label: "Вся формула" },
-            ]}
-            rows={[
-              ["0", "p", "1", "1"],
-              ["1", "1", "q", "q"],
-            ]}
-          />
-          <Typography.Text>
-            Следовательно, точку можно включать в A только при q=1. Ограничение:
-            A ⊆ Q. Никакого ограничения через P в итоге нет. Максимальная длина
-            равна 24-13=11.
-          </Typography.Text>
-          <Typography.Text>
-            Та же формула раскрывается до ¬a ∨ q, но метод подстановок позволяет
-            прийти к ответу без длинного алгебраического преобразования. Он
-            также защищает от попытки обязательно использовать каждый отрезок из
-            условия: иногда один из них логически исчезает.
-          </Typography.Text>
-        </>
-      ),
-    },
-    {
-      id: "koncy-otrezkov",
-      navLabel: "Концы отрезков",
-      explanation: (
-        <>
-          <Typography.Text>
-            <strong>
-              Истинность p и q меняется только на концах отрезков: прямую делят
-              концами и проверяют каждую часть и каждый конец.
-            </strong>
-          </Typography.Text>
-          <Typography.Text>
-            Рассмотрим P=[4;15], Q=[9;21]. Истинность p,q может измениться
-            только при пересечении концов 4,9,15,21. Между соседними концами оба
-            условия постоянны.
-          </Typography.Text>
-          <LessonTable
-            label={"Между соседними концами оба условия постоянны"}
-            columns={[
-              { label: "Область" },
-              { label: "p=(x ∈ P)" },
-              { label: "q=(x ∈ Q)" },
-            ]}
-            rows={[
-              ["(-∞;4)", "0", "0"],
-              [
-                <>
-                  {"{"}4{"}"}
-                </>,
-                "1",
-                "0",
-              ],
-              ["(4;9)", "1", "0"],
-              [
-                <>
-                  {"{"}9{"}"}
-                </>,
-                "1",
-                "1",
-              ],
-              ["(9;15)", "1", "1"],
-              [
-                <>
-                  {"{"}15{"}"}
-                </>,
-                "1",
-                "1",
-              ],
-              ["(15;21)", "0", "1"],
-              [
-                <>
-                  {"{"}21{"}"}
-                </>,
-                "0",
-                "1",
-              ],
-              ["(21;+∞)", "0", "0"],
-            ]}
-          />
-          <Typography.Text>
-            Здесь можно склеить соседние строки с одинаковыми значениями. Но
-            первичная запись границ отдельными строками полезна: она сразу видит
-            разницу между [4;15] и (4;15).
-          </Typography.Text>
-          <Typography.Text>
-            Добавь в таблицу F при a=0 и при a=1. Получишь обязательные,
-            запрещённые и свободные области. Дальше остаётся подобрать один
-            отрезок нужной минимальной или максимальной длины.
-          </Typography.Text>
-        </>
-      ),
-    },
-    {
-      id: "ekvivalentnost",
-      navLabel: "Эквивалентность",
-      explanation: (
-        <>
-          <Typography.Text>
-            <strong>
-              Эквивалентность p ≡ q истинна и внутри обоих отрезков, и вне обоих
-              — внешние области забывать нельзя.
-            </strong>
-          </Typography.Text>
-          <Typography.Text>Для тех же P,Q рассмотрим</Typography.Text>
-          <Typography.Text>(p ≡ q) → ¬a.</Typography.Text>
-          <Typography.Text>
-            Когда p=q, требуется a=0. Когда p ≠ q, левая часть ложна и a
-            свободно. Значит, разрешены только точки, принадлежащие ровно одному
-            из отрезков:
-          </Typography.Text>
-          <Typography.Text>
-            A ⊆ (P ∖ Q) ∪ (Q ∖ P) =[4;9) ∪ (15;21].
-          </Typography.Text>
-          <Typography.Text>
-            Внешние лучи не подходят: там p = q = 0, следовательно, a обязано
-            быть 0. Один отрезок A должен лежать внутри одной из двух частей.
+            Стрелка: ¬(P ∨ Q) ∨ A. Часть без A ложна, когда x лежит в P или в Q.
+            Значит, A должен накрыть и [3; 6], и [14; 19].
           </Typography.Text>
           <LessonDiagram
-            {...lessonMedia.pfLine415_921_imppqnota_0_26}
+            {...lessonMedia.pfLine36_1419_impporqa_0_22_d6ee8f}
             caption={
               <>
-                Эквивалентность истинна и внутри обоих отрезков, и вне обоих:
-                там A запрещено (пунктир). Свободны только части, где точка
-                ровно в одном отрезке.
+                Обязательны обе части. Промежутку между ними формула ничего не
+                требует, но без него A не будет отрезком.
               </>
             }
           />
+          <Typography.Text>
+            Одним куском это отрезок от 3 до 19, его длина 19 − 3 = 16. Ответ —
+            16.
+          </Typography.Text>
         </>
       ),
     },
     {
-      id: "poryadok-resheniya",
-      navLabel: "Порядок решения",
+      id: "lozhna-pri-lyubom-x",
+      navLabel: "Ложна при любом x",
       explanation: (
         <>
           <Typography.Text>
+            Иногда формула должна быть не истинной, а ложной при любом x.
+            Например: P = [5; 22], найди наименьшую длину A, при которой формула
+            (x ∈ P) ∧ ¬(x ∈ A) ложна при любом x.
+          </Typography.Text>
+          <Typography.Text>
             <strong>
-              Порядок решения: буквы, подстановки, концы, классы частей прямой,
-              затем один отрезок нужной длины.
+              Тогда ищут x, при которых формула могла бы стать истинной, и
+              выбирают A так, чтобы этого не случилось.
             </strong>
           </Typography.Text>
-          <ol>
-            <li>Уточни область x, вид A и ограничения на его концы.</li>
-            <li>Перепиши каждую принадлежность одной логической буквой.</li>
-            <li>Найди опасные сочетания или проверь a=0 и a=1.</li>
-            <li>Выпиши все концы фиксированных промежутков по возрастанию.</li>
-            <li>
-              Определи обязательные, запрещённые и свободные части прямой,
-              включая границы.
-            </li>
-            <li>
-              Для минимального отрезка закрой все обязательные точки и проверь,
-              что промежуток между ними разрешён.
-            </li>
-            <li>
-              Для максимального отрезка найди самую длинную допустимую
-              непрерывную часть с учётом обязательных точек.
-            </li>
-            <li>
-              Вычисли расстояние r-l и отдельно проверь достижимость границ.
-            </li>
-          </ol>
+          <Typography.Text>
+            P ∧ ¬A истинна, когда x лежит в P, но не лежит в A. Чтобы так не
+            случилось ни при одном x, каждая точка P должна лежать в A.
+            Наименьший A — сам P, его длина 22 − 5 = 17.
+          </Typography.Text>
+          <ProofDisclosure
+            kind="nuance"
+            summary="Тонкости: через отрицание всей формулы"
+          >
+            <Typography.Text>
+              Формула ложна при любом x — значит, её отрицание истинно при любом
+              x: ¬(P ∧ ¬A) = ¬P ∨ A. Дальше решают как обычно: A решает всё при
+              x из P, там x обязан быть в A.
+            </Typography.Text>
+          </ProofDisclosure>
         </>
       ),
     },
     {
-      id: "oblast-itogo",
+      id: "konechnye-mnozhestva",
+      navLabel: "Конечные множества",
+      explanation: (
+        <>
+          <Typography.Text>
+            А если A, P и Q — не отрезки, а наборы чисел? Пусть P ={" "}
+            {"{2, 4, 6, 8, 10, 12}"}, Q = {"{3, 6, 9, 12, 15, 18}"}, а A —
+            набор натуральных чисел, при котором формула ((x ∈ P) ∧ (x ∈ Q)) →
+            (x ∈ A) тождественно истинна. Какая наименьшая сумма чисел A?
+          </Typography.Text>
+          <Typography.Text>
+            <strong>
+              Метод тот же, но числа делят на группы: в P и в Q сразу, только в
+              P, только в Q, ни в одном. Группы удобно видеть на двух кругах —
+              их называют кругами Эйлера.
+            </strong>
+          </Typography.Text>
+          <Typography.Text>
+            Стрелка: ¬(P ∧ Q) ∨ A. Часть без A ложна для чисел, которые есть и в
+            P, и в Q, — это 6 и 12. Они обязаны быть в A, остальные можно не
+            брать.
+          </Typography.Text>
+          <LessonDiagram
+            {...lessonMedia.pfEuler_9aba0d}
+            caption={
+              <>
+                В пересечении кругов — числа, которые есть и в P, и в Q. Только
+                они обязаны войти в A.
+              </>
+            }
+          />
+          <Typography.Text>
+            Для наименьшей суммы берём только обязательные числа: A ={" "}
+            {"{6, 12}"}, сумма 18.
+          </Typography.Text>
+          <Typography.Text>
+            Если же A стоит слева — ((x ∈ A) → (x ∈ P)) ∨ (x ∈ Q) = ¬A ∨ P ∨ Q
+            — то в A можно брать только числа из кругов. Тогда наибольшее
+            количество чисел в A — все 10 чисел из P и Q.
+          </Typography.Text>
+          <ProofDisclosure
+            kind="nuance"
+            summary="Тонкости: сумма и количество — разные вопросы"
+          >
+            <Typography.Text>
+              Для наибольшего количества берут все разрешённые числа. Для
+              наибольшей суммы отрицательные числа не берут, даже если они
+              разрешены: каждое уменьшает сумму.
+            </Typography.Text>
+          </ProofDisclosure>
+        </>
+      ),
+    },
+    {
+      id: "otrezki-itogo",
       navLabel: "Итого",
       explanation: (
         <>
           <LessonSummary
             items={[
+              { key: "Запись", note: <>P вместо x ∈ P</> },
               {
-                note: (
-                  <>(x ∈ P) → (x ∈ A) — P ⊆ A; (x ∈ A) → (x ∈ P) — A ⊆ P.</>
-                ),
+                key: "A справа от стрелки",
+                note: <>точки, обязательные для A, — наименьший A</>,
               },
               {
-                note: (
-                  <>
-                    Две подстановки: F(0) = 0, F(1) = 1 — точка обязательна; 1 и
-                    0 — запрещена; 1 и 1 — свободна.
-                  </>
-                ),
+                key: "A с отрицанием",
+                note: <>точки, разрешённые для A, — наибольший A</>,
               },
-              {
-                note: (
-                  <>
-                    D ⊆ A ⊆ U: минимальный отрезок — от левой до правой
-                    обязательной точки, и промежуток должен быть разрешён;
-                    максимальный — самая длинная связная разрешённая часть.
-                  </>
-                ),
-              },
-              { note: <>Длины раздельных частей не складывают.</> },
-              { note: <>Эквивалентность истинна и вне обоих отрезков.</> },
-              {
-                note: (
-                  <>
-                    Для конечного A количество элементов, сумма и длина — разные
-                    ответы; обязательные элементы не удаляют.
-                  </>
-                ),
-              },
+              { key: "Две части", note: <>A накрывает и промежуток</> },
+              { key: "Длина", note: <>правый конец минус левый</> },
+              { key: "Ложна при любом x", note: <>не дать ей стать истинной</> },
+              { key: "Множества", note: <>группы чисел по кругам Эйлера</> },
             ]}
           />
         </>

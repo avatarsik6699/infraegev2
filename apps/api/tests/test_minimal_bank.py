@@ -3,7 +3,6 @@
 import asyncio
 import json
 import os
-import shutil
 import subprocess
 import sys
 import time
@@ -336,8 +335,10 @@ def test_invalid_theory_reference_rolls_back_import(database, field):
 
 def test_validate_cli_checks_canonical_bank_without_database_or_legacy_json(tmp_path):
     directory = tmp_path / "bank"
-    shutil.copytree(BANK, directory)
-    data = json.loads((directory / "bank.json").read_text())
+    directory.mkdir()
+    # only bank.json changes; the 1.2 GB of files are read in place, not copied
+    (directory / "files").symlink_to(BANK / "files", target_is_directory=True)
+    data = json.loads((BANK / "bank.json").read_text())
     task = next(
         e
         for e in data["tasks"]
