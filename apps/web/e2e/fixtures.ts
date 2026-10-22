@@ -65,10 +65,10 @@ const numberSequencesLessonConfig = {
   route: "/ege/17-chislovye-posledovatelnosti/chisla-i-proverki",
   title: "Обработка числовой последовательности",
   taskNumber: 17,
-  taskCount: 49,
-  masteryTaskCount: 38,
-  diagramCount: 10,
-  downloadCount: 23,
+  taskCount: 44,
+  masteryTaskCount: 40,
+  diagramCount: 9,
+  downloadCount: 24,
 };
 
 const stringProcessingLessonConfig = {

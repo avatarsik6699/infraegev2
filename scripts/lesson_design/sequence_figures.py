@@ -9,9 +9,10 @@ the strip; brackets overlap, the last group starts at n − k.
 ``seq_negmod(x, d)`` — x on the number line between multiples of d: Python's
 x % d is the distance from the multiple on the left, the last digit of the
 record is the remainder of abs(x).
-``seq_threshold(values, ending, pairs_over)`` — the running maximum of the
+``seq_threshold(values, ending, k, at_most)`` — the running maximum of the
 elements with a given ending, element by element: the threshold is known
-only after the last element; the pairs over the final threshold are marked.
+only after the last element; the groups of k that pass the final threshold
+(above it, or not above it with ``at_most``) are marked.
 ``seq_triangle(sides)`` — sorted sides p ≤ q ≤ r drawn as segments: p and q
 laid end to end along r either fall short, just reach it or overlap it.
 ``seq_pair_grid(values)`` — the n × n table of index pairs: the cells i < j
@@ -35,6 +36,7 @@ CELL, GAP = 64, 8
 
 def _cell(x, y, label, w=CELL, h=44, hot=False, faint=False, size=19) -> str:
     stroke = ACCENT if hot else (FAINT if faint else INK)
+    size = 17 if w == CELL and len(label) >= 5 else size  # −2100 fits the cell
     return (
         f'<rect x="{x:.1f}" y="{y:.1f}" width="{w}" height="{h}" rx="6" '
         f'fill="{WASH if hot else "#fff"}" stroke="{stroke}" stroke-width="{2 if hot else 1.5}"/>'
@@ -47,8 +49,9 @@ def _minus(x: int) -> str:
     return str(x).replace("-", "−")
 
 
-def _left(n: int, width: int = 660) -> float:
-    return (width - (n * CELL + (n - 1) * GAP)) / 2
+def _left(n: int, width: int = 660, label: float = 0) -> float:
+    """The left edge of a centred strip of n cells, moved right of its row labels."""
+    return max((width - (n * CELL + (n - 1) * GAP)) / 2, label)
 
 
 # --- elements, numbers and indexes ----------------------------------------------
@@ -57,7 +60,7 @@ def _left(n: int, width: int = 660) -> float:
 def seq_strip(values: list[int] | None = None) -> str:
     values = values or [8, -12, 5, 20, -3, 14]
     n = len(values)
-    left = _left(n)
+    left = _left(n, label=86)
     out = ['<svg viewBox="0 0 660 150" role="img" aria-label="Элементы, их номера и индексы">']
     out.append(_text(left - 12, 30, "номер", 13, MUTED, "end"))
     out.append(_text(left - 12, 76, "значение", 13, MUTED, "end"))
@@ -98,7 +101,7 @@ def seq_strip(values: list[int] | None = None) -> str:
 def seq_windows(values: list[int] | None = None, k: int = 2) -> str:
     values = values or [8, -12, 5, 20, -3, 14]
     n = len(values)
-    left = _left(n)
+    left = _left(n, label=62)
     starts = list(range(n - k + 1))
     levels = 2 if k == 2 else 3
     height = 112 + levels * 30 + 30
@@ -147,11 +150,11 @@ def seq_negmod(x: int = -17, d: int = 10) -> str:
     def pos(v: float) -> float:
         return left + (v - lo) / (hi - lo) * (right - left)
 
-    out = [f'<svg viewBox="0 0 660 190" role="img" aria-label="Остаток {x} от деления на {d}">']
+    out = [f'<svg viewBox="0 0 660 200" role="img" aria-label="Остаток {x} от деления на {d}">']
     out.append(
         f'<line x1="{left}" y1="{base}" x2="{right}" y2="{base}" stroke="{INK}" stroke-width="1.5"/>'
     )
-    for v in range(lo, hi + 1):
+    for v in range(lo, hi + 1, max(1, d // 10)):
         tall = v % d == 0
         out.append(
             f'<line x1="{pos(v):.1f}" y1="{base - (7 if tall else 3)}" x2="{pos(v):.1f}" '
@@ -166,12 +169,13 @@ def seq_negmod(x: int = -17, d: int = 10) -> str:
     )
     out.append(_text((pos(m) + pos(x)) / 2, base - 44, f"+{r}", 15, ACCENT, "middle", 600))
     out.append(f'<circle cx="{pos(x):.1f}" cy="{base}" r="6" fill="{ACCENT}"/>')
-    out.append(_text(pos(x), base + 28, _minus(x), 15, ACCENT, "middle", 600))
+    near = min(x - m, m + d - x) <= d / 4  # the label would cover a tick label
+    out.append(_text(pos(x), base + (50 if near else 28), _minus(x), 15, ACCENT, "middle", 600))
     out.append(_text(pos(m), 22, f"ближайшее слева кратное {d}: {_minus(m)}", 13, MUTED, "middle"))
     out.append(
         _text(
             330,
-            156,
+            166,
             f"{_minus(x)} = ({_minus(q)}) · {d} + {r}, поэтому {_minus(x)} % {d} = {r}",
             15,
             INK,
@@ -179,11 +183,12 @@ def seq_negmod(x: int = -17, d: int = 10) -> str:
         )
     )
     a = abs(x)
+    digits = {10: "последняя цифра", 100: "две последние цифры"}[d]
     out.append(
         _text(
             330,
-            180,
-            f"последняя цифра записи — остаток модуля: {a} = {a // d} · {d} + {a % d}",
+            190,
+            f"{digits} записи — остаток модуля: {a} = {a // d} · {d} + {a % d}",
             13,
             MUTED,
             "middle",
@@ -196,19 +201,26 @@ def seq_negmod(x: int = -17, d: int = 10) -> str:
 # --- a threshold of the whole sequence -------------------------------------------
 
 
-def seq_threshold(values: list[int] | None = None, ending: int = 17) -> str:
+def seq_threshold(
+    values: list[int] | None = None, ending: int = 17, k: int = 2, at_most: bool = False
+) -> str:
+    """Groups of k neighbours against the final threshold: a sum passes when it is
+    above it, or not above it with ``at_most``."""
     values = values or [30, 117, 95, 120, 217]
     mod = 10 ** len(str(ending))
     n = len(values)
-    left = _left(n, 600) + 60
+    left = _left(n, label=86)
     running, best = [], None
     for v in values:
         if abs(v) % mod == ending and (best is None or v > best):
             best = v
         running.append(best)
     final = running[-1]
+    levels = 2 if k == 2 else 3
+    height = 176 + levels * 34 + 34
     out = [
-        '<svg viewBox="0 0 660 260" role="img" aria-label="Порог меняется до последнего элемента">'
+        f'<svg viewBox="0 0 660 {height}" role="img" '
+        'aria-label="Порог меняется до последнего элемента">'
     ]
     out.append(_text(left - 12, 58, "элемент", 13, MUTED, "end"))
     out.append(_text(left - 12, 112, "порог", 13, MUTED, "end"))
@@ -220,12 +232,13 @@ def seq_threshold(values: list[int] | None = None, ending: int = 17) -> str:
         shown = "—" if running[i] is None else _minus(running[i])
         changed = running[i] is not None and (i == 0 or running[i] != running[i - 1])
         out.append(_text(x + CELL / 2, 120, shown, 16, ACCENT if changed else MUTED, "middle", 600))
-    for i in range(n - 1):
-        s = values[i] + values[i + 1]
+    for i in range(n - k + 1):
+        s = sum(values[i : i + k])
         x1 = left + i * (CELL + GAP) + CELL / 2
-        x2 = x1 + CELL + GAP
-        y = 160 + (i % 2) * 34
-        good = s > final
+        x2 = x1 + (k - 1) * (CELL + GAP)
+        y = 164 + (i % levels) * 34
+        good = s <= final if at_most else s > final
+        sign = ("≤" if good else ">") if at_most else (">" if good else "≤")
         color = INK if good else FAINT
         out.append(
             f'<path d="M {x1:.1f} {y - 8} v 8 H {x2:.1f} v -8" fill="none" stroke="{color}" '
@@ -235,7 +248,7 @@ def seq_threshold(values: list[int] | None = None, ending: int = 17) -> str:
             _text(
                 (x1 + x2) / 2,
                 y + 17,
-                f"{_minus(s)} {'>' if good else '≤'} {_minus(final)}",
+                f"{_minus(s)} {sign} {_minus(final)}",
                 13,
                 INK if good else MUTED,
                 "middle",
@@ -244,7 +257,7 @@ def seq_threshold(values: list[int] | None = None, ending: int = 17) -> str:
     out.append(
         _text(
             330,
-            252,
+            height - 8,
             f"окончательный порог {_minus(final)} известен только после просмотра всех элементов",
             13,
             MUTED,
@@ -288,7 +301,7 @@ def seq_triangle(sides: list[list[int]] | None = None) -> str:
         out.append(_text(x0 + p * unit / 2, y + 2, f"p = {p}", 13, MUTED, "middle"))
         out.append(_text(x0 + p * unit + q * unit / 2, y + 2, f"q = {q}", 13, ACCENT, "middle"))
         if p + q > r:
-            verdict = f"{p} + {q} = {p + q} > {r}: стороны можно согнуть — треугольник есть"
+            verdict = f"{p} + {q} = {p + q} > {r}: концы можно поднять и свести в вершину — треугольник есть"
         elif p + q == r:
             verdict = f"{p} + {q} = {r}: стороны лягут на одну прямую — треугольника нет"
         else:
@@ -464,10 +477,29 @@ def seq_roles(pair: list[int] | None = None, d: int = 3, limit: int = 10) -> str
     by_columns = any(r[0] for r in has) and any(r[1] for r in has)
     by_diagonal = (has[0][0] and has[1][1]) or (has[1][0] and has[0][1])
     by_row = any(r[0] and r[1] for r in has)
+    a, z = (_minus(v) for v in pair)
     panels = [
-        ("хотя бы одно кратно 3", "и хотя бы одно < 10", "в каждом столбце есть «да»", by_columns),
-        ("одно кратно 3,", "а другое < 10", "«да» по диагонали: разные числа", by_diagonal),
-        ("хотя бы одно и кратно 3,", "и < 10", "вся строка — «да»", by_row),
+        (
+            "хотя бы одно кратно 3",
+            "и хотя бы одно < 10",
+            ["в каждом столбце есть «да»"],
+            by_columns,
+        ),
+        (
+            "одно кратно 3,",
+            "а другое < 10",
+            [
+                f"{a} кратно 3, {z} < 10: {'да' if has[0][0] and has[1][1] else 'нет'}",
+                f"{z} кратно 3, {a} < 10: {'да' if has[1][0] and has[0][1] else 'нет'}",
+            ],
+            by_diagonal,
+        ),
+        (
+            "хотя бы одно одновременно",
+            "кратно 3 и < 10",
+            ["вся строка одного числа — «да»"],
+            by_row,
+        ),
     ]
     cw, ch, lw = 58, 34, 44
     out = ['<svg viewBox="0 0 660 250" role="img" aria-label="Три формулировки на одной паре">']
@@ -495,33 +527,29 @@ def seq_roles(pair: list[int] | None = None, d: int = 3, limit: int = 10) -> str
                     )
                 )
         if p == 0:
+            # a column is read top to bottom: it passes when it has a «да» anywhere
             for c in range(2):
-                r = next((r for r in range(2) if has[r][c]), None)
-                if r is not None:
-                    out.append(_box(gx + c * cw + 3, gy + r * ch + 3, cw - 6, ch - 6, ACCENT, 2))
-        elif p == 1:
-            for r1, r2 in ((0, 1), (1, 0)):
-                good = has[r1][0] and has[r2][1]
+                found = any(has[r][c] for r in range(2))
                 out.append(
-                    _line(
-                        gx + cw * 0.78,
-                        gy + ch * (0.7 if r1 == 0 else 1.3),
-                        gx + cw * 1.22,
-                        gy + ch * (1.3 if r1 == 0 else 0.7),
-                        ACCENT if good else MUTED,
-                        2 if good else 1.25,
-                        not good,
+                    _box(
+                        gx + c * cw + 3,
+                        gy + 3,
+                        cw - 6,
+                        2 * ch - 6,
+                        ACCENT if found else MUTED,
+                        2 if found else 1.25,
                     )
                 )
-        else:
+        elif p == 2:
             for r in range(2):
                 if has[r][0] and has[r][1]:
                     out.append(_box(gx + 3, gy + r * ch + 3, 2 * cw - 6, ch - 6, ACCENT, 2))
-        out.append(_text(x0 + 104, 184, how, 12, MUTED, "middle"))
+        for k, line in enumerate(how):
+            out.append(_text(x0 + 104, 176 + k * 16, line, 12, MUTED, "middle"))
         out.append(
             _text(
                 x0 + 104,
-                212,
+                220,
                 "подходит" if ok else "не подходит",
                 15,
                 ACCENT if ok else INK,

@@ -11,6 +11,7 @@ import {
 } from "~/shared/components/learning-content";
 import type { LessonContent } from "../lib/define-lesson.types";
 import { lessonMedia } from "./number-sequences.paid.chto-proveryat-i-vyvodit.media";
+import { SAMPLE_LIST } from "./number-sequences.theme";
 import { PythonTerm } from "./python-term";
 
 const content: LessonContent.PaidSubtopicContent = {
@@ -21,119 +22,68 @@ const content: LessonContent.PaidSubtopicContent = {
       explanation: (
         <>
           <Typography.Text>
+            Чем «квадрат минимального элемента» отличается от «минимального
+            квадрата элемента»?
+          </Typography.Text>
+          <Typography.Text>
             <strong>
-              Формулировку условия и ответа читают как последовательность
-              действий: что найти, что с ним сделать и в каком порядке.
+              Формулировку читают как цепочку действий: «квадрат минимума» —
+              сначала минимум, потом квадрат; «минимум квадратов» — наоборот.
             </strong>{" "}
-            Составные величины и модуль ответа нужны в 22 задачах подборки из
-            85, сравнение остатка элемента с наименьшим или наибольшим элементом
-            — в 12 (среди них основная волна ЕГЭ-2026 и демоверсия 2025 года),
-            порядок чисел внутри группы — в 7, и 5 из них — задачи 2025–2026
-            годов.
-          </Typography.Text>
-          <Typography.Text>
-            Порядок действий разберём на числах −20, −3, 8, а порядок внутри
-            группы — на тройке 4, 10, 7. Порог всей последовательности считается
-            заранее, как в подтеме 5.
-          </Typography.Text>
-        </>
-      ),
-    },
-    {
-      id: "dlinnye-formulirovki",
-      navLabel: "Длинные формулировки",
-      explanation: (
-        <>
-          <Typography.Text>
-            <strong>
-              В длинных формулировках особенно важно соблюдать порядок операций.
-            </strong>
-          </Typography.Text>
-          <Typography.Text>Рассмотрим:</Typography.Text>
-          <blockquote>
-            <Typography.Text>Квадрат минимального элемента.</Typography.Text>
-          </blockquote>
-          <Typography.Text>
-            <strong>Сначала</strong> находим минимум, <strong>затем</strong>{" "}
-            возводим его в квадрат: <Notation>{"min(a) ** 2"}</Notation>. А
-            «минимальный квадрат элемента» означает сначала возведение каждого
-            элемента в квадрат, затем поиск минимума:{" "}
-            <Notation>{"min([x ** 2 for x in a])"}</Notation>. Для −20, −3, 8:
-          </Typography.Text>
-          <CodeBlock
-            code={
-              "a = [-20, -3, 8]\nprint(min(a) ** 2, min([x ** 2 for x in a]))"
-            }
-            label={"Для −20, −3, 8"}
-            language="python"
-            output={"400 9"}
-          />
-          <Typography.Text>
-            (min a)² = (−20)² = 400, но min(400, 9, 64) = 9. Разница огромна:
+            Для чисел −20, −3, 8 получаются совсем разные числа:
           </Typography.Text>
           <LessonDiagram
             {...lessonMedia.seqOrder_4749b0}
             caption={
               <>
-                Одни и те же два действия — найти минимум и возвести в квадрат.
-                Если сначала взять минимум, получится 400; если сначала возвести
-                всё в квадрат, отрицательное −20 превращается в самое большое
-                число 400, и минимум — 9.
+                Одни и те же два действия в разном порядке. В квадрате −20
+                становится самым большим числом 400, поэтому минимум квадратов —
+                9.
               </>
             }
           />
-          <Typography.Text>
-            Точно так же «абсолютное значение максимальной суммы» означает{" "}
-            <Notation>{"abs(max(results))"}</Notation>, а «максимальное
-            абсолютное значение суммы» —{" "}
-            <Notation>{"max([abs(value) for value in results])"}</Notation>. Для
-            сумм −20 и −3 первое выражение даёт <Notation>{"3"}</Notation>,
-            второе — <Notation>{"20"}</Notation>:
-          </Typography.Text>
+          <Typography.Text>То же в программе:</Typography.Text>
           <CodeBlock
             code={
-              "results = [-20, -3]\nprint(abs(max(results)), max([abs(v) for v in results]))"
+              "a = [-20, -3, 8]\nprint(min(a) ** 2, min([x ** 2 for x in a]))"
             }
-            label={"Для сумм −20 и −3 первое выражение даёт 3, второе — 20"}
+            label={"Квадрат минимума и минимум квадратов"}
             language="python"
-            output={"3 20"}
+            output={"400 9"}
           />
           <Typography.Text>
-            Полезно разбирать формулировку как последовательность действий:
+            Выбери формулировку, чтобы увидеть выражение:
           </Typography.Text>
           <VariantPicker
-            label={"Формулировка и порядок действий"}
+            label={"Формулировка и выражение"}
             variants={[
               {
-                label: "квадрат минимального числа",
-                value: <>найти минимум → возвести в квадрат</>,
+                label: "квадрат минимального элемента",
+                value: <Notation>{"min(a) ** 2"}</Notation>,
               },
               {
-                label: "минимум квадратов чисел",
-                value: <>возвести числа в квадрат → найти минимум</>,
+                label: "минимальный квадрат элемента",
+                value: <Notation>{"min([x ** 2 for x in a])"}</Notation>,
               },
               {
                 label: "модуль максимальной суммы",
-                value: <>вычислить суммы → найти максимум → взять модуль</>,
+                value: <Notation>{"abs(max(sums))"}</Notation>,
               },
               {
                 label: "максимальный модуль суммы",
-                value: <>вычислить суммы → взять их модули → найти максимум</>,
+                value: <Notation>{"max([abs(s) for s in sums])"}</Notation>,
               },
               {
                 label: "квадрат количества элементов",
-                value: <>посчитать элементы → возвести количество в квадрат</>,
-              },
-              {
-                label: "сумма квадратов элементов",
-                value: <>возвести элементы в квадрат → сложить</>,
+                value: <Notation>{"len(a) ** 2"}</Notation>,
               },
             ]}
           />
           <Typography.Text>
-            Поэтому <strong>нельзя</strong> заранее брать модуль всех
-            результатов, если в условии требуется модуль только окончательного
-            максимума.
+            Если бы в задаче темы было «сумма тройки не больше квадрата
+            максимального элемента, оканчивающегося на 25», порог стал бы{" "}
+            <Notation>{"max(ends) ** 2"}</Notation>, а остальное решение не
+            изменилось бы.
           </Typography.Text>
         </>
       ),
@@ -144,57 +94,32 @@ const content: LessonContent.PaidSubtopicContent = {
       explanation: (
         <>
           <Typography.Text>
-            <strong>
-              Величина, по которой проверяют группу, может отличаться от
-              величины, которую нужно вывести.
-            </strong>
+            Что выводить, если проверяют одно, а в ответе спрашивают другое?
           </Typography.Text>
-          <Typography.Text>Например:</Typography.Text>
-          <blockquote>
-            <Typography.Text>
-              Сумма пары больше порога. Найти минимальную сумму квадратов
-              подходящих пар.
-            </Typography.Text>
-          </blockquote>
-          <Typography.Text>Тогда:</Typography.Text>
+          <Typography.Text>
+            <strong>
+              Группу отбирают по одной величине, а в список кладут ту, что
+              спрашивают в ответе.
+            </strong>{" "}
+            Пусть в задаче темы просят не наибольшую сумму, а наибольшее
+            произведение чисел подходящей тройки. Проверка остаётся прежней — по
+            сумме, а в список идёт произведение:
+          </Typography.Text>
           <CodeBlock
-            code={"if x + y > threshold:\n    results.append(x ** 2 + y ** 2)"}
-            label={"Тогда"}
+            code={
+              "def four(x):\n    return 1000 <= abs(x) <= 9999\n\n\n" +
+              SAMPLE_LIST +
+              "\nresults = []\nfor i in range(len(a) - 2):\n    x, y, z = a[i], a[i + 1], a[i + 2]\n    k = int(four(x)) + int(four(y)) + int(four(z))\n    if k <= 2 and x + y + z <= 2025:\n        results.append(x * y * z)\nprint(len(results), max(results))"
+            }
+            label={"Отбор по сумме, ответ по произведению"}
             language="python"
+            output={"4 18375000"}
           />
           <Typography.Text>
-            А ответ — <Notation>{"print(len(results), min(results))"}</Notation>
-            , при условии существования подходящих пар. Здесь:
-          </Typography.Text>
-          <ul>
-            <li>
-              проверка относится к <Notation>{"x + y"}</Notation>;
-            </li>
-            <li>
-              сохраняется <Notation>{"x ** 2 + y ** 2"}</Notation>;
-            </li>
-            <li>из сохранённого выбирается минимум.</li>
-          </ul>
-          <Typography.Text>
-            В каждой задаче полезно отдельно выписать:
-          </Typography.Text>
-          <ol>
-            <li>
-              <strong>условие отбора</strong>;
-            </li>
-            <li>
-              <strong>
-                величину, которую сравниваем между подходящими группами
-              </strong>
-              ;
-            </li>
-            <li>
-              <strong>окончательное преобразование ответа</strong>, если оно
-              требуется.
-            </li>
-          </ol>
-          <Typography.Text>
-            Так ты не будешь машинально искать максимум суммы в любой задаче.
+            Подходят те же четыре тройки, а наибольшее произведение даёт тройка
+            −1250, −2100, 7. Перед тем как писать программу, выпиши три вещи: по
+            какому условию отбирают группы, какую величину кладут в список и что
+            с ней сделать в ответе — максимум, минимум или модуль.
           </Typography.Text>
         </>
       ),
@@ -205,227 +130,102 @@ const content: LessonContent.PaidSubtopicContent = {
       explanation: (
         <>
           <Typography.Text>
-            <strong>
-              Остаток минимального элемента и минимальный остаток — тоже разные
-              вещи.
-            </strong>
+            Что значит «остаток от деления хотя бы одного элемента на 111 равен
+            минимальному элементу последовательности»?
           </Typography.Text>
           <Typography.Text>
-            Предположим, последовательность 8, 12. Минимальный элемент —{" "}
-            <Notation>{"8"}</Notation>, его остаток при делении на пять равен 3.
-            Но остатки всех элементов — 3 и 2, и минимальный из них равен{" "}
-            <Notation>{"2"}</Notation>. Поэтому{" "}
-            <Notation>{"min(a) % 5"}</Notation> и{" "}
-            <Notation>{"min([x % 5 for x in a])"}</Notation> не равны в общем
-            случае:
+            <strong>
+              Остаток элемента сравнивают с самим минимумом:{" "}
+              <Notation>{"x % 111 == m"}</Notation>, где{" "}
+              <Notation>{"m = min(a)"}</Notation> найден до цикла.
+            </strong>{" "}
+            Похожие слова дают другие проверки:
           </Typography.Text>
-          <CodeBlock
-            code={"a = [8, 12]\nprint(min(a) % 5, min([x % 5 for x in a]))"}
-            label={
-              "Поэтому min(a) % 5 и min([x % 5 for x in a]) не равны в общем случае"
-            }
-            language="python"
-            output={"3 2"}
-          />
-          <Typography.Text>Ещё одно различие:</Typography.Text>
           <LessonTable
-            label={"Ещё одно различие"}
+            label={"Остаток и минимум: формулировки"}
             columns={[{ label: "Формулировка" }, { label: "Проверка" }]}
             rows={[
               [
-                <>
-                  Остаток <Notation>{"x"}</Notation> равен минимальному элементу
-                  последовательности
-                </>,
-                <>
-                  <Notation>{"x % 5 == minimum"}</Notation>
-                </>,
+                "остаток x равен минимальному элементу",
+                <Notation key="a">{"x % d == m"}</Notation>,
               ],
               [
-                <>
-                  Остаток <Notation>{"x"}</Notation> равен остатку минимального
-                  элемента
-                </>,
-                <>
-                  <Notation>{"x % 5 == minimum % 5"}</Notation>
-                </>,
+                "остаток x равен остатку минимального элемента",
+                <Notation key="b">{"x % d == m % d"}</Notation>,
               ],
             ]}
           />
           <Typography.Text>
-            Нельзя добавлять <Notation>{"% 5"}</Notation> справа, если его нет в
-            смысле условия. Обе формулировки встречаются на экзамене: первая — в
-            основной волне ЕГЭ-2026 («остаток от деления хотя бы одного элемента
-            на 33 равен минимальному числу последовательности»), вторая — в
-            тренировочных работах.
-          </Typography.Text>
-          <Typography.Text>Для задачи:</Typography.Text>
-          <blockquote>
-            <Typography.Text>
-              У ровно одного числа тройки остаток от деления на пять совпадает с
-              остатком минимального элемента всей последовательности,
-            </Typography.Text>
-          </blockquote>
-          <Typography.Text>пишем до перебора:</Typography.Text>
-          <CodeBlock
-            code={"minimum = min(a)\ntarget_remainder = minimum % 5"}
-            label={"пишем до перебора"}
-            language="python"
-          />
-          <Typography.Text>А внутри перебора троек:</Typography.Text>
-          <CodeBlock
-            code={
-              "matching_count = (\n    int(x % 5 == target_remainder)\n    + int(y % 5 == target_remainder)\n    + int(z % 5 == target_remainder)\n)\n\ncondition = matching_count == 1"
-            }
-            label={"А внутри перебора троек"}
-            language="python"
-          />
-          <Typography.Text>
-            Предварительный минимум вычисляем один раз, до цикла.
-          </Typography.Text>
-        </>
-      ),
-    },
-    {
-      id: "malenkij-spisok",
-      navLabel: "Сортировка тройки",
-      explanation: (
-        <>
-          <Typography.Text>
-            <strong>
-              Для работы с наибольшими и наименьшими числами внутри тройки
-              удобно создать маленький список.
-            </strong>
-          </Typography.Text>
-          <Typography.Text>
-            Запишем <Notation>{"triple = [x, y, z]"}</Notation>. Теперь доступны{" "}
-            <Notation>{"min(triple)"}</Notation>,{" "}
-            <Notation>{"max(triple)"}</Notation>,{" "}
-            <Notation>{"sum(triple)"}</Notation>.
-          </Typography.Text>
-          <Typography.Text>
-            Если нужна сумма двух наибольших элементов, можно{" "}
-            <strong>из общей суммы вычесть один наименьший</strong>:{" "}
-            <Notation>{"sum(triple) - min(triple)"}</Notation>. Почему это
-            работает? Из трёх элементов мы убираем наименьший — остаются два
-            наибольших. Для 4, 10, 7 получаем 4 + 10 + 7 − 4 = 17 — это сумма{" "}
-            <Notation>{"10"}</Notation> и <Notation>{"7"}</Notation>.
-          </Typography.Text>
-          <Typography.Text>
-            Аналогично сумма двух наименьших —{" "}
-            <Notation>{"sum(triple) - max(triple)"}</Notation>, а средний по
-            величине элемент —{" "}
-            <Notation>{"sum(triple) - min(triple) - max(triple)"}</Notation>:
+            «Остаток минимального» и «минимальный остаток» тоже различаются. Для
+            чисел 8 и 12 минимальный элемент 8 даёт при делении на 5 остаток 3,
+            а остатки чисел — 3 и 2, и наименьший из них 2:
           </Typography.Text>
           <CodeBlock
-            code={
-              "triple = [4, 10, 7]\nprint(sum(triple) - min(triple), sum(triple) - max(triple))\nprint(sum(triple) - min(triple) - max(triple))"
-            }
-            label={"Код на Python: triple = [4, 10, 7]"}
+            code={"a = [8, 12]\nprint(min(a) % 5, min([x % 5 for x in a]))"}
+            label={"Остаток минимального и минимальный остаток"}
             language="python"
-            output={"17 11\n7"}
+            output={"3 2"}
           />
-          <Typography.Text>
-            Повторяющиеся значения не мешают. Для 5, 5, 5 сумма двух наибольших:
-            15 − 5 = 10. Не нужно удалять все вхождения минимального значения:
-            вычитается значение <strong>одного</strong> элемента.
-          </Typography.Text>
-          <Typography.Text>
-            Если нужно более подробно расположить три значения по величине,
-            используется{" "}
-            <PythonTerm term="sorted">
-              <Notation>{"sorted"}</Notation>
-            </PythonTerm>
-            : <Notation>{"ordered = sorted(triple)"}</Notation> создаёт новый
-            список с элементами по возрастанию. Тогда{" "}
-            <Notation>{"ordered[0]"}</Notation> — наименьший,{" "}
-            <Notation>{"ordered[1]"}</Notation> — средний,{" "}
-            <Notation>{"ordered[2]"}</Notation> — наибольший.
-          </Typography.Text>
-          <Typography.Text>
-            Это сортировка только текущей тройки. Исходная последовательность{" "}
-            <Notation>{"a"}</Notation> не изменяется, поэтому соседство в ней
-            сохраняется.
-          </Typography.Text>
-          <Typography.Text>
-            Для пары то же короче: «меньший элемент пары оканчивается на 5» —
-            это <Notation>{"abs(min(x, y)) % 10 == 5"}</Notation>.
-          </Typography.Text>
         </>
       ),
     },
     {
       id: "dva-naibolshih",
-      navLabel: "Два наибольших",
+      navLabel: "Наибольшие в тройке",
       explanation: (
         <>
           <Typography.Text>
+            Как найти сумму двух наибольших чисел тройки или её среднее по
+            величине число?
+          </Typography.Text>
+          <Typography.Text>
             <strong>
-              «Два наибольших числа» выбираются до возведения в квадрат, если
-              именно так сформулировано условие.
+              Сумма двух наибольших — сумма тройки без наименьшего:{" "}
+              <Notation>{"sum(t) - min(t)"}</Notation>. А чтобы найти среднее по
+              величине число, тройку сортируют:{" "}
+              <PythonTerm term="sorted">
+                <Notation>{"sorted(t)"}</Notation>
+              </PythonTerm>
+              .
             </strong>
-          </Typography.Text>
-          <Typography.Text>
-            Пусть тройка −10, 3, 4. Два наибольших числа —{" "}
-            <Notation>{"3"}</Notation> и <Notation>{"4"}</Notation>. Сумма их
-            квадратов: 3² + 4² = 25. Два наибольших квадрата — уже{" "}
-            <Notation>{"100"}</Notation> и <Notation>{"16"}</Notation>, их сумма
-            равна <Notation>{"116"}</Notation>.
-          </Typography.Text>
-          <Typography.Text>
-            Поэтому для суммы квадратов двух наибольших <strong>чисел</strong>{" "}
-            сначала выбираем числа, затем возводим в квадрат. Можно обойтись и
-            без сортировки: из суммы трёх квадратов вычитается квадрат
-            наименьшего <strong>исходного</strong> числа.
-          </Typography.Text>
-          <Typography.Text>
-            Функции <Notation>{"min"}</Notation> и <Notation>{"max"}</Notation>{" "}
-            умеют принимать как список, так и несколько отдельных значений:{" "}
-            <Notation>{"min(x, y, z)"}</Notation>.
           </Typography.Text>
           <CodeBlock
             code={
-              "x = -10\ny = 3\nz = 4\nordered = sorted([x, y, z])\nprint(ordered[1] ** 2 + ordered[2] ** 2)\nprint(x ** 2 + y ** 2 + z ** 2 - min(x, y, z) ** 2)"
+              "t = [4, 10, 7]\ns = sorted(t)\nprint(sum(t) - min(t), s, s[1])"
             }
-            label={"Код на Python: x = -10"}
+            label={"Два наибольших и среднее число тройки"}
             language="python"
-            output={"25\n25"}
+            output={"17 [4, 7, 10] 7"}
           />
-          <Typography.Text>Для других формулировок:</Typography.Text>
+          <Typography.Text>
+            <Notation>{"sorted"}</Notation> создаёт новый список из трёх чисел.
+            Исходный список <Notation>{"a"}</Notation> не меняется, и соседи в
+            нём остаются на своих местах.
+          </Typography.Text>
+          <Typography.Text>
+            «Сумма квадратов двух наибольших чисел» — сначала выбрать числа,
+            потом возвести в квадрат. Для −10, 3, 4 это 3² + 4² = 25, а не 100 +
+            16: −10 — наименьшее число, хотя его квадрат самый большой.
+          </Typography.Text>
           <VariantPicker
             label={"Требуемая величина и выражение"}
             variants={[
               {
                 label: "произведение минимума и максимума тройки",
-                value: (
-                  <>
-                    <Notation>{"min(triple) * max(triple)"}</Notation>
-                  </>
-                ),
+                value: <Notation>{"min(t) * max(t)"}</Notation>,
               },
               {
                 label: "сумма модулей минимума и максимума",
-                value: (
-                  <>
-                    <Notation>{"abs(min(triple)) + abs(max(triple))"}</Notation>
-                  </>
-                ),
+                value: <Notation>{"abs(min(t)) + abs(max(t))"}</Notation>,
+                note: <>для −9 и 5: 9 + 5 = 14</>,
               },
               {
                 label: "модуль суммы минимума и максимума",
-                value: (
-                  <>
-                    <Notation>{"abs(min(triple) + max(triple))"}</Notation>
-                  </>
-                ),
+                value: <Notation>{"abs(min(t) + max(t))"}</Notation>,
+                note: <>для −9 и 5: |−4| = 4</>,
               },
             ]}
           />
-          <Typography.Text>
-            Последние две строки тоже различаются. Для минимума{" "}
-            <Notation>{"-9"}</Notation> и максимума <Notation>{"5"}</Notation>:
-            |−9| + |5| = 14, но |−9 + 5| = 4.
-          </Typography.Text>
         </>
       ),
     },
@@ -437,47 +237,109 @@ const content: LessonContent.PaidSubtopicContent = {
           <LessonSummary
             items={[
               {
+                key: "Порядок слов",
                 note: (
                   <>
-                    Формулировка разбирается в порядке действий: «квадрат
-                    минимума» — <Notation>{"min(a) ** 2"}</Notation>, «минимум
-                    квадратов» —{" "}
-                    <Notation>{"min([x ** 2 for x in a])"}</Notation>, модуль
-                    берут только у того, у чего он назван.
+                    порядок действий: «квадрат минимума» —{" "}
+                    <Notation>{"min(a) ** 2"}</Notation>
                   </>
                 ),
               },
               {
+                key: "Модуль",
                 note: (
                   <>
-                    Отдельно выписываются условие отбора, сравниваемая величина
-                    и окончательное преобразование ответа.
+                    только у того, у чего назван:{" "}
+                    <Notation>{"abs(max(sums))"}</Notation>
                   </>
                 ),
               },
               {
+                key: "Проверка и ответ",
+                note: <>в список кладут величину из ответа</>,
+              },
+              {
+                key: "Остаток и минимум",
                 note: (
                   <>
-                    «Остаток равен минимальному элементу» —{" "}
-                    <Notation>{"x % m == minimum"}</Notation>, «остатку
-                    минимального» —{" "}
-                    <Notation>{"x % m == minimum % m"}</Notation>.
+                    «равен минимальному» — <Notation>{"x % d == m"}</Notation>,
+                    «остатку минимального» —{" "}
+                    <Notation>{"x % d == m % d"}</Notation>
                   </>
                 ),
               },
               {
+                key: "Два наибольших",
+                note: <Notation>{"sum(t) - min(t)"}</Notation>,
+              },
+              {
+                key: "Порядок в тройке",
                 note: (
                   <>
-                    Внутри тройки: два наибольших —{" "}
-                    <Notation>{"sum(triple) - min(triple)"}</Notation>, средний
-                    — без минимума и максимума, подробный порядок —{" "}
-                    <Notation>{"sorted"}</Notation>; сначала выбирают числа,
-                    потом возводят в квадрат.
+                    <Notation>{"sorted(t)"}</Notation>, исходный список не
+                    меняется
                   </>
                 ),
               },
             ]}
           />
+        </>
+      ),
+    },
+  ],
+  checkpoint: [
+    {
+      id: "zadacha-1",
+      prompt: (
+        <>
+          Для чисел 5, −7, 2 найди квадрат минимального элемента и минимальный
+          квадрат элемента.
+        </>
+      ),
+      reveal: <>49 и 4: минимум −7, его квадрат 49; квадраты 25, 49, 4.</>,
+    },
+    {
+      id: "zadacha-2",
+      prompt: (
+        <>
+          Суммы подходящих троек: −15, −40, 10. Найди модуль максимальной суммы
+          и максимальный модуль суммы.
+        </>
+      ),
+      reveal: <>10 и 40: максимум сумм 10, а модули 15, 40, 10.</>,
+    },
+    {
+      id: "zadacha-3",
+      prompt: (
+        <>
+          Для чисел 13, 22, 9 найди остаток от деления на 5 минимального
+          элемента и минимальный из остатков.
+        </>
+      ),
+      reveal: <>4 и 2: минимальный элемент 9, 9 % 5 = 4; остатки 3, 2, 4.</>,
+    },
+    {
+      id: "zadacha-4",
+      prompt: (
+        <>
+          Для тройки 7, −2, 5 найди сумму двух наибольших чисел и среднее по
+          величине число.
+        </>
+      ),
+      reveal: <>12 и 5: два наибольших — 7 и 5; после сортировки −2, 5, 7.</>,
+    },
+    {
+      id: "zadacha-5",
+      prompt: (
+        <>
+          В задаче темы просят записать количество троек, затем минимальную из
+          сумм. Что изменится в программе и что получится на восьми числах?
+        </>
+      ),
+      reveal: (
+        <>
+          Только вывод: <Notation>{"print(len(sums), min(sums))"}</Notation>. На
+          восьми числах — 4 −3343.
         </>
       ),
     },

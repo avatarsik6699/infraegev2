@@ -3,28 +3,851 @@
 import type { LessonMediaTypes } from "~/shared/components/learning-content";
 
 export const lessonMedia = {
-  // %%seq_strip([8, -12, 5, 20, -3, 14])%%
-  seqStrip_0b8aae: {
+  // %%seq_strip([125, 1300, -1250, -2100, 7, -325, 2025, 3000])%%
+  seqStrip_93ecbe: {
     kind: "diagram",
-    svg: '<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" viewBox="0 0 660 150"><text x="106.0" y="30.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="end" style="font-variant-numeric:tabular-nums">номер</text><text x="106.0" y="76.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="end" style="font-variant-numeric:tabular-nums">значение</text><text x="106.0" y="122.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="end" style="font-variant-numeric:tabular-nums">индекс</text><text x="150.0" y="30.0" font-family="inherit" font-size="14" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">1</text><rect x="118.0" y="46.0" width="64" height="44" rx="6" fill="#fff" stroke="#17191e" stroke-width="1.5"/><text x="150.0" y="75.0" font-family="inherit" font-size="19" font-weight="600" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">8</text><text x="150.0" y="122.0" font-family="inherit" font-size="15" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">a[0]</text><text x="222.0" y="30.0" font-family="inherit" font-size="14" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">2</text><rect x="190.0" y="46.0" width="64" height="44" rx="6" fill="#fff" stroke="#17191e" stroke-width="1.5"/><text x="222.0" y="75.0" font-family="inherit" font-size="19" font-weight="600" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">−12</text><text x="222.0" y="122.0" font-family="inherit" font-size="15" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">a[1]</text><text x="294.0" y="30.0" font-family="inherit" font-size="14" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">3</text><rect x="262.0" y="46.0" width="64" height="44" rx="6" fill="#fff" stroke="#17191e" stroke-width="1.5"/><text x="294.0" y="75.0" font-family="inherit" font-size="19" font-weight="600" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">5</text><text x="294.0" y="122.0" font-family="inherit" font-size="15" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">a[2]</text><text x="366.0" y="30.0" font-family="inherit" font-size="14" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">4</text><rect x="334.0" y="46.0" width="64" height="44" rx="6" fill="#fff" stroke="#17191e" stroke-width="1.5"/><text x="366.0" y="75.0" font-family="inherit" font-size="19" font-weight="600" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">20</text><text x="366.0" y="122.0" font-family="inherit" font-size="15" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">a[3]</text><text x="438.0" y="30.0" font-family="inherit" font-size="14" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">5</text><rect x="406.0" y="46.0" width="64" height="44" rx="6" fill="#fff" stroke="#17191e" stroke-width="1.5"/><text x="438.0" y="75.0" font-family="inherit" font-size="19" font-weight="600" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">−3</text><text x="438.0" y="122.0" font-family="inherit" font-size="15" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">a[4]</text><text x="510.0" y="30.0" font-family="inherit" font-size="14" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">6</text><rect x="478.0" y="46.0" width="64" height="44" rx="6" fill="#f3f3f1" stroke="#ff6a00" stroke-width="2"/><text x="510.0" y="75.0" font-family="inherit" font-size="19" font-weight="600" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">14</text><text x="510.0" y="122.0" font-family="inherit" font-size="15" font-weight="600" fill="#ff6a00" text-anchor="middle" style="font-variant-numeric:tabular-nums">a[5]</text><text x="330.0" y="145.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">n = len(a) = 6, последний индекс — n − 1 = 5</text></svg>',
+    svg: '<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" viewBox="0 0 660 150"><text x="74.0" y="30.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="end" style="font-variant-numeric:tabular-nums">номер</text><text x="74.0" y="76.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="end" style="font-variant-numeric:tabular-nums">значение</text><text x="74.0" y="122.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="end" style="font-variant-numeric:tabular-nums">индекс</text><text x="118.0" y="30.0" font-family="inherit" font-size="14" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">1</text><rect x="86.0" y="46.0" width="64" height="44" rx="6" fill="#fff" stroke="#17191e" stroke-width="1.5"/><text x="118.0" y="75.0" font-family="inherit" font-size="19" font-weight="600" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">125</text><text x="118.0" y="122.0" font-family="inherit" font-size="15" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">a[0]</text><text x="190.0" y="30.0" font-family="inherit" font-size="14" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">2</text><rect x="158.0" y="46.0" width="64" height="44" rx="6" fill="#fff" stroke="#17191e" stroke-width="1.5"/><text x="190.0" y="75.0" font-family="inherit" font-size="19" font-weight="600" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">1300</text><text x="190.0" y="122.0" font-family="inherit" font-size="15" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">a[1]</text><text x="262.0" y="30.0" font-family="inherit" font-size="14" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">3</text><rect x="230.0" y="46.0" width="64" height="44" rx="6" fill="#fff" stroke="#17191e" stroke-width="1.5"/><text x="262.0" y="75.0" font-family="inherit" font-size="17" font-weight="600" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">−1250</text><text x="262.0" y="122.0" font-family="inherit" font-size="15" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">a[2]</text><text x="334.0" y="30.0" font-family="inherit" font-size="14" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">4</text><rect x="302.0" y="46.0" width="64" height="44" rx="6" fill="#fff" stroke="#17191e" stroke-width="1.5"/><text x="334.0" y="75.0" font-family="inherit" font-size="17" font-weight="600" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">−2100</text><text x="334.0" y="122.0" font-family="inherit" font-size="15" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">a[3]</text><text x="406.0" y="30.0" font-family="inherit" font-size="14" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">5</text><rect x="374.0" y="46.0" width="64" height="44" rx="6" fill="#fff" stroke="#17191e" stroke-width="1.5"/><text x="406.0" y="75.0" font-family="inherit" font-size="19" font-weight="600" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">7</text><text x="406.0" y="122.0" font-family="inherit" font-size="15" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">a[4]</text><text x="478.0" y="30.0" font-family="inherit" font-size="14" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">6</text><rect x="446.0" y="46.0" width="64" height="44" rx="6" fill="#fff" stroke="#17191e" stroke-width="1.5"/><text x="478.0" y="75.0" font-family="inherit" font-size="19" font-weight="600" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">−325</text><text x="478.0" y="122.0" font-family="inherit" font-size="15" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">a[5]</text><text x="550.0" y="30.0" font-family="inherit" font-size="14" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">7</text><rect x="518.0" y="46.0" width="64" height="44" rx="6" fill="#fff" stroke="#17191e" stroke-width="1.5"/><text x="550.0" y="75.0" font-family="inherit" font-size="19" font-weight="600" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">2025</text><text x="550.0" y="122.0" font-family="inherit" font-size="15" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">a[6]</text><text x="622.0" y="30.0" font-family="inherit" font-size="14" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">8</text><rect x="590.0" y="46.0" width="64" height="44" rx="6" fill="#f3f3f1" stroke="#ff6a00" stroke-width="2"/><text x="622.0" y="75.0" font-family="inherit" font-size="19" font-weight="600" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">3000</text><text x="622.0" y="122.0" font-family="inherit" font-size="15" font-weight="600" fill="#ff6a00" text-anchor="middle" style="font-variant-numeric:tabular-nums">a[7]</text><text x="330.0" y="145.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">n = len(a) = 8, последний индекс — n − 1 = 7</text></svg>',
     width: 660,
     height: 150,
     alt: "Элементы, их номера и индексы",
   },
-  // %%seq_roles([3, 100], 3, 10)%%
-  seqRoles3_10: {
+  // %%seq_windows([125, 1300, -1250, -2100, 7, -325, 2025, 3000], 2)%%
+  seqWindows2: {
     kind: "diagram",
-    svg: '<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" viewBox="0 0 660 250"><text x="112.0" y="20.0" font-family="inherit" font-size="13" font-weight="600" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">хотя бы одно кратно 3</text><text x="112.0" y="38.0" font-family="inherit" font-size="13" font-weight="600" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">и хотя бы одно &lt; 10</text><text x="81.0" y="76.0" font-family="inherit" font-size="12" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">кратно 3</text><text x="139.0" y="76.0" font-family="inherit" font-size="12" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">&lt; 10</text><text x="42.0" y="107.1" font-family="inherit" font-size="14" font-weight="600" fill="#17191e" text-anchor="end" style="font-variant-numeric:tabular-nums">3</text><rect x="52.0" y="86.0" width="58.0" height="34.0" rx="5" fill="#fff" stroke="#d9d9d4" stroke-width="1.25"/><text x="81.0" y="107.1" font-family="inherit" font-size="14" font-weight="600" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">да</text><rect x="110.0" y="86.0" width="58.0" height="34.0" rx="5" fill="#fff" stroke="#d9d9d4" stroke-width="1.25"/><text x="139.0" y="107.1" font-family="inherit" font-size="14" font-weight="600" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">да</text><text x="42.0" y="141.1" font-family="inherit" font-size="14" font-weight="600" fill="#17191e" text-anchor="end" style="font-variant-numeric:tabular-nums">100</text><rect x="52.0" y="120.0" width="58.0" height="34.0" rx="5" fill="#fff" stroke="#d9d9d4" stroke-width="1.25"/><text x="81.0" y="141.1" font-family="inherit" font-size="14" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">нет</text><rect x="110.0" y="120.0" width="58.0" height="34.0" rx="5" fill="#fff" stroke="#d9d9d4" stroke-width="1.25"/><text x="139.0" y="141.1" font-family="inherit" font-size="14" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">нет</text><rect x="55.0" y="89.0" width="52.0" height="28.0" rx="5" fill="none" stroke="#ff6a00" stroke-width="2"/><rect x="113.0" y="89.0" width="52.0" height="28.0" rx="5" fill="none" stroke="#ff6a00" stroke-width="2"/><text x="112.0" y="184.0" font-family="inherit" font-size="12" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">в каждом столбце есть «да»</text><text x="112.0" y="212.0" font-family="inherit" font-size="15" font-weight="600" fill="#ff6a00" text-anchor="middle" style="font-variant-numeric:tabular-nums">подходит</text><text x="332.0" y="20.0" font-family="inherit" font-size="13" font-weight="600" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">одно кратно 3,</text><text x="332.0" y="38.0" font-family="inherit" font-size="13" font-weight="600" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">а другое &lt; 10</text><text x="301.0" y="76.0" font-family="inherit" font-size="12" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">кратно 3</text><text x="359.0" y="76.0" font-family="inherit" font-size="12" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">&lt; 10</text><text x="262.0" y="107.1" font-family="inherit" font-size="14" font-weight="600" fill="#17191e" text-anchor="end" style="font-variant-numeric:tabular-nums">3</text><rect x="272.0" y="86.0" width="58.0" height="34.0" rx="5" fill="#fff" stroke="#d9d9d4" stroke-width="1.25"/><text x="301.0" y="107.1" font-family="inherit" font-size="14" font-weight="600" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">да</text><rect x="330.0" y="86.0" width="58.0" height="34.0" rx="5" fill="#fff" stroke="#d9d9d4" stroke-width="1.25"/><text x="359.0" y="107.1" font-family="inherit" font-size="14" font-weight="600" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">да</text><text x="262.0" y="141.1" font-family="inherit" font-size="14" font-weight="600" fill="#17191e" text-anchor="end" style="font-variant-numeric:tabular-nums">100</text><rect x="272.0" y="120.0" width="58.0" height="34.0" rx="5" fill="#fff" stroke="#d9d9d4" stroke-width="1.25"/><text x="301.0" y="141.1" font-family="inherit" font-size="14" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">нет</text><rect x="330.0" y="120.0" width="58.0" height="34.0" rx="5" fill="#fff" stroke="#d9d9d4" stroke-width="1.25"/><text x="359.0" y="141.1" font-family="inherit" font-size="14" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">нет</text><line x1="317.2" y1="109.8" x2="342.8" y2="130.2" stroke="#4d535e" stroke-width="1.25" stroke-dasharray="5 4"/><line x1="317.2" y1="130.2" x2="342.8" y2="109.8" stroke="#4d535e" stroke-width="1.25" stroke-dasharray="5 4"/><text x="332.0" y="184.0" font-family="inherit" font-size="12" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">«да» по диагонали: разные числа</text><text x="332.0" y="212.0" font-family="inherit" font-size="15" font-weight="600" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">не подходит</text><text x="552.0" y="20.0" font-family="inherit" font-size="13" font-weight="600" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">хотя бы одно и кратно 3,</text><text x="552.0" y="38.0" font-family="inherit" font-size="13" font-weight="600" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">и &lt; 10</text><text x="521.0" y="76.0" font-family="inherit" font-size="12" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">кратно 3</text><text x="579.0" y="76.0" font-family="inherit" font-size="12" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">&lt; 10</text><text x="482.0" y="107.1" font-family="inherit" font-size="14" font-weight="600" fill="#17191e" text-anchor="end" style="font-variant-numeric:tabular-nums">3</text><rect x="492.0" y="86.0" width="58.0" height="34.0" rx="5" fill="#fff" stroke="#d9d9d4" stroke-width="1.25"/><text x="521.0" y="107.1" font-family="inherit" font-size="14" font-weight="600" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">да</text><rect x="550.0" y="86.0" width="58.0" height="34.0" rx="5" fill="#fff" stroke="#d9d9d4" stroke-width="1.25"/><text x="579.0" y="107.1" font-family="inherit" font-size="14" font-weight="600" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">да</text><text x="482.0" y="141.1" font-family="inherit" font-size="14" font-weight="600" fill="#17191e" text-anchor="end" style="font-variant-numeric:tabular-nums">100</text><rect x="492.0" y="120.0" width="58.0" height="34.0" rx="5" fill="#fff" stroke="#d9d9d4" stroke-width="1.25"/><text x="521.0" y="141.1" font-family="inherit" font-size="14" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">нет</text><rect x="550.0" y="120.0" width="58.0" height="34.0" rx="5" fill="#fff" stroke="#d9d9d4" stroke-width="1.25"/><text x="579.0" y="141.1" font-family="inherit" font-size="14" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">нет</text><rect x="495.0" y="89.0" width="110.0" height="28.0" rx="5" fill="none" stroke="#ff6a00" stroke-width="2"/><text x="552.0" y="184.0" font-family="inherit" font-size="12" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">вся строка — «да»</text><text x="552.0" y="212.0" font-family="inherit" font-size="15" font-weight="600" fill="#ff6a00" text-anchor="middle" style="font-variant-numeric:tabular-nums">подходит</text><text x="330.0" y="242.0" font-family="inherit" font-size="12" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">пара (3, 100): строки — числа пары, столбцы — свойства</text></svg>',
+    svg: '<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" viewBox="0 0 660 202"><rect x="62.0" y="30.0" width="64" height="44" rx="6" fill="#fff" stroke="#17191e" stroke-width="1.5"/><text x="94.0" y="59.0" font-family="inherit" font-size="19" font-weight="600" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">125</text><text x="94.0" y="96.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">0</text><rect x="134.0" y="30.0" width="64" height="44" rx="6" fill="#fff" stroke="#17191e" stroke-width="1.5"/><text x="166.0" y="59.0" font-family="inherit" font-size="19" font-weight="600" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">1300</text><text x="166.0" y="96.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">1</text><rect x="206.0" y="30.0" width="64" height="44" rx="6" fill="#fff" stroke="#17191e" stroke-width="1.5"/><text x="238.0" y="59.0" font-family="inherit" font-size="17" font-weight="600" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">−1250</text><text x="238.0" y="96.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">2</text><rect x="278.0" y="30.0" width="64" height="44" rx="6" fill="#fff" stroke="#17191e" stroke-width="1.5"/><text x="310.0" y="59.0" font-family="inherit" font-size="17" font-weight="600" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">−2100</text><text x="310.0" y="96.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">3</text><rect x="350.0" y="30.0" width="64" height="44" rx="6" fill="#fff" stroke="#17191e" stroke-width="1.5"/><text x="382.0" y="59.0" font-family="inherit" font-size="19" font-weight="600" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">7</text><text x="382.0" y="96.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">4</text><rect x="422.0" y="30.0" width="64" height="44" rx="6" fill="#fff" stroke="#17191e" stroke-width="1.5"/><text x="454.0" y="59.0" font-family="inherit" font-size="19" font-weight="600" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">−325</text><text x="454.0" y="96.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">5</text><rect x="494.0" y="30.0" width="64" height="44" rx="6" fill="#fff" stroke="#17191e" stroke-width="1.5"/><text x="526.0" y="59.0" font-family="inherit" font-size="19" font-weight="600" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">2025</text><text x="526.0" y="96.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">6</text><rect x="566.0" y="30.0" width="64" height="44" rx="6" fill="#fff" stroke="#17191e" stroke-width="1.5"/><text x="598.0" y="59.0" font-family="inherit" font-size="19" font-weight="600" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">3000</text><text x="598.0" y="96.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">7</text><text x="50.0" y="96.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="end" style="font-variant-numeric:tabular-nums">индекс</text><path d="M 68.0 108 v 8 H 192.0 v -8" fill="none" stroke="#17191e" stroke-width="1.5" stroke-linejoin="round"/><text x="130.0" y="134.0" font-family="inherit" font-size="13" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">i = 0</text><path d="M 140.0 138 v 8 H 264.0 v -8" fill="none" stroke="#17191e" stroke-width="1.5" stroke-linejoin="round"/><text x="202.0" y="164.0" font-family="inherit" font-size="13" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">i = 1</text><path d="M 212.0 108 v 8 H 336.0 v -8" fill="none" stroke="#17191e" stroke-width="1.5" stroke-linejoin="round"/><text x="274.0" y="134.0" font-family="inherit" font-size="13" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">i = 2</text><path d="M 284.0 138 v 8 H 408.0 v -8" fill="none" stroke="#17191e" stroke-width="1.5" stroke-linejoin="round"/><text x="346.0" y="164.0" font-family="inherit" font-size="13" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">i = 3</text><path d="M 356.0 108 v 8 H 480.0 v -8" fill="none" stroke="#17191e" stroke-width="1.5" stroke-linejoin="round"/><text x="418.0" y="134.0" font-family="inherit" font-size="13" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">i = 4</text><path d="M 428.0 138 v 8 H 552.0 v -8" fill="none" stroke="#17191e" stroke-width="1.5" stroke-linejoin="round"/><text x="490.0" y="164.0" font-family="inherit" font-size="13" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">i = 5</text><path d="M 500.0 108 v 8 H 624.0 v -8" fill="none" stroke="#ff6a00" stroke-width="2" stroke-linejoin="round"/><text x="562.0" y="134.0" font-family="inherit" font-size="13" font-weight="600" fill="#ff6a00" text-anchor="middle" style="font-variant-numeric:tabular-nums">i = 6</text><text x="330.0" y="194.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">n = 8: последнее начало i = n − 2 = 6, всего пар n − 1 = 7</text></svg>',
     width: 660,
-    height: 250,
-    alt: "Три формулировки на одной паре",
+    height: 202,
+    alt: "Соседние группы по 2",
   },
-  // %%seq_negmod(-17, 10)%%
-  seqNegmod17_10: {
+  // run notes: "1: `a` — восемь чисел задачи темы.\n2: `sums` — пустой список: сюда попадут суммы подходящих троек.\n3.1: Первая тройка начинается с индекса `i` = `0`.\n4.1: Тройка `125, 1300, -1250`: сумма `175`.\n5.1: `175 <= 2025` — тройка подходит.\n6.1: Сумма `175` попадает в `sums`.\n3.2: `i` = `1` — тройка сдвинулась на одно число.\n4.2: Тройка `1300, -1250, -2100`: сумма `-2050`.\n4.3: Тройка `-1250, -2100, 7`: сумма `-3343`.\n4.4: Тройка `-2100, 7, -325`: сумма `-2418`.\n4.5: Тройка `7, -325, 2025`: сумма `1707`.\n4.6: Тройка `-325, 2025, 3000`: сумма `4700`.\n5.6: `4700 <= 2025` неверно — тройка не подходит, её сумма в список не попадает.\n5.2: `-2050 <= 2025` — тройка подходит.\n6.2: Сумма `-2050` попадает в `sums`.\n5.3: `-3343 <= 2025` — тройка подходит.\n6.3: Сумма `-3343` попадает в `sums`.\n5.4: `-2418 <= 2025` — тройка подходит.\n6.4: Сумма `-2418` попадает в `sums`.\n5.5: `1707 <= 2025` — тройка подходит.\n6.5: Сумма `1707` попадает в `sums`.\n3.3: `i` = `2` — следующая тройка.\n3.4: `i` = `3` — следующая тройка.\n3.5: `i` = `4` — следующая тройка.\n3.6: `i` = `5` — следующая тройка.\n3.7: Начала от `0` до `5` закончились — все шесть троек проверены.\n7: Подошли пять троек: `len(sums)` = `5`, наибольшая сумма `max(sums)` = `1707`."
+  runTriples: {
+    kind: "run",
+    code: "a = [125, 1300, -1250, -2100, 7, -325, 2025, 3000]\nsums = []\nfor i in range(len(a) - 2):\n    s = a[i] + a[i + 1] + a[i + 2]\n    if s <= 2025:\n        sums.append(s)\nprint(len(sums), max(sums))",
+    fileName: "triples.py",
+    output: "5 1707",
+    steps: [
+      {
+        line: null,
+        text: "Программа ещё не запущена.",
+        kind: "start",
+        frames: [{ title: "программа", names: [] }],
+        objs: {},
+        out: "",
+      },
+      {
+        line: 1,
+        text: "`a` — восемь чисел задачи темы.",
+        kind: "line",
+        frames: [
+          {
+            title: "программа",
+            names: [
+              {
+                n: "a",
+                v: "[125, 1300, -1250, -2100, 7, -325, 2025, 3000]",
+                ref: 0,
+                ch: true,
+              },
+            ],
+          },
+        ],
+        objs: {
+          "0": {
+            v: "[125, 1300, -1250, -2100, 7, -325, 2025, 3000]",
+            ch: true,
+          },
+        },
+        out: "",
+      },
+      {
+        line: 2,
+        text: "`sums` — пустой список: сюда попадут суммы подходящих троек.",
+        kind: "line",
+        frames: [
+          {
+            title: "программа",
+            names: [
+              {
+                n: "a",
+                v: "[125, 1300, -1250, -2100, 7, -325, 2025, 3000]",
+                ref: 0,
+                ch: false,
+              },
+              { n: "sums", v: "[]", ref: 1, ch: true },
+            ],
+          },
+        ],
+        objs: {
+          "0": {
+            v: "[125, 1300, -1250, -2100, 7, -325, 2025, 3000]",
+            ch: false,
+          },
+          "1": { v: "[]", ch: true },
+        },
+        out: "",
+      },
+      {
+        line: 3,
+        text: "Первая тройка начинается с индекса `i` = `0`.",
+        kind: "line",
+        frames: [
+          {
+            title: "программа",
+            names: [
+              {
+                n: "a",
+                v: "[125, 1300, -1250, -2100, 7, -325, 2025, 3000]",
+                ref: 0,
+                ch: false,
+              },
+              { n: "sums", v: "[]", ref: 1, ch: false },
+              { n: "i", v: "0", ref: null, ch: true },
+            ],
+          },
+        ],
+        objs: {
+          "0": {
+            v: "[125, 1300, -1250, -2100, 7, -325, 2025, 3000]",
+            ch: false,
+          },
+          "1": { v: "[]", ch: false },
+        },
+        out: "",
+      },
+      {
+        line: 4,
+        text: "Тройка `125, 1300, -1250`: сумма `175`.",
+        kind: "line",
+        frames: [
+          {
+            title: "программа",
+            names: [
+              {
+                n: "a",
+                v: "[125, 1300, -1250, -2100, 7, -325, 2025, 3000]",
+                ref: 0,
+                ch: false,
+              },
+              { n: "sums", v: "[]", ref: 1, ch: false },
+              { n: "i", v: "0", ref: null, ch: false },
+              { n: "s", v: "175", ref: null, ch: true },
+            ],
+          },
+        ],
+        objs: {
+          "0": {
+            v: "[125, 1300, -1250, -2100, 7, -325, 2025, 3000]",
+            ch: false,
+          },
+          "1": { v: "[]", ch: false },
+        },
+        out: "",
+      },
+      {
+        line: 5,
+        text: "`175 <= 2025` — тройка подходит.",
+        kind: "line",
+        frames: [
+          {
+            title: "программа",
+            names: [
+              {
+                n: "a",
+                v: "[125, 1300, -1250, -2100, 7, -325, 2025, 3000]",
+                ref: 0,
+                ch: false,
+              },
+              { n: "sums", v: "[]", ref: 1, ch: false },
+              { n: "i", v: "0", ref: null, ch: false },
+              { n: "s", v: "175", ref: null, ch: false },
+            ],
+          },
+        ],
+        objs: {
+          "0": {
+            v: "[125, 1300, -1250, -2100, 7, -325, 2025, 3000]",
+            ch: false,
+          },
+          "1": { v: "[]", ch: false },
+        },
+        out: "",
+      },
+      {
+        line: 6,
+        text: "Сумма `175` попадает в `sums`.",
+        kind: "line",
+        frames: [
+          {
+            title: "программа",
+            names: [
+              {
+                n: "a",
+                v: "[125, 1300, -1250, -2100, 7, -325, 2025, 3000]",
+                ref: 0,
+                ch: false,
+              },
+              { n: "sums", v: "[175]", ref: 1, ch: true },
+              { n: "i", v: "0", ref: null, ch: false },
+              { n: "s", v: "175", ref: null, ch: false },
+            ],
+          },
+        ],
+        objs: {
+          "0": {
+            v: "[125, 1300, -1250, -2100, 7, -325, 2025, 3000]",
+            ch: false,
+          },
+          "1": { v: "[175]", ch: true },
+        },
+        out: "",
+      },
+      {
+        line: 3,
+        text: "`i` = `1` — тройка сдвинулась на одно число.",
+        kind: "line",
+        frames: [
+          {
+            title: "программа",
+            names: [
+              {
+                n: "a",
+                v: "[125, 1300, -1250, -2100, 7, -325, 2025, 3000]",
+                ref: 0,
+                ch: false,
+              },
+              { n: "sums", v: "[175]", ref: 1, ch: false },
+              { n: "i", v: "1", ref: null, ch: true },
+              { n: "s", v: "175", ref: null, ch: false },
+            ],
+          },
+        ],
+        objs: {
+          "0": {
+            v: "[125, 1300, -1250, -2100, 7, -325, 2025, 3000]",
+            ch: false,
+          },
+          "1": { v: "[175]", ch: false },
+        },
+        out: "",
+      },
+      {
+        line: 4,
+        text: "Тройка `1300, -1250, -2100`: сумма `-2050`.",
+        kind: "line",
+        frames: [
+          {
+            title: "программа",
+            names: [
+              {
+                n: "a",
+                v: "[125, 1300, -1250, -2100, 7, -325, 2025, 3000]",
+                ref: 0,
+                ch: false,
+              },
+              { n: "sums", v: "[175]", ref: 1, ch: false },
+              { n: "i", v: "1", ref: null, ch: false },
+              { n: "s", v: "-2050", ref: null, ch: true },
+            ],
+          },
+        ],
+        objs: {
+          "0": {
+            v: "[125, 1300, -1250, -2100, 7, -325, 2025, 3000]",
+            ch: false,
+          },
+          "1": { v: "[175]", ch: false },
+        },
+        out: "",
+      },
+      {
+        line: 5,
+        text: "`-2050 <= 2025` — тройка подходит.",
+        kind: "line",
+        frames: [
+          {
+            title: "программа",
+            names: [
+              {
+                n: "a",
+                v: "[125, 1300, -1250, -2100, 7, -325, 2025, 3000]",
+                ref: 0,
+                ch: false,
+              },
+              { n: "sums", v: "[175]", ref: 1, ch: false },
+              { n: "i", v: "1", ref: null, ch: false },
+              { n: "s", v: "-2050", ref: null, ch: false },
+            ],
+          },
+        ],
+        objs: {
+          "0": {
+            v: "[125, 1300, -1250, -2100, 7, -325, 2025, 3000]",
+            ch: false,
+          },
+          "1": { v: "[175]", ch: false },
+        },
+        out: "",
+      },
+      {
+        line: 6,
+        text: "Сумма `-2050` попадает в `sums`.",
+        kind: "line",
+        frames: [
+          {
+            title: "программа",
+            names: [
+              {
+                n: "a",
+                v: "[125, 1300, -1250, -2100, 7, -325, 2025, 3000]",
+                ref: 0,
+                ch: false,
+              },
+              { n: "sums", v: "[175, -2050]", ref: 1, ch: true },
+              { n: "i", v: "1", ref: null, ch: false },
+              { n: "s", v: "-2050", ref: null, ch: false },
+            ],
+          },
+        ],
+        objs: {
+          "0": {
+            v: "[125, 1300, -1250, -2100, 7, -325, 2025, 3000]",
+            ch: false,
+          },
+          "1": { v: "[175, -2050]", ch: true },
+        },
+        out: "",
+      },
+      {
+        line: 3,
+        text: "`i` = `2` — следующая тройка.",
+        kind: "line",
+        frames: [
+          {
+            title: "программа",
+            names: [
+              {
+                n: "a",
+                v: "[125, 1300, -1250, -2100, 7, -325, 2025, 3000]",
+                ref: 0,
+                ch: false,
+              },
+              { n: "sums", v: "[175, -2050]", ref: 1, ch: false },
+              { n: "i", v: "2", ref: null, ch: true },
+              { n: "s", v: "-2050", ref: null, ch: false },
+            ],
+          },
+        ],
+        objs: {
+          "0": {
+            v: "[125, 1300, -1250, -2100, 7, -325, 2025, 3000]",
+            ch: false,
+          },
+          "1": { v: "[175, -2050]", ch: false },
+        },
+        out: "",
+      },
+      {
+        line: 4,
+        text: "Тройка `-1250, -2100, 7`: сумма `-3343`.",
+        kind: "line",
+        frames: [
+          {
+            title: "программа",
+            names: [
+              {
+                n: "a",
+                v: "[125, 1300, -1250, -2100, 7, -325, 2025, 3000]",
+                ref: 0,
+                ch: false,
+              },
+              { n: "sums", v: "[175, -2050]", ref: 1, ch: false },
+              { n: "i", v: "2", ref: null, ch: false },
+              { n: "s", v: "-3343", ref: null, ch: true },
+            ],
+          },
+        ],
+        objs: {
+          "0": {
+            v: "[125, 1300, -1250, -2100, 7, -325, 2025, 3000]",
+            ch: false,
+          },
+          "1": { v: "[175, -2050]", ch: false },
+        },
+        out: "",
+      },
+      {
+        line: 5,
+        text: "`-3343 <= 2025` — тройка подходит.",
+        kind: "line",
+        frames: [
+          {
+            title: "программа",
+            names: [
+              {
+                n: "a",
+                v: "[125, 1300, -1250, -2100, 7, -325, 2025, 3000]",
+                ref: 0,
+                ch: false,
+              },
+              { n: "sums", v: "[175, -2050]", ref: 1, ch: false },
+              { n: "i", v: "2", ref: null, ch: false },
+              { n: "s", v: "-3343", ref: null, ch: false },
+            ],
+          },
+        ],
+        objs: {
+          "0": {
+            v: "[125, 1300, -1250, -2100, 7, -325, 2025, 3000]",
+            ch: false,
+          },
+          "1": { v: "[175, -2050]", ch: false },
+        },
+        out: "",
+      },
+      {
+        line: 6,
+        text: "Сумма `-3343` попадает в `sums`.",
+        kind: "line",
+        frames: [
+          {
+            title: "программа",
+            names: [
+              {
+                n: "a",
+                v: "[125, 1300, -1250, -2100, 7, -325, 2025, 3000]",
+                ref: 0,
+                ch: false,
+              },
+              { n: "sums", v: "[175, -2050, -3343]", ref: 1, ch: true },
+              { n: "i", v: "2", ref: null, ch: false },
+              { n: "s", v: "-3343", ref: null, ch: false },
+            ],
+          },
+        ],
+        objs: {
+          "0": {
+            v: "[125, 1300, -1250, -2100, 7, -325, 2025, 3000]",
+            ch: false,
+          },
+          "1": { v: "[175, -2050, -3343]", ch: true },
+        },
+        out: "",
+      },
+      {
+        line: 3,
+        text: "`i` = `3` — следующая тройка.",
+        kind: "line",
+        frames: [
+          {
+            title: "программа",
+            names: [
+              {
+                n: "a",
+                v: "[125, 1300, -1250, -2100, 7, -325, 2025, 3000]",
+                ref: 0,
+                ch: false,
+              },
+              { n: "sums", v: "[175, -2050, -3343]", ref: 1, ch: false },
+              { n: "i", v: "3", ref: null, ch: true },
+              { n: "s", v: "-3343", ref: null, ch: false },
+            ],
+          },
+        ],
+        objs: {
+          "0": {
+            v: "[125, 1300, -1250, -2100, 7, -325, 2025, 3000]",
+            ch: false,
+          },
+          "1": { v: "[175, -2050, -3343]", ch: false },
+        },
+        out: "",
+      },
+      {
+        line: 4,
+        text: "Тройка `-2100, 7, -325`: сумма `-2418`.",
+        kind: "line",
+        frames: [
+          {
+            title: "программа",
+            names: [
+              {
+                n: "a",
+                v: "[125, 1300, -1250, -2100, 7, -325, 2025, 3000]",
+                ref: 0,
+                ch: false,
+              },
+              { n: "sums", v: "[175, -2050, -3343]", ref: 1, ch: false },
+              { n: "i", v: "3", ref: null, ch: false },
+              { n: "s", v: "-2418", ref: null, ch: true },
+            ],
+          },
+        ],
+        objs: {
+          "0": {
+            v: "[125, 1300, -1250, -2100, 7, -325, 2025, 3000]",
+            ch: false,
+          },
+          "1": { v: "[175, -2050, -3343]", ch: false },
+        },
+        out: "",
+      },
+      {
+        line: 5,
+        text: "`-2418 <= 2025` — тройка подходит.",
+        kind: "line",
+        frames: [
+          {
+            title: "программа",
+            names: [
+              {
+                n: "a",
+                v: "[125, 1300, -1250, -2100, 7, -325, 2025, 3000]",
+                ref: 0,
+                ch: false,
+              },
+              { n: "sums", v: "[175, -2050, -3343]", ref: 1, ch: false },
+              { n: "i", v: "3", ref: null, ch: false },
+              { n: "s", v: "-2418", ref: null, ch: false },
+            ],
+          },
+        ],
+        objs: {
+          "0": {
+            v: "[125, 1300, -1250, -2100, 7, -325, 2025, 3000]",
+            ch: false,
+          },
+          "1": { v: "[175, -2050, -3343]", ch: false },
+        },
+        out: "",
+      },
+      {
+        line: 6,
+        text: "Сумма `-2418` попадает в `sums`.",
+        kind: "line",
+        frames: [
+          {
+            title: "программа",
+            names: [
+              {
+                n: "a",
+                v: "[125, 1300, -1250, -2100, 7, -325, 2025, 3000]",
+                ref: 0,
+                ch: false,
+              },
+              { n: "sums", v: "[175, -2050, -3343, -2418]", ref: 1, ch: true },
+              { n: "i", v: "3", ref: null, ch: false },
+              { n: "s", v: "-2418", ref: null, ch: false },
+            ],
+          },
+        ],
+        objs: {
+          "0": {
+            v: "[125, 1300, -1250, -2100, 7, -325, 2025, 3000]",
+            ch: false,
+          },
+          "1": { v: "[175, -2050, -3343, -2418]", ch: true },
+        },
+        out: "",
+      },
+      {
+        line: 3,
+        text: "`i` = `4` — следующая тройка.",
+        kind: "line",
+        frames: [
+          {
+            title: "программа",
+            names: [
+              {
+                n: "a",
+                v: "[125, 1300, -1250, -2100, 7, -325, 2025, 3000]",
+                ref: 0,
+                ch: false,
+              },
+              { n: "sums", v: "[175, -2050, -3343, -2418]", ref: 1, ch: false },
+              { n: "i", v: "4", ref: null, ch: true },
+              { n: "s", v: "-2418", ref: null, ch: false },
+            ],
+          },
+        ],
+        objs: {
+          "0": {
+            v: "[125, 1300, -1250, -2100, 7, -325, 2025, 3000]",
+            ch: false,
+          },
+          "1": { v: "[175, -2050, -3343, -2418]", ch: false },
+        },
+        out: "",
+      },
+      {
+        line: 4,
+        text: "Тройка `7, -325, 2025`: сумма `1707`.",
+        kind: "line",
+        frames: [
+          {
+            title: "программа",
+            names: [
+              {
+                n: "a",
+                v: "[125, 1300, -1250, -2100, 7, -325, 2025, 3000]",
+                ref: 0,
+                ch: false,
+              },
+              { n: "sums", v: "[175, -2050, -3343, -2418]", ref: 1, ch: false },
+              { n: "i", v: "4", ref: null, ch: false },
+              { n: "s", v: "1707", ref: null, ch: true },
+            ],
+          },
+        ],
+        objs: {
+          "0": {
+            v: "[125, 1300, -1250, -2100, 7, -325, 2025, 3000]",
+            ch: false,
+          },
+          "1": { v: "[175, -2050, -3343, -2418]", ch: false },
+        },
+        out: "",
+      },
+      {
+        line: 5,
+        text: "`1707 <= 2025` — тройка подходит.",
+        kind: "line",
+        frames: [
+          {
+            title: "программа",
+            names: [
+              {
+                n: "a",
+                v: "[125, 1300, -1250, -2100, 7, -325, 2025, 3000]",
+                ref: 0,
+                ch: false,
+              },
+              { n: "sums", v: "[175, -2050, -3343, -2418]", ref: 1, ch: false },
+              { n: "i", v: "4", ref: null, ch: false },
+              { n: "s", v: "1707", ref: null, ch: false },
+            ],
+          },
+        ],
+        objs: {
+          "0": {
+            v: "[125, 1300, -1250, -2100, 7, -325, 2025, 3000]",
+            ch: false,
+          },
+          "1": { v: "[175, -2050, -3343, -2418]", ch: false },
+        },
+        out: "",
+      },
+      {
+        line: 6,
+        text: "Сумма `1707` попадает в `sums`.",
+        kind: "line",
+        frames: [
+          {
+            title: "программа",
+            names: [
+              {
+                n: "a",
+                v: "[125, 1300, -1250, -2100, 7, -325, 2025, 3000]",
+                ref: 0,
+                ch: false,
+              },
+              {
+                n: "sums",
+                v: "[175, -2050, -3343, -2418, 1707]",
+                ref: 1,
+                ch: true,
+              },
+              { n: "i", v: "4", ref: null, ch: false },
+              { n: "s", v: "1707", ref: null, ch: false },
+            ],
+          },
+        ],
+        objs: {
+          "0": {
+            v: "[125, 1300, -1250, -2100, 7, -325, 2025, 3000]",
+            ch: false,
+          },
+          "1": { v: "[175, -2050, -3343, -2418, 1707]", ch: true },
+        },
+        out: "",
+      },
+      {
+        line: 3,
+        text: "`i` = `5` — следующая тройка.",
+        kind: "line",
+        frames: [
+          {
+            title: "программа",
+            names: [
+              {
+                n: "a",
+                v: "[125, 1300, -1250, -2100, 7, -325, 2025, 3000]",
+                ref: 0,
+                ch: false,
+              },
+              {
+                n: "sums",
+                v: "[175, -2050, -3343, -2418, 1707]",
+                ref: 1,
+                ch: false,
+              },
+              { n: "i", v: "5", ref: null, ch: true },
+              { n: "s", v: "1707", ref: null, ch: false },
+            ],
+          },
+        ],
+        objs: {
+          "0": {
+            v: "[125, 1300, -1250, -2100, 7, -325, 2025, 3000]",
+            ch: false,
+          },
+          "1": { v: "[175, -2050, -3343, -2418, 1707]", ch: false },
+        },
+        out: "",
+      },
+      {
+        line: 4,
+        text: "Тройка `-325, 2025, 3000`: сумма `4700`.",
+        kind: "line",
+        frames: [
+          {
+            title: "программа",
+            names: [
+              {
+                n: "a",
+                v: "[125, 1300, -1250, -2100, 7, -325, 2025, 3000]",
+                ref: 0,
+                ch: false,
+              },
+              {
+                n: "sums",
+                v: "[175, -2050, -3343, -2418, 1707]",
+                ref: 1,
+                ch: false,
+              },
+              { n: "i", v: "5", ref: null, ch: false },
+              { n: "s", v: "4700", ref: null, ch: true },
+            ],
+          },
+        ],
+        objs: {
+          "0": {
+            v: "[125, 1300, -1250, -2100, 7, -325, 2025, 3000]",
+            ch: false,
+          },
+          "1": { v: "[175, -2050, -3343, -2418, 1707]", ch: false },
+        },
+        out: "",
+      },
+      {
+        line: 5,
+        text: "`4700 <= 2025` неверно — тройка не подходит, её сумма в список не попадает.",
+        kind: "line",
+        frames: [
+          {
+            title: "программа",
+            names: [
+              {
+                n: "a",
+                v: "[125, 1300, -1250, -2100, 7, -325, 2025, 3000]",
+                ref: 0,
+                ch: false,
+              },
+              {
+                n: "sums",
+                v: "[175, -2050, -3343, -2418, 1707]",
+                ref: 1,
+                ch: false,
+              },
+              { n: "i", v: "5", ref: null, ch: false },
+              { n: "s", v: "4700", ref: null, ch: false },
+            ],
+          },
+        ],
+        objs: {
+          "0": {
+            v: "[125, 1300, -1250, -2100, 7, -325, 2025, 3000]",
+            ch: false,
+          },
+          "1": { v: "[175, -2050, -3343, -2418, 1707]", ch: false },
+        },
+        out: "",
+      },
+      {
+        line: 3,
+        text: "Начала от `0` до `5` закончились — все шесть троек проверены.",
+        kind: "line",
+        frames: [
+          {
+            title: "программа",
+            names: [
+              {
+                n: "a",
+                v: "[125, 1300, -1250, -2100, 7, -325, 2025, 3000]",
+                ref: 0,
+                ch: false,
+              },
+              {
+                n: "sums",
+                v: "[175, -2050, -3343, -2418, 1707]",
+                ref: 1,
+                ch: false,
+              },
+              { n: "i", v: "5", ref: null, ch: false },
+              { n: "s", v: "4700", ref: null, ch: false },
+            ],
+          },
+        ],
+        objs: {
+          "0": {
+            v: "[125, 1300, -1250, -2100, 7, -325, 2025, 3000]",
+            ch: false,
+          },
+          "1": { v: "[175, -2050, -3343, -2418, 1707]", ch: false },
+        },
+        out: "",
+      },
+      {
+        line: 7,
+        text: "Подошли пять троек: `len(sums)` = `5`, наибольшая сумма `max(sums)` = `1707`.",
+        kind: "line",
+        frames: [
+          {
+            title: "программа",
+            names: [
+              {
+                n: "a",
+                v: "[125, 1300, -1250, -2100, 7, -325, 2025, 3000]",
+                ref: 0,
+                ch: false,
+              },
+              {
+                n: "sums",
+                v: "[175, -2050, -3343, -2418, 1707]",
+                ref: 1,
+                ch: false,
+              },
+              { n: "i", v: "5", ref: null, ch: false },
+              { n: "s", v: "4700", ref: null, ch: false },
+            ],
+          },
+        ],
+        objs: {
+          "0": {
+            v: "[125, 1300, -1250, -2100, 7, -325, 2025, 3000]",
+            ch: false,
+          },
+          "1": { v: "[175, -2050, -3343, -2418, 1707]", ch: false },
+        },
+        out: "5 1707\n",
+      },
+    ],
+  },
+  // %%seq_windows([125, 1300, -1250, -2100, 7, -325, 2025, 3000], 3)%%
+  seqWindows3: {
     kind: "diagram",
-    svg: '<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" viewBox="0 0 660 190"><line x1="40" y1="92" x2="620" y2="92" stroke="#17191e" stroke-width="1.5"/><line x1="40.0" y1="85" x2="40.0" y2="99" stroke="#17191e"/><text x="40.0" y="120.0" font-family="inherit" font-size="14" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">−30</text><line x1="59.3" y1="89" x2="59.3" y2="95" stroke="#d9d9d4"/><line x1="78.7" y1="89" x2="78.7" y2="95" stroke="#d9d9d4"/><line x1="98.0" y1="89" x2="98.0" y2="95" stroke="#d9d9d4"/><line x1="117.3" y1="89" x2="117.3" y2="95" stroke="#d9d9d4"/><line x1="136.7" y1="89" x2="136.7" y2="95" stroke="#d9d9d4"/><line x1="156.0" y1="89" x2="156.0" y2="95" stroke="#d9d9d4"/><line x1="175.3" y1="89" x2="175.3" y2="95" stroke="#d9d9d4"/><line x1="194.7" y1="89" x2="194.7" y2="95" stroke="#d9d9d4"/><line x1="214.0" y1="89" x2="214.0" y2="95" stroke="#d9d9d4"/><line x1="233.3" y1="85" x2="233.3" y2="99" stroke="#17191e"/><text x="233.3" y="120.0" font-family="inherit" font-size="14" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">−20</text><line x1="252.7" y1="89" x2="252.7" y2="95" stroke="#d9d9d4"/><line x1="272.0" y1="89" x2="272.0" y2="95" stroke="#d9d9d4"/><line x1="291.3" y1="89" x2="291.3" y2="95" stroke="#d9d9d4"/><line x1="310.7" y1="89" x2="310.7" y2="95" stroke="#d9d9d4"/><line x1="330.0" y1="89" x2="330.0" y2="95" stroke="#d9d9d4"/><line x1="349.3" y1="89" x2="349.3" y2="95" stroke="#d9d9d4"/><line x1="368.7" y1="89" x2="368.7" y2="95" stroke="#d9d9d4"/><line x1="388.0" y1="89" x2="388.0" y2="95" stroke="#d9d9d4"/><line x1="407.3" y1="89" x2="407.3" y2="95" stroke="#d9d9d4"/><line x1="426.7" y1="85" x2="426.7" y2="99" stroke="#17191e"/><text x="426.7" y="120.0" font-family="inherit" font-size="14" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">−10</text><line x1="446.0" y1="89" x2="446.0" y2="95" stroke="#d9d9d4"/><line x1="465.3" y1="89" x2="465.3" y2="95" stroke="#d9d9d4"/><line x1="484.7" y1="89" x2="484.7" y2="95" stroke="#d9d9d4"/><line x1="504.0" y1="89" x2="504.0" y2="95" stroke="#d9d9d4"/><line x1="523.3" y1="89" x2="523.3" y2="95" stroke="#d9d9d4"/><line x1="542.7" y1="89" x2="542.7" y2="95" stroke="#d9d9d4"/><line x1="562.0" y1="89" x2="562.0" y2="95" stroke="#d9d9d4"/><line x1="581.3" y1="89" x2="581.3" y2="95" stroke="#d9d9d4"/><line x1="600.7" y1="89" x2="600.7" y2="95" stroke="#d9d9d4"/><line x1="620.0" y1="85" x2="620.0" y2="99" stroke="#17191e"/><text x="620.0" y="120.0" font-family="inherit" font-size="14" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">0</text><path d="M 233.3 78 Q 262.3 36 291.3 78" fill="none" stroke="#ff6a00" stroke-width="2"/><text x="262.3" y="48.0" font-family="inherit" font-size="15" font-weight="600" fill="#ff6a00" text-anchor="middle" style="font-variant-numeric:tabular-nums">+3</text><circle cx="291.3" cy="92" r="6" fill="#ff6a00"/><text x="291.3" y="120.0" font-family="inherit" font-size="15" font-weight="600" fill="#ff6a00" text-anchor="middle" style="font-variant-numeric:tabular-nums">−17</text><text x="233.3" y="22.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">ближайшее слева кратное 10: −20</text><text x="330.0" y="156.0" font-family="inherit" font-size="15" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">−17 = (−2) · 10 + 3, поэтому −17 % 10 = 3</text><text x="330.0" y="180.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">последняя цифра записи — остаток модуля: 17 = 1 · 10 + 7</text></svg>',
+    svg: '<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" viewBox="0 0 660 232"><rect x="62.0" y="30.0" width="64" height="44" rx="6" fill="#fff" stroke="#17191e" stroke-width="1.5"/><text x="94.0" y="59.0" font-family="inherit" font-size="19" font-weight="600" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">125</text><text x="94.0" y="96.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">0</text><rect x="134.0" y="30.0" width="64" height="44" rx="6" fill="#fff" stroke="#17191e" stroke-width="1.5"/><text x="166.0" y="59.0" font-family="inherit" font-size="19" font-weight="600" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">1300</text><text x="166.0" y="96.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">1</text><rect x="206.0" y="30.0" width="64" height="44" rx="6" fill="#fff" stroke="#17191e" stroke-width="1.5"/><text x="238.0" y="59.0" font-family="inherit" font-size="17" font-weight="600" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">−1250</text><text x="238.0" y="96.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">2</text><rect x="278.0" y="30.0" width="64" height="44" rx="6" fill="#fff" stroke="#17191e" stroke-width="1.5"/><text x="310.0" y="59.0" font-family="inherit" font-size="17" font-weight="600" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">−2100</text><text x="310.0" y="96.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">3</text><rect x="350.0" y="30.0" width="64" height="44" rx="6" fill="#fff" stroke="#17191e" stroke-width="1.5"/><text x="382.0" y="59.0" font-family="inherit" font-size="19" font-weight="600" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">7</text><text x="382.0" y="96.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">4</text><rect x="422.0" y="30.0" width="64" height="44" rx="6" fill="#fff" stroke="#17191e" stroke-width="1.5"/><text x="454.0" y="59.0" font-family="inherit" font-size="19" font-weight="600" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">−325</text><text x="454.0" y="96.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">5</text><rect x="494.0" y="30.0" width="64" height="44" rx="6" fill="#fff" stroke="#17191e" stroke-width="1.5"/><text x="526.0" y="59.0" font-family="inherit" font-size="19" font-weight="600" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">2025</text><text x="526.0" y="96.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">6</text><rect x="566.0" y="30.0" width="64" height="44" rx="6" fill="#fff" stroke="#17191e" stroke-width="1.5"/><text x="598.0" y="59.0" font-family="inherit" font-size="19" font-weight="600" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">3000</text><text x="598.0" y="96.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">7</text><text x="50.0" y="96.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="end" style="font-variant-numeric:tabular-nums">индекс</text><path d="M 68.0 108 v 8 H 264.0 v -8" fill="none" stroke="#17191e" stroke-width="1.5" stroke-linejoin="round"/><text x="166.0" y="134.0" font-family="inherit" font-size="13" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">i = 0</text><path d="M 140.0 138 v 8 H 336.0 v -8" fill="none" stroke="#17191e" stroke-width="1.5" stroke-linejoin="round"/><text x="238.0" y="164.0" font-family="inherit" font-size="13" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">i = 1</text><path d="M 212.0 168 v 8 H 408.0 v -8" fill="none" stroke="#17191e" stroke-width="1.5" stroke-linejoin="round"/><text x="310.0" y="194.0" font-family="inherit" font-size="13" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">i = 2</text><path d="M 284.0 108 v 8 H 480.0 v -8" fill="none" stroke="#17191e" stroke-width="1.5" stroke-linejoin="round"/><text x="382.0" y="134.0" font-family="inherit" font-size="13" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">i = 3</text><path d="M 356.0 138 v 8 H 552.0 v -8" fill="none" stroke="#17191e" stroke-width="1.5" stroke-linejoin="round"/><text x="454.0" y="164.0" font-family="inherit" font-size="13" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">i = 4</text><path d="M 428.0 168 v 8 H 624.0 v -8" fill="none" stroke="#ff6a00" stroke-width="2" stroke-linejoin="round"/><text x="526.0" y="194.0" font-family="inherit" font-size="13" font-weight="600" fill="#ff6a00" text-anchor="middle" style="font-variant-numeric:tabular-nums">i = 5</text><text x="330.0" y="224.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">n = 8: последнее начало i = n − 3 = 5, всего троек n − 2 = 6</text></svg>',
     width: 660,
-    height: 190,
-    alt: "Остаток -17 от деления на 10",
+    height: 232,
+    alt: "Соседние группы по 3",
   },
 } as const satisfies Record<string, LessonMediaTypes.Generated>;

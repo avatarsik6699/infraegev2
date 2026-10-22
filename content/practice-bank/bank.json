@@ -141219,7 +141219,7 @@
         "explanation_kind": "worked_solution",
         "difficulty": 1,
         "estimated_minutes": 1,
-        "answer_instruction": "Введите два числа через пробел в том порядке, в каком их спрашивают.",
+        "answer_instruction": "Введите через пробел сумму квадратов, затем квадрат суммы.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
@@ -141234,7 +141234,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Сумма квадратов — сначала возвести каждое число, квадрат суммы — сначала сложить."
+              "markdown": "Сумма квадратов — сначала возвести каждое число в квадрат, квадрат суммы — сначала сложить."
             }
           }
         ],
@@ -141242,7 +141242,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "53 и 81: 4 + 49 = 53, а 9² = 81."
+              "markdown": "4 + 49 = 53, а (2 + 7)² = 9² = 81."
             }
           },
           {
@@ -141250,7 +141250,13 @@
             "data": {
               "language": "python",
               "code": "x, y = 2, 7\nprint(x ** 2 + y ** 2, (x + y) ** 2)",
-              "caption": "Решение программой"
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `53 81`"
             }
           }
         ],
@@ -141259,7 +141265,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 0,
+            "position": 3,
             "material_id": "number-sequences"
           }
         ],
@@ -141340,21 +141346,10 @@
         "skills": [],
         "exam_numbers": [17],
         "files": [],
-        "lessons": [
-          {
-            "position": 1,
-            "material_id": "number-sequences"
-          }
-        ],
-        "theory_links": [
-          {
-            "label": "Теория",
-            "section": "pervaya-stroka",
-            "material_id": "number-sequences"
-          }
-        ],
+        "lessons": [],
+        "theory_links": [],
         "catalog_visible": false,
-        "archived": false,
+        "archived": true,
         "sources": [
           {
             "url": null,
@@ -141385,7 +141380,7 @@
         "explanation_kind": "worked_solution",
         "difficulty": 1,
         "estimated_minutes": 4,
-        "answer_instruction": "Введите два числа через пробел в том порядке, в каком их спрашивают.",
+        "answer_instruction": "Введите через пробел количество кратных 9, затем количество положительных кратных 9.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
@@ -141406,7 +141401,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Кратность — `x % 9 == 0`; ноль и отрицательные кратные входят только в первое количество."
+              "markdown": "Кратность — `x % 9 == 0`. Ноль и отрицательные кратные входят только в первое количество."
             }
           }
         ],
@@ -141414,15 +141409,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "`111 48`: ноль и отрицательные кратные девяти входят в первое количество, но не во второе."
+              "markdown": "Первый счётчик растёт на каждом кратном девяти, второй — только на положительном из них."
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "with open(\"17-1.txt\") as f:\n    a = [int(part) for part in f.read().split()]\n\ncount = 0\npositive = 0\nfor x in a:\n    if x % 9 == 0:\n        count += 1\n        if x > 0:\n            positive += 1\nprint(count, positive)",
-              "caption": "Решение программой"
+              "code": "with open(\"17-1.txt\") as f:\n    a = [int(x) for x in f]\ncount = 0\npositive = 0\nfor x in a:\n    if x % 9 == 0:\n        count += 1\n        if x > 0:\n            positive += 1\nprint(count, positive)",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `111 48`"
             }
           }
         ],
@@ -141477,13 +141478,325 @@
     },
     {
       "task": {
+        "id": "task-17-5-10",
+        "title": "Задача темы",
+        "short_description": null,
+        "explanation_kind": "worked_solution",
+        "difficulty": 3,
+        "estimated_minutes": 8,
+        "answer_instruction": "Введите через пробел количество троек, затем максимальную сумму.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "В файле 17.txt содержится последовательность целых чисел. Элементы последовательности могут принимать целые значения от −100 000 до 100 000 включительно. Определите количество троек элементов последовательности, в которых не более двух из трёх элементов являются четырёхзначными числами, а сумма элементов тройки не больше максимального элемента последовательности, оканчивающегося на 25. В ответе запишите количество найденных троек чисел, затем максимальную из сумм элементов таких троек. В данной задаче под тройкой подразумевается три идущих подряд элемента последовательности."
+            }
+          },
+          {
+            "type": "attachment",
+            "data": {
+              "usage_id": "statement-1"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Порог — `max` чисел, у которых `abs(x) % 100 == 25`; четырёхзначность — по модулю, «не более двух» — `k <= 2`."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Порог по файлу — 99825. Проверь программу на восьми числах темы: должно получиться 4 1707."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "def four(x):\n    return 1000 <= abs(x) <= 9999\n\n\nwith open(\"17.txt\") as f:\n    a = [int(x) for x in f]\nlimit = max([x for x in a if abs(x) % 100 == 25])\nsums = []\nfor i in range(len(a) - 2):\n    x, y, z = a[i], a[i + 1], a[i + 2]\n    k = int(four(x)) + int(four(y)) + int(four(z))\n    if k <= 2 and x + y + z <= limit:\n        sums.append(x + y + z)\nprint(len(sums), max(sums))",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `8358 99821`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [17],
+        "files": [
+          {
+            "id": "statement-1",
+            "purpose": "attachment",
+            "checksum": "24aefa979defdd581e6bb6c34ea12612b3bbdbe580f6a07978e29b5c7c2b65e4",
+            "filename": "17.txt",
+            "attribution": null,
+            "description": "Последовательность целых чисел от −100 000 до 100 000"
+          }
+        ],
+        "lessons": [
+          {
+            "position": 20,
+            "material_id": "number-sequences"
+          }
+        ],
+        "theory_links": [
+          {
+            "label": "Теория",
+            "section": "zadacha-temy",
+            "material_id": "number-sequences"
+          }
+        ],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["8358 99821"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "task-17-4-10",
+        "title": "Тройки с суммой, кратной 10",
+        "short_description": null,
+        "explanation_kind": "worked_solution",
+        "difficulty": 1,
+        "estimated_minutes": 4,
+        "answer_instruction": "Введите через пробел количество троек, затем максимальную сумму.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "В файле 17-1.txt содержится последовательность целых чисел от −10 000 до 10 000. Определите количество троек элементов последовательности, сумма которых кратна 10, затем максимальную из сумм элементов таких троек. Под тройкой подразумевается три идущих подряд элемента последовательности."
+            }
+          },
+          {
+            "type": "attachment",
+            "data": {
+              "usage_id": "statement-1"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Складывай в список суммы подходящих троек: его длина — количество, `max` — ответ."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Тройки перебирает `range(len(a) - 2)`, сумма подходящей тройки попадает в список внутри `if`."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "with open(\"17-1.txt\") as f:\n    a = [int(x) for x in f]\nsums = []\nfor i in range(len(a) - 2):\n    s = a[i] + a[i + 1] + a[i + 2]\n    if s % 10 == 0:\n        sums.append(s)\nprint(len(sums), max(sums))",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `87 17460`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [17],
+        "files": [
+          {
+            "id": "statement-1",
+            "purpose": "attachment",
+            "checksum": "05899e44c905c7f0103bdeb17560369b8819ba428e036dc876c74290d8870e12",
+            "filename": "17-1.txt",
+            "attribution": null,
+            "description": "Последовательность целых чисел от −10 000 до 10 000"
+          }
+        ],
+        "lessons": [
+          {
+            "position": 6,
+            "material_id": "number-sequences"
+          }
+        ],
+        "theory_links": [
+          {
+            "label": "Теория",
+            "section": "kolichestvo-i-maksimum",
+            "material_id": "number-sequences"
+          }
+        ],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["87 17460"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "task-17-1-09",
+        "title": "Длина и края списка",
+        "short_description": null,
+        "explanation_kind": "worked_solution",
+        "difficulty": 1,
+        "estimated_minutes": 4,
+        "answer_instruction": "Введите через пробел количество чисел, затем сумму первого и последнего.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "В файле 17-1.txt содержится последовательность целых чисел, по одному в строке. Определите количество чисел в файле, затем сумму первого и последнего чисел."
+            }
+          },
+          {
+            "type": "attachment",
+            "data": {
+              "usage_id": "statement-1"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Последний элемент — `a[len(a) - 1]`: индексы начинаются с нуля."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Файл читается в список, длину даёт `len`, первый элемент — `a[0]`, последний — `a[len(a) - 1]`."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "with open(\"17-1.txt\") as f:\n    a = [int(x) for x in f]\nprint(len(a), a[0] + a[len(a) - 1])",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `1000 -4465`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [17],
+        "files": [
+          {
+            "id": "statement-1",
+            "purpose": "attachment",
+            "checksum": "05899e44c905c7f0103bdeb17560369b8819ba428e036dc876c74290d8870e12",
+            "filename": "17-1.txt",
+            "attribution": null,
+            "description": "Последовательность целых чисел от −10 000 до 10 000"
+          }
+        ],
+        "lessons": [
+          {
+            "position": 0,
+            "material_id": "number-sequences"
+          }
+        ],
+        "theory_links": [
+          {
+            "label": "Теория",
+            "section": "fajl-v-spisok",
+            "material_id": "number-sequences"
+          }
+        ],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["1000 -4465"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
         "id": "task-17-1-08",
         "title": "Делится на 4, но не на 8",
         "short_description": null,
         "explanation_kind": "worked_solution",
         "difficulty": 1,
         "estimated_minutes": 4,
-        "answer_instruction": "Введите два числа через пробел в том порядке, в каком их спрашивают.",
+        "answer_instruction": "Введите через пробел количество чисел, кратных 4, но не 8, затем количество чисел от −100 до 100.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
@@ -141512,15 +141825,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "`145 324`: `x % 4 == 0 and x % 8 != 0` и `-100 <= x <= 100`."
+              "markdown": "«Делится на 4, но не на 8» — `x % 4 == 0 and x % 8 != 0`, «от −100 до 100 включительно» — `-100 <= x <= 100`."
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "with open(\"17-1.txt\") as f:\n    a = [int(part) for part in f.read().split()]\n\nfirst = 0\nsecond = 0\nfor x in a:\n    if x % 4 == 0 and x % 8 != 0:\n        first += 1\n    if -100 <= x <= 100:\n        second += 1\nprint(first, second)",
-              "caption": "Решение программой"
+              "code": "with open(\"17-1.txt\") as f:\n    a = [int(x) for x in f]\nfirst = 0\nsecond = 0\nfor x in a:\n    if x % 4 == 0 and x % 8 != 0:\n        first += 1\n    if -100 <= x <= 100:\n        second += 1\nprint(first, second)",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `145 324`"
             }
           }
         ],
@@ -141538,7 +141857,7 @@
         ],
         "lessons": [
           {
-            "position": 3,
+            "position": 1,
             "material_id": "number-sequences"
           }
         ],
@@ -141581,7 +141900,7 @@
         "explanation_kind": "worked_solution",
         "difficulty": 2,
         "estimated_minutes": 4,
-        "answer_instruction": "Введите два числа через пробел в том порядке, в каком их спрашивают.",
+        "answer_instruction": "Введите через пробел количество чисел, кратных ровно одному из чисел 4 и 6, затем — хотя бы одному.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
@@ -141602,7 +141921,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Посчитайте выполненные проверки: `int(x % 4 == 0) + int(x % 6 == 0)`."
+              "markdown": "Посчитай выполненные проверки: `k = int(x % 4 == 0) + int(x % 6 == 0)`."
             }
           }
         ],
@@ -141610,15 +141929,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "`272 365`: «ровно одно» — `int(x % 4 == 0) + int(x % 6 == 0) == 1`, а числа, кратные 12, входят только во второе количество."
+              "markdown": "«Ровно одно» — `k == 1`, «хотя бы одно» — `k >= 1`. Числа, кратные 12, входят только во второе количество."
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "with open(\"17-1.txt\") as f:\n    a = [int(part) for part in f.read().split()]\n\nexactly = 0\nat_least = 0\nfor x in a:\n    k = int(x % 4 == 0) + int(x % 6 == 0)\n    if k == 1:\n        exactly += 1\n    if k >= 1:\n        at_least += 1\nprint(exactly, at_least)",
-              "caption": "Решение программой"
+              "code": "with open(\"17-1.txt\") as f:\n    a = [int(x) for x in f]\nexactly = 0\nat_least = 0\nfor x in a:\n    k = int(x % 4 == 0) + int(x % 6 == 0)\n    if k == 1:\n        exactly += 1\n    if k >= 1:\n        at_least += 1\nprint(exactly, at_least)",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `272 365`"
             }
           }
         ],
@@ -141636,14 +141961,14 @@
         ],
         "lessons": [
           {
-            "position": 4,
+            "position": 10,
             "material_id": "number-sequences"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "rovno-odno",
+            "section": "skolko-elementov",
             "material_id": "number-sequences"
           }
         ],
@@ -141700,7 +142025,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Сложите три проверки делимости и сравните количество с двойкой."
+              "markdown": "Сложи три проверки делимости и сравни количество с двойкой."
             }
           }
         ],
@@ -141708,15 +142033,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "`282`: `int(x % 2 == 0) + int(x % 3 == 0) + int(x % 5 == 0) >= 2`."
+              "markdown": "«Хотя бы на два из трёх» — `k >= 2`, где `k` — количество выполненных проверок делимости."
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "with open(\"17-1.txt\") as f:\n    a = [int(part) for part in f.read().split()]\n\ncount = 0\nfor x in a:\n    k = int(x % 2 == 0) + int(x % 3 == 0) + int(x % 5 == 0)\n    if k >= 2:\n        count += 1\nprint(count)",
-              "caption": "Решение программой"
+              "code": "with open(\"17-1.txt\") as f:\n    a = [int(x) for x in f]\ncount = 0\nfor x in a:\n    k = int(x % 2 == 0) + int(x % 3 == 0) + int(x % 5 == 0)\n    if k >= 2:\n        count += 1\nprint(count)",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `282`"
             }
           }
         ],
@@ -141734,14 +142065,14 @@
         ],
         "lessons": [
           {
-            "position": 5,
+            "position": 11,
             "material_id": "number-sequences"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "rovno-odno",
+            "section": "skolko-elementov",
             "material_id": "number-sequences"
           }
         ],
@@ -141777,7 +142108,7 @@
         "explanation_kind": "worked_solution",
         "difficulty": 1,
         "estimated_minutes": 2,
-        "answer_instruction": "Введите три числа через пробел в том порядке, в каком их спрашивают.",
+        "answer_instruction": "Введите через пробел три числа в том порядке, в каком их выведет программа.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
@@ -141792,7 +142123,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Остаток в Python неотрицателен: −23 = (−3) · 10 + 7."
+              "markdown": "Остаток отсчитывают от ближайшего кратного 10 слева: −23 = (−3) · 10 + 7."
             }
           }
         ],
@@ -141800,7 +142131,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "`7 3 -3`: −23 = (−3) · 10 + 7, а последняя цифра записи — 3."
+              "markdown": "−23 = (−3) · 10 + 7, поэтому остаток 7, а целая часть −3. Последняя цифра записи — остаток модуля: 3."
             }
           },
           {
@@ -141808,7 +142139,13 @@
             "data": {
               "language": "python",
               "code": "print(-23 % 10, abs(-23) % 10, -23 // 10)",
-              "caption": "Решение программой"
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `7 3 -3`"
             }
           }
         ],
@@ -141817,7 +142154,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 6,
+            "position": 13,
             "material_id": "number-sequences"
           }
         ],
@@ -141860,7 +142197,7 @@
         "explanation_kind": "worked_solution",
         "difficulty": 2,
         "estimated_minutes": 4,
-        "answer_instruction": "Введите два числа через пробел в том порядке, в каком их спрашивают.",
+        "answer_instruction": "Введите через пробел количество таких чисел, затем количество отрицательных среди них.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
@@ -141881,7 +142218,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Количество цифр и последнюю цифру проверяйте у `abs(x)`, знак — у самого `x`."
+              "markdown": "Количество цифр и последнюю цифру проверяй у `abs(x)`, знак — у самого `x`."
             }
           }
         ],
@@ -141889,15 +142226,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "`37 17`: `100 <= abs(x) <= 999 and abs(x) % 10 == 7`; с `x % 10 == 7` получилось бы `31 11`: у отрицательных чисел проверялась бы не та цифра — например, `-113 % 10` равно 7."
+              "markdown": "`100 <= abs(x) <= 999 and abs(x) % 10 == 7`. Без модуля проверялась бы не та цифра: `-113 % 10` равно 7."
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "with open(\"17-1.txt\") as f:\n    a = [int(part) for part in f.read().split()]\n\ncount = 0\nnegative = 0\nfor x in a:\n    if 100 <= abs(x) <= 999 and abs(x) % 10 == 7:\n        count += 1\n        if x < 0:\n            negative += 1\nprint(count, negative)",
-              "caption": "Решение программой"
+              "code": "with open(\"17-1.txt\") as f:\n    a = [int(x) for x in f]\ncount = 0\nnegative = 0\nfor x in a:\n    if 100 <= abs(x) <= 999 and abs(x) % 10 == 7:\n        count += 1\n        if x < 0:\n            negative += 1\nprint(count, negative)",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `37 17`"
             }
           }
         ],
@@ -141915,14 +142258,14 @@
         ],
         "lessons": [
           {
-            "position": 7,
+            "position": 15,
             "material_id": "number-sequences"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "gde-nuzhen-modul",
+            "section": "kolichestvo-cifr",
             "material_id": "number-sequences"
           }
         ],
@@ -141987,15 +142330,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "`87`: `abs(x) >= 10 and abs(x) % 10 == abs(x) // 10 % 10`."
+              "markdown": "`m >= 10 and m % 10 == m // 10 % 10`, где `m = abs(x)`."
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "with open(\"17-1.txt\") as f:\n    a = [int(part) for part in f.read().split()]\n\ncount = 0\nfor x in a:\n    d = abs(x)\n    if d >= 10 and d % 10 == d // 10 % 10:\n        count += 1\nprint(count)",
-              "caption": "Решение программой"
+              "code": "with open(\"17-1.txt\") as f:\n    a = [int(x) for x in f]\ncount = 0\nfor x in a:\n    m = abs(x)\n    if m >= 10 and m % 10 == m // 10 % 10:\n        count += 1\nprint(count)",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `87`"
             }
           }
         ],
@@ -142013,7 +142362,7 @@
         ],
         "lessons": [
           {
-            "position": 8,
+            "position": 16,
             "material_id": "number-sequences"
           }
         ],
@@ -142056,14 +142405,14 @@
         "explanation_kind": "worked_solution",
         "difficulty": 1,
         "estimated_minutes": 3,
-        "answer_instruction": "Введите два числа через пробел в том порядке, в каком их спрашивают.",
+        "answer_instruction": "Введите через пробел количество пар, затем максимальную сумму.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Последовательность 4, 7, 10, 3, −2. Найди количество соседних пар, где хотя бы одно число чётное, и максимальную сумму."
+              "markdown": "Последовательность 4, 7, 10, 3, −2. Найди количество соседних пар, где хотя бы одно число чётное, и максимальную сумму таких пар."
             }
           }
         ],
@@ -142071,7 +142420,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "У пяти чисел четыре соседние пары: индексы начала от 0 до 3."
+              "markdown": "«Хотя бы одно» — `or`: пара подходит и тогда, когда чётны оба числа."
             }
           }
         ],
@@ -142079,15 +142428,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "`4 17`: проверяются все четыре соседние пары, в каждой есть чётное число."
+              "markdown": "Чётное число есть во всех четырёх парах; наибольшая сумма у пары (7, 10)."
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "a = [4, 7, 10, 3, -2]\ncount = 0\nbest = None\nfor i in range(len(a) - 1):\n    x, y = a[i], a[i + 1]\n    if x % 2 == 0 or y % 2 == 0:\n        count += 1\n        if best is None or x + y > best:\n            best = x + y\nprint(count, best)",
-              "caption": "Решение программой"
+              "code": "a = [4, 7, 10, 3, -2]\nsums = []\nfor i in range(len(a) - 1):\n    x, y = a[i], a[i + 1]\n    if x % 2 == 0 or y % 2 == 0:\n        sums.append(x + y)\nprint(len(sums), max(sums))",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `4 17`"
             }
           }
         ],
@@ -142096,14 +142451,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 9,
+            "position": 8,
             "material_id": "number-sequences"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "sosednie-pary",
+            "section": "i-ili-ne",
             "material_id": "number-sequences"
           }
         ],
@@ -142139,14 +142494,14 @@
         "explanation_kind": "worked_solution",
         "difficulty": 1,
         "estimated_minutes": 3,
-        "answer_instruction": "Введите два числа через пробел в том порядке, в каком их спрашивают.",
+        "answer_instruction": "Введите через пробел количество пар, затем максимальную сумму.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Последовательность −8, 0, 5, −3, 2. Найди количество соседних пар, где ровно одно число отрицательное, и максимальную сумму."
+              "markdown": "Последовательность −8, 0, 5, −3, 2. Найди количество соседних пар, где ровно одно число отрицательное, и максимальную сумму таких пар."
             }
           }
         ],
@@ -142154,7 +142509,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Ноль не отрицателен: пара (−8, 0) содержит ровно одно отрицательное число."
+              "markdown": "Ноль не отрицательный: в паре (−8, 0) отрицательное число ровно одно."
             }
           }
         ],
@@ -142162,15 +142517,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "`3 2`: пара (−8, 0) подходит — отрицательное в ней ровно одно."
+              "markdown": "Подходят (−8, 0), (5, −3) и (−3, 2); `x * y < 0` пропустил бы пару с нулём."
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "a = [-8, 0, 5, -3, 2]\ncount = 0\nbest = None\nfor i in range(len(a) - 1):\n    x, y = a[i], a[i + 1]\n    if int(x < 0) + int(y < 0) == 1:\n        count += 1\n        if best is None or x + y > best:\n            best = x + y\nprint(count, best)",
-              "caption": "Решение программой"
+              "code": "a = [-8, 0, 5, -3, 2]\nsums = []\nfor i in range(len(a) - 1):\n    x, y = a[i], a[i + 1]\n    if int(x < 0) + int(y < 0) == 1:\n        sums.append(x + y)\nprint(len(sums), max(sums))",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `3 2`"
             }
           }
         ],
@@ -142179,14 +142540,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 10,
+            "position": 17,
             "material_id": "number-sequences"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "sosednie-pary",
+            "section": "znak-chisla",
             "material_id": "number-sequences"
           }
         ],
@@ -142222,14 +142583,14 @@
         "explanation_kind": "worked_solution",
         "difficulty": 2,
         "estimated_minutes": 3,
-        "answer_instruction": "Введите два числа через пробел в том порядке, в каком их спрашивают.",
+        "answer_instruction": "Введите через пробел количество пар, затем минимальную сумму квадратов.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Последовательность 7, 12, 17, −7, 4. Найди количество соседних пар, где ровно одно число оканчивается на семь, и минимальную сумму квадратов."
+              "markdown": "Последовательность 7, 12, 17, −7, 4. Найди количество соседних пар, где ровно одно число оканчивается на 7, и минимальную сумму квадратов таких пар."
             }
           }
         ],
@@ -142237,7 +142598,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Окончание отрицательного числа — по модулю; ответ — минимум сумм квадратов."
+              "markdown": "Окончание отрицательного числа проверяй у модуля; в ответе — наименьшая сумма квадратов."
             }
           }
         ],
@@ -142245,15 +142606,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "`3 65`: пара (17, −7) не подходит, оба числа оканчиваются на 7."
+              "markdown": "Пара (17, −7) не подходит: на 7 оканчиваются оба числа."
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "a = [7, 12, 17, -7, 4]\ncount = 0\nbest = None\nfor i in range(len(a) - 1):\n    x, y = a[i], a[i + 1]\n    k = int(abs(x) % 10 == 7) + int(abs(y) % 10 == 7)\n    if k == 1:\n        count += 1\n        s = x ** 2 + y ** 2\n        if best is None or s < best:\n            best = s\nprint(count, best)",
-              "caption": "Решение программой"
+              "code": "a = [7, 12, 17, -7, 4]\nsquares = []\nfor i in range(len(a) - 1):\n    x, y = a[i], a[i + 1]\n    k = int(abs(x) % 10 == 7) + int(abs(y) % 10 == 7)\n    if k == 1:\n        squares.append(x ** 2 + y ** 2)\nprint(len(squares), min(squares))",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `3 65`"
             }
           }
         ],
@@ -142262,14 +142629,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 11,
+            "position": 14,
             "material_id": "number-sequences"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "sosednie-pary",
+            "section": "poslednie-cifry",
             "material_id": "number-sequences"
           }
         ],
@@ -142305,14 +142672,14 @@
         "explanation_kind": "worked_solution",
         "difficulty": 2,
         "estimated_minutes": 3,
-        "answer_instruction": "Введите два числа через пробел в том порядке, в каком их спрашивают.",
+        "answer_instruction": "Введите через пробел количество троек, затем максимальную сумму.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Последовательность 100, 5, 200, 300, 7, 400. Найди количество соседних троек, где ровно два числа трёхзначные, и максимальную сумму."
+              "markdown": "Последовательность 100, 5, 200, 300, 7, 400. Найди количество соседних троек, где ровно два числа трёхзначные, и максимальную сумму таких троек."
             }
           }
         ],
@@ -142320,7 +142687,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "У шести чисел четыре соседние тройки, и они пересекаются."
+              "markdown": "Посчитай трёхзначные числа в каждой тройке; соседние тройки пересекаются."
             }
           }
         ],
@@ -142328,15 +142695,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "`4 707`: соседние тройки пересекаются, все четыре подходят."
+              "markdown": "Во всех четырёх тройках ровно два трёхзначных числа; наибольшая сумма у тройки 300, 7, 400."
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "a = [100, 5, 200, 300, 7, 400]\ncount = 0\nbest = None\nfor i in range(len(a) - 2):\n    g = [a[i], a[i + 1], a[i + 2]]\n    k = 0\n    for x in g:\n        if 100 <= abs(x) <= 999:\n            k += 1\n    if k == 2:\n        count += 1\n        if best is None or sum(g) > best:\n            best = sum(g)\nprint(count, best)",
-              "caption": "Решение программой"
+              "code": "def three(x):\n    return 100 <= abs(x) <= 999\n\n\na = [100, 5, 200, 300, 7, 400]\nsums = []\nfor i in range(len(a) - 2):\n    x, y, z = a[i], a[i + 1], a[i + 2]\n    k = int(three(x)) + int(three(y)) + int(three(z))\n    if k == 2:\n        sums.append(x + y + z)\nprint(len(sums), max(sums))",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `4 707`"
             }
           }
         ],
@@ -142352,7 +142725,7 @@
         "theory_links": [
           {
             "label": "Теория",
-            "section": "sosednie-trojki",
+            "section": "skolko-elementov",
             "material_id": "number-sequences"
           }
         ],
@@ -142388,7 +142761,7 @@
         "explanation_kind": "worked_solution",
         "difficulty": 1,
         "estimated_minutes": 1,
-        "answer_instruction": "Введите три числа через пробел в том порядке, в каком их спрашивают.",
+        "answer_instruction": "Введите через пробел количество пар, троек и четвёрок.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
@@ -142403,7 +142776,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Группа из k элементов начинается на индексах от 0 до n − k."
+              "markdown": "Группа из k соседних чисел начинается на индексах от 0 до n − k: всего n − k + 1 начал."
             }
           }
         ],
@@ -142411,7 +142784,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "1999, 1998 и 1997: n − 1, n − 2 и n − 3."
+              "markdown": "Пар n − 1 = 1999, троек n − 2 = 1998, четвёрок n − 3 = 1997."
             }
           },
           {
@@ -142419,7 +142792,13 @@
             "data": {
               "language": "python",
               "code": "n = 2000\nprint(n - 1, n - 2, n - 3)",
-              "caption": "Решение программой"
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `1999 1998 1997`"
             }
           }
         ],
@@ -142428,14 +142807,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 13,
+            "position": 4,
             "material_id": "number-sequences"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "granica-perebora",
+            "section": "sosednie-trojki",
             "material_id": "number-sequences"
           }
         ],
@@ -142471,7 +142850,7 @@
         "explanation_kind": "worked_solution",
         "difficulty": 1,
         "estimated_minutes": 3,
-        "answer_instruction": "Введите два числа через пробел в том порядке, в каком их спрашивают.",
+        "answer_instruction": "Введите через пробел количество четвёрок, затем максимальную сумму.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
@@ -142486,7 +142865,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Последний используемый индекс четвёрки — `i + 3`, значит `range(len(a) - 3)`."
+              "markdown": "Последний индекс четвёрки — `i + 3`, поэтому начала перебирает `range(len(a) - 3)`."
             }
           }
         ],
@@ -142494,15 +142873,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "`1 14`: суммы четвёрок 10, 14, 18, кратна 7 только 14."
+              "markdown": "Суммы четвёрок 10, 14, 18 — кратна 7 только 14."
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "a = [1, 2, 3, 4, 5, 6]\ncount = 0\nbest = None\nfor i in range(len(a) - 3):\n    s = a[i] + a[i + 1] + a[i + 2] + a[i + 3]\n    if s % 7 == 0:\n        count += 1\n        if best is None or s > best:\n            best = s\nprint(count, best)",
-              "caption": "Решение программой"
+              "code": "a = [1, 2, 3, 4, 5, 6]\nsums = []\nfor i in range(len(a) - 3):\n    s = a[i] + a[i + 1] + a[i + 2] + a[i + 3]\n    if s % 7 == 0:\n        sums.append(s)\nprint(len(sums), max(sums))",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `1 14`"
             }
           }
         ],
@@ -142511,7 +142896,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 14,
+            "position": 5,
             "material_id": "number-sequences"
           }
         ],
@@ -142554,7 +142939,7 @@
         "explanation_kind": "worked_solution",
         "difficulty": 2,
         "estimated_minutes": 5,
-        "answer_instruction": "Введите два числа через пробел в том порядке, в каком их спрашивают.",
+        "answer_instruction": "Введите через пробел количество пар, затем максимальную сумму.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
@@ -142575,7 +142960,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Все подходящие суммы отрицательные: начинайте максимум с `None`, а не с нуля."
+              "markdown": "Обе проверки знака соедини с проверкой суммы через `and`. Подходящие суммы отрицательные — это нормально."
             }
           }
         ],
@@ -142583,15 +142968,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "`60 -30`: все подходящие суммы отрицательные, поэтому максимум, начатый с нуля, дал бы 0."
+              "markdown": "Все подходящие суммы отрицательные, поэтому и максимальная из них отрицательная."
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "with open(\"17-1.txt\") as f:\n    a = [int(part) for part in f.read().split()]\n\ncount = 0\nbest = None\nfor i in range(len(a) - 1):\n    x, y = a[i], a[i + 1]\n    if x < 0 and y < 0 and (x + y) % 5 == 0:\n        count += 1\n        if best is None or x + y > best:\n            best = x + y\nprint(count, best)",
-              "caption": "Решение программой"
+              "code": "with open(\"17-1.txt\") as f:\n    a = [int(x) for x in f]\nsums = []\nfor i in range(len(a) - 1):\n    x, y = a[i], a[i + 1]\n    if x < 0 and y < 0 and (x + y) % 5 == 0:\n        sums.append(x + y)\nprint(len(sums), max(sums))",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `60 -30`"
             }
           }
         ],
@@ -142609,14 +143000,14 @@
         ],
         "lessons": [
           {
-            "position": 15,
+            "position": 7,
             "material_id": "number-sequences"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "bez-spiska-summ",
+            "section": "kolichestvo-i-maksimum",
             "material_id": "number-sequences"
           }
         ],
@@ -142652,7 +143043,7 @@
         "explanation_kind": "worked_solution",
         "difficulty": 2,
         "estimated_minutes": 5,
-        "answer_instruction": "Введите два числа через пробел в том порядке, в каком их спрашивают.",
+        "answer_instruction": "Введите через пробел количество троек, затем минимальную сумму.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
@@ -142673,7 +143064,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Трёхзначность — по модулю у каждого числа тройки; ответ — минимальная сумма."
+              "markdown": "Трёхзначность проверяй у модуля каждого числа тройки; в ответе — наименьшая сумма."
             }
           }
         ],
@@ -142681,15 +143072,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "`49 -10020`: `100 <= abs(x) <= 999` для каждого числа тройки, их количество равно 2."
+              "markdown": "Трёхзначное — `100 <= abs(x) <= 999`: минус не цифра. Таких чисел в тройке должно быть ровно два."
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "with open(\"17-1.txt\") as f:\n    a = [int(part) for part in f.read().split()]\n\ncount = 0\nbest = None\nfor i in range(len(a) - 2):\n    g = [a[i], a[i + 1], a[i + 2]]\n    k = 0\n    for x in g:\n        if 100 <= abs(x) <= 999:\n            k += 1\n    if k == 2 and sum(g) % 4 == 0:\n        count += 1\n        if best is None or sum(g) < best:\n            best = sum(g)\nprint(count, best)",
-              "caption": "Решение программой"
+              "code": "def three(x):\n    return 100 <= abs(x) <= 999\n\n\nwith open(\"17-1.txt\") as f:\n    a = [int(x) for x in f]\nsums = []\nfor i in range(len(a) - 2):\n    x, y, z = a[i], a[i + 1], a[i + 2]\n    k = int(three(x)) + int(three(y)) + int(three(z))\n    if k == 2 and (x + y + z) % 4 == 0:\n        sums.append(x + y + z)\nprint(len(sums), min(sums))",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `49 -10020`"
             }
           }
         ],
@@ -142707,14 +143104,14 @@
         ],
         "lessons": [
           {
-            "position": 16,
+            "position": 9,
             "material_id": "number-sequences"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "sosednie-trojki",
+            "section": "chetyrehznachnye",
             "material_id": "number-sequences"
           }
         ],
@@ -142750,7 +143147,7 @@
         "explanation_kind": "worked_solution",
         "difficulty": 2,
         "estimated_minutes": 4,
-        "answer_instruction": "Введите три числа через пробел в том порядке, в каком их спрашивают.",
+        "answer_instruction": "Введите через пробел порог, количество пар и максимальную сумму.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
@@ -142765,7 +143162,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Сначала найдите порог по всем числам, затем перебирайте пары."
+              "markdown": "Сначала найди порог по всем числам, потом перебирай пары."
             }
           }
         ],
@@ -142773,15 +143170,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Порог 217; подходят пары (40, 217) и (217, 5): `2 257`."
+              "markdown": "Порог 217 — последнее число на 17. Подходят пары (40, 217) и (217, 5)."
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "a = [12, 117, 40, 217, 5]\nm = max(x for x in a if abs(x) % 100 == 17)\ncount = 0\nbest = None\nfor i in range(len(a) - 1):\n    s = a[i] + a[i + 1]\n    if s > m:\n        count += 1\n        if best is None or s > best:\n            best = s\nprint(m, count, best)",
-              "caption": "Решение программой"
+              "code": "a = [12, 117, 40, 217, 5]\nlimit = max([x for x in a if abs(x) % 100 == 17])\nsums = []\nfor i in range(len(a) - 1):\n    s = a[i] + a[i + 1]\n    if s > limit:\n        sums.append(s)\nprint(limit, len(sums), max(sums))",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `217 2 257`"
             }
           }
         ],
@@ -142790,14 +143193,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 17,
+            "position": 18,
             "material_id": "number-sequences"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "predvaritelnaya-harakteristika",
+            "section": "snachala-porog",
             "material_id": "number-sequences"
           }
         ],
@@ -142833,14 +143236,14 @@
         "explanation_kind": "worked_solution",
         "difficulty": 2,
         "estimated_minutes": 5,
-        "answer_instruction": "Введите два числа через пробел в том порядке, в каком их спрашивают.",
+        "answer_instruction": "Введите через пробел количество пар, затем максимальную сумму квадратов.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Последовательность −31, 6, 21, −4, 11. Найди минимальный элемент, оканчивающийся на один. Затем найди соседние пары, в которых ровно одно число оканчивается на один, а сумма квадратов меньше квадрата найденного минимума. Выведи количество пар и максимальную сумму квадратов."
+              "markdown": "Последовательность −31, 6, 21, −4, 11. Найди минимальный элемент, оканчивающийся на 1. Затем найди соседние пары, в которых ровно одно число оканчивается на 1, а сумма квадратов меньше квадрата найденного минимума. Найди количество таких пар и максимальную сумму квадратов."
             }
           }
         ],
@@ -142856,15 +143259,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "`3 477`: предварительный минимум равен −31, его квадрат — 961."
+              "markdown": "Минимум равен −31, его квадрат 961. Пара (−31, 6) не подходит: 961 + 36 больше 961. Подходят (6, 21), (21, −4) и (−4, 11)."
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "a = [-31, 6, 21, -4, 11]\nm = min(x for x in a if abs(x) % 10 == 1)\ncount = 0\nbest = None\nfor i in range(len(a) - 1):\n    x, y = a[i], a[i + 1]\n    k = int(abs(x) % 10 == 1) + int(abs(y) % 10 == 1)\n    s = x ** 2 + y ** 2\n    if k == 1 and s < m ** 2:\n        count += 1\n        if best is None or s > best:\n            best = s\nprint(count, best)",
-              "caption": "Решение программой"
+              "code": "a = [-31, 6, 21, -4, 11]\nm = min([x for x in a if abs(x) % 10 == 1])\nsquares = []\nfor i in range(len(a) - 1):\n    x, y = a[i], a[i + 1]\n    k = int(abs(x) % 10 == 1) + int(abs(y) % 10 == 1)\n    if k == 1 and x ** 2 + y ** 2 < m ** 2:\n        squares.append(x ** 2 + y ** 2)\nprint(len(squares), max(squares))",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `3 477`"
             }
           }
         ],
@@ -142873,14 +143282,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 18,
+            "position": 26,
             "material_id": "number-sequences"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "polnaya-zadacha",
+            "section": "poryadok-dejstvij",
             "material_id": "number-sequences"
           }
         ],
@@ -142916,7 +143325,7 @@
         "explanation_kind": "worked_solution",
         "difficulty": 2,
         "estimated_minutes": 5,
-        "answer_instruction": "Введите два числа через пробел в том порядке, в каком их спрашивают.",
+        "answer_instruction": "Введите через пробел количество пар, затем максимальную сумму.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
@@ -142931,7 +143340,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "«Одно…, а другое…» — два распределения ролей через `or`; среднее сравнивайте без деления."
+              "markdown": "«Одно…, а другое…» — два распределения ролей через `or`; среднее сравнивай без деления: `y * k < s`."
             }
           }
         ],
@@ -142939,15 +143348,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "`2 17`: среднее чётных 6, 2, 4 равно 4; подходят (9, 2) и (2, 15). У пары (15, 4) другое число 4 не меньше 4."
+              "markdown": "Среднее чётных 6, 2, 4 равно 4. Подходят (9, 2) и (2, 15); у пары (15, 4) другое число 4 не меньше 4."
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "a = [6, 9, 2, 15, 4]\ns = sum(x for x in a if x % 2 == 0)\nk = sum(1 for x in a if x % 2 == 0)\ncount = 0\nbest = None\nfor i in range(len(a) - 1):\n    x, y = a[i], a[i + 1]\n    if (x % 3 == 0 and y * k < s) or (y % 3 == 0 and x * k < s):\n        count += 1\n        if best is None or x + y > best:\n            best = x + y\nprint(count, best)",
-              "caption": "Решение программой"
+              "code": "a = [6, 9, 2, 15, 4]\neven = [x for x in a if x % 2 == 0]\ns, k = sum(even), len(even)\nsums = []\nfor i in range(len(a) - 1):\n    x, y = a[i], a[i + 1]\n    if (x % 3 == 0 and y * k < s) or (y % 3 == 0 and x * k < s):\n        sums.append(x + y)\nprint(len(sums), max(sums))",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `2 17`"
             }
           }
         ],
@@ -142956,7 +143371,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 19,
+            "position": 22,
             "material_id": "number-sequences"
           }
         ],
@@ -142999,7 +143414,7 @@
         "explanation_kind": "worked_solution",
         "difficulty": 3,
         "estimated_minutes": 8,
-        "answer_instruction": "Введите два числа через пробел в том порядке, в каком их спрашивают.",
+        "answer_instruction": "Введите через пробел количество троек, затем максимальную сумму.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
@@ -143028,15 +143443,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "`13 104902`."
+              "markdown": "Три проверки тройки соединяет `and`; порог находят до цикла."
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "with open(\"17-2.txt\") as f:\n    a = [int(part) for part in f.read().split()]\n\nm = max(x for x in a if x % 100 == 21)\ncount = 0\nbest = None\nfor i in range(len(a) - 2):\n    g = [a[i], a[i + 1], a[i + 2]]\n    four = 0\n    seven = 0\n    for x in g:\n        four += int(1000 <= x <= 9999)\n        seven += int(x % 7 == 0)\n    if four == 2 and seven >= 1 and sum(g) > m:\n        count += 1\n        if best is None or sum(g) > best:\n            best = sum(g)\nprint(count, best)",
-              "caption": "Решение программой"
+              "code": "def four(x):\n    return 1000 <= abs(x) <= 9999\n\n\nwith open(\"17-2.txt\") as f:\n    a = [int(x) for x in f]\nlimit = max([x for x in a if x % 100 == 21])\nsums = []\nfor i in range(len(a) - 2):\n    x, y, z = a[i], a[i + 1], a[i + 2]\n    k4 = int(four(x)) + int(four(y)) + int(four(z))\n    k7 = int(x % 7 == 0) + int(y % 7 == 0) + int(z % 7 == 0)\n    if k4 == 2 and k7 >= 1 and x + y + z > limit:\n        sums.append(x + y + z)\nprint(len(sums), max(sums))",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `13 104902`"
             }
           }
         ],
@@ -143054,14 +143475,14 @@
         ],
         "lessons": [
           {
-            "position": 20,
+            "position": 21,
             "material_id": "number-sequences"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "trojki-s-porogom",
+            "section": "zadacha-temy",
             "material_id": "number-sequences"
           }
         ],
@@ -143097,7 +143518,7 @@
         "explanation_kind": "worked_solution",
         "difficulty": 2,
         "estimated_minutes": 6,
-        "answer_instruction": "Введите два числа через пробел в том порядке, в каком их спрашивают.",
+        "answer_instruction": "Введите через пробел количество пар, затем максимальную сумму.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
@@ -143118,7 +143539,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Первым проходом посчитайте кратные 25, затем используйте количество как порог для суммы пары."
+              "markdown": "Сначала посчитай кратные 25 во всём файле, затем сравнивай с этим количеством сумму пары."
             }
           }
         ],
@@ -143126,15 +143547,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "`520 41`: сначала одним проходом считается количество кратных 25, затем оно служит порогом для пар."
+              "markdown": "Порог — `len([x for x in a if x % 25 == 0])`, его находят до перебора пар."
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "with open(\"17-1.txt\") as f:\n    a = [int(part) for part in f.read().split()]\n\nm = 0\nfor x in a:\n    if x % 25 == 0:\n        m += 1\ncount = 0\nbest = None\nfor i in range(len(a) - 1):\n    x, y = a[i], a[i + 1]\n    if (x < 0 or y < 0) and x + y < m:\n        count += 1\n        if best is None or x + y > best:\n            best = x + y\nprint(count, best)",
-              "caption": "Решение программой"
+              "code": "with open(\"17-1.txt\") as f:\n    a = [int(x) for x in f]\nlimit = len([x for x in a if x % 25 == 0])\nsums = []\nfor i in range(len(a) - 1):\n    x, y = a[i], a[i + 1]\n    if (x < 0 or y < 0) and x + y < limit:\n        sums.append(x + y)\nprint(len(sums), max(sums))",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `520 41`"
             }
           }
         ],
@@ -143152,14 +143579,14 @@
         ],
         "lessons": [
           {
-            "position": 21,
+            "position": 19,
             "material_id": "number-sequences"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "vidy-harakteristik",
+            "section": "otbor",
             "material_id": "number-sequences"
           }
         ],
@@ -143195,7 +143622,7 @@
         "explanation_kind": "worked_solution",
         "difficulty": 3,
         "estimated_minutes": 7,
-        "answer_instruction": "Введите два числа через пробел в том порядке, в каком их спрашивают.",
+        "answer_instruction": "Введите через пробел количество пар, затем максимальную сумму.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
@@ -143224,15 +143651,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "`190 99120`: среднее нечётных сравнивается без деления — `y * k < s`."
+              "markdown": "Среднее нечётных сравнивают без деления; распределения ролей соединяет `or`."
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "with open(\"17-2.txt\") as f:\n    a = [int(part) for part in f.read().split()]\n\ns = sum(x for x in a if x % 2 != 0)\nk = sum(1 for x in a if x % 2 != 0)\ncount = 0\nbest = None\nfor i in range(len(a) - 1):\n    x, y = a[i], a[i + 1]\n    if (x % 9 == 0 and y * k < s) or (y % 9 == 0 and x * k < s):\n        count += 1\n        if best is None or x + y > best:\n            best = x + y\nprint(count, best)",
-              "caption": "Решение программой"
+              "code": "with open(\"17-2.txt\") as f:\n    a = [int(x) for x in f]\nodd = [x for x in a if x % 2 != 0]\ns, k = sum(odd), len(odd)\nsums = []\nfor i in range(len(a) - 1):\n    x, y = a[i], a[i + 1]\n    if (x % 9 == 0 and y * k < s) or (y % 9 == 0 and x * k < s):\n        sums.append(x + y)\nprint(len(sums), max(sums))",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `190 99120`"
             }
           }
         ],
@@ -143250,14 +143683,14 @@
         ],
         "lessons": [
           {
-            "position": 22,
+            "position": 23,
             "material_id": "number-sequences"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "srednee-bez-drobej",
+            "section": "srednee",
             "material_id": "number-sequences"
           }
         ],
@@ -143293,7 +143726,7 @@
         "explanation_kind": "worked_solution",
         "difficulty": 1,
         "estimated_minutes": 2,
-        "answer_instruction": "Введите два числа через пробел в том порядке, в каком их спрашивают.",
+        "answer_instruction": "Введите через пробел квадрат минимального элемента, затем минимальный квадрат.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
@@ -143316,15 +143749,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "49 и 4: минимум −7, его квадрат 49; квадраты 25, 49, 4."
+              "markdown": "Минимум −7, его квадрат 49; квадраты чисел 25, 49, 4 — наименьший 4."
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "a = [5, -7, 2]\nprint(min(a) ** 2, min(x ** 2 for x in a))",
-              "caption": "Решение программой"
+              "code": "a = [5, -7, 2]\nprint(min(a) ** 2, min([x ** 2 for x in a]))",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `49 4`"
             }
           }
         ],
@@ -143333,14 +143772,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 23,
+            "position": 24,
             "material_id": "number-sequences"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "proverka-i-otvet",
+            "section": "poryadok-dejstvij",
             "material_id": "number-sequences"
           }
         ],
@@ -143376,7 +143815,7 @@
         "explanation_kind": "worked_solution",
         "difficulty": 1,
         "estimated_minutes": 2,
-        "answer_instruction": "Введите два числа через пробел в том порядке, в каком их спрашивают.",
+        "answer_instruction": "Введите через пробел модуль максимальной суммы, затем максимальный модуль суммы.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
@@ -143399,15 +143838,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "10 и 40: максимум сумм 10, а модули 15, 40, 10."
+              "markdown": "Максимум сумм 10, его модуль 10; модули 15, 40, 10 — наибольший 40."
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "sums = [-15, -40, 10]\nprint(abs(max(sums)), max(abs(s) for s in sums))",
-              "caption": "Решение программой"
+              "code": "sums = [-15, -40, 10]\nprint(abs(max(sums)), max([abs(s) for s in sums]))",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `10 40`"
             }
           }
         ],
@@ -143416,14 +143861,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 24,
+            "position": 25,
             "material_id": "number-sequences"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "proverka-i-otvet",
+            "section": "poryadok-dejstvij",
             "material_id": "number-sequences"
           }
         ],
@@ -143459,7 +143904,7 @@
         "explanation_kind": "worked_solution",
         "difficulty": 1,
         "estimated_minutes": 2,
-        "answer_instruction": "Введите два числа через пробел в том порядке, в каком их спрашивают.",
+        "answer_instruction": "Введите через пробел остаток минимального элемента, затем минимальный остаток.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
@@ -143474,7 +143919,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Остаток минимального — `min(a) % 5`; минимальный остаток — минимум из остатков всех чисел."
+              "markdown": "Остаток минимального — `min(a) % 5`; минимальный остаток — наименьший из остатков всех чисел."
             }
           }
         ],
@@ -143482,15 +143927,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "4 и 2: минимальный элемент 9, 9 % 5 = 4; остатки 3, 2, 4."
+              "markdown": "Минимальный элемент 9, 9 % 5 = 4; остатки чисел 3, 2, 4 — наименьший 2."
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "a = [13, 22, 9]\nprint(min(a) % 5, min(x % 5 for x in a))",
-              "caption": "Решение программой"
+              "code": "a = [13, 22, 9]\nprint(min(a) % 5, min([x % 5 for x in a]))",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `4 2`"
             }
           }
         ],
@@ -143499,7 +143950,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 25,
+            "position": 29,
             "material_id": "number-sequences"
           }
         ],
@@ -143542,7 +143993,7 @@
         "explanation_kind": "worked_solution",
         "difficulty": 1,
         "estimated_minutes": 3,
-        "answer_instruction": "Введите три числа через пробел в том порядке, в каком их спрашивают.",
+        "answer_instruction": "Введите через пробел сумму двух наибольших, сумму их квадратов и средний по величине элемент.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
@@ -143557,7 +144008,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "После `sorted` два наибольших — `g[1]` и `g[2]`, средний по величине — `g[1]`."
+              "markdown": "После `sorted` два наибольших — `t[1]` и `t[2]`, средний по величине — `t[1]`."
             }
           }
         ],
@@ -143565,15 +144016,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "12, 74 и 5: два наибольших — 7 и 5, 49 + 25 = 74."
+              "markdown": "Два наибольших — 7 и 5: 7 + 5 = 12, 49 + 25 = 74; средний по величине — 5."
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "g = sorted([7, -2, 5])\nprint(g[1] + g[2], g[1] ** 2 + g[2] ** 2, g[1])",
-              "caption": "Решение программой"
+              "code": "t = sorted([7, -2, 5])\nprint(t[1] + t[2], t[1] ** 2 + t[2] ** 2, t[1])",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `12 74 5`"
             }
           }
         ],
@@ -143582,7 +144039,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 26,
+            "position": 32,
             "material_id": "number-sequences"
           }
         ],
@@ -143625,7 +144082,7 @@
         "explanation_kind": "worked_solution",
         "difficulty": 1,
         "estimated_minutes": 3,
-        "answer_instruction": "Введите три числа через пробел в том порядке, в каком их спрашивают.",
+        "answer_instruction": "Введите через пробел сумму модулей, модуль суммы, затем произведение.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
@@ -143648,15 +144105,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "12, 4 и −32: |−8| + |4| = 12, |−8 + 4| = 4, −8 · 4 = −32."
+              "markdown": "|−8| + |4| = 12, |−8 + 4| = 4, −8 · 4 = −32."
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "g = [3, -8, 4]\nlo, hi = min(g), max(g)\nprint(abs(lo) + abs(hi), abs(lo + hi), lo * hi)",
-              "caption": "Решение программой"
+              "code": "t = [3, -8, 4]\nlo, hi = min(t), max(t)\nprint(abs(lo) + abs(hi), abs(lo + hi), lo * hi)",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `12 4 -32`"
             }
           }
         ],
@@ -143665,14 +144128,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 27,
+            "position": 33,
             "material_id": "number-sequences"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "malenkij-spisok",
+            "section": "dva-naibolshih",
             "material_id": "number-sequences"
           }
         ],
@@ -143708,7 +144171,7 @@
         "explanation_kind": "worked_solution",
         "difficulty": 2,
         "estimated_minutes": 4,
-        "answer_instruction": "Введите два числа через пробел в том порядке, в каком их спрашивают.",
+        "answer_instruction": "Введите через пробел количество пар, затем максимальную сумму.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
@@ -143731,15 +144194,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "`2 34`: минимум 4; остатки 2, 4, 3, 2 — подходят пары (30, 4) и (4, 17)."
+              "markdown": "Минимум 4; остатки 2, 4, 3, 2 — подходят пары (30, 4) и (4, 17)."
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "a = [30, 4, 17, 9]\nm = min(a)\ncount = 0\nbest = None\nfor i in range(len(a) - 1):\n    x, y = a[i], a[i + 1]\n    if x % 7 == m or y % 7 == m:\n        count += 1\n        if best is None or x + y > best:\n            best = x + y\nprint(count, best)",
-              "caption": "Решение программой"
+              "code": "a = [30, 4, 17, 9]\nm = min(a)\nsums = []\nfor i in range(len(a) - 1):\n    x, y = a[i], a[i + 1]\n    if x % 7 == m or y % 7 == m:\n        sums.append(x + y)\nprint(len(sums), max(sums))",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `2 34`"
             }
           }
         ],
@@ -143748,7 +144217,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 28,
+            "position": 30,
             "material_id": "number-sequences"
           }
         ],
@@ -143791,7 +144260,7 @@
         "explanation_kind": "worked_solution",
         "difficulty": 1,
         "estimated_minutes": 3,
-        "answer_instruction": "Введите два числа через пробел в том порядке, в каком их спрашивают.",
+        "answer_instruction": "Введите через пробел количество пар, затем минимальную сумму квадратов.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
@@ -143806,7 +144275,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Отбор — по сумме пары, ответ — минимум сумм квадратов подходящих пар."
+              "markdown": "Отбор — по сумме пары, а в список кладут суммы квадратов."
             }
           }
         ],
@@ -143814,15 +144283,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "`2 37`: подходят (−1, 6) с суммой 5 и (6, 2) с суммой 8; суммы квадратов 37 и 40."
+              "markdown": "Подходят (−1, 6) с суммой 5 и (6, 2) с суммой 8; их суммы квадратов 37 и 40."
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "a = [3, -1, 6, 2]\ncount = 0\nbest = None\nfor i in range(len(a) - 1):\n    x, y = a[i], a[i + 1]\n    if x + y > 4:\n        count += 1\n        s = x ** 2 + y ** 2\n        if best is None or s < best:\n            best = s\nprint(count, best)",
-              "caption": "Решение программой"
+              "code": "a = [3, -1, 6, 2]\nsquares = []\nfor i in range(len(a) - 1):\n    x, y = a[i], a[i + 1]\n    if x + y > 4:\n        squares.append(x ** 2 + y ** 2)\nprint(len(squares), min(squares))",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `2 37`"
             }
           }
         ],
@@ -143831,7 +144306,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 29,
+            "position": 27,
             "material_id": "number-sequences"
           }
         ],
@@ -143874,7 +144349,7 @@
         "explanation_kind": "worked_solution",
         "difficulty": 2,
         "estimated_minutes": 5,
-        "answer_instruction": "Введите два числа через пробел в том порядке, в каком их спрашивают.",
+        "answer_instruction": "Введите через пробел количество пар, затем максимальную сумму.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
@@ -143895,7 +144370,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Найдите `m = min(a)` до цикла и сравнивайте с ним `x % 37` и `y % 37`."
+              "markdown": "Найди `m = min(a)` до цикла и сравнивай с ним `x % 37` и `y % 37`."
             }
           }
         ],
@@ -143903,15 +144378,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "`64 106864`: проверка `x % 37 == m or y % 37 == m`, где `m = min(a)` найден заранее."
+              "markdown": "Проверка `x % 37 == m or y % 37 == m`, где `m` найден заранее."
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "with open(\"17-2.txt\") as f:\n    a = [int(part) for part in f.read().split()]\n\nm = min(a)\ncount = 0\nbest = None\nfor i in range(len(a) - 1):\n    x, y = a[i], a[i + 1]\n    if x % 37 == m or y % 37 == m:\n        count += 1\n        if best is None or x + y > best:\n            best = x + y\nprint(count, best)",
-              "caption": "Решение программой"
+              "code": "with open(\"17-2.txt\") as f:\n    a = [int(x) for x in f]\nm = min(a)\nsums = []\nfor i in range(len(a) - 1):\n    x, y = a[i], a[i + 1]\n    if x % 37 == m or y % 37 == m:\n        sums.append(x + y)\nprint(len(sums), max(sums))",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `64 106864`"
             }
           }
         ],
@@ -143929,7 +144410,7 @@
         ],
         "lessons": [
           {
-            "position": 30,
+            "position": 31,
             "material_id": "number-sequences"
           }
         ],
@@ -143972,7 +144453,7 @@
         "explanation_kind": "worked_solution",
         "difficulty": 3,
         "estimated_minutes": 8,
-        "answer_instruction": "Введите два числа через пробел в том порядке, в каком их спрашивают.",
+        "answer_instruction": "Введите через пробел количество троек, затем модуль максимальной суммы.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
@@ -143993,7 +144474,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Сумма двух наибольших — `sum(g) - min(g)`; модуль — только у окончательного максимума."
+              "markdown": "Сумма двух наибольших — `sum(t) - min(t)`; модуль берут только у окончательного максимума."
             }
           }
         ],
@@ -144001,15 +144482,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "`245 75`: сумма двух наибольших — `sum(g) - min(g)`; модуль берётся только у окончательного максимума."
+              "markdown": "Порог — квадрат количества четырёхзначных чисел на 13; модуль — у окончательного максимума."
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "with open(\"17-3.txt\") as f:\n    a = [int(part) for part in f.read().split()]\n\nk = 0\nfor x in a:\n    if 1000 <= abs(x) <= 9999 and abs(x) % 100 == 13:\n        k += 1\ncount = 0\nbest = None\nfor i in range(len(a) - 2):\n    g = [a[i], a[i + 1], a[i + 2]]\n    if sum(g) - min(g) < k ** 2:\n        count += 1\n        if best is None or sum(g) > best:\n            best = sum(g)\nprint(count, abs(best))",
-              "caption": "Решение программой"
+              "code": "with open(\"17-3.txt\") as f:\n    a = [int(x) for x in f]\nends = [x for x in a if abs(x) % 100 == 13]\nk = len([x for x in ends if 1000 <= abs(x) <= 9999])\nsums = []\nfor i in range(len(a) - 2):\n    t = [a[i], a[i + 1], a[i + 2]]\n    if sum(t) - min(t) < k ** 2:\n        sums.append(sum(t))\nprint(len(sums), abs(max(sums)))",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `245 75`"
             }
           }
         ],
@@ -144027,7 +144514,7 @@
         ],
         "lessons": [
           {
-            "position": 31,
+            "position": 34,
             "material_id": "number-sequences"
           }
         ],
@@ -144070,7 +144557,7 @@
         "explanation_kind": "worked_solution",
         "difficulty": 3,
         "estimated_minutes": 7,
-        "answer_instruction": "Введите два числа через пробел в том порядке, в каком их спрашивают.",
+        "answer_instruction": "Введите через пробел количество пар, затем минимальную сумму квадратов.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
@@ -144091,7 +144578,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Порог — наибольшее отрицательное трёхзначное кратное 7; ответ — минимум сумм квадратов."
+              "markdown": "Порог — наибольшее отрицательное трёхзначное кратное 7; в ответе — минимум сумм квадратов."
             }
           }
         ],
@@ -144099,15 +144586,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "`301 10`: проверяется сумма, а выводится минимум сумм квадратов."
+              "markdown": "Проверяется сумма пары, а в список идёт сумма квадратов."
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "with open(\"17-3.txt\") as f:\n    a = [int(part) for part in f.read().split()]\n\nt = max(x for x in a if -999 <= x <= -100 and x % 7 == 0)\ncount = 0\nbest = None\nfor i in range(len(a) - 1):\n    x, y = a[i], a[i + 1]\n    if int(x < 0) + int(y < 0) == 1 and x + y > t:\n        count += 1\n        s = x ** 2 + y ** 2\n        if best is None or s < best:\n            best = s\nprint(count, best)",
-              "caption": "Решение программой"
+              "code": "with open(\"17-3.txt\") as f:\n    a = [int(x) for x in f]\nlimit = max([x for x in a if -999 <= x <= -100 and x % 7 == 0])\nsquares = []\nfor i in range(len(a) - 1):\n    x, y = a[i], a[i + 1]\n    if int(x < 0) + int(y < 0) == 1 and x + y > limit:\n        squares.append(x ** 2 + y ** 2)\nprint(len(squares), min(squares))",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `301 10`"
             }
           }
         ],
@@ -144125,7 +144618,7 @@
         ],
         "lessons": [
           {
-            "position": 32,
+            "position": 28,
             "material_id": "number-sequences"
           }
         ],
@@ -144168,7 +144661,7 @@
         "explanation_kind": "worked_solution",
         "difficulty": 2,
         "estimated_minutes": 4,
-        "answer_instruction": "Введите два числа через пробел в том порядке, в каком их спрашивают.",
+        "answer_instruction": "Введите через пробел количество троек, затем максимальную сумму.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
@@ -144183,7 +144676,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Отсортируйте тройку: p + q > r и p² + q² = r²."
+              "markdown": "Отсортируй тройку: `p + q > r` и `p ** 2 + q ** 2 == r ** 2`."
             }
           }
         ],
@@ -144191,15 +144684,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "`2 24`: подходят (3, 4, 5) и (6, 8, 10)."
+              "markdown": "Подходят 3, 4, 5 и 6, 8, 10."
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "a = [3, 4, 5, 6, 8, 10]\ncount = 0\nbest = None\nfor i in range(len(a) - 2):\n    p, q, r = sorted([a[i], a[i + 1], a[i + 2]])\n    if p + q > r and p ** 2 + q ** 2 == r ** 2:\n        count += 1\n        if best is None or p + q + r > best:\n            best = p + q + r\nprint(count, best)",
-              "caption": "Решение программой"
+              "code": "a = [3, 4, 5, 6, 8, 10]\nsums = []\nfor i in range(len(a) - 2):\n    p, q, r = sorted([a[i], a[i + 1], a[i + 2]])\n    if p + q > r and p ** 2 + q ** 2 == r ** 2:\n        sums.append(p + q + r)\nprint(len(sums), max(sums))",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `2 24`"
             }
           }
         ],
@@ -144208,7 +144707,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 33,
+            "position": 37,
             "material_id": "number-sequences",
             "counts_toward_mastery": false
           }
@@ -144252,7 +144751,7 @@
         "explanation_kind": "worked_solution",
         "difficulty": 2,
         "estimated_minutes": 5,
-        "answer_instruction": "Введите два числа через пробел в том порядке, в каком их спрашивают.",
+        "answer_instruction": "Введите через пробел количество троек, затем максимальную сумму.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
@@ -144267,7 +144766,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Тупоугольный: треугольник существует и p² + q² < r² для наибольшей стороны r."
+              "markdown": "Тупоугольный: треугольник существует и `p ** 2 + q ** 2 < r ** 2` для наибольшей стороны `r`."
             }
           }
         ],
@@ -144275,15 +144774,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "`1 17`: подходит только 6, 8, 3 — 3 + 6 > 8, но 9 + 36 = 45 < 64. Тройки 10, 6, 8 и 3, 4, 5 прямоугольные, у 8, 3, 4 и 4, 5, 13 треугольника нет."
+              "markdown": "Подходит только 6, 8, 3: 3 + 6 > 8, но 9 + 36 = 45 < 64. Тройки 10, 6, 8 и 3, 4, 5 прямоугольные, у 8, 3, 4 и 4, 5, 13 треугольника нет."
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "a = [10, 6, 8, 3, 4, 5, 13]\ncount = 0\nbest = None\nfor i in range(len(a) - 2):\n    p, q, r = sorted([a[i], a[i + 1], a[i + 2]])\n    if p + q > r and p ** 2 + q ** 2 < r ** 2:\n        count += 1\n        if best is None or p + q + r > best:\n            best = p + q + r\nprint(count, best)",
-              "caption": "Решение программой"
+              "code": "a = [10, 6, 8, 3, 4, 5, 13]\nsums = []\nfor i in range(len(a) - 2):\n    p, q, r = sorted([a[i], a[i + 1], a[i + 2]])\n    if p + q > r and p ** 2 + q ** 2 < r ** 2:\n        sums.append(p + q + r)\nprint(len(sums), max(sums))",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `1 17`"
             }
           }
         ],
@@ -144292,7 +144797,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 34,
+            "position": 35,
             "material_id": "number-sequences",
             "counts_toward_mastery": false
           }
@@ -144336,7 +144841,7 @@
         "explanation_kind": "worked_solution",
         "difficulty": 2,
         "estimated_minutes": 6,
-        "answer_instruction": "Введите два числа через пробел в том порядке, в каком их спрашивают.",
+        "answer_instruction": "Введите через пробел количество троек, затем максимальную сумму.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
@@ -144357,7 +144862,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Остроугольный: p + q > r и p² + q² > r² после сортировки тройки."
+              "markdown": "Остроугольный: `p + q > r` и `p ** 2 + q ** 2 > r ** 2` после сортировки тройки."
             }
           }
         ],
@@ -144365,15 +144870,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "`141 114`."
+              "markdown": "Стороны в файле идут в любом порядке, поэтому тройку сортируют."
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "with open(\"17-5.txt\") as f:\n    a = [int(part) for part in f.read().split()]\n\ncount = 0\nbest = 0\nfor i in range(len(a) - 2):\n    p, q, r = sorted([a[i], a[i + 1], a[i + 2]])\n    if p + q > r and p ** 2 + q ** 2 > r ** 2:\n        count += 1\n        best = max(best, p + q + r)\nprint(count, best)",
-              "caption": "Решение программой"
+              "code": "with open(\"17-5.txt\") as f:\n    a = [int(x) for x in f]\nsums = []\nfor i in range(len(a) - 2):\n    p, q, r = sorted([a[i], a[i + 1], a[i + 2]])\n    if p + q > r and p ** 2 + q ** 2 > r ** 2:\n        sums.append(p + q + r)\nif len(sums) == 0:\n    print(0, 0)\nelse:\n    print(len(sums), max(sums))",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `141 114`"
             }
           }
         ],
@@ -144391,7 +144902,7 @@
         ],
         "lessons": [
           {
-            "position": 35,
+            "position": 36,
             "material_id": "number-sequences",
             "counts_toward_mastery": false
           }
@@ -144435,7 +144946,7 @@
         "explanation_kind": "worked_solution",
         "difficulty": 2,
         "estimated_minutes": 6,
-        "answer_instruction": "Введите два числа через пробел в том порядке, в каком их спрашивают.",
+        "answer_instruction": "Введите через пробел количество троек, затем максимальную сумму.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
@@ -144464,15 +144975,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "`7 280`: стороны идут в файле в любом порядке, поэтому без сортировки тройки часть из них потерялась бы."
+              "markdown": "После сортировки наибольшая сторона — `r`, проверка Пифагора сравнивает с её квадратом."
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "with open(\"17-5.txt\") as f:\n    a = [int(part) for part in f.read().split()]\n\ncount = 0\nbest = 0\nfor i in range(len(a) - 2):\n    p, q, r = sorted([a[i], a[i + 1], a[i + 2]])\n    if p + q > r and p ** 2 + q ** 2 == r ** 2:\n        count += 1\n        best = max(best, p + q + r)\nprint(count, best)",
-              "caption": "Решение программой"
+              "code": "with open(\"17-5.txt\") as f:\n    a = [int(x) for x in f]\nsums = []\nfor i in range(len(a) - 2):\n    p, q, r = sorted([a[i], a[i + 1], a[i + 2]])\n    if p + q > r and p ** 2 + q ** 2 == r ** 2:\n        sums.append(p + q + r)\nif len(sums) == 0:\n    print(0, 0)\nelse:\n    print(len(sums), max(sums))",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `7 280`"
             }
           }
         ],
@@ -144490,7 +145007,7 @@
         ],
         "lessons": [
           {
-            "position": 36,
+            "position": 38,
             "material_id": "number-sequences",
             "counts_toward_mastery": false
           }
@@ -144572,22 +145089,10 @@
         "skills": [],
         "exam_numbers": [17],
         "files": [],
-        "lessons": [
-          {
-            "position": 37,
-            "material_id": "number-sequences",
-            "counts_toward_mastery": false
-          }
-        ],
-        "theory_links": [
-          {
-            "label": "Теория",
-            "section": "chislo-proverok",
-            "material_id": "number-sequences"
-          }
-        ],
+        "lessons": [],
+        "theory_links": [],
         "catalog_visible": false,
-        "archived": false,
+        "archived": true,
         "sources": [
           {
             "url": null,
@@ -144656,22 +145161,10 @@
         "skills": [],
         "exam_numbers": [17],
         "files": [],
-        "lessons": [
-          {
-            "position": 38,
-            "material_id": "number-sequences",
-            "counts_toward_mastery": false
-          }
-        ],
-        "theory_links": [
-          {
-            "label": "Теория",
-            "section": "chislo-proverok",
-            "material_id": "number-sequences"
-          }
-        ],
+        "lessons": [],
+        "theory_links": [],
         "catalog_visible": false,
-        "archived": false,
+        "archived": true,
         "sources": [
           {
             "url": null,
@@ -144740,22 +145233,10 @@
         "skills": [],
         "exam_numbers": [17],
         "files": [],
-        "lessons": [
-          {
-            "position": 39,
-            "material_id": "number-sequences",
-            "counts_toward_mastery": false
-          }
-        ],
-        "theory_links": [
-          {
-            "label": "Теория",
-            "section": "ne-sosedi",
-            "material_id": "number-sequences"
-          }
-        ],
+        "lessons": [],
+        "theory_links": [],
         "catalog_visible": false,
-        "archived": false,
+        "archived": true,
         "sources": [
           {
             "url": null,
@@ -144824,22 +145305,10 @@
         "skills": [],
         "exam_numbers": [17],
         "files": [],
-        "lessons": [
-          {
-            "position": 40,
-            "material_id": "number-sequences",
-            "counts_toward_mastery": false
-          }
-        ],
-        "theory_links": [
-          {
-            "label": "Теория",
-            "section": "po-ostatkam",
-            "material_id": "number-sequences"
-          }
-        ],
+        "lessons": [],
+        "theory_links": [],
         "catalog_visible": false,
-        "archived": false,
+        "archived": true,
         "sources": [
           {
             "url": null,
@@ -144908,22 +145377,10 @@
         "skills": [],
         "exam_numbers": [17],
         "files": [],
-        "lessons": [
-          {
-            "position": 41,
-            "material_id": "number-sequences",
-            "counts_toward_mastery": false
-          }
-        ],
-        "theory_links": [
-          {
-            "label": "Теория",
-            "section": "po-ostatkam",
-            "material_id": "number-sequences"
-          }
-        ],
+        "lessons": [],
+        "theory_links": [],
         "catalog_visible": false,
-        "archived": false,
+        "archived": true,
         "sources": [
           {
             "url": null,
@@ -145007,22 +145464,10 @@
             "description": "Последовательность натуральных чисел, не превышающих 10 000"
           }
         ],
-        "lessons": [
-          {
-            "position": 42,
-            "material_id": "number-sequences",
-            "counts_toward_mastery": false
-          }
-        ],
-        "theory_links": [
-          {
-            "label": "Теория",
-            "section": "po-ostatkam",
-            "material_id": "number-sequences"
-          }
-        ],
+        "lessons": [],
+        "theory_links": [],
         "catalog_visible": false,
-        "archived": false,
+        "archived": true,
         "sources": [
           {
             "url": null,
@@ -145106,22 +145551,10 @@
             "description": "Последовательность натуральных чисел, не превышающих 10 000"
           }
         ],
-        "lessons": [
-          {
-            "position": 43,
-            "material_id": "number-sequences",
-            "counts_toward_mastery": false
-          }
-        ],
-        "theory_links": [
-          {
-            "label": "Теория",
-            "section": "ne-sosedi",
-            "material_id": "number-sequences"
-          }
-        ],
+        "lessons": [],
+        "theory_links": [],
         "catalog_visible": false,
-        "archived": false,
+        "archived": true,
         "sources": [
           {
             "url": null,
@@ -145152,14 +145585,14 @@
         "explanation_kind": "worked_solution",
         "difficulty": 2,
         "estimated_minutes": 6,
-        "answer_instruction": "Введите два числа через пробел в том порядке, в каком их спрашивают.",
+        "answer_instruction": "Введите через пробел количество пар, затем максимальную сумму.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "В файле 17-4.txt содержится последовательность натуральных чисел, не превышающих 100 000. Определите количество пар, в которых ровно одно число делится на 3, а сумма элементов пары кратна 5. В ответе запишите количество найденных пар, затем максимальную из сумм элементов таких пар. (Подтемы 2 и 4.)"
+              "markdown": "В файле 17-4.txt содержится последовательность натуральных чисел, не превышающих 100 000. Определите количество пар, в которых ровно одно число делится на 3, а сумма элементов пары кратна 5. В ответе запишите количество найденных пар, затем максимальную из сумм элементов таких пар."
             }
           },
           {
@@ -145181,15 +145614,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "`92 172180`: «ровно одно» — `int(x % 3 == 0) + int(y % 3 == 0) == 1`; с «хотя бы одним» подошли бы и пары, где оба кратны трём."
+              "markdown": "«Ровно одно кратно 3» — `k == 1`; с «хотя бы одним» подошли бы и пары, где кратны оба."
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "with open(\"17-4.txt\") as f:\n    a = [int(part) for part in f.read().split()]\n\ncount = 0\nbest = None\nfor i in range(len(a) - 1):\n    x, y = a[i], a[i + 1]\n    k = int(x % 3 == 0) + int(y % 3 == 0)\n    if k == 1 and (x + y) % 5 == 0:\n        count += 1\n        if best is None or x + y > best:\n            best = x + y\nprint(count, best)",
-              "caption": "Решение программой"
+              "code": "with open(\"17-4.txt\") as f:\n    a = [int(x) for x in f]\nsums = []\nfor i in range(len(a) - 1):\n    x, y = a[i], a[i + 1]\n    k = int(x % 3 == 0) + int(y % 3 == 0)\n    if k == 1 and (x + y) % 5 == 0:\n        sums.append(x + y)\nprint(len(sums), max(sums))",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `92 172180`"
             }
           }
         ],
@@ -145207,7 +145646,7 @@
         ],
         "lessons": [
           {
-            "position": 44,
+            "position": 39,
             "material_id": "number-sequences"
           }
         ],
@@ -145244,14 +145683,14 @@
         "explanation_kind": "worked_solution",
         "difficulty": 3,
         "estimated_minutes": 8,
-        "answer_instruction": "Введите два числа через пробел в том порядке, в каком их спрашивают.",
+        "answer_instruction": "Введите через пробел количество троек, затем минимальную сумму.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "В файле 17-3.txt содержится последовательность целых чисел от −100 000 до 100 000. Определите количество троек, в которых не более одного числа трёхзначное, а сумма элементов тройки не меньше минимального положительного элемента последовательности, оканчивающегося на 99. В ответе запишите количество найденных троек, затем минимальную из сумм элементов таких троек. (Подтемы 3 и 5: трёхзначное — по модулю, «не меньше» включает равенство.)"
+              "markdown": "В файле 17-3.txt содержится последовательность целых чисел от −100 000 до 100 000. Определите количество троек, в которых не более одного числа трёхзначное, а сумма элементов тройки не меньше минимального положительного элемента последовательности, оканчивающегося на 99. В ответе запишите количество найденных троек, затем минимальную из сумм элементов таких троек."
             }
           },
           {
@@ -145273,15 +145712,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "`404 99`: минимальный положительный элемент на 99 — само число 99, и тройка с суммой ровно 99 подходит; со строгим «больше» ответ был бы другим."
+              "markdown": "Минимальный положительный элемент на 99 — само число 99, и тройка с суммой ровно 99 подходит; со строгим «больше» ответ был бы другим."
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "with open(\"17-3.txt\") as f:\n    a = [int(part) for part in f.read().split()]\n\nm = min(x for x in a if x > 0 and x % 100 == 99)\ncount = 0\nbest = None\nfor i in range(len(a) - 2):\n    g = [a[i], a[i + 1], a[i + 2]]\n    k = 0\n    for x in g:\n        if 100 <= abs(x) <= 999:\n            k += 1\n    if k <= 1 and sum(g) >= m:\n        count += 1\n        if best is None or sum(g) < best:\n            best = sum(g)\nprint(count, best)",
-              "caption": "Решение программой"
+              "code": "def three(x):\n    return 100 <= abs(x) <= 999\n\n\nwith open(\"17-3.txt\") as f:\n    a = [int(x) for x in f]\nlimit = min([x for x in a if x > 0 and x % 100 == 99])\nsums = []\nfor i in range(len(a) - 2):\n    x, y, z = a[i], a[i + 1], a[i + 2]\n    k = int(three(x)) + int(three(y)) + int(three(z))\n    if k <= 1 and x + y + z >= limit:\n        sums.append(x + y + z)\nprint(len(sums), min(sums))",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `404 99`"
             }
           }
         ],
@@ -145299,7 +145744,7 @@
         ],
         "lessons": [
           {
-            "position": 45,
+            "position": 40,
             "material_id": "number-sequences"
           }
         ],
@@ -145336,14 +145781,14 @@
         "explanation_kind": "worked_solution",
         "difficulty": 3,
         "estimated_minutes": 8,
-        "answer_instruction": "Введите два числа через пробел в том порядке, в каком их спрашивают.",
+        "answer_instruction": "Введите через пробел количество пар, затем максимальную сумму.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Для файла 17-4.txt определите количество пар, для которых выполняются условия: остаток от деления на 3 хотя бы одного числа пары равен остатку от деления на 3 минимального элемента последовательности; остаток от деления на 7 хотя бы одного числа пары равен остатку от деления на 7 максимального элемента последовательности. В ответе запишите количество найденных пар, затем максимальную из сумм элементов таких пар. (Подтемы 5 и 6.)"
+              "markdown": "Для файла 17-4.txt определите количество пар, для которых выполняются условия: остаток от деления на 3 хотя бы одного числа пары равен остатку от деления на 3 минимального элемента последовательности; остаток от деления на 7 хотя бы одного числа пары равен остатку от деления на 7 максимального элемента последовательности. В ответе запишите количество найденных пар, затем максимальную из сумм элементов таких пар."
             }
           },
           {
@@ -145357,7 +145802,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Сравнивайте остатки: `x % 3 == min(a) % 3`, а не `x % 3 == min(a)`."
+              "markdown": "Сравнивай остатки: `x % 3 == min(a) % 3`, а не `x % 3 == min(a)`."
             }
           }
         ],
@@ -145365,15 +145810,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "`164 149944`: сравниваются остатки — `x % 3 == min(a) % 3`, а не `x % 3 == min(a)`."
+              "markdown": "Остатки минимума и максимума находят до цикла; в паре сравнивают остатки её чисел."
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "with open(\"17-4.txt\") as f:\n    a = [int(part) for part in f.read().split()]\n\nr3 = min(a) % 3\nr7 = max(a) % 7\ncount = 0\nbest = None\nfor i in range(len(a) - 1):\n    x, y = a[i], a[i + 1]\n    first = x % 3 == r3 or y % 3 == r3\n    second = x % 7 == r7 or y % 7 == r7\n    if first and second:\n        count += 1\n        if best is None or x + y > best:\n            best = x + y\nprint(count, best)",
-              "caption": "Решение программой"
+              "code": "with open(\"17-4.txt\") as f:\n    a = [int(x) for x in f]\nr3 = min(a) % 3\nr7 = max(a) % 7\nsums = []\nfor i in range(len(a) - 1):\n    x, y = a[i], a[i + 1]\n    first = x % 3 == r3 or y % 3 == r3\n    second = x % 7 == r7 or y % 7 == r7\n    if first and second:\n        sums.append(x + y)\nprint(len(sums), max(sums))",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `164 149944`"
             }
           }
         ],
@@ -145391,7 +145842,7 @@
         ],
         "lessons": [
           {
-            "position": 46,
+            "position": 41,
             "material_id": "number-sequences"
           }
         ],
@@ -145428,14 +145879,14 @@
         "explanation_kind": "worked_solution",
         "difficulty": 3,
         "estimated_minutes": 8,
-        "answer_instruction": "Введите два числа через пробел в том порядке, в каком их спрашивают.",
+        "answer_instruction": "Введите через пробел количество троек, затем модуль максимальной суммы.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Для файла 17-3.txt определите количество троек, в которых все числа одного знака, а модуль суммы элементов тройки меньше максимального элемента последовательности, запись которого оканчивается на 77. В ответе запишите количество найденных троек, затем абсолютное значение максимальной из сумм элементов таких троек. (Подтемы 3, 5 и 6.)"
+              "markdown": "Для файла 17-3.txt определите количество троек, в которых все числа одного знака, а модуль суммы элементов тройки меньше максимального элемента последовательности, запись которого оканчивается на 77. В ответе запишите количество найденных троек, затем абсолютное значение максимальной из сумм элементов таких троек."
             }
           },
           {
@@ -145449,7 +145900,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Ноль не положителен и не отрицателен; модуль — у суммы в проверке и у окончательного максимума."
+              "markdown": "Ноль не положительный и не отрицательный; модуль — у суммы в проверке и у окончательного максимума."
             }
           }
         ],
@@ -145457,15 +145908,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "`77 6498`: ноль не относится ни к положительным, ни к отрицательным, поэтому тройки с нулём не подходят."
+              "markdown": "Тройки с нулём не подходят: ноль не относится ни к положительным, ни к отрицательным."
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "with open(\"17-3.txt\") as f:\n    a = [int(part) for part in f.read().split()]\n\nm = max(x for x in a if abs(x) % 100 == 77)\ncount = 0\nbest = None\nfor i in range(len(a) - 2):\n    g = [a[i], a[i + 1], a[i + 2]]\n    same = min(g) > 0 or max(g) < 0\n    if same and abs(sum(g)) < m:\n        count += 1\n        if best is None or sum(g) > best:\n            best = sum(g)\nprint(count, abs(best))",
-              "caption": "Решение программой"
+              "code": "with open(\"17-3.txt\") as f:\n    a = [int(x) for x in f]\nlimit = max([x for x in a if abs(x) % 100 == 77])\nsums = []\nfor i in range(len(a) - 2):\n    t = [a[i], a[i + 1], a[i + 2]]\n    same = min(t) > 0 or max(t) < 0\n    if same and abs(sum(t)) < limit:\n        sums.append(sum(t))\nprint(len(sums), abs(max(sums)))",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `77 6498`"
             }
           }
         ],
@@ -145483,7 +145940,7 @@
         ],
         "lessons": [
           {
-            "position": 47,
+            "position": 42,
             "material_id": "number-sequences"
           }
         ],
@@ -145520,14 +145977,14 @@
         "explanation_kind": "worked_solution",
         "difficulty": 3,
         "estimated_minutes": 9,
-        "answer_instruction": "Введите два числа через пробел в том порядке, в каком их спрашивают.",
+        "answer_instruction": "Введите через пробел количество четвёрок, затем максимальную сумму.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Для файла 17-4.txt определите количество четвёрок, в которых чисел, кратных 3, больше, чем чисел, кратных 7, а сумма элементов четвёрки больше утроенного среднего арифметического всех чётных элементов последовательности. В ответе запишите количество найденных четвёрок, затем максимальную из сумм элементов таких четвёрок. (Подтемы 2, 4 и 5: среднее — без деления.)"
+              "markdown": "Для файла 17-4.txt определите количество четвёрок, в которых чисел, кратных 3, больше, чем чисел, кратных 7, а сумма элементов четвёрки больше утроенного среднего арифметического всех чётных элементов последовательности. В ответе запишите количество найденных четвёрок, затем максимальную из сумм элементов таких четвёрок."
             }
           },
           {
@@ -145541,7 +145998,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Без деления: сумма четвёрки, умноженная на `k`, больше `3 * s` (сумма и количество чётных)."
+              "markdown": "Без деления: сумма четвёрки, умноженная на `k`, больше `3 * s`, где `s` и `k` — сумма и количество чётных."
             }
           }
         ],
@@ -145549,15 +146006,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "`357 240298`: условие на среднее без деления — сумма четвёрки, умноженная на `k`, больше `3 * s`, где `s` и `k` — сумма и количество чётных элементов."
+              "markdown": "Условие на среднее записано без деления: `sum(t) * k > 3 * s`."
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "with open(\"17-4.txt\") as f:\n    a = [int(part) for part in f.read().split()]\n\ns = sum(x for x in a if x % 2 == 0)\nk = sum(1 for x in a if x % 2 == 0)\ncount = 0\nbest = None\nfor i in range(len(a) - 3):\n    g = a[i : i + 4]\n    k3 = sum(1 for x in g if x % 3 == 0)\n    k7 = sum(1 for x in g if x % 7 == 0)\n    if k3 > k7 and sum(g) * k > 3 * s:\n        count += 1\n        if best is None or sum(g) > best:\n            best = sum(g)\nprint(count, best)",
-              "caption": "Решение программой"
+              "code": "with open(\"17-4.txt\") as f:\n    a = [int(x) for x in f]\neven = [x for x in a if x % 2 == 0]\ns, k = sum(even), len(even)\nsums = []\nfor i in range(len(a) - 3):\n    t = [a[i], a[i + 1], a[i + 2], a[i + 3]]\n    k3 = len([x for x in t if x % 3 == 0])\n    k7 = len([x for x in t if x % 7 == 0])\n    if k3 > k7 and sum(t) * k > 3 * s:\n        sums.append(sum(t))\nprint(len(sums), max(sums))",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `357 240298`"
             }
           }
         ],
@@ -145575,7 +146038,7 @@
         ],
         "lessons": [
           {
-            "position": 48,
+            "position": 43,
             "material_id": "number-sequences"
           }
         ],
@@ -832538,6 +833001,13 @@
       "mime_type": "text/plain",
       "size_bytes": 9,
       "storage_key": "0dd532145f72eda4694c421ff8fd21fe026a0f8a2df7c164838551e45f4b3010"
+    },
+    {
+      "format": "txt",
+      "checksum": "24aefa979defdd581e6bb6c34ea12612b3bbdbe580f6a07978e29b5c7c2b65e4",
+      "mime_type": "text/plain",
+      "size_bytes": 63720,
+      "storage_key": "24aefa979defdd581e6bb6c34ea12612b3bbdbe580f6a07978e29b5c7c2b65e4"
     }
   ],
   "materials": [
@@ -834282,64 +834752,44 @@
       "id": "number-sequences",
       "sections": [
         "kak-ustroena-tema",
-        "posledovatelnost",
-        "kolichestvo-i-velichina",
         "spisok",
         "fajl-v-spisok",
-        "pervaya-stroka",
         "proverki-usloviya",
         "ostatok",
         "summa-i-proizvedenie",
         "chisla-itogo",
-        "skolko-elementov",
+        "sosednie-pary",
+        "sosednie-trojki",
+        "kolichestvo-i-maksimum",
+        "gruppy-itogo",
         "i-ili-ne",
-        "rovno-odno",
-        "raznye-svojstva",
+        "chetyrehznachnye",
+        "skolko-elementov",
         "skobki",
         "odno-a-drugoe",
         "skolko-itogo",
-        "cifry-i-znak",
         "poslednie-cifry",
         "gde-nuzhen-modul",
         "kolichestvo-cifr",
         "cifra-v-razryade",
         "znak-chisla",
         "cifry-itogo",
-        "granica-perebora",
-        "sosednie-pary",
-        "sosednie-trojki",
-        "pervaya-zadacha",
-        "bez-spiska-summ",
-        "pochemu-verno",
-        "gruppy-itogo",
-        "porog-po-vsem",
-        "predvaritelnaya-harakteristika",
-        "vidy-harakteristik",
-        "ishodnye-chisla",
-        "polnaya-zadacha",
-        "trojki-s-porogom",
+        "snachala-porog",
+        "otbor",
+        "zadacha-temy",
         "srednee",
-        "srednee-bez-drobej",
-        "ne-povtoryat",
-        "lomayushchie-preobrazovaniya",
+        "ne-menyat-spisok",
         "posledovatelnost-itogo",
         "poryadok-dejstvij",
-        "dlinnye-formulirovki",
         "proverka-i-otvet",
         "ostatok-minimalnogo",
-        "malenkij-spisok",
         "dva-naibolshih",
         "vyvod-itogo",
         "treugolniki",
         "sushchestvovanie",
         "vid-treugolnika",
         "pryamougolnyj",
-        "treugolniki-itogo",
-        "lyubye-pary",
-        "ne-sosedi",
-        "chislo-proverok",
-        "po-ostatkam",
-        "pary-itogo"
+        "treugolniki-itogo"
       ],
       "kind": "topic",
       "status": "published",
@@ -834350,11 +834800,8 @@
           "access": "free",
           "sections": [
             "kak-ustroena-tema",
-            "posledovatelnost",
-            "kolichestvo-i-velichina",
             "spisok",
             "fajl-v-spisok",
-            "pervaya-stroka",
             "proverki-usloviya",
             "ostatok",
             "summa-i-proizvedenie",
@@ -834362,13 +834809,22 @@
           ]
         },
         {
-          "slug": "skolko-podhodit",
+          "slug": "sosednie-gruppy",
           "access": "free",
           "sections": [
-            "skolko-elementov",
+            "sosednie-pary",
+            "sosednie-trojki",
+            "kolichestvo-i-maksimum",
+            "gruppy-itogo"
+          ]
+        },
+        {
+          "slug": "skolko-podhodit",
+          "access": "paid",
+          "sections": [
             "i-ili-ne",
-            "rovno-odno",
-            "raznye-svojstva",
+            "chetyrehznachnye",
+            "skolko-elementov",
             "skobki",
             "odno-a-drugoe",
             "skolko-itogo"
@@ -834376,9 +834832,8 @@
         },
         {
           "slug": "cifry-i-znak",
-          "access": "free",
+          "access": "paid",
           "sections": [
-            "cifry-i-znak",
             "poslednie-cifry",
             "gde-nuzhen-modul",
             "kolichestvo-cifr",
@@ -834388,32 +834843,14 @@
           ]
         },
         {
-          "slug": "sosednie-gruppy",
-          "access": "paid",
-          "sections": [
-            "granica-perebora",
-            "sosednie-pary",
-            "sosednie-trojki",
-            "pervaya-zadacha",
-            "bez-spiska-summ",
-            "pochemu-verno",
-            "gruppy-itogo"
-          ]
-        },
-        {
           "slug": "vsya-posledovatelnost",
           "access": "paid",
           "sections": [
-            "porog-po-vsem",
-            "predvaritelnaya-harakteristika",
-            "vidy-harakteristik",
-            "ishodnye-chisla",
-            "polnaya-zadacha",
-            "trojki-s-porogom",
+            "snachala-porog",
+            "otbor",
+            "zadacha-temy",
             "srednee",
-            "srednee-bez-drobej",
-            "ne-povtoryat",
-            "lomayushchie-preobrazovaniya",
+            "ne-menyat-spisok",
             "posledovatelnost-itogo"
           ]
         },
@@ -834422,10 +834859,8 @@
           "access": "paid",
           "sections": [
             "poryadok-dejstvij",
-            "dlinnye-formulirovki",
             "proverka-i-otvet",
             "ostatok-minimalnogo",
-            "malenkij-spisok",
             "dva-naibolshih",
             "vyvod-itogo"
           ]
@@ -834439,17 +834874,6 @@
             "vid-treugolnika",
             "pryamougolnyj",
             "treugolniki-itogo"
-          ]
-        },
-        {
-          "slug": "lyubye-pary",
-          "access": "paid",
-          "sections": [
-            "lyubye-pary",
-            "ne-sosedi",
-            "chislo-proverok",
-            "po-ostatkam",
-            "pary-itogo"
           ]
         }
       ],

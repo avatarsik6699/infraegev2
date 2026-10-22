@@ -2,18 +2,18 @@
 
 The lesson loops over indices with arithmetic checks. Here every answer is recomputed
 another way: windows by ``zip`` over shifted lists, digits from the decimal string,
-averages as exact fractions, triangles by all three inequalities without sorting and
-pairs of any positions by ``combinations`` or remainder counts. The bank's own
-solution programs, run next to their attachments, must print the same answers.
+averages as exact fractions, triangles by all three inequalities without sorting. The
+bank's own solution programs, run next to their attachments, must print the same
+answers. The first-line task and the pairs of any positions are archived with their
+sections (Change 197).
 """
 
 import shutil
 import subprocess
 import sys
 import tempfile
-from collections import Counter
 from fractions import Fraction
-from itertools import combinations, permutations
+from itertools import permutations
 from pathlib import Path
 
 import pytest
@@ -27,7 +27,10 @@ ROOT = Path(__file__).resolve().parents[3]
 BANK_DIR = ROOT / "content/practice-bank"
 FILES = ROOT / "content/lesson-files/topic-17"
 MATERIAL = "number-sequences"
-RETIRED = [f"task-17-{number:02d}" for number in range(1, 9)]
+RETIRED = [f"task-17-{number:02d}" for number in range(1, 9)] + [
+    "task-17-1-06",
+    *(f"task-17-8-{number:02d}" for number in (1, 2, 3, 4, 6, 7, 8)),
+]
 
 Group = tuple[int, ...]
 
@@ -94,11 +97,11 @@ def _mean(values: list[int]) -> Fraction:
 def answers() -> dict[str, str]:
     a: dict[str, str] = {}
     f1, f2, f3, f4 = (_read(f"17-{k}.txt") for k in range(1, 5))
-    f5, f6 = _read("17-5.txt"), _read("17-6.txt")
+    f5, theme = _read("17-5.txt"), _read("17.txt")
 
     # subtopic 1
     a["task-17-1-05"] = f"{sum(x * x for x in (2, 7))} {sum((2, 7)) ** 2}"
-    a["task-17-1-06"] = f"{10 + 20 + 30} {3 + 10 + 20 + 30}"
+    a["task-17-1-09"] = f"{len(f1)} {f1[0] + f1[-1]}"
     nines = [x for x in f1 if x % 9 == 0]
     a["task-17-1-07"] = f"{len(nines)} {len([x for x in nines if x > 0])}"
     a["task-17-1-08"] = (
@@ -134,6 +137,7 @@ def answers() -> dict[str, str]:
     )
     a["task-17-4-05"] = " ".join(str(len(_windows(list(range(2000)), k))) for k in (2, 3, 4))
     a["task-17-4-07"] = _answer(_windows([1, 2, 3, 4, 5, 6], 4), lambda g: sum(g) % 7 == 0)
+    a["task-17-4-10"] = _answer(_windows(f1, 3), lambda g: sum(g) % 10 == 0)
     a["task-17-4-08"] = _answer(_windows(f1, 2), lambda g: max(g) < 0 and sum(g) % 5 == 0)
     a["task-17-4-09"] = _answer(
         _windows(f1, 3),
@@ -165,6 +169,11 @@ def answers() -> dict[str, str]:
             and any(x % 7 == 0 for x in g)
             and sum(g) > m
         ),
+    )
+    m = max(x for x in theme if _ends(x, "25"))
+    a["task-17-5-10"] = _answer(
+        _windows(theme, 3),
+        lambda g: [len(_digits(x)) == 4 for x in g].count(True) <= 2 and sum(g) <= m,
     )
     m = len([x for x in f1 if x % 25 == 0])
     a["task-17-5-08"] = _answer(_windows(f1, 2), lambda g: min(g) < 0 and sum(g) < m)
@@ -209,23 +218,6 @@ def answers() -> dict[str, str]:
         _windows(f5, 3), lambda g: _triangle(g) and _largest_square_gap(g) > 0
     )
     a["task-17-7-08"] = _answer(_windows(f5, 3), lambda g: _triangle(g) and _right(g))
-    # subtopic 8: pairs of any positions
-    a["task-17-8-01"] = (
-        f"{len(list(combinations(range(5), 2)))} {len(list(combinations(range(2000), 2)))}"
-    )
-    pairs = list(combinations([7, 7, 7, 7], 2))
-    a["task-17-8-02"] = f"{len(pairs)} {len([p for p in pairs if p[0] != p[1]])}"
-    a["task-17-8-03"] = _answer(list(combinations([3, 8, 2, 7], 2)), lambda g: sum(g) % 5 == 0)
-    a["task-17-8-04"] = " ".join(
-        str(next(s for s in range(7) if (r + s) % 7 == 0)) for r in (0, 3, 5)
-    )
-    seq = [2, 5, 8, 11, 14]
-    same = Counter(x % 3 for x in seq)
-    a["task-17-8-06"] = f"{sum(c * (c - 1) // 2 for c in same.values())} {max(seq) - min(seq)}"
-    a["task-17-8-07"] = _answer(
-        list(combinations(f6, 2)), lambda g: sum(g) % 12 == 0 and any(x % 5 == 0 for x in g)
-    )
-    a["task-17-8-08"] = _answer(list(combinations(f6, 2)), lambda g: g[0] * g[1] % 14 == 0)
     # Практика и итог
     a["task-17-9-01"] = _answer(
         _windows(f4, 2), lambda g: _exactly(g, lambda x: x % 3 == 0) and sum(g) % 5 == 0
@@ -268,13 +260,13 @@ def _solution(task: TaskData) -> str:
 def test_every_answer_matches_independent_recomputation(answers: dict[str, str]) -> None:
     tasks = _entries()
     assert sorted(tasks) == sorted(answers)
-    assert sorted(t.lessons[0].position for t in tasks.values()) == list(range(49))
+    assert sorted(t.lessons[0].position for t in tasks.values()) == list(range(44))
     for task_id, task in tasks.items():
         assert task.checker.answer_variants[0] == answers[task_id], task_id
         assert task.exam_numbers == [17] and not task.catalog_visible and not task.archived
         on_final_page = task_id.startswith("task-17-9-")
         assert bool(task.theory_links) != on_final_page, task_id
-        advanced = task_id.startswith(("task-17-7-", "task-17-8-"))
+        advanced = task_id.startswith("task-17-7-")
         assert task.lessons[0].counts_toward_mastery == (not advanced), task_id
 
 

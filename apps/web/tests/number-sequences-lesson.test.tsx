@@ -85,7 +85,7 @@ function compiles(code: string): boolean {
 }
 
 describe("task 17 number sequences lesson (Change 184)", () => {
-  it("has six core subtopics, two advanced and their self-checks", () => {
+  it("has six core subtopics, one advanced and their self-checks", () => {
     expect(lesson).toMatchObject({
       id: "number-sequences",
       routeSlug: "17-chislovye-posledovatelnosti",
@@ -97,16 +97,15 @@ describe("task 17 number sequences lesson (Change 184)", () => {
     const subtopics = lessonSubtopics(lesson);
     expect(subtopics.map(({ slug, level }) => [slug, level])).toEqual([
       ["chisla-i-proverki", "core"],
+      ["sosednie-gruppy", "core"],
       ["skolko-podhodit", "core"],
       ["cifry-i-znak", "core"],
-      ["sosednie-gruppy", "core"],
       ["vsya-posledovatelnost", "core"],
       ["chto-proveryat-i-vyvodit", "core"],
       ["treugolniki", "advanced"],
-      ["lyubye-pary", "advanced"],
     ]);
     expect(subtopics.map(({ checkpoint }) => checkpoint?.length ?? 0)).toEqual([
-      4, 7, 6, 1, 3, 0, 4, 1,
+      5, 5, 5, 5, 5, 5, 4,
     ]);
     expect(lesson.examFocus).toBeDefined();
     expect(lesson.result).toBeDefined();
@@ -177,7 +176,7 @@ describe("task 17 number sequences lesson (Change 184)", () => {
           prelude += piece.code + "\n";
       }
     }
-    expect(ran).toBe(37);
+    expect(ran).toBe(25);
   }, 60_000);
 
   it("keeps spaces around inline code, links and emphasis", () => {
@@ -193,15 +192,15 @@ describe("task 17 number sequences lesson (Change 184)", () => {
     );
   });
 
-  it("uses every generated figure once, with the stepper and run blocks", () => {
+  it("uses every generated figure once, with the run block", () => {
     const container = renderAuthoredLessonContent(authoredContent);
     const media = Object.values(lessonMedia);
     const diagrams = media.filter((item) => item.kind === "diagram");
     expect(
       container.querySelectorAll("figure[data-lesson-diagram]"),
     ).toHaveLength(diagrams.length);
-    expect(media.filter((item) => item.kind === "stepper")).toHaveLength(1);
-    expect(media.filter((item) => item.kind === "run")).toHaveLength(2);
+    expect(media.filter((item) => item.kind === "stepper")).toHaveLength(0);
+    expect(media.filter((item) => item.kind === "run")).toHaveLength(1);
     expect(container.querySelectorAll("img, video")).toHaveLength(0);
     expect(container.querySelectorAll("[data-topic-cheat-sheet]")).toHaveLength(
       1,

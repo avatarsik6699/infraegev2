@@ -11,518 +11,170 @@ import {
 } from "~/shared/components/learning-content";
 import type { LessonContent } from "../lib/define-lesson.types";
 import { lessonMedia } from "./number-sequences.paid.vsya-posledovatelnost.media";
+import { SAMPLE_LIST } from "./number-sequences.theme";
 import { PythonTerm } from "./python-term";
 
 const content: LessonContent.PaidSubtopicContent = {
   theory: [
     {
-      id: "porog-po-vsem",
-      navLabel: "Порог по всем числам",
+      id: "snachala-porog",
+      navLabel: "Сначала порог",
       explanation: (
         <>
           <Typography.Text>
+            Порог задачи темы — максимальный элемент, оканчивающийся на 25.
+            Можно ли проверять тройки сразу, пока читаем числа по порядку?
+          </Typography.Text>
+          <Typography.Text>
             <strong>
-              Если условие опирается на величину всей последовательности —
-              наименьший элемент с нужным окончанием, количество кратных,
-              среднее, — её находят заранее, отдельным проходом.
+              Нет: число в конце файла может оказаться больше всех прежних и
+              поднять порог — даже для самых первых троек. Поэтому сначала
+              проходят весь список и находят порог, а потом перебирают тройки.
             </strong>{" "}
-            Так устроены 69 задач подборки из 85 и все 15 задач реальных
-            экзаменов: «сумма тройки больше максимального элемента,
-            оканчивающегося на 19», «сумма пары меньше количества чисел, кратных
-            23».
-          </Typography.Text>
-          <Typography.Text>
-            Главный пример подтемы — последовательность −47, 8, 17, −7, 4, 27,
-            10 и числа в ней, оканчивающиеся на 7. Ещё две полные задачи — на
-            тройки и на среднее — разобраны на своих коротких
-            последовательностях. Перебор соседних групп из подтемы 4 считаем
-            знакомым.
-          </Typography.Text>
-        </>
-      ),
-    },
-    {
-      id: "predvaritelnaya-harakteristika",
-      navLabel: "Сначала характеристика",
-      explanation: (
-        <>
-          <Typography.Text>
-            <strong>
-              Иногда перед проверкой пар нужно узнать характеристику всей
-              последовательности.
-            </strong>
-          </Typography.Text>
-          <Typography.Text>Например:</Typography.Text>
-          <blockquote>
-            <Typography.Text>
-              Сумма пары должна быть больше максимального элемента,
-              оканчивающегося на 7.
-            </Typography.Text>
-          </blockquote>
-          <Typography.Text>
-            Пока мы не просмотрели весь файл, этот максимум может быть
-            неизвестен. Последний элемент файла способен оказаться больше всех
-            предыдущих и изменить порог для проверки даже самой первой пары.
+            Посмотри, как меняется наибольший элемент на 25, пока читаем восемь
+            чисел темы:
           </Typography.Text>
           <LessonDiagram
             {...lessonMedia.seqThreshold7}
             caption={
               <>
-                Наибольший элемент на 7 растёт по мере чтения: −47, затем 17,
-                затем 27. Пара (8, 17) с суммой 25 прошла бы проверку с порогом
-                17, но окончательный порог — 27, и подходят только пары с
-                суммами 31 и 37.
+                До седьмого числа порог — 125, и только 2025 поднимает его до
+                окончательного. Под числами — суммы троек против окончательного
+                порога: не проходит лишь последняя, 4700.
               </>
             }
           />
           <Typography.Text>
-            Поэтому задача естественно делится на этапы:
-          </Typography.Text>
-          <ol>
-            <li>прочитать последовательность;</li>
-            <li>вычислить нужное значение по всей последовательности;</li>
-            <li>
-              проверить пары или тройки с использованием уже известного
-              значения.
-            </li>
-          </ol>
-          <Typography.Text>
-            Просмотр всех элементов от начала до конца называют{" "}
-            <strong>проходом по последовательности</strong>.
+            Первая тройка 125, 1300, −1250 с суммой 175 подходит под порог 2025.
+            Если сравнить её с порогом на момент чтения — 125, — она не пройдёт,
+            и ответ на восьми числах получится 3 вместо 4.
           </Typography.Text>
           <Typography.Text>
-            Два последовательных прохода не означают перебор всех сочетаний.
-            Например, при десяти тысячах элементов мы примерно дважды выполняем
-            по десять тысяч действий.
+            Поэтому решение проходит по списку дважды: первый проход находит
+            порог, второй перебирает тройки. Два прохода по 10 000 чисел
+            программа делает мгновенно.
           </Typography.Text>
         </>
       ),
     },
     {
-      id: "vidy-harakteristik",
-      navLabel: "Минимум, максимум, количество",
+      id: "otbor",
+      navLabel: "Отбор и характеристика",
       explanation: (
         <>
           <Typography.Text>
+            Как найти максимальный элемент, оканчивающийся на 25?
+          </Typography.Text>
+          <Typography.Text>
             <strong>
-              Предварительная характеристика может быть минимумом, максимумом,
-              количеством, суммой или средним.
+              Сначала нужные числа отбирают в отдельный список, потом применяют
+              к нему{" "}
+              <PythonTerm term="agg">
+                <Notation>{"max"}</Notation>, <Notation>{"min"}</Notation>,{" "}
+                <Notation>{"len"}</Notation> или <Notation>{"sum"}</Notation>
+              </PythonTerm>
+              .
             </strong>
-          </Typography.Text>
-          <Typography.Text>
-            Минимум возвращает{" "}
-            <PythonTerm term="agg">
-              <Notation>{"min"}</Notation>
-            </PythonTerm>
-            , максимум — <Notation>{"max"}</Notation>, сумму элементов —{" "}
-            <Notation>{"sum"}</Notation>:
-          </Typography.Text>
-          <CodeBlock
-            code={"a = [4, 9, -2]\nprint(min(a), max(a), sum(a))"}
-            label={
-              "Минимум возвращает {{agg|min}}, максимум — max, сумму элементов — sum"
-            }
-            language="python"
-            output={"-2 9 11"}
-          />
-          <Typography.Text>
-            Если нужны только элементы с определённым свойством,{" "}
-            <strong>сначала отберём их</strong>. В нашей последовательности это
-            числа, оканчивающиеся на 7 — файл{" "}
-            <Notation>{"17-sem.txt"}</Notation>:
           </Typography.Text>
           <CodeBlock
             code={
-              'with open("17-sem.txt") as f:\n    a = [int(part) for part in f.read().split()]\n\nselected = []\n\nfor x in a:\n    if abs(x) % 10 == 7:\n        selected.append(x)\nprint(selected)'
+              SAMPLE_LIST +
+              "\nends = [x for x in a if abs(x) % 100 == 25]\nprint(ends, max(ends))"
             }
-            label={
-              "В нашей последовательности это числа, оканчивающиеся на 7 — файл 17-sem.txt"
-            }
+            label={"Числа, оканчивающиеся на 25, и их максимум"}
             language="python"
-            output={"[-47, 17, -7, 27]"}
+            output={"[125, -325, 2025] 2025"}
           />
           <Typography.Text>
-            Теперь <Notation>{"max(selected)"}</Notation> даёт максимальное{" "}
-            <strong>исходное число</strong> среди отобранных. Короткая запись
-            отбора — <PythonTerm term="comp">списковое включение</PythonTerm> с
-            условием:
+            Это <PythonTerm term="comp">списковое включение</PythonTerm> с
+            условием: перебрать <Notation>{"x"}</Notation> из{" "}
+            <Notation>{"a"}</Notation> и взять <Notation>{"x"}</Notation>, если
+            он оканчивается на 25. В список кладут исходные числа:{" "}
+            <Notation>{"x"}</Notation>, а не <Notation>{"abs(x)"}</Notation>.
+            Модуль нужен только для проверки окончания — иначе вместо −325 в
+            списке окажется 325, а это другое число.
           </Typography.Text>
-          <CodeBlock
-            code={"selected = [x for x in a if abs(x) % 10 == 7]"}
-            label={
-              "Короткая запись отбора — {{comp|списковое включение}} с условием"
-            }
-            language="python"
-          />
-          <Typography.Text>Её нужно читать так:</Typography.Text>
-          <blockquote>
-            <Typography.Text>
-              Перебрать <Notation>{"x"}</Notation> из <Notation>{"a"}</Notation>{" "}
-              и добавить <Notation>{"x"}</Notation>, если его запись
-              заканчивается на 7.
-            </Typography.Text>
-          </blockquote>
-          <Typography.Text>Общий порядок:</Typography.Text>
-          <blockquote>
-            <Typography.Text>
-              Сначала определить, какие элементы участвуют в вычислении, затем
-              применить к ним нужную операцию.
-            </Typography.Text>
-          </blockquote>
+          <Typography.Text>
+            Из отобранного списка получают любую характеристику, которую
+            спрашивает условие:
+          </Typography.Text>
           <VariantPicker
-            label={"Требование и запись после отбора в selected"}
+            label={"Что найти по всей последовательности и выражение"}
             variants={[
               {
-                label: "количество таких элементов",
-                value: (
-                  <>
-                    <Notation>{"len(selected)"}</Notation>
-                  </>
-                ),
-                note: <>так считают порог «количество чисел, кратных 23»</>,
-              },
-              {
-                label: "сумма таких элементов",
-                value: (
-                  <>
-                    <Notation>{"sum(selected)"}</Notation>
-                  </>
-                ),
+                label: "максимальный такой элемент",
+                value: <Notation>{"max(ends)"}</Notation>,
               },
               {
                 label: "минимальный такой элемент",
-                value: (
-                  <>
-                    <Notation>{"min(selected)"}</Notation>
-                  </>
-                ),
+                value: <Notation>{"min(ends)"}</Notation>,
               },
               {
-                label: "максимальный такой элемент",
-                value: (
-                  <>
-                    <Notation>{"max(selected)"}</Notation>
-                  </>
-                ),
+                label: "количество таких элементов",
+                value: <Notation>{"len(ends)"}</Notation>,
+                note: <>так считают порог «количество чисел, кратных 2042»</>,
               },
               {
-                label: "среднее арифметическое",
-                value: (
-                  <>
-                    <Notation>{"sum(selected) / len(selected)"}</Notation>
-                  </>
-                ),
-              },
-              {
-                label: "квадрат количества",
-                value: (
-                  <>
-                    <Notation>{"len(selected) ** 2"}</Notation>
-                  </>
-                ),
+                label: "сумма таких элементов",
+                value: <Notation>{"sum(ends)"}</Notation>,
               },
             ]}
           />
-          <Typography.Text>Для нашей последовательности:</Typography.Text>
-          <CodeBlock
-            code={
-              "selected = [x for x in a if abs(x) % 10 == 7]\nprint(len(selected), min(selected), max(selected))"
-            }
-            label={"Для нашей последовательности"}
-            language="python"
-            output={"4 -47 27"}
-          />
           <Typography.Text>
-            У пустого списка нет обычного минимума и максимума:{" "}
-            <Notation>{"min([])"}</Notation> и <Notation>{"max([])"}</Notation>{" "}
-            приводят к ошибке. Среднее пустого списка также не определено:
-            получится деление на ноль.
-          </Typography.Text>
-          <Typography.Text>
-            Поэтому нужно учитывать гарантию существования нужных элементов в
-            условии либо отдельно обрабатывать их отсутствие.{" "}
-            <strong>
-              Нельзя заменять отсутствующий минимум или максимум произвольным
-              нулём.
-            </strong>
+            У пустого списка нет ни максимума, ни минимума:{" "}
+            <Notation>{"max([])"}</Notation> — ошибка. В файлах задания нужные
+            числа есть, а иногда условие прямо это гарантирует.
           </Typography.Text>
         </>
       ),
     },
     {
-      id: "ishodnye-chisla",
-      navLabel: "Исходные числа",
+      id: "zadacha-temy",
+      navLabel: "Задача темы целиком",
       explanation: (
         <>
           <Typography.Text>
-            <strong>
-              При отборе по цифрам сравнивать обычно нужно исходные числа.
-            </strong>
+            Теперь все части задачи на месте — как их собрать?
           </Typography.Text>
-          <Typography.Text>
-            Числа, оканчивающиеся на семь, у нас −47, 17, −7, 27. Минимальное из
-            них — −47. Проверка окончания использует модуль:{" "}
-            <Notation>{"abs(x) % 10 == 7"}</Notation>.
-          </Typography.Text>
-          <Typography.Text>
-            Но в список мы кладём <strong>исходное число</strong> —{" "}
-            <Notation>{"selected.append(x)"}</Notation>, а не{" "}
-            <Notation>{"selected.append(abs(x))"}</Notation>. Иначе будем искать
-            минимум абсолютных величин — это другая задача.
-          </Typography.Text>
-          <Typography.Text>
-            Аналогично среди отрицательных чисел −900, −250, −710 максимальное —
-            −250, поскольку оно ближе к нулю: −900 {"<"} −710 {"<"} −250.
-          </Typography.Text>
-        </>
-      ),
-    },
-    {
-      id: "polnaya-zadacha",
-      navLabel: "Полная задача",
-      explanation: (
-        <>
           <Typography.Text>
             <strong>
-              Разберём полную задачу с предварительным минимумом, окончаниями и
-              квадратами.
-            </strong>
-          </Typography.Text>
-          <Typography.Text>Учебное условие:</Typography.Text>
-          <blockquote>
-            <Typography.Text>
-              Рассматриваются соседние пары целых чисел. Ровно одно число пары
-              оканчивается на семь. Сумма квадратов чисел пары должна быть
-              меньше квадрата минимального элемента всей последовательности,
-              оканчивающегося на семь. Найти количество подходящих пар и
-              максимальную сумму квадратов.
-            </Typography.Text>
-          </blockquote>
-          <Typography.Text>
-            Предполагаем, что элемент для вычисления минимума существует.
-          </Typography.Text>
-          <Typography.Text>
-            Разделим текст на самостоятельные действия.
+              Порог находят до цикла, тройки проверяют в цикле, ответ выводят
+              после цикла.
+            </strong>{" "}
+            Сначала — вручную на восьми числах темы, с порогом 2025:
           </Typography.Text>
           <LessonTable
-            label={"Разделим текст на самостоятельные действия"}
-            columns={[{ label: "Часть условия" }, { label: "Что делаем" }]}
-            rows={[
-              [
-                "Минимальный элемент всей последовательности, оканчивающийся на 7",
-                "Находим заранее",
-              ],
-              [
-                "Ровно одно число пары оканчивается на 7",
-                "Считаем такие числа внутри пары",
-              ],
-              [
-                "Сумма квадратов меньше квадрата минимума",
-                "Сравниваем две величины",
-              ],
-              ["Количество пар", "Увеличиваем счётчик"],
-              [
-                "Максимальная сумма квадратов",
-                "Обновляем максимум именно этой величины",
-              ],
-            ]}
-          />
-          <Typography.Text>
-            Для −47, 8, 17, −7, 4, 27, 10 минимум уже найден: m = −47, m² =
-            2209. Далее:
-          </Typography.Text>
-          <LessonTable
-            label={
-              "Для −47, 8, 17, −7, 4, 27, 10 минимум уже найден: m = −47, m² = 2209. Далее"
-            }
-            columns={[
-              { label: "Пара" },
-              { label: "Сколько чисел оканчиваются на 7", numeric: true },
-              { label: "Сумма квадратов", numeric: true },
-              { label: "Подходит?" },
-            ]}
-            rows={[
-              [
-                <>
-                  <Notation>{"(-47, 8)"}</Notation>
-                </>,
-                "1",
-                "2273",
-                "Нет: слишком большая сумма квадратов",
-              ],
-              [
-                <>
-                  <Notation>{"(8, 17)"}</Notation>
-                </>,
-                "1",
-                "353",
-                "Да",
-              ],
-              [
-                <>
-                  <Notation>{"(17, -7)"}</Notation>
-                </>,
-                "2",
-                "338",
-                "Нет: подходят оба окончания",
-              ],
-              [
-                <>
-                  <Notation>{"(-7, 4)"}</Notation>
-                </>,
-                "1",
-                "65",
-                "Да",
-              ],
-              [
-                <>
-                  <Notation>{"(4, 27)"}</Notation>
-                </>,
-                "1",
-                "745",
-                "Да",
-              ],
-              [
-                <>
-                  <Notation>{"(27, 10)"}</Notation>
-                </>,
-                "1",
-                "829",
-                "Да",
-              ],
-            ]}
-          />
-          <Typography.Text>
-            Ответ: <Notation>{"4 829"}</Notation>. Программа — файл{" "}
-            <Notation>{"17-sem.txt"}</Notation>:
-          </Typography.Text>
-          <CodeBlock
-            code={
-              'with open("17-sem.txt") as f:\n    a = [int(part) for part in f.read().split()]\n\nselected = []\n\nfor x in a:\n    if abs(x) % 10 == 7:\n        selected.append(x)\n\nm = min(selected)\n\ncount = 0\nbest = None\n\nfor i in range(len(a) - 1):\n    x = a[i]\n    y = a[i + 1]\n\n    endings_count = (\n        int(abs(x) % 10 == 7)\n        + int(abs(y) % 10 == 7)\n    )\n\n    square_sum = x ** 2 + y ** 2\n\n    if endings_count == 1 and square_sum < m ** 2:\n        count += 1\n\n        if best is None or square_sum > best:\n            best = square_sum\n\nif count > 0:\n    print(count, best)\nelse:\n    print("Подходящих пар нет")'
-            }
-            label={"Ответ: 4 829. Программа — файл 17-sem.txt"}
-            language="python"
-            output={"4 829"}
-          />
-          <Typography.Text>
-            Здесь полезно обратить внимание на три независимых решения:
-          </Typography.Text>
-          <ul>
-            <li>
-              для проверки окончания используется <Notation>{"abs"}</Notation>;
-            </li>
-            <li>для поиска минимума используются исходные значения;</li>
-            <li>
-              для ответа сравниваются суммы квадратов, а не обычные суммы.
-            </li>
-          </ul>
-          <Typography.Text>
-            Именно такие различия нужно удерживать при чтении длинного условия.
-          </Typography.Text>
-        </>
-      ),
-    },
-    {
-      id: "trojki-s-porogom",
-      navLabel: "Тройки с порогом",
-      explanation: (
-        <>
-          <Typography.Text>
-            <strong>
-              В задачах на тройки обычно меняется число проверяемых элементов, а
-              общий алгоритм остаётся прежним.
-            </strong>
-          </Typography.Text>
-          <Typography.Text>Учебное условие:</Typography.Text>
-          <blockquote>
-            <Typography.Text>
-              Последовательность содержит положительные целые числа. В соседней
-              тройке ровно два числа должны быть четырёхзначными, хотя бы одно —
-              делиться на три, а сумма должна превышать максимальный элемент
-              всей последовательности, оканчивающийся на 17. Найти количество
-              таких троек и максимальную сумму.
-            </Typography.Text>
-          </blockquote>
-          <Typography.Text>
-            Предполагаем, что число для предварительного максимума существует.
-            Пример: 1017, 2000, 6, 3001, 4001, 8, 123. Максимальное число с
-            окончанием <Notation>{"17"}</Notation> — 1017.
-          </Typography.Text>
-          <LessonTable
-            label={"Максимальное число с окончанием 17 — 1017"}
+            label={"Задача темы на восьми числах"}
             columns={[
               { label: "Тройка" },
               { label: "Четырёхзначных", numeric: true },
-              { label: "Кратных 3", numeric: true },
               { label: "Сумма", numeric: true },
               { label: "Подходит?" },
             ]}
             rows={[
-              [
-                <>
-                  <Notation>{"(1017, 2000, 6)"}</Notation>
-                </>,
-                "2",
-                "2",
-                "3023",
-                "Да",
-              ],
-              [
-                <>
-                  <Notation>{"(2000, 6, 3001)"}</Notation>
-                </>,
-                "2",
-                "1",
-                "5007",
-                "Да",
-              ],
-              [
-                <>
-                  <Notation>{"(6, 3001, 4001)"}</Notation>
-                </>,
-                "2",
-                "1",
-                "7008",
-                "Да",
-              ],
-              [
-                <>
-                  <Notation>{"(3001, 4001, 8)"}</Notation>
-                </>,
-                "2",
-                "0",
-                "7010",
-                "Нет",
-              ],
-              [
-                <>
-                  <Notation>{"(4001, 8, 123)"}</Notation>
-                </>,
-                "1",
-                "1",
-                "4132",
-                "Нет",
-              ],
+              ["125, 1300, −1250", "2", "175", "да"],
+              ["1300, −1250, −2100", "3", "−2050", "нет: три четырёхзначных"],
+              ["−1250, −2100, 7", "2", "−3343", "да"],
+              ["−2100, 7, −325", "1", "−2418", "да"],
+              ["7, −325, 2025", "1", "1707", "да"],
+              ["−325, 2025, 3000", "2", "4700", "нет: сумма больше 2025"],
             ]}
           />
           <Typography.Text>
-            У четвёртой тройки сумма больше, чем у третьей. Но она не проходит
-            условие, поэтому не может определять максимум ответа. Ответ:{" "}
-            <Notation>{"3 7008"}</Notation>. Программа — файл{" "}
-            <Notation>{"17-troyki.txt"}</Notation>:
+            На восьми числах ответ 4 1707. Программа для файла задачи темы:
           </Typography.Text>
           <CodeBlock
             code={
-              'with open("17-troyki.txt") as f:\n    a = [int(part) for part in f.read().split()]\n\nselected = [x for x in a if x % 100 == 17]\nthreshold = max(selected)\n\nresults = []\n\nfor i in range(len(a) - 2):\n    x = a[i]\n    y = a[i + 1]\n    z = a[i + 2]\n\n    four_digit_count = (\n        int(1000 <= x <= 9999)\n        + int(1000 <= y <= 9999)\n        + int(1000 <= z <= 9999)\n    )\n\n    multiple_count = (\n        int(x % 3 == 0)\n        + int(y % 3 == 0)\n        + int(z % 3 == 0)\n    )\n\n    current_sum = x + y + z\n\n    condition_1 = four_digit_count == 2\n    condition_2 = multiple_count >= 1\n    condition_3 = current_sum > threshold\n\n    if condition_1 and condition_2 and condition_3:\n        results.append(current_sum)\n\nif len(results) > 0:\n    print(len(results), max(results))\nelse:\n    print("Подходящих троек нет")'
+              'def four(x):\n    return 1000 <= abs(x) <= 9999\n\n\nwith open("17.txt") as f:\n    a = [int(x) for x in f]\nlimit = max([x for x in a if abs(x) % 100 == 25])\nsums = []\nfor i in range(len(a) - 2):\n    x, y, z = a[i], a[i + 1], a[i + 2]\n    k = int(four(x)) + int(four(y)) + int(four(z))\n    if k <= 2 and x + y + z <= limit:\n        sums.append(x + y + z)\nprint(len(sums), max(sums))'
             }
-            label={"Программа — файл 17-troyki.txt"}
+            label={"Решение задачи темы"}
             language="python"
-            output={"3 7008"}
+            output={"8358 99821"}
           />
           <Typography.Text>
-            Здесь числа по условию положительные, поэтому{" "}
-            <Notation>{"abs"}</Notation> не требуется ни при проверке количества
-            цифр, ни при проверке окончания.
+            Ответ задачи темы: <strong>8358 99821</strong>. Порог по файлу —
+            99825. Чтобы проверить программу, замени чтение файла строкой{" "}
+            <Notation>{SAMPLE_LIST}</Notation>: должно получиться 4 1707.
           </Typography.Text>
         </>
       ),
@@ -533,277 +185,68 @@ const content: LessonContent.PaidSubtopicContent = {
       explanation: (
         <>
           <Typography.Text>
+            Порог бывает и средним — например, «меньше среднего арифметического
+            всех чётных элементов последовательности». Как его считать?
+          </Typography.Text>
+          <Typography.Text>
             <strong>
-              Среднее арифметическое нужно вычислять по той группе элементов,
-              которая названа в условии.
-            </strong>
-          </Typography.Text>
-          <Typography.Text>
-            Среднее — это сумма значений, делённая на их количество. Для чисел
-            2, 4, 12 получаем (2 + 4 + 12) / 3 = 6.
-          </Typography.Text>
-          <Typography.Text>
-            Если требуется среднее всех чётных элементов последовательности:
+              Среднее считают по той группе, что названа в условии: сумма её
+              чисел, делённая на их количество. Сравнивают без деления: вместо{" "}
+              <Notation>{"x < s / k"}</Notation> пишут{" "}
+              <Notation>{"x * k < s"}</Notation>.
+            </strong>{" "}
+            В последовательности 2, 9, 4, 7, 12 чётные числа 2, 4, 12, их сумма
+            18, количество 3, среднее 6:
           </Typography.Text>
           <CodeBlock
             code={
-              "even_numbers = [x for x in a if x % 2 == 0]\n\naverage = sum(even_numbers) / len(even_numbers)"
+              "a = [2, 9, 4, 7, 12]\neven = [x for x in a if x % 2 == 0]\ns = sum(even)\nk = len(even)\nprint(s / k, 4 * k < s, 7 * k < s)"
             }
-            label={
-              "Если требуется среднее всех чётных элементов последовательности"
-            }
+            label={"Среднее чётных и сравнение без деления"}
             language="python"
+            output={"6.0 True False"}
           />
           <Typography.Text>
-            Нельзя делить сумму чётных элементов на общее количество элементов
-            файла. Знаменатель должен соответствовать той же группе, что и
-            числитель.
-          </Typography.Text>
-          <Typography.Text>
-            Также не нужно использовать <Notation>{"//"}</Notation>:{" "}
-            <Notation>{"sum(even_numbers) // len(even_numbers)"}</Notation>{" "}
-            <strong>округлит результат вниз</strong> и может изменить проверки.
-            Например, настоящее среднее равно <Notation>{"6.5"}</Notation>.
-            Тогда число <Notation>{"6"}</Notation> меньше среднего. Но после
-            округления до <Notation>{"6"}</Notation> проверка{" "}
-            <Notation>{"6 < 6"}</Notation> уже ложна.
+            4 меньше среднего, 7 — нет. Делить сумму чётных на длину всего
+            списка нельзя: в знаменателе количество той же группы. Умножать обе
+            части на k можно, потому что k положительно, а сравнение без деления
+            точное — в нём нет дробей.
           </Typography.Text>
         </>
       ),
     },
     {
-      id: "srednee-bez-drobej",
-      navLabel: "Среднее без дробей",
+      id: "ne-menyat-spisok",
+      navLabel: "Исходный список не трогаем",
       explanation: (
         <>
           <Typography.Text>
-            <strong>
-              Сравнение со средним можно выполнить точно, вообще не вычисляя
-              дробное число.
-            </strong>
+            Можно ли упростить перебор — отсортировать числа или выбросить
+            неподходящие?
           </Typography.Text>
-          <Typography.Text>
-            Пусть <Notation>{"S"}</Notation> — сумма выбранных элементов,{" "}
-            <Notation>{"K"}</Notation> — их количество,{" "}
-            <Notation>{"K > 0"}</Notation>. Тогда x {"<"} S / K. Умножаем обе
-            части на положительное число <Notation>{"K"}</Notation>.{" "}
-            <strong>Направление неравенства не меняется</strong>: x · K {"<"} S.
-            В Python: <Notation>{"x * K < S"}</Notation>.
-          </Typography.Text>
-          <VariantPicker
-            label={"Сравнение со средним и запись без деления"}
-            variants={[
-              {
-                label: "x < S / K",
-                value: (
-                  <>
-                    <Notation>{"x * K < S"}</Notation>
-                  </>
-                ),
-              },
-              {
-                label: "x <= S / K",
-                value: (
-                  <>
-                    <Notation>{"x * K <= S"}</Notation>
-                  </>
-                ),
-              },
-              {
-                label: "x > S / K",
-                value: (
-                  <>
-                    <Notation>{"x * K > S"}</Notation>
-                  </>
-                ),
-              },
-              {
-                label: "x >= S / K",
-                value: (
-                  <>
-                    <Notation>{"x * K >= S"}</Notation>
-                  </>
-                ),
-              },
-            ]}
-          />
-          <Typography.Text>
-            Так мы сохраняем вычисления в целых числах.
-          </Typography.Text>
-          <Typography.Text>Теперь учебная задача:</Typography.Text>
-          <blockquote>
-            <Typography.Text>
-              В соседней паре одно число делится на три, а другое меньше
-              среднего арифметического всех чётных элементов последовательности.
-              Найти количество таких пар и максимальную сумму.
-            </Typography.Text>
-          </blockquote>
-          <Typography.Text>
-            Последовательность 2, 9, 4, 7, 12. Чётные числа 2, 4, 12, их среднее
-            равно 6.
-          </Typography.Text>
-          <LessonTable
-            label={
-              "Последовательность 2, 9, 4, 7, 12. Чётные числа 2, 4, 12, их среднее равно 6"
-            }
-            columns={[
-              { label: "Пара" },
-              { label: "Подходит?" },
-              { label: "Почему" },
-            ]}
-            rows={[
-              [
-                <>
-                  <Notation>{"(2, 9)"}</Notation>
-                </>,
-                "Да",
-                "9 кратно 3, а 2 меньше 6",
-              ],
-              [
-                <>
-                  <Notation>{"(9, 4)"}</Notation>
-                </>,
-                "Да",
-                "9 кратно 3, а 4 меньше 6",
-              ],
-              [
-                <>
-                  <Notation>{"(4, 7)"}</Notation>
-                </>,
-                "Нет",
-                "Ни одно число не кратно 3",
-              ],
-              [
-                <>
-                  <Notation>{"(7, 12)"}</Notation>
-                </>,
-                "Нет",
-                "12 кратно 3, но другое число 7 не меньше 6",
-              ],
-            ]}
-          />
-          <Typography.Text>
-            Ответ: <Notation>{"2 13"}</Notation>. Программа без деления — файл{" "}
-            <Notation>{"17-srednee.txt"}</Notation>:
-          </Typography.Text>
-          <CodeBlock
-            code={
-              'with open("17-srednee.txt") as f:\n    a = [int(part) for part in f.read().split()]\n\neven_numbers = [x for x in a if x % 2 == 0]\n\neven_sum = sum(even_numbers)\neven_count = len(even_numbers)\n\n# Предполагается, что чётные элементы существуют.\n\nresults = []\n\nfor i in range(len(a) - 1):\n    x = a[i]\n    y = a[i + 1]\n\n    first_case = (\n        x % 3 == 0\n        and y * even_count < even_sum\n    )\n\n    second_case = (\n        y % 3 == 0\n        and x * even_count < even_sum\n    )\n\n    if first_case or second_case:\n        results.append(x + y)\n\nif len(results) > 0:\n    print(len(results), max(results))\nelse:\n    print("Подходящих пар нет")'
-            }
-            label={"Ответ: 2 13. Программа без деления — файл 17-srednee.txt"}
-            language="python"
-            output={"2 13"}
-          />
-          <Typography.Text>
-            Даже если оба распределения ролей подходят, пара добавляется только
-            один раз: у нас один <Notation>{"if"}</Notation> с объединением
-            через <Notation>{"or"}</Notation>.
-          </Typography.Text>
-        </>
-      ),
-    },
-    {
-      id: "ne-povtoryat",
-      navLabel: "Не повторять в цикле",
-      explanation: (
-        <>
           <Typography.Text>
             <strong>
-              Предварительные вычисления не стоит повторять внутри каждого шага
-              цикла.
+              Нет: соседи есть только в исходном порядке. Сортировка и удаление
+              чисел создают пары, которых в файле не было.
             </strong>
           </Typography.Text>
-          <Typography.Text>Например:</Typography.Text>
-          <CodeBlock
-            code={
-              "for i in range(len(a) - 1):\n    if a[i] > sum(a) / len(a):\n        ..."
-            }
-            label={"Например"}
-            language="python"
-          />
-          <Typography.Text>
-            Здесь <Notation>{"sum(a)"}</Notation> заново проходит по всему
-            списку на каждом повторении. Если список длинный, это создаёт много
-            лишней работы. Лучше:
-          </Typography.Text>
-          <CodeBlock
-            code={
-              "average = sum(a) / len(a)\n\nfor i in range(len(a) - 1):\n    if a[i] > average:\n        ..."
-            }
-            label={"Лучше"}
-            language="python"
-          />
-          <Typography.Text>
-            То же относится к <Notation>{"min(a)"}</Notation>,{" "}
-            <Notation>{"max(a)"}</Notation> и отбору элементов всей
-            последовательности.
-          </Typography.Text>
-          <Typography.Text>Практическое правило:</Typography.Text>
-          <blockquote>
-            <Typography.Text>
-              Если величина не зависит от текущего индекса{" "}
-              <Notation>{"i"}</Notation>, подумай, можно ли вычислить её до
-              цикла.
-            </Typography.Text>
-          </blockquote>
-          <Typography.Text>
-            Но минимум текущей тройки <Notation>{"min(x, y, z)"}</Notation>{" "}
-            зависит от рассматриваемых элементов, поэтому его как раз нужно
-            находить внутри перебора.
-          </Typography.Text>
-        </>
-      ),
-    },
-    {
-      id: "lomayushchie-preobrazovaniya",
-      navLabel: "Что ломает соседство",
-      explanation: (
-        <>
-          <Typography.Text>
-            <strong>
-              Есть несколько преобразований, которые почти всегда ломают задачу
-              на соседство.
-            </strong>
-          </Typography.Text>
-          <ol>
-            <li>
-              <strong>Сортировка всей последовательности</strong>{" "}
-              <Notation>{"a.sort()"}</Notation>. Она меняет порядок элементов.
-              Например, 10, 1, 20 имеет соседние пары (10, 1) и (1, 20). После
-              сортировки 1, 10, 20 получаются (1, 10) и (10, 20). Появилась
-              другая пара.
-            </li>
-            <li>
-              <strong>Предварительное удаление элементов</strong>, которые сами
-              по себе не обладают нужным свойством. Допустим, нужно проверить
-              соседние пары, где хотя бы одно число чётное, в последовательности
-              2, 7, 4. Если сначала оставить только чётные 2, 4, мы создадим
-              новую пару (2, 4), которой в исходной последовательности не было.
-            </li>
-            <li>
-              <strong>Удаление повторов.</strong> Оно меняет и количество
-              элементов, и их соседство.
-            </li>
-          </ol>
           <LessonDiagram
             {...lessonMedia.seqBroken_53f788}
             caption={
               <>
                 Слева пары исходной последовательности, справа — после
                 сортировки и после отбора чётных. Пар (10, 20) и (2, 4) в
-                исходной последовательности не было, а условие задачи говорит
-                именно о ней.
+                исходной последовательности не было.
               </>
             }
           />
           <Typography.Text>
-            Отбирать отдельный список для вычисления глобального порога можно.
-            Заменять им исходную последовательность для перебора соседей обычно
-            нельзя.
-          </Typography.Text>
-          <Typography.Text>
-            Исходный список <Notation>{"a"}</Notation> лучше сохранять в том
-            порядке и составе, в котором он прочитан из файла.
+            Отобрать отдельный список для порога можно — как{" "}
+            <Notation>{"ends"}</Notation> выше. Но тройки перебирают в исходном
+            списке <Notation>{"a"}</Notation>. И порог считают один раз, до
+            цикла: если написать <Notation>{"max(...)"}</Notation> внутри цикла,
+            программа будет заново проходить весь список на каждой тройке — 10
+            000 раз по 10 000 чисел.
           </Typography.Text>
         </>
       ),
@@ -816,42 +259,46 @@ const content: LessonContent.PaidSubtopicContent = {
           <LessonSummary
             items={[
               {
+                key: "Порог",
+                note: <>по всему списку, до перебора троек</>,
+              },
+              {
+                key: "Отбор",
+                note: (
+                  <Notation>{"[x for x in a if abs(x) % 100 == 25]"}</Notation>
+                ),
+              },
+              {
+                key: "Исходные числа",
                 note: (
                   <>
-                    Величина всей последовательности считается до перебора
-                    групп: окончательный порог известен только после последнего
-                    элемента.
+                    в список — <Notation>{"x"}</Notation>, а не{" "}
+                    <Notation>{"abs(x)"}</Notation>
                   </>
                 ),
               },
               {
+                key: "Характеристика",
                 note: (
                   <>
-                    Сначала отбираются нужные элементы (
-                    <Notation>{"[x for x in a if …]"}</Notation>), затем к ним
-                    применяется <Notation>{"min"}</Notation>,{" "}
-                    <Notation>{"max"}</Notation>, <Notation>{"len"}</Notation>,{" "}
-                    <Notation>{"sum"}</Notation>; в список кладутся исходные
-                    числа.
+                    <Notation>{"max"}</Notation>, <Notation>{"min"}</Notation>,{" "}
+                    <Notation>{"len"}</Notation>, <Notation>{"sum"}</Notation>{" "}
+                    отобранного списка
                   </>
                 ),
               },
               {
+                key: "Среднее",
                 note: (
                   <>
-                    Среднее считается по той же группе, что названа в условии, а
-                    сравнение с ним — без деления:{" "}
-                    <Notation>{"x * K < S"}</Notation>.
+                    <Notation>{"x * k < s"}</Notation> вместо{" "}
+                    <Notation>{"x < s / k"}</Notation>
                   </>
                 ),
               },
               {
-                note: (
-                  <>
-                    Порог вычисляется один раз, до цикла; отобранный список не
-                    заменяет исходную последовательность.
-                  </>
-                ),
+                key: "Задача темы",
+                note: <>8358 99821; на восьми числах — 4 1707</>,
               },
             ]}
           />
@@ -861,17 +308,33 @@ const content: LessonContent.PaidSubtopicContent = {
   ],
   checkpoint: [
     {
-      id: "zadacha-2",
+      id: "zadacha-1",
       prompt: (
         <>
-          Среди чисел −35, 15, −5, 25 найди наименьшее и наибольшее. Почему
-          наибольшее — не 35?
+          Числа последовательности, оканчивающиеся на 5: −35, 15, −5, 25. Какой
+          у них минимальный и какой максимальный элемент? Почему максимальный —
+          не 35?
         </>
       ),
       reveal: (
         <>
-          Наименьшее −35, наибольшее 25: сравниваются исходные числа, а 35 —
-          модуль −35.
+          Наименьшее −35, наибольшее 25. Числа 35 в последовательности нет: это
+          модуль −35, а сравнивают исходные числа.
+        </>
+      ),
+    },
+    {
+      id: "zadacha-2",
+      prompt: (
+        <>
+          На восьми числах темы покажи тройку, которая пройдёт проверку с
+          окончательным порогом, но не пройдёт с порогом на момент чтения.
+        </>
+      ),
+      reveal: (
+        <>
+          125, 1300, −1250: сумма 175 не больше 2025, но больше 125 — порога
+          после первых трёх чисел.
         </>
       ),
     },
@@ -879,15 +342,14 @@ const content: LessonContent.PaidSubtopicContent = {
       id: "zadacha-3",
       prompt: (
         <>
-          Последовательность 3, 8, 5, 10, 7. Найди среднее арифметическое
-          нечётных элементов и проверь без деления, какие элементы
-          последовательности меньше этого среднего.
+          Последовательность 3, 8, 6, 5, 4. Какие числа меньше среднего
+          арифметического чётных? Запиши проверку без деления.
         </>
       ),
       reveal: (
         <>
-          Среднее нечётных 3, 5, 7 равно 5: S = 15, K = 3. Меньше среднего
-          только 3: 3 · 3 = 9 {"<"} 15, а у 5 получается 15 {"<"} 15 — ложь.
+          Чётные 8, 6, 4: сумма 18, количество 3, среднее 6. Меньше — 3, 5 и 4.
+          Проверка <Notation>{"x * 3 < 18"}</Notation>.
         </>
       ),
     },
@@ -895,14 +357,27 @@ const content: LessonContent.PaidSubtopicContent = {
       id: "zadacha-4",
       prompt: (
         <>
-          Какие соседние пары у последовательности 30, 1, 20 и какие появятся
-          после <Notation>{"a.sort()"}</Notation>?
+          Что выведет{" "}
+          <Notation>
+            {"print(len([x for x in [10, -25, 125, 7] if abs(x) % 100 == 25]))"}
+          </Notation>
+          ?
+        </>
+      ),
+      reveal: <>2: на 25 оканчиваются −25 и 125.</>,
+    },
+    {
+      id: "zadacha-5",
+      prompt: (
+        <>
+          Почему перед перебором троек нельзя отсортировать список или выбросить
+          из него числа, которые не оканчиваются на 25?
         </>
       ),
       reveal: (
         <>
-          До сортировки (30, 1) и (1, 20), после — (1, 20) и (20, 30): пары (20,
-          30) в исходной последовательности не было.
+          Тройки — это соседи в исходном порядке. После сортировки или удаления
+          рядом окажутся числа, которые в файле соседями не были.
         </>
       ),
     },

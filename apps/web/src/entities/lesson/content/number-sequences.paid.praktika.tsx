@@ -8,6 +8,7 @@ import {
   VariantPicker,
 } from "~/shared/components/learning-content";
 import type { LessonContent } from "../lib/define-lesson.types";
+import { R, SAMPLE_LIST } from "./number-sequences.theme";
 import { SubtopicLink } from "./subtopic-link";
 
 const content: LessonContent.PaidPracticeContent = {
@@ -15,103 +16,100 @@ const content: LessonContent.PaidPracticeContent = {
     <>
       <Typography.Text>
         <strong>
-          Проверять программу нужно на случаях, где возможна конкретная ошибка.
-        </strong>
-      </Typography.Text>
-      <Typography.Text>
-        Необязательно придумывать большой файл. Небольшие данные часто лучше
-        обнаруживают неверную логику. Выбери, что проверяешь, чтобы увидеть
-        полезный случай:
+          Программу проверяют на коротком списке, где ответ известен заранее:
+          одни тройки подходят, другие нет.
+        </strong>{" "}
+        Выбери ошибку, чтобы увидеть, как себя проверить:
       </Typography.Text>
       <VariantPicker
-        label={"Что проверяем и полезный случай"}
+        label={"Ошибка и как себя проверить"}
         variants={[
-          { label: "«хотя бы одно»", value: <>подходят оба числа пары</> },
           {
-            label: "«ровно одно»",
-            value: <>подходят оба — пара должна быть исключена</>,
+            label: "порог по ходу чтения",
+            value: <>Порог считается в том же цикле, что и тройки</>,
+            note: <>найти порог до цикла по всему списку</>,
           },
           {
-            label: "работа со знаком",
-            value: <>есть отрицательное число и ноль</>,
-          },
-          {
-            label: "начальное значение максимума",
-            value: <>все подходящие суммы отрицательны</>,
-          },
-          {
-            label: "граница количества цифр",
+            label: "окончание без модуля",
             value: (
               <>
-                <Notation>{"99"}</Notation>, <Notation>{"100"}</Notation>,{" "}
-                <Notation>{"999"}</Notation>, <Notation>{"1000"}</Notation>
+                <Notation>{"x % 100 == 25"}</Notation> не видит −325
+              </>
+            ),
+            note: (
+              <>
+                окончание — <Notation>{"abs(x) % 100"}</Notation>
               </>
             ),
           },
           {
-            label: "строгое или нестрогое сравнение",
-            value: <>значение в точности равно порогу</>,
+            label: "цифры без модуля",
+            value: <>−1250 не считается четырёхзначным</>,
+            note: <Notation>{"1000 <= abs(x) <= 9999"}</Notation>,
           },
           {
-            label: "пересечение групп",
-            value: <>подходят две пары с общим элементом</>,
-          },
-          {
-            label: "одинаковые значения",
-            value: <>повторяющиеся числа — разные элементы</>,
-          },
-          {
-            label: "конец цикла",
-            value: <>подходящей оказывается последняя пара или тройка</>,
-          },
-          {
-            label: "порядок операций",
+            label: "«не более двух» как «ровно два»",
             value: (
-              <>максимальная сумма отрицательна, а в ответе нужен её модуль</>
+              <>
+                Написано <Notation>{"k == 2"}</Notation>
+              </>
             ),
+            note: (
+              <>
+                «не более двух» — <Notation>{"k <= 2"}</Notation>
+              </>
+            ),
+          },
+          {
+            label: "граница range",
+            value: (
+              <>
+                Тройки перебираются <Notation>{"range(len(a))"}</Notation>
+              </>
+            ),
+            note: (
+              <>
+                тройки — <Notation>{"range(len(a) - 2)"}</Notation>
+              </>
+            ),
+          },
+          {
+            label: "строгое и нестрогое",
+            value: <>«Не больше» записано как {"<"}</>,
+            note: <>проверить тройку, чья сумма равна порогу</>,
+          },
+          {
+            label: "модуль в списке",
+            value: <>В список для порога попал abs(x), а не x</>,
+            note: <>отбирать по модулю, класть исходное число</>,
+          },
+          {
+            label: "что выводить",
+            value: <>Выведена наибольшая сумма, а спросили наименьшую</>,
+            note: <>перечитать последнюю фразу условия</>,
           },
         ]}
       />
       <Typography.Text>
-        Во время отладки можно выводить проверяемые элементы:
+        Удобнее всего проверять на восьми числах темы: ответ на них — 4 1707.
+        Замени чтение файла списком и выведи каждую тройку с проверками:
       </Typography.Text>
       <CodeBlock
         code={
-          'with open("17.txt") as f:\n    a = [int(part) for part in f.read().split()]\n\nfor i in range(len(a) - 1):\n    x = a[i]\n    y = a[i + 1]\n\n    condition = x % 4 == 0 or y % 4 == 0\n\n    print(i, x, y, condition, x + y)'
+          "def four(x):\n    return 1000 <= abs(x) <= 9999\n\n\n" +
+          SAMPLE_LIST +
+          "\nfor i in range(len(a) - 2):\n    x, y, z = a[i], a[i + 1], a[i + 2]\n    k = int(four(x)) + int(four(y)) + int(four(z))\n    print(i, x, y, z, k, x + y + z)"
         }
-        label={"Во время отладки можно выводить проверяемые элементы"}
+        label={"Отладочный вывод троек"}
         language="python"
         output={
-          "0 8 -12 True -4\n1 -12 5 True -7\n2 5 20 True 25\n3 20 -3 True 17\n4 -3 14 False 11"
+          "0 125 1300 -1250 2 175\n1 1300 -1250 -2100 3 -2050\n2 -1250 -2100 7 2 -3343\n3 -2100 7 -325 1 -2418\n4 7 -325 2025 1 1707\n5 -325 2025 3000 2 4700"
         }
       />
-      <Typography.Text>Так видно:</Typography.Text>
-      <ul>
-        <li>какие пары действительно перебираются;</li>
-        <li>чему равно условие;</li>
-        <li>какая величина вычислена.</li>
-      </ul>
       <Typography.Text>
-        После проверки вспомогательный вывод убирают.
-      </Typography.Text>
-      <Typography.Text>
-        Также полезно проверить разумные границы количества:
-      </Typography.Text>
-      <ul>
-        <li>
-          соседних пар не может быть больше <Notation>{"n - 1"}</Notation>;
-        </li>
-        <li>
-          соседних троек — больше <Notation>{"n - 2"}</Notation>;
-        </li>
-        <li>
-          неупорядоченных пар разных позиций — больше{" "}
-          <Notation>{"n * (n - 1) // 2"}</Notation>.
-        </li>
-      </ul>
-      <Typography.Text>
-        Если программа превышает соответствующую границу, она что-то считает
-        повторно.
+        Строки совпадают с таблицей из подтемы «Порог по всей
+        последовательности» — значит, перебор и подсчёт верны. После проверки
+        отладочный вывод убирают.
       </Typography.Text>
     </>
   ),
@@ -119,51 +117,39 @@ const content: LessonContent.PaidPracticeContent = {
     <>
       <Typography.Text>
         <strong>
-          Любая задача задания 17 решается одним порядком рассуждений:
-          определить объект перебора, заранее найти величины всей
-          последовательности, разложить условие группы на отдельные проверки и
-          отдельно записать, что выводить.
-        </strong>{" "}
-        Ошибки удобнее ловить на короткой последовательности, где одни группы
-        подходят, а другие нет, чем на большом ответе программы.
+          Любая задача задания 17 решается в три шага: найти порог по всей
+          последовательности, перебрать соседние группы с проверками условия и
+          вывести количество и нужную величину.
+        </strong>
       </Typography.Text>
       <Typography.Text>
         Всё главное из подтем собрано на одной схеме. Номер раздела ведёт на его
-        подтему, а ниже схемы каждый шаг разобран подробнее.
+        подтему.
       </Typography.Text>
       <TopicCheatSheet
         label={"Задание 17 на одной схеме"}
         flow={[
           {
-            name: "Заранее",
-            note: "порог по всей последовательности: отбор, min, max, количество, среднее",
+            name: "Порог",
+            note: "до цикла: отбор и max, min, len, sum",
           },
-          { name: "Перебор", note: "соседние группы: `range(len(a) - k + 1)`" },
+          { name: "Перебор", note: "соседние группы: range(len(a) - k + 1)" },
           {
             name: "Ответ",
-            note: "счётчик и лучшее значение, которое начинается с `None`",
+            note: "len(sums) и max или min списка",
           },
         ]}
         groups={[
           {
             number: 1,
             title: (
-              <SubtopicLink
-                routeSlug="17-chislovye-posledovatelnosti"
-                subtopic="chisla-i-proverki"
-              >
-                Числа и проверки
+              <SubtopicLink routeSlug={R} subtopic="chisla-i-proverki">
+                Файл и условие
               </SubtopicLink>
             ),
             rows: [
               {
-                key: (
-                  <>
-                    <Notation>
-                      {"[int(part) for part in f.read().split()]"}
-                    </Notation>
-                  </>
-                ),
+                key: <Notation>{"[int(x) for x in f]"}</Notation>,
                 note: <>файл → список чисел</>,
               },
               {
@@ -173,271 +159,150 @@ const content: LessonContent.PaidPracticeContent = {
                     <Notation>{"a[n - 1]"}</Notation>
                   </>
                 ),
-                note: <>индексы; первую строку не удалять без причины</>,
+                note: <>индексы с нуля</>,
               },
               {
-                key: (
-                  <>
-                    <Notation>{"x % d == 0"}</Notation>
-                  </>
-                ),
+                key: <Notation>{"x % d == 0"}</Notation>,
                 note: <>кратно d; ноль кратен любому числу</>,
               },
               {
-                key: (
-                  <>
-                    <Notation>{"(x + y) % 7 == 0"}</Notation>
-                  </>
-                ),
-                note: <>условие на саму сумму, не на слагаемые</>,
+                key: <Notation>{"(x + y) % 7 == 0"}</Notation>,
+                note: <>условие на саму сумму</>,
               },
             ],
           },
           {
             number: 2,
             title: (
-              <SubtopicLink
-                routeSlug="17-chislovye-posledovatelnosti"
-                subtopic="skolko-podhodit"
-              >
-                Сколько подходит
+              <SubtopicLink routeSlug={R} subtopic="sosednie-gruppy">
+                Соседние пары и тройки
               </SubtopicLink>
             ),
             rows: [
               {
-                key: (
-                  <>
-                    <Notation>{"k = int(…) + int(…) + int(…)"}</Notation>
-                  </>
-                ),
-                note: <>количество выполненных проверок</>,
+                key: <Notation>{"range(len(a) - 1)"}</Notation>,
+                note: <>пары</>,
               },
               {
-                key: (
-                  <>
-                    <Notation>{"k == 1"}</Notation>,{" "}
-                    <Notation>{"k <= 2"}</Notation>,{" "}
-                    <Notation>{"k >= 2"}</Notation>
-                  </>
-                ),
-                note: <>ровно одно, не более двух, не менее двух</>,
+                key: <Notation>{"range(len(a) - 2)"}</Notation>,
+                note: <>тройки</>,
               },
               {
-                key: <>«хотя бы одно»</>,
-                note: <>допускает, что подходят оба</>,
-              },
-              {
-                key: <>«одно…, а другое…»</>,
-                note: (
-                  <>
-                    два распределения ролей через <Notation>{"or"}</Notation>
-                  </>
-                ),
+                key: <Notation>{"sums.append(s)"}</Notation>,
+                note: <>внутри if; ответ — len и max</>,
               },
             ],
           },
           {
             number: 3,
             title: (
-              <SubtopicLink
-                routeSlug="17-chislovye-posledovatelnosti"
-                subtopic="cifry-i-znak"
-              >
-                Цифры и знак
+              <SubtopicLink routeSlug={R} subtopic="skolko-podhodit">
+                Сколько чисел подходит
               </SubtopicLink>
             ),
             rows: [
               {
-                key: (
-                  <>
-                    <Notation>{"abs(x) % 10"}</Notation>,{" "}
-                    <Notation>{"abs(x) % 100"}</Notation>
-                  </>
-                ),
-                note: (
-                  <>
-                    окончание записи; <Notation>{"-17 % 10"}</Notation> равно 3
-                  </>
-                ),
+                key: <Notation>{"k = int(…) + int(…) + int(…)"}</Notation>,
+                note: <>количество выполненных проверок</>,
               },
               {
                 key: (
                   <>
-                    <Notation>{"abs(x) // 10 % 10"}</Notation>,{" "}
-                    <Notation>{"str(abs(x))[0]"}</Notation>
+                    <Notation>{"k == 1"}</Notation>,{" "}
+                    <Notation>{"k <= 2"}</Notation>
                   </>
                 ),
-                note: <>предпоследняя и первая цифры</>,
+                note: <>ровно одно, не более двух</>,
               },
               {
-                key: (
-                  <>
-                    <Notation>{"100 <= abs(x) <= 999"}</Notation>
-                  </>
-                ),
-                note: <>трёхзначное по модулю</>,
+                key: <Notation>{"1000 <= abs(x) <= 9999"}</Notation>,
+                note: <>четырёхзначное</>,
               },
               {
-                key: (
-                  <>
-                    <Notation>{"int(x < 0) + int(y < 0) == 1"}</Notation>
-                  </>
-                ),
-                note: <>ровно одно отрицательное; ноль не отрицателен</>,
+                key: <>одно…, а другое…</>,
+                note: <>два распределения ролей</>,
               },
             ],
           },
           {
             number: 4,
             title: (
-              <SubtopicLink
-                routeSlug="17-chislovye-posledovatelnosti"
-                subtopic="sosednie-gruppy"
-              >
-                Соседние группы
+              <SubtopicLink routeSlug={R} subtopic="cifry-i-znak">
+                Цифры и знак
               </SubtopicLink>
             ),
             rows: [
               {
-                key: (
+                key: <Notation>{"abs(x) % 100 == 25"}</Notation>,
+                note: (
                   <>
-                    <Notation>{"range(len(a) - 1)"}</Notation>
+                    окончание; <Notation>{"-325 % 100"}</Notation> = 75
                   </>
                 ),
-                note: <>пары: i + 1 ≤ n − 1</>,
               },
               {
-                key: (
-                  <>
-                    <Notation>{"range(len(a) - 2)"}</Notation>
-                  </>
-                ),
-                note: <>тройки: i + 2 ≤ n − 1</>,
+                key: <Notation>{"x % 5 == 2"}</Notation>,
+                note: <>остаток — без модуля</>,
               },
               {
-                key: (
-                  <>
-                    <Notation>{"best = None"}</Notation>
-                  </>
-                ),
-                note: <>максимум не начинают с нуля</>,
-              },
-              {
-                key: (
-                  <>
-                    <Notation>{"0 0"}</Notation>
-                  </>
-                ),
-                note: <>только если так требует условие</>,
+                key: <Notation>{"int(x < 0) + int(y < 0) == 1"}</Notation>,
+                note: <>ровно одно отрицательное; ноль не отрицателен</>,
               },
             ],
           },
           {
             number: 5,
             title: (
-              <SubtopicLink
-                routeSlug="17-chislovye-posledovatelnosti"
-                subtopic="vsya-posledovatelnost"
-              >
-                Вся последовательность
+              <SubtopicLink routeSlug={R} subtopic="vsya-posledovatelnost">
+                Порог по всей последовательности
               </SubtopicLink>
             ),
             rows: [
               {
-                key: (
-                  <>
-                    <Notation>{"[x for x in a if …]"}</Notation>
-                  </>
-                ),
-                note: <>отбор; в список кладут исходные числа</>,
+                key: <Notation>{"[x for x in a if …]"}</Notation>,
+                note: <>отбор; в список — исходные числа</>,
               },
+              { key: <>до цикла</>, note: <>порог считают один раз</> },
               {
-                key: (
-                  <>
-                    <Notation>{"x * K < S"}</Notation>
-                  </>
-                ),
+                key: <Notation>{"x * k < s"}</Notation>,
                 note: <>сравнение со средним без деления</>,
               },
-              { key: <>до цикла</>, note: <>порог считается один раз</> },
-              {
-                key: (
-                  <>
-                    без <Notation>{"a.sort()"}</Notation>
-                  </>
-                ),
-                note: <>отбор и сортировка ломают соседство</>,
-              },
+              { key: <>8358 99821</>, note: <>ответ задачи темы</> },
             ],
           },
           {
             number: 6,
             title: (
-              <SubtopicLink
-                routeSlug="17-chislovye-posledovatelnosti"
-                subtopic="chto-proveryat-i-vyvodit"
-              >
-                Что выводить
+              <SubtopicLink routeSlug={R} subtopic="chto-proveryat-i-vyvodit">
+                Длинные формулировки
               </SubtopicLink>
             ),
             rows: [
               {
-                key: (
-                  <>
-                    <Notation>{"min(a) ** 2"}</Notation> ≠{" "}
-                    <Notation>{"min(x ** 2 …)"}</Notation>
-                  </>
-                ),
-                note: <>квадрат минимума и минимум квадратов</>,
+                key: <Notation>{"min(a) ** 2"}</Notation>,
+                note: <>квадрат минимума, а не минимум квадратов</>,
               },
               {
-                key: (
-                  <>
-                    <Notation>{"abs(max(results))"}</Notation>
-                  </>
-                ),
-                note: <>модуль только окончательного ответа</>,
+                key: <Notation>{"x % d == m % d"}</Notation>,
+                note: <>остаток минимального</>,
               },
               {
-                key: (
-                  <>
-                    <Notation>{"x % m == minimum"}</Notation>
-                  </>
-                ),
-                note: (
-                  <>
-                    не путать с <Notation>{"minimum % m"}</Notation>
-                  </>
-                ),
-              },
-              {
-                key: (
-                  <>
-                    <Notation>{"sum(t) - min(t)"}</Notation>
-                  </>
-                ),
-                note: <>сумма двух наибольших тройки</>,
+                key: <Notation>{"sum(t) - min(t)"}</Notation>,
+                note: <>два наибольших в тройке</>,
               },
             ],
           },
           {
             number: 7,
             title: (
-              <SubtopicLink
-                routeSlug="17-chislovye-posledovatelnosti"
-                subtopic="treugolniki"
-              >
-                Треугольники
+              <SubtopicLink routeSlug={R} subtopic="treugolniki">
+                Тройка как стороны треугольника
               </SubtopicLink>
             ),
             level: "дополнительный урок",
             rows: [
               {
-                key: (
-                  <>
-                    <Notation>{"sorted"}</Notation> → p ≤ q ≤ r
-                  </>
-                ),
+                key: <Notation>{"p, q, r = sorted(t)"}</Notation>,
                 note: <>треугольник, если p + q {">"} r</>,
               },
               {
@@ -450,50 +315,17 @@ const content: LessonContent.PaidPracticeContent = {
               },
             ],
           },
-          {
-            number: 8,
-            title: (
-              <SubtopicLink
-                routeSlug="17-chislovye-posledovatelnosti"
-                subtopic="lyubye-pary"
-              >
-                Любые пары
-              </SubtopicLink>
-            ),
-            level: "дополнительный урок",
-            rows: [
-              {
-                key: (
-                  <>
-                    <Notation>{"for j in range(i + 1, n)"}</Notation>
-                  </>
-                ),
-                note: <>пары i {"<"} j, n(n − 1)/2 штук</>,
-              },
-              {
-                key: (
-                  <>
-                    <Notation>{"counts[(-r) % m]"}</Notation>
-                  </>
-                ),
-                note: <>партнёры по остаткам; текущее — после подсчёта</>,
-              },
-            ],
-          },
         ]}
         sections={[
           {
-            title: "Три вопроса к готовой программе",
+            title: "Три вопроса к условию",
             steps: [
-              <>Все ли нужные группы перебраны и ни одна не лишняя?</>,
+              <>Какой порог нужен заранее и по каким числам его искать?</>,
               <>
-                Точно ли проверка повторяет слова условия: «хотя бы», «ровно»,
-                «не меньше»?
+                Что проверяют у группы: «хотя бы», «ровно», «не более», «не
+                больше»?
               </>,
-              <>
-                Выведена ли именно требуемая величина: сумма, сумма квадратов,
-                модуль?
-              </>,
+              <>Какую величину выводят: сумму, минимум, модуль?</>,
             ],
           },
         ]}
@@ -504,71 +336,6 @@ const content: LessonContent.PaidPracticeContent = {
           </>
         }
       />
-      <Typography.Text>
-        <strong>
-          Для решения новой задачи полезен один и тот же порядок рассуждения.
-        </strong>
-      </Typography.Text>
-      <ol>
-        <li>
-          <strong>Определи объект перебора.</strong> Отдельные элементы,
-          соседние пары, соседние тройки или любые пары разных позиций?
-        </li>
-        <li>
-          <strong>Уточни допустимые значения.</strong> Возможны ли отрицательные
-          числа и ноль? Нужно ли учитывать знак при проверке количества цифр?
-        </li>
-        <li>
-          <strong>Выдели сведения обо всей последовательности.</strong> Минимум,
-          максимум, количество, сумма, среднее? По всем элементам или по
-          некоторой их части?
-        </li>
-        <li>
-          <strong>Разложи условие группы на отдельные проверки.</strong>{" "}
-          Например: «ровно два четырёхзначных», «есть кратное пяти», «сумма
-          меньше порога».
-        </li>
-        <li>
-          <strong>Отдельно выпиши, что требуется вывести.</strong> Количество и
-          максимум суммы? Количество и минимум суммы квадратов? Модуль
-          окончательного максимума?
-        </li>
-        <li>
-          <strong>Выбери способ накопления ответа.</strong> Список подходящих
-          значений либо счётчик и лучшее значение.
-        </li>
-        <li>
-          <strong>Проверь решение на короткой последовательности.</strong>{" "}
-          Желательно такой, где одни группы подходят, другие — нет.
-        </li>
-        <li>
-          <strong>
-            Запусти программу на файле и перенеси ответ в нужном порядке.
-          </strong>
-        </li>
-      </ol>
-      <Typography.Text>
-        Например, из длинного условия может получиться такая рабочая запись:
-      </Typography.Text>
-      <ul>
-        <li>
-          <strong>Перебор:</strong> соседние тройки.
-        </li>
-        <li>
-          <strong>Заранее:</strong> минимальное положительное трёхзначное число.
-        </li>
-        <li>
-          <strong>Условия тройки:</strong> не более двух трёхзначных чисел;
-          сумма не меньше найденного минимума.
-        </li>
-        <li>
-          <strong>Ответ:</strong> количество троек и максимальная сумма среди
-          них.
-        </li>
-      </ul>
-      <Typography.Text>
-        После такой записи код становится переводом уже понятного решения.
-      </Typography.Text>
     </>
   ),
 };

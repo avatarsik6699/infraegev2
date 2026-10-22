@@ -53,7 +53,7 @@ def _value(v) -> str:
         kind = "сеть" if "Network" in name else "адрес" if "Address" in name else "интерфейс"
         return f"{kind} {v}"
     text = repr(v)
-    return text if len(text) <= 40 else text[:39] + "…"
+    return text if len(text) <= 48 else text[:47] + "…"
 
 
 def _src(node: ast.AST) -> str:

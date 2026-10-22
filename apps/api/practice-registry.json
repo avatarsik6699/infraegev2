@@ -1742,64 +1742,44 @@
       "id": "number-sequences",
       "sections": [
         "kak-ustroena-tema",
-        "posledovatelnost",
-        "kolichestvo-i-velichina",
         "spisok",
         "fajl-v-spisok",
-        "pervaya-stroka",
         "proverki-usloviya",
         "ostatok",
         "summa-i-proizvedenie",
         "chisla-itogo",
-        "skolko-elementov",
+        "sosednie-pary",
+        "sosednie-trojki",
+        "kolichestvo-i-maksimum",
+        "gruppy-itogo",
         "i-ili-ne",
-        "rovno-odno",
-        "raznye-svojstva",
+        "chetyrehznachnye",
+        "skolko-elementov",
         "skobki",
         "odno-a-drugoe",
         "skolko-itogo",
-        "cifry-i-znak",
         "poslednie-cifry",
         "gde-nuzhen-modul",
         "kolichestvo-cifr",
         "cifra-v-razryade",
         "znak-chisla",
         "cifry-itogo",
-        "granica-perebora",
-        "sosednie-pary",
-        "sosednie-trojki",
-        "pervaya-zadacha",
-        "bez-spiska-summ",
-        "pochemu-verno",
-        "gruppy-itogo",
-        "porog-po-vsem",
-        "predvaritelnaya-harakteristika",
-        "vidy-harakteristik",
-        "ishodnye-chisla",
-        "polnaya-zadacha",
-        "trojki-s-porogom",
+        "snachala-porog",
+        "otbor",
+        "zadacha-temy",
         "srednee",
-        "srednee-bez-drobej",
-        "ne-povtoryat",
-        "lomayushchie-preobrazovaniya",
+        "ne-menyat-spisok",
         "posledovatelnost-itogo",
         "poryadok-dejstvij",
-        "dlinnye-formulirovki",
         "proverka-i-otvet",
         "ostatok-minimalnogo",
-        "malenkij-spisok",
         "dva-naibolshih",
         "vyvod-itogo",
         "treugolniki",
         "sushchestvovanie",
         "vid-treugolnika",
         "pryamougolnyj",
-        "treugolniki-itogo",
-        "lyubye-pary",
-        "ne-sosedi",
-        "chislo-proverok",
-        "po-ostatkam",
-        "pary-itogo"
+        "treugolniki-itogo"
       ],
       "kind": "topic",
       "status": "published",
@@ -1810,11 +1790,8 @@
           "access": "free",
           "sections": [
             "kak-ustroena-tema",
-            "posledovatelnost",
-            "kolichestvo-i-velichina",
             "spisok",
             "fajl-v-spisok",
-            "pervaya-stroka",
             "proverki-usloviya",
             "ostatok",
             "summa-i-proizvedenie",
@@ -1822,13 +1799,22 @@
           ]
         },
         {
-          "slug": "skolko-podhodit",
+          "slug": "sosednie-gruppy",
           "access": "free",
           "sections": [
-            "skolko-elementov",
+            "sosednie-pary",
+            "sosednie-trojki",
+            "kolichestvo-i-maksimum",
+            "gruppy-itogo"
+          ]
+        },
+        {
+          "slug": "skolko-podhodit",
+          "access": "paid",
+          "sections": [
             "i-ili-ne",
-            "rovno-odno",
-            "raznye-svojstva",
+            "chetyrehznachnye",
+            "skolko-elementov",
             "skobki",
             "odno-a-drugoe",
             "skolko-itogo"
@@ -1836,9 +1822,8 @@
         },
         {
           "slug": "cifry-i-znak",
-          "access": "free",
+          "access": "paid",
           "sections": [
-            "cifry-i-znak",
             "poslednie-cifry",
             "gde-nuzhen-modul",
             "kolichestvo-cifr",
@@ -1848,32 +1833,14 @@
           ]
         },
         {
-          "slug": "sosednie-gruppy",
-          "access": "paid",
-          "sections": [
-            "granica-perebora",
-            "sosednie-pary",
-            "sosednie-trojki",
-            "pervaya-zadacha",
-            "bez-spiska-summ",
-            "pochemu-verno",
-            "gruppy-itogo"
-          ]
-        },
-        {
           "slug": "vsya-posledovatelnost",
           "access": "paid",
           "sections": [
-            "porog-po-vsem",
-            "predvaritelnaya-harakteristika",
-            "vidy-harakteristik",
-            "ishodnye-chisla",
-            "polnaya-zadacha",
-            "trojki-s-porogom",
+            "snachala-porog",
+            "otbor",
+            "zadacha-temy",
             "srednee",
-            "srednee-bez-drobej",
-            "ne-povtoryat",
-            "lomayushchie-preobrazovaniya",
+            "ne-menyat-spisok",
             "posledovatelnost-itogo"
           ]
         },
@@ -1882,10 +1849,8 @@
           "access": "paid",
           "sections": [
             "poryadok-dejstvij",
-            "dlinnye-formulirovki",
             "proverka-i-otvet",
             "ostatok-minimalnogo",
-            "malenkij-spisok",
             "dva-naibolshih",
             "vyvod-itogo"
           ]
@@ -1899,17 +1864,6 @@
             "vid-treugolnika",
             "pryamougolnyj",
             "treugolniki-itogo"
-          ]
-        },
-        {
-          "slug": "lyubye-pary",
-          "access": "paid",
-          "sections": [
-            "lyubye-pary",
-            "ne-sosedi",
-            "chislo-proverok",
-            "po-ostatkam",
-            "pary-itogo"
           ]
         }
       ],
