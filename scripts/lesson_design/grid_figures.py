@@ -456,19 +456,24 @@ def grid_walls(
 ) -> str:
     """A field with thick walls (``right`` — a wall to the right of the cell, ``down`` —
     below it; −1 — a closed cell) and, for a ``mode``, a table of the same shape with the
-    same walls: «max» or «min» — best sums from ``start``, «back» — the largest sum from
-    every cell to the bottom right cell; «X» — no route. ``marks`` — accented cells."""
+    same walls: «max» or «min» — best sums from ``start``, «both» — the two tables side
+    by side, «back» — the largest sum from every cell to the bottom right cell; «X» — no
+    route. ``marks`` — accented cells."""
     h, w = len(field), len(field[0])
     size = 44 if w <= 4 else 36
     rw, dw, hot = _cells(right), _cells(down), _cells(marks)
     panels = [[[_num(v) for v in row] for row in field]]
-    if mode:
-        pick = min if mode == "min" else max
-        t = best_sums(field, rw, dw, pick, _cells([start])[0], mode == "back")
+    for part in ("max", "min") if mode == "both" else (mode,) if mode else ():
+        pick = min if part == "min" else max
+        t = best_sums(field, rw, dw, pick, _cells([start])[0], part == "back")
         panels.append([["X" if v is None else _num(v) for v in row] for row in t])
-    names = titles or ["монеты поля", "лучшие суммы"]
+    names = titles or (
+        ["монеты поля", "наибольшие суммы", "наименьшие суммы"]
+        if mode == "both"
+        else ["монеты поля", "лучшие суммы"]
+    )
     width = w * size
-    gap = 80
+    gap = 40 if mode == "both" else 80
     total = len(panels) * width + (len(panels) - 1) * gap
     x0 = (660 - total) / 2
     height = 40 + h * size + 16

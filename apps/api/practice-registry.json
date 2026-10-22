@@ -2848,62 +2848,36 @@
     {
       "id": "spreadsheet-optimization",
       "sections": [
-        "kak-ustroena-tema-18",
-        "pole-i-marshruty",
-        "dlina-marshruta",
-        "ochevidnye-sposoby",
+        "kak-ustroena-tema",
+        "pole-i-marshrut",
         "poslednij-shag",
-        "luchshaya-summa",
-        "pravilo-kletki",
-        "pole-4x4",
-        "vosstanovlenie-marshruta",
+        "tolko-luchshaya",
+        "tablica-summ",
         "summa-itogo",
-        "dva-bloka",
-        "forma-bloka",
+        "raschyotnyj-blok",
         "chetyre-formuly",
         "kopirovanie",
         "blok-minimuma",
-        "pole-ekzamena",
+        "pole-iz-fajla",
         "excel-itogo",
         "stena-na-vhode",
-        "stena-mezhdu-kletkami",
-        "steny-na-vhode",
         "stena-v-formule",
-        "otrezok-steny",
+        "steny-v-fajle",
         "steny-itogo",
-        "nedostizhimye-kletki",
-        "dostizhimost",
-        "vymyshlennyj-marshrut",
-        "metka-x",
         "uglovye-finishi",
-        "start-vnutri",
+        "nedostizhimye",
+        "zadacha-temy",
         "finishi-itogo",
         "drugie-napravleniya",
-        "predshestvenniki",
-        "adresa-predshestvennikov",
-        "obratnyj-raschyot",
-        "neskolko-zapuskov",
-        "zapuski-itogo",
-        "sostav-kandidatov",
-        "diagonal-vpravo-vniz",
-        "diagonal-vlevo-vniz",
-        "vklad-ot-prihoda",
+        "start-vnutri",
+        "vklad-kletki",
         "zapas-energii",
-        "diagonali-itogo",
-        "dopolnitelnyy-urok-perehody",
-        "proverka-prihoda",
-        "vspomogatelnye-bloki",
-        "nachislenie-i-perehod",
-        "ostatok-energii",
-        "harakteristika-marshruta",
-        "cherez-kletku",
-        "perehody-itogo",
-        "dopolnitelnyy-urok-ladya",
+        "pravila-itogo",
+        "diagonali",
         "ladya",
-        "rasshiryayushchijsya-diapazon",
         "chislo-marshrutov",
-        "sostoyanie",
-        "ladya-itogo"
+        "neskolko-zapuskov",
+        "dop-itogo"
       ],
       "kind": "topic",
       "status": "published",
@@ -2913,15 +2887,11 @@
           "slug": "luchshaya-summa-do-kletki",
           "access": "free",
           "sections": [
-            "kak-ustroena-tema-18",
-            "pole-i-marshruty",
-            "dlina-marshruta",
-            "ochevidnye-sposoby",
+            "kak-ustroena-tema",
+            "pole-i-marshrut",
             "poslednij-shag",
-            "luchshaya-summa",
-            "pravilo-kletki",
-            "pole-4x4",
-            "vosstanovlenie-marshruta",
+            "tolko-luchshaya",
+            "tablica-summ",
             "summa-itogo"
           ]
         },
@@ -2929,24 +2899,21 @@
           "slug": "tablica-v-excel",
           "access": "free",
           "sections": [
-            "dva-bloka",
-            "forma-bloka",
+            "raschyotnyj-blok",
             "chetyre-formuly",
             "kopirovanie",
             "blok-minimuma",
-            "pole-ekzamena",
+            "pole-iz-fajla",
             "excel-itogo"
           ]
         },
         {
           "slug": "steny",
-          "access": "free",
+          "access": "paid",
           "sections": [
             "stena-na-vhode",
-            "stena-mezhdu-kletkami",
-            "steny-na-vhode",
             "stena-v-formule",
-            "otrezok-steny",
+            "steny-v-fajle",
             "steny-itogo"
           ]
         },
@@ -2954,12 +2921,9 @@
           "slug": "nedostizhimye-i-finishi",
           "access": "paid",
           "sections": [
-            "nedostizhimye-kletki",
-            "dostizhimost",
-            "vymyshlennyj-marshrut",
-            "metka-x",
             "uglovye-finishi",
-            "start-vnutri",
+            "nedostizhimye",
+            "zadacha-temy",
             "finishi-itogo"
           ]
         },
@@ -2968,49 +2932,21 @@
           "access": "paid",
           "sections": [
             "drugie-napravleniya",
-            "predshestvenniki",
-            "adresa-predshestvennikov",
-            "obratnyj-raschyot",
-            "neskolko-zapuskov",
-            "zapuski-itogo"
-          ]
-        },
-        {
-          "slug": "diagonali-i-cena-shaga",
-          "access": "paid",
-          "sections": [
-            "sostav-kandidatov",
-            "diagonal-vpravo-vniz",
-            "diagonal-vlevo-vniz",
-            "vklad-ot-prihoda",
+            "start-vnutri",
+            "vklad-kletki",
             "zapas-energii",
-            "diagonali-itogo"
-          ]
-        },
-        {
-          "slug": "usloviya-perehoda",
-          "access": "paid",
-          "sections": [
-            "dopolnitelnyy-urok-perehody",
-            "proverka-prihoda",
-            "vspomogatelnye-bloki",
-            "nachislenie-i-perehod",
-            "ostatok-energii",
-            "harakteristika-marshruta",
-            "cherez-kletku",
-            "perehody-itogo"
+            "pravila-itogo"
           ]
         },
         {
           "slug": "ladya-i-chislo-marshrutov",
           "access": "paid",
           "sections": [
-            "dopolnitelnyy-urok-ladya",
+            "diagonali",
             "ladya",
-            "rasshiryayushchijsya-diapazon",
             "chislo-marshrutov",
-            "sostoyanie",
-            "ladya-itogo"
+            "neskolko-zapuskov",
+            "dop-itogo"
           ]
         }
       ],

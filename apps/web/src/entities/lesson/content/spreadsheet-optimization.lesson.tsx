@@ -7,133 +7,74 @@ import {
   LessonStepper,
   LessonSummary,
   LessonTable,
+  ProofDisclosure,
   SheetBlock,
-  VariantPicker,
 } from "~/shared/components/learning-content";
 import { spreadsheetOptimizationLessonPublication } from "~/shared/config/lesson-publication.mjs";
 import { defineLesson } from "../lib/define-lesson";
 import { lessonMedia } from "./spreadsheet-optimization.media";
+import { FieldTable, R, THEME_TASK } from "./spreadsheet-optimization.theme";
 import { PythonTerm } from "./python-term";
+import { SubtopicLink } from "./subtopic-link";
 
 export const spreadsheetOptimizationLesson = defineLesson({
   ...spreadsheetOptimizationLessonPublication,
   masteryThreshold: 0.8,
   learningOutcomes: [
     "Находить лучшую сумму до клетки по последнему шагу, а не перебором маршрутов",
-    "Строить блоки максимума и минимума в Excel четырьмя формулами и копированием",
-    "Учитывать стены на входе в клетку и отличать недостижимую клетку от суммы 0",
-    "Выбирать ответ среди «угловых» финишей и стартов, менять направления и считать от финиша",
-    "Добавлять диагональные приходы и цену шага, отвечать на вопросы о запасе энергии",
-    "Для редких задач — условия перехода, ладья и число маршрутов (дополнительные уроки)",
+    "Строить в Excel блок лучших сумм четырьмя формулами и получать минимум заменой МАКС на МИН",
+    "Учитывать стены на входе в клетку",
+    "Находить «угловые» финиши и недостижимые клетки и решать задачу темы целиком",
+    "Менять соседей и вклад клетки для других направлений, старта внутри поля, цены шага и запаса энергии",
+    "Для редких задач — диагонали, ладья, число маршрутов и несколько запусков (дополнительный урок)",
   ],
   accessTier: "paid",
   subtopics: [
     {
       slug: "luchshaya-summa-do-kletki",
       title: "Лучшая сумма до клетки",
-      lead: "Поле и маршрут, почему не годятся жадный выбор и перебор, предшественники, почему хватает лучшей суммы до клетки, правило клетки, края поля, поле 4 × 4 руками и восстановление маршрута.",
+      lead: "Что спрашивают в задании 18 и как найти наибольшую и наименьшую сумму маршрута, не перебирая маршруты.",
       conceptIds: [
-        "kak-ustroena-tema-18",
-        "pole-i-marshruty",
-        "dlina-marshruta",
-        "ochevidnye-sposoby",
+        "kak-ustroena-tema",
+        "pole-i-marshrut",
         "poslednij-shag",
-        "luchshaya-summa",
-        "pravilo-kletki",
-        "pole-4x4",
-        "vosstanovlenie-marshruta",
+        "tolko-luchshaya",
+        "tablica-summ",
         "summa-itogo",
-      ],
-      checkpoint: [
-        {
-          id: "zadacha-5",
-          prompt: (
-            <>
-              Почему в правиле клетки нельзя взять a(r, c) + M(r − 1, c) + M(r,
-              c − 1), то есть сложить результаты сверху и слева?
-            </>
-          ),
-          reveal: (
-            <>
-              Это суммы двух разных маршрутов: последний шаг в клетку один,
-              поэтому выбирается один приход — лучший.
-            </>
-          ),
-        },
-        {
-          id: "zadacha-7",
-          prompt: (
-            <>
-              Восстанови для поля из задачи 6 маршрут с наибольшей и маршрут с
-              наименьшей суммой.
-            </>
-          ),
-          reveal: (
-            <>
-              Максимум A1 → B1 → B2 → C2 → C3: 3 + 4 + 8 + 5 + 7 = 27; минимум
-              A1 → A2 → A3 → B3 → C3: 3 + 1 + 6 + 2 + 7 = 19.
-            </>
-          ),
-        },
-      ],
-    },
-    {
-      slug: "tablica-v-excel",
-      title: "Таблица максимума и минимума в Excel",
-      lead: "Исходное поле и два расчётных блока, формулы старта, краёв и внутренней клетки, заполнение прямоугольника одной формулой, проверка таблицы и ответ по файлу задачи.",
-      conceptIds: [
-        "dva-bloka",
-        "forma-bloka",
-        "chetyre-formuly",
-        "kopirovanie",
-        "blok-minimuma",
-        "pole-ekzamena",
-        "excel-itogo",
       ],
       checkpoint: [
         {
           id: "zadacha-1",
           prompt: (
             <>
-              Какая формула окажется в <Notation>{"I3"}</Notation> после
-              заполнения <Notation>{"G2:I4"}</Notation> формулой{" "}
-              <Notation>{"=B2+МАКС(F2;G1)"}</Notation>?
+              Монета в клетке — 6. До соседа слева лучшие суммы: наибольшая 30,
+              наименьшая 21; до соседа сверху — 25 и 17. Найди наибольшую и
+              наименьшую сумму до клетки.
             </>
           ),
-          reveal: (
-            <>
-              <Notation>{"=D3+МАКС(H3;I2)"}</Notation>.
-            </>
-          ),
+          reveal: <>36 и 23: 6 + max(30; 25) и 6 + min(21; 17).</>,
         },
         {
           id: "zadacha-2",
           prompt: (
-            <>
-              Какая формула окажется в <Notation>{"C13"}</Notation> блока
-              минимума <Notation>{"A11:D14"}</Notation> после заполнения?
-            </>
+            <>Почему нельзя сложить суммы слева и сверху: монета + 30 + 25?</>
           ),
           reveal: (
             <>
-              <Notation>{"=C3+МИН(B13;C12)"}</Notation>.
+              Это суммы двух разных маршрутов. В клетку робот приходит один раз
+              — либо слева, либо сверху, — поэтому берут одну из сумм.
             </>
           ),
         },
         {
           id: "zadacha-3",
           prompt: (
-            <>
-              В <Notation>{"G2"}</Notation> по ошибке записали{" "}
-              <Notation>{"=B2+F2+G1"}</Notation>. Что получится в{" "}
-              <Notation>{"G2"}</Notation> для нашего поля и почему это не сумма
-              маршрута?
-            </>
+            <>Найди наибольшую и наименьшую сумму до клетки C2 поля 4 × 4.</>
           ),
           reveal: (
             <>
-              1 + 7 + 9 = 17: сложены суммы двух разных маршрутов, а последний
-              шаг в клетку один.
+              21 и 16. Слева B2: 10 и 8, сверху C1: 13. Наибольшая 8 + 13 = 21,
+              наименьшая 8 + 8 = 16.
             </>
           ),
         },
@@ -141,16 +82,14 @@ export const spreadsheetOptimizationLesson = defineLesson({
           id: "zadacha-4",
           prompt: (
             <>
-              Поле занимает <Notation>{"A1:O15"}</Notation>, блок максимума —{" "}
-              <Notation>{"A17:O31"}</Notation>. Какая формула стоит в{" "}
-              <Notation>{"C19"}</Notation> после заполнения и какой клетке поля
-              она соответствует?
+              Почему в верхней строке и левом столбце наибольшая и наименьшая
+              суммы совпадают?
             </>
           ),
           reveal: (
             <>
-              <Notation>{"=C3+МАКС(B19;C18)"}</Notation>; клетке{" "}
-              <Notation>{"C3"}</Notation> поля — блок сдвинут на 16 строк вниз.
+              В эти клетки ведёт единственный маршрут: в верхнюю строку — только
+              слева, в левый столбец — только сверху.
             </>
           ),
         },
@@ -158,34 +97,108 @@ export const spreadsheetOptimizationLesson = defineLesson({
           id: "zadacha-5",
           prompt: (
             <>
-              Блок <Notation>{"A6:D9"}</Notation> скопировали в{" "}
-              <Notation>{"A11:D14"}</Notation> и заменили{" "}
-              <Notation>{"МАКС"}</Notation> на <Notation>{"МИН"}</Notation>.
-              Какая формула окажется в <Notation>{"C13"}</Notation> и что в ней
-              неверно?
+              Почему нельзя на каждом шаге идти к самой дорогой из двух соседних
+              монет?
             </>
           ),
           reveal: (
             <>
-              <Notation>{"=C8+МИН(B13;C12)"}</Notation>: вместо монеты{" "}
-              <Notation>{"C3"}</Notation> прибавляется значение{" "}
-              <Notation>{"C8"}</Notation> блока максимума.
+              Ближайшая дорогая монета может увести от выгодной части поля: в
+              клетки левее и выше робот уже не вернётся.
+            </>
+          ),
+        },
+      ],
+    },
+    {
+      slug: "tablica-v-excel",
+      title: "Таблица в Excel",
+      lead: "Как записать правило клетки формулами: блок под полем, четыре формулы и замена МАКС на МИН.",
+      conceptIds: [
+        "raschyotnyj-blok",
+        "chetyre-formuly",
+        "kopirovanie",
+        "blok-minimuma",
+        "pole-iz-fajla",
+        "excel-itogo",
+      ],
+      checkpoint: [
+        {
+          id: "zadacha-1",
+          prompt: (
+            <>
+              Формулу <Notation>{"=B2+МАКС(A7;B6)"}</Notation> растянули на{" "}
+              <Notation>{"B7:D9"}</Notation>. Какая формула окажется в{" "}
+              <Notation>{"C8"}</Notation>?
+            </>
+          ),
+          reveal: (
+            <>
+              <Notation>{"=C3+МАКС(B8;C7)"}</Notation>: монета C3 и суммы
+              соседей слева и сверху в блоке.
             </>
           ),
         },
         {
-          id: "zadacha-6",
+          id: "zadacha-2",
           prompt: (
             <>
-              Как, не строя второго блока, получить минимум, если блок максимума
-              уже готов и ответ записан?
+              В <Notation>{"B6"}</Notation> записали{" "}
+              <Notation>{"=B1"}</Notation>. Что не так?
             </>
           ),
           reveal: (
             <>
-              Заменить в выделенном блоке <Notation>{"МАКС"}</Notation> на{" "}
-              <Notation>{"МИН"}</Notation> командой «Найти и заменить»: ссылки
-              на монеты и соседей не сдвигаются.
+              Пропала сумма до соседа слева: получился маршрут, который начался
+              в B1. Нужно <Notation>{"=A6+B1"}</Notation>.
+            </>
+          ),
+        },
+        {
+          id: "zadacha-3",
+          prompt: (
+            <>
+              Что получится, если в формуле написать{" "}
+              <Notation>{"$B$2"}</Notation> вместо <Notation>{"B2"}</Notation> и
+              растянуть её на весь блок?
+            </>
+          ),
+          reveal: (
+            <>
+              Все клетки блока будут прибавлять одну и ту же монету из B2, а не
+              свою. Здесь ссылки должны сдвигаться вместе с формулой.
+            </>
+          ),
+        },
+        {
+          id: "zadacha-4",
+          prompt: (
+            <>
+              Блок максимума <Notation>{"A6:D9"}</Notation> скопировали целиком
+              в <Notation>{"A11:D14"}</Notation>. Какая формула окажется в{" "}
+              <Notation>{"B12"}</Notation> и что в ней не так?
+            </>
+          ),
+          reveal: (
+            <>
+              <Notation>{"=B7+МАКС(A12;B11)"}</Notation>: вместо монеты из B2
+              она берёт число из блока максимума.
+            </>
+          ),
+        },
+        {
+          id: "zadacha-5",
+          prompt: (
+            <>
+              Поле 20 × 20 занимает <Notation>{"A1:T20"}</Notation>, блок
+              начинается в <Notation>{"A22"}</Notation>. В какой ячейке будет
+              лучшая сумма до правой нижней клетки?
+            </>
+          ),
+          reveal: (
+            <>
+              В <Notation>{"T41"}</Notation>: блок сдвинут на 21 строку вниз, а
+              T20 + 21 строка = T41.
             </>
           ),
         },
@@ -194,277 +207,129 @@ export const spreadsheetOptimizationLesson = defineLesson({
     {
       slug: "steny",
       title: "Стены",
-      lead: "Стена запрещает переход, а не клетку: какие стены видит клетка на входе, формула с одним предшественником, стены в файле задачи и в расчётном блоке.",
+      lead: "Как стена меняет формулу клетки: приход сквозь стену убирают, и остаётся один сосед.",
+      access: "paid",
       conceptIds: [
         "stena-na-vhode",
-        "stena-mezhdu-kletkami",
-        "steny-na-vhode",
         "stena-v-formule",
-        "otrezok-steny",
+        "steny-v-fajle",
         "steny-itogo",
       ],
-      checkpoint: [
-        {
-          id: "zadacha-3",
-          prompt: (
-            <>
-              Клетка <Notation>{"C3"}</Notation> закрыта стенами справа и снизу.
-              Изменится ли лучшая сумма до <Notation>{"C3"}</Notation>? А до{" "}
-              <Notation>{"D3"}</Notation>?
-            </>
-          ),
-          reveal: (
-            <>
-              До <Notation>{"C3"}</Notation> — нет: стены справа и снизу
-              закрывают выходы. До <Notation>{"D3"}</Notation> — да, если в неё
-              приходили из <Notation>{"C3"}</Notation>: теперь она получает
-              сумму только сверху.
-            </>
-          ),
-        },
-        {
-          id: "zadacha-4",
-          prompt: (
-            <>
-              Блок максимума — в <Notation>{"F1:I4"}</Notation>. Какую формулу
-              записать в <Notation>{"G3"}</Notation>, если у клетки{" "}
-              <Notation>{"B3"}</Notation> поля стена слева?
-            </>
-          ),
-          reveal: (
-            <>
-              <Notation>{"=B3+G2"}</Notation>: приход только сверху.
-            </>
-          ),
-        },
-        {
-          id: "zadacha-6",
-          prompt: (
-            <>
-              Поле 15 × 15 занимает <Notation>{"A1:O15"}</Notation>, блок
-              максимума — <Notation>{"A17:O31"}</Notation>. Над клетками{" "}
-              <Notation>{"H12:K12"}</Notation> стена. Какую формулу записать в{" "}
-              <Notation>{"H28"}</Notation> и до какой клетки её копировать?
-            </>
-          ),
-          reveal: (
-            <>
-              <Notation>{"=H12+G28"}</Notation>: строке 12 поля соответствует
-              строка 28 блока, приход только слева; формулу копируют вправо до{" "}
-              <Notation>{"K28"}</Notation>.
-            </>
-          ),
-        },
-      ],
+      paid: {
+        outline: [
+          { id: "stena-na-vhode", navLabel: "Стена на входе" },
+          { id: "stena-v-formule", navLabel: "Стена в формуле" },
+          { id: "steny-v-fajle", navLabel: "Стены в файле" },
+          { id: "steny-itogo", navLabel: "Итого" },
+        ],
+        preview: (
+          <>
+            <Typography.Text>
+              В задаче темы между клетками стоят стены. Что стена меняет в
+              правиле клетки?
+            </Typography.Text>
+          </>
+        ),
+        selfCheck: 5,
+        load: () => import("./spreadsheet-optimization.paid.steny"),
+      },
     },
     {
       slug: "nedostizhimye-i-finishi",
-      title: "Недостижимые клетки и «угловые» финиши",
-      lead: "Недостижимая клетка и ноль, «X» и ЕЧИСЛО вместо нуля, финиш в любой «угловой» клетке, старт внутри поля — главный тип экзамена 2023–2026 годов.",
+      title: "Тупики и недостижимые клетки",
+      lead: "Где робот может закончить маршрут, куда он не попадёт вовсе — и задача темы целиком: ответ 2629 378.",
       access: "paid",
       conceptIds: [
-        "nedostizhimye-kletki",
-        "dostizhimost",
-        "vymyshlennyj-marshrut",
-        "metka-x",
         "uglovye-finishi",
-        "start-vnutri",
+        "nedostizhimye",
+        "zadacha-temy",
         "finishi-itogo",
       ],
       paid: {
         outline: [
-          { id: "nedostizhimye-kletki", navLabel: "Недостижимые клетки" },
-          { id: "dostizhimost", navLabel: "Достижимость" },
-          { id: "vymyshlennyj-marshrut", navLabel: "Вымышленный маршрут" },
-          { id: "metka-x", navLabel: "Метка «X»" },
-          { id: "uglovye-finishi", navLabel: "«Угловые» финиши" },
-          { id: "start-vnutri", navLabel: "Старт внутри поля" },
+          { id: "uglovye-finishi", navLabel: "«Угловые» клетки" },
+          { id: "nedostizhimye", navLabel: "Недостижимые клетки" },
+          { id: "zadacha-temy", navLabel: "Задача темы целиком" },
           { id: "finishi-itogo", navLabel: "Итого" },
         ],
         preview: (
           <>
             <Typography.Text>
-              <strong>
-                Недостижимая клетка и клетка с суммой 0 — разные вещи, а финиш
-                может стоять в любой клетке, из которой робот не может уйти.
-              </strong>{" "}
-              Так устроен главный тип экзамена 2023–2026 годов. На поле основной
-              волны 2026 года стены отрезают 12 клеток, и без их учёта минимум
-              получается 369 вместо 1205.
+              В задаче темы маршрут заканчивается в любой «угловой» клетке, а в
+              некоторые клетки робот не попадает вовсе. Где тогда искать ответ?
             </Typography.Text>
           </>
         ),
-        selfCheck: 4,
+        selfCheck: 5,
         load: () =>
           import("./spreadsheet-optimization.paid.nedostizhimye-i-finishi"),
       },
     },
     {
       slug: "napravleniya-i-zapuski",
-      title: "Другие направления и несколько запусков",
-      lead: "Предшественники и «угловые» клетки при других командах, расчёт от клетки до финиша, несколько стартов и запусков: сумма k лучших результатов.",
+      title: "Другие направления и правила",
+      lead: "Робот ходит влево или вверх, стартует в середине поля, платит за шаг или тратит энергию — меняются только соседи и вклад клетки.",
       access: "paid",
       conceptIds: [
         "drugie-napravleniya",
-        "predshestvenniki",
-        "adresa-predshestvennikov",
-        "obratnyj-raschyot",
-        "neskolko-zapuskov",
-        "zapuski-itogo",
+        "start-vnutri",
+        "vklad-kletki",
+        "zapas-energii",
+        "pravila-itogo",
       ],
       paid: {
         outline: [
           { id: "drugie-napravleniya", navLabel: "Другие направления" },
-          { id: "predshestvenniki", navLabel: "Предшественники" },
-          { id: "adresa-predshestvennikov", navLabel: "Адреса в Excel" },
-          { id: "obratnyj-raschyot", navLabel: "Обратный расчёт" },
-          { id: "neskolko-zapuskov", navLabel: "Несколько запусков" },
-          { id: "zapuski-itogo", navLabel: "Итого" },
+          { id: "start-vnutri", navLabel: "Старт внутри поля" },
+          { id: "vklad-kletki", navLabel: "Вклад клетки" },
+          { id: "zapas-energii", navLabel: "Запас энергии" },
+          { id: "pravila-itogo", navLabel: "Итого" },
         ],
         preview: (
           <>
             <Typography.Text>
-              <strong>
-                Если направления движения изменились, нужно заново определить
-                предшественников: формула всегда должна соответствовать
-                разрешённым командам.
-              </strong>{" "}
-              Во второй половине подтемы робот запускается несколько раз — из
-              разных стартов или с разными финишами.
+              Что меняется в таблице, если робот ходит влево и вниз, а не вправо
+              и вниз?
             </Typography.Text>
           </>
         ),
-        selfCheck: 2,
+        selfCheck: 5,
         load: () =>
           import("./spreadsheet-optimization.paid.napravleniya-i-zapuski"),
       },
     },
     {
-      slug: "diagonali-i-cena-shaga",
-      title: "Диагонали, цена шага и запас энергии",
-      lead: "Третий и четвёртый предшественник при диагональных шагах, вклад, зависящий от перехода, — кандидат для каждого прихода отдельно, вопросы о запасе энергии до финальных клеток.",
+      slug: "ladya-i-chislo-marshrutov",
+      title: "Диагонали, ладья и число маршрутов",
+      lead: "Когда соседей больше двух, когда приходы складывают, а не выбирают, и как сложить результаты нескольких запусков.",
+      level: "advanced",
       access: "paid",
       conceptIds: [
-        "sostav-kandidatov",
-        "diagonal-vpravo-vniz",
-        "diagonal-vlevo-vniz",
-        "vklad-ot-prihoda",
-        "zapas-energii",
-        "diagonali-itogo",
+        "diagonali",
+        "ladya",
+        "chislo-marshrutov",
+        "neskolko-zapuskov",
+        "dop-itogo",
       ],
       paid: {
         outline: [
-          { id: "sostav-kandidatov", navLabel: "Состав кандидатов" },
-          { id: "diagonal-vpravo-vniz", navLabel: "Диагональ вправо-вниз" },
-          { id: "diagonal-vlevo-vniz", navLabel: "Диагональ влево-вниз" },
-          { id: "vklad-ot-prihoda", navLabel: "Вклад зависит от прихода" },
-          { id: "zapas-energii", navLabel: "Запас энергии" },
-          { id: "diagonali-itogo", navLabel: "Итого" },
+          { id: "diagonali", navLabel: "Диагонали" },
+          { id: "ladya", navLabel: "Ладья" },
+          { id: "chislo-marshrutov", navLabel: "Число маршрутов" },
+          { id: "neskolko-zapuskov", navLabel: "Несколько запусков" },
+          { id: "dop-itogo", navLabel: "Итого" },
         ],
         preview: (
           <>
             <Typography.Text>
-              <strong>
-                Когда меняется набор команд или цена шага, меняется только
-                состав кандидатов: каждый допустимый приход даёт своего
-                кандидата, а клетка берёт лучшего.
-              </strong>{" "}
-              Так устроены задачи с диагональными шагами, с ценой шага,
-              зависящей от перехода, и с вопросами о запасе энергии.
+              <strong>Дополнительный урок — для продвинутых.</strong> Изредка в
+              задании 18 робот ходит по диагонали или на несколько клеток,
+              спрашивают число маршрутов или сумму нескольких запусков. Задачи
+              основных подтем решаются без него.
             </Typography.Text>
           </>
         ),
         selfCheck: 4,
-        load: () =>
-          import("./spreadsheet-optimization.paid.diagonali-i-cena-shaga"),
-      },
-    },
-    {
-      slug: "usloviya-perehoda",
-      title: "Условия перехода и вклад клетки",
-      lead: "Переход по условию на числа клеток, вклад клетки по правилу, подсчёт достижимых клеток и шагов, характеристика лучшего маршрута, обязательная клетка.",
-      level: "advanced",
-      access: "paid",
-      conceptIds: [
-        "dopolnitelnyy-urok-perehody",
-        "proverka-prihoda",
-        "vspomogatelnye-bloki",
-        "nachislenie-i-perehod",
-        "ostatok-energii",
-        "harakteristika-marshruta",
-        "cherez-kletku",
-        "perehody-itogo",
-      ],
-      paid: {
-        outline: [
-          {
-            id: "dopolnitelnyy-urok-perehody",
-            navLabel: "Дополнительный урок",
-          },
-          { id: "proverka-prihoda", navLabel: "Проверка прихода" },
-          { id: "vspomogatelnye-bloki", navLabel: "Вспомогательные блоки" },
-          { id: "nachislenie-i-perehod", navLabel: "Начисление и переход" },
-          { id: "ostatok-energii", navLabel: "Остаток энергии" },
-          {
-            id: "harakteristika-marshruta",
-            navLabel: "Характеристика маршрута",
-          },
-          { id: "cherez-kletku", navLabel: "Через заданную клетку" },
-          { id: "perehody-itogo", navLabel: "Итого" },
-        ],
-        preview: (
-          <>
-            <Typography.Text>
-              <strong>Дополнительный урок — для продвинутых.</strong> Он для
-              тех, кто хочет закрыть все возможные случаи задания 18: восемь
-              задач подборки 2021–2025 годов с условиями перехода, особым
-              вкладом клетки и вопросом о самом лучшем маршруте; на экзаменах
-              таких задач не было. Задачи основных подтем решаются без него.
-            </Typography.Text>
-          </>
-        ),
-        selfCheck: 2,
-        load: () => import("./spreadsheet-optimization.paid.usloviya-perehoda"),
-      },
-    },
-    {
-      slug: "ladya-i-chislo-marshrutov",
-      title: "Ладья, число маршрутов и состояние",
-      lead: "Ход на несколько клеток и расширяющийся диапазон, число маршрутов сложением, когда одной лучшей суммы мало.",
-      level: "advanced",
-      access: "paid",
-      conceptIds: [
-        "dopolnitelnyy-urok-ladya",
-        "ladya",
-        "rasshiryayushchijsya-diapazon",
-        "chislo-marshrutov",
-        "sostoyanie",
-        "ladya-itogo",
-      ],
-      paid: {
-        outline: [
-          { id: "dopolnitelnyy-urok-ladya", navLabel: "Дополнительный урок" },
-          { id: "ladya", navLabel: "Ладья" },
-          {
-            id: "rasshiryayushchijsya-diapazon",
-            navLabel: "Расширяющийся диапазон",
-          },
-          { id: "chislo-marshrutov", navLabel: "Число маршрутов" },
-          { id: "sostoyanie", navLabel: "Когда хватает одного числа" },
-          { id: "ladya-itogo", navLabel: "Итого" },
-        ],
-        preview: (
-          <>
-            <Typography.Text>
-              <strong>Дополнительный урок — для продвинутых.</strong> Он для
-              тех, кто хочет закрыть все возможные случаи задания 18: ладья,
-              которая ходит на несколько клеток, и подсчёт числа маршрутов
-              встречаются в четырёх задачах подборки 2021–2025 годов, на
-              экзаменах таких не было. Задачи основных подтем решаются без него.
-            </Typography.Text>
-          </>
-        ),
-        selfCheck: 2,
         load: () =>
           import("./spreadsheet-optimization.paid.ladya-i-chislo-marshrutov"),
       },
@@ -472,158 +337,133 @@ export const spreadsheetOptimizationLesson = defineLesson({
   ],
   theory: [
     {
-      id: "kak-ustroena-tema-18",
+      id: "kak-ustroena-tema",
       navLabel: "Как устроена тема",
       explanation: (
         <>
           <Typography.Text>
-            <strong>
-              Главная идея задания 18 — для каждой клетки определить лучшую
-              сумму, с которой робот может в неё попасть.
-            </strong>{" "}
-            Когда мы умеем это делать, большое поле решается постепенно: от
-            начальной клетки к соседним, затем дальше, до нужного результата.
-            Этому и посвящена подтема: сначала руками, на маленьком поле, а в
-            следующей подтеме — формулами Excel на поле экзамена.
+            В задании 18 дают файл Excel: квадратное поле, в каждой клетке —
+            монета. Робот идёт по полю по заданным правилам и собирает монеты.
+            Нужно найти, какую наибольшую и какую наименьшую сумму он может
+            собрать. Вот задача, которую мы будем решать всю тему:
           </Typography.Text>
-          <Typography.Text>
-            Всю подтему мы будем разбирать одно учебное поле 4 × 4: на нём
-            каждое рассуждение можно проверить вручную.
-          </Typography.Text>
-        </>
-      ),
-    },
-    {
-      id: "pole-i-marshruty",
-      navLabel: "Поле и маршруты",
-      explanation: (
-        <>
+          <Typography.Text>{THEME_TASK}</Typography.Text>
           <Typography.Text>
             <strong>
-              Сначала нужно точно понять, что изображает таблица и какие
-              маршруты разрешены.
+              Маршрутов на поле 20 × 20 — миллиарды, перебрать их не выйдет.
             </strong>{" "}
-            В базовом варианте робот начинает движение в левой верхней клетке,
-            перемещается на одну клетку вправо или вниз и должен попасть в
-            правую нижнюю. Число в клетке показывает стоимость лежащей там
-            монеты. Робот забирает монеты во всех посещённых клетках, включая
-            начальную и конечную.
+            Поэтому задачу решают таблицей в Excel: для каждой клетки считают
+            лучшую сумму, с которой в неё можно прийти. Каждый шаг сначала
+            проверим руками на маленьком поле 4 × 4. Разберём условие:
           </Typography.Text>
-          <Typography.Text>Наше поле:</Typography.Text>
           <LessonTable
-            label={"Наше поле"}
-            columns={[
-              { label: "Строка" },
-              { label: "A", numeric: true },
-              { label: "B", numeric: true },
-              { label: "C", numeric: true },
-              { label: "D", numeric: true },
-            ]}
+            label={"Условие задачи темы по частям"}
+            columns={[{ label: "В условии" }, { label: "Что это значит" }]}
             rows={[
-              ["1", "2", "7", "4", "1"],
-              ["2", "5", "1", "8", "3"],
-              ["3", "2", "6", "2", "9"],
-              ["4", "4", "3", "7", "2"],
+              [
+                "вправо или вниз",
+                "назад робот не возвращается: каждую клетку он проходит не больше одного раза",
+              ],
+              [
+                "внутренние стены",
+                "между некоторыми соседними клетками перейти нельзя",
+              ],
+              [
+                "забирает монету, в том числе в начальной и конечной клетках",
+                "сумма маршрута — монеты всех его клеток, первой и последней тоже",
+              ],
+              [
+                "«угловые» клетки, ограниченные справа и снизу",
+                "тупики: здесь маршрут заканчивается",
+              ],
+              [
+                "конечных клеток может быть несколько",
+                "ответ ищут среди всех тупиков, а не только в правой нижней клетке",
+              ],
+              [
+                "сначала максимальную сумму, затем минимальную",
+                "ответ — два числа в этом порядке",
+              ],
             ]}
           />
           <Typography.Text>
-            Буквы обозначают столбцы, числа слева — строки, как{" "}
-            <PythonTerm term="xl-address">адреса ячеек</PythonTerm> в
-            электронной таблице: <Notation>{"A1"}</Notation> — левая верхняя
-            клетка с монетой 2, <Notation>{"B2"}</Notation> — клетка во второй
-            строке и втором столбце с монетой 1, <Notation>{"D4"}</Notation> —
-            правая нижняя клетка с монетой 2.
+            Тема состоит из пяти подтем и дополнительного урока — у каждой своя
+            страница. Идём по ним по порядку:
           </Typography.Text>
-          <Typography.Text>
-            <strong>Маршрут</strong> — последовательность клеток, которые
-            посетил робот. Например, A1 → B1 → B2 → C2 → C3 → D3 → D4: переходы
-            вправо, вниз, вправо, вниз, вправо, вниз — все разрешены. Собранная
-            сумма 2 + 7 + 1 + 8 + 2 + 9 + 2 = 31. Другой маршрут, A1 → A2 → B2 →
-            B3 → B4 → C4 → D4, даёт 2 + 5 + 1 + 6 + 3 + 7 + 2 = 26.
-          </Typography.Text>
-          <Typography.Text>
-            Задание обычно требует найти{" "}
-            <strong>
-              наибольшую и наименьшую сумму среди всех допустимых маршрутов
-            </strong>
-            . Поэтому найти один удачный маршрут недостаточно: нужно обосновать,
-            что лучше или хуже уже получить невозможно.
-          </Typography.Text>
+          <ol>
+            <li>
+              <strong>Лучшая сумма до клетки</strong> — ты сейчас здесь: правило
+              клетки на поле 4 × 4.
+            </li>
+            <li>
+              <SubtopicLink routeSlug={R} subtopic="tablica-v-excel">
+                Таблица в Excel
+              </SubtopicLink>{" "}
+              — то же правило формулами.
+            </li>
+            <li>
+              <SubtopicLink routeSlug={R} subtopic="steny">
+                Стены
+              </SubtopicLink>{" "}
+              — как стена меняет формулу.
+            </li>
+            <li>
+              <SubtopicLink routeSlug={R} subtopic="nedostizhimye-i-finishi">
+                Тупики и недостижимые клетки
+              </SubtopicLink>{" "}
+              — решим задачу темы целиком: ответ 2629 378.
+            </li>
+            <li>
+              <SubtopicLink routeSlug={R} subtopic="napravleniya-i-zapuski">
+                Другие направления и правила
+              </SubtopicLink>{" "}
+              — влево и вверх, старт в середине поля, цена шага, запас энергии.
+            </li>
+            <li>
+              <SubtopicLink routeSlug={R} subtopic="ladya-i-chislo-marshrutov">
+                Диагонали, ладья и число маршрутов
+              </SubtopicLink>{" "}
+              — дополнительный урок для редких задач.
+            </li>
+          </ol>
         </>
       ),
     },
     {
-      id: "dlina-marshruta",
-      navLabel: "Длина маршрута",
+      id: "pole-i-marshrut",
+      navLabel: "Поле и маршрут",
       explanation: (
         <>
           <Typography.Text>
-            <strong>
-              При движении только вправо и вниз робот не возвращается в
-              посещённую клетку, а число шагов любого маршрута заранее известно.
-            </strong>{" "}
-            Чтобы вернуться, пришлось бы хотя бы раз пойти влево или вверх.
-            Поэтому одну монету робот не заберёт дважды, а всё поле посетить не
-            сможет: после перехода из <Notation>{"A1"}</Notation> в{" "}
-            <Notation>{"B1"}</Notation> в <Notation>{"A2"}</Notation> уже не
-            попасть — она левее.
+            Что такое маршрут и как посчитать его сумму?
           </Typography.Text>
-          <Typography.Text>
-            Пусть в поле h строк и w столбцов. Из левой верхней клетки в правую
-            нижнюю нужно сделать h − 1 шагов вниз и w − 1 шагов вправо, всего{" "}
-            <strong>h + w − 2</strong> перемещений. Посещённых клеток на одну
-            больше — начальная посещена ещё до первого шага:{" "}
-            <strong>h + w − 1</strong>. На нашем поле любой маршрут — это 6
-            перемещений и 7 клеток; проверь на двух маршрутах выше.
-          </Typography.Text>
-        </>
-      ),
-    },
-    {
-      id: "ochevidnye-sposoby",
-      navLabel: "Жадность и перебор",
-      explanation: (
-        <>
           <Typography.Text>
             <strong>
-              Два очевидных способа не годятся: выбирать самую дорогую соседнюю
-              монету и перебирать все маршруты.
+              Маршрут — цепочка клеток от старта до финиша, а его сумма — сумма
+              монет всех этих клеток.
             </strong>{" "}
-            Большая ближайшая монета может увести робота от гораздо более
-            выгодной части поля. На нашем поле такой выбор случайно приводит к
-            лучшему маршруту, поэтому возьмём поле, где он ошибается:
+            Начнём без стен: робот идёт из левой верхней клетки A1 в правую
+            нижнюю D4. Буквы — столбцы, числа — строки, как адреса ячеек Excel:
           </Typography.Text>
-          <LessonTable
-            label={"Строка, A, B, C"}
-            columns={[
-              { label: "Строка" },
-              { label: "A", numeric: true },
-              { label: "B", numeric: true },
-              { label: "C", numeric: true },
-            ]}
-            rows={[
-              ["1", "1", "9", "1"],
-              ["2", "8", "1", "1"],
-              ["3", "100", "100", "1"],
-            ]}
-          />
+          <FieldTable label={"Поле 4 × 4"} />
           <Typography.Text>
-            Из <Notation>{"A1"}</Notation> выгоднее пойти к монете 9, но после
-            этого в <Notation>{"A3"}</Notation>, где лежит 100, уже не попасть.
-            Даже лучший маршрут с первым шагом вправо даст 1 + 9 + 1 + 100 + 1 =
-            112, а A1 → A2 → A3 → B3 → C3 собирает 1 + 8 + 100 + 100 + 1 ={" "}
-            <strong>210</strong>. Такой выбор по ближайшей выгоде называют{" "}
-            <strong>жадным алгоритмом</strong>; для минимума он ошибается так
-            же.
+            Маршрут A1 → B1 → B2 → C2 → C3 → D3 → D4 собирает 2 + 7 + 1 + 8 + 2
+            + 9 + 2 = 31, а маршрут A1 → A2 → B2 → B3 → B4 → C4 → D4 — 26. Нам
+            нужны наибольшая и наименьшая суммы среди всех маршрутов. На этом
+            поле маршрутов 20, а на поле 20 × 20 — больше 35 миллиардов, так что
+            перебирать их не будем.
           </Typography.Text>
-          <Typography.Text>
-            Перебор надёжен, но маршрутов слишком много. Маршрут — это
-            последовательность шагов П (вправо) и Н (вниз): на поле 3 × 3 их
-            шесть (ППНН, ПНПН, ПННП, НППН, НПНП, ННПП), на нашем 4 × 4 — 20, а
-            на поле 20 × 20 без стен — <strong>больше 35 миллиардов</strong>,
-            хотя клеток в нём всего 400. Нужен способ, который обрабатывает
-            клетки, а не маршруты.
-          </Typography.Text>
+          <ProofDisclosure
+            kind="nuance"
+            summary="Тонкости: почему не идти к самой дорогой монете"
+          >
+            <Typography.Text>
+              Ближайшая дорогая монета может увести робота от выгодной части
+              поля. На поле 1, 9, 1 / 8, 1, 1 / 100, 100, 1 шаг к девятке
+              оставляет позади обе сотни: лучший маршрут после него — 112, а
+              маршрут вниз через сотни — 210.
+            </Typography.Text>
+          </ProofDisclosure>
         </>
       ),
     },
@@ -633,22 +473,14 @@ export const spreadsheetOptimizationLesson = defineLesson({
       explanation: (
         <>
           <Typography.Text>
-            <strong>
-              Чтобы найти лучшую сумму для клетки, достаточно понять, откуда
-              робот мог сделать в неё последний шаг.
-            </strong>{" "}
-            Возьмём <Notation>{"B2"}</Notation>. При движении вправо и вниз
-            последний шаг мог быть только из <Notation>{"A2"}</Notation> —
-            вправо, или из <Notation>{"B1"}</Notation> — вниз. Из{" "}
-            <Notation>{"C2"}</Notation> и <Notation>{"B3"}</Notation> в{" "}
-            <Notation>{"B2"}</Notation> не попасть — это движения влево и вверх;
-            из <Notation>{"A1"}</Notation> за один шаг тоже нельзя: диагонали в
-            базовом варианте запрещены.
+            Как найти лучшую сумму до клетки B2, не перебирая маршруты?
           </Typography.Text>
           <Typography.Text>
-            Клетку, из которой можно сделать последний шаг в рассматриваемую,
-            будем называть <strong>предшественником</strong>. Для обычной
-            внутренней клетки предшественники — слева и сверху:
+            <strong>
+              Посмотри, откуда робот сделал последний шаг. В B2 он пришёл либо
+              слева, из A2, либо сверху, из B1. Лучшая сумма до B2 — её монета
+              плюс лучшая из сумм до A2 и до B1.
+            </strong>
           </Typography.Text>
           <LessonDiagram
             {...lessonMedia.gridPreds_122f4b}
@@ -660,250 +492,82 @@ export const spreadsheetOptimizationLesson = defineLesson({
             }
           />
           <Typography.Text>
-            До <Notation>{"A2"}</Notation> и до <Notation>{"B1"}</Notation> путь
-            единственный: 2 + 5 = 7 и 2 + 7 = 9. Если прийти в{" "}
-            <Notation>{"B2"}</Notation> слева, получится 7 + 1 = 8, если сверху
-            — 9 + 1 = 10. Наибольшая сумма до <Notation>{"B2"}</Notation> — 1 +
-            max(7; 9) = <strong>10</strong>, наименьшая — 1 + min(7; 9) ={" "}
-            <strong>8</strong>: монета клетки плюс лучшая из сумм
-            предшественников. Запись max означает «выбрать наибольшее число»,
-            min — «наименьшее».
+            До A2 путь один: 2 + 5 = 7. До B1 тоже один: 2 + 7 = 9. Значит,
+            наибольшая сумма до B2 — 1 + 9 = 10, а наименьшая — 1 + 7 = 8.
           </Typography.Text>
           <Typography.Text>
-            <strong>
-              Сравниваются накопленные суммы за весь путь до соседних клеток
-            </strong>
-            , а не монеты в них. Монета текущей клетки прибавляется ровно один
-            раз: суммы предшественников уже содержат все монеты своих маршрутов.
-            А вот складывать суммы слева и сверху <strong>нельзя</strong> — это
-            два разных маршрута, а последний шаг в клетку один.
+            Сравнивают суммы всего пути до соседей, а не монеты в них. А
+            складывать суммы слева и сверху нельзя: это два разных маршрута, а в
+            клетку робот приходит один раз.
           </Typography.Text>
         </>
       ),
     },
     {
-      id: "luchshaya-summa",
-      navLabel: "Только лучшая сумма",
+      id: "tolko-luchshaya",
+      navLabel: "Почему хватает лучшей суммы",
       explanation: (
         <>
           <Typography.Text>
-            <strong>
-              Хранить можно только лучшую сумму до клетки: остальные маршруты до
-              неё уже не обгонят лучший.
-            </strong>{" "}
-            На нашем поле в клетку <Notation>{"C3"}</Notation> можно прийти,
-            например, так:
+            Почему для клетки достаточно помнить одну лучшую сумму?
           </Typography.Text>
-          <ul>
-            <li>A1 → B1 → C1 → C2 → C3 с суммой 2 + 7 + 4 + 8 + 2 = 23;</li>
-            <li>A1 → A2 → A3 → B3 → C3 с суммой 2 + 5 + 2 + 6 + 2 = 17.</li>
-          </ul>
           <Typography.Text>
-            Продолжим оба пути одинаково, через <Notation>{"D3"}</Notation> в{" "}
-            <Notation>{"D4"}</Notation>: это добавит 9 + 2 = 11. Итоги 23 + 11 =
-            34 и 17 + 11 = 28 — первый путь по-прежнему лучше. Через{" "}
-            <Notation>{"C4"}</Notation> было бы 32 и 26 — снова лучше первый.
+            <strong>
+              Два маршрута, пришедшие в одну клетку, дальше могут идти одинаково
+              — и тот, что впереди, так и останется впереди.
+            </strong>{" "}
+            В C3 можно прийти с суммой 23 (A1 → B1 → C1 → C2 → C3) или с суммой
+            17 (A1 → A2 → A3 → B3 → C3). Продолжим оба одинаково, через D3 в D4:
           </Typography.Text>
           <LessonDiagram
             {...lessonMedia.gridRoutes}
             caption={
               <>
-                Два пути в C3 с суммами 23 и 17 и одно продолжение +11: 34 {">"}{" "}
-                28, разница 6 никуда не делась.
+                К обоим путям прибавилось 11: 34 против 28. Разница 6 никуда не
+                делась.
               </>
             }
           />
-          <Typography.Text>Причина проста:</Typography.Text>
-          <blockquote>
-            <Typography.Text>
-              Если два маршрута уже пришли в одну и ту же клетку, то доступные
-              дальнейшие действия у них одинаковы.
-            </Typography.Text>
-          </blockquote>
           <Typography.Text>
-            Они стоят в одной клетке одного поля, и дальше им доступны одни и те
-            же ходы. Поэтому маршрут с меньшей накопленной суммой уже не обгонит
-            маршрут с большей: для максимума в <Notation>{"C3"}</Notation>{" "}
-            достаточно хранить 23, для минимума — наименьшую сумму.
-          </Typography.Text>
-          <Typography.Text>
-            Это рассуждение работает и при отрицательных числах: если 23 {">"}{" "}
-            17, то 23 + x {">"} 17 + x при любом одинаковом x.{" "}
-            <strong>
-              Положительность монет для этого доказательства не нужна.
-            </strong>
+            Какое бы продолжение мы ни выбрали, к обеим суммам прибавится одно и
+            то же. Поэтому маршрут с суммой 17 уже не обгонит маршрут с 23, и
+            для максимума в C3 достаточно помнить 23.
           </Typography.Text>
         </>
       ),
     },
     {
-      id: "pravilo-kletki",
-      navLabel: "Правило клетки",
+      id: "tablica-summ",
+      navLabel: "Таблица лучших сумм",
       explanation: (
         <>
           <Typography.Text>
+            Как посчитать лучшие суммы для всех клеток поля?
+          </Typography.Text>
+          <Typography.Text>
             <strong>
-              Общее правило: лучшая сумма клетки — её монета плюс лучшая из сумм
-              предшественников; у старта и у краёв поля свои правила.
+              Идём по строкам сверху вниз, а в строке — слева направо: к каждой
+              клетке суммы её соседей слева и сверху уже готовы.
             </strong>{" "}
-            Обозначим a(r, c) монету в строке r и столбце c, M(r, c) —
-            наибольшую сумму от старта до этой клетки включительно, m(r, c) —
-            наименьшую. Для внутренней клетки
-          </Typography.Text>
-          <Typography.Text>
-            <strong>M(r, c) = a(r, c) + max(M(r − 1, c); M(r, c − 1)),</strong>
-          </Typography.Text>
-          <Typography.Text>
-            <strong>m(r, c) = a(r, c) + min(m(r − 1, c); m(r, c − 1)).</strong>
-          </Typography.Text>
-          <Typography.Text>Края считаются отдельно:</Typography.Text>
-          <ol>
-            <li>
-              в стартовой клетке робот ещё не ходил, но монету уже забрал: у нас
-              в <Notation>{"A1"}</Notation> обе суммы равны 2;
-            </li>
-            <li>
-              в верхнюю строку приходят только слева, поэтому там накопленные
-              суммы: 2, 9, 13, 14 — это 2, затем 2 + 7, 2 + 7 + 4 и 2 + 7 + 4 +
-              1;
-            </li>
-            <li>в левый столбец приходят только сверху: 2, 7, 9, 13.</li>
-          </ol>
-          <Typography.Text>
-            На краях путь единственный, и максимум с минимумом совпадают.{" "}
-            <strong>
-              Несуществующего соседа нельзя считать приходом с суммой 0
-            </strong>
-            : у клетки верхней строки предшественника сверху просто нет.
-          </Typography.Text>
-          <Typography.Text>
-            Считать нужно так, чтобы суммы предшественников уже были известны:
-            по строкам сверху вниз, а в строке — слева направо. Такой подход
-            называют <strong>динамическим программированием</strong>: большая
-            задача разбивается на маленькие «лучшая сумма до этой клетки», а их
-            ответы сохраняются в <strong>таблице динамики</strong>. Это не новое
-            расположение монет и не один маршрут через всё поле: для каждой
-            клетки в ней решена своя задача.
-          </Typography.Text>
-        </>
-      ),
-    },
-    {
-      id: "pole-4x4",
-      navLabel: "Поле 4 × 4",
-      explanation: (
-        <>
-          <Typography.Text>
-            <strong>
-              Разберём поле 4 × 4 полностью: сначала края, затем внутренние
-              клетки строка за строкой.
-            </strong>{" "}
-            Пройди заполнение обеих таблиц по шагам: в каждом кадре — монета
-            клетки, два готовых предшественника (пунктир) и формулы.
+            Старт A1 — просто его монета, 2. В верхнюю строку приходят только
+            слева, в левый столбец — только сверху: там суммы просто
+            накапливаются. Остальные клетки — по правилу последнего шага.
+            Наибольшие и наименьшие суммы считают в двух отдельных таблицах.
+            Пройди заполнение по шагам:
           </Typography.Text>
           <LessonStepper
             {...lessonMedia.gridFillStepper}
-            label={
-              "Заполнение таблиц максимума и минимума на поле 4 × 4: шаг за шагом"
-            }
+            label={"Заполнение таблиц максимума и минимума на поле 4 × 4"}
           />
           <Typography.Text>
-            Полная таблица максимальных сумм и таблица минимальных:
-          </Typography.Text>
-          <LessonTable
-            label={"Полная таблица максимальных сумм и таблица минимальных"}
-            columns={[
-              { label: "Строка" },
-              { label: "A", numeric: true },
-              { label: "B", numeric: true },
-              { label: "C", numeric: true },
-              { label: "D", numeric: true },
-              { label: "" },
-              { label: "A", numeric: true },
-              { label: "B", numeric: true },
-              { label: "C", numeric: true },
-              { label: "D", numeric: true },
-            ]}
-            rows={[
-              ["1", "2", "9", "13", "14", "", "2", "9", "13", "14"],
-              ["2", "7", "10", "21", "24", "", "7", "8", "16", "17"],
-              ["3", "9", "16", "23", "33", "", "9", "14", "16", "25"],
-              [
-                "4",
-                "13",
-                "19",
-                "30",
-                <>
-                  <strong>35</strong>
-                </>,
-                "",
-                "13",
-                "16",
-                "23",
-                <>
-                  <strong>25</strong>
-                </>,
-              ],
-            ]}
-          />
-          <Typography.Text>
-            Для этого поля <strong>максимум 35, минимум 25</strong>. Верхняя
-            строка и левый столбец в двух таблицах одинаковы: для них существует
-            только один путь. Но внутренние клетки пересчитываются отдельно: в{" "}
-            <Notation>{"C2"}</Notation> для минимума слева используется{" "}
-            <strong>минимальный результат 8</strong>, а не максимальный
-            результат 10 из таблицы максимума. Маршруты из начала урока с
-            суммами 31 и 26 действительно лежат между 25 и 35.
-          </Typography.Text>
-        </>
-      ),
-    },
-    {
-      id: "vosstanovlenie-marshruta",
-      navLabel: "Восстановление маршрута",
-      explanation: (
-        <>
-          <Typography.Text>
-            <strong>
-              По готовой таблице можно восстановить маршрут, который даёт
-              найденную сумму.
-            </strong>{" "}
-            Для этого удобно идти от финиша назад. В таблице максимума в{" "}
-            <Notation>{"D4"}</Notation> стоит 35, монета в{" "}
-            <Notation>{"D4"}</Notation> стоит 2. Значит, перед последним шагом
-            было 35 − 2 = 33. Из предшественников в <Notation>{"C4"}</Notation>{" "}
-            стоит 30, в <Notation>{"D3"}</Notation> — 33, поэтому последний шаг
-            был из <Notation>{"D3"}</Notation>. Дальше аналогично:{" "}
-            <Notation>{"D3"}</Notation> получена из <Notation>{"D2"}</Notation>,{" "}
-            <Notation>{"D2"}</Notation> — из <Notation>{"C2"}</Notation>,{" "}
-            <Notation>{"C2"}</Notation> — из <Notation>{"C1"}</Notation>,{" "}
-            <Notation>{"C1"}</Notation> — из <Notation>{"B1"}</Notation>,{" "}
-            <Notation>{"B1"}</Notation> — из <Notation>{"A1"}</Notation>.
-          </Typography.Text>
-          <LessonDiagram
-            {...lessonMedia.gridBack}
-            caption={
-              <>
-                От финиша назад: из клетки идём в того предшественника, чья
-                сумма вместе с монетой клетки дала её сумму; при равенстве
-                годится любой.
-              </>
-            }
-          />
-          <Typography.Text>
-            В направлении движения робота получился маршрут A1 → B1 → C1 → C2 →
-            D2 → D3 → D4, и сумма исходных монет 2 + 7 + 4 + 8 + 3 + 9 + 2 = 35
-            совпадает с таблицей. Один из минимальных маршрутов — A1 → A2 → B2 →
-            B3 → C3 → C4 → D4 с суммой 2 + 5 + 1 + 6 + 2 + 7 + 2 = 25.
+            В D4 получилось 35 — это наибольшая сумма маршрута, и 25 —
+            наименьшая. Маршруты 31 и 26 из начала урока лежат между ними.
           </Typography.Text>
           <Typography.Text>
-            При восстановлении нужно пользоваться той таблицей, для которой
-            ищется маршрут: максимальным суммам соответствует таблица максимума,
-            минимальным — таблица минимума. Если два предшественника дают
-            одинаковый лучший результат, для поиска только суммы можно выбрать
-            любой из них. Это означает, что оптимальных маршрутов может быть
-            несколько: в <Notation>{"C4"}</Notation> минимум 7 + min(16; 16) —
-            второй минимальный маршрут идёт через <Notation>{"B4"}</Notation>.
+            Такой способ — решить задачу для каждой клетки и записать ответы в
+            таблицу — называют динамическим программированием. Слово
+            «программирование» тут историческое: считать можно и в Excel, и
+            руками.
           </Typography.Text>
         </>
       ),
@@ -916,103 +580,55 @@ export const spreadsheetOptimizationLesson = defineLesson({
           <LessonSummary
             items={[
               {
+                key: "Маршрут",
+                note: <>клетки от старта до финиша, сумма — их монеты</>,
+              },
+              {
+                key: "Последний шаг",
+                note: <>при ходах вправо и вниз — слева или сверху</>,
+              },
+              {
+                key: "Правило клетки",
+                note: <>монета + лучшая из сумм соседей слева и сверху</>,
+              },
+              {
+                key: "Края",
                 note: (
                   <>
-                    Лучшая сумма до клетки — монета клетки плюс лучшая из сумм
-                    её предшественников; при движении вправо и вниз
-                    предшественники слева и сверху.
+                    старт — своя монета; верхняя строка и левый столбец —
+                    накопленные суммы
                   </>
                 ),
               },
               {
-                note: (
-                  <>
-                    Хранить только лучшую сумму до клетки можно: дальнейшие
-                    действия не зависят от того, как робот в неё пришёл.
-                  </>
-                ),
+                key: "Две таблицы",
+                note: <>максимум и минимум считают отдельно</>,
               },
-              {
-                note: (
-                  <>
-                    Старт — своя монета; верхняя строка и левый столбец —
-                    накопленные суммы; несуществующий сосед — не 0.
-                  </>
-                ),
-              },
-              {
-                note: (
-                  <>
-                    Максимум и минимум — две отдельные таблицы; маршрут
-                    восстанавливается от финиша назад.
-                  </>
-                ),
-              },
-              {
-                note: (
-                  <>
-                    Любой маршрут между противоположными углами посещает h + w −
-                    1 клеток.
-                  </>
-                ),
-              },
+              { key: "Поле 4 × 4", note: <>наибольшая 35, наименьшая 25</> },
             ]}
           />
         </>
       ),
     },
     {
-      id: "dva-bloka",
-      navLabel: "Поле и расчётные блоки",
+      id: "raschyotnyj-blok",
+      navLabel: "Расчётный блок",
       explanation: (
         <>
+          <Typography.Text>Где в Excel считать лучшие суммы?</Typography.Text>
           <Typography.Text>
             <strong>
-              В Excel удобно сохранять исходные монеты и расчётные суммы в
-              разных областях листа: одна формула, скопированная на
-              прямоугольник, считает всю таблицу лучших сумм.
+              Под полем, в блоке той же формы: каждой клетке поля соответствует
+              своя клетка блока.
             </strong>{" "}
-            Формулы этой подтемы — основа всех остальных задач темы.
+            Поле 4 × 4 занимает <Notation>{"A1:D4"}</Notation>. Оставим пустую
+            строку 5, и блок наибольших сумм займёт{" "}
+            <Notation>{"A6:D9"}</Notation>: клетке B2 поля соответствует{" "}
+            <Notation>{"B7"}</Notation> блока — ровно на 5 строк ниже.
           </Typography.Text>
           <Typography.Text>
-            Опора — правило клетки и поле 4 × 4 из прошлой подтемы (максимум 35,
-            минимум 25) и приём курса Excel{" "}
-            <PythonTerm term="xl-neighbours">«таблица из таблицы»</PythonTerm>:
-            внутренняя ячейка считается из уже вычисленных соседей, крайние —
-            своими формулами.
-          </Typography.Text>
-        </>
-      ),
-    },
-    {
-      id: "forma-bloka",
-      navLabel: "Форма блока",
-      explanation: (
-        <>
-          <Typography.Text>
-            <strong>
-              Каждый расчётный блок повторяет форму исходного поля.
-            </strong>{" "}
-            Для учебного поля 4 × 4 расположим исходные монеты в{" "}
-            <Notation>{"A1:D4"}</Notation>, а максимальные суммы — рядом, в{" "}
-            <Notation>{"F1:I4"}</Notation>. Клетке <Notation>{"B2"}</Notation>{" "}
-            поля соответствует <Notation>{"G2"}</Notation> блока: адрес сдвинут
-            на 5 столбцов; так же <Notation>{"A1"}</Notation> соответствует{" "}
-            <Notation>{"F1"}</Notation>, а <Notation>{"D4"}</Notation> —{" "}
-            <Notation>{"I4"}</Notation>.
-          </Typography.Text>
-          <Typography.Text>
-            Расчётный блок всегда стоит за пределами исходных данных — правее
-            или ниже поля.
-          </Typography.Text>
-          <Typography.Text>
-            Формулы ниже записаны для русских названий функций Excel с
-            разделителем <Notation>{";"}</Notation>; английские имена — в
-            справочнике курса. Нам нужны только{" "}
-            <PythonTerm term="xl-range-functions">
-              <Notation>{"МАКС"}</Notation> и <Notation>{"МИН"}</Notation>
-            </PythonTerm>
-            .
+            Блок ставят под полем, а не справа: на экзамене поле широкое, а вниз
+            места сколько угодно.
           </Typography.Text>
         </>
       ),
@@ -1022,129 +638,13 @@ export const spreadsheetOptimizationLesson = defineLesson({
       navLabel: "Четыре формулы",
       explanation: (
         <>
+          <Typography.Text>Какие формулы записать в блок?</Typography.Text>
           <Typography.Text>
             <strong>
-              Блок максимума строится четырьмя формулами: старт, первая строка,
-              левый столбец и одна внутренняя клетка.
+              Хватит четырёх: для старта, верхней строки, левого столбца и одной
+              внутренней клетки. Остальное заполнит{" "}
+              <PythonTerm term="xl-fill">растягивание</PythonTerm>.
             </strong>
-          </Typography.Text>
-          <ol>
-            <li>
-              Начальная сумма в <Notation>{"F1"}</Notation>:{" "}
-              <Notation>{"=A1"}</Notation>. В нашем примере получится 2.
-            </li>
-            <li>
-              Первая строка, <Notation>{"G1"}</Notation>:{" "}
-              <Notation>{"=B1+F1"}</Notation> — монета следующей клетки плюс
-              накопленная сумма до предыдущей, 7 + 2 = 9. Скопируем формулу
-              вправо до <Notation>{"I1"}</Notation>: в{" "}
-              <Notation>{"H1"}</Notation> будет <Notation>{"=C1+G1"}</Notation>,
-              в <Notation>{"I1"}</Notation> — <Notation>{"=D1+H1"}</Notation>.
-              Верхняя строка заполнится значениями 2, 9, 13, 14.
-            </li>
-            <li>
-              Левый столбец, <Notation>{"F2"}</Notation>:{" "}
-              <Notation>{"=A2+F1"}</Notation>, скопируем вниз до{" "}
-              <Notation>{"F4"}</Notation>. Это накопленные суммы при движении
-              вниз по левому краю.
-            </li>
-            <li>
-              Первая внутренняя клетка, <Notation>{"G2"}</Notation>:{" "}
-              <Notation>{"=B2+МАКС(F2;G1)"}</Notation>. Здесь{" "}
-              <Notation>{"B2"}</Notation> — исходная монета текущей клетки,{" "}
-              <Notation>{"F2"}</Notation> — максимальная сумма для её левого
-              предшественника, <Notation>{"G1"}</Notation> — для верхнего;
-              результат 1 + max(7; 9) = 10.
-            </li>
-          </ol>
-          <Typography.Text>
-            Теперь <PythonTerm term="xl-fill">растянем</PythonTerm> формулу из{" "}
-            <Notation>{"G2"}</Notation> вправо до <Notation>{"I2"}</Notation>,
-            выделим получившийся диапазон <Notation>{"G2:I2"}</Notation> и
-            растянем его вниз до четвёртой строки. В итоге формулы окажутся во
-            всём диапазоне <Notation>{"G2:I4"}</Notation>, а ответ на вопрос о
-            максимуме — в <Notation>{"I4"}</Notation>:
-          </Typography.Text>
-          <SheetBlock {...lessonMedia.sheet1} label={"Лист «Максимум»"} />
-          <Typography.Text>
-            Выбери <Notation>{"I4"}</Notation>: рамки стоят на{" "}
-            <Notation>{"D4"}</Notation> — монете финиша — и на{" "}
-            <Notation>{"H4"}</Notation>, <Notation>{"I3"}</Notation> — двух уже
-            посчитанных предшественниках. Значения блока совпадают с таблицей,
-            которую мы считали руками. Поменяй монету в{" "}
-            <Notation>{"C2"}</Notation> с 8 на 1 — пересчитается всё правее и
-            ниже, и максимум станет 29: теперь лучший маршрут обходит{" "}
-            <Notation>{"C2"}</Notation>.
-          </Typography.Text>
-        </>
-      ),
-    },
-    {
-      id: "kopirovanie",
-      navLabel: "Копирование формулы",
-      explanation: (
-        <>
-          <Typography.Text>
-            <strong>
-              При копировании формула сохраняет взаимное расположение ссылок,
-              поэтому одна формула подходит для всех внутренних клеток.
-            </strong>{" "}
-            Такие ссылки называют <strong>относительными</strong>. Копия формулы{" "}
-            <Notation>{"G2"}</Notation> на одну ячейку вправо и на одну вниз:
-          </Typography.Text>
-          <FormulaBlock
-            lines={[
-              { cell: "G2", formula: "=B2+МАКС(F2;G1)" },
-              { cell: "H2", formula: "=C2+МАКС(G2;H1)" },
-              { cell: "G3", formula: "=B3+МАКС(F3;G2)" },
-            ]}
-            label="Формула"
-          />
-          <Typography.Text>
-            Каждая ссылка сдвинулась на один столбец вправо или на одну строку
-            вниз. В обоих случаях сохраняется смысл:
-          </Typography.Text>
-          <blockquote>
-            <Typography.Text>
-              Взять соответствующую исходную монету и сравнить расчётные
-              результаты слева и сверху.
-            </Typography.Text>
-          </blockquote>
-          <Typography.Text>
-            Знак <Notation>{"$"}</Notation>{" "}
-            <PythonTerm term="xl-ref">
-              закрепляет столбец или строку ссылки
-            </PythonTerm>
-            . В обычной внутренней формуле робота ссылки должны перемещаться
-            вместе с формулой, поэтому закреплять их здесь не требуется.{" "}
-            <strong>
-              Если закрепить исходную монету как <Notation>{"$B$2"}</Notation>,
-              во всех скопированных формулах будет прибавляться одна и та же
-              монета из <Notation>{"B2"}</Notation>.
-            </strong>{" "}
-            Это изменит смысл расчёта: в <Notation>{"I4"}</Notation> вместо 35
-            получится 17 — к каждой внутренней клетке прибавлялась единица из{" "}
-            <Notation>{"B2"}</Notation>.
-          </Typography.Text>
-        </>
-      ),
-    },
-    {
-      id: "blok-minimuma",
-      navLabel: "Блок минимума",
-      explanation: (
-        <>
-          <Typography.Text>
-            <strong>
-              Минимум считают во втором блоке той же формы, а на поле экзамена
-              блоки ставят под полем.
-            </strong>{" "}
-            Блок минимума строят теми же четырьмя формулами, только с{" "}
-            <Notation>{"МИН"}</Notation> и со ссылками на свой блок. Справа от
-            большого поля места мало, поэтому удобнее ставить блоки под ним
-            через пустую строку. Для нашего поля блок максимума займёт{" "}
-            <Notation>{"A6:D9"}</Notation>, блок минимума —{" "}
-            <Notation>{"A11:D14"}</Notation>:
           </Typography.Text>
           <FormulaBlock
             lines={[
@@ -1152,94 +652,153 @@ export const spreadsheetOptimizationLesson = defineLesson({
               { cell: "B6", formula: "=A6+B1" },
               { cell: "A7", formula: "=A6+A2" },
               { cell: "B7", formula: "=B2+МАКС(A7;B6)" },
-              { cell: "B12", formula: "=B2+МИН(A12;B11)" },
             ]}
             label="Формула"
           />
+          <ul>
+            <li>
+              <Notation>{"A6"}</Notation> — старт: монета A1, 2.
+            </li>
+            <li>
+              <Notation>{"B6"}</Notation> — верхняя строка: сумма слева плюс
+              монета, 2 + 7 = 9. Растягиваем вправо до{" "}
+              <Notation>{"D6"}</Notation>.
+            </li>
+            <li>
+              <Notation>{"A7"}</Notation> — левый столбец: сумма сверху плюс
+              монета. Растягиваем вниз до <Notation>{"A9"}</Notation>.
+            </li>
+            <li>
+              <Notation>{"B7"}</Notation> — монета B2 плюс большая из сумм слева
+              (<Notation>{"A7"}</Notation>) и сверху (
+              <Notation>{"B6"}</Notation>): 1 + 9 = 10. Растягиваем на весь{" "}
+              <Notation>{"B7:D9"}</Notation>.
+            </li>
+          </ul>
           <Typography.Text>
-            Монета по-прежнему берётся из поля (<Notation>{"B2"}</Notation>), а
-            соседи — из своего блока: клетка левее и клетка выше. Старт, первая
-            строка и левый столбец блока минимума — те же формулы, что у блока
-            максимума:
-          </Typography.Text>
-          <SheetBlock {...lessonMedia.sheet2} label={"Лист «Под-полем»"} />
-          <Typography.Text>
-            Ответы — в <Notation>{"D9"}</Notation> и{" "}
-            <Notation>{"D14"}</Notation>, под финишем{" "}
-            <Notation>{"D4"}</Notation>: 35 и 25. Выбери{" "}
-            <Notation>{"C13"}</Notation>: рамки на монете{" "}
-            <Notation>{"C3"}</Notation> поля и на двух соседях в блоке минимума.
-          </Typography.Text>
-          <Typography.Text>
-            <strong>
-              Готовый блок целиком копировать нельзя: относительные ссылки на
-              монеты тоже сдвинутся.
-            </strong>{" "}
-            Если скопировать <Notation>{"A6:D9"}</Notation> в{" "}
-            <Notation>{"A11:D14"}</Notation> и заменить{" "}
-            <Notation>{"МАКС"}</Notation> на <Notation>{"МИН"}</Notation>, в{" "}
-            <Notation>{"B12"}</Notation> окажется{" "}
-            <Notation>{"=B7+МИН(A12;B11)"}</Notation>: вместо монеты 1 из{" "}
-            <Notation>{"B2"}</Notation> прибавится 10 из блока максимума.
-            Поэтому блок минимума либо строят формулами заново, либо, записав
-            максимум, заменяют <Notation>{"МАКС"}</Notation> на{" "}
-            <Notation>{"МИН"}</Notation> прямо в блоке максимума — командой
-            «Найти и заменить» (<KeyCombo keys={["Ctrl", "H"]} />) по
-            выделенному блоку; тогда ссылки остаются на месте.
+            В <Notation>{"D9"}</Notation>, под финишем D4, получится 35 — как и
+            руками.
           </Typography.Text>
         </>
       ),
     },
     {
-      id: "pole-ekzamena",
-      navLabel: "Поле экзамена",
+      id: "kopirovanie",
+      navLabel: "Почему одна формула подходит всем",
       explanation: (
         <>
           <Typography.Text>
+            Почему одну и ту же формулу можно растянуть на весь блок?
+          </Typography.Text>
+          <Typography.Text>
             <strong>
-              На поле экзамена те же формулы, только адреса больше.
+              При копировании ссылки сдвигаются вместе с формулой, и смысл
+              сохраняется: «моя монета плюс лучшая из сумм слева и сверху».
             </strong>{" "}
-            Пусть поле 15 × 15 занимает <Notation>{"A1:O15"}</Notation>. Оставим
-            пустую строку 16, и блок максимума займёт{" "}
-            <Notation>{"A17:O31"}</Notation>:
+            Такие ссылки называют{" "}
+            <PythonTerm term="xl-ref">относительными</PythonTerm>. Копии формулы
+            из <Notation>{"B7"}</Notation> на клетку вправо и на клетку вниз:
           </Typography.Text>
           <FormulaBlock
             lines={[
-              { cell: "A17", formula: "=A1" },
-              { cell: "B17", formula: "=A17+B1" },
-              { cell: "A18", formula: "=A17+A2" },
-              { cell: "B18", formula: "=B2+МАКС(A18;B17)" },
+              { cell: "B7", formula: "=B2+МАКС(A7;B6)" },
+              { cell: "C7", formula: "=C2+МАКС(B7;C6)" },
+              { cell: "B8", formula: "=B3+МАКС(A8;B7)" },
+            ]}
+            label="Формула"
+          />
+          <ProofDisclosure kind="nuance" summary="Тонкости: знак $">
+            <Typography.Text>
+              Знак <Notation>{"$"}</Notation> закрепляет адрес. Здесь он только
+              мешает: если написать <Notation>{"$B$2"}</Notation>, все клетки
+              блока будут прибавлять одну и ту же монету из B2, и в D9 вместо 35
+              получится 17.
+            </Typography.Text>
+          </ProofDisclosure>
+        </>
+      ),
+    },
+    {
+      id: "blok-minimuma",
+      navLabel: "Минимум",
+      explanation: (
+        <>
+          <Typography.Text>А как получить наименьшую сумму?</Typography.Text>
+          <Typography.Text>
+            <strong>
+              Так же, только с МИН. Проще всего записать максимум и заменить{" "}
+              <Notation>{"МАКС"}</Notation> на <Notation>{"МИН"}</Notation> в
+              блоке командой «Найти и заменить» (
+              <KeyCombo keys={["Ctrl", "H"]} />
+              ).
+            </strong>{" "}
+            Блок пересчитается, и в D9 появится минимум. Можно и построить
+            второй блок ниже, в <Notation>{"A11:D14"}</Notation>, — в листе ниже
+            оба блока. Поменяй любую монету: пересчитаются оба.
+          </Typography.Text>
+          <SheetBlock {...lessonMedia.sheet2} label={"Лист с двумя блоками"} />
+          <Typography.Text>
+            Ответы — в <Notation>{"D9"}</Notation> и{" "}
+            <Notation>{"D14"}</Notation>: 35 и 25. Выбери{" "}
+            <Notation>{"C13"}</Notation> — рамки покажут монету C3 поля и двух
+            соседей в блоке минимума.
+          </Typography.Text>
+          <ProofDisclosure
+            kind="nuance"
+            summary="Тонкости: почему нельзя скопировать готовый блок"
+          >
+            <Typography.Text>
+              Если скопировать <Notation>{"A6:D9"}</Notation> целиком в{" "}
+              <Notation>{"A11:D14"}</Notation>, сдвинутся и ссылки на монеты: в{" "}
+              <Notation>{"B12"}</Notation> окажется{" "}
+              <Notation>{"=B7+МАКС(A12;B11)"}</Notation>, и вместо монеты 1 из
+              B2 прибавится 10 из блока максимума. Поэтому второй блок строят
+              теми же четырьмя формулами, а замена МАКС на МИН внутри блока
+              ссылки не трогает.
+            </Typography.Text>
+          </ProofDisclosure>
+        </>
+      ),
+    },
+    {
+      id: "pole-iz-fajla",
+      navLabel: "Поле из файла",
+      explanation: (
+        <>
+          <Typography.Text>Что меняется на поле экзамена?</Typography.Text>
+          <Typography.Text>
+            <strong>
+              Только адреса: те же четыре формулы, блок под полем через пустую
+              строку.
+            </strong>{" "}
+            Поле задачи темы — 20 × 20, оно занимает{" "}
+            <Notation>{"A1:T20"}</Notation>. Блок начнём со строки 22:
+          </Typography.Text>
+          <FormulaBlock
+            lines={[
+              { cell: "A22", formula: "=A1" },
+              { cell: "B22", formula: "=A22+B1" },
+              { cell: "A23", formula: "=A22+A2" },
+              { cell: "B23", formula: "=B2+МАКС(A23;B22)" },
             ]}
             label="Формула"
           />
           <Typography.Text>
-            <Notation>{"B17"}</Notation> растягивают вправо до{" "}
-            <Notation>{"O17"}</Notation>, <Notation>{"A18"}</Notation> — вниз до{" "}
-            <Notation>{"A31"}</Notation>, <Notation>{"B18"}</Notation> — на
-            прямоугольник <Notation>{"B18:O31"}</Notation>. Ответ — в{" "}
-            <Notation>{"O31"}</Notation>, клетке блока под финишем{" "}
-            <Notation>{"O15"}</Notation>. Большой диапазон удобно выделять
-            адресом в поле имени, а не мышью.
+            <Notation>{"B22"}</Notation> растягивают вправо до{" "}
+            <Notation>{"T22"}</Notation>, <Notation>{"A23"}</Notation> — вниз до{" "}
+            <Notation>{"A41"}</Notation>, а <Notation>{"B23"}</Notation> — на
+            весь прямоугольник <Notation>{"B23:T41"}</Notation>. Большой
+            диапазон удобно выделить, вписав его адрес в{" "}
+            <PythonTerm term="xl-address">поле имени</PythonTerm> слева от
+            строки формул. Лучшая сумма до правой нижней клетки — в{" "}
+            <Notation>{"T41"}</Notation>.
           </Typography.Text>
           <Typography.Text>
-            <strong>
-              В Excel полезно проверить несколько формул после растягивания
-            </strong>{" "}
-            (<PythonTerm term="xl-check">проверка ответа</PythonTerm>): первую
-            внутреннюю клетку, клетку в середине, последнюю клетку. Так можно
-            заметить ошибочную ссылку, закреплённый адрес или случайное
-            обращение к другому расчётному блоку. Excel сам считает ячейки{" "}
-            <PythonTerm term="xl-recalc">в порядке зависимостей</PythonTerm>:
-            строки сверху вниз перебирать не нужно, достаточно, чтобы формула
-            клетки ссылалась только на её предшественников.
-          </Typography.Text>
-          <Typography.Text>
-            Ответ записывают{" "}
-            <strong>в том порядке, который требует условие</strong>. Обычно это
-            два числа подряд без разделителя: для нашего поля «сначала максимум,
-            затем минимум» — <Notation>{"3525"}</Notation>. В части задач
-            требуется сначала минимум, затем максимум, — тогда{" "}
-            <Notation>{"2535"}</Notation>.
+            После растягивания открой две-три формулы — первую внутреннюю, из
+            середины и последнюю — и проверь, что они ссылаются на свою монету и
+            на соседей слева и сверху. Ответ записывай в том порядке, который
+            требует условие: у нас — сначала максимум, потом минимум, через
+            пробел.
           </Typography.Text>
         </>
       ),
@@ -1252,299 +811,42 @@ export const spreadsheetOptimizationLesson = defineLesson({
           <LessonSummary
             items={[
               {
+                key: "Блок",
+                note: <>под полем через пустую строку, той же формы</>,
+              },
+              {
+                key: "Старт",
+                note: <Notation>{"=A1"}</Notation>,
+              },
+              {
+                key: "Края",
                 note: (
                   <>
-                    Поле и расчётные блоки — разные области листа одной формы;
-                    клетка блока соответствует клетке поля со сдвигом.
+                    <Notation>{"=A6+B1"}</Notation> вправо,{" "}
+                    <Notation>{"=A6+A2"}</Notation> вниз
                   </>
                 ),
               },
               {
+                key: "Внутри",
                 note: (
                   <>
-                    Старт <Notation>{"=A1"}</Notation>, первая строка{" "}
-                    <Notation>{"=B1+F1"}</Notation> вправо, левый столбец{" "}
-                    <Notation>{"=A2+F1"}</Notation> вниз, внутренняя клетка{" "}
-                    <Notation>{"=B2+МАКС(F2;G1)"}</Notation> на весь
-                    прямоугольник.
+                    <Notation>{"=B2+МАКС(A7;B6)"}</Notation> на весь блок
                   </>
                 ),
               },
               {
+                key: "Минимум",
                 note: (
                   <>
-                    Ссылки относительные, <Notation>{"$"}</Notation> здесь не
-                    нужен; блок минимума — с <Notation>{"МИН"}</Notation> и
-                    соседями из своего блока; на экзамене блоки — под полем.
+                    замена МАКС на МИН (<KeyCombo keys={["Ctrl", "H"]} />) или
+                    второй блок
                   </>
                 ),
               },
               {
-                note: (
-                  <>
-                    Скопированный целиком блок ссылается не на те монеты; «Найти
-                    и заменить» внутри блока ссылки не сдвигает.
-                  </>
-                ),
-              },
-              {
-                note: (
-                  <>
-                    После заполнения проверяют несколько формул и порядок двух
-                    чисел в ответе.
-                  </>
-                ),
-              },
-            ]}
-          />
-        </>
-      ),
-    },
-    {
-      id: "stena-na-vhode",
-      navLabel: "Стена на входе",
-      explanation: (
-        <>
-          <Typography.Text>
-            <strong>
-              Стена запрещает переход между двумя клетками, поэтому у клетки со
-              стеной на входе остаётся один предшественник.
-            </strong>{" "}
-            Сами клетки стена недоступными не делает. На экзамене поле почти
-            всегда со стенами.
-          </Typography.Text>
-          <Typography.Text>
-            Продолжим поле 4 × 4 из прошлых подтем и добавим на него две стены:
-            между <Notation>{"C1"}</Notation> и <Notation>{"C2"}</Notation> и
-            между <Notation>{"C4"}</Notation> и <Notation>{"D4"}</Notation>.
-            Блок максимума — в <Notation>{"F1:I4"}</Notation>, как в прошлой
-            подтеме.
-          </Typography.Text>
-        </>
-      ),
-    },
-    {
-      id: "stena-mezhdu-kletkami",
-      navLabel: "Стена между клетками",
-      explanation: (
-        <>
-          <Typography.Text>
-            <strong>Стена делит две соседние клетки, а не закрывает их.</strong>{" "}
-            Например, стена между <Notation>{"C1"}</Notation> и{" "}
-            <Notation>{"C2"}</Notation> означает, что робот не может перейти из{" "}
-            <Notation>{"C1"}</Notation> в <Notation>{"C2"}</Notation>. Но в{" "}
-            <Notation>{"C2"}</Notation> он всё ещё может попасть слева, из{" "}
-            <Notation>{"B2"}</Notation>, если этот переход разрешён. Поэтому при
-            наличии стен меняется список допустимых предшественников:
-          </Typography.Text>
-          <VariantPicker
-            label={"Откуда можно прийти в клетку → правило расчёта"}
-            variants={[
-              {
-                label: "слева и сверху",
-                value: <>монета + лучший из двух результатов</>,
-              },
-              { label: "только слева", value: <>монета + результат слева</> },
-              { label: "только сверху", value: <>монета + результат сверху</> },
-            ]}
-          />
-          <Typography.Text>
-            Стены убирают часть маршрутов, но число шагов в оставшихся маршрутах
-            между противоположными углами не меняют: по-прежнему h + w − 2.
-            Бывает, что стены закрывают клетку и слева, и сверху, — такие клетки
-            разбирает следующая подтема; на нашем поле их нет.
-          </Typography.Text>
-        </>
-      ),
-    },
-    {
-      id: "steny-na-vhode",
-      navLabel: "Какие стены важны",
-      explanation: (
-        <>
-          <Typography.Text>
-            <strong>
-              При расчёте до текущей клетки нас интересуют стены на входе в неё.
-            </strong>{" "}
-            Для движения вправо и вниз стена слева от текущей клетки запрещает
-            приход слева, стена сверху — приход сверху. Стены справа и снизу не
-            влияют на накопленную сумму до этой клетки: они определяют, куда
-            робот сможет пойти дальше.
-          </Typography.Text>
-          <LessonDiagram
-            {...lessonMedia.gridPreds_0d7f60}
-            caption={
-              <>
-                Стена слева отнимает приход слева, стена сверху — приход сверху;
-                стены справа и снизу закрывают выходы и сумму до клетки не
-                меняют.
-              </>
-            }
-          />
-          <Typography.Text>
-            На нашем поле монета <Notation>{"C2"}</Notation> стоит 8, лучшая
-            сумма слева (в <Notation>{"B2"}</Notation>) — 10, сверху (в{" "}
-            <Notation>{"C1"}</Notation>) — 13, и сверху стена. Вариант с суммой
-            13 недопустим, результат 10 + 8 = <strong>18</strong>. Использовать
-            8 + max(10; 13) = 21 нельзя: такая формула разрешила бы пройти
-            сквозь стену. Так же <Notation>{"D4"}</Notation> получает сумму
-            только сверху: 2 + 30 = 32.
-          </Typography.Text>
-        </>
-      ),
-    },
-    {
-      id: "stena-v-formule",
-      navLabel: "Стена в формуле",
-      explanation: (
-        <>
-          <Typography.Text>
-            <strong>
-              В Excel стену учитывают формулой: у клетки со стеной из формулы
-              убирают запрещённого предшественника.
-            </strong>{" "}
-            Для расчётной клетки <Notation>{"G2"}</Notation>, соответствующей
-            исходной <Notation>{"B2"}</Notation>:
-          </Typography.Text>
-          <VariantPicker
-            label={"Ситуация → формула в G2"}
-            variants={[
-              {
-                label: "оба прихода доступны, ищем максимум",
-                value: (
-                  <>
-                    <Notation>{"=B2+МАКС(F2;G1)"}</Notation>
-                  </>
-                ),
-              },
-              {
-                label: "оба прихода доступны, ищем минимум",
-                value: (
-                  <>
-                    <Notation>{"=B2+МИН(F2;G1)"}</Notation>
-                  </>
-                ),
-              },
-              {
-                label: "можно прийти только сверху",
-                value: (
-                  <>
-                    <Notation>{"=B2+G1"}</Notation>
-                  </>
-                ),
-              },
-              {
-                label: "можно прийти только слева",
-                value: (
-                  <>
-                    <Notation>{"=B2+F2"}</Notation>
-                  </>
-                ),
-              },
-            ]}
-          />
-          <Typography.Text>
-            При одном допустимом предшественнике выбор между максимумом и
-            минимумом в самой формуле не нужен. Но ссылка должна вести в
-            соответствующий расчётный блок: максимальный или минимальный.
-          </Typography.Text>
-          <Typography.Text>
-            Удобный порядок: заполнить весь прямоугольник общей формулой, как в
-            прошлой подтеме, а затем исправить клетки у стен. На нашем поле в{" "}
-            <Notation>{"H2"}</Notation> (под ней <Notation>{"C2"}</Notation> со
-            стеной сверху) остаётся <Notation>{"=C2+G2"}</Notation>, в{" "}
-            <Notation>{"I4"}</Notation> (<Notation>{"D4"}</Notation> со стеной
-            слева) — <Notation>{"=D4+I3"}</Notation>:
-          </Typography.Text>
-          <SheetBlock {...lessonMedia.sheet3} label={"Лист «Стены»"} />
-          <Typography.Text>
-            Выбери <Notation>{"H2"}</Notation>: рамки только на монете{" "}
-            <Notation>{"C2"}</Notation> и на <Notation>{"G2"}</Notation> —
-            сверху приход закрыт.{" "}
-            <strong>
-              Толстая линия, нарисованная между ячейками Excel, сама по себе не
-              меняет формулу.
-            </strong>{" "}
-            Это оформление таблицы, запрет перехода нужно учесть в расчёте.
-            Рисунок стен удобно перенести и на расчётный блок — командой «Формат
-            по образцу» или вставкой только форматов, — тогда при правке формул
-            стены видны рядом. Блок минимума строится так же; в нём{" "}
-            <Notation>{"C2"}</Notation> получает 8 + 8 = 16, а{" "}
-            <Notation>{"D4"}</Notation> — 2 + 25 = 27, поэтому со стенами{" "}
-            <strong>максимум 32, минимум 27</strong> вместо 35 и 25.
-          </Typography.Text>
-        </>
-      ),
-    },
-    {
-      id: "otrezok-steny",
-      navLabel: "Отрезок стены",
-      explanation: (
-        <>
-          <Typography.Text>
-            <strong>
-              На поле экзамена стена — отрезок вдоль нескольких клеток, и
-              формулу правят на всём отрезке.
-            </strong>{" "}
-            Если стена тянется слева от клеток <Notation>{"E5:E9"}</Notation>, у
-            всех пяти клеток приход только сверху. В блоке под полем со строки
-            17 это клетки <Notation>{"E21:E25"}</Notation>: в{" "}
-            <Notation>{"E21"}</Notation> записывают{" "}
-            <Notation>{"=E5+E20"}</Notation> и копируют вниз до{" "}
-            <Notation>{"E25"}</Notation>. Стена над клетками{" "}
-            <Notation>{"H12:K12"}</Notation> даёт в строке блока формулу «только
-            слева», скопированную вправо по отрезку.
-          </Typography.Text>
-          <Typography.Text>
-            При сохранении только чисел, например в текстовый файл,{" "}
-            <strong>
-              сведения о стенах, нарисованных границами ячеек, теряются
-            </strong>
-            . Их пришлось бы учитывать отдельно. Для поля со стенами Excel
-            удобен именно потому, что рисунок стен остаётся перед глазами.
-          </Typography.Text>
-        </>
-      ),
-    },
-    {
-      id: "steny-itogo",
-      navLabel: "Итого",
-      explanation: (
-        <>
-          <LessonSummary
-            items={[
-              {
-                note: (
-                  <>
-                    Стена запрещает переход, а не клетку; клетка со стеной на
-                    входе получает сумму от оставшегося предшественника.
-                  </>
-                ),
-              },
-              {
-                note: (
-                  <>
-                    Для движения вправо и вниз важны стены слева и сверху от
-                    клетки; стены справа и снизу закрывают выходы.
-                  </>
-                ),
-              },
-              {
-                note: (
-                  <>
-                    В Excel: общая формула на весь блок, затем у клеток со
-                    стеной — <Notation>{"=B2+G1"}</Notation> или{" "}
-                    <Notation>{"=B2+F2"}</Notation>; ссылка — в свой блок.
-                  </>
-                ),
-              },
-              {
-                note: (
-                  <>
-                    Рисунок стен переносят на блок форматом; вдоль отрезка стены
-                    формулу правят и копируют по всему отрезку.
-                  </>
-                ),
+                key: "Ответ",
+                note: <>в клетке блока под финишем, в порядке условия</>,
               },
             ]}
           />

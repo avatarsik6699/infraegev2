@@ -31,6 +31,30 @@ RD = ((0, 1), (1, 0))
 LD = ((0, -1), (1, 0))
 DIAG = ((0, 1), (1, 0), (1, 1))
 Cell = tuple[int, int]
+FINAL = {"task-18-9-02", "task-18-9-05"}
+ADVANCED = {
+    "task-18-5-05",
+    "task-18-5-07",
+    "task-18-6-01",
+    "task-18-6-07",
+    "task-18-8-01",
+    "task-18-8-03",
+    "task-18-8-04",
+    "task-18-8-07",
+    "task-18-9-01",
+    "task-18-9-03",
+    "task-18-9-04",
+}
+ARCHIVED = [
+    "task-18-1-02",
+    "task-18-1-03",
+    "task-18-5-04",
+    "task-18-7-04",
+    "task-18-7-05",
+    "task-18-7-06",
+    "task-18-7-07",
+    "task-18-8-05",
+]
 
 
 def _datasets():
@@ -178,15 +202,9 @@ def answers() -> dict[str, str]:
 
     _sys.setrecursionlimit(10000)
     a: dict[str, str] = {}
-    ex, f4 = _field(EX), _field(F4)
+    ex = _field(EX)
     # subtopic 1
     a["task-18-1-01"] = f"{max(4 + 29, 4 + 20)} {min(4 + 18, 4 + 15)}"
-    path = next(_routes(_field([[0] * 8 for _ in range(5)]), (0, 0), (4, 7)))
-    a["task-18-1-02"] = f"{len(path) - 1} {len(path)}"
-    six = _field([[4] * 6 for _ in range(6)])
-    a["task-18-1-03"] = f"{len(next(_routes(six, (0, 0), (5, 5))))} " + _pair(
-        _sums(six, (0, 0), (5, 5))
-    ).replace(" ", " ")
     g = _field([[1, 5, 1], [4, 3, 2], [9, 9, 1]])
     greedy = [(0, 0)]
     while greedy[-1] != (2, 2):
@@ -202,35 +220,34 @@ def answers() -> dict[str, str]:
     a["task-18-1-08"] = _pair(_sums(_field([[-2, 5, -1], [4, -6, 3], [-3, 2, -4]]), (0, 0), (2, 2)))
     f9 = _field([[6, 4, 15, 11, 8], [7, 16, 16, 6, 16], [10, 15, 9, 7, 9], [4, 11, 17, 6, 8]])
     s = _sums(f9, (0, 0), (3, 4))
-    a["task-18-1-09"] = f"{max(s)}{min(s)}"
+    a["task-18-1-09"] = f"{max(s)} {min(s)}"
     # subtopic 2
     b1 = _book("18-1")
     mx, mn = _best_to(b1, max), _best_to(b1, min)
-    a["task-18-2-07"] = f"{mx(14, 14)}{mn(14, 14)}"
-    a["task-18-2-08"] = f"{mn(9, 9)}{mx(9, 9)}"
+    a["task-18-2-07"] = f"{mx(14, 14)} {mn(14, 14)}"
+    a["task-18-2-08"] = f"{mn(9, 9)} {mx(9, 9)}"
     # subtopic 3
     a["task-18-3-01"] = f"{4 + 20} {4 + 15}"
     a["task-18-3-02"] = _pair(_sums(_field(EX, down=["B1"]), (0, 0), (2, 2)))
     a["task-18-3-05"] = _pair(_sums(_field(F4, right=["C4", "B3"], down=["C1"]), (0, 0), (3, 3)))
     b2 = _book("18-2")
-    a["task-18-3-07"] = f"{_best_to(b2, max)(19, 19)}{_best_to(b2, min)(19, 19)}"
+    a["task-18-3-07"] = f"{_best_to(b2, max)(19, 19)} {_best_to(b2, min)(19, 19)}"
     # subtopic 4
     w = _field([[4, 2, 7], [3, 9, 1], [6, 5, 8]], right=["A1", "B3"], down=["B2"])
     a["task-18-4-03"] = _pair(_sums(w, (0, 0)))
     b3 = _book("18-3")
-    a["task-18-4-06"] = "".join(map(str, _corners(b3)))
+    a["task-18-4-06"] = " ".join(map(str, _corners(b3)))
     best3 = _best_to(b3, max)
     a["task-18-4-07"] = str(sum(best3(r, c) is None for r in range(b3.h) for c in range(b3.w)))
-    a["task-18-4-08"] = "".join(map(str, _corners(_book("18-4"), RD, (5, 3))))
+    a["task-18-4-08"] = " ".join(map(str, _corners(_book("18-4"), RD, (5, 3))))
     # subtopic 5
     a["task-18-5-01"] = _pair(_sums(ex, (0, 2), (2, 0), LD))
-    a["task-18-5-04"] = str(min(_sums(f4, (1, 1), (3, 3))))
     a["task-18-5-05"] = (
         f"{sum(sorted([70, 95, 60, 95, 81])[-2:])} {sum(sorted([40, 52, 33, 47, 39])[:2])}"
     )
     mx5, mn5 = _corners(_book("18-5"), LD, (0, 19))
-    a["task-18-5-06"] = f"{mn5}{mx5}"
-    a["task-18-5-07"] = "".join(map(str, _starts(_book("18-6"), 3)))
+    a["task-18-5-06"] = f"{mn5} {mx5}"
+    a["task-18-5-07"] = " ".join(map(str, _starts(_book("18-6"), 3)))
     # subtopic 6
     a["task-18-6-01"] = _pair(_sums(ex, (0, 0), (2, 2), DIAG))
     a["task-18-6-04"] = str(max(61 + (12 if 12 > 20 else 0), 58 + (12 if 12 > 9 else 0)))
@@ -243,34 +260,10 @@ def answers() -> dict[str, str]:
 
     least = _best_to(b8, min, step=cost)
     finals = _stops(b8, least)
-    a["task-18-6-08"] = f"{min(least(*e) for e in finals)}{max(least(*e) for e in finals)}"
+    a["task-18-6-08"] = f"{min(least(*e) for e in finals)} {max(least(*e) for e in finals)}"
     # subtopic 7
     even = lambda f, p: f.a[p[0]][p[1]] if f.a[p[0]][p[1]] % 2 == 0 else 0  # noqa: E731
     a["task-18-7-01"] = _pair(_sums(ex, (0, 0), (2, 2), weight=even))
-    spent = {(r, c): min(_sums(f4, (0, 0), (r, c))) for r in range(4) for c in range(4)}
-    reach = [p for p, v in spent.items() if v <= 20]
-    a["task-18-7-04"] = f"{len(reach)} {max(r + c for r, c in reach)}"
-    best_path = max(_routes(f4, (0, 0), (3, 3)), key=lambda p: sum(f4.a[r][c] for r, c in p))
-    a["task-18-7-05"] = str(sum(f4.a[r][c] % 2 for r, c in best_path))
-    via = [sum(f4.a[r][c] for r, c in p) for p in _routes(f4, (0, 0), (3, 3)) if (2, 1) in p]
-    a["task-18-7-06"] = _pair(via)
-    b10 = _book("18-10")
-
-    @cache
-    def parity(r: int, c: int) -> Any:
-        if (r, c) == (0, 0):
-            return b10.a[0][0]
-        x, cands = b10.a[r][c], []
-        if c and b10.a[r][c - 1] % 2 == x % 2 and parity(r, c - 1) is not None:
-            cands.append(parity(r, c - 1))
-        if r and b10.a[r - 1][c] % 2 != x % 2 and parity(r - 1, c) is not None:
-            cands.append(parity(r - 1, c))
-        if r and c and parity(r - 1, c - 1) is not None:
-            cands.append(parity(r - 1, c - 1))
-        return x + max(cands) if cands else None
-
-    cut = sum(parity(r, c) is None for r in range(15) for c in range(15))
-    a["task-18-7-07"] = f"{parity(14, 14)} {cut}"
     # subtopic 8
     row = [4, -9, 6, -2, 5]
     rook = max(
@@ -284,7 +277,6 @@ def answers() -> dict[str, str]:
     )
     walls = _field(F4, right=["C4"], down=["C1"])
     a["task-18-8-04"] = str(sum(1 for _ in _routes(walls, (0, 0), (3, 3))))
-    a["task-18-8-05"] = f"{4 + 1} {1}"
     b9 = _book("18-9")
 
     def ok(p, q) -> bool:
@@ -304,25 +296,25 @@ def answers() -> dict[str, str]:
     mx3, mn3 = _best_to(b3, max), _best_to(b3, min)
     ends = _stops(b3, mx3)
     a["task-18-9-01"] = (
-        f"{sum(sorted(mx3(*e) for e in ends)[-2:])}{sum(sorted(mn3(*e) for e in ends)[:2])}"
+        f"{sum(sorted(mx3(*e) for e in ends)[-2:])} {sum(sorted(mn3(*e) for e in ends)[:2])}"
     )
-    a["task-18-9-02"] = "".join(map(str, _corners(b2)))
-    a["task-18-9-03"] = "".join(map(str, _starts(_book("18-6"), 2)))
-    a["task-18-9-04"] = f"{_best_to(b1, max, DIAG)(14, 14)}{_best_to(b1, min, DIAG)(14, 14)}"
-    a["task-18-9-05"] = "".join(map(str, _corners(_book("18-4"))))
+    a["task-18-9-02"] = " ".join(map(str, _corners(b2)))
+    a["task-18-9-03"] = " ".join(map(str, _starts(_book("18-6"), 2)))
+    a["task-18-9-04"] = f"{_best_to(b1, max, DIAG)(14, 14)} {_best_to(b1, min, DIAG)(14, 14)}"
+    a["task-18-9-05"] = " ".join(map(str, _corners(_book("18-4"))))
     return a
 
 
 def test_every_answer_matches_independent_recomputation(answers: dict[str, str]) -> None:
     tasks = _entries()
     assert sorted(tasks) == sorted(answers)
-    assert sorted(t.lessons[0].position for t in tasks.values()) == list(range(41))
+    assert sorted(t.lessons[0].position for t in tasks.values()) == list(range(33))
     for task_id, task in tasks.items():
         assert task.checker.answer_variants[0] == answers[task_id], task_id
         assert task.exam_numbers == [18] and not task.catalog_visible and not task.archived
-        on_final_page = task_id.startswith("task-18-9-")
+        on_final_page = task_id in FINAL
         assert bool(task.theory_links) != on_final_page, task_id
-        advanced = task_id.startswith(("task-18-7-", "task-18-8-"))
+        advanced = task_id in ADVANCED
         assert task.lessons[0].counts_toward_mastery == (not advanced), task_id
 
 
@@ -346,3 +338,11 @@ def test_checker_accepts_the_answer_and_rejects_an_off_by_one(
         tokens = expected.split()
         tokens[-1] = str(int(tokens[-1]) + 1)
         assert not is_correct(task.checker, " ".join(tokens)), task_id
+
+
+def test_tasks_of_the_removed_sections_are_archived() -> None:
+    tasks = {entry.task.id: entry.task for entry in _bank().tasks}
+    for task_id in ARCHIVED:
+        task = tasks[task_id]
+        assert task.archived and not task.catalog_visible, task_id
+        assert not task.lessons and not task.theory_links, task_id

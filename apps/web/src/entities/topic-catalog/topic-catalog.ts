@@ -22,7 +22,7 @@ const subtopicFacts: Readonly<
   "numeral-systems": { count: 6, first: "zapis-i-znachenie" },
   spreadsheets: { count: 6, first: "stroka-i-uslovie" },
   "number-sequences": { count: 7, first: "chisla-i-proverki" },
-  "spreadsheet-optimization": { count: 8, first: "luchshaya-summa-do-kletki" },
+  "spreadsheet-optimization": { count: 6, first: "luchshaya-summa-do-kletki" },
   "winning-strategy": { count: 7, first: "igra-i-strategiya" },
   "graph-analysis": { count: 7, first: "graf-i-put" },
   "string-processing": { count: 8, first: "stroka-i-fragment" },

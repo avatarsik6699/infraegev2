@@ -29,7 +29,7 @@ const authoredContent = [
 ];
 
 describe("task 18 robot lesson (Change 184)", () => {
-  it("has six core subtopics, two advanced and their self-checks", () => {
+  it("has five core subtopics, one advanced and their self-checks", () => {
     expect(lesson).toMatchObject({
       id: "spreadsheet-optimization",
       routeSlug: "18-robot-sborshchik-monet",
@@ -45,12 +45,10 @@ describe("task 18 robot lesson (Change 184)", () => {
       ["steny", "core"],
       ["nedostizhimye-i-finishi", "core"],
       ["napravleniya-i-zapuski", "core"],
-      ["diagonali-i-cena-shaga", "core"],
-      ["usloviya-perehoda", "advanced"],
       ["ladya-i-chislo-marshrutov", "advanced"],
     ]);
     expect(subtopics.map(({ checkpoint }) => checkpoint?.length ?? 0)).toEqual([
-      2, 6, 3, 4, 2, 4, 2, 2,
+      5, 5, 5, 5, 5, 4,
     ]);
     expect(lesson.examFocus).toBeDefined();
     expect(lesson.result).toBeDefined();
@@ -110,7 +108,7 @@ describe("task 18 robot lesson (Change 184)", () => {
     const container = renderAuthoredLessonContent(authoredContent);
     const media = Object.values(lessonMedia);
     const diagrams = media.filter((item) => item.kind === "diagram");
-    expect(diagrams).toHaveLength(11);
+    expect(diagrams).toHaveLength(8);
     expect(
       container.querySelectorAll("figure[data-lesson-diagram]"),
     ).toHaveLength(diagrams.length);
