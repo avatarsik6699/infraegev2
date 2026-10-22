@@ -1,12 +1,12 @@
 """Independent answer and content checks for the EGE tasks 19–21 lesson «Выигрышная стратегия».
 
-The lesson asks bounded questions with the recursion ``f(p, m)``: can the player win within
-m moves of the game. Here every game is solved to the end instead: the value of a position
-is +n when the player to move forces a win by his n-th move at the latest (and not
-sooner), −n when the opponent forces a win by his n-th move whatever the player does.
-Then W1, L1, W2, L2 are the values +1, −1, +2, −2, a win by the third move is +3, and
-Petya's mistake is a move to a position of value +1 for Vanya. The bank's own solution
-programs must print the same answers.
+The lesson finds the group of a position with the label function ``g(s)``: В1, П1, В2,
+П2 (and В3, П3 in the advanced lesson). Here every game is solved to the end instead:
+the value of a position is +n when the player to move forces a win by his n-th move at
+the latest (and not sooner), −n when the opponent forces a win by his n-th move whatever
+the player does. Then В1, П1, В2, П2 are the values +1, −1, +2, −2, В3 and П3 are +3 and
+−3, and Petya's mistake is a move to a position of value +1 for Vanya. The bank's own
+solution programs must print the same answers.
 """
 
 import subprocess
@@ -109,7 +109,7 @@ def answers() -> dict[str, str]:
     # subtopic 2
     g = Game(heap("+1", "+2", "*3"), at_least(60))
     a["task-19-2-07"] = " ".join(map(str, g.where(range(1, 60), -1)))
-    a["task-19-2-08"] = "".join(map(str, g.where(range(1, 60), 2)))
+    a["task-19-2-08"] = " ".join(map(str, g.where(range(1, 60), 2)))
     a["task-19-2-09"] = str(min(g.where(range(1, 60), -2)))
     # subtopic 3
     g = Game(heap("+2", "+3", "*2"), at_least(50))
@@ -117,28 +117,35 @@ def answers() -> dict[str, str]:
     a["task-19-3-04"] = f"{len(w2)} {sum(w2)} {min(w2)} {max(w2)}"
     g = Game(heap("+1", "+3", "*3"), at_least(200))
     a["task-19-3-06"] = " ".join(map(str, g.where(range(1, 200), -1)))
-    a["task-19-3-07"] = "".join(map(str, g.where(range(1, 200), 2)[:2]))
+    a["task-19-3-07"] = " ".join(map(str, g.where(range(1, 200), 2)[:2]))
     g = Game(heap("+2", "+5", "*2"), at_least(301))
     a["task-19-3-08"] = str(len(g.where(range(1, 301), -2)))
     # subtopic 4: two heaps
     g = Game(heaps(3, 2), total(120))
     a["task-19-4-06"] = str(min(s for s in range(1, 111) if g.mistake((9, s))))
-    a["task-19-4-07"] = "".join(
+    a["task-19-4-07"] = " ".join(
         str(s) for s in [s for s in range(1, 111) if g.value((9, s)) == 2][:2]
     )
     a["task-19-4-08"] = str(min(s for s in range(1, 111) if g.value((9, s)) == -2))
+    # the theme task: (7, S), +3 or ×2 in one pile, the sum at least 100
+    g = Game(heaps(3, 2), total(100))
+    a["task-19-4-11"] = str(min(s for s in range(1, 93) if g.mistake((7, s))))
+    a["task-19-4-12"] = " ".join(
+        str(s) for s in [s for s in range(1, 93) if g.value((7, s)) == 2][:2]
+    )
+    a["task-19-4-13"] = str(min(s for s in range(1, 93) if g.value((7, s)) == -2))
     # subtopic 5: decreasing heaps
     a["task-19-5-01"] = str(3 * (12 + 1) - 1)
     g = Game(heap("-3", "/4"), at_most(20))
     a["task-19-5-05"] = str(max(s for s in range(21, 1000) if g.mistake(s)))
     g = Game(heap("-2", "-5", "/3"), at_most(30))
     a["task-19-5-07"] = str(min(g.where(range(31, 1000), -1)))
-    a["task-19-5-08"] = "".join(map(str, g.where(range(31, 1000), 2)[:2]))
+    a["task-19-5-08"] = " ".join(map(str, g.where(range(31, 1000), 2)[:2]))
     a["task-19-5-09"] = str(min(g.where(range(31, 1000), -2)))
     a["task-19-5-10"] = str(max(s for s in range(31, 1000) if g.mistake(s)))
-    # subtopic 6
+    # subtopic 6 (advanced): the third move
     g = Game(heaps(2, 2), total(100))
-    a["task-19-6-07"] = "".join(
+    a["task-19-6-07"] = " ".join(
         str(s) for s in [s for s in range(1, 90) if g.value((10, s)) == 3][:2]
     )
     a["task-19-6-08"] = str(min(s for s in range(1, 90) if g.value((10, s)) == -3))
@@ -177,7 +184,7 @@ def answers() -> dict[str, str]:
     g = Game(heap("-3", "-4", "/2"), at_most(40))
     a["task-19-8-04"] = str(max(g.where(range(41, 1000), -1)))
     g = Game(heap("+1", "+4", "*3"), at_least(100))
-    a["task-19-8-05"] = "".join(map(str, g.where(range(1, 100), 3)[:2]))
+    a["task-19-8-05"] = " ".join(map(str, g.where(range(1, 100), 2)[:2]))
     return a
 
 
@@ -193,14 +200,14 @@ def _solution(task: TaskData) -> str:
 def test_every_answer_matches_independent_recomputation(answers: dict[str, str]) -> None:
     tasks = _entries()
     assert sorted(tasks) == sorted(answers)
-    assert sorted(t.lessons[0].position for t in tasks.values()) == list(range(31))
+    assert sorted(t.lessons[0].position for t in tasks.values()) == list(range(34))
     for task_id, task in tasks.items():
         assert task.checker.answer_variants[0] == answers[task_id], task_id
         assert set(task.exam_numbers) <= {19, 20, 21} and task.exam_numbers, task_id
         assert not task.catalog_visible and not task.archived, task_id
         on_final_page = task_id.startswith("task-19-8-")
         assert bool(task.theory_links) != on_final_page, task_id
-        advanced = task_id.startswith("task-19-7-")
+        advanced = task_id.startswith(("task-19-6-", "task-19-7-"))
         assert task.lessons[0].counts_toward_mastery == (not advanced), task_id
 
 

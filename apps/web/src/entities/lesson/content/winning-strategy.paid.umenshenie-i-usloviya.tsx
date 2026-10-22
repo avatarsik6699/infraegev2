@@ -6,101 +6,64 @@ import { Typography } from "~/shared/components/typography";
 import {
   LessonDiagram,
   LessonSummary,
+  ProofDisclosure,
   VariantPicker,
 } from "~/shared/components/learning-content";
 import type { LessonContent } from "../lib/define-lesson.types";
 import { lessonMedia } from "./winning-strategy.paid.umenshenie-i-usloviya.media";
 import { PythonTerm } from "./python-term";
 
+const G =
+  "@cache\ndef g(s):\n    nxt = moves(s)\n    if any(finished(q) for q in nxt):\n        return 1  # В1\n    r = [g(q) for q in nxt]\n    if all(x == 1 for x in r):\n        return -1  # П1\n    if -1 in r:\n        return 2  # В2\n    if all(x > 0 for x in r):\n        return -2  # П2\n    return 0";
+const RULES =
+  "def moves(s):\n    return [s - 1, s // 2]\n\n\ndef finished(s):\n    return s <= 10";
+
 const content: LessonContent.PaidSubtopicContent = {
   theory: [
-    {
-      id: "te-zhe-proverki",
-      navLabel: "Те же проверки",
-      explanation: (
-        <>
-          <Typography.Text>
-            <strong>
-              Игры с уменьшением кучи и игры с ходами по условию решаются теми
-              же логическими проверками: меняются только разрешённые действия и
-              условие окончания.
-            </strong>{" "}
-            В последних вариантах кучу часто уменьшают — вычитанием и делением с
-            округлением, а ходы бывают разрешены только при условии: «если число
-            чётное», «если делится на 3».
-          </Typography.Text>
-          <Typography.Text>
-            Учебная игра: разрешено убрать один камень либо разделить количество
-            камней на 2 с округлением вниз, выигрывает получивший не более 10
-            камней, первоначально S ≥ 11.
-          </Typography.Text>
-        </>
-      ),
-    },
     {
       id: "umenshenie-kuchi",
       navLabel: "Уменьшение кучи",
       explanation: (
         <>
+          <Typography.Text>Что меняется, когда кучу уменьшают?</Typography.Text>
           <Typography.Text>
             <strong>
-              Уменьшение кучи записывается теми же двумя функциями.
+              Только правила: ходы уменьшают кучу, а выигрывает тот, кто первым
+              опустился до порога. Функция <Notation>{"g"}</Notation> прежняя.
             </strong>{" "}
-            Правила:
+            Учебная игра: можно убрать один камень или уменьшить кучу вдвое с
+            округлением вниз; выигрывает тот, у кого после хода в куче не более
+            10 камней; S ≥ 11.
           </Typography.Text>
           <CodeBlock
-            code={
-              "def moves(s):\n    return [s - 1, s // 2]\n\n\ndef finished(s):\n    return s <= 10"
-            }
-            label={
-              "Уменьшение кучи записывается теми же двумя функциями. Правила"
-            }
+            code={RULES + "\n\n\nprint(moves(21), moves(22))"}
+            label={"Правила убывающей игры"}
             language="python"
+            output={"[20, 10] [21, 11]"}
           />
           <Typography.Text>
-            Операция{" "}
-            <PythonTerm term="intdiv">
-              <Notation>{"//"}</Notation>
-            </PythonTerm>{" "}
-            для неотрицательных целых чисел означает целочисленное деление с
-            округлением вниз:
-          </Typography.Text>
-          <CodeBlock
-            code={"print(20 // 2, 21 // 2, 22 // 2)"}
-            label={"Код на Python: print(20 // 2, 21 // 2, 22 // 2)"}
-            language="python"
-            output={"10 10 11"}
-          />
-          <Typography.Text>
-            Поэтому из 21 можно выиграть сразу: 21 → 10. А из 22 делением
-            получится 11 — игра ещё продолжается.
+            <Notation>{"//"}</Notation> —{" "}
+            <PythonTerm term="intdiv">деление с округлением вниз</PythonTerm>:
+            21 // 2 = 10, поэтому из 21 выигрывают сразу. А из 22 делением
+            получится 11 — игра продолжается.
           </Typography.Text>
         </>
       ),
     },
     {
-      id: "blizhajshie-gruppy",
-      navLabel: "Ближайшие группы",
+      id: "gruppy-umensheniya",
+      navLabel: "Группы позиций",
       explanation: (
         <>
+          <Typography.Text>Где здесь В1, П1, В2 и П2?</Typography.Text>
           <Typography.Text>
             <strong>
-              Ближайшие группы позиций находят так же, от конца игры.
+              Определения те же, только конец игры теперь внизу: ближе к победе
+              — меньше камней, и перебор идёт вверх от порога.
             </strong>{" "}
-            <Notation>{"W1"}</Notation> — 11, 12, …, 21.{" "}
-            <Notation>{"L1"}</Notation> — 22, потому что 22 → 21 или 22 → 11, и
-            оба результата — <Notation>{"W1"}</Notation>. Для{" "}
-            <Notation>{"W2"}</Notation> нужно одним ходом попасть в 22.
-            Убавлением единицы: S − 1 = 22, S = 23. Делением на 2 с округлением
-            вниз: 44 // 2 = 22 и 45 // 2 = 22. Поэтому{" "}
-            <strong>W2 = 23, 44, 45</strong>.
-          </Typography.Text>
-          <Typography.Text>
-            Для этой игры <Notation>{"L2"}</Notation> — позиции 24 и 46.
-            Проверим: 24 → 23 или 24 → 12, здесь 23 —{" "}
-            <Notation>{"W2"}</Notation>, а 12 — <Notation>{"W1"}</Notation>. И
-            46 → 45 или 46 → 23, здесь оба результата —{" "}
-            <Notation>{"W2"}</Notation>.
+            В1 — 11–21. П1 — 22: оба хода, в 21 и в 11, ведут в В1. В ловушку 22
+            ведут 23 (−1), 44 и 45 (44 // 2 = 45 // 2 = 22) — это В2. П2 — 24 и
+            46.
           </Typography.Text>
           <LessonDiagram
             {...lessonMedia.gameLine11_46_12_10_11254347}
@@ -108,29 +71,23 @@ const content: LessonContent.PaidSubtopicContent = {
               <>
                 Убывающая игра: −1 или //2, победа при s ≤ 10. Деление
                 перепрыгивает далеко: в ловушку 22 ведут 23, 44 и 45. Позиции
-                26–42 пропущены — ни одна из них не попала в группы.
+                26–42 пропущены — ни одна не попала в группы.
               </>
             }
           />
-          <Typography.Text>
-            Функции подтемы 3 с новыми <Notation>{"moves"}</Notation> и{" "}
-            <Notation>{"finished"}</Notation> дают то же самое. Перебор идёт{" "}
-            <strong>вверх от порога</strong>: S ≥ 11.
-          </Typography.Text>
+          <Typography.Text>Программа находит то же:</Typography.Text>
           <CodeBlock
             code={
-              "print([s for s in range(11, 60) if lose1(s)])\nprint([s for s in range(11, 60) if win2(s)])\nprint([s for s in range(11, 60) if lose2(s)])"
+              "from functools import cache\n\n\n" +
+              RULES +
+              "\n\n\n" +
+              G +
+              "\n\n\nstarts = range(11, 60)\nprint([s for s in starts if g(s) == -1])\nprint([s for s in starts if g(s) == 2])\nprint([s for s in starts if g(s) == -2])"
             }
             label={"Перебор идёт вверх от порога: S ≥ 11"}
             language="python"
             output={"[22]\n[23, 44, 45]\n[24, 46]"}
           />
-          <Typography.Text>
-            Таким образом, даже при уменьшении кучи работают те же правила: есть
-            победный ход; все ходы дают сопернику немедленную победу; есть
-            переход в такую ловушку; все ходы дают сопернику победу за один или
-            два его хода.
-          </Typography.Text>
         </>
       ),
     },
@@ -140,135 +97,104 @@ const content: LessonContent.PaidSubtopicContent = {
       explanation: (
         <>
           <Typography.Text>
-            <strong>Округление нужно переносить из условия буквально.</strong>{" "}
-            Для положительных целых чисел каждый вид деления записывается
-            по-своему:
+            Как записать «уменьшить в два раза» в коде?
+          </Typography.Text>
+          <Typography.Text>
+            <strong>
+              Так, как сказано в условии: округление вниз, вверх или «только
+              если делится нацело» — это три разных хода.
+            </strong>
           </Typography.Text>
           <VariantPicker
-            label={"Что требует условие и как записать"}
+            label={"Слова условия и запись в moves"}
             variants={[
               {
-                label: "Деление с округлением вниз",
-                value: (
-                  <>
-                    <Notation>{"s // d"}</Notation>
-                  </>
-                ),
+                label: "с округлением вниз",
+                value: <Notation>{"s // 2"}</Notation>,
                 note: <>21 // 2 = 10</>,
               },
               {
-                label: "Деление с округлением вверх",
-                value: (
-                  <>
-                    <Notation>{"(s + d - 1) // d"}</Notation>
-                  </>
-                ),
+                label: "с округлением вверх",
+                value: <Notation>{"(s + 1) // 2"}</Notation>,
                 note: <>(21 + 1) // 2 = 11</>,
               },
               {
-                label: "Деление только при делимости без остатка",
-                value: (
-                  <>
-                    сначала проверить <Notation>{"s % d == 0"}</Notation>
-                  </>
-                ),
+                label: "если делится нацело",
+                value: <Notation>{"if s % 2 == 0"}</Notation>,
                 note: <>21 на 2 не делится — хода нет</>,
               },
             ]}
           />
           <Typography.Text>
-            <Notation>{"%"}</Notation> возвращает остаток от деления. Обычное{" "}
-            <Notation>{"/"}</Notation> может дать дробное число, а{" "}
-            <PythonTerm term="round">
-              <Notation>{"round()"}</Notation>
-            </PythonTerm>{" "}
-            округляет по другому правилу.{" "}
-            <strong>Подставлять их вместо нужного округления нельзя:</strong>
+            Обычное деление и <Notation>{"round"}</Notation> не подходят:{" "}
+            <Notation>{"21 / 2"}</Notation> даёт дробное 10.5, а{" "}
+            <Notation>{"round(10.5)"}</Notation> — 10, потому что округляет к
+            чётному:
           </Typography.Text>
           <CodeBlock
-            code={
-              "print(10 % 3, 12 % 3)\nprint(21 / 2, round(10.5), (21 + 1) // 2)"
-            }
-            label={"Подставлять их вместо нужного округления нельзя"}
+            code={"print(21 // 2, (21 + 1) // 2, 21 / 2, round(10.5))"}
+            label={"Три способа поделить 21 пополам"}
             language="python"
-            output={"1 0\n10.5 10 11"}
+            output={"10 11 10.5 10"}
           />
           <Typography.Text>
-            Деление вверх через{" "}
-            <PythonTerm term="ceil">
-              <Notation>{"(s + d - 1) // d"}</Notation>
-            </PythonTerm>{" "}
-            работает без дробей.
+            Деление на 3 с округлением вверх —{" "}
+            <Notation>{"(s + 2) // 3"}</Notation>: к числу добавляют делитель
+            без единицы.
           </Typography.Text>
         </>
       ),
     },
     {
-      id: "granica-deleniya",
-      navLabel: "Граница деления",
+      id: "granica",
+      navLabel: "Граница перебора",
       explanation: (
         <>
           <Typography.Text>
-            <strong>
-              Граница для деления вниз — последнее число, которое ещё делится «в
-              порог».
-            </strong>{" "}
-            Например, s // 4 ≤ 10 выполняется вплоть до s = 43, потому что 43 //
-            4 = 10, но 44 // 4 = 11.{" "}
-            <strong>Поэтому граница здесь 43, а не 40.</strong>
-          </Typography.Text>
-        </>
-      ),
-    },
-    {
-      id: "naimenshee-i-naibolshee",
-      navLabel: "Наименьшее и наибольшее S",
-      explanation: (
-        <>
-          <Typography.Text>
-            <strong>
-              Наименьшее S ищут перебором вверх от порога, а для наибольшего
-              нужна граница, выведенная из правил.
-            </strong>{" "}
-            В убывающей игре верхнего предела S в условии нет: «S ≥ 11». Если
-            спрашивают наименьшее значение или два наименьших, перебор просто
-            идёт вверх, пока они не найдутся. Если спрашивают наибольшее или все
-            значения, перебор до случайного числа ничего не доказывает (подтема
-            3).
+            В условии «S ≥ 11», а сверху границы нет. До какого S перебирать?
           </Typography.Text>
           <Typography.Text>
+            <strong>
+              Наименьшее S ищут вверх от порога, пока не найдётся. Для
+              наибольшего нужна граница из рассуждения: дальше неё ответов быть
+              не может.
+            </strong>{" "}
             Найдём наибольшее S, при котором Ваня может выиграть первым ходом
-            после неудачного хода Пети. Быстрее всего куча уменьшается двумя
-            делениями подряд: из S получается S // 2 // 2 = S // 4. Чтобы Ваня
-            закончил игру, нужно S // 4 ≤ 10, а это выполняется только до S = 43
-            — граница из предыдущего шага.{" "}
-            <strong>
-              Из любого S ≥ 44 даже самый быстрый спуск за два хода не доходит
-              до 10
-            </strong>
-            , значит, дальше подходящих S нет. Партия 43 → 21 → 10 возможна: ход
-            Пети в 21 игру не заканчивает.
+            после неудачного хода Пети.
+          </Typography.Text>
+          <Typography.Text>
+            Быстрее всего куча убывает от двух делений подряд: из S получается S
+            // 4. Чтобы Ваня дошёл до порога, нужно S // 4 ≤ 10, а это верно
+            только до S = 43: 43 // 4 = 10, но 44 // 4 = 11. Значит, ответ не
+            больше 43, и перебора до 1000 хватит с запасом:
           </Typography.Text>
           <CodeBlock
             code={
-              "found = [s for s in range(11, 44) if after_mistake(s)]\nprint(max(found))"
+              "from functools import cache\n\n\n" +
+              RULES +
+              "\n\n\n" +
+              G +
+              "\n\n\ndef mistake(s):\n    return any(not finished(q) and g(q) == 1\n               for q in moves(s))\n\n\nprint(max(s for s in range(11, 1000) if mistake(s)))"
             }
-            label={
-              "Партия 43 → 21 → 10 возможна: ход Пети в 21 игру не заканчивает"
-            }
+            label={"Наибольшее S с запасом по границе"}
             language="python"
             output={"43"}
           />
           <Typography.Text>
-            Для гарантии (<Notation>{"L1"}</Notation>) рассуждают наоборот:{" "}
-            <strong>
-              после каждого хода Пети, даже самого слабого, у Вани должен быть
-              победный ход
-            </strong>
-            , поэтому границу даёт самый медленный ход Пети. Здесь самый
-            медленный — −1: из S − 1 Ваня должен выиграть, то есть S − 1 ≤ 21, S
-            ≤ 22.
+            Если спрашивают о гарантии — «при любом ходе Пети Ваня выигрывает
+            первым ходом», — граница другая. Ваня должен выиграть даже после
+            самого медленного хода Пети, здесь это −1. Значит, S − 1 должно быть
+            В1, то есть S − 1 ≤ 21 и S ≤ 22. Дальше П1 быть не может.
           </Typography.Text>
+          <ProofDisclosure kind="nuance" summary="Тонкости: очень большие S">
+            <Typography.Text>
+              В экзаменационных задачах порог бывает в десятки тысяч камней.
+              Перебирай S вверх от порога: тогда для каждого нового S позиции
+              ниже уже запомнены, и рекурсия неглубокая. Если начать сразу с
+              огромного S, цепочка вызовов −1, −1, −1… упрётся в{" "}
+              <PythonTerm term="reclimit">предел глубины рекурсии</PythonTerm>.
+            </Typography.Text>
+          </ProofDisclosure>
         </>
       ),
     },
@@ -278,74 +204,37 @@ const content: LessonContent.PaidSubtopicContent = {
       explanation: (
         <>
           <Typography.Text>
+            Как записать ход, который разрешён не всегда?
+          </Typography.Text>
+          <Typography.Text>
             <strong>
-              Если некоторые команды разрешены только при определённых условиях,
-              в <Notation>{"moves"}</Notation> включаются только разрешённые
-              действия.
+              В <Notation>{"moves"}</Notation> ход добавляют только после
+              проверки условия.
             </strong>{" "}
-            Например, деление на 2 — только без остатка. Ход появляется в списке
-            после проверки{" "}
-            <PythonTerm term="if">
-              <Notation>{"if"}</Notation>
-            </PythonTerm>
-            :
+            Пусть делить пополам можно только чётную кучу:
           </Typography.Text>
           <CodeBlock
             code={
-              "def moves(s):\n    result = [s - 1]\n\n    if s % 2 == 0:\n        result.append(s // 2)\n\n    return result\n\n\nprint(moves(13), moves(14))\nprint([s for s in range(11, 30) if lose1(s)])"
+              "from functools import cache\n\n\ndef moves(s):\n    result = [s - 1]\n    if s % 2 == 0:\n        result.append(s // 2)\n    return result\n\n\ndef finished(s):\n    return s <= 10\n\n\n" +
+              G +
+              "\n\n\nprint(moves(13), moves(14))\nprint([s for s in range(11, 30) if g(s) == -1])"
             }
-            label={"Ход появляется в списке после проверки {{if|if}}"}
+            label={"Ход появляется после проверки {{if|if}}"}
             language="python"
             output={"[12] [13, 7]\n[13, 15, 17, 19, 21]"}
           />
           <Typography.Text>
-            <strong>Условие меняет всю картину групп.</strong> Без него 13 была{" "}
-            <Notation>{"W1"}</Notation> (13 // 2 = 6), а теперь из 13 есть
-            только ход в 12, и это <Notation>{"L1"}</Notation>. Так же
-            записывают любые ходы с условием: «если чётное — уменьшить вдвое,
-            если кратно трём — на треть», «добавить делитель числа», а в двух
-            кучах — «добавлять только в меньшую кучу»: проверка{" "}
-            <Notation>{"if a <= b:"}</Notation> выбирает, какую кучу можно
-            менять.
-          </Typography.Text>
-        </>
-      ),
-    },
-    {
-      id: "zapreshchyonnyj-rezultat",
-      navLabel: "Запрещённый результат",
-      explanation: (
-        <>
-          <Typography.Text>
-            <strong>Запрещённый результат удаляют из списка ходов.</strong> Это
-            делают <PythonTerm term="comp">списковым включением</PythonTerm>.
-            Если нужно попасть <strong>ровно</strong> в заданное число и
-            превышение запрещено, необходимо не только изменить проверку
-            окончания, но и убрать запрещённые ходы:
-          </Typography.Text>
-          <CodeBlock
-            code={
-              "def moves(s):\n    candidates = [s + 1, s * 2]\n    return [q for q in candidates if q <= 21]\n\n\ndef finished(s):\n    return s == 21\n\n\nprint(moves(11), moves(15), finished(21))"
-            }
-            label={"Код на Python: def moves(s):"}
-            language="python"
-            output={"[12] [16] True"}
-          />
-          <Typography.Text>
-            Конструкция{" "}
-            <Notation>{"[q for q in candidates if q <= 21]"}</Notation> создаёт
-            список из тех кандидатов <Notation>{"q"}</Notation>, для которых
-            выполнено условие <Notation>{"q <= 21"}</Notation>. Так же
-            запрещают, например, ход, после которого количество камней делится
-            на 3: <Notation>{"q % 3 != 0"}</Notation>.
+            Условие меняет все группы. Без него 13 была В1 (13 // 2 = 6), а
+            теперь из 13 один ход — в 12, а это В1 соперника. Так же пишут «если
+            кратно трём», «добавить делитель числа», «добавлять только в меньшую
+            кучу».
           </Typography.Text>
           <Typography.Text>
-            Если же превышение порога разрешено, но приводит к поражению
-            сделавшего ход, это уже другой исход завершения.{" "}
-            <strong>
-              Нельзя считать любой конец победой предыдущего игрока
-            </strong>
-            : функция должна различать победное завершение и проигрышное.
+            Запрещённый результат тоже убирают в <Notation>{"moves"}</Notation>.
+            «Превышать 21 нельзя» —{" "}
+            <Notation>{"[q for q in (s + 1, s * 2) if q <= 21]"}</Notation>, а{" "}
+            <Notation>{"finished"}</Notation> тогда проверяет{" "}
+            <Notation>{"s == 21"}</Notation>.
           </Typography.Text>
         </>
       ),
@@ -356,37 +245,39 @@ const content: LessonContent.PaidSubtopicContent = {
       explanation: (
         <>
           <Typography.Text>
+            Что делает <Notation>{"g"}</Notation>, если из позиции нет ни одного
+            хода?
+          </Typography.Text>
+          <Typography.Text>
             <strong>
-              Позицию без ходов обрабатывают отдельно:{" "}
-              <Notation>{"all"}</Notation> от пустого списка даёт{" "}
-              <Notation>{"True"}</Notation>.
+              Возвращает −1, и это обычно ошибка: для пустого списка{" "}
+              <Notation>{"all"}</Notation> даёт <Notation>{"True"}</Notation>.
             </strong>{" "}
-            Функции подтемы 3 рассчитаны на игры, где у каждой незавершённой
-            позиции есть хотя бы один разрешённый ход. Если ходы зависят от
-            делителей, это не так. Пусть к куче можно добавить её делитель d,
-            где 1 {"<"} d {"<"} s, а побеждает получивший не менее 30 камней. У
-            простого числа таких делителей нет:
+            Пусть к куче можно добавить её делитель d, 1 {"<"} d {"<"} s, а
+            выигрывает получивший не менее 30 камней. У простого числа таких
+            делителей нет:
           </Typography.Text>
           <CodeBlock
             code={
-              "def moves(s):\n    return [s + d for d in range(2, s) if s % d == 0]\n\n\ndef finished(s):\n    return s >= 30\n\n\nprint(moves(12), moves(7))\nprint(lose1(7))"
+              "from functools import cache\n\n\ndef moves(s):\n    return [s + d for d in range(2, s) if s % d == 0]\n\n\ndef finished(s):\n    return s >= 30\n\n\n" +
+              G +
+              "\n\n\nprint(moves(12), moves(7), g(7))"
             }
-            label={"У простого числа таких делителей нет"}
+            label={"У простого числа нет ходов"}
             language="python"
-            output={"[14, 15, 16, 18] []\nTrue"}
+            output={"[14, 15, 16, 18] [] -1"}
           />
           <Typography.Text>
-            <Notation>{"lose1(7)"}</Notation> проверяет «все ходы ведут в{" "}
-            <Notation>{"W1"}</Notation>», а ходов нет — и{" "}
+            Из 7 Петя не может сходить вовсе, а программа назвала 7 позицией П1:
+            ни одного хода — значит, «все ходы ведут в В1».{" "}
             <PythonTerm term="anyall">
               <Notation>{"all([])"}</Notation>
             </PythonTerm>{" "}
-            даёт <Notation>{"True"}</Notation>: нет ни одного нарушения. Но из 7
-            Петя вообще не может сходить, и что это значит, решает условие. В
-            задачах с делителями так бывает и с S = 1, и без такой проверки
-            ответ получается на одно значение больше. Исправление — потребовать,
-            чтобы ходы были: <Notation>{"moves(p) and all(...)"}</Notation>, или
-            исключить такие S из перебора по условию.
+            верен, потому что нарушений нет. Что значит позиция без ходов,
+            решает условие. Если она не должна попадать в ответ, добавь в начало{" "}
+            <Notation>{"g"}</Notation> строку{" "}
+            <Notation>{"if not nxt: return 0"}</Notation> — сразу после{" "}
+            <Notation>{"nxt = moves(s)"}</Notation>.
           </Typography.Text>
         </>
       ),
@@ -399,40 +290,35 @@ const content: LessonContent.PaidSubtopicContent = {
           <LessonSummary
             items={[
               {
+                key: "Уменьшение",
+                note: <>те же группы; перебор вверх от порога</>,
+              },
+              {
+                key: "Вниз",
+                note: <Notation>{"s // 2"}</Notation>,
+              },
+              {
+                key: "Вверх",
+                note: <Notation>{"(s + 1) // 2"}</Notation>,
+              },
+              {
+                key: "Наибольшее S",
+                note: <>граница — самый быстрый спуск до порога</>,
+              },
+              {
+                key: "Ход с условием",
                 note: (
                   <>
-                    Уменьшение кучи — те же функции с другими{" "}
-                    <Notation>{"moves"}</Notation> и{" "}
-                    <Notation>{"finished"}</Notation>; перебор S идёт вверх от
-                    порога.
+                    добавить в <Notation>{"moves"}</Notation> после{" "}
+                    <Notation>{"if"}</Notation>
                   </>
                 ),
               },
               {
+                key: "Нет ходов",
                 note: (
                   <>
-                    Округление переносят буквально: <Notation>{"//"}</Notation>{" "}
-                    — вниз, <Notation>{"(s + d - 1) // d"}</Notation> — вверх,{" "}
-                    <Notation>{"s % d == 0"}</Notation> — ход только при
-                    делимости.
-                  </>
-                ),
-              },
-              {
-                note: (
-                  <>
-                    Для наибольшего S без верхней границы выводят границу: самый
-                    быстрый спуск для неудачного хода, самый медленный ход Пети
-                    — для гарантии.
-                  </>
-                ),
-              },
-              {
-                note: (
-                  <>
-                    Ход по условию — <Notation>{"if"}</Notation> в{" "}
-                    <Notation>{"moves"}</Notation>, запрещённый результат —
-                    фильтр списка; позицию без ходов обрабатывают отдельно.
+                    <Notation>{"all([])"}</Notation> — True: решить по условию
                   </>
                 ),
               },
@@ -444,36 +330,36 @@ const content: LessonContent.PaidSubtopicContent = {
   ],
   checkpoint: [
     {
-      id: "zadacha-2",
+      id: "zadacha-1",
       prompt: (
         <>
-          Ход: разделить кучу на 3 с округлением вверх. Запиши выражение для{" "}
-          <Notation>{"moves"}</Notation>. Что получится из 20 и из 21?
+          Игра: убрать один камень или разделить кучу на 2 с округлением вниз,
+          победа при s ≤ 10. Почему 22 — П1?
         </>
       ),
       reveal: (
         <>
-          <Notation>{"(s + 2) // 3"}</Notation>: из 20 получается 7, из 21 —
-          тоже 7.
+          Из 22 получаются 21 и 11, а из обеих соперник выигрывает сразу: 21 //
+          2 = 10 и 11 − 1 = 10.
         </>
       ),
+    },
+    {
+      id: "zadacha-2",
+      prompt: <>До какого наибольшего S верно s // 4 ≤ 12?</>,
+      reveal: <>До 51: 51 // 4 = 12, а 52 // 4 = 13.</>,
     },
     {
       id: "zadacha-3",
       prompt: (
         <>
-          Игра: убрать два камня или разделить кучу на 3 с округлением вниз,
-          выигрывает получивший не более 15 камней, S ≥ 16. Найди вручную{" "}
-          <Notation>{"W1"}</Notation>, <Notation>{"L1"}</Notation> и{" "}
-          <Notation>{"W2"}</Notation>.
+          Кучу можно уменьшить в три раза с округлением вверх. Как записать этот
+          ход для s?
         </>
       ),
       reveal: (
         <>
-          <Notation>{"W1"}</Notation>: 16–47 (47 // 3 = 15);{" "}
-          <Notation>{"L1"}</Notation>: 48, 49 (оба хода ведут в{" "}
-          <Notation>{"W1"}</Notation>); <Notation>{"W2"}</Notation>: 50, 51 (−2)
-          и 144–149 (деление на 3 даёт 48 или 49).
+          <Notation>{"(s + 2) // 3"}</Notation>: например, 10 → 4, а 9 → 3.
         </>
       ),
     },
@@ -481,35 +367,29 @@ const content: LessonContent.PaidSubtopicContent = {
       id: "zadacha-4",
       prompt: (
         <>
-          Игра: убрать один камень; если количество камней делится на 3, можно
-          уменьшить его в три раза. Выигрывает получивший не более 10 камней.
-          Найди программой все <Notation>{"L1"}</Notation> при 11 ≤ S ≤ 40 и
-          наименьшую позицию <Notation>{"L2"}</Notation>.
+          Ход «уменьшить вдвое» разрешён только для чётной кучи. Что вернёт{" "}
+          <Notation>{"moves(15)"}</Notation> в игре «−1 или //2»?
         </>
       ),
       reveal: (
         <>
-          <Notation>{"L1"}</Notation>: 13, 16, 19, 22, 25, 28, 31; наименьшая{" "}
-          <Notation>{"L2"}</Notation> — 33.
+          <Notation>{"[14]"}</Notation>: 15 нечётное, деления нет.
         </>
       ),
     },
     {
-      id: "zadacha-6",
+      id: "zadacha-5",
       prompt: (
         <>
-          В игре «добавить делитель d, 1 {"<"} d {"<"} s, победа при s ≥ 30» при
-          каких S от 2 до 10 нет ни одного хода? Что вернёт для них{" "}
-          <Notation>{"lose1"}</Notation> и как это исправить?
+          Почему для наименьшего S граница перебора не нужна, а для наибольшего
+          — нужна?
         </>
       ),
       reveal: (
         <>
-          2, 3, 5, 7 — у простых чисел нет делителей между 1 и s.{" "}
-          <Notation>{"lose1"}</Notation> вернёт <Notation>{"True"}</Notation>,
-          потому что <Notation>{"all([])"}</Notation> —{" "}
-          <Notation>{"True"}</Notation>; нужно проверять, что список ходов не
-          пуст.
+          Наименьшее — первое найденное при переборе вверх. Наибольшее можно
+          назвать, только зная, что дальше подходящих S нет, — это и даёт
+          граница.
         </>
       ),
     },

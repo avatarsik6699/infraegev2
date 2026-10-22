@@ -2,30 +2,32 @@
 
 Every number on a figure is computed here from the same data as the picture:
 the rules of a game are given once (``ops``, ``end``, ``limit``) and the
-positions, their kinds and the strategies come from the same small solver the
-lesson programs use (f(p, m) of subtopic 6). All keys start with ``game_``.
+positions, their kinds and the strategies come from a small solver. The groups
+В1, П1, В2, П2 are those of the lesson's label function. All keys start with
+``game_``.
 
 ``game_tree(start, depth, winner, …)`` — a game tree of one pile: every
 move (``winner=""``) or the strategy of the winner — his chosen move and
 every reply of the opponent. ``path`` marks one party.
 ``game_line_stepper(lo, hi, …)`` — positions on a number line filled from
-the end of the game: W1, then L1, W2 and L2, with the moves that decide.
+the end of the game: В1, then П1, В2 and П2, with the moves that decide.
 ``game_line(lo, hi, …)`` — the final frame of the same line, with gaps.
-``game_grid(first, second, limit, …)`` — two piles: every position (a, b)
+``game_grid(first, rows, cols, limit, …)`` — two piles: every position (a, b)
 with its kind, the row of the start (first, S) and marked positions.
-``game_calls_stepper(start, m)`` — the calls of f(p, m) in the order the
-program finishes them: ``any`` on the turn of the player we check, ``all``
-on the opponent's turn, values going up.
+``game_kinds(examples)`` — four cards, one position of each group and its moves.
+``game_label_stepper(start)`` — the calls of the lesson's g(s) in the order the
+program finishes them, each with the group it returns.
 """
 
 from __future__ import annotations
 
+import html
 from functools import cache, lru_cache
 
 from figures import ACCENT, FAINT, INK, MUTED, WASH, _arrow, _stepper, _text
 
 W = 660
-KINDS = ("W1", "L1", "W2", "L2")
+KINDS = ("В1", "П1", "В2", "П2")
 
 # --- one-pile games ----------------------------------------------------------
 
@@ -211,6 +213,84 @@ def _segments(lo: int, hi: int, show: str) -> list[int | None]:
     return cells
 
 
+def _label(x: float, y: float, s: str, color: str) -> str:
+    """A move name on a white halo, so a line under it does not cut it."""
+    return (
+        f'<text x="{x:.1f}" y="{y:.1f}" font-family="inherit" font-size="13" '
+        f'fill="{color}" text-anchor="middle" stroke="#fff" stroke-width="4" '
+        f'paint-order="stroke" style="font-variant-numeric:tabular-nums">'
+        f"{html.escape(s)}</text>"
+    )
+
+
+def _arches(xs: dict, top: float, cw: float, arrows) -> list[str]:
+    """Moves on a number line as nested arches over the cells.
+
+    Every arch leaves its cell straight up and comes down straight into the
+    target, so the head points along the line. Arches into (and out of) one
+    cell get their own points on its top edge: the farther the other end, the
+    closer to the middle, and the higher the arch — farther arches enclose
+    nearer ones and never cross them. Each arch carries its own move name."""
+    near = 2.5 * cw
+
+    def ends(key: int, other: list[tuple[int, int]]) -> dict:
+        """Offsets of the ends at cell ``key`` for arches to the cells ``other``:
+        the nearest other end gets the point on its own side, the farther ones
+        follow inwards. Arches from one side share the whole edge, from both
+        sides — a half each."""
+        offsets = {}
+        sides = [
+            (
+                side,
+                sorted(
+                    (o for o in other if (xs[o[0]] - xs[key]) * side > 0),
+                    key=lambda o: abs(xs[o[0]] - xs[key]),
+                ),
+            )
+            for side in (-1, 1)
+        ]
+        both = all(group for _, group in sides)
+        for side, group in sides:
+            n = len(group)
+            for i, o in enumerate(group):
+                if both:
+                    offsets[o] = side * (0.38 - 0.3 * i / max(n - 1, 1)) * cw
+                else:
+                    offsets[o] = side * ((n - 1) / 2 - i) * min(0.3, 0.8 / max(n - 1, 1)) * cw
+        return offsets
+
+    into: dict[int, list] = {}
+    out_of: dict[int, list] = {}
+    for n, (a, b, _op, _hot) in enumerate(arrows):
+        into.setdefault(b, []).append((a, n))
+        out_of.setdefault(a, []).append((b, n))
+    land = {b: ends(b, v) for b, v in into.items()}
+    leave = {a: ends(a, v) for a, v in out_of.items()}
+    out = []
+    labels = []
+    for n, (a, b, op, hot) in enumerate(arrows):
+        x1 = xs[a] + leave[a][(b, n)]
+        x2 = xs[b] + land[b][(a, n)]
+        if abs(xs[b] - xs[a]) < near:
+            h = 20.0
+        else:
+            # long arches into one cell: each farther one higher
+            longer = [
+                o
+                for o, _ in into[b]
+                if abs(xs[o] - xs[b]) >= near and abs(xs[o] - xs[b]) < abs(xs[a] - xs[b])
+            ]
+            h = 80.0 + 26 * len(longer)
+        color = ACCENT if hot else INK
+        out.append(
+            f'<path d="M {x1:.1f} {top} C {x1:.1f} {top - h:.1f} {x2:.1f} {top - h:.1f} '
+            f'{x2:.1f} {top - 8:.1f}" fill="none" stroke="{color}" stroke-width="1.25"/>'
+        )
+        out.append(f'<path d="M {x2:.1f} {top:.1f} l -3.5 -8 l 7 0 Z" fill="{color}"/>')
+        labels.append(_label((x1 + x2) / 2, top - 0.75 * h - 5, op, ACCENT if hot else MUTED))
+    return out + labels
+
+
 def _line_svg(game: Pile, cells, known: dict, arrows, note: str, rejected=()) -> str:
     n = len(cells)
     cw = min(34, (W - 24) / n)
@@ -224,10 +304,10 @@ def _line_svg(game: Pile, cells, known: dict, arrows, note: str, rejected=()) ->
             out.append(_text(x + cw / 2, y + 5, "…", 14, MUTED, "middle"))
             continue
         k = known.get(s)
-        fill = WASH if k in ("W1", "W2") else "#fff"
-        stroke = ACCENT if k == "L1" else (INK if k else FAINT)
-        dash = ' stroke-dasharray="4 3"' if k in ("W2", "L2") else ""
-        width = 2 if k == "L1" else 1.25
+        fill = WASH if k in ("В1", "В2") else "#fff"
+        stroke = ACCENT if k == "П1" else (INK if k else FAINT)
+        dash = ' stroke-dasharray="4 3"' if k in ("В2", "П2") else ""
+        width = 2 if k == "П1" else 1.25
         out.append(
             f'<rect x="{x + 1:.1f}" y="{y - 14}" width="{cw - 2:.1f}" height="28" rx="4" '
             f'fill="{fill}" stroke="{stroke}" stroke-width="{width}"{dash}/>'
@@ -241,38 +321,13 @@ def _line_svg(game: Pile, cells, known: dict, arrows, note: str, rejected=()) ->
                     y + 32,
                     k,
                     13,
-                    ACCENT if k == "L1" else MUTED,
+                    ACCENT if k == "П1" else MUTED,
                     "middle",
                 )
             )
         if s in rejected:
             out.append(_text(x + cw / 2, y + 32, "нет", 13, MUTED, "middle"))
-    into: dict[int, int] = {}
-    labelled: list[tuple[int, str]] = []
-    for a, b, op, hot in arrows:
-        x1, x2 = xs[a], xs[b]
-        # arcs into one cell are stacked: each next one higher, one label
-        k = into.get(b, 0)
-        into[b] = k + 1
-        lift = 14 + min(abs(x2 - x1), 420) * 0.14 + 22 * k
-        mid = (x1 + x2) / 2
-        color = ACCENT if hot else INK
-        out.append(
-            f'<path d="M {x1:.1f} {y - 16} Q {mid:.1f} {y - 16 - 2 * lift:.1f} {x2:.1f} {y - 18}" '
-            f'fill="none" stroke="{color}" stroke-width="1.25"/>'
-        )
-        # small head pointing down at the target
-        out.append(f'<path d="M {x2:.1f} {y - 16} l -4 -7 l 8 0 Z" fill="{color}"/>')
-        if not any(t == b and o == op for t, o in labelled):
-            if abs(x2 - x1) < 2.5 * cw:
-                # a short arc: the label beside its start, clear of long arcs
-                side = 1 if x1 > x2 else -1
-                out.append(
-                    _text(x1 + side * 8, y - 22, op, 13, MUTED, "start" if side > 0 else "end")
-                )
-            else:
-                out.append(_text(mid, y - 18 - lift, op, 13, MUTED, "middle"))
-            labelled.append((b, op))
+    out += _arches(xs, y - 15, cw, arrows)
     out.append(_text(12, 22, game.rules(), 13, MUTED))
     if note:
         out.append(_text(12, 200, note, 13, INK))
@@ -286,7 +341,7 @@ def _line_svg(game: Pile, cells, known: dict, arrows, note: str, rejected=()) ->
 def game_line_frames(
     lo: int = 1, hi: int = 20, ops=("+1", "×2"), end: str = "≥", limit: int = 21, show: str = ""
 ) -> list[tuple[str, str]]:
-    """W1, L1, W2, L2 filled in that order; each frame shows the moves that decide."""
+    """В1, П1, В2, П2 filled in that order; each frame shows the moves that decide."""
     game = Pile(ops, end, limit)
     cells = _segments(lo, hi, show)
     seen = [s for s in cells if s is not None]
@@ -300,8 +355,8 @@ def game_line_frames(
             f"Игра: {game.rules()}. Начинаем с конца: из каких позиций можно выиграть одним ходом?",
         )
     )
-    w1 = group["W1"]
-    known.update(dict.fromkeys(w1, "W1"))
+    w1 = group["В1"]
+    known.update(dict.fromkeys(w1, "В1"))
     first = w1[0] if end == "≥" else w1[-1]
     op, q = next((op, q) for op, q in game.moves(first) if game.over(q))
     frames.append(
@@ -311,16 +366,16 @@ def game_line_frames(
                 cells,
                 known,
                 [],
-                f"W1: {_span(w1)} — есть ход, который сразу заканчивает игру.",
+                f"В1: {_span(w1)} — есть ход, который сразу заканчивает игру.",
             ),
-            f"W1 = {_span(w1)}: из {first} ход {op} даёт {q}, игра окончена. "
+            f"В1 = {_span(w1)}: из {first} ход {op} даёт {q}, игра окончена. "
             f"Из {first - 1 if end == '≥' else first + 1} такого хода уже нет.",
         )
     )
     for name, rule in (
-        ("L1", "все ходы ведут в W1 соперника"),
-        ("W2", "не W1, но есть ход в L1"),
-        ("L2", "все ходы ведут в W1 или W2, но позиция не L1"),
+        ("П1", "все ходы ведут в В1 соперника"),
+        ("В2", "не В1, но есть ход в П1"),
+        ("П2", "все ходы ведут в В1 или В2, но позиция не П1"),
     ):
         members = group[name]
         known.update(dict.fromkeys(members, name))
@@ -328,11 +383,11 @@ def game_line_frames(
         parts = []
         for s in members:
             outs = game.moves(s)
-            if name == "W2":
-                outs = [(o, t) for o, t in outs if kinds.get(t) == "L1"][:1]
+            if name == "В2":
+                outs = [(o, t) for o, t in outs if kinds.get(t) == "П1"][:1]
             for o, t in outs:
                 if t in kinds or t in seen:
-                    arrows.append((s, t, o, name == "W2"))
+                    arrows.append((s, t, o, name == "В2"))
             parts.append(
                 f"{s}: " + ", ".join(f"{o} → {t} ({kinds.get(t) or 'конец'})" for o, t in outs)
             )
@@ -342,19 +397,19 @@ def game_line_frames(
                 f"{name} = {_span(members)}: {rule}. " + "; ".join(parts) + ".",
             )
         )
-        if name == "L2":
-            # a candidate that fails: one move into W1 or W2, another not
+        if name == "П2":
+            # a candidate that fails: one move into В1 or В2, another not
             fails = [
                 s
                 for s in seen
                 if kinds[s] is None
-                and any(kinds.get(t) in ("W1", "W2") for _, t in game.moves(s))
-                and not all(kinds.get(t) in ("W1", "W2") for _, t in game.moves(s))
+                and any(kinds.get(t) in ("В1", "В2") for _, t in game.moves(s))
+                and not all(kinds.get(t) in ("В1", "В2") for _, t in game.moves(s))
             ]
             if fails:
                 s = fails[0]
-                bad = next((o, t) for o, t in game.moves(s) if kinds.get(t) not in ("W1", "W2"))
-                good = next((o, t) for o, t in game.moves(s) if kinds.get(t) in ("W1", "W2"))
+                bad = next((o, t) for o, t in game.moves(s) if kinds.get(t) not in ("В1", "В2"))
+                good = next((o, t) for o, t in game.moves(s) if kinds.get(t) in ("В1", "В2"))
                 frames.append(
                     (
                         _line_svg(
@@ -362,11 +417,11 @@ def game_line_frames(
                             cells,
                             known,
                             [(s, good[1], good[0], False), (s, bad[1], bad[0], True)],
-                            f"{s} — не L2: ход {bad[0]} даёт {bad[1]}, а это не W1 и не W2.",
+                            f"{s} — не П2: ход {bad[0]} даёт {bad[1]}, а это не В1 и не В2.",
                             rejected=(s,),
                         ),
                         f"{s} не подходит: {good[0]} → {good[1]} ({kinds[good[1]]}), "
-                        f"но {bad[0]} → {bad[1]}, а {bad[1]} не W1 и не W2. Соперник не обязан "
+                        f"но {bad[0]} → {bad[1]}, а {bad[1]} не В1 и не В2. Соперник не обязан "
                         "выигрывать за один-два хода — значит, гарантии нет.",
                     )
                 )
@@ -421,10 +476,10 @@ def game_line(
     end: str = "≤",
     limit: int = 10,
     show: str = "",
-    arrows: str = "W2",
+    arrows: str = "В2",
 ) -> str:
     """All four groups at once; arcs only for the moves of the group ``arrows``
-    (W2 — the move into the trap L1, L2 — every move)."""
+    (В2 — the move into the trap П1, П2 — every move)."""
     game = Pile(ops, end, limit)
     cells = _segments(lo, hi, show)
     seen = [s for s in cells if s is not None]
@@ -435,8 +490,8 @@ def game_line(
         if kinds[s] != arrows:
             continue
         for op, t in game.moves(s):
-            if t in kinds and (arrows != "W2" or kinds[t] == "L1"):
-                arcs.append((s, t, op, arrows == "W2"))
+            if t in kinds and (arrows != "В2" or kinds[t] == "П1"):
+                arcs.append((s, t, op, arrows == "В2"))
     members = [s for s in seen if kinds[s] == arrows]
     note = f"Стрелки — ходы из {_span(members)} ({arrows})."
     return _line_svg(game, cells, known, arcs, note)
@@ -446,35 +501,41 @@ def game_line(
 
 
 @cache
-def _f2(a: int, b: int, m: int, limit: int, mul: int) -> bool:
+def _f2(a: int, b: int, m: int, limit: int, add: int, mul: int) -> bool:
     if a + b >= limit:
         return m % 2 == 0
     if m == 0:
         return False
-    nxt = [(a + 1, b), (a * mul, b), (a, b + 1), (a, b * mul)]
-    results = [_f2(x, y, m - 1, limit, mul) for x, y in nxt]
+    nxt = [(a + add, b), (a * mul, b), (a, b + add), (a, b * mul)]
+    results = [_f2(x, y, m - 1, limit, add, mul) for x, y in nxt]
     return any(results) if m % 2 else all(results)
 
 
-def kind2(a: int, b: int, limit: int = 20, mul: int = 2) -> str | None:
+def kind2(a: int, b: int, limit: int = 20, add: int = 1, mul: int = 2) -> str | None:
     if a + b >= limit:
         return None
     for m, name in enumerate(KINDS, 1):
-        if _f2(a, b, m, limit, mul):
+        if _f2(a, b, m, limit, add, mul):
             return name
     return None
 
 
 def game_grid(
-    first: int = 3, rows: int = 7, cols: int = 12, limit: int = 20, mark=((6, 6), (2, 10))
+    first: int = 3,
+    rows: int = 7,
+    cols: int = 12,
+    limit: int = 20,
+    mark=((6, 6), (2, 10)),
+    add: int = 1,
+    mul: int = 2,
 ) -> str:
-    """Positions (a, b) of two piles, +1 or ×2 in one pile, the game ends when
+    """Positions (a, b) of two piles, +add or ×mul in one pile, the game ends when
     a + b ≥ limit. Row a = first is the start (first, S). Every text is 18 px of
     the 660-wide figure: about 9 px when the figure shrinks to a phone column."""
     cell, size = 46, 18
     x0, y0 = 60, 104
     out = [
-        _text(12, 26, f"+1 или ×2 в одну кучу, победа при a + b ≥ {limit}", size, MUTED),
+        _text(12, 26, f"+{add} или ×{mul} в одну кучу, победа при a + b ≥ {limit}", size, MUTED),
         _text(x0 + cols * cell / 2, 62, "b — вторая куча", size, MUTED, "middle"),
         _text(14, y0 + rows * cell / 2 + 6, "a", size, MUTED),
     ]
@@ -489,16 +550,16 @@ def game_grid(
             x = x0 + (b - 1) * cell
             if a + b >= limit:
                 continue
-            k = kind2(a, b, limit)
-            fill = WASH if k in ("W1", "W2") else "#fff"
-            stroke = ACCENT if k == "L1" else (INK if k else FAINT)
-            dash = ' stroke-dasharray="4 3"' if k in ("W2", "L2") else ""
+            k = kind2(a, b, limit, add, mul)
+            fill = WASH if k in ("В1", "В2") else "#fff"
+            stroke = ACCENT if k == "П1" else (INK if k else FAINT)
+            dash = ' stroke-dasharray="4 3"' if k in ("В2", "П2") else ""
             out.append(
                 f'<rect x="{x + 2}" y="{y + 2}" width="{cell - 4}" height="{cell - 4}" rx="4" '
-                f'fill="{fill}" stroke="{stroke}" stroke-width="{2 if k == "L1" else 1.25}"{dash}/>'
+                f'fill="{fill}" stroke="{stroke}" stroke-width="{2 if k == "П1" else 1.25}"{dash}/>'
             )
             if k:
-                color = ACCENT if k == "L1" else INK
+                color = ACCENT if k == "П1" else INK
                 out.append(_text(x + cell / 2, y + cell / 2 + 6, k, size, color, "middle"))
     ry = y0 + (first - 1) * cell
     out.append(
@@ -513,15 +574,15 @@ def game_grid(
         )
     yb = y0 + rows * cell + 32
     marks = " и ".join(f"({a}, {b})" for a, b in mark)
-    for i, line in enumerate(
-        (
-            f"рамка — строка ({first}, S); кружки — {marks}",
-            f"у обеих сумма {sum(mark[0])}; без подписи — дальше двух ходов",
-            "клеток нет — игра уже окончена",
-        )
-    ):
+    legend = [
+        f"рамка — строка ({first}, S); кружки — {marks}",
+        f"у обеих сумма {sum(mark[0])}; без подписи — дальше двух ходов",
+    ]
+    if rows + cols >= limit:
+        legend.append("клеток нет — игра уже окончена")
+    for i, line in enumerate(legend):
         out.append(_text(12, yb + i * 26, line, size, MUTED))
-    height = yb + 2 * 26 + 12
+    height = yb + (len(legend) - 1) * 26 + 12
     return (
         f'<svg viewBox="0 0 {W} {height}" role="img" aria-label="Позиции двух куч и их группы">'
         + "".join(out)
@@ -529,117 +590,233 @@ def game_grid(
     )
 
 
-# --- calls of f(p, m) --------------------------------------------------------------
+# --- the four groups on examples ------------------------------------------------
+
+RULE = {
+    "В1": "есть ход, который кончает игру",
+    "П1": "все ходы — в В1 соперника",
+    "В2": "есть ход в П1 соперника",
+    "П2": "все ходы — в В1 или В2, не все в В1",
+}
 
 
-def _calls(game: Pile, s: int, m: int, ident=()):
-    """(ident, s, m, kids, value, how) in the order the program finishes them."""
+def _kind_box(
+    x: float, y: float, label: str, kind: str | None, w: float = 50, named: bool = True
+) -> str:
+    """A position box with its group under it; the end of the game is washed."""
+    fill = WASH if kind in ("В1", "В2", "конец") else "#fff"
+    stroke = ACCENT if kind == "П1" else INK
+    dash = ' stroke-dasharray="4 3"' if kind in ("В2", "П2") else ""
+    out = [
+        f'<rect x="{x - w / 2:.1f}" y="{y - 16}" width="{w}" height="32" rx="7" '
+        f'fill="{fill}" stroke="{stroke}" stroke-width="{2 if kind == "П1" else 1.25}"{dash}/>',
+        _text(x, y + 5, label, 15, INK, "middle", 600 if kind == "конец" else 400),
+    ]
+    if kind and named:
+        color = ACCENT if kind == "П1" else MUTED
+        out.append(_text(x, y + 34, kind, 14, color, "middle"))
+    return "".join(out)
+
+
+def game_kinds(examples=(11, 10, 9, 8)) -> str:
+    """Four cards: a position of each group of the game +1 or ×2 until 21 and
+    its moves; the move that decides is orange, a move the player skips is faint."""
+    game = Pile()
+    out = []
+    cw, ch = W / 2, 196
+    for i, (name, s) in enumerate(zip(KINDS, examples, strict=True)):
+        assert game.kind(s) == name, (s, name)
+        x0, y0 = (i % 2) * cw, (i // 2) * ch
+        cx = x0 + cw / 2
+        out.append(_text(x0 + 16, y0 + 28, name, 17, ACCENT if name == "П1" else INK, "start", 700))
+        out.append(_text(x0 + 52, y0 + 28, RULE[name], 14, MUTED))
+        out.append(_kind_box(cx, y0 + 64, str(s), name, named=False))
+        moves = game.moves(s)
+        for j, (op, q) in enumerate(moves):
+            qx = cx + (j - (len(moves) - 1) / 2) * 130
+            if game.over(q):
+                kind = "конец"
+            else:
+                kind = game.kind(q)
+            decides = {
+                "В1": kind == "конец",
+                "П1": True,
+                "В2": kind == "П1",
+                "П2": True,
+            }[name]
+            skipped = name in ("В1", "В2") and not decides
+            color = ACCENT if decides and name in ("В1", "В2") else (FAINT if skipped else INK)
+            out.append(_arrow(cx, y0 + 82, qx, y0 + 128, color, dashed=skipped, width=1.25))
+            out.append(_edge_label(cx, y0 + 64, qx, y0 + 144, op))
+            out.append(_kind_box(qx, y0 + 144, str(q), kind))
+    for x in (cw,):
+        out.append(f'<line x1="{x}" y1="8" x2="{x}" y2="{2 * ch - 8}" stroke="{FAINT}"/>')
+    out.append(f'<line x1="8" y1="{ch}" x2="{W - 8}" y2="{ch}" stroke="{FAINT}"/>')
+    return (
+        f'<svg viewBox="0 0 {W} {2 * ch}" role="img" '
+        f'aria-label="Четыре группы позиций на примерах: 11, 10, 9 и 8">' + "".join(out) + "</svg>"
+    )
+
+
+# --- calls of the label function g ------------------------------------------------
+
+NAMES = {1: "В1", -1: "П1", 2: "В2", -2: "П2", 0: "дальше"}
+WHY = {
+    -1: "все ходы ведут в В1",
+    2: "есть ход в П1",
+    -2: "все ходы ведут в В1 или В2",
+    0: "ни одно правило не подошло",
+}
+
+
+def _minus(v: int) -> str:
+    return f"−{-v}" if v < 0 else str(v)
+
+
+def _label_calls(game: Pile, s: int):
+    """The calls of the lesson's g(s) in the order they finish: a node is
+    (ident, s, op, kids, end, value); ``end`` is the move that ends the game."""
     order = []
+    calls = []
 
-    def go(s, m, ident):
-        if game.over(s):
-            value, how, kids = m % 2 == 0, "конец", []
-        elif m == 0:
-            value, how, kids = False, "m = 0", []
+    def go(s, op, ident):
+        nxt = game.moves(s)
+        end = next(((o, q) for o, q in nxt if game.over(q)), None)
+        if not end:
+            calls.append((len(order), ident, s, nxt))
+        kids = [] if end else [go(q, o, ident + (j,)) for j, (o, q) in enumerate(nxt)]
+        if end:
+            value = 1
         else:
-            kids = [go(q, m - 1, ident + (j,)) for j, (_, q) in enumerate(game.moves(s))]
-            vals = [k[4] for k in kids]
-            value, how = (any(vals), "any") if m % 2 else (all(vals), "all")
-        node = (ident, s, m, kids, value, how)
+            r = [k[5] for k in kids]
+            if all(x == 1 for x in r):
+                value = -1
+            elif -1 in r:
+                value = 2
+            elif all(x > 0 for x in r):
+                value = -2
+            else:
+                value = 0
+        node = (ident, s, op, kids, end, value)
         order.append(node)
         return node
 
-    root = go(s, m, ident)
-    return root, order
+    return go(s, "", ()), order, calls
 
 
-def game_calls_frames(start: int = 5, m: int = 3) -> list[tuple[str, str]]:
-    game = Pile()
-    root, order = _calls(game, start, m)
+def game_label_frames(
+    start: int = 9, ops=("+1", "×2"), end: str = "≥", limit: int = 21
+) -> list[tuple[str, str]]:
+    game = Pile(ops, end, limit)
+    root, order, calls = _label_calls(game, start)
     pos: dict[tuple, tuple[float, int]] = {}
     leaves = 0
 
     def place(node, d):
         nonlocal leaves
-        ident, _s, _m, kids, _v, _h = node
+        ident, _s, _op, kids, fin, _v = node
         for k in kids:
             place(k, d + 1)
-        if kids:
-            x = sum(pos[k[0]][0] for k in kids) / len(kids)
-        else:
-            x = leaves
+        if fin:
+            pos[ident + ("end",)] = (leaves, d + 1)
+        xs = [pos[k[0]][0] for k in kids] or [pos[ident + ("end",)][0]]
+        if not kids and not fin:
+            xs = [leaves]
+        pos[ident] = (sum(xs) / len(xs), d)
+        if fin or not kids:
             leaves += 1
-        pos[ident] = (x, d)
 
     place(root, 0)
     depth = max(d for _, d in pos.values())
-    step = (W - 80) / max(leaves - 1, 1)
+    left, right = 70, W - 70
+    step = (right - left) / max(leaves - 1, 1)
 
     def px(x):
-        return 40 + x * step
+        return left + x * step
 
     def py(d):
-        return 34 + d * 88
+        return 36 + d * 92
 
-    def svg(done: set, current):
+    def svg(done: set, current, waiting=()):
         out = []
         for node in order:
-            ident, _s, _m, kids, _v, _h = node
-            for k in kids:
+            ident, s, _op, kids, fin, value = node
+            seen = ident in done or ident == current
+            x, y = px(pos[ident][0]), py(pos[ident][1])
+            lit = done | set(waiting) | {current}
+            targets = [(k[0], k[2], k[0] in lit) for k in kids]
+            if fin and seen:
+                targets.append((ident + ("end",), fin[0], True))
+            for t, op, lit in targets:
+                tx, ty = px(pos[t][0]), py(pos[t][1])
+                out.append(_arrow(x, y + 23, tx, ty - 24, INK if lit else FAINT, width=1.25))
+                out.append(_edge_label(x, y, tx, ty, op))
+            if fin and seen:
+                ex, ey = px(pos[ident + ("end",)][0]), py(pos[ident + ("end",)][1])
                 out.append(
-                    f'<line x1="{px(pos[ident][0]):.1f}" y1="{py(pos[ident][1]) + 44}" '
-                    f'x2="{px(pos[k[0]][0]):.1f}" y2="{py(pos[k[0]][1]) - 20}" '
-                    f'stroke="{FAINT}" stroke-width="1.25"/>'
+                    f'<rect x="{ex - 30:.1f}" y="{ey - 20}" width="60" height="40" rx="7" '
+                    f'fill="{WASH}" stroke="{INK}" stroke-width="1.25"/>'
                 )
+                out.append(_text(ex, ey - 2, str(fin[1]), 14, INK, "middle", 600))
+                out.append(_text(ex, ey + 14, "конец", 12, MUTED, "middle"))
         for node in order:
-            ident, s, mm, kids, value, how = node
+            ident, s, _op, _kids, _fin, value = node
             x, y = px(pos[ident][0]), py(pos[ident][1])
             is_done = ident in done
-            stroke = ACCENT if ident == current else (INK if is_done else FAINT)
+            wait = ident in waiting and ident != current
+            stroke = ACCENT if ident == current else (INK if is_done or wait else FAINT)
             out.append(
-                f'<rect x="{x - 36:.1f}" y="{y - 20}" width="72" height="40" rx="6" '
-                f'fill="{WASH if is_done and value else "#fff"}" stroke="{stroke}" '
-                f'stroke-width="{2 if ident == current else 1.25}"/>'
+                f'<rect x="{x - 46:.1f}" y="{y - 22}" width="92" height="44" rx="7" '
+                f'fill="#fff" stroke="{stroke}" stroke-width="{2 if ident == current else 1.25}"/>'
             )
-            out.append(_text(x, y - 3, f"f({s}, {mm})", 13, INK if is_done else MUTED, "middle"))
+            out.append(_text(x, y - 3, f"g({s})", 14, INK if is_done or wait else MUTED, "middle"))
             if is_done:
-                tail = "True" if value else "False"
+                tail = f"= {_minus(value)} ({NAMES[value]})"
                 out.append(_text(x, y + 14, tail, 13, INK, "middle", 600))
-            if kids:
-                out.append(_text(x, y + 37, how, 13, MUTED, "middle"))
+            elif wait or ident == current and ident not in done and _kids:
+                out.append(_text(x, y + 14, "ждёт…", 13, MUTED, "middle"))
         return (
-            f'<svg viewBox="0 0 {W} {py(depth) + 30}" role="img" '
-            f'aria-label="Вызовы f({start}, {m})">' + "".join(out) + "</svg>"
+            f'<svg viewBox="0 0 {W} {py(depth) + 32}" role="img" '
+            f'aria-label="Вызовы g({start}) и группы позиций">' + "".join(out) + "</svg>"
         )
 
-    frames = [
-        (
-            svg(set(), root[0]),
-            f"f({start}, {m}): проверяем победу Пети не позднее его второго хода. "
-            "Программа спускается по ходам, пока не дойдёт до конца игры или до m = 0.",
-        )
-    ]
+    def asks(s, nxt):
+        after = " и ".join(f"{q} ({o})" for o, q in nxt)
+        return f"g({s}): ни один ход не кончает игру — нужны группы позиций {after}."
+
+    frames = []
     done: set = set()
-    for node in order:
-        ident, s, mm, kids, value, how = node
+    waits: list = []  # (ident, s) of the calls waiting for answers
+    for i, node in enumerate(order):
+        for at, ident, s, nxt in calls:
+            if at == i:
+                text = asks(s, nxt)
+                if waits:
+                    text += f" g({waits[-1][1]}) ждёт ответа."
+                else:
+                    text = text.replace(" — нужны", ", поэтому программа спрашивает")
+                waits.append((ident, s))
+                frames.append((svg(set(done), ident, {w for w, _ in waits}), text))
+        ident, s, _op, kids, fin, value = node
         done.add(ident)
-        if how == "конец":
-            who = "нужный" if value else "не тот"
-            text = f"f({s}, {mm}): {s} ≥ {game.limit}, игра окончена, последний ход сделал {who} игрок — {value}."
-        elif how == "m = 0":
-            text = f"f({s}, {mm}): ходы кончились, а игра идёт — False."
+        if fin:
+            text = f"g({s}): ход {fin[0]} даёт {fin[1]} — игра кончается. {s} — В1, g({s}) = 1."
         else:
-            vals = ", ".join(str(k[4]) for k in kids)
-            whose = (
-                "ход Пети — хватит одного хода" if how == "any" else "ход Вани — нужны все ответы"
+            vals = ", ".join(_minus(k[5]) for k in kids)
+            text = (
+                f"g({s}): ходы дают [{vals}] — {WHY[value]}. "
+                f"{s} — {NAMES[value]}, g({s}) = {_minus(value)}."
             )
-            text = f"f({s}, {mm}) = {how}([{vals}]) = {value}: {whose}."
-        frames.append((svg(done, ident), text))
+        if ident == root[0]:
+            text += f" Программа печатает {value}."
+        if not fin:
+            waits.remove((ident, s))
+        frames.append((svg(set(done), ident, {w for w, _ in waits}), text))
     return frames
 
 
-def game_calls_stepper(start: int = 5, m: int = 3) -> str:
-    return _stepper(game_calls_frames(start, m))
+def game_label_stepper(start: int = 9) -> str:
+    return _stepper(game_label_frames(start))
 
 
 GAME_FIGURES: dict = {
@@ -647,11 +824,12 @@ GAME_FIGURES: dict = {
     "game_line_stepper": game_line_stepper,
     "game_line": game_line,
     "game_grid": game_grid,
-    "game_calls_stepper": game_calls_stepper,
+    "game_label_stepper": game_label_stepper,
+    "game_kinds": game_kinds,
 }
 GAME_STEPPERS: dict = {
     "game_line_stepper": game_line_frames,
-    "game_calls_stepper": game_calls_frames,
+    "game_label_stepper": game_label_frames,
 }
 GAME_WIDGETS: dict = {}
 GAME_SCRIPTS: dict = {}

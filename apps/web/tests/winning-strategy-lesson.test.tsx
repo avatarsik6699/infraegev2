@@ -91,7 +91,7 @@ function compiles(code: string): boolean {
 }
 
 describe("tasks 19–21 winning strategy lesson (Change 184)", () => {
-  it("has six core subtopics, one advanced and their self-checks", () => {
+  it("has five core subtopics, one advanced and their self-checks", () => {
     expect(lesson).toMatchObject({
       id: "winning-strategy",
       routeSlug: "19-21-vyigryshnaya-strategiya",
@@ -104,14 +104,13 @@ describe("tasks 19–21 winning strategy lesson (Change 184)", () => {
     expect(subtopics.map(({ slug, level }) => [slug, level])).toEqual([
       ["igra-i-strategiya", "core"],
       ["pozicii-ot-konca", "core"],
-      ["chetyre-proverki", "core"],
+      ["programma", "core"],
       ["dve-kuchi", "core"],
       ["umenshenie-i-usloviya", "core"],
-      ["rekursiya-f", "core"],
       ["pozitsiya-shire", "advanced"],
     ]);
     expect(subtopics.map(({ checkpoint }) => checkpoint?.length ?? 0)).toEqual([
-      5, 6, 4, 5, 4, 6, 2,
+      5, 5, 5, 5, 5, 4,
     ]);
     expect(lesson.examFocus).toBeDefined();
     expect(lesson.result).toBeDefined();
@@ -193,7 +192,7 @@ describe("tasks 19–21 winning strategy lesson (Change 184)", () => {
           prelude += piece.code + "\n";
       }
     }
-    expect(ran).toBe(21);
+    expect(ran).toBe(16);
   }, 60_000);
 
   it("keeps spaces around inline code, links and emphasis", () => {
@@ -217,14 +216,14 @@ describe("tasks 19–21 winning strategy lesson (Change 184)", () => {
       container.querySelectorAll("figure[data-lesson-diagram]"),
     ).toHaveLength(diagrams.length);
     expect(media.filter((item) => item.kind === "stepper")).toHaveLength(2);
-    expect(media.filter((item) => item.kind === "run")).toHaveLength(2);
+    expect(media.filter((item) => item.kind === "run")).toHaveLength(0);
     expect(container.querySelectorAll("img, video")).toHaveLength(0);
     expect(container.querySelectorAll("[data-topic-cheat-sheet]")).toHaveLength(
       1,
     );
     expect(
       container.querySelectorAll("[data-python-term]").length,
-    ).toBeGreaterThanOrEqual(10);
+    ).toBeGreaterThanOrEqual(8);
     expect(container.querySelectorAll("aside, [role='note']")).toHaveLength(0);
   });
 });

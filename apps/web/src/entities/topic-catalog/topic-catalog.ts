@@ -23,7 +23,7 @@ const subtopicFacts: Readonly<
   spreadsheets: { count: 6, first: "stroka-i-uslovie" },
   "number-sequences": { count: 7, first: "chisla-i-proverki" },
   "spreadsheet-optimization": { count: 6, first: "luchshaya-summa-do-kletki" },
-  "winning-strategy": { count: 7, first: "igra-i-strategiya" },
+  "winning-strategy": { count: 6, first: "igra-i-strategiya" },
   "graph-analysis": { count: 7, first: "graf-i-put" },
   "string-processing": { count: 8, first: "stroka-i-fragment" },
   "divisors-and-masks": { count: 6, first: "perebor-i-proverki" },

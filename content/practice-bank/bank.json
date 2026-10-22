@@ -164715,7 +164715,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Ваня выигрывает после неудачного хода: проверьте два сильнейших хода подряд."
+              "markdown": "Неудачный ход — возможность: проверь два самых сильных хода подряд."
             }
           }
         ],
@@ -164730,8 +164730,13 @@
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "from functools import cache\n\n\ndef moves(s):\n    return [s + 1, s * 3]\n\n\ndef finished(s):\n    return s >= 40\n\n\n@cache\ndef f(p, m):\n    if finished(p):\n        return m % 2 == 0\n    if m == 0:\n        return False\n    results = [f(q, m - 1) for q in moves(p)]\n    if m % 2 == 1:\n        return any(results)\n    return all(results)\n\n\ndef mistake(p):\n    return any(not finished(q) and f(q, 1) for q in moves(p))\n\n\nprint(min(s for s in range(1, 40) if mistake(s)))",
-              "caption": "Решение программой"
+              "code": "from functools import cache\n\n\ndef moves(s):\n    return [s + 1, s * 3]\n\n\ndef finished(s):\n    return s >= 40\n\n\n@cache\ndef g(s):\n    nxt = moves(s)\n    if any(finished(q) for q in nxt):\n        return 1  # В1\n    r = [g(q) for q in nxt]\n    if all(x == 1 for x in r):\n        return -1  # П1\n    if -1 in r:\n        return 2  # В2\n    if all(x > 0 for x in r):\n        return -2  # П2\n    return 0\n\n\ndef mistake(s):\n    # Петя ходит так, что Ваня выигрывает сразу\n    return any(not finished(q) and g(q) == 1\n               for q in moves(s))\n\n\nprint(min(s for s in range(1, 40) if mistake(s)))"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `5`"
             }
           }
         ],
@@ -164798,7 +164803,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Проверьте все пары ходов, а не только два удвоения."
+              "markdown": "Из маленькой кучи прибавление 7 сильнее удвоения: сравни все пары ходов."
             }
           }
         ],
@@ -164813,8 +164818,13 @@
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "from functools import cache\n\n\ndef moves(s):\n    return [s + 7, s * 2]\n\n\ndef finished(s):\n    return s >= 40\n\n\n@cache\ndef f(p, m):\n    if finished(p):\n        return m % 2 == 0\n    if m == 0:\n        return False\n    results = [f(q, m - 1) for q in moves(p)]\n    if m % 2 == 1:\n        return any(results)\n    return all(results)\n\n\ndef mistake(p):\n    return any(not finished(q) and f(q, 1) for q in moves(p))\n\n\nprint(min(s for s in range(1, 40) if mistake(s)))",
-              "caption": "Решение программой"
+              "code": "from functools import cache\n\n\ndef moves(s):\n    return [s + 7, s * 2]\n\n\ndef finished(s):\n    return s >= 40\n\n\n@cache\ndef g(s):\n    nxt = moves(s)\n    if any(finished(q) for q in nxt):\n        return 1  # В1\n    r = [g(q) for q in nxt]\n    if all(x == 1 for x in r):\n        return -1  # П1\n    if -1 in r:\n        return 2  # В2\n    if all(x > 0 for x in r):\n        return -2  # П2\n    return 0\n\n\ndef mistake(s):\n    # Петя ходит так, что Ваня выигрывает сразу\n    return any(not finished(q) and g(q) == 1\n               for q in moves(s))\n\n\nprint(min(s for s in range(1, 40) if mistake(s)))"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `10`"
             }
           }
         ],
@@ -164881,7 +164891,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Два умножения на 4 подряд — самый быстрый рост."
+              "markdown": "Самый быстрый рост — два умножения на 4 подряд."
             }
           }
         ],
@@ -164896,8 +164906,13 @@
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "from functools import cache\n\n\ndef moves(s):\n    return [s + 1, s + 4, s * 4]\n\n\ndef finished(s):\n    return s >= 90\n\n\n@cache\ndef f(p, m):\n    if finished(p):\n        return m % 2 == 0\n    if m == 0:\n        return False\n    results = [f(q, m - 1) for q in moves(p)]\n    if m % 2 == 1:\n        return any(results)\n    return all(results)\n\n\ndef mistake(p):\n    return any(not finished(q) and f(q, 1) for q in moves(p))\n\n\nprint(min(s for s in range(1, 90) if mistake(s)))",
-              "caption": "Решение программой"
+              "code": "from functools import cache\n\n\ndef moves(s):\n    return [s + 1, s + 4, s * 4]\n\n\ndef finished(s):\n    return s >= 90\n\n\n@cache\ndef g(s):\n    nxt = moves(s)\n    if any(finished(q) for q in nxt):\n        return 1  # В1\n    r = [g(q) for q in nxt]\n    if all(x == 1 for x in r):\n        return -1  # П1\n    if -1 in r:\n        return 2  # В2\n    if all(x > 0 for x in r):\n        return -2  # П2\n    return 0\n\n\ndef mistake(s):\n    # Петя ходит так, что Ваня выигрывает сразу\n    return any(not finished(q) and g(q) == 1\n               for q in moves(s))\n\n\nprint(min(s for s in range(1, 90) if mistake(s)))"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `6`"
             }
           }
         ],
@@ -164964,7 +164979,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Нужна позиция L1: Петя не выигрывает сразу, а каждый его ход отдаёт Ване W1."
+              "markdown": "Нужна П1: Петя сразу не выигрывает, а каждый его ход отдаёт Ване В1."
             }
           }
         ],
@@ -164972,15 +164987,20 @@
           {
             "type": "text",
             "data": {
-              "markdown": "19: `W1` — от 20 (3 · 20 = 60), из 19 получаются 20, 21 и 57 — все `W1`."
+              "markdown": "19: В1 — от 20 (3 · 20 = 60), а из 19 получаются 20, 21 и 57 — все В1."
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "from functools import cache\n\n\ndef moves(s):\n    return [s + 1, s + 2, s * 3]\n\n\ndef finished(s):\n    return s >= 60\n\n\n@cache\ndef f(p, m):\n    if finished(p):\n        return m % 2 == 0\n    if m == 0:\n        return False\n    results = [f(q, m - 1) for q in moves(p)]\n    if m % 2 == 1:\n        return any(results)\n    return all(results)\n\n\nprint(*[s for s in range(1, 60)\n        if not f(s, 1) and f(s, 2)])",
-              "caption": "Решение программой"
+              "code": "from functools import cache\n\n\ndef moves(s):\n    return [s + 1, s + 2, s * 3]\n\n\ndef finished(s):\n    return s >= 60\n\n\n@cache\ndef g(s):\n    nxt = moves(s)\n    if any(finished(q) for q in nxt):\n        return 1  # В1\n    r = [g(q) for q in nxt]\n    if all(x == 1 for x in r):\n        return -1  # П1\n    if -1 in r:\n        return 2  # В2\n    if all(x > 0 for x in r):\n        return -2  # П2\n    return 0\n\n\nprint(*[s for s in range(1, 60) if g(s) == -1])"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `19`"
             }
           }
         ],
@@ -164996,7 +165016,7 @@
         "theory_links": [
           {
             "label": "Теория",
-            "section": "poziciya-l1",
+            "section": "poziciya-p1",
             "material_id": "winning-strategy"
           }
         ],
@@ -165032,14 +165052,14 @@
         "explanation_kind": "worked_solution",
         "difficulty": 2,
         "estimated_minutes": 5,
-        "answer_instruction": "Введите два числа подряд, без пробела, в порядке возрастания.",
+        "answer_instruction": "Введите два числа через пробел в порядке возрастания.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Для игры задачи 7 найдите два таких значения S, при которых у Пети есть выигрышная стратегия, причём одновременно выполняются два условия: Петя не может выиграть за один ход; Петя может выиграть своим вторым ходом независимо от того, как будет ходить Ваня. Найденные значения запишите в порядке возрастания без разделительных знаков."
+              "markdown": "Игра та же: можно добавить в кучу один или два камня или утроить её; игра завершается, когда в куче не менее 60 камней; 1 ≤ S ≤ 59. Найдите два наименьших значения S, при которых у Пети есть выигрышная стратегия, причём одновременно выполняются два условия: Петя не может выиграть за один ход; Петя может выиграть своим вторым ходом независимо от того, как будет ходить Ваня."
             }
           }
         ],
@@ -165047,7 +165067,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "W2: нельзя выиграть сразу, но можно отдать сопернику L1."
+              "markdown": "В2: сразу не выиграть, но можно отдать Ване П1 — позицию 19."
             }
           }
         ],
@@ -165055,15 +165075,20 @@
           {
             "type": "text",
             "data": {
-              "markdown": "1718: из 17 ход +2 и из 18 ход +1 ведут в 19."
+              "markdown": "17 и 18: из 17 ход +2 и из 18 ход +1 ведут в 19 — П1."
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "from functools import cache\n\n\ndef moves(s):\n    return [s + 1, s + 2, s * 3]\n\n\ndef finished(s):\n    return s >= 60\n\n\n@cache\ndef f(p, m):\n    if finished(p):\n        return m % 2 == 0\n    if m == 0:\n        return False\n    results = [f(q, m - 1) for q in moves(p)]\n    if m % 2 == 1:\n        return any(results)\n    return all(results)\n\n\nprint(*[s for s in range(1, 60)\n        if not f(s, 1) and f(s, 3)], sep='')",
-              "caption": "Решение программой"
+              "code": "from functools import cache\n\n\ndef moves(s):\n    return [s + 1, s + 2, s * 3]\n\n\ndef finished(s):\n    return s >= 60\n\n\n@cache\ndef g(s):\n    nxt = moves(s)\n    if any(finished(q) for q in nxt):\n        return 1  # В1\n    r = [g(q) for q in nxt]\n    if all(x == 1 for x in r):\n        return -1  # П1\n    if -1 in r:\n        return 2  # В2\n    if all(x > 0 for x in r):\n        return -2  # П2\n    return 0\n\n\nprint(*[s for s in range(1, 60) if g(s) == 2])"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `17 18`"
             }
           }
         ],
@@ -165079,7 +165104,7 @@
         "theory_links": [
           {
             "label": "Теория",
-            "section": "poziciya-w2",
+            "section": "poziciya-v2",
             "material_id": "winning-strategy"
           }
         ],
@@ -165101,7 +165126,7 @@
         ],
         "checker": {
           "checker_type": "exact_match",
-          "answer_variants": ["1718"],
+          "answer_variants": ["17 18"],
           "numeric_tolerance": null
         }
       },
@@ -165122,7 +165147,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Для игры задачи 7 найдите минимальное значение S, при котором одновременно выполняются два условия: у Вани есть выигрышная стратегия, позволяющая ему выиграть первым или вторым ходом при любой игре Пети; у Вани нет стратегии, которая позволит ему гарантированно выиграть первым ходом."
+              "markdown": "Игра та же: можно добавить в кучу один или два камня или утроить её; игра завершается, когда в куче не менее 60 камней; 1 ≤ S ≤ 59. Найдите минимальное значение S, при котором одновременно выполняются два условия: у Вани есть выигрышная стратегия, позволяющая ему выиграть первым или вторым ходом при любой игре Пети; у Вани нет стратегии, которая позволит ему гарантированно выиграть первым ходом."
             }
           }
         ],
@@ -165130,7 +165155,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "L2: Ваня гарантирует победу не позднее второго хода, но не первым."
+              "markdown": "П2: все ходы Пети отдают Ване В1 или В2, но не все — В1."
             }
           }
         ],
@@ -165138,15 +165163,20 @@
           {
             "type": "text",
             "data": {
-              "markdown": "16: из 16 получаются 17 и 18 (`W2`) и 48 (`W1`)."
+              "markdown": "16: из 16 получаются 17 и 18 (В2) и 48 (В1)."
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "from functools import cache\n\n\ndef moves(s):\n    return [s + 1, s + 2, s * 3]\n\n\ndef finished(s):\n    return s >= 60\n\n\n@cache\ndef f(p, m):\n    if finished(p):\n        return m % 2 == 0\n    if m == 0:\n        return False\n    results = [f(q, m - 1) for q in moves(p)]\n    if m % 2 == 1:\n        return any(results)\n    return all(results)\n\n\nprint(min(s for s in range(1, 60)\n          if not f(s, 2) and f(s, 4)))",
-              "caption": "Решение программой"
+              "code": "from functools import cache\n\n\ndef moves(s):\n    return [s + 1, s + 2, s * 3]\n\n\ndef finished(s):\n    return s >= 60\n\n\n@cache\ndef g(s):\n    nxt = moves(s)\n    if any(finished(q) for q in nxt):\n        return 1  # В1\n    r = [g(q) for q in nxt]\n    if all(x == 1 for x in r):\n        return -1  # П1\n    if -1 in r:\n        return 2  # В2\n    if all(x > 0 for x in r):\n        return -2  # П2\n    return 0\n\n\nprint(min(s for s in range(1, 60) if g(s) == -2))"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `16`"
             }
           }
         ],
@@ -165162,7 +165192,7 @@
         "theory_links": [
           {
             "label": "Теория",
-            "section": "poziciya-l2",
+            "section": "poziciya-p2",
             "material_id": "winning-strategy"
           }
         ],
@@ -165205,7 +165235,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Для игры задачи 1 сколько значений S дают задание 20 и чему равна их сумма? Какой ответ записать, если просят «наименьшее и наибольшее»?"
+              "markdown": "Игра: можно добавить два или три камня либо удвоить кучу, победа при s ≥ 50, 1 ≤ S ≤ 49. Найдите все S, при которых Петя не может выиграть первым ходом, но выигрывает вторым при любой игре Вани (задание 20). Сколько таких значений, чему равна их сумма, какое наименьшее и какое наибольшее?"
             }
           }
         ],
@@ -165213,7 +165243,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Сначала соберите все значения, затем возьмите из списка то, что спрашивают."
+              "markdown": "Сначала собери все В2 в список, затем возьми из него то, что спрашивают."
             }
           }
         ],
@@ -165221,15 +165251,20 @@
           {
             "type": "text",
             "data": {
-              "markdown": "4 значения, сумма 75; «наименьшее и наибольшее» — 12 и 22."
+              "markdown": "4 значения, сумма 75, наименьшее 12, наибольшее 22."
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "from functools import cache\n\n\ndef moves(s):\n    return [s + 2, s + 3, s * 2]\n\n\ndef finished(s):\n    return s >= 50\n\n\n@cache\ndef f(p, m):\n    if finished(p):\n        return m % 2 == 0\n    if m == 0:\n        return False\n    results = [f(q, m - 1) for q in moves(p)]\n    if m % 2 == 1:\n        return any(results)\n    return all(results)\n\n\nfound = [s for s in range(1, 50)\n         if not f(s, 1) and f(s, 3)]\nprint(len(found), sum(found), min(found), max(found))",
-              "caption": "Решение программой"
+              "code": "from functools import cache\n\n\ndef moves(s):\n    return [s + 2, s + 3, s * 2]\n\n\ndef finished(s):\n    return s >= 50\n\n\n@cache\ndef g(s):\n    nxt = moves(s)\n    if any(finished(q) for q in nxt):\n        return 1  # В1\n    r = [g(q) for q in nxt]\n    if all(x == 1 for x in r):\n        return -1  # П1\n    if -1 in r:\n        return 2  # В2\n    if all(x > 0 for x in r):\n        return -2  # П2\n    return 0\n\n\nfound = [s for s in range(1, 50) if g(s) == 2]\nprint(len(found), sum(found), min(found), max(found))"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `4 75 12 22`"
             }
           }
         ],
@@ -165238,7 +165273,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 6,
+            "position": 8,
             "material_id": "winning-strategy"
           }
         ],
@@ -165296,7 +165331,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Позиция L1: каждый ход Пети отдаёт Ване W1."
+              "markdown": "Позиция П1: g(s) == -1."
             }
           }
         ],
@@ -165304,15 +165339,20 @@
           {
             "type": "text",
             "data": {
-              "markdown": "66: `W1` — от 67 (3 · 67 = 201), из 66 получаются 67, 69 и 198."
+              "markdown": "66: В1 — от 67 (3 · 67 = 201), а из 66 получаются 67, 69 и 198."
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "from functools import cache\n\n\ndef moves(s):\n    return [s + 1, s + 3, s * 3]\n\n\ndef finished(s):\n    return s >= 200\n\n\n@cache\ndef f(p, m):\n    if finished(p):\n        return m % 2 == 0\n    if m == 0:\n        return False\n    results = [f(q, m - 1) for q in moves(p)]\n    if m % 2 == 1:\n        return any(results)\n    return all(results)\n\n\nprint(*[s for s in range(1, 200)\n        if not f(s, 1) and f(s, 2)])",
-              "caption": "Решение программой"
+              "code": "from functools import cache\n\n\ndef moves(s):\n    return [s + 1, s + 3, s * 3]\n\n\ndef finished(s):\n    return s >= 200\n\n\n@cache\ndef g(s):\n    nxt = moves(s)\n    if any(finished(q) for q in nxt):\n        return 1  # В1\n    r = [g(q) for q in nxt]\n    if all(x == 1 for x in r):\n        return -1  # П1\n    if -1 in r:\n        return 2  # В2\n    if all(x > 0 for x in r):\n        return -2  # П2\n    return 0\n\n\nprint(*[s for s in range(1, 200) if g(s) == -1])"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `66`"
             }
           }
         ],
@@ -165321,14 +165361,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 7,
+            "position": 6,
             "material_id": "winning-strategy"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "chetyre-proverki",
+            "section": "tri-voprosa",
             "material_id": "winning-strategy"
           }
         ],
@@ -165364,14 +165404,14 @@
         "explanation_kind": "worked_solution",
         "difficulty": 2,
         "estimated_minutes": 5,
-        "answer_instruction": "Введите два числа подряд, без пробела, в порядке возрастания.",
+        "answer_instruction": "Введите два числа через пробел в порядке возрастания.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Для игры задачи 6 найдите два наименьших значения S, при которых Петя не может выиграть первым ходом, но у Пети есть выигрышная стратегия, позволяющая ему выиграть вторым ходом при любой игре Вани. Запишите их в порядке возрастания без разделительных знаков."
+              "markdown": "Игра та же: можно добавить в кучу один или три камня либо утроить её; игра завершается, когда в куче не менее 200 камней; 1 ≤ S ≤ 199. Найдите два наименьших значения S, при которых у Пети есть выигрышная стратегия, причём одновременно выполняются два условия: Петя не может выиграть за один ход; Петя может выиграть своим вторым ходом независимо от того, как будет ходить Ваня."
             }
           }
         ],
@@ -165379,7 +165419,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Значений больше двух — возьмите два наименьших."
+              "markdown": "Подходящих значений больше двух — возьми два наименьших."
             }
           }
         ],
@@ -165387,15 +165427,20 @@
           {
             "type": "text",
             "data": {
-              "markdown": "2263: подходят 22, 63 и 65; 22 утроением даёт 66, 63 и 65 — прибавлением."
+              "markdown": "22 и 63: подходят 22, 63 и 65; из 22 утроение даёт 66 (П1), из 63 и 65 — прибавление."
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "from functools import cache\n\n\ndef moves(s):\n    return [s + 1, s + 3, s * 3]\n\n\ndef finished(s):\n    return s >= 200\n\n\n@cache\ndef f(p, m):\n    if finished(p):\n        return m % 2 == 0\n    if m == 0:\n        return False\n    results = [f(q, m - 1) for q in moves(p)]\n    if m % 2 == 1:\n        return any(results)\n    return all(results)\n\n\nfound = [s for s in range(1, 200)\n         if not f(s, 1) and f(s, 3)]\nprint(*found[:2], sep='')",
-              "caption": "Решение программой"
+              "code": "from functools import cache\n\n\ndef moves(s):\n    return [s + 1, s + 3, s * 3]\n\n\ndef finished(s):\n    return s >= 200\n\n\n@cache\ndef g(s):\n    nxt = moves(s)\n    if any(finished(q) for q in nxt):\n        return 1  # В1\n    r = [g(q) for q in nxt]\n    if all(x == 1 for x in r):\n        return -1  # П1\n    if -1 in r:\n        return 2  # В2\n    if all(x > 0 for x in r):\n        return -2  # П2\n    return 0\n\n\nfound = [s for s in range(1, 200) if g(s) == 2]\nprint(*found[:2])"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `22 63`"
             }
           }
         ],
@@ -165404,7 +165449,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 8,
+            "position": 9,
             "material_id": "winning-strategy"
           }
         ],
@@ -165433,7 +165478,7 @@
         ],
         "checker": {
           "checker_type": "exact_match",
-          "answer_variants": ["2263"],
+          "answer_variants": ["22 63"],
           "numeric_tolerance": null
         }
       },
@@ -165462,7 +165507,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Посчитайте позиции L2 во всём диапазоне."
+              "markdown": "Посчитай позиции П2 во всём диапазоне: len(...)."
             }
           }
         ],
@@ -165477,8 +165522,13 @@
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "from functools import cache\n\n\ndef moves(s):\n    return [s + 2, s + 5, s * 2]\n\n\ndef finished(s):\n    return s >= 301\n\n\n@cache\ndef f(p, m):\n    if finished(p):\n        return m % 2 == 0\n    if m == 0:\n        return False\n    results = [f(q, m - 1) for q in moves(p)]\n    if m % 2 == 1:\n        return any(results)\n    return all(results)\n\n\nprint(len([s for s in range(1, 301)\n           if not f(s, 2) and f(s, 4)]))",
-              "caption": "Решение программой"
+              "code": "from functools import cache\n\n\ndef moves(s):\n    return [s + 2, s + 5, s * 2]\n\n\ndef finished(s):\n    return s >= 301\n\n\n@cache\ndef g(s):\n    nxt = moves(s)\n    if any(finished(q) for q in nxt):\n        return 1  # В1\n    r = [g(q) for q in nxt]\n    if all(x == 1 for x in r):\n        return -1  # П1\n    if -1 in r:\n        return 2  # В2\n    if all(x > 0 for x in r):\n        return -2  # П2\n    return 0\n\n\nprint(len([s for s in range(1, 301) if g(s) == -2]))"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `3`"
             }
           }
         ],
@@ -165487,14 +165537,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 9,
+            "position": 7,
             "material_id": "winning-strategy"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "poisk-znachenij",
+            "section": "tri-voprosa",
             "material_id": "winning-strategy"
           }
         ],
@@ -165545,7 +165595,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Два удвоения большей кучи подряд — самый быстрый рост суммы."
+              "markdown": "Самый быстрый рост суммы — два удвоения второй кучи подряд."
             }
           }
         ],
@@ -165560,8 +165610,13 @@
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "from functools import cache\n\n\ndef moves(p):\n    a, b = p\n    return [(a + 3, b), (a * 2, b), (a, b + 3), (a, b * 2)]\n\n\ndef finished(p):\n    a, b = p\n    return a + b >= 120\n\n\n@cache\ndef f(p, m):\n    if finished(p):\n        return m % 2 == 0\n    if m == 0:\n        return False\n    results = [f(q, m - 1) for q in moves(p)]\n    if m % 2 == 1:\n        return any(results)\n    return all(results)\n\n\ndef mistake(p):\n    return any(not finished(q) and f(q, 1) for q in moves(p))\n\n\nprint(min(s for s in range(1, 111) if mistake((9, s))))",
-              "caption": "Решение программой"
+              "code": "from functools import cache\n\n\ndef moves(p):\n    a, b = p\n    return [(a + 3, b), (a * 2, b),\n            (a, b + 3), (a, b * 2)]\n\n\ndef finished(p):\n    a, b = p\n    return a + b >= 120\n\n\n@cache\ndef g(s):\n    nxt = moves(s)\n    if any(finished(q) for q in nxt):\n        return 1  # В1\n    r = [g(q) for q in nxt]\n    if all(x == 1 for x in r):\n        return -1  # П1\n    if -1 in r:\n        return 2  # В2\n    if all(x > 0 for x in r):\n        return -2  # П2\n    return 0\n\n\ndef mistake(s):\n    # Петя ходит так, что Ваня выигрывает сразу\n    return any(not finished(q) and g(q) == 1\n               for q in moves(s))\n\n\nstarts = [(9, s) for s in range(1, 111)]\nprint(min(p[1] for p in starts if mistake(p)))"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `28`"
             }
           }
         ],
@@ -165577,7 +165632,7 @@
         "theory_links": [
           {
             "label": "Теория",
-            "section": "neudachnyj-hod-kuchi",
+            "section": "kuchi-v-kode",
             "material_id": "winning-strategy"
           }
         ],
@@ -165613,14 +165668,14 @@
         "explanation_kind": "worked_solution",
         "difficulty": 2,
         "estimated_minutes": 5,
-        "answer_instruction": "Введите два числа подряд, без пробела, в порядке возрастания.",
+        "answer_instruction": "Введите два числа через пробел в порядке возрастания.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Для игры задачи 6 найдите два наименьших значения S, при которых у Пети есть выигрышная стратегия, причём одновременно выполняются два условия: Петя не может выиграть за один ход; Петя может выиграть своим вторым ходом независимо от того, как будет ходить Ваня. Запишите их в порядке возрастания без разделительных знаков."
+              "markdown": "Игра та же: две кучи, за ход можно добавить в одну из куч три камня или удвоить одну кучу; игра завершается, когда в двух кучах вместе не менее 120 камней; в первой куче 9 камней, во второй — S, 1 ≤ S ≤ 110. Найдите два наименьших значения S, при которых у Пети есть выигрышная стратегия, причём одновременно выполняются два условия: Петя не может выиграть за один ход; Петя может выиграть своим вторым ходом независимо от того, как будет ходить Ваня."
             }
           }
         ],
@@ -165628,7 +165683,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Перебирайте начальные позиции (9, S) теми же функциями."
+              "markdown": "Перебирай начальные позиции (9, S) и отбирай g(p) == 2."
             }
           }
         ],
@@ -165636,15 +165691,20 @@
           {
             "type": "text",
             "data": {
-              "markdown": "2750: подходят 27, 50, 51, 52 и 53, два наименьших — 27 и 50."
+              "markdown": "27 и 50: подходят 27, 50, 51, 52 и 53."
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "from functools import cache\n\n\ndef moves(p):\n    a, b = p\n    return [(a + 3, b), (a * 2, b), (a, b + 3), (a, b * 2)]\n\n\ndef finished(p):\n    a, b = p\n    return a + b >= 120\n\n\n@cache\ndef f(p, m):\n    if finished(p):\n        return m % 2 == 0\n    if m == 0:\n        return False\n    results = [f(q, m - 1) for q in moves(p)]\n    if m % 2 == 1:\n        return any(results)\n    return all(results)\n\n\nfound = [s for s in range(1, 111)\n         if not f((9, s), 1) and f((9, s), 3)]\nprint(*found[:2], sep='')",
-              "caption": "Решение программой"
+              "code": "from functools import cache\n\n\ndef moves(p):\n    a, b = p\n    return [(a + 3, b), (a * 2, b),\n            (a, b + 3), (a, b * 2)]\n\n\ndef finished(p):\n    a, b = p\n    return a + b >= 120\n\n\n@cache\ndef g(s):\n    nxt = moves(s)\n    if any(finished(q) for q in nxt):\n        return 1  # В1\n    r = [g(q) for q in nxt]\n    if all(x == 1 for x in r):\n        return -1  # П1\n    if -1 in r:\n        return 2  # В2\n    if all(x > 0 for x in r):\n        return -2  # П2\n    return 0\n\n\nstarts = [(9, s) for s in range(1, 111)]\nprint(*[p[1] for p in starts if g(p) == 2][:2])"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `27 50`"
             }
           }
         ],
@@ -165660,7 +165720,7 @@
         "theory_links": [
           {
             "label": "Теория",
-            "section": "perebor-3-s",
+            "section": "setka-pozicij",
             "material_id": "winning-strategy"
           }
         ],
@@ -165682,7 +165742,7 @@
         ],
         "checker": {
           "checker_type": "exact_match",
-          "answer_variants": ["2750"],
+          "answer_variants": ["27 50"],
           "numeric_tolerance": null
         }
       },
@@ -165703,7 +165763,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Для игры задачи 6 найдите минимальное значение S, при котором одновременно выполняются два условия: у Вани есть выигрышная стратегия, позволяющая ему выиграть первым или вторым ходом при любой игре Пети; у Вани нет стратегии, которая позволит ему гарантированно выиграть первым ходом."
+              "markdown": "Игра та же: две кучи, за ход можно добавить в одну из куч три камня или удвоить одну кучу; игра завершается, когда в двух кучах вместе не менее 120 камней; в первой куче 9 камней, во второй — S, 1 ≤ S ≤ 110. Найдите минимальное значение S, при котором одновременно выполняются два условия: у Вани есть выигрышная стратегия, позволяющая ему выиграть первым или вторым ходом при любой игре Пети; у Вани нет стратегии, которая позволит ему гарантированно выиграть первым ходом."
             }
           }
         ],
@@ -165711,7 +165771,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "L2 для начальной позиции (9, S)."
+              "markdown": "П2 для начальной позиции (9, S): g(p) == -2."
             }
           }
         ],
@@ -165719,15 +165779,20 @@
           {
             "type": "text",
             "data": {
-              "markdown": "47."
+              "markdown": "47 — наименьшее S, при котором (9, S) — П2."
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "from functools import cache\n\n\ndef moves(p):\n    a, b = p\n    return [(a + 3, b), (a * 2, b), (a, b + 3), (a, b * 2)]\n\n\ndef finished(p):\n    a, b = p\n    return a + b >= 120\n\n\n@cache\ndef f(p, m):\n    if finished(p):\n        return m % 2 == 0\n    if m == 0:\n        return False\n    results = [f(q, m - 1) for q in moves(p)]\n    if m % 2 == 1:\n        return any(results)\n    return all(results)\n\n\nprint(min(s for s in range(1, 111)\n          if not f((9, s), 2) and f((9, s), 4)))",
-              "caption": "Решение программой"
+              "code": "from functools import cache\n\n\ndef moves(p):\n    a, b = p\n    return [(a + 3, b), (a * 2, b),\n            (a, b + 3), (a, b * 2)]\n\n\ndef finished(p):\n    a, b = p\n    return a + b >= 120\n\n\n@cache\ndef g(s):\n    nxt = moves(s)\n    if any(finished(q) for q in nxt):\n        return 1  # В1\n    r = [g(q) for q in nxt]\n    if all(x == 1 for x in r):\n        return -1  # П1\n    if -1 in r:\n        return 2  # В2\n    if all(x > 0 for x in r):\n        return -2  # П2\n    return 0\n\n\nstarts = [(9, s) for s in range(1, 111)]\nprint(min(p[1] for p in starts if g(p) == -2))"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `47`"
             }
           }
         ],
@@ -165743,7 +165808,7 @@
         "theory_links": [
           {
             "label": "Теория",
-            "section": "perebor-3-s",
+            "section": "setka-pozicij",
             "material_id": "winning-strategy"
           }
         ],
@@ -165794,7 +165859,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Найдите последнее число, которое после деления ещё не больше 12."
+              "markdown": "Найди последнее число, которое после деления на 3 с округлением вниз ещё не больше 12."
             }
           }
         ],
@@ -165802,7 +165867,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "38, потому что `38 // 3 == 12`, а `39 // 3 == 13`."
+              "markdown": "38: 38 // 3 = 12, а 39 // 3 = 13."
             }
           },
           {
@@ -165812,6 +165877,12 @@
               "code": "print(max(s for s in range(1, 100) if s // 3 <= 12))",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `38`"
+            }
           }
         ],
         "skills": [],
@@ -165819,14 +165890,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 13,
+            "position": 19,
             "material_id": "winning-strategy"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "granica-deleniya",
+            "section": "okruglenie",
             "material_id": "winning-strategy"
           }
         ],
@@ -165877,7 +165948,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Два деления подряд дают S // 16 — оттуда граница перебора."
+              "markdown": "Два деления подряд дают S // 16 — отсюда граница перебора."
             }
           }
         ],
@@ -165892,8 +165963,13 @@
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "from functools import cache\n\n\ndef moves(s):\n    return [s - 3, s // 4]\n\n\ndef finished(s):\n    return s <= 20\n\n\n@cache\ndef f(p, m):\n    if finished(p):\n        return m % 2 == 0\n    if m == 0:\n        return False\n    results = [f(q, m - 1) for q in moves(p)]\n    if m % 2 == 1:\n        return any(results)\n    return all(results)\n\n\ndef mistake(p):\n    return any(not finished(q) and f(q, 1) for q in moves(p))\n\n\nprint(max(s for s in range(21, 1000) if mistake(s)))",
-              "caption": "Решение программой"
+              "code": "from functools import cache\n\n\ndef moves(s):\n    return [s - 3, s // 4]\n\n\ndef finished(s):\n    return s <= 20\n\n\n@cache\ndef g(s):\n    nxt = moves(s)\n    if any(finished(q) for q in nxt):\n        return 1  # В1\n    r = [g(q) for q in nxt]\n    if all(x == 1 for x in r):\n        return -1  # П1\n    if -1 in r:\n        return 2  # В2\n    if all(x > 0 for x in r):\n        return -2  # П2\n    return 0\n\n\ndef mistake(s):\n    # Петя ходит так, что Ваня выигрывает сразу\n    return any(not finished(q) and g(q) == 1\n               for q in moves(s))\n\n\nprint(max(s for s in range(21, 1000) if mistake(s)))"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `335`"
             }
           }
         ],
@@ -165902,14 +165978,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 14,
+            "position": 20,
             "material_id": "winning-strategy"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "naimenshee-i-naibolshee",
+            "section": "granica",
             "material_id": "winning-strategy"
           }
         ],
@@ -165960,7 +166036,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "W1 — до 92: 92 // 3 = 30."
+              "markdown": "В1 — до 92: 92 // 3 = 30. Ищи первую П1 выше."
             }
           }
         ],
@@ -165968,15 +166044,20 @@
           {
             "type": "text",
             "data": {
-              "markdown": "93: `W1` — от 31 до 92 (92 // 3 = 30), из 93 получаются 91, 88 и 31."
+              "markdown": "93: В1 — от 31 до 92 (92 // 3 = 30), а из 93 получаются 91, 88 и 31 — все В1."
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "from functools import cache\n\n\ndef moves(s):\n    return [s - 2, s - 5, s // 3]\n\n\ndef finished(s):\n    return s <= 30\n\n\n@cache\ndef f(p, m):\n    if finished(p):\n        return m % 2 == 0\n    if m == 0:\n        return False\n    results = [f(q, m - 1) for q in moves(p)]\n    if m % 2 == 1:\n        return any(results)\n    return all(results)\n\n\nprint(min(s for s in range(31, 1000)\n          if not f(s, 1) and f(s, 2)))",
-              "caption": "Решение программой"
+              "code": "from functools import cache\n\n\ndef moves(s):\n    return [s - 2, s - 5, s // 3]\n\n\ndef finished(s):\n    return s <= 30\n\n\n@cache\ndef g(s):\n    nxt = moves(s)\n    if any(finished(q) for q in nxt):\n        return 1  # В1\n    r = [g(q) for q in nxt]\n    if all(x == 1 for x in r):\n        return -1  # П1\n    if -1 in r:\n        return 2  # В2\n    if all(x > 0 for x in r):\n        return -2  # П2\n    return 0\n\n\nprint(min(s for s in range(31, 1000) if g(s) == -1))"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `93`"
             }
           }
         ],
@@ -165985,14 +166066,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 15,
+            "position": 16,
             "material_id": "winning-strategy"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "umenshenie-kuchi",
+            "section": "gruppy-umensheniya",
             "material_id": "winning-strategy"
           }
         ],
@@ -166028,14 +166109,14 @@
         "explanation_kind": "worked_solution",
         "difficulty": 2,
         "estimated_minutes": 5,
-        "answer_instruction": "Введите два числа подряд, без пробела, в порядке возрастания.",
+        "answer_instruction": "Введите два числа через пробел в порядке возрастания.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Для игры задачи 7 найдите два наименьших значения S, при которых у Пети есть выигрышная стратегия, причём Петя не может выиграть за один ход, но может выиграть своим вторым ходом независимо от того, как будет ходить Ваня. Запишите их в порядке возрастания без разделительных знаков."
+              "markdown": "Игра та же: можно убрать из кучи два или пять камней либо уменьшить кучу в три раза с округлением вниз; игра завершается, когда в куче не более 30 камней; S ≥ 31. Найдите два наименьших значения S, при которых у Пети есть выигрышная стратегия, причём одновременно выполняются два условия: Петя не может выиграть за один ход; Петя может выиграть своим вторым ходом независимо от того, как будет ходить Ваня."
             }
           }
         ],
@@ -166043,7 +166124,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "W2: ход в позицию L1."
+              "markdown": "В2: есть ход в П1."
             }
           }
         ],
@@ -166051,15 +166132,20 @@
           {
             "type": "text",
             "data": {
-              "markdown": "9596: из 95 и 96 ход −2 ведёт в 93 и 94 (`L1`)."
+              "markdown": "95 и 96: ход −2 ведёт в 93 и 94 — П1."
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "from functools import cache\n\n\ndef moves(s):\n    return [s - 2, s - 5, s // 3]\n\n\ndef finished(s):\n    return s <= 30\n\n\n@cache\ndef f(p, m):\n    if finished(p):\n        return m % 2 == 0\n    if m == 0:\n        return False\n    results = [f(q, m - 1) for q in moves(p)]\n    if m % 2 == 1:\n        return any(results)\n    return all(results)\n\n\nfound = [s for s in range(31, 1000)\n         if not f(s, 1) and f(s, 3)]\nprint(*found[:2], sep='')",
-              "caption": "Решение программой"
+              "code": "from functools import cache\n\n\ndef moves(s):\n    return [s - 2, s - 5, s // 3]\n\n\ndef finished(s):\n    return s <= 30\n\n\n@cache\ndef g(s):\n    nxt = moves(s)\n    if any(finished(q) for q in nxt):\n        return 1  # В1\n    r = [g(q) for q in nxt]\n    if all(x == 1 for x in r):\n        return -1  # П1\n    if -1 in r:\n        return 2  # В2\n    if all(x > 0 for x in r):\n        return -2  # П2\n    return 0\n\n\nprint(*[s for s in range(31, 1000) if g(s) == 2][:2])"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `95 96`"
             }
           }
         ],
@@ -166068,14 +166154,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 16,
+            "position": 17,
             "material_id": "winning-strategy"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "blizhajshie-gruppy",
+            "section": "gruppy-umensheniya",
             "material_id": "winning-strategy"
           }
         ],
@@ -166097,7 +166183,7 @@
         ],
         "checker": {
           "checker_type": "exact_match",
-          "answer_variants": ["9596"],
+          "answer_variants": ["95 96"],
           "numeric_tolerance": null
         }
       },
@@ -166118,7 +166204,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Для игры задачи 7 найдите минимальное значение S, при котором у Вани есть выигрышная стратегия, позволяющая ему выиграть первым или вторым ходом при любой игре Пети, но нет стратегии, которая позволит ему гарантированно выиграть первым ходом."
+              "markdown": "Игра та же: можно убрать из кучи два или пять камней либо уменьшить кучу в три раза с округлением вниз; игра завершается, когда в куче не более 30 камней; S ≥ 31. Найдите минимальное значение S, при котором одновременно выполняются два условия: у Вани есть выигрышная стратегия, позволяющая ему выиграть первым или вторым ходом при любой игре Пети; у Вани нет стратегии, которая позволит ему гарантированно выиграть первым ходом."
             }
           }
         ],
@@ -166126,7 +166212,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "L2: все ходы отдают W1 или W2, но не все — W1."
+              "markdown": "П2: все ходы отдают В1 или В2, но не все — В1."
             }
           }
         ],
@@ -166134,15 +166220,20 @@
           {
             "type": "text",
             "data": {
-              "markdown": "97."
+              "markdown": "97 — наименьшая П2."
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "from functools import cache\n\n\ndef moves(s):\n    return [s - 2, s - 5, s // 3]\n\n\ndef finished(s):\n    return s <= 30\n\n\n@cache\ndef f(p, m):\n    if finished(p):\n        return m % 2 == 0\n    if m == 0:\n        return False\n    results = [f(q, m - 1) for q in moves(p)]\n    if m % 2 == 1:\n        return any(results)\n    return all(results)\n\n\nprint(min(s for s in range(31, 1000)\n          if not f(s, 2) and f(s, 4)))",
-              "caption": "Решение программой"
+              "code": "from functools import cache\n\n\ndef moves(s):\n    return [s - 2, s - 5, s // 3]\n\n\ndef finished(s):\n    return s <= 30\n\n\n@cache\ndef g(s):\n    nxt = moves(s)\n    if any(finished(q) for q in nxt):\n        return 1  # В1\n    r = [g(q) for q in nxt]\n    if all(x == 1 for x in r):\n        return -1  # П1\n    if -1 in r:\n        return 2  # В2\n    if all(x > 0 for x in r):\n        return -2  # П2\n    return 0\n\n\nprint(min(s for s in range(31, 1000) if g(s) == -2))"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `97`"
             }
           }
         ],
@@ -166151,14 +166242,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 17,
+            "position": 18,
             "material_id": "winning-strategy"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "blizhajshie-gruppy",
+            "section": "gruppy-umensheniya",
             "material_id": "winning-strategy"
           }
         ],
@@ -166201,7 +166292,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Для игры задачи 7 укажите максимальное значение S, при котором Ваня может выиграть своим первым ходом при неудачном ходе Пети."
+              "markdown": "Игра та же: можно убрать из кучи два или пять камней либо уменьшить кучу в три раза с округлением вниз; игра завершается, когда в куче не более 30 камней; S ≥ 31. Укажите максимальное значение S, при котором Ваня может выиграть своим первым ходом после неудачного первого хода Пети."
             }
           }
         ],
@@ -166209,7 +166300,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Два деления подряд: S // 9 ≤ 30."
+              "markdown": "Два деления подряд: S // 9 ≤ 30 — это граница."
             }
           }
         ],
@@ -166224,8 +166315,13 @@
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "from functools import cache\n\n\ndef moves(s):\n    return [s - 2, s - 5, s // 3]\n\n\ndef finished(s):\n    return s <= 30\n\n\n@cache\ndef f(p, m):\n    if finished(p):\n        return m % 2 == 0\n    if m == 0:\n        return False\n    results = [f(q, m - 1) for q in moves(p)]\n    if m % 2 == 1:\n        return any(results)\n    return all(results)\n\n\ndef mistake(p):\n    return any(not finished(q) and f(q, 1) for q in moves(p))\n\n\nprint(max(s for s in range(31, 1000) if mistake(s)))",
-              "caption": "Решение программой"
+              "code": "from functools import cache\n\n\ndef moves(s):\n    return [s - 2, s - 5, s // 3]\n\n\ndef finished(s):\n    return s <= 30\n\n\n@cache\ndef g(s):\n    nxt = moves(s)\n    if any(finished(q) for q in nxt):\n        return 1  # В1\n    r = [g(q) for q in nxt]\n    if all(x == 1 for x in r):\n        return -1  # П1\n    if -1 in r:\n        return 2  # В2\n    if all(x > 0 for x in r):\n        return -2  # П2\n    return 0\n\n\ndef mistake(s):\n    # Петя ходит так, что Ваня выигрывает сразу\n    return any(not finished(q) and g(q) == 1\n               for q in moves(s))\n\n\nprint(max(s for s in range(31, 1000) if mistake(s)))"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `278`"
             }
           }
         ],
@@ -166234,14 +166330,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 18,
+            "position": 21,
             "material_id": "winning-strategy"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "naimenshee-i-naibolshee",
+            "section": "granica",
             "material_id": "winning-strategy"
           }
         ],
@@ -166277,14 +166373,14 @@
         "explanation_kind": "worked_solution",
         "difficulty": 3,
         "estimated_minutes": 6,
-        "answer_instruction": "Введите два числа подряд, без пробела, в порядке возрастания.",
+        "answer_instruction": "Введите два числа через пробел в порядке возрастания.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Два игрока, Петя и Ваня, играют в игру с двумя кучами камней. Игроки ходят по очереди, первый ход делает Петя. За один ход игрок может добавить в одну из куч (по своему выбору) два камня или увеличить количество камней в куче в два раза. Игра завершается, когда суммарное количество камней в кучах становится не менее 100. Победителем считается игрок, сделавший последний ход. В начальный момент в первой куче было 10 камней, во второй — S камней, 1 ≤ S ≤ 89. Найдите два наименьших значения S, при которых у Пети есть выигрышная стратегия, причём одновременно выполняются два условия: Петя не может выиграть за один и за два хода; Петя может выиграть своим третьим ходом независимо от ходов Вани. Запишите их в порядке возрастания без разделительных знаков."
+              "markdown": "Два игрока, Петя и Ваня, играют в игру с двумя кучами камней. Игроки ходят по очереди, первый ход делает Петя. За один ход игрок может добавить в одну из куч (по своему выбору) два камня или увеличить количество камней в куче в два раза. Игра завершается, когда суммарное количество камней в кучах становится не менее 100. Победителем считается игрок, сделавший последний ход. В начальный момент в первой куче было 10 камней, во второй — S камней, 1 ≤ S ≤ 89. Найдите два наименьших значения S, при которых у Пети есть выигрышная стратегия, причём одновременно выполняются два условия: Петя не может выиграть за один и за два хода; Петя может выиграть своим третьим ходом независимо от ходов Вани."
             }
           }
         ],
@@ -166292,7 +166388,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "«Не за один и не за два хода, но третьим» — not f(p, 3) and f(p, 5)."
+              "markdown": "Добавь в g группы В3 и П3 и отбери g(p) == 3."
             }
           }
         ],
@@ -166300,15 +166396,20 @@
           {
             "type": "text",
             "data": {
-              "markdown": "3536: подходят 35, 36 и 40, два наименьших — 35 и 36."
+              "markdown": "35 и 36: подходят 35, 36 и 40."
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "from functools import cache\n\n\ndef moves(p):\n    a, b = p\n    return [(a + 2, b), (a * 2, b), (a, b + 2), (a, b * 2)]\n\n\ndef finished(p):\n    a, b = p\n    return a + b >= 100\n\n\n@cache\ndef f(p, m):\n    if finished(p):\n        return m % 2 == 0\n    if m == 0:\n        return False\n    results = [f(q, m - 1) for q in moves(p)]\n    if m % 2 == 1:\n        return any(results)\n    return all(results)\n\n\nfound = [s for s in range(1, 90)\n         if not f((10, s), 3) and f((10, s), 5)]\nprint(*found[:2], sep='')",
-              "caption": "Решение программой"
+              "code": "from functools import cache\n\n\ndef moves(p):\n    a, b = p\n    return [(a + 2, b), (a * 2, b),\n            (a, b + 2), (a, b * 2)]\n\n\ndef finished(p):\n    a, b = p\n    return a + b >= 100\n\n\n@cache\ndef g(s):\n    nxt = moves(s)\n    if any(finished(q) for q in nxt):\n        return 1  # В1\n    r = [g(q) for q in nxt]\n    if all(x == 1 for x in r):\n        return -1  # П1\n    if -1 in r:\n        return 2  # В2\n    if all(0 < x <= 2 for x in r):\n        return -2  # П2\n    if -2 in r:\n        return 3  # В3\n    if all(x > 0 for x in r):\n        return -3  # П3\n    return 0\n\n\nstarts = [(10, s) for s in range(1, 90)]\nprint(*[p[1] for p in starts if g(p) == 3][:2])"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `35 36`"
             }
           }
         ],
@@ -166317,8 +166418,9 @@
         "files": [],
         "lessons": [
           {
-            "position": 19,
-            "material_id": "winning-strategy"
+            "position": 22,
+            "material_id": "winning-strategy",
+            "counts_toward_mastery": false
           }
         ],
         "theory_links": [
@@ -166346,7 +166448,7 @@
         ],
         "checker": {
           "checker_type": "exact_match",
-          "answer_variants": ["3536"],
+          "answer_variants": ["35 36"],
           "numeric_tolerance": null
         }
       },
@@ -166367,7 +166469,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Для игры задачи 7 найдите наименьшее значение S, при котором одновременно выполняются два условия: у Вани есть выигрышная стратегия, позволяющая ему выиграть вторым или третьим ходом при любой игре Пети; у Вани нет стратегии, которая позволит ему гарантированно выиграть вторым ходом."
+              "markdown": "Игра та же: две кучи, за ход можно добавить в одну из куч два камня или удвоить одну кучу; игра завершается, когда в двух кучах вместе не менее 100 камней; в первой куче 10 камней, во второй — S, 1 ≤ S ≤ 89. Найдите наименьшее значение S, при котором одновременно выполняются два условия: у Вани есть выигрышная стратегия, позволяющая ему выиграть вторым или третьим ходом при любой игре Пети; у Вани нет стратегии, которая позволит ему гарантированно выиграть вторым ходом."
             }
           }
         ],
@@ -166375,7 +166477,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Вторым или третьим, но не гарантированно вторым: not f(p, 4) and f(p, 6)."
+              "markdown": "Нужна П3: g(p) == -3."
             }
           }
         ],
@@ -166383,15 +166485,20 @@
           {
             "type": "text",
             "data": {
-              "markdown": "34."
+              "markdown": "34 — наименьшая П3 среди (10, S)."
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "from functools import cache\n\n\ndef moves(p):\n    a, b = p\n    return [(a + 2, b), (a * 2, b), (a, b + 2), (a, b * 2)]\n\n\ndef finished(p):\n    a, b = p\n    return a + b >= 100\n\n\n@cache\ndef f(p, m):\n    if finished(p):\n        return m % 2 == 0\n    if m == 0:\n        return False\n    results = [f(q, m - 1) for q in moves(p)]\n    if m % 2 == 1:\n        return any(results)\n    return all(results)\n\n\nprint(min(s for s in range(1, 90)\n          if not f((10, s), 4) and f((10, s), 6)))",
-              "caption": "Решение программой"
+              "code": "from functools import cache\n\n\ndef moves(p):\n    a, b = p\n    return [(a + 2, b), (a * 2, b),\n            (a, b + 2), (a, b * 2)]\n\n\ndef finished(p):\n    a, b = p\n    return a + b >= 100\n\n\n@cache\ndef g(s):\n    nxt = moves(s)\n    if any(finished(q) for q in nxt):\n        return 1  # В1\n    r = [g(q) for q in nxt]\n    if all(x == 1 for x in r):\n        return -1  # П1\n    if -1 in r:\n        return 2  # В2\n    if all(0 < x <= 2 for x in r):\n        return -2  # П2\n    if -2 in r:\n        return 3  # В3\n    if all(x > 0 for x in r):\n        return -3  # П3\n    return 0\n\n\nstarts = [(10, s) for s in range(1, 90)]\nprint(min(p[1] for p in starts if g(p) == -3))"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `34`"
             }
           }
         ],
@@ -166400,8 +166507,9 @@
         "files": [],
         "lessons": [
           {
-            "position": 20,
-            "material_id": "winning-strategy"
+            "position": 23,
+            "material_id": "winning-strategy",
+            "counts_toward_mastery": false
           }
         ],
         "theory_links": [
@@ -166458,7 +166566,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Игра до конца: позиция проигрышна, если любой ход отдаёт выигрышную."
+              "markdown": "Игра до конца: позиция проигрышная, если любой ход отдаёт сопернику выигрышную."
             }
           }
         ],
@@ -166476,6 +166584,12 @@
               "code": "from functools import cache\n\n\n@cache\ndef win(s):\n    return any(s - k == 0 or not win(s - k)\n               for k in (1, 2, 3) if k <= s)\n\n\nprint(*[s for s in range(1, 15) if not win(s)])",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `4 8 12`"
+            }
           }
         ],
         "skills": [],
@@ -166483,7 +166597,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 21,
+            "position": 26,
             "material_id": "winning-strategy",
             "counts_toward_mastery": false
           }
@@ -166542,7 +166656,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Перебирайте пары куч, а не начальное S."
+              "markdown": "Перебирай пары куч, а не начальное S."
             }
           }
         ],
@@ -166550,7 +166664,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "18: например, (1, 17) — утроение даёт 1 + 51 = 52; при сумме 17 лучший ход даёт не больше 49."
+              "markdown": "например, (1, 17) — утроение даёт 1 + 51 = 52; при сумме 17 лучший ход даёт не больше 49."
             }
           },
           {
@@ -166560,6 +166674,12 @@
               "code": "def moves(p):\n    a, b = p\n    return [(a + 1, b), (a * 3, b), (a, b + 1), (a, b * 3)]\n\n\ndef finished(p):\n    return p[0] + p[1] >= 50\n\n\nbest = None\nfor a in range(1, 50):\n    for b in range(1, 50):\n        p = (a, b)\n        wins = any(finished(q) for q in moves(p))\n        if not finished(p) and wins:\n            if best is None or a + b < best:\n                best = a + b\nprint(best)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `18`"
+            }
           }
         ],
         "skills": [],
@@ -166567,7 +166687,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 22,
+            "position": 28,
             "material_id": "winning-strategy",
             "counts_toward_mastery": false
           }
@@ -166626,7 +166746,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Позиция — пара: число камней и последний ход."
+              "markdown": "Позиция — пара: число камней и прошлый ход. Нужна П1."
             }
           }
         ],
@@ -166634,15 +166754,20 @@
           {
             "type": "text",
             "data": {
-              "markdown": "14."
+              "markdown": "14 — единственная П1 среди начальных позиций (S, '')."
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "from functools import cache\n\n\ndef moves(p):\n    s, last = p\n    result = []\n    if last != '+1':\n        result.append((s + 1, '+1'))\n    if last != '+2':\n        result.append((s + 2, '+2'))\n    if last != '×2':\n        result.append((s * 2, '×2'))\n    return result\n\n\ndef finished(p):\n    return p[0] >= 30\n\n\n@cache\ndef f(p, m):\n    if finished(p):\n        return m % 2 == 0\n    if m == 0:\n        return False\n    results = [f(q, m - 1) for q in moves(p)]\n    if m % 2 == 1:\n        return any(results)\n    return all(results)\n\n\nstarts = [(s, '') for s in range(1, 30)]\nprint(*[p[0] for p in starts if not f(p, 1) and f(p, 2)])",
-              "caption": "Решение программой"
+              "code": "from functools import cache\n\n\ndef moves(p):\n    s, last = p\n    result = []\n    if last != '+1':\n        result.append((s + 1, '+1'))\n    if last != '+2':\n        result.append((s + 2, '+2'))\n    if last != '×2':\n        result.append((s * 2, '×2'))\n    return result\n\n\ndef finished(p):\n    return p[0] >= 30\n\n\n@cache\ndef g(s):\n    nxt = moves(s)\n    if any(finished(q) for q in nxt):\n        return 1  # В1\n    r = [g(q) for q in nxt]\n    if all(x == 1 for x in r):\n        return -1  # П1\n    if -1 in r:\n        return 2  # В2\n    if all(x > 0 for x in r):\n        return -2  # П2\n    return 0\n\n\nstarts = [(s, '') for s in range(1, 30)]\nprint(*[p[0] for p in starts if g(p) == -1])"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `14`"
             }
           }
         ],
@@ -166651,7 +166776,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 23,
+            "position": 24,
             "material_id": "winning-strategy",
             "counts_toward_mastery": false
           }
@@ -166702,7 +166827,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Для игры задачи 5 найдите наименьшее и наибольшее значения S, при которых Петя не может выиграть первым ходом, но может выиграть своим вторым ходом при любой игре Вани."
+              "markdown": "Игра та же: можно добавить в кучу один или два камня или удвоить её, но нельзя повторять ход, который только что сделал соперник; игра завершается, когда в куче не менее 30 камней; 1 ≤ S ≤ 29. Найдите наименьшее и наибольшее значения S, при которых Петя не может выиграть первым ходом, но может выиграть своим вторым ходом при любой игре Вани."
             }
           }
         ],
@@ -166710,7 +166835,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Та же позиция-пара, проверка W2."
+              "markdown": "Та же позиция-пара, отбор g(p) == 2."
             }
           }
         ],
@@ -166718,15 +166843,20 @@
           {
             "type": "text",
             "data": {
-              "markdown": "7 и 13."
+              "markdown": "7 и 13 — наименьшая и наибольшая В2."
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "from functools import cache\n\n\ndef moves(p):\n    s, last = p\n    result = []\n    if last != '+1':\n        result.append((s + 1, '+1'))\n    if last != '+2':\n        result.append((s + 2, '+2'))\n    if last != '×2':\n        result.append((s * 2, '×2'))\n    return result\n\n\ndef finished(p):\n    return p[0] >= 30\n\n\n@cache\ndef f(p, m):\n    if finished(p):\n        return m % 2 == 0\n    if m == 0:\n        return False\n    results = [f(q, m - 1) for q in moves(p)]\n    if m % 2 == 1:\n        return any(results)\n    return all(results)\n\n\nfound = [s for s in range(1, 30)\n         if not f((s, ''), 1) and f((s, ''), 3)]\nprint(min(found), max(found))",
-              "caption": "Решение программой"
+              "code": "from functools import cache\n\n\ndef moves(p):\n    s, last = p\n    result = []\n    if last != '+1':\n        result.append((s + 1, '+1'))\n    if last != '+2':\n        result.append((s + 2, '+2'))\n    if last != '×2':\n        result.append((s * 2, '×2'))\n    return result\n\n\ndef finished(p):\n    return p[0] >= 30\n\n\n@cache\ndef g(s):\n    nxt = moves(s)\n    if any(finished(q) for q in nxt):\n        return 1  # В1\n    r = [g(q) for q in nxt]\n    if all(x == 1 for x in r):\n        return -1  # П1\n    if -1 in r:\n        return 2  # В2\n    if all(x > 0 for x in r):\n        return -2  # П2\n    return 0\n\n\nfound = [s for s in range(1, 30) if g((s, '')) == 2]\nprint(min(found), max(found))"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `7 13`"
             }
           }
         ],
@@ -166735,7 +166865,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 24,
+            "position": 25,
             "material_id": "winning-strategy",
             "counts_toward_mastery": false
           }
@@ -166794,7 +166924,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Игра до конца: у Вани стратегия, если начальная позиция проигрышна для Пети."
+              "markdown": "Игра до конца: у Вани стратегия, если начальная позиция проигрышная для Пети."
             }
           }
         ],
@@ -166802,7 +166932,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "25: игра до конца даёт для Вани S = 2, 6, 8, 11, 15, 18, 21, 25."
+              "markdown": "игра до конца даёт для Вани S = 2, 6, 8, 11, 15, 18, 21, 25."
             }
           },
           {
@@ -166812,6 +166942,12 @@
               "code": "from functools import cache\n\n\ndef moves(p):\n    a, b = p\n    return [(a + 1, b), (a * 2, b), (a, b + 1), (a, b * 2)]\n\n\ndef finished(p):\n    return p[0] + p[1] >= 60\n\n\n@cache\ndef win(p):\n    return any(finished(q) or not win(q) for q in moves(p))\n\n\nprint(max(s for s in range(1, 54) if not win((6, s))))",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `25`"
+            }
           }
         ],
         "skills": [],
@@ -166819,7 +166955,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 25,
+            "position": 27,
             "material_id": "winning-strategy",
             "counts_toward_mastery": false
           }
@@ -166870,7 +167006,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Два игрока, Петя и Ваня, играют в игру с кучей камней. Игроки ходят по очереди, первый ход делает Петя. За один ход игрок может добавить в кучу два камня или увеличить количество камней в куче в три раза. Игра завершается, когда количество камней в куче становится не менее 70. Победителем считается игрок, сделавший последний ход. В начальный момент в куче было S камней, 1 ≤ S ≤ 69. Известно, что Ваня выиграл своим первым ходом после неудачного первого хода Пети. Укажите минимальное значение S, когда такая ситуация возможна. (Подтема 1.)"
+              "markdown": "Два игрока, Петя и Ваня, играют в игру с кучей камней. Игроки ходят по очереди, первый ход делает Петя. За один ход игрок может добавить в кучу два камня или увеличить количество камней в куче в три раза. Игра завершается, когда количество камней в куче становится не менее 70. Победителем считается игрок, сделавший последний ход. В начальный момент в куче было S камней, 1 ≤ S ≤ 69. Известно, что Ваня выиграл своим первым ходом после неудачного первого хода Пети. Укажите минимальное значение S, когда такая ситуация возможна."
             }
           }
         ],
@@ -166878,7 +167014,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Два утроения подряд."
+              "markdown": "Два утроения подряд — самый быстрый рост."
             }
           }
         ],
@@ -166886,15 +167022,20 @@
           {
             "type": "text",
             "data": {
-              "markdown": "8: два утроения дают 8 · 3 · 3 = 72 ≥ 70, а 7 · 9 = 63; с прибавлением меньше: (7 + 2) · 3 = 27."
+              "markdown": "два утроения дают 8 · 3 · 3 = 72 ≥ 70, а 7 · 9 = 63; с прибавлением меньше: (7 + 2) · 3 = 27."
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "from functools import cache\n\n\ndef moves(s):\n    return [s + 2, s * 3]\n\n\ndef finished(s):\n    return s >= 70\n\n\n@cache\ndef f(p, m):\n    if finished(p):\n        return m % 2 == 0\n    if m == 0:\n        return False\n    results = [f(q, m - 1) for q in moves(p)]\n    if m % 2 == 1:\n        return any(results)\n    return all(results)\n\n\ndef mistake(p):\n    return any(not finished(q) and f(q, 1) for q in moves(p))\n\n\nprint(min(s for s in range(1, 70) if mistake(s)))",
-              "caption": "Решение программой"
+              "code": "from functools import cache\n\n\ndef moves(s):\n    return [s + 2, s * 3]\n\n\ndef finished(s):\n    return s >= 70\n\n\n@cache\ndef g(s):\n    nxt = moves(s)\n    if any(finished(q) for q in nxt):\n        return 1  # В1\n    r = [g(q) for q in nxt]\n    if all(x == 1 for x in r):\n        return -1  # П1\n    if -1 in r:\n        return 2  # В2\n    if all(x > 0 for x in r):\n        return -2  # П2\n    return 0\n\n\ndef mistake(s):\n    # Петя ходит так, что Ваня выигрывает сразу\n    return any(not finished(q) and g(q) == 1\n               for q in moves(s))\n\n\nprint(min(s for s in range(1, 70) if mistake(s)))"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `8`"
             }
           }
         ],
@@ -166903,7 +167044,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 26,
+            "position": 29,
             "material_id": "winning-strategy"
           }
         ],
@@ -166947,7 +167088,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Игра с кучей камней: за один ход можно добавить один камень, добавить три камня или удвоить кучу. Игра завершается, когда в куче не менее 45 камней, 1 ≤ S ≤ 44. Найдите наименьшее и наибольшее значения S, при которых Петя не может выиграть первым ходом, но у Пети есть выигрышная стратегия, позволяющая ему выиграть вторым ходом при любой игре Вани. (Подтемы 2 и 3.)"
+              "markdown": "Игра с кучей камней: за один ход можно добавить один камень, добавить три камня или удвоить кучу. Игра завершается, когда в куче не менее 45 камней, 1 ≤ S ≤ 44. Найдите наименьшее и наибольшее значения S, при которых Петя не может выиграть первым ходом, но у Пети есть выигрышная стратегия, позволяющая ему выиграть вторым ходом при любой игре Вани."
             }
           }
         ],
@@ -166955,7 +167096,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "W2: not f(s, 1) and f(s, 3)."
+              "markdown": "Собери все В2 и возьми наименьшее и наибольшее."
             }
           }
         ],
@@ -166970,8 +167111,13 @@
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "from functools import cache\n\n\ndef moves(s):\n    return [s + 1, s + 3, s * 2]\n\n\ndef finished(s):\n    return s >= 45\n\n\n@cache\ndef f(p, m):\n    if finished(p):\n        return m % 2 == 0\n    if m == 0:\n        return False\n    results = [f(q, m - 1) for q in moves(p)]\n    if m % 2 == 1:\n        return any(results)\n    return all(results)\n\n\nfound = [s for s in range(1, 45)\n         if not f(s, 1) and f(s, 3)]\nprint(min(found), max(found))",
-              "caption": "Решение программой"
+              "code": "from functools import cache\n\n\ndef moves(s):\n    return [s + 1, s + 3, s * 2]\n\n\ndef finished(s):\n    return s >= 45\n\n\n@cache\ndef g(s):\n    nxt = moves(s)\n    if any(finished(q) for q in nxt):\n        return 1  # В1\n    r = [g(q) for q in nxt]\n    if all(x == 1 for x in r):\n        return -1  # П1\n    if -1 in r:\n        return 2  # В2\n    if all(x > 0 for x in r):\n        return -2  # П2\n    return 0\n\n\nfound = [s for s in range(1, 45) if g(s) == 2]\nprint(min(found), max(found))"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `11 21`"
             }
           }
         ],
@@ -166980,7 +167126,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 27,
+            "position": 30,
             "material_id": "winning-strategy"
           }
         ],
@@ -167024,7 +167170,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Две кучи камней: за один ход можно добавить в одну из куч два камня или удвоить одну кучу. Игра завершается, когда суммарное количество камней в кучах становится не менее 100. В первой куче 7 камней, во второй — S, 1 ≤ S ≤ 92. Найдите минимальное значение S, при котором у Вани есть выигрышная стратегия, позволяющая ему выиграть первым или вторым ходом при любой игре Пети, но нет стратегии, которая позволит ему гарантированно выиграть первым ходом. (Подтема 4.)"
+              "markdown": "Две кучи камней: за один ход можно добавить в одну из куч два камня или удвоить одну кучу. Игра завершается, когда суммарное количество камней в кучах становится не менее 100. В первой куче 7 камней, во второй — S, 1 ≤ S ≤ 92. Найдите минимальное значение S, при котором у Вани есть выигрышная стратегия, позволяющая ему выиграть первым или вторым ходом при любой игре Пети, но нет стратегии, которая позволит ему гарантированно выиграть первым ходом."
             }
           }
         ],
@@ -167032,7 +167178,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Начальная позиция (7, S), проверка L2."
+              "markdown": "Начальная позиция (7, S), отбор g(p) == -2."
             }
           }
         ],
@@ -167040,15 +167186,20 @@
           {
             "type": "text",
             "data": {
-              "markdown": "40: подходят 40 и 43."
+              "markdown": "подходят 40 и 43."
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "from functools import cache\n\n\ndef moves(p):\n    a, b = p\n    return [(a + 2, b), (a * 2, b), (a, b + 2), (a, b * 2)]\n\n\ndef finished(p):\n    a, b = p\n    return a + b >= 100\n\n\n@cache\ndef f(p, m):\n    if finished(p):\n        return m % 2 == 0\n    if m == 0:\n        return False\n    results = [f(q, m - 1) for q in moves(p)]\n    if m % 2 == 1:\n        return any(results)\n    return all(results)\n\n\nprint(min(s for s in range(1, 93)\n          if not f((7, s), 2) and f((7, s), 4)))",
-              "caption": "Решение программой"
+              "code": "from functools import cache\n\n\ndef moves(p):\n    a, b = p\n    return [(a + 2, b), (a * 2, b),\n            (a, b + 2), (a, b * 2)]\n\n\ndef finished(p):\n    a, b = p\n    return a + b >= 100\n\n\n@cache\ndef g(s):\n    nxt = moves(s)\n    if any(finished(q) for q in nxt):\n        return 1  # В1\n    r = [g(q) for q in nxt]\n    if all(x == 1 for x in r):\n        return -1  # П1\n    if -1 in r:\n        return 2  # В2\n    if all(x > 0 for x in r):\n        return -2  # П2\n    return 0\n\n\nstarts = [(7, s) for s in range(1, 93)]\nprint(min(p[1] for p in starts if g(p) == -2))"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `40`"
             }
           }
         ],
@@ -167057,7 +167208,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 28,
+            "position": 31,
             "material_id": "winning-strategy"
           }
         ],
@@ -167101,7 +167252,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Куча камней: за один ход можно убрать три камня, убрать четыре камня или уменьшить количество камней в два раза с округлением вниз. Игра завершается, когда в куче становится не более 40 камней; S ≥ 41. Укажите максимальное значение S, при котором Петя не может выиграть за один ход, но при любом ходе Пети Ваня может выиграть своим первым ходом. (Подтема 5: граница.)"
+              "markdown": "Куча камней: за один ход можно убрать три камня, убрать четыре камня или уменьшить количество камней в два раза с округлением вниз. Игра завершается, когда в куче становится не более 40 камней; S ≥ 41. Укажите максимальное значение S, при котором Петя не может выиграть за один ход, но при любом ходе Пети Ваня может выиграть своим первым ходом."
             }
           }
         ],
@@ -167109,7 +167260,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Граница: самый медленный ход −3 должен вести в W1."
+              "markdown": "Граница: самый медленный ход −3 должен вести в В1."
             }
           }
         ],
@@ -167117,15 +167268,20 @@
           {
             "type": "text",
             "data": {
-              "markdown": "84: `W1` — до 81 (81 // 2 = 40), каждый ход Пети должен вести в `W1`, а самый медленный ход −3 даёт S − 3 ≤ 81; подходят 82, 83 и 84."
+              "markdown": "84: В1 — до 81 (81 // 2 = 40), а каждый ход Пети должен вести в В1; самый медленный ход −3 даёт S − 3 ≤ 81. Подходят 82, 83 и 84."
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "from functools import cache\n\n\ndef moves(s):\n    return [s - 3, s - 4, s // 2]\n\n\ndef finished(s):\n    return s <= 40\n\n\n@cache\ndef f(p, m):\n    if finished(p):\n        return m % 2 == 0\n    if m == 0:\n        return False\n    results = [f(q, m - 1) for q in moves(p)]\n    if m % 2 == 1:\n        return any(results)\n    return all(results)\n\n\nprint(max(s for s in range(41, 1000)\n          if not f(s, 1) and f(s, 2)))",
-              "caption": "Решение программой"
+              "code": "from functools import cache\n\n\ndef moves(s):\n    return [s - 3, s - 4, s // 2]\n\n\ndef finished(s):\n    return s <= 40\n\n\n@cache\ndef g(s):\n    nxt = moves(s)\n    if any(finished(q) for q in nxt):\n        return 1  # В1\n    r = [g(q) for q in nxt]\n    if all(x == 1 for x in r):\n        return -1  # П1\n    if -1 in r:\n        return 2  # В2\n    if all(x > 0 for x in r):\n        return -2  # П2\n    return 0\n\n\nprint(max(s for s in range(41, 1000) if g(s) == -1))"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `84`"
             }
           }
         ],
@@ -167134,7 +167290,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 29,
+            "position": 32,
             "material_id": "winning-strategy"
           }
         ],
@@ -167171,14 +167327,14 @@
         "explanation_kind": "worked_solution",
         "difficulty": 3,
         "estimated_minutes": 6,
-        "answer_instruction": "Введите два числа подряд, без пробела, в порядке возрастания.",
+        "answer_instruction": "Введите два числа через пробел в порядке возрастания.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Куча камней: за один ход можно добавить один камень, добавить четыре камня или утроить кучу. Игра завершается, когда в куче не менее 100 камней, 1 ≤ S ≤ 99. Найдите два наименьших значения S, при которых Петя не может выиграть за один и за два хода, но может выиграть своим третьим ходом независимо от ходов Вани. Запишите их в порядке возрастания без разделительных знаков. (Подтема 6.)"
+              "markdown": "Куча камней: за один ход можно добавить один камень, добавить четыре камня или утроить кучу. Игра завершается, когда в куче не менее 100 камней, 1 ≤ S ≤ 99. Найдите два наименьших значения S, при которых у Пети есть выигрышная стратегия, причём одновременно выполняются два условия: Петя не может выиграть за один ход; Петя может выиграть своим вторым ходом независимо от того, как будет ходить Ваня."
             }
           }
         ],
@@ -167186,7 +167342,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "not f(s, 3) and f(s, 5)."
+              "markdown": "В2: сразу не выиграть, но можно отдать Ване П1."
             }
           }
         ],
@@ -167194,15 +167350,20 @@
           {
             "type": "text",
             "data": {
-              "markdown": "2427: подходят 24, 27 и 30."
+              "markdown": "11 и 29: из этих позиций Петя отдаёт Ване П1."
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "from functools import cache\n\n\ndef moves(s):\n    return [s + 1, s + 4, s * 3]\n\n\ndef finished(s):\n    return s >= 100\n\n\n@cache\ndef f(p, m):\n    if finished(p):\n        return m % 2 == 0\n    if m == 0:\n        return False\n    results = [f(q, m - 1) for q in moves(p)]\n    if m % 2 == 1:\n        return any(results)\n    return all(results)\n\n\nfound = [s for s in range(1, 100)\n         if not f(s, 3) and f(s, 5)]\nprint(*found[:2], sep='')",
-              "caption": "Решение программой"
+              "code": "from functools import cache\n\n\ndef moves(s):\n    return [s + 1, s + 4, s * 3]\n\n\ndef finished(s):\n    return s >= 100\n\n\n@cache\ndef g(s):\n    nxt = moves(s)\n    if any(finished(q) for q in nxt):\n        return 1  # В1\n    r = [g(q) for q in nxt]\n    if all(x == 1 for x in r):\n        return -1  # П1\n    if -1 in r:\n        return 2  # В2\n    if all(x > 0 for x in r):\n        return -2  # П2\n    return 0\n\n\nprint(*[s for s in range(1, 100) if g(s) == 2][:2])"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `11 29`"
             }
           }
         ],
@@ -167211,7 +167372,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 30,
+            "position": 33,
             "material_id": "winning-strategy"
           }
         ],
@@ -167234,7 +167395,7 @@
         ],
         "checker": {
           "checker_type": "exact_match",
-          "answer_variants": ["2427"],
+          "answer_variants": ["11 29"],
           "numeric_tolerance": null
         }
       },
@@ -819576,6 +819737,270 @@
         }
       },
       "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "task-19-4-11",
+        "title": "Задача темы: задание 19",
+        "short_description": null,
+        "explanation_kind": "worked_solution",
+        "difficulty": 2,
+        "estimated_minutes": 5,
+        "answer_instruction": "Введите число.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Задача темы. Два игрока, Петя и Ваня, играют в следующую игру. Перед игроками лежат две кучи камней. Игроки ходят по очереди, первый ход делает Петя. За один ход игрок может добавить в одну из куч (по своему выбору) три камня или увеличить количество камней в куче в два раза. Игра завершается, когда суммарное количество камней в кучах становится не менее 100. Победителем считается игрок, сделавший последний ход. В начальный момент в первой куче было 7 камней, во второй — S камней, 1 ≤ S ≤ 92. Известно, что Ваня выиграл своим первым ходом после неудачного первого хода Пети. Укажите минимальное значение S, когда такая ситуация возможна."
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Неудачный ход Пети — функция mistake."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "24: два удвоения второй кучи дают 7 + 4 · 24 = 103 ≥ 100, а из 23 — только 99."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "from functools import cache\n\n\ndef moves(p):\n    a, b = p\n    return [(a + 3, b), (a * 2, b),\n            (a, b + 3), (a, b * 2)]\n\n\ndef finished(p):\n    a, b = p\n    return a + b >= 100\n\n\n@cache\ndef g(s):\n    nxt = moves(s)\n    if any(finished(q) for q in nxt):\n        return 1  # В1\n    r = [g(q) for q in nxt]\n    if all(x == 1 for x in r):\n        return -1  # П1\n    if -1 in r:\n        return 2  # В2\n    if all(x > 0 for x in r):\n        return -2  # П2\n    return 0\n\n\ndef mistake(s):\n    # Петя ходит так, что Ваня выигрывает сразу\n    return any(not finished(q) and g(q) == 1\n               for q in moves(s))\n\n\nstarts = [(7, s) for s in range(1, 93)]\nprint(min(p[1] for p in starts if mistake(p)))"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `24`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [19],
+        "files": [],
+        "lessons": [
+          {
+            "position": 13,
+            "material_id": "winning-strategy"
+          }
+        ],
+        "theory_links": [
+          {
+            "label": "Теория",
+            "section": "zadacha-temy",
+            "material_id": "winning-strategy"
+          }
+        ],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["24"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "task-19-4-12",
+        "title": "Задача темы: задание 20",
+        "short_description": null,
+        "explanation_kind": "worked_solution",
+        "difficulty": 2,
+        "estimated_minutes": 5,
+        "answer_instruction": "Введите два числа через пробел в порядке возрастания.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Задача темы. Два игрока, Петя и Ваня, играют в следующую игру. Перед игроками лежат две кучи камней. Игроки ходят по очереди, первый ход делает Петя. За один ход игрок может добавить в одну из куч (по своему выбору) три камня или увеличить количество камней в куче в два раза. Игра завершается, когда суммарное количество камней в кучах становится не менее 100. Победителем считается игрок, сделавший последний ход. В начальный момент в первой куче было 7 камней, во второй — S камней, 1 ≤ S ≤ 92. Найдите два наименьших значения S, при которых у Пети есть выигрышная стратегия, причём одновременно выполняются два условия: Петя не может выиграть за один ход; Петя может выиграть своим вторым ходом независимо от того, как будет ходить Ваня."
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "В2: отбери g(p) == 2 и возьми два наименьших."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "23 и 42: из (7, 23) удвоение второй кучи даёт ловушку (7, 46), из (7, 42) прибавление — ловушку (7, 45)."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "from functools import cache\n\n\ndef moves(p):\n    a, b = p\n    return [(a + 3, b), (a * 2, b),\n            (a, b + 3), (a, b * 2)]\n\n\ndef finished(p):\n    a, b = p\n    return a + b >= 100\n\n\n@cache\ndef g(s):\n    nxt = moves(s)\n    if any(finished(q) for q in nxt):\n        return 1  # В1\n    r = [g(q) for q in nxt]\n    if all(x == 1 for x in r):\n        return -1  # П1\n    if -1 in r:\n        return 2  # В2\n    if all(x > 0 for x in r):\n        return -2  # П2\n    return 0\n\n\nstarts = [(7, s) for s in range(1, 93)]\nprint(*[p[1] for p in starts if g(p) == 2][:2])"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `23 42`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [20],
+        "files": [],
+        "lessons": [
+          {
+            "position": 14,
+            "material_id": "winning-strategy"
+          }
+        ],
+        "theory_links": [
+          {
+            "label": "Теория",
+            "section": "zadacha-temy",
+            "material_id": "winning-strategy"
+          }
+        ],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["23 42"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "task-19-4-13",
+        "title": "Задача темы: задание 21",
+        "short_description": null,
+        "explanation_kind": "worked_solution",
+        "difficulty": 2,
+        "estimated_minutes": 5,
+        "answer_instruction": "Введите число.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Задача темы. Два игрока, Петя и Ваня, играют в следующую игру. Перед игроками лежат две кучи камней. Игроки ходят по очереди, первый ход делает Петя. За один ход игрок может добавить в одну из куч (по своему выбору) три камня или увеличить количество камней в куче в два раза. Игра завершается, когда суммарное количество камней в кучах становится не менее 100. Победителем считается игрок, сделавший последний ход. В начальный момент в первой куче было 7 камней, во второй — S камней, 1 ≤ S ≤ 92. Найдите минимальное значение S, при котором одновременно выполняются два условия: у Вани есть выигрышная стратегия, позволяющая ему выиграть первым или вторым ходом при любой игре Пети; у Вани нет стратегии, которая позволит ему гарантированно выиграть первым ходом."
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "П2: отбери g(p) == -2."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "39: из (7, 39) три хода ведут в В2 Вани, а ход в (7, 78) — в В1."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "from functools import cache\n\n\ndef moves(p):\n    a, b = p\n    return [(a + 3, b), (a * 2, b),\n            (a, b + 3), (a, b * 2)]\n\n\ndef finished(p):\n    a, b = p\n    return a + b >= 100\n\n\n@cache\ndef g(s):\n    nxt = moves(s)\n    if any(finished(q) for q in nxt):\n        return 1  # В1\n    r = [g(q) for q in nxt]\n    if all(x == 1 for x in r):\n        return -1  # П1\n    if -1 in r:\n        return 2  # В2\n    if all(x > 0 for x in r):\n        return -2  # П2\n    return 0\n\n\nstarts = [(7, s) for s in range(1, 93)]\nprint(min(p[1] for p in starts if g(p) == -2))"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `39`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [21],
+        "files": [],
+        "lessons": [
+          {
+            "position": 15,
+            "material_id": "winning-strategy"
+          }
+        ],
+        "theory_links": [
+          {
+            "label": "Теория",
+            "section": "zadacha-temy",
+            "material_id": "winning-strategy"
+          }
+        ],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["39"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
     }
   ],
   "files": [
@@ -836503,71 +836928,42 @@
     {
       "id": "winning-strategy",
       "sections": [
-        "kak-ustroena-tema-19",
-        "pravila-igry",
+        "kak-ustroena-tema",
+        "hod-i-poziciya",
         "konec-igry",
-        "vtoroj-hod-peti",
-        "udachnaya-partiya",
-        "strategiya",
-        "sushchestvuet-i-vse",
+        "partiya-i-strategiya",
+        "svoj-hod-i-hod-sopernika",
         "neudachnyj-hod",
         "igra-itogo",
-        "ot-blizhajshej-pobedy",
-        "otnositelno-igroka",
-        "poziciya-w1",
-        "poziciya-l1",
-        "poziciya-w2",
-        "poziciya-l2",
-        "analiz-ot-konca",
-        "strategiya-vani",
-        "zadanie-19",
-        "zadaniya-20-21",
-        "otricanie",
-        "silnyj-hod",
+        "ot-konca",
+        "poziciya-v1",
+        "poziciya-p1",
+        "poziciya-v2",
+        "poziciya-p2",
+        "vse-gruppy",
+        "voprosy-i-gruppy",
         "pozicii-itogo",
-        "rassuzhdeniya-v-kod",
-        "moves-i-finished",
-        "any",
-        "chetyre-proverki",
-        "not-finished",
-        "poisk-znachenij",
+        "pravila-v-kode",
+        "any-i-all",
+        "gruppa-pozicii",
+        "zapominanie",
+        "tri-voprosa",
         "forma-otveta",
-        "granica-perebora",
-        "proverki-itogo",
-        "dve-kuchi",
+        "programma-itogo",
         "para-chisel",
-        "kortezh",
-        "proverka-pozicii",
-        "poziciya-3-3",
-        "neudachnyj-hod-kuchi",
-        "perebor-3-s",
-        "summa-kuch",
+        "kuchi-v-kode",
+        "setka-pozicij",
+        "zadacha-temy",
         "drugie-pravila",
         "kuchi-itogo",
-        "te-zhe-proverki",
         "umenshenie-kuchi",
-        "blizhajshie-gruppy",
+        "gruppy-umensheniya",
         "okruglenie",
-        "granica-deleniya",
-        "naimenshee-i-naibolshee",
+        "granica",
         "hody-s-usloviem",
-        "zapreshchyonnyj-rezultat",
         "bez-hodov",
         "umenshenie-itogo",
-        "odna-funkciya",
-        "tot-zhe-vopros",
-        "can-win",
-        "voprosy-zadanij",
-        "shablon-f",
-        "nechyotnoe-m",
-        "f-5-3",
-        "vyzovy-f",
-        "f-dve-kuchi",
-        "ne-pozdnee-i-rovno",
         "tretij-hod",
-        "glubina",
-        "rekursiya-itogo",
-        "dopolnitelnyy-urok-poziciya",
         "sostoyanie-shire",
         "do-konca",
         "vse-pozicii",
@@ -836581,13 +836977,11 @@
           "slug": "igra-i-strategiya",
           "access": "free",
           "sections": [
-            "kak-ustroena-tema-19",
-            "pravila-igry",
+            "kak-ustroena-tema",
+            "hod-i-poziciya",
             "konec-igry",
-            "vtoroj-hod-peti",
-            "udachnaya-partiya",
-            "strategiya",
-            "sushchestvuet-i-vse",
+            "partiya-i-strategiya",
+            "svoj-hod-i-hod-sopernika",
             "neudachnyj-hod",
             "igra-itogo"
           ]
@@ -836596,48 +836990,37 @@
           "slug": "pozicii-ot-konca",
           "access": "free",
           "sections": [
-            "ot-blizhajshej-pobedy",
-            "otnositelno-igroka",
-            "poziciya-w1",
-            "poziciya-l1",
-            "poziciya-w2",
-            "poziciya-l2",
-            "analiz-ot-konca",
-            "strategiya-vani",
-            "zadanie-19",
-            "zadaniya-20-21",
-            "otricanie",
-            "silnyj-hod",
+            "ot-konca",
+            "poziciya-v1",
+            "poziciya-p1",
+            "poziciya-v2",
+            "poziciya-p2",
+            "vse-gruppy",
+            "voprosy-i-gruppy",
             "pozicii-itogo"
           ]
         },
         {
-          "slug": "chetyre-proverki",
+          "slug": "programma",
           "access": "paid",
           "sections": [
-            "rassuzhdeniya-v-kod",
-            "moves-i-finished",
-            "any",
-            "chetyre-proverki",
-            "not-finished",
-            "poisk-znachenij",
+            "pravila-v-kode",
+            "any-i-all",
+            "gruppa-pozicii",
+            "zapominanie",
+            "tri-voprosa",
             "forma-otveta",
-            "granica-perebora",
-            "proverki-itogo"
+            "programma-itogo"
           ]
         },
         {
           "slug": "dve-kuchi",
           "access": "paid",
           "sections": [
-            "dve-kuchi",
             "para-chisel",
-            "kortezh",
-            "proverka-pozicii",
-            "poziciya-3-3",
-            "neudachnyj-hod-kuchi",
-            "perebor-3-s",
-            "summa-kuch",
+            "kuchi-v-kode",
+            "setka-pozicij",
+            "zadacha-temy",
             "drugie-pravila",
             "kuchi-itogo"
           ]
@@ -836646,42 +837029,20 @@
           "slug": "umenshenie-i-usloviya",
           "access": "paid",
           "sections": [
-            "te-zhe-proverki",
             "umenshenie-kuchi",
-            "blizhajshie-gruppy",
+            "gruppy-umensheniya",
             "okruglenie",
-            "granica-deleniya",
-            "naimenshee-i-naibolshee",
+            "granica",
             "hody-s-usloviem",
-            "zapreshchyonnyj-rezultat",
             "bez-hodov",
             "umenshenie-itogo"
-          ]
-        },
-        {
-          "slug": "rekursiya-f",
-          "access": "paid",
-          "sections": [
-            "odna-funkciya",
-            "tot-zhe-vopros",
-            "can-win",
-            "voprosy-zadanij",
-            "shablon-f",
-            "nechyotnoe-m",
-            "f-5-3",
-            "vyzovy-f",
-            "f-dve-kuchi",
-            "ne-pozdnee-i-rovno",
-            "tretij-hod",
-            "glubina",
-            "rekursiya-itogo"
           ]
         },
         {
           "slug": "pozitsiya-shire",
           "access": "paid",
           "sections": [
-            "dopolnitelnyy-urok-poziciya",
+            "tretij-hod",
             "sostoyanie-shire",
             "do-konca",
             "vse-pozicii",
