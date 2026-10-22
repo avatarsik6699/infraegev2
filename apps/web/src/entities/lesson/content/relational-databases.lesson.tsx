@@ -18,6 +18,8 @@ import { lessonMedia } from "./relational-databases.media";
 import { PythonTerm } from "./python-term";
 import { SubtopicLink } from "./subtopic-link";
 
+const R = "3-svyazannye-tablicy";
+
 export const relationalDatabasesLesson = defineLesson({
   ...relationalDatabasesLessonPublication,
   masteryThreshold: 0.8,
@@ -32,7 +34,7 @@ export const relationalDatabasesLesson = defineLesson({
     {
       slug: "tablicy-i-klyuchi",
       title: "База из трёх листов",
-      lead: "Задача темы, три листа файла, что означает строка каждого из них и как листы связаны по совпадению ID.",
+      lead: "Три листа файла: что означает строка каждого и как листы связаны по коду.",
       conceptIds: [
         "kak-ustroena-tema-3",
         "odna-bolshaya-tablica",
@@ -128,7 +130,7 @@ export const relationalDatabasesLesson = defineLesson({
     {
       slug: "svyaz-listov-vpr",
       title: "ВПР: связь листов",
-      lead: "Район магазина и сведения о товаре прямо в строке операции: поиск по ключу вручную, формула ВПР с точным совпадением и закреплённым справочником.",
+      lead: "Как дописать к каждой операции сведения о магазине и товаре — вручную и формулой ВПР.",
       conceptIds: [
         "harakteristiki-operacii",
         "formula-vpr",
@@ -207,7 +209,7 @@ export const relationalDatabasesLesson = defineLesson({
     {
       slug: "otbor-zapisey",
       title: "Отбор записей: фильтр",
-      lead: "Вопрос раскладывается на требования к столбцам, период включительно, фильтр по нескольким столбцам, «все виды» товара и сумма только видимых строк.",
+      lead: "Как разложить вопрос на требования и отобрать нужные строки фильтром.",
       conceptIds: [
         "otbor",
         "vklyuchitelno",
@@ -297,7 +299,7 @@ export const relationalDatabasesLesson = defineLesson({
     {
       slug: "vklad-zapisi",
       title: "Расчёт ответа",
-      lead: "Отбор и расчёт — два шага: масса и стоимость строки во вспомогательном столбце, изменение запаса со знаками, итог по магазину и форма ответа.",
+      lead: "Как посчитать массу, стоимость или изменение запаса по отобранным строкам — и записать ответ.",
       conceptIds: [
         "otbor-i-vychislenie",
         "massa",
@@ -389,10 +391,14 @@ export const relationalDatabasesLesson = defineLesson({
         <>
           <Typography.Text>
             В задании 3 дан файл Excel из трёх листов: «Движение товаров» —
-            поступления и продажи, «Товар» и «Магазин» — справочники. Вопрос
-            звучит так: «Используя информацию из базы данных, определи общую
-            массу (в кг) товаров фабрики А, проданных магазинами Северного
-            района за период с 1 по 10 июня включительно».
+            поступления и продажи, «Товар» и «Магазин» — справочники. По ним
+            нужно что-то посчитать: массу, выручку или изменение запаса. Вот
+            задача, которую мы будем решать всю тему:
+          </Typography.Text>
+          <Typography.Text>
+            «Используя информацию из базы данных, определи общую массу (в кг)
+            товаров фабрики А, проданных магазинами Северного района за период с
+            1 по 10 июня включительно».
           </Typography.Text>
           <LessonDiagram
             {...lessonMedia.dbSchemashop}
@@ -406,12 +412,37 @@ export const relationalDatabasesLesson = defineLesson({
           />
           <Typography.Text>
             <strong>
-              Решение — четыре шага: понять листы, дописать к операциям нужные
-              сведения формулой ВПР, отобрать строки фильтром и сложить значения
-              видимых строк.
-            </strong>{" "}
-            По подтеме на шаг; задачу темы решим на учебной базе из трёх
-            магазинов и трёх товаров, все её записи можно проверить глазами.
+              Задачу решают в четыре шага, и каждому шагу посвящена своя подтема
+              — у каждой своя страница:
+            </strong>
+          </Typography.Text>
+          <ol>
+            <li>
+              <strong>База из трёх листов</strong> — ты сейчас здесь: что
+              означают листы и как они связаны.
+            </li>
+            <li>
+              <SubtopicLink routeSlug={R} subtopic="svyaz-listov-vpr">
+                ВПР: связь листов
+              </SubtopicLink>{" "}
+              — дописываем к каждой продаже район, поставщика и массу.
+            </li>
+            <li>
+              <SubtopicLink routeSlug={R} subtopic="otbor-zapisey">
+                Отбор записей: фильтр
+              </SubtopicLink>{" "}
+              — оставляем только нужные строки.
+            </li>
+            <li>
+              <SubtopicLink routeSlug={R} subtopic="vklad-zapisi">
+                Расчёт ответа
+              </SubtopicLink>{" "}
+              — считаем массу и получаем ответ задачи темы: 14,5 кг.
+            </li>
+          </ol>
+          <Typography.Text>
+            Учиться будем на маленькой базе из трёх магазинов и трёх товаров:
+            все её записи можно проверить глазами.
           </Typography.Text>
         </>
       ),

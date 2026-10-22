@@ -72,6 +72,12 @@ function pieces(node: React.ReactNode, out: Piece[] = []): Piece[] {
     out.push({ kind: "text", text: textOf(node.props.children as never) });
     return out;
   }
+  // the panels of LessonTabs are props, not children
+  const tabs = node.props.tabs as { content: React.ReactNode }[] | undefined;
+  if (Array.isArray(tabs)) {
+    for (const tab of tabs) pieces(tab.content, out);
+    return out;
+  }
   return pieces(node.props.children as React.ReactNode, out);
 }
 
@@ -86,7 +92,7 @@ function compiles(code: string): boolean {
 }
 
 describe("task 14 numeral systems lesson (Change 184)", () => {
-  it("has six core subtopics, one advanced and their self-checks", () => {
+  it("has five core subtopics, one advanced and their self-checks", () => {
     expect(lesson).toMatchObject({
       id: "numeral-systems",
       routeSlug: "14-sistemy-schisleniya",
@@ -102,11 +108,10 @@ describe("task 14 numeral systems lesson (Change 184)", () => {
       ["cifry-programmoj", "core"],
       ["parametr-x", "core"],
       ["neizvestnaya-cifra", "core"],
-      ["dve-cifry", "core"],
       ["neizvestnoe-osnovanie", "advanced"],
     ]);
     expect(subtopics.map(({ checkpoint }) => checkpoint?.length ?? 0)).toEqual([
-      2, 0, 2, 2, 2, 2, 1,
+      5, 5, 5, 5, 5, 4,
     ]);
     expect(lesson.examFocus).toBeDefined();
     expect(lesson.result).toBeDefined();
@@ -184,7 +189,7 @@ describe("task 14 numeral systems lesson (Change 184)", () => {
           prelude += piece.code + "\n";
       }
     }
-    expect(ran).toBe(24);
+    expect(ran).toBe(20);
   }, 60_000);
 
   it("keeps spaces around inline code, links and emphasis", () => {
@@ -207,7 +212,7 @@ describe("task 14 numeral systems lesson (Change 184)", () => {
     expect(
       container.querySelectorAll("figure[data-lesson-diagram]"),
     ).toHaveLength(diagrams.length);
-    expect(media.filter((item) => item.kind === "stepper")).toHaveLength(2);
+    expect(media.filter((item) => item.kind === "stepper")).toHaveLength(3);
     expect(media.filter((item) => item.kind === "run")).toHaveLength(3);
     expect(container.querySelectorAll("img, video")).toHaveLength(0);
     expect(container.querySelectorAll("[data-topic-cheat-sheet]")).toHaveLength(

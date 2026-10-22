@@ -68,14 +68,14 @@ def answers() -> dict[str, str]:
     a["task-14-1-02"] = str(rec([2, 1, 0, 3], 4))
     a["task-14-1-03"] = "".join(map(str, rep(94, 5)))
     a["task-14-1-04"] = str(rec([5] * 4, 6))
-    a["task-14-1-06"] = f"{6**2} {6**3 - 1} {6**3 - 6**2}"
+    a["task-14-1-06"] = str(len(range(6**2, 6**3)))
     a["task-14-1-07"] = str(rep(2024, 5)[-4])
-    a["task-14-1-08"] = f"{rec(rep(2024, 7)[:-2], 7)} {rec(rep(2024, 7)[-2:], 7)}"
-    a["task-14-1-09"] = f"11 {rec([3, 10, 7], 11)}"
+    a["task-14-1-08"] = str(rec(rep(2024, 7)[-2:], 7))
+    a["task-14-1-09"] = str(rec([3, 10, 7], 11))
     # subtopic 2: block records
     total = rep(rec([3, 2, 4], 5) + rec([1, 4, 3], 5), 5)
     a["task-14-2-01"] = "".join(map(str, total))
-    a["task-14-2-02"] = "6 " + "6" * 5
+    a["task-14-2-02"] = "6" * 5
     record = [1] + [0] * 4 + [1] + [0] * 2 + [1]  # places 8, 3 and 0
     assert rec(record, 7) == 7**8 + 7**3 + 1
     a["task-14-2-03"] = str(record.count(0))
@@ -108,7 +108,7 @@ def answers() -> dict[str, str]:
     def fours(x: int) -> int:
         return rep(x - 1, 5).count(0) + 6 - len(rep(x - 1, 5)) if x > 1 else 6
 
-    a["task-14-4-02"] = f"{fours(1)} {fours(2)}"
+    a["task-14-4-02"] = str(fours(2))
     a["task-14-4-03"] = str(max(x for x in range(1, 201) if fours(x) == 4))
     zeros = [rep(5**6 - x, 5).count(0) for x in range(1, 501)]
     a["task-14-4-05"] = str(zeros.index(max(zeros)) + 1)
@@ -169,7 +169,7 @@ def answers() -> dict[str, str]:
     a["task-14-7-01"] = str(next(q for q in range(5, 67) if q * q + 2 * q + 4 == 67))
     # q(q + x) = 81 with 0 ≤ x < q and q ≥ 5
     (pair,) = [(q, 81 // q - q) for q in range(5, 82) if 81 % q == 0 and 0 <= 81 // q - q < q]
-    a["task-14-7-02"] = f"{pair[0]} {pair[1]}"
+    a["task-14-7-02"] = str(pair[0])
     sols = [
         (q, x, y)
         for q in range(8, 40)

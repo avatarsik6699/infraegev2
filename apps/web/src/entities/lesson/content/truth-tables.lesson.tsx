@@ -19,6 +19,8 @@ import { lessonMedia } from "./truth-tables.media";
 import { PythonTerm } from "./python-term";
 import { SubtopicLink } from "./subtopic-link";
 
+const R = "2-tablicy-istinnosti";
+
 export const truthTablesLesson = defineLesson({
   ...truthTablesLessonPublication,
   masteryThreshold: 0.8,
@@ -33,7 +35,7 @@ export const truthTablesLesson = defineLesson({
     {
       slug: "logicheskie-operacii",
       title: "Логические операции",
-      lead: "Задача темы и пять операций: отрицание, И, ИЛИ, импликация и равнозначность — когда каждая истинна, а когда ложна.",
+      lead: "Пять логических операций — отрицание, И, ИЛИ, импликация и равнозначность: когда каждая истинна, а когда ложна.",
       conceptIds: [
         "kak-ustroena-tema-2",
         "otricanie",
@@ -120,7 +122,7 @@ export const truthTablesLesson = defineLesson({
     {
       slug: "formula-i-nabory",
       title: "Формула и её таблица",
-      lead: "Порядок действий в формуле, полная таблица из 2ⁿ строк и поиск наборов с нужным F от внешней операции.",
+      lead: "В каком порядке вычислять формулу, как выглядит полная таблица и как найти строки, где F = 1.",
       conceptIds: [
         "formula-po-chastyam",
         "poryadok-dejstvij",
@@ -213,7 +215,7 @@ export const truthTablesLesson = defineLesson({
     {
       slug: "fragment-i-stolbcy",
       title: "Фрагмент и порядок столбцов",
-      lead: "Фрагмент из условия, общий порядок столбцов и разные строки — задача темы по шагам, разные значения F и цепочка стрелок.",
+      lead: "Как подписать столбцы фрагмента — задача темы по шагам, разные значения F и цепочка стрелок.",
       conceptIds: [
         "fragment-i-podpisi",
         "fragment-tablicy",
@@ -304,7 +306,7 @@ export const truthTablesLesson = defineLesson({
     {
       slug: "proverka-python",
       title: "Решение программой",
-      lead: "Формула на Python со скобками у сравнений, перебор наборов циклами или product и сопоставление вывода со строками фрагмента.",
+      lead: "Как записать формулу на Python, перебрать все наборы и сопоставить вывод со строками фрагмента.",
       conceptIds: [
         "proverka-programmoj",
         "formula-na-python",
@@ -388,9 +390,9 @@ export const truthTablesLesson = defineLesson({
           <Typography.Text>
             В задании 2 дана логическая формула и несколько строк её таблицы
             истинности. Над столбцами не написано, какой столбец какой
-            переменной принадлежит, а часть клеток пустая. Вот такая задача: F =
-            ¬x ∧ (y ∨ z) ∧ (z → w), фрагмент из трёх разных строк, в каждой F =
-            1.
+            переменной принадлежит, а часть клеток пустая. Вот задача, которую
+            мы будем решать всю тему: формула F = ¬x ∧ (y ∨ z) ∧ (z → w), а ниже
+            — три разные строки её таблицы, в каждой F = 1.
           </Typography.Text>
           <LessonTable
             label={"Фрагмент таблицы функции F = ¬x ∧ (y ∨ z) ∧ (z → w)"}
@@ -417,12 +419,34 @@ export const truthTablesLesson = defineLesson({
             не показали.
           </Typography.Text>
           <Typography.Text>
-            Для решения нужны три умения: знать, когда истинна каждая операция
-            (эта подтема), находить, при каких значениях переменных формула
-            равна 1 (подтема 2), и подбирать столбцы так, чтобы подошли все
-            строки сразу (подтема 3). В подтеме 4 те же наборы получим
-            программой.
+            Для этого нужны три умения — каждому посвящена своя подтема, а в
+            четвёртой те же наборы получим программой. У каждой подтемы своя
+            страница, идём по ним по порядку:
           </Typography.Text>
+          <ol>
+            <li>
+              <strong>Логические операции</strong> — ты сейчас здесь: когда
+              истинна каждая операция.
+            </li>
+            <li>
+              <SubtopicLink routeSlug={R} subtopic="formula-i-nabory">
+                Формула и её таблица
+              </SubtopicLink>{" "}
+              — при каких значениях переменных формула равна 1.
+            </li>
+            <li>
+              <SubtopicLink routeSlug={R} subtopic="fragment-i-stolbcy">
+                Фрагмент и порядок столбцов
+              </SubtopicLink>{" "}
+              — как подобрать столбцы, и ответ задачи темы.
+            </li>
+            <li>
+              <SubtopicLink routeSlug={R} subtopic="proverka-python">
+                Решение программой
+              </SubtopicLink>{" "}
+              — те же наборы — программой на Python.
+            </li>
+          </ol>
         </>
       ),
     },

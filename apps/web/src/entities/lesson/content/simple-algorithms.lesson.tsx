@@ -22,6 +22,8 @@ const THEME_ALGORITHM =
 const THEME_PROGRAM =
   'import turtle as t\n\nk = 30\nt.tracer(0)\nt.setheading(90)\n\nfor _ in range(2):\n    t.forward(6 * k)\n    t.right(90)\n    t.forward(8 * k)\n    t.right(90)\n\nt.penup()\nt.forward(2 * k)\nt.right(90)\nt.forward(3 * k)\nt.left(90)\nt.pendown()\n\nfor _ in range(2):\n    t.forward(5 * k)\n    t.right(90)\n    t.forward(7 * k)\n    t.right(90)\n\nt.penup()\nfor x in range(-2, 13):\n    for y in range(-2, 10):\n        t.goto(x * k, y * k)\n        t.dot(4, "red")\n\nt.update()\nt.done()';
 
+const R = "6-prostejshie-algoritmy-dlya-ispolnitelej";
+
 export const simpleAlgorithmsLesson = defineLesson({
   ...simpleAlgorithmsLessonPublication,
   masteryThreshold: 0.8,
@@ -38,7 +40,7 @@ export const simpleAlgorithmsLesson = defineLesson({
     {
       slug: "sostoyanie-i-komandy",
       title: "Команды и след",
-      lead: "Задача темы, состояние Черепахи, движение и поворот, «Повтори» и переход ко второй фигуре с поднятым хвостом.",
+      lead: "Как Черепаха выполняет команды и где окажутся фигуры задачи темы.",
       conceptIds: [
         "kak-ustroena-tema-6",
         "sostoyanie-cherepahi",
@@ -141,7 +143,7 @@ export const simpleAlgorithmsLesson = defineLesson({
     {
       slug: "granica-i-velichiny",
       title: "Точки внутри и на границе",
-      lead: "Целочисленные точки, строго внутри и вместе с границей, подсчёт по рядам, площадь и периметр, незамкнутая линия.",
+      lead: "Сколько целых точек внутри фигуры и на её границе — и чем это отличается от площади и периметра.",
       conceptIds: [
         "chto-sprashivaet-vopros",
         "vnutri-na-granice-snaruzhi",
@@ -226,7 +228,7 @@ export const simpleAlgorithmsLesson = defineLesson({
     {
       slug: "neskolko-figur",
       title: "Две фигуры",
-      lead: "Пересечение — ответ задачи темы, объединение, «в одной, но не в другой», касание и фигура из двух прямоугольников.",
+      lead: "Пересечение и объединение двух фигур — и ответ задачи темы.",
       conceptIds: [
         "peresechenie",
         "obedinenie",
@@ -298,7 +300,7 @@ export const simpleAlgorithmsLesson = defineLesson({
     {
       slug: "postroenie-i-reshetka",
       title: "Рисунок программой",
-      lead: "Шаблон на turtle: перевод команд, масштаб, сетка целых точек — и подсчёт по готовому рисунку.",
+      lead: "Как нарисовать фигуры программой на turtle и посчитать точки по готовому рисунку.",
       conceptIds: [
         "risunok-kak-proverka",
         "gotovyj-shablon",
@@ -413,7 +415,7 @@ export const simpleAlgorithmsLesson = defineLesson({
     {
       slug: "naklonnaya-geometriya",
       title: "Наклонные стороны",
-      lead: "Угол поворота и угол фигуры, нецелые вершины, счёт по столбцам и проверка спорной точки.",
+      lead: "Фигуры с наклонными сторонами: углы поворота, счёт по столбцам и спорные точки.",
       conceptIds: [
         "naklonnye-storony",
         "ugol-povorota-i-ugol-figury",
@@ -493,7 +495,7 @@ export const simpleAlgorithmsLesson = defineLesson({
     {
       slug: "podschet-programmoj",
       title: "Подсчёт программой",
-      lead: "Условие принадлежности точки, перебор целых точек, две фигуры и треугольник программой, наименьший параметр и наибольшее пересечение.",
+      lead: "Как посчитать точки программой без рисунка — условием принадлежности и перебором.",
       level: "advanced",
       conceptIds: [
         "uslovie-prinadlezhnosti",
@@ -569,9 +571,14 @@ export const simpleAlgorithmsLesson = defineLesson({
       explanation: (
         <>
           <Typography.Text>
-            Типичное условие задания 6: Черепаха находится в начале координат,
-            её голова направлена вдоль положительного направления оси ординат,
-            хвост опущен. Ей дали алгоритм:
+            В задании 6 Черепаха рисует фигуры по командам, а спрашивают,
+            сколько точек с целыми координатами лежит внутри фигуры или в общей
+            части двух фигур. Вот задача, которую мы будем решать всю тему:
+          </Typography.Text>
+          <Typography.Text>
+            «Черепаха находится в начале координат, её голова направлена вдоль
+            положительного направления оси ординат, хвост опущен. Ей дали
+            алгоритм:
           </Typography.Text>
           <CodeBlock
             code={THEME_ALGORITHM}
@@ -579,20 +586,76 @@ export const simpleAlgorithmsLesson = defineLesson({
             language="text"
           />
           <Typography.Text>
-            «Определи, сколько точек с целочисленными координатами находится
+            Определи, сколько точек с целочисленными координатами находится
             внутри пересечения фигур, ограниченных заданными алгоритмом линиями.
             Точки на линиях учитывать».
           </Typography.Text>
           <Typography.Text>
             <strong>
-              Задание 6 решают в два шага: сначала по командам восстанавливают
-              фигуры, затем считают точки той области, о которой спрашивают.
+              Сначала по командам восстанавливают фигуры, потом считают точки
+              той области, о которой спрашивают.
             </strong>{" "}
-            В этой подтеме — команды и след: где окажутся фигуры. В подтеме 2 —
-            точки одной фигуры, в подтеме 3 — пересечение и ответ задачи, в
-            подтеме 4 — та же задача рисунком программой, в подтеме 5 — фигуры с
-            наклонными сторонами. Ответ — 30.
+            Разберём, что сказано в условии:
           </Typography.Text>
+          <LessonTable
+            label={"Условие задачи темы по частям"}
+            columns={[{ label: "В условии" }, { label: "Что это значит" }]}
+            rows={[
+              [
+                "начало координат, голова вдоль оси ординат, хвост опущен",
+                "Черепаха стоит в (0; 0), смотрит вверх и сразу рисует",
+              ],
+              [
+                "фигуры, ограниченные линиями алгоритма",
+                "алгоритм рисует два прямоугольника",
+              ],
+              ["пересечение фигур", "общая часть двух прямоугольников"],
+              [
+                "точки с целочисленными координатами",
+                "точки вроде (3; 2), а не (2,5; 1)",
+              ],
+              ["точки на линиях учитывать", "точки на сторонах тоже считаем"],
+            ]}
+          />
+          <Typography.Text>
+            Тема состоит из шести подтем — у каждой своя страница. Идём по ним
+            по порядку:
+          </Typography.Text>
+          <ol>
+            <li>
+              <strong>Команды и след</strong> — ты сейчас здесь.
+            </li>
+            <li>
+              <SubtopicLink routeSlug={R} subtopic="granica-i-velichiny">
+                Точки внутри и на границе
+              </SubtopicLink>{" "}
+              — сколько точек в одной фигуре.
+            </li>
+            <li>
+              <SubtopicLink routeSlug={R} subtopic="neskolko-figur">
+                Две фигуры
+              </SubtopicLink>{" "}
+              — пересечение и ответ задачи темы: 30.
+            </li>
+            <li>
+              <SubtopicLink routeSlug={R} subtopic="postroenie-i-reshetka">
+                Рисунок программой
+              </SubtopicLink>{" "}
+              — та же задача рисунком на turtle.
+            </li>
+            <li>
+              <SubtopicLink routeSlug={R} subtopic="naklonnaya-geometriya">
+                Наклонные стороны
+              </SubtopicLink>{" "}
+              — фигуры, у которых стороны не по клеткам.
+            </li>
+            <li>
+              <SubtopicLink routeSlug={R} subtopic="podschet-programmoj">
+                Подсчёт программой
+              </SubtopicLink>{" "}
+              — дополнительный урок: считаем точки без рисунка.
+            </li>
+          </ol>
         </>
       ),
     },

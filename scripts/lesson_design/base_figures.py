@@ -173,60 +173,253 @@ def _term_label(coef: int, power: int, q: int, first: bool) -> str:
     return sign + body
 
 
-def base_blocks(q: int = 5, rows: list | None = None) -> str:
+def _columns(ds: list[int], fold: int | None) -> list:
+    """Columns of a record, the highest place first: ``("place", k)`` or, for the
+    inside of a run of more than ``fold`` equal digits, one ``("gap", hidden)``."""
+    places = len(ds)
+    cols: list = []
+    j = 0
+    while j < places:
+        k = j
+        while k < places and ds[k] == ds[j]:
+            k += 1
+        run = list(range(places - 1 - j, places - 1 - k, -1))
+        if fold and len(run) > fold:
+            cols += [("place", p) for p in run[:2]]
+            cols.append(("gap", run[2:-2]))
+            cols += [("place", p) for p in run[-2:]]
+        else:
+            cols += [("place", p) for p in run]
+        j = k
+    return cols
+
+
+def base_blocks(q: int = 5, rows: list | None = None, labels=None, fold: int | None = None) -> str:
     """Rows of terms [[coef, power], …]; each row is one part of the expression.
-    The parts are drawn over the places of their digits, the total below."""
+    The parts are drawn over the places of their digits, the total below. With
+    ``fold`` a run of more than ``fold`` equal digits of the total shows its two
+    first and two last places around «…»; ``labels`` name the rows."""
     rows = rows or [[[1, 12]], [[1, 7], [-1, 3]]]
     parts = [sum(c * q**p for c, p in row) for row in rows]
-    labels = ["".join(_term_label(c, p, q, i == 0) for i, (c, p) in enumerate(row)) for row in rows]
+    if labels is None:
+        labels = [
+            "".join(_term_label(c, p, q, i == 0) for i, (c, p) in enumerate(row)) for row in rows
+        ]
     total = sum(parts)
-    places = len(_digits(total, q))
+    ds = _digits(total, q)
+    cols = _columns(ds, fold)
     size, gap = 38, 5
     step = size + gap
-    x0 = 660 - 16 - places * step + gap
+    width = 660
+    x0 = width - 16 - len(cols) * step + gap
     top = 30
     height = top + (len(rows) + 1) * 54 + 80
-    out = [f'<svg viewBox="0 0 660 {height}" role="img" aria-label="Запись выражения по блокам">']
-    for k in range(places):
-        x = x0 + (places - 1 - k) * step + size / 2
-        out.append(_text(x, top - 10, str(k), 12, MUTED, "middle"))
+    col_x = {i: x0 + i * step for i in range(len(cols))}
+    out = [
+        f'<svg viewBox="0 0 {width} {height}" role="img" aria-label="Запись выражения по блокам">'
+    ]
+    for i, (kind, val) in enumerate(cols):
+        if kind == "place":
+            out.append(_text(col_x[i] + size / 2, top - 10, str(val), 12, MUTED, "middle"))
     out.append(_text(x0 - 10, top - 10, "разряд", 12, MUTED, "end"))
+
+    def draw_row(rd: list[int], y: float, hot: bool) -> None:
+        at = {len(rd) - 1 - j: d for j, d in enumerate(rd)}
+        for i, (kind, val) in enumerate(cols):
+            if kind == "place":
+                if val in at:
+                    d = at[val]
+                    out.append(
+                        _box(col_x[i], y, DIGITS[d], size, hot=hot, muted=d == 0 and not hot)
+                    )
+            elif any(p in at for p in val):
+                out.append(
+                    _text(col_x[i] + size / 2, y + size * 0.62, "…", 20, MUTED, "middle", 600)
+                )
+
     for r, (label, value) in enumerate(zip(labels, parts, strict=True)):
         y = top + r * 54
-        ds = _digits(value, q)
         out.append(_text(x0 - 10, y + 25, label, 15, INK, "end", 600))
-        for j, d in enumerate(ds):
-            k = len(ds) - 1 - j
-            x = x0 + (places - 1 - k) * step
-            out.append(_box(x, y, DIGITS[d], size, muted=d == 0))
+        draw_row(_digits(value, q), y, False)
     y = top + len(rows) * 54 + 6
     out.append(
-        f'<line x1="{x0 - 4:.1f}" y1="{y - 8}" x2="{x0 + places * step - gap + 4:.1f}" '
+        f'<line x1="{x0 - 4:.1f}" y1="{y - 8}" x2="{x0 + len(cols) * step - gap + 4:.1f}" '
         f'y2="{y - 8}" stroke="{INK}" stroke-width="1.5"/>'
     )
     out.append(_text(x0 - 10, y + 25, "сумма", 15, ACCENT, "end", 600))
-    ds = _digits(total, q)
-    for j, d in enumerate(ds):
-        out.append(_box(x0 + j * step, y, DIGITS[d], size, hot=True))
+    draw_row(ds, y, True)
     # runs of equal digits with their lengths under the total
-    runs, j = [], 0
+    yb = y + size + 8
+    j = 0
+    pos = {val: i for i, (kind, val) in enumerate(cols) if kind == "place"}
     while j < len(ds):
         k = j
         while k < len(ds) and ds[k] == ds[j]:
             k += 1
-        runs.append((j, k, ds[j]))
-        j = k
-    yb = y + size + 8
-    for a, b, d in runs:
-        x1, x2 = x0 + a * step, x0 + b * step - gap
+        hi, lo = len(ds) - 1 - j, len(ds) - k
+        x1, x2 = col_x[pos[hi]], col_x[pos[lo]] + size
         out.append(
             f'<path d="M {x1:.1f} {yb} v 6 H {x2:.1f} v -6" fill="none" stroke="{MUTED}" '
             'stroke-width="1.25"/>'
         )
-        out.append(_text((x1 + x2) / 2, yb + 24, f"{DIGITS[d]} × {b - a}", 13, INK, "middle"))
+        out.append(_text((x1 + x2) / 2, yb + 24, f"{DIGITS[ds[j]]} × {k - j}", 13, INK, "middle"))
+        j = k
     counts = {d: ds.count(d) for d in sorted(set(ds))}
     summary = ", ".join(f"«{DIGITS[d]}» — {c}" for d, c in counts.items())
-    out.append(_text(330, height - 14, f"всего {len(ds)} цифр: {summary}", 14, MUTED, "middle"))
+    out.append(
+        _text(width / 2, height - 14, f"всего {len(ds)} цифр: {summary}", 14, MUTED, "middle")
+    )
+    out.append("</svg>")
+    return "".join(out)
+
+
+# --- q^k − 1: one unit of the highest place broken down -----------------------------
+
+
+def base_borrow_frames(q: int = 5, k: int = 4) -> list[tuple[str, str]]:
+    """10…0 − 1 in base q: the unit of place k is broken down place by place to the
+    right; in every place one unit goes on and q − 1 stay."""
+    size, gap = 44, 10
+    step = size + gap
+    cols = k + 1
+    x0 = (660 - cols * step + gap) / 2
+
+    def frame(cells: list[str], hot: int | None, minus: bool, note: str) -> str:
+        out = ['<svg viewBox="0 0 660 200" role="img" aria-hidden="true">']
+        for i, ch in enumerate(cells):
+            place = k - i
+            x = x0 + i * step
+            out.append(_text(x + size / 2, 34, f"{q}{_sup(place)}", 12, MUTED, "middle"))
+            if ch:
+                big = ch not in DIGITS[:q]
+                out.append(_box(x, 44, ch, size, hot=place == hot or big, muted=ch == "0", font=22))
+        if minus:
+            out.append(
+                _text(x0 + (cols - 1) * step + size / 2, 124, "− 1", 18, ACCENT, "middle", 600)
+            )
+        out.append(_text(330, 176, note, 15, INK, "middle", 600))
+        out.append("</svg>")
+        return "".join(out)
+
+    top = DIGITS[q - 1]
+    frames = [
+        (
+            frame(
+                ["1"] + ["0"] * k,
+                None,
+                True,
+                f"10…0{_sub(q)} − 1: в разряде единиц вычитать не из чего",
+            ),
+            f"1{'0' * k}{_sub(q)} — это {q}{_sup(k)}. Отнять 1 из разряда единиц нельзя: там 0.",
+        )
+    ]
+    for i in range(1, k + 1):
+        cells = [""] + [top] * (i - 1) + [str(q) if q < 10 else f"{q}"] + ["0"] * (k - i)
+        place = k - i
+        frames.append(
+            (
+                frame(cells, place, True, f"разряд {q}{_sup(place)}: пришло {q} единиц"),
+                (
+                    f"Единица разряда {q}{_sup(place + 1)} — это {q} единиц разряда {q}{_sup(place)}."
+                    + (f" Одну отдаём дальше вправо, {q - 1} остаются." if place else "")
+                ),
+            )
+        )
+    frames.append(
+        (
+            frame([""] + [top] * k, None, False, f"{q}{_sup(k)} − 1 = {top * k}{_sub(q)}"),
+            f"Из {q} единиц вычли 1 — осталось {q - 1}. В каждом разряде цифра {top}: "
+            f"{q}{_sup(k)} − 1 = {top * k}{_sub(q)}.",
+        )
+    )
+    return frames
+
+
+def base_borrow(q: int = 5, k: int = 4) -> str:
+    """Why q^k − 1 is k digits q − 1, step by step."""
+    return _stepper(base_borrow_frames(q, k))
+
+
+# --- q^n − x as (q^n − 1) − (x − 1) ---------------------------------------------------
+
+
+def base_minus(
+    q: int = 5, n: int = 23, x: int = 1876, head: int | None = None, fold: int = 6
+) -> str:
+    """The run of n digits q − 1 minus x − 1 digit by digit, no borrowing: the digit
+    q − 1 survives exactly where x − 1 has a zero. ``head`` — a higher power added
+    to the expression (drawn as its leading 1)."""
+    top_ds = [q - 1] * n
+    sub = _digits(x - 1, q)
+    sub = [0] * (n - len(sub)) + sub
+    res = [a - b for a, b in zip(top_ds, sub, strict=True)]
+    cols = _columns([q - 1] * (n - 5) + [0] * 5 if fold else res, fold)
+    # the five lowest places stay visible, the rest folds
+    size, gap = 38, 5
+    step = size + gap
+    x0 = 660 - 16 - (len(cols) + (1 if head else 0)) * step + gap
+    lead = 1 if head else 0
+    col_x = {i: x0 + (i + lead) * step for i in range(len(cols))}
+    label_x = x0 - 10
+    out = ['<svg viewBox="0 0 660 300" role="img" aria-label="Вычитание x − 1 из цифр q − 1">']
+    for i, (kind, val) in enumerate(cols):
+        if kind == "place":
+            out.append(_text(col_x[i] + size / 2, 22, str(val), 12, MUTED, "middle"))
+    if head:
+        out.append(_text(x0 + size / 2, 22, str(head), 12, MUTED, "middle"))
+    rows = [
+        (f"{q}{_sup(n)} − 1", top_ds, False, None),
+        (f"x − 1 = {x - 1}", sub, False, None),
+        ("разность", res, True, sub),
+    ]
+    for r, (label, rd, hot, under) in enumerate(rows):
+        y = 32 + r * 64
+        if r == 2:
+            out.append(
+                f'<line x1="{x0 - 4:.1f}" y1="{y - 10}" x2="{660 - 12}" y2="{y - 10}" '
+                f'stroke="{INK}" stroke-width="1.5"/>'
+            )
+            if head:
+                out.append(_box(x0, y, "1", size, font=18))
+        out.append(_text(label_x, y + 25, label, 14, ACCENT if hot else INK, "end", 600))
+        at = {n - 1 - j: d for j, d in enumerate(rd)}
+        for i, (kind, val) in enumerate(cols):
+            if kind == "place":
+                d = at[val]
+                keep = hot and under is not None and under[n - 1 - val] == 0
+                out.append(
+                    _box(
+                        col_x[i], y, DIGITS[d], size, hot=keep, muted=(not hot and d == 0), font=18
+                    )
+                )
+            else:
+                out.append(
+                    _text(col_x[i] + size / 2, y + size * 0.62, "…", 20, MUTED, "middle", 600)
+                )
+    kept = sum(1 for d in res if d == q - 1)
+    word = _digits_word(kept)
+    out.append(
+        _text(
+            330,
+            262,
+            f"цифра {q - 1} осталась там, где у x − 1 ноль: {kept} {word} {q - 1}",
+            15,
+            ACCENT,
+            "middle",
+            600,
+        )
+    )
+
+    out.append(
+        _text(
+            330,
+            286,
+            "вычитаем поразрядно: из цифры q − 1 можно вычесть любую цифру без займа",
+            13,
+            MUTED,
+            "middle",
+        )
+    )
     out.append("</svg>")
     return "".join(out)
 
@@ -283,32 +476,39 @@ def base_groups(bits: str = "11010110") -> str:
 
 
 def base_count_plot(
-    q: int = 3, power: int = 8, digit: int = 2, stop: int = 100, target: int | None = 5
+    q: int = 3,
+    power: int = 8,
+    digit: int = 2,
+    stop: int = 100,
+    target: int | None = 5,
+    head: int | None = None,
 ) -> str:
     """Dots (x, count of ``digit`` in the record of q^power − x) for x = 1 … stop.
     With ``target`` the x giving exactly this count are filled and the largest
     one is circled; without it the largest count and its smallest x are marked."""
     xs = list(range(1, stop + 1))
-    cs = [_digits(q**power - x, q).count(digit) for x in xs]
+    base = q**power + (q**head if head else 0)
+    cs = [_digits(base - x, q).count(digit) for x in xs]
     left, right, top, bottom = 64, 640, 24, 206
     cmax = max(cs + [target or 0]) + 1
+    cmin = max(0, min(cs) - 1)
 
     def px(x):
         return left + (x - 1) * (right - left) / max(1, stop - 1)
 
     def py(c):
-        return bottom - c * (bottom - top) / cmax
+        return bottom - (c - cmin) * (bottom - top) / (cmax - cmin)
 
-    name = f"{q}{_sup(power)} − x"
-    out = [f'<svg viewBox="0 0 660 262" role="img" aria-label="Цифры {digit} в записи {name}">']
+    name = (f"{q}{_sup(head)} + " if head else "") + f"{q}{_sup(power)} − x"
+    out = [f'<svg viewBox="0 0 660 280" role="img" aria-label="Цифры {digit} в записи {name}">']
     out.append(
         f'<line x1="{left}" y1="{bottom}" x2="{right}" y2="{bottom}" stroke="{INK}" stroke-width="1.25"/>'
     )
     out.append(
         f'<line x1="{left}" y1="{top}" x2="{left}" y2="{bottom}" stroke="{INK}" stroke-width="1.25"/>'
     )
-    for c in range(0, cmax + 1):
-        if c % max(1, cmax // 5) == 0:
+    for c in range(cmin, cmax + 1):
+        if (cmax - cmin) <= 8 or c % max(1, (cmax - cmin) // 5) == 0:
             out.append(_text(left - 8, py(c) + 4, str(c), 12, MUTED, "end"))
     for x in xs:
         if x == 1 or x % 10 == 0:
@@ -336,18 +536,22 @@ def base_count_plot(
         f'<circle cx="{px(mark):.1f}" cy="{py(mc):.1f}" r="10" fill="none" stroke="{ACCENT}" stroke-width="2"/>'
     )
     if target is not None:
-        note = (
-            f"цифр {digit} в записи {name} по основанию {q}; ● — ровно {target}, "
-            f"их {len(good)}; ○ — наибольший такой x = {mark}"
-        )
+        note = f"● — ровно {target} {_digits_word(target)} {digit} ({len(good)} значений x); в кольце — наибольший x = {mark}"
     else:
-        note = (
-            f"цифр {digit} в записи {name} по основанию {q}; ● — наибольшее количество "
-            f"{mc}; ○ — наименьший x с ним, {mark}"
+        note = f"● — наибольшее количество, {mc}; в кольце — наименьший x с ним, {mark}"
+    out.append(
+        _text(
+            330, 248, f"сколько цифр {digit} в записи {name} по основанию {q}", 13, MUTED, "middle"
         )
-    out.append(_text(330, 254, note, 13, INK, "middle"))
+    )
+    out.append(_text(330, 270, note, 13, INK, "middle"))
     out.append("</svg>")
     return "".join(out)
+
+
+def _digits_word(n: int) -> str:
+    """«цифры» after 2, 3, 4 (not 12–14), otherwise «цифр»."""
+    return "цифры" if n % 10 in (2, 3, 4) and n % 100 not in (12, 13, 14) else "цифр"
 
 
 # --- pairs of unknown digits --------------------------------------------------------
@@ -427,11 +631,13 @@ def base_pair_grid(a: str = "1xy", qa: int = 5, b: str = "2yx", qb: int = 7, k: 
 
 BASE_FIGURES: dict = {
     "base_carry": base_carry,
+    "base_borrow": base_borrow,
+    "base_minus": base_minus,
     "base_blocks": base_blocks,
     "base_groups": base_groups,
     "base_count_plot": base_count_plot,
     "base_pair_grid": base_pair_grid,
 }
-BASE_STEPPERS: dict = {"base_carry": base_carry_frames}
+BASE_STEPPERS: dict = {"base_carry": base_carry_frames, "base_borrow": base_borrow_frames}
 BASE_WIDGETS: dict = {}
 BASE_SCRIPTS: dict = {}

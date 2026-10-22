@@ -199875,7 +199875,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Каждая цифра умножается на вес своего разряда."
+              "markdown": "Умножь каждую цифру на вес её разряда: 4³, 4², 4, 1."
             }
           }
         ],
@@ -199883,7 +199883,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "147: 2 · 4³ + 1 · 4² + 0 · 4 + 3 = 128 + 16 + 3."
+              "markdown": "Веса разрядов четверичной записи справа налево — 1, 4, 16, 64. Значение 2103₄ = 2 · 64 + 1 · 16 + 0 · 4 + 3 = 128 + 16 + 3 = 147."
             }
           },
           {
@@ -199891,7 +199891,13 @@
             "data": {
               "language": "python",
               "code": "print(int('2103', 4))",
-              "caption": "Решение программой"
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `147`"
             }
           }
         ],
@@ -199958,7 +199964,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Делите на 5 и читайте остатки снизу вверх."
+              "markdown": "Дели на 5 и записывай остатки; читай их снизу вверх."
             }
           }
         ],
@@ -199966,7 +199972,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "334₅: 3 · 25 + 3 · 5 + 4 = 94."
+              "markdown": "94 = 5 · 18 + 4, 18 = 5 · 3 + 3, 3 = 5 · 0 + 3. Остатки снизу вверх — 3, 3, 4: запись 334₅. Проверка: 3 · 25 + 3 · 5 + 4 = 94."
             }
           },
           {
@@ -199974,7 +199980,13 @@
             "data": {
               "language": "python",
               "code": "def digits(n, q):\n    if n == 0:\n        return [0]\n\n    result = []\n\n    while n > 0:\n        result.append(n % q)\n        n = n // q\n\n    result.reverse()\n    return result\n\n\nprint(*digits(94, 5), sep='')",
-              "caption": "Решение программой"
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `334`"
             }
           }
         ],
@@ -199983,7 +199995,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 1,
+            "position": 2,
             "material_id": "numeral-systems"
           }
         ],
@@ -200041,7 +200053,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Следующее число — уже пятизначное 10000₆."
+              "markdown": "Следующее число после наибольшего четырёхзначного — 10000₆ = 6⁴."
             }
           }
         ],
@@ -200049,7 +200061,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "1295: это 6⁴ − 1, в шестеричной записи 5555₆."
+              "markdown": "Наибольшее четырёхзначное шестеричное число — 5555₆: четыре наибольшие цифры. Следующее за ним — 10000₆ = 6⁴, поэтому 5555₆ = 6⁴ − 1 = 1295."
             }
           },
           {
@@ -200057,7 +200069,13 @@
             "data": {
               "language": "python",
               "code": "print(6 ** 4 - 1)",
-              "caption": "Решение программой"
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `1295`"
             }
           }
         ],
@@ -200066,14 +200084,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 2,
+            "position": 8,
             "material_id": "numeral-systems"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "dlina-zapisi-14",
+            "section": "minus-edinica",
             "material_id": "numeral-systems"
           }
         ],
@@ -200109,14 +200127,14 @@
         "explanation_kind": "worked_solution",
         "difficulty": 1,
         "estimated_minutes": 2,
-        "answer_instruction": "Введите три числа через пробел в том порядке, в каком их спрашивают.",
+        "answer_instruction": "Введите число.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Какие значения имеют трёхзначные числа в системе с основанием 6? Сколько их?"
+              "markdown": "Сколько трёхзначных чисел в системе счисления с основанием 6?"
             }
           }
         ],
@@ -200124,7 +200142,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Трёхзначные числа лежат от q² до q³ − 1."
+              "markdown": "Трёхзначные числа — от 100₆ = 6² до 555₆ = 6³ − 1."
             }
           }
         ],
@@ -200132,15 +200150,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "От 36 до 215: 6² ≤ N < 6³, всего 180 чисел."
+              "markdown": "Наименьшее трёхзначное число — 100₆ = 36, наибольшее — 555₆ = 6³ − 1 = 215. Всего чисел 215 − 36 + 1 = 180, то есть 6³ − 6²."
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "print(6 ** 2, 6 ** 3 - 1, 6 ** 3 - 6 ** 2)",
-              "caption": "Решение программой"
+              "code": "print(6**3 - 6**2)",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `180`"
             }
           }
         ],
@@ -200149,14 +200173,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 3,
+            "position": 5,
             "material_id": "numeral-systems"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "dlina-zapisi-14",
+            "section": "stepen-osnovaniya",
             "material_id": "numeral-systems"
           }
         ],
@@ -200178,7 +200202,7 @@
         ],
         "checker": {
           "checker_type": "exact_match",
-          "answer_variants": ["36 215 180"],
+          "answer_variants": ["180"],
           "numeric_tolerance": null
         }
       },
@@ -200207,7 +200231,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Отбросьте три младшие цифры и возьмите последнюю."
+              "markdown": "Отбрось три младшие цифры делением на 5³ и возьми последнюю цифру остатком."
             }
           }
         ],
@@ -200215,7 +200239,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "1: (2024 // 5³) % 5 = 16 % 5 = 1; 2024 = 31044₅, разряды справа 4, 4, 0, 1, 3."
+              "markdown": "2024 // 5³ = 16 — это запись без трёх младших цифр, а 16 % 5 = 1 — её последняя цифра. Проверка: 2024 = 31044₅, в разряде 3 стоит 1."
             }
           },
           {
@@ -200223,7 +200247,13 @@
             "data": {
               "language": "python",
               "code": "print(2024 // 5 ** 3 % 5)",
-              "caption": "Решение программой"
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `1`"
             }
           }
         ],
@@ -200232,14 +200262,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 4,
+            "position": 3,
             "material_id": "numeral-systems"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "ostatok-i-chastnoe",
+            "section": "posledovatelnoe-delenie",
             "material_id": "numeral-systems"
           }
         ],
@@ -200275,14 +200305,14 @@
         "explanation_kind": "worked_solution",
         "difficulty": 1,
         "estimated_minutes": 2,
-        "answer_instruction": "Введите два числа через пробел в том порядке, в каком их спрашивают.",
+        "answer_instruction": "Введите число.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Чему равны 2024 // 49 и 2024 % 49? Как они связаны с семеричной записью числа 2024?"
+              "markdown": "Чему равен остаток от деления 2024 на 49? Найди его по семеричной записи 2024 = 5621₇."
             }
           }
         ],
@@ -200290,7 +200320,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "49 = 7²: деление отрезает две последние семеричные цифры."
+              "markdown": "49 = 7²: остаток — две последние семеричные цифры."
             }
           }
         ],
@@ -200298,15 +200328,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "41 и 15: 2024 = 5621₇, 41 = 56₇ — запись без двух последних цифр, 15 = 21₇ — блок двух последних цифр."
+              "markdown": "Деление на 7² отрезает две последние цифры семеричной записи, а остаток — это они сами: 21₇ = 2 · 7 + 1 = 15."
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "print(2024 // 49, 2024 % 49)",
-              "caption": "Решение программой"
+              "code": "print(2024 % 49)",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `15`"
             }
           }
         ],
@@ -200315,14 +200351,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 5,
+            "position": 4,
             "material_id": "numeral-systems"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "sdvigi",
+            "section": "posledovatelnoe-delenie",
             "material_id": "numeral-systems"
           }
         ],
@@ -200344,7 +200380,7 @@
         ],
         "checker": {
           "checker_type": "exact_match",
-          "answer_variants": ["41 15"],
+          "answer_variants": ["15"],
           "numeric_tolerance": null
         }
       },
@@ -200358,14 +200394,14 @@
         "explanation_kind": "worked_solution",
         "difficulty": 1,
         "estimated_minutes": 2,
-        "answer_instruction": "Введите два числа через пробел в том порядке, в каком их спрашивают.",
+        "answer_instruction": "Введите число.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Найди наименьшее основание q, в котором допустима запись 3A7, и значение этой записи в этом основании."
+              "markdown": "Запись 3A7 возможна в нескольких системах счисления. Найди её значение в системе с наименьшим возможным основанием."
             }
           }
         ],
@@ -200373,7 +200409,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Каждая цифра меньше основания; A = 10."
+              "markdown": "Основание больше наибольшей цифры; A = 10."
             }
           }
         ],
@@ -200381,15 +200417,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "q = 11, потому что A = 10; 3A7₁₁ = 3 · 121 + 10 · 11 + 7 = 480."
+              "markdown": "Наибольшая цифра записи — A = 10, поэтому основание не меньше 11. В системе с основанием 11: 3A7₁₁ = 3 · 121 + 10 · 11 + 7 = 480."
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "def value(ds, q):\n    v = 0\n    for d in ds:\n        v = v * q + d\n    return v\n\n\nq = max(3, 10, 7) + 1\nprint(q, value([3, 10, 7], q))",
-              "caption": "Решение программой"
+              "code": "print(int('3A7', 11))",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `480`"
             }
           }
         ],
@@ -200398,14 +200440,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 6,
+            "position": 1,
             "material_id": "numeral-systems"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "naimenshee-osnovanie",
+            "section": "cifry-bukvy",
             "material_id": "numeral-systems"
           }
         ],
@@ -200427,7 +200469,7 @@
         ],
         "checker": {
           "checker_type": "exact_match",
-          "answer_variants": ["11 480"],
+          "answer_variants": ["480"],
           "numeric_tolerance": null
         }
       },
@@ -200456,7 +200498,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Складывайте поразрядно с переносом через 5."
+              "markdown": "Складывай столбиком: пиши остаток суммы от деления на 5, а целую часть переноси."
             }
           }
         ],
@@ -200464,7 +200506,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "1022₅. В десятичной системе 89 + 48 = 137, а 1022₅ = 125 + 10 + 2 = 137."
+              "markdown": "Единицы: 4 + 3 = 7 = 1 · 5 + 2, пишем 2, переносим 1. Пятёрки: 2 + 4 + 1 = 7 — пишем 2, переносим 1. Далее 3 + 1 + 1 = 5 — пишем 0, переносим 1. Получается 1022₅; проверка: 89 + 48 = 137 = 1022₅."
             }
           },
           {
@@ -200472,7 +200514,13 @@
             "data": {
               "language": "python",
               "code": "def digits(n, q):\n    if n == 0:\n        return [0]\n\n    result = []\n\n    while n > 0:\n        result.append(n % q)\n        n = n // q\n\n    result.reverse()\n    return result\n\n\ns = int('324', 5) + int('143', 5)\nprint(*digits(s, 5), sep='')",
-              "caption": "Решение программой"
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `1022`"
             }
           }
         ],
@@ -200481,7 +200529,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 7,
+            "position": 13,
             "material_id": "numeral-systems"
           }
         ],
@@ -200524,14 +200572,14 @@
         "explanation_kind": "worked_solution",
         "difficulty": 1,
         "estimated_minutes": 2,
-        "answer_instruction": "Введите количество цифр и запись 7⁵ − 1 через пробел.",
+        "answer_instruction": "Введите число.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Сколько цифр содержит запись 7⁵ в системе с основанием 7? Как выглядит запись 7⁵ − 1?"
+              "markdown": "Как выглядит запись числа 7⁵ − 1 в системе счисления с основанием 7?"
             }
           }
         ],
@@ -200539,7 +200587,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "qⁿ — единица и n нулей, qⁿ − 1 — n старших цифр."
+              "markdown": "qᵏ − 1 записывается k цифрами q − 1."
             }
           }
         ],
@@ -200547,15 +200595,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "У 7⁵ шесть цифр: 100000₇. А 7⁵ − 1 = 66666₇."
+              "markdown": "7⁵ — это единица и пять нулей: 100000₇. Если вычесть 1, во всех пяти разрядах окажутся наибольшие цифры: 7⁵ − 1 = 66666₇. Программа собирает запись остатками от деления на 7."
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "def digits(n, q):\n    if n == 0:\n        return [0]\n\n    result = []\n\n    while n > 0:\n        result.append(n % q)\n        n = n // q\n\n    result.reverse()\n    return result\n\n\ntop = digits(7 ** 5 - 1, 7)\nprint(len(digits(7 ** 5, 7)), ''.join(map(str, top)))",
-              "caption": "Решение программой"
+              "code": "n = 7**5 - 1\ns = ''\nwhile n > 0:\n    s = str(n % 7) + s\n    n = n // 7\nprint(s)",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `66666`"
             }
           }
         ],
@@ -200564,7 +200618,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 8,
+            "position": 9,
             "material_id": "numeral-systems"
           }
         ],
@@ -200593,7 +200647,7 @@
         ],
         "checker": {
           "checker_type": "exact_match",
-          "answer_variants": ["6 66666"],
+          "answer_variants": ["66666"],
           "numeric_tolerance": null
         }
       },
@@ -200630,7 +200684,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "6 нулей. Всего девять разрядов — от 8 до 0. В трёх разрядах стоят единицы: 8, 3 и 0. Остальные шесть равны нулю."
+              "markdown": "7⁸, 7³ и 1 = 7⁰ — единицы в разрядах 8, 3 и 0, разряды не пересекаются. Всего в записи девять цифр, три из них единицы, остальные шесть — нули."
             }
           },
           {
@@ -200638,7 +200692,13 @@
             "data": {
               "language": "python",
               "code": "def digits(n, q):\n    if n == 0:\n        return [0]\n\n    result = []\n\n    while n > 0:\n        result.append(n % q)\n        n = n // q\n\n    result.reverse()\n    return result\n\n\nprint(digits(7 ** 8 + 7 ** 3 + 1, 7).count(0))",
-              "caption": "Решение программой"
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `6`"
             }
           }
         ],
@@ -200647,14 +200707,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 9,
+            "position": 6,
             "material_id": "numeral-systems"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "bloki-cifr",
+            "section": "stepen-osnovaniya",
             "material_id": "numeral-systems"
           }
         ],
@@ -200705,7 +200765,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "qᵃ − qᵇ — (a − b) старших цифр и b нулей."
+              "markdown": "qᵃ − qᵇ — это a − b цифр q − 1, а за ними b нулей."
             }
           }
         ],
@@ -200713,7 +200773,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "13: 20 − 7 = 13. Запись состоит из тринадцати троек и семи нулей."
+              "markdown": "4²⁰ − 4⁷ = 4⁷ · (4¹³ − 1): тринадцать цифр 3, за ними семь нулей. Троек 13."
             }
           },
           {
@@ -200721,7 +200781,13 @@
             "data": {
               "language": "python",
               "code": "def digits(n, q):\n    if n == 0:\n        return [0]\n\n    result = []\n\n    while n > 0:\n        result.append(n % q)\n        n = n // q\n\n    result.reverse()\n    return result\n\n\nprint(digits(4 ** 20 - 4 ** 7, 4).count(3))",
-              "caption": "Решение программой"
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `13`"
             }
           }
         ],
@@ -200788,7 +200854,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Приведите степени к основанию 2."
+              "markdown": "Приведи степени к основанию 2: 8 = 2³."
             }
           }
         ],
@@ -200796,7 +200862,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "19. Преобразование: 8¹⁵ + 2²⁰ − 7 = 2⁴⁵ + (2²⁰ − 2³) + 1. Единиц: 1 + (20 − 3) + 1 = 19."
+              "markdown": "8¹⁵ = 2⁴⁵. Вычтем 7 через блоки: 2²⁰ − 7 = (2²⁰ − 2³) + 1. Получаем 2⁴⁵ + (2²⁰ − 2³) + 1: одна единица, семнадцать единиц в разрядах 19…3 и одна в разряде 0 — всего 19."
             }
           },
           {
@@ -200804,7 +200870,13 @@
             "data": {
               "language": "python",
               "code": "print(bin(8 ** 15 + 2 ** 20 - 7)[2:].count('1'))",
-              "caption": "Решение программой"
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `19`"
             }
           }
         ],
@@ -200813,14 +200885,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 11,
+            "position": 7,
             "material_id": "numeral-systems"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "perevod-gruppami",
+            "section": "stepen-osnovaniya",
             "material_id": "numeral-systems"
           }
         ],
@@ -200871,7 +200943,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Две одинаковые степени дают перенос."
+              "markdown": "Два одинаковых слагаемых складываются с переносом."
             }
           }
         ],
@@ -200879,7 +200951,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "4. Сначала возникает перенос: 2¹⁵ + 2¹⁵ = 2¹⁶. Затем 2³ − 1 = 111₂. Получается одна старшая единица и три младшие."
+              "markdown": "2¹⁵ + 2¹⁵ = 2¹⁶ — блоки совпали, и две единицы дали одну в следующем разряде. 2³ − 1 = 111₂. Всего единиц 1 + 3 = 4."
             }
           },
           {
@@ -200887,7 +200959,13 @@
             "data": {
               "language": "python",
               "code": "print(bin(2 ** 15 + 2 ** 15 + 2 ** 3 - 1)[2:].count('1'))",
-              "caption": "Решение программой"
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `4`"
             }
           }
         ],
@@ -200896,7 +200974,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 12,
+            "position": 14,
             "material_id": "numeral-systems"
           }
         ],
@@ -200954,7 +201032,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "9⁸ = 3¹⁶."
+              "markdown": "Приведи 9⁸ к основанию 3."
             }
           }
         ],
@@ -200962,7 +201040,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "6: 9⁸ = 3¹⁶ — единица в разряде 16, а 3¹⁰ − 3⁴ — шесть двоек в разрядах 9…4 и четыре нуля; запись 10000002222220000₃."
+              "markdown": "9⁸ = 3¹⁶ — единица в разряде 16. 3¹⁰ − 3⁴ — шесть двоек в разрядах 9…4 и четыре нуля. Блоки не пересекаются, двоек 6."
             }
           },
           {
@@ -200970,7 +201048,13 @@
             "data": {
               "language": "python",
               "code": "def digits(n, q):\n    if n == 0:\n        return [0]\n\n    result = []\n\n    while n > 0:\n        result.append(n % q)\n        n = n // q\n\n    result.reverse()\n    return result\n\n\nprint(digits(9 ** 8 + 3 ** 10 - 3 ** 4, 3).count(2))",
-              "caption": "Решение программой"
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `6`"
             }
           }
         ],
@@ -200979,14 +201063,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 13,
+            "position": 11,
             "material_id": "numeral-systems"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "odno-osnovanie",
+            "section": "otvet-zadachi-14",
             "material_id": "numeral-systems"
           }
         ],
@@ -201037,7 +201121,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Разбейте вычитаемое на блоки."
+              "markdown": "Вычитаемое 5³ + 3 займи у 5⁴."
             }
           }
         ],
@@ -201045,7 +201129,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "6: 25⁶ = 5¹², а 5⁸ − 5³ − 3 = (5⁸ − 5⁴) + (5⁴ − 5³ − 3) = 44440000₅ + 3442₅; запись 1000044443442₅, четвёрок 4 + 2."
+              "markdown": "25⁶ = 5¹². Вычитаемое раскладываем: 5⁸ − 5³ − 3 = (5⁸ − 5⁴) + (5⁴ − 5³ − 3) = 44440000₅ + 3442₅. Четвёрок в записи 4 + 2 = 6."
             }
           },
           {
@@ -201053,7 +201137,13 @@
             "data": {
               "language": "python",
               "code": "def digits(n, q):\n    if n == 0:\n        return [0]\n\n    result = []\n\n    while n > 0:\n        result.append(n % q)\n        n = n // q\n\n    result.reverse()\n    return result\n\n\nprint(digits(25 ** 6 + 5 ** 8 - 5 ** 3 - 3, 5).count(4))",
-              "caption": "Решение программой"
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `6`"
             }
           }
         ],
@@ -201062,14 +201152,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 14,
+            "position": 12,
             "material_id": "numeral-systems"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "neudobnoe-vychitaemoe",
+            "section": "otvet-zadachi-14",
             "material_id": "numeral-systems"
           }
         ],
@@ -201128,7 +201218,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "2: 2016 = 13200₆ (остатки 0, 0, 2, 3, 1)."
+              "markdown": "2016 = 6 · 336 + 0, 336 = 6 · 56 + 0, 56 = 6 · 9 + 2, 9 = 6 · 1 + 3, 1 = 6 · 0 + 1. Запись 13200₆, нулей два."
             }
           },
           {
@@ -201136,7 +201226,13 @@
             "data": {
               "language": "python",
               "code": "def digits(n, q):\n    if n == 0:\n        return [0]\n\n    result = []\n\n    while n > 0:\n        result.append(n % q)\n        n = n // q\n\n    result.reverse()\n    return result\n\n\nprint(digits(2016, 6).count(0))",
-              "caption": "Решение программой"
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `2`"
             }
           }
         ],
@@ -201152,7 +201248,7 @@
         "theory_links": [
           {
             "label": "Теория",
-            "section": "podschyot-cifry",
+            "section": "odin-sposob",
             "material_id": "numeral-systems"
           }
         ],
@@ -201211,7 +201307,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "51: 2¹⁰⁰ − 2⁵⁰ — пятьдесят единиц в разрядах 99…50, плюс единица в разряде 0."
+              "markdown": "2¹⁰⁰ − 2⁵⁰ — пятьдесят единиц в разрядах 99…50 и пятьдесят нулей, плюс единица в разряде 0. Единиц 51."
             }
           },
           {
@@ -201219,7 +201315,13 @@
             "data": {
               "language": "python",
               "code": "print(bin(2 ** 100 - 2 ** 50 + 1)[2:].count('1'))",
-              "caption": "Решение программой"
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `51`"
             }
           }
         ],
@@ -201235,7 +201337,7 @@
         "theory_links": [
           {
             "label": "Теория",
-            "section": "bolshie-stepeni",
+            "section": "otvet-programmoj",
             "material_id": "numeral-systems"
           }
         ],
@@ -201286,7 +201388,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Сумма списка цифр."
+              "markdown": "Собери цифры в список и сложи их."
             }
           }
         ],
@@ -201294,7 +201396,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "120: 7²⁰ − 1 — двадцать шестёрок, 20 · 6."
+              "markdown": "7²⁰ − 1 — двадцать шестёрок. Сумма цифр 20 · 6 = 120."
             }
           },
           {
@@ -201302,7 +201404,13 @@
             "data": {
               "language": "python",
               "code": "def digits(n, q):\n    if n == 0:\n        return [0]\n\n    result = []\n\n    while n > 0:\n        result.append(n % q)\n        n = n // q\n\n    result.reverse()\n    return result\n\n\nprint(sum(digits(7 ** 20 - 1, 7)))",
-              "caption": "Решение программой"
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `120`"
             }
           }
         ],
@@ -201311,14 +201419,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 17,
+            "position": 18,
             "material_id": "numeral-systems"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "voprosy-o-zapisi",
+            "section": "spisok-cifr",
             "material_id": "numeral-systems"
           }
         ],
@@ -201369,7 +201477,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Множество цифр списка."
+              "markdown": "Различные значения списка оставляет set."
             }
           }
         ],
@@ -201377,7 +201485,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "2: запись FFFFF000FF₁₆ состоит из цифр F и 0."
+              "markdown": "16¹⁰ − 16⁵ — пять цифр F и пять нулей, + 255 = FF₁₆ заполняет два младших разряда: FFFFF000FF₁₆. Различных цифр две: F и 0."
             }
           },
           {
@@ -201385,7 +201493,13 @@
             "data": {
               "language": "python",
               "code": "def digits(n, q):\n    if n == 0:\n        return [0]\n\n    result = []\n\n    while n > 0:\n        result.append(n % q)\n        n = n // q\n\n    result.reverse()\n    return result\n\n\nprint(len(set(digits(16 ** 10 - 16 ** 5 + 255, 16))))",
-              "caption": "Решение программой"
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `2`"
             }
           }
         ],
@@ -201394,14 +201508,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 18,
+            "position": 19,
             "material_id": "numeral-systems"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "voprosy-o-zapisi",
+            "section": "spisok-cifr",
             "material_id": "numeral-systems"
           }
         ],
@@ -201460,7 +201574,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "18: запись 100088888888888888688885₉, `digits(number, 9).count(8)`."
+              "markdown": "Программа переводит число делением на 9 и считает восьмёрки. В записи 100088888888888888688885₉ их 18."
             }
           },
           {
@@ -201468,7 +201582,13 @@
             "data": {
               "language": "python",
               "code": "def digits(n, q):\n    if n == 0:\n        return [0]\n\n    result = []\n\n    while n > 0:\n        result.append(n % q)\n        n = n // q\n\n    result.reverse()\n    return result\n\n\nn = 3 * 27 ** 15 + 9 ** 20 - 2 * 3 ** 10 - 4\nprint(digits(n, 9).count(8))",
-              "caption": "Решение программой"
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `18`"
             }
           }
         ],
@@ -201477,14 +201597,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 19,
+            "position": 17,
             "material_id": "numeral-systems"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "podschyot-cifry",
+            "section": "otvet-programmoj",
             "material_id": "numeral-systems"
           }
         ],
@@ -201527,7 +201647,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Значение выражения 5 · 36²⁰ + 6⁴⁵ − 6¹⁰ − 2025 записали в системе счисления с основанием 36. Определите количество цифр с числовым значением, превышающим 9."
+              "markdown": "Значение выражения 5 · 36²⁰ + 6⁴⁵ − 6¹⁰ − 2025 записали в системе счисления с основанием 36. Определи количество цифр с числовым значением, превышающим 9."
             }
           }
         ],
@@ -201535,7 +201655,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Цифры записи — числа от 0 до 35."
+              "markdown": "Цифры 36-ричной записи — числа от 0 до 35."
             }
           }
         ],
@@ -201543,7 +201663,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "20: в записи 604ZZZZZZZZZZZZZZYZZYFR₃₆ двадцать цифр больше 9 — Z = 35, Y = 34, F = 15 и R = 27."
+              "markdown": "Список цифр хранит их значения, поэтому достаточно посчитать цифры больше 9. В записи 604ZZZZZZZZZZZZZZYZZYFR₃₆ это Z, Y, F и R — всего 20."
             }
           },
           {
@@ -201551,7 +201671,13 @@
             "data": {
               "language": "python",
               "code": "def digits(n, q):\n    if n == 0:\n        return [0]\n\n    result = []\n\n    while n > 0:\n        result.append(n % q)\n        n = n // q\n\n    result.reverse()\n    return result\n\n\nn = 5 * 36 ** 20 + 6 ** 45 - 6 ** 10 - 2025\nprint(sum(1 for d in digits(n, 36) if d > 9))",
-              "caption": "Решение программой"
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `20`"
             }
           }
         ],
@@ -201610,7 +201736,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Значение выражения 4 · 31³⁰ + 9 · 31¹⁵ − 31⁶ + 2026 записали в системе счисления с основанием 31. Определите сумму цифр с числовым значением, не превышающим 15."
+              "markdown": "Значение выражения 4 · 31³⁰ + 9 · 31¹⁵ − 31⁶ + 2026 записали в системе счисления с основанием 31. Определи сумму цифр с числовым значением, не превышающим 15."
             }
           }
         ],
@@ -201618,7 +201744,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Отберите цифры условием и сложите."
+              "markdown": "Отбери цифры не больше 15 и сложи их."
             }
           }
         ],
@@ -201626,7 +201752,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "28: в записи 4000000000000008UUUUUUUUU00023B₃₁ цифры не больше 15 — это 4, 8, 2, 3, B = 11 и нули; 4 + 8 + 2 + 3 + 11 = 28."
+              "markdown": "В 31-ричной записи цифры не больше 15 — это 4, 8, 2, 3, 11 и нули. Их сумма 4 + 8 + 2 + 3 + 11 = 28."
             }
           },
           {
@@ -201634,7 +201760,13 @@
             "data": {
               "language": "python",
               "code": "def digits(n, q):\n    if n == 0:\n        return [0]\n\n    result = []\n\n    while n > 0:\n        result.append(n % q)\n        n = n // q\n\n    result.reverse()\n    return result\n\n\nn = 4 * 31 ** 30 + 9 * 31 ** 15 - 31 ** 6 + 2026\nprint(sum(d for d in digits(n, 31) if d <= 15))",
-              "caption": "Решение программой"
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `28`"
             }
           }
         ],
@@ -201686,14 +201818,14 @@
         "explanation_kind": "worked_solution",
         "difficulty": 1,
         "estimated_minutes": 2,
-        "answer_instruction": "Введите два числа через пробел в том порядке, в каком их спрашивают.",
+        "answer_instruction": "Введите число.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Сколько четвёрок в пятеричной записи 5⁶ − 1 и 5⁶ − 2?"
+              "markdown": "Сколько цифр 4 в пятеричной записи числа 5⁶ − 2?"
             }
           }
         ],
@@ -201701,7 +201833,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "5⁶ − 1 — шесть старших цифр."
+              "markdown": "5⁶ − 2 = (5⁶ − 1) − 1."
             }
           }
         ],
@@ -201709,15 +201841,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "6 и 5: 5⁶ − 1 = 444444₅, 5⁶ − 2 = 444443₅."
+              "markdown": "5⁶ − 1 = 444444₅. Вычесть ещё 1 — значит уменьшить последнюю цифру: 444443₅. Четвёрок пять."
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "def digits(n, q):\n    if n == 0:\n        return [0]\n\n    result = []\n\n    while n > 0:\n        result.append(n % q)\n        n = n // q\n\n    result.reverse()\n    return result\n\n\nprint(digits(5 ** 6 - 1, 5).count(4),\n      digits(5 ** 6 - 2, 5).count(4))",
-              "caption": "Решение программой"
+              "code": "n = 5**6 - 2\ncount = 0\nwhile n > 0:\n    if n % 5 == 4:\n        count = count + 1\n    n = n // 5\nprint(count)",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `5`"
             }
           }
         ],
@@ -201726,14 +201864,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 22,
+            "position": 24,
             "material_id": "numeral-systems"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "bez-zaimstvovanij",
+            "section": "pochemu-otvet",
             "material_id": "numeral-systems"
           }
         ],
@@ -201755,7 +201893,7 @@
         ],
         "checker": {
           "checker_type": "exact_match",
-          "answer_variants": ["6 5"],
+          "answer_variants": ["5"],
           "numeric_tolerance": null
         }
       },
@@ -201784,7 +201922,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Перебирайте x как число, а не как цифру."
+              "markdown": "Перебирай x как число от 1 до 200, а не как цифру."
             }
           }
         ],
@@ -201792,7 +201930,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "176: x − 1 = 175 = 001200₅ — четыре нуля, поэтому 5⁶ − 176 = 443244₅."
+              "markdown": "Перебор x от 1 до 200 с подсчётом четвёрок даёт наибольшее подходящее x = 176. Проверка: x − 1 = 175 = 1200₅ — две ненулевые цифры, и из шести четвёрок остаются четыре: 5⁶ − 176 = 443244₅."
             }
           },
           {
@@ -201800,7 +201938,13 @@
             "data": {
               "language": "python",
               "code": "def digits(n, q):\n    if n == 0:\n        return [0]\n\n    result = []\n\n    while n > 0:\n        result.append(n % q)\n        n = n // q\n\n    result.reverse()\n    return result\n\n\nprint(max(x for x in range(1, 201)\n          if digits(5 ** 6 - x, 5).count(4) == 4))",
-              "caption": "Решение программой"
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `176`"
             }
           }
         ],
@@ -201809,14 +201953,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 23,
+            "position": 22,
             "material_id": "numeral-systems"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "maksimalnoe-x",
+            "section": "perebor-x",
             "material_id": "numeral-systems"
           }
         ],
@@ -201867,7 +202011,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Сначала наибольшее количество, затем первое x с ним."
+              "markdown": "Сначала найди наибольшее количество нулей, затем первое x с ним."
             }
           }
         ],
@@ -201875,7 +202019,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "125: нулей в записи столько, сколько четвёрок в x − 1 ≤ 499; больше трёх их не бывает, первое такое x − 1 = 124 = 444₅."
+              "markdown": "Нули в записи 5⁶ − x стоят там, где у x − 1 четвёрки. При x ≤ 500 у x − 1 не больше трёх четвёрок, и первое такое x − 1 = 124 = 444₅. Значит, x = 125."
             }
           },
           {
@@ -201883,7 +202027,13 @@
             "data": {
               "language": "python",
               "code": "def digits(n, q):\n    if n == 0:\n        return [0]\n\n    result = []\n\n    while n > 0:\n        result.append(n % q)\n        n = n // q\n\n    result.reverse()\n    return result\n\n\nzeros = [digits(5 ** 6 - x, 5).count(0) for x in range(1, 501)]\nprint(zeros.index(max(zeros)) + 1)",
-              "caption": "Решение программой"
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `125`"
             }
           }
         ],
@@ -201892,14 +202042,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 24,
+            "position": 25,
             "material_id": "numeral-systems"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "naibolshee-kolichestvo",
+            "section": "naibolshee-i-naimenshee",
             "material_id": "numeral-systems"
           }
         ],
@@ -201942,7 +202092,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Значение арифметического выражения 7¹⁰⁰ + 7⁵⁰ − x, где x — целое положительное число, не превышающее 3000, записали в семеричной системе счисления. Определите наибольшее значение x, при котором в записи содержится ровно 53 нуля."
+              "markdown": "Значение арифметического выражения 7¹⁰⁰ + 7⁵⁰ − x, где x — целое положительное число, не превышающее 3000, записали в семеричной системе счисления. Определи наибольшее значение x, при котором в записи содержится ровно 53 нуля."
             }
           }
         ],
@@ -201950,7 +202100,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Количество нулей меняется не плавно — проверьте все x."
+              "markdown": "Количество нулей меняется скачками — проверь все x."
             }
           }
         ],
@@ -201958,7 +202108,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "2744: 2744 = 8 · 7³; нулей 53 у 25 значений x, наибольшее — 2744."
+              "markdown": "Перебор x от 1 до 3000 находит 25 значений с ровно 53 нулями; наибольшее из них — 2744 = 8 · 7³."
             }
           },
           {
@@ -201966,7 +202116,13 @@
             "data": {
               "language": "python",
               "code": "def digits(n, q):\n    if n == 0:\n        return [0]\n\n    result = []\n\n    while n > 0:\n        result.append(n % q)\n        n = n // q\n\n    result.reverse()\n    return result\n\n\nn = 7 ** 100 + 7 ** 50\nprint(max(x for x in range(1, 3001)\n          if digits(n - x, 7).count(0) == 53))",
-              "caption": "Решение программой"
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `2744`"
             }
           }
         ],
@@ -201975,14 +202131,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 25,
+            "position": 23,
             "material_id": "numeral-systems"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "maksimalnoe-x",
+            "section": "perebor-x",
             "material_id": "numeral-systems"
           }
         ],
@@ -202025,7 +202181,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Значение арифметического выражения 11 · 13²⁰ + 13¹⁰ − x, где x — целое положительное число, записали в 13-ричной системе счисления. Определите наименьшее значение x, при котором в записи ровно 7 цифр с числовым значением 12."
+              "markdown": "Значение арифметического выражения 11 · 13²⁰ + 13¹⁰ − x, где x — целое положительное число, записали в 13-ричной системе счисления. Определи наименьшее значение x, при котором в записи ровно 7 цифр с числовым значением 12."
             }
           }
         ],
@@ -202033,7 +202189,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Верхней границы нет — перебор while."
+              "markdown": "Верхней границы нет — перебирай циклом while до первого подходящего x."
             }
           }
         ],
@@ -202041,7 +202197,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "184: цифры 12 стоят там, где у x − 1 нули среди десяти младших разрядов; нужно три ненулевых цифры, наименьшее x − 1 = 111₁₃ = 183."
+              "markdown": "Цифры 12 стоят там, где у x − 1 нули среди десяти младших разрядов. Нужно ровно три ненулевые цифры, наименьшее такое x − 1 = 111₁₃ = 183, поэтому x = 184."
             }
           },
           {
@@ -202049,7 +202205,13 @@
             "data": {
               "language": "python",
               "code": "def digits(n, q):\n    if n == 0:\n        return [0]\n\n    result = []\n\n    while n > 0:\n        result.append(n % q)\n        n = n // q\n\n    result.reverse()\n    return result\n\n\nn = 11 * 13 ** 20 + 13 ** 10\nx = 1\nwhile digits(n - x, 13).count(12) != 7:\n    x += 1\nprint(x)",
-              "caption": "Решение программой"
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `184`"
             }
           }
         ],
@@ -202065,7 +202227,7 @@
         "theory_links": [
           {
             "label": "Теория",
-            "section": "bez-zaimstvovanij",
+            "section": "naibolshee-i-naimenshee",
             "material_id": "numeral-systems"
           }
         ],
@@ -202108,7 +202270,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Значение арифметического выражения 6¹²⁰ + 6⁶⁰ − x, где x — натуральное число, не превышающее 2000, записали в шестеричной системе счисления. Определите максимальное количество нулей в этой записи."
+              "markdown": "Значение арифметического выражения 6¹²⁰ + 6⁶⁰ − x, где x — натуральное число, не превышающее 2000, записали в шестеричной системе счисления. Определи максимальное количество нулей в этой записи."
             }
           }
         ],
@@ -202116,7 +202278,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Ответ — количество, а не x."
+              "markdown": "Спрашивают количество нулей, а не x."
             }
           }
         ],
@@ -202124,7 +202286,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "64: при x = 1296 = 6⁴ число равно 6¹²⁰ + (6⁶⁰ − 6⁴) — единица в разряде 120, нули в разрядах 119…60, пятёрки в 59…4 и нули в 3…0; нулей 60 + 4 = 64."
+              "markdown": "Перебор x до 2000 даёт наибольшее количество нулей 64. Например, при x = 6⁴ = 1296 число равно 6¹²⁰ + (6⁶⁰ − 6⁴): нули в разрядах 119…60 и 3…0 — их 60 + 4 = 64."
             }
           },
           {
@@ -202132,7 +202294,13 @@
             "data": {
               "language": "python",
               "code": "def digits(n, q):\n    if n == 0:\n        return [0]\n\n    result = []\n\n    while n > 0:\n        result.append(n % q)\n        n = n // q\n\n    result.reverse()\n    return result\n\n\nn = 6 ** 120 + 6 ** 60\nprint(max(digits(n - x, 6).count(0) for x in range(1, 2001)))",
-              "caption": "Решение программой"
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `64`"
             }
           }
         ],
@@ -202148,7 +202316,7 @@
         "theory_links": [
           {
             "label": "Теория",
-            "section": "naibolshee-kolichestvo",
+            "section": "naibolshee-i-naimenshee",
             "material_id": "numeral-systems"
           }
         ],
@@ -202199,7 +202367,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "x — цифра от 0 до 6; ответ — частное."
+              "markdown": "x — цифра от 0 до 6; в ответ — частное."
             }
           }
         ],
@@ -202207,7 +202375,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "28. Сумма 154 + 14x. Подходят x = 1 и x = 4. Минимальная цифра — 1: (154 + 14) / 6 = 28."
+              "markdown": "2x3₇ + 1x4₇ = 154 + 14x. Делится на 6 при x = 1 и x = 4; наименьшая цифра — 1. Сумма 168, частное 168 / 6 = 28."
             }
           },
           {
@@ -202215,7 +202383,13 @@
             "data": {
               "language": "python",
               "code": "def value(ds, q):\n    v = 0\n    for d in ds:\n        v = v * q + d\n    return v\n\n\nfor x in range(7):\n    s = value([2, x, 3], 7) + value([1, x, 4], 7)\n    if s % 6 == 0:\n        print(s // 6)\n        break",
-              "caption": "Решение программой"
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `28`"
             }
           }
         ],
@@ -202224,14 +202398,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 28,
+            "position": 29,
             "material_id": "numeral-systems"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "naimenshaya-cifra",
+            "section": "perebor-cifry",
             "material_id": "numeral-systems"
           }
         ],
@@ -202282,7 +202456,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Цифра x должна подходить обоим основаниям."
+              "markdown": "Цифра x должна подходить обоим основаниям: 6 и 8."
             }
           }
         ],
@@ -202290,7 +202464,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "42. Допустимы x = 0, …, 5. Сумма 140 + 14x. Подходят x = 0 и x = 5. Для максимального: (140 + 70) / 5 = 42."
+              "markdown": "x стоит в шестеричной записи, поэтому x — от 0 до 5. Сумма 2x1₆ + 1x3₈ = 140 + 14x делится на 5 при x = 0 и x = 5. Наибольшая цифра — 5: (140 + 70) / 5 = 42."
             }
           },
           {
@@ -202298,7 +202472,13 @@
             "data": {
               "language": "python",
               "code": "def value(ds, q):\n    v = 0\n    for d in ds:\n        v = v * q + d\n    return v\n\n\nfor x in range(6):\n    s = value([2, x, 1], 6) + value([1, x, 3], 8)\n    if s % 5 == 0:\n        answer = s // 5\nprint(answer)",
-              "caption": "Решение программой"
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `42`"
             }
           }
         ],
@@ -202307,14 +202487,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 29,
+            "position": 34,
             "material_id": "numeral-systems"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "dopustimye-znacheniya",
+            "section": "raznye-osnovaniya",
             "material_id": "numeral-systems"
           }
         ],
@@ -202365,7 +202545,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "33 — одна цифра с весом 40."
+              "markdown": "Цифра 33 — одна цифра с весом 40."
             }
           }
         ],
@@ -202373,7 +202553,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "4527: 2 · 40² + 33 · 40 + 7 = 3200 + 1320 + 7. Значение 33 занимает один разряд с весом 40."
+              "markdown": "2x7₄₀ при x = 33: 2 · 40² + 33 · 40 + 7 = 3200 + 1320 + 7 = 4527."
             }
           },
           {
@@ -202381,7 +202561,13 @@
             "data": {
               "language": "python",
               "code": "def value(ds, q):\n    v = 0\n    for d in ds:\n        v = v * q + d\n    return v\n\n\nprint(value([2, 33, 7], 40))",
-              "caption": "Решение программой"
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `4527`"
             }
           }
         ],
@@ -202397,7 +202583,7 @@
         "theory_links": [
           {
             "label": "Теория",
-            "section": "ves-razryada",
+            "section": "perebor-cifry",
             "material_id": "numeral-systems"
           }
         ],
@@ -202440,7 +202626,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Операнды арифметического выражения записаны в системе счисления с основанием 19: 7x3A₁₉ + 4Bx3₁₉. В записи чисел переменной x обозначена неизвестная цифра из алфавита 19-ричной системы счисления. Определите наименьшее значение x, при котором значение выражения кратно 18. Для найденного x вычислите частное от деления значения выражения на 18 и укажите его в десятичной системе счисления."
+              "markdown": "Операнды арифметического выражения записаны в системе счисления с основанием 19: 7x3A₁₉ + 4Bx3₁₉. В записи чисел переменной x обозначена неизвестная цифра из алфавита 19-ричной системы счисления. Определи наименьшее значение x, при котором значение выражения кратно 18. Для найденного x вычисли частное от деления значения выражения на 18 и укажи его в десятичной системе счисления."
             }
           }
         ],
@@ -202448,7 +202634,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "A = 10, B = 11; наименьшее x — первое найденное."
+              "markdown": "A = 10, B = 11; наименьшее x — первое найденное при переборе по возрастанию."
             }
           }
         ],
@@ -202456,7 +202642,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "4585: x = 8, сумма 82530."
+              "markdown": "Перебор x от 0 до 18 находит первое подходящее x = 8: сумма 82530 кратна 18. Частное 82530 / 18 = 4585."
             }
           },
           {
@@ -202464,7 +202650,13 @@
             "data": {
               "language": "python",
               "code": "def value(ds, q):\n    v = 0\n    for d in ds:\n        v = v * q + d\n    return v\n\n\nfor x in range(19):\n    s = value([7, x, 3, 10], 19) + value([4, 11, x, 3], 19)\n    if s % 18 == 0:\n        print(s // 18)\n        break",
-              "caption": "Решение программой"
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `4585`"
             }
           }
         ],
@@ -202480,7 +202672,7 @@
         "theory_links": [
           {
             "label": "Теория",
-            "section": "funkciya-znacheniya",
+            "section": "perebor-cifry",
             "material_id": "numeral-systems"
           }
         ],
@@ -202523,7 +202715,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Операнды арифметического выражения записаны в системе счисления с основанием 23: 5x18C3₂₃ + 2x7x₂₃ + 96x41₂₃. Переменной x обозначена неизвестная цифра из алфавита 23-ричной системы счисления. Определите наибольшее значение x, при котором значение выражения кратно 22. Для найденного x вычислите частное от деления значения выражения на 22."
+              "markdown": "Операнды арифметического выражения записаны в системе счисления с основанием 23: 5x18C3₂₃ + 2x7x₂₃ + 96x41₂₃. Переменной x обозначена неизвестная цифра из алфавита 23-ричной системы счисления. Определи наибольшее значение x, при котором значение выражения кратно 22. Для найденного x вычисли частное от деления значения выражения на 22."
             }
           }
         ],
@@ -202531,7 +202723,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Наибольшее x — последнее подходящее."
+              "markdown": "Наибольшее x — последнее подходящее при переборе по возрастанию."
             }
           }
         ],
@@ -202539,7 +202731,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "1748466: подходят x = 2 и x = 13, наибольшее 13, сумма 38466252."
+              "markdown": "Подходят x = 2 и x = 13; наибольшее — 13. Сумма 38466252, частное 38466252 / 22 = 1748466."
             }
           },
           {
@@ -202547,7 +202739,13 @@
             "data": {
               "language": "python",
               "code": "def value(ds, q):\n    v = 0\n    for d in ds:\n        v = v * q + d\n    return v\n\n\nfor x in range(23):\n    s = (value([5, x, 1, 8, 12, 3], 23)\n         + value([2, x, 7, x], 23) + value([9, 6, x, 4, 1], 23))\n    if s % 22 == 0:\n        answer = s // 22\nprint(answer)",
-              "caption": "Решение программой"
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `1748466`"
             }
           }
         ],
@@ -202556,7 +202754,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 32,
+            "position": 33,
             "material_id": "numeral-systems"
           }
         ],
@@ -202606,7 +202804,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Операнды арифметического выражения записаны в системах счисления с основаниями 14 и 12: 5x7₁₄ + x3B₁₂. Переменной x обозначена неизвестная цифра из алфавита десятичной системы счисления. Определите значение x, при котором значение выражения кратно 20. Для найденного x вычислите частное от деления значения выражения на 20."
+              "markdown": "Операнды арифметического выражения записаны в системах счисления с основаниями 14 и 12: 5x7₁₄ + x3B₁₂. Переменной x обозначена неизвестная цифра из алфавита десятичной системы счисления. Определи значение x, при котором значение выражения кратно 20. Для найденного x вычисли частное от деления значения выражения на 20."
             }
           }
         ],
@@ -202614,7 +202812,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "x — от 0 до 9, независимо от оснований."
+              "markdown": "x — от 0 до 9, какими бы ни были основания."
             }
           }
         ],
@@ -202622,7 +202820,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "107: x от 0 до 9, подходит только x = 7, сумма 2140."
+              "markdown": "«Цифра из алфавита десятичной системы» — это 0…9. Подходит только x = 7: сумма 2140, частное 2140 / 20 = 107."
             }
           },
           {
@@ -202630,7 +202828,13 @@
             "data": {
               "language": "python",
               "code": "def value(ds, q):\n    v = 0\n    for d in ds:\n        v = v * q + d\n    return v\n\n\nfor x in range(10):\n    s = value([5, x, 7], 14) + value([x, 3, 11], 12)\n    if s % 20 == 0:\n        print(s // 20)",
-              "caption": "Решение программой"
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `107`"
             }
           }
         ],
@@ -202639,14 +202843,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 33,
+            "position": 28,
             "material_id": "numeral-systems"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "dopustimye-znacheniya",
+            "section": "chto-oboznachaet",
             "material_id": "numeral-systems"
           }
         ],
@@ -202689,7 +202893,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Операнды арифметического выражения записаны в системе счисления с основанием 41: 6x29₄₁ + 1x07x₄₁. Переменной x обозначена неизвестная цифра из алфавита 41-ричной системы счисления. Определите наименьшее значение x, при котором значение выражения кратно 40. Для найденного x вычислите частное от деления значения выражения на 40."
+              "markdown": "Операнды арифметического выражения записаны в системе счисления с основанием 41: 6x29₄₁ + 1x07x₄₁. Переменной x обозначена неизвестная цифра из алфавита 41-ричной системы счисления. Определи наименьшее значение x, при котором значение выражения кратно 40. Для найденного x вычисли частное от деления значения выражения на 40."
             }
           }
         ],
@@ -202697,7 +202901,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "При основании больше 36 int(s, q) не работает."
+              "markdown": "При основании больше 36 int(s, q) не работает — считай значение списком цифр."
             }
           }
         ],
@@ -202705,7 +202909,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "89817: x = 5, сумма 3592680."
+              "markdown": "Цифры храним числами и считаем значение функцией value. Первое подходящее x = 5: сумма 3592680, частное 3592680 / 40 = 89817."
             }
           },
           {
@@ -202713,7 +202917,13 @@
             "data": {
               "language": "python",
               "code": "def value(ds, q):\n    v = 0\n    for d in ds:\n        v = v * q + d\n    return v\n\n\nfor x in range(41):\n    s = value([6, x, 2, 9], 41) + value([1, x, 0, 7, x], 41)\n    if s % 40 == 0:\n        print(s // 40)\n        break",
-              "caption": "Решение программой"
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `89817`"
             }
           }
         ],
@@ -202722,14 +202932,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 34,
+            "position": 32,
             "material_id": "numeral-systems"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "ves-razryada",
+            "section": "perebor-cifry",
             "material_id": "numeral-systems"
           }
         ],
@@ -202780,7 +202990,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Обе цифры есть в четверичной записи."
+              "markdown": "Обе цифры есть в четверичной записи — они от 0 до 3."
             }
           }
         ],
@@ -202788,7 +202998,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "11. Сумма 66 + 5x + 6y. Минимальное подходящее значение — 77, при x = 1, y = 1: 77 / 7 = 11."
+              "markdown": "Сумма 1xy₄ + 2yx₅ = 66 + 5x + 6y. Среди всех пар наименьшее кратное 7 значение — 77 при x = 1, y = 1. Частное 77 / 7 = 11."
             }
           },
           {
@@ -202796,7 +203006,13 @@
             "data": {
               "language": "python",
               "code": "def value(ds, q):\n    v = 0\n    for d in ds:\n        v = v * q + d\n    return v\n\n\nbest = None\nfor x in range(4):\n    for y in range(4):\n        s = value([1, x, y], 4) + value([2, y, x], 5)\n        if s % 7 == 0 and (best is None or s < best):\n            best = s\nprint(best // 7)",
-              "caption": "Решение программой"
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `11`"
             }
           }
         ],
@@ -202812,7 +203028,7 @@
         "theory_links": [
           {
             "label": "Теория",
-            "section": "vyrazhenie-ot-dvuh",
+            "section": "dve-cifry",
             "material_id": "numeral-systems"
           }
         ],
@@ -202855,7 +203071,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Операнды арифметического выражения записаны в системах счисления с основаниями 11 и 13: 3x6y₁₁ + y5x1₁₃. Переменными x и y обозначены допустимые в данных системах счисления неизвестные цифры. Определите значения x и y, при которых значение выражения будет наименьшим и кратно 41. Для найденных значений вычислите частное от деления значения выражения на 41."
+              "markdown": "Операнды арифметического выражения записаны в системах счисления с основаниями 11 и 13: 3x6y₁₁ + y5x1₁₃. Переменными x и y обозначены допустимые в данных системах счисления неизвестные цифры. Определи значения x и y, при которых значение выражения будет наименьшим и кратно 41. Для найденных значений вычисли частное от деления значения выражения на 41."
             }
           }
         ],
@@ -202871,7 +203087,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "253: наименьшая сумма 10373 при x = 8, y = 2; первая найденная пара x = 1, y = 10 даёт 27019."
+              "markdown": "Сравниваем все пары: наименьшая сумма, кратная 41, — 10373 при x = 8, y = 2. Первая найденная пара x = 1, y = 10 дала бы 27019. Частное 10373 / 41 = 253."
             }
           },
           {
@@ -202879,7 +203095,13 @@
             "data": {
               "language": "python",
               "code": "def value(ds, q):\n    v = 0\n    for d in ds:\n        v = v * q + d\n    return v\n\n\nbest = None\nfor x in range(11):\n    for y in range(11):\n        s = value([3, x, 6, y], 11) + value([y, 5, x, 1], 13)\n        if s % 41 == 0 and (best is None or s < best):\n            best = s\nprint(best // 41)",
-              "caption": "Решение программой"
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `253`"
             }
           }
         ],
@@ -202895,7 +203117,7 @@
         "theory_links": [
           {
             "label": "Теория",
-            "section": "naimenshee-znachenie",
+            "section": "dve-cifry",
             "material_id": "numeral-systems"
           }
         ],
@@ -202938,7 +203160,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "В числе 4x1y7₃₈ переменные x и y обозначают некоторые цифры из алфавита системы счисления с основанием 38. Определите такие значения x и y, при которых число кратно 37, а число yx₃₈ имеет наибольшее возможное значение. В ответе запишите значение yx₃₈ в десятичной системе счисления."
+              "markdown": "В числе 4x1y7₃₈ переменные x и y обозначают некоторые цифры из алфавита системы счисления с основанием 38. Определи такие значения x и y, при которых число кратно 37, а число yx₃₈ имеет наибольшее возможное значение. В ответе запиши значение yx₃₈ в десятичной системе счисления."
             }
           }
         ],
@@ -202946,7 +203168,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Ответ — значение пары, а не само число."
+              "markdown": "В ответ — значение пары yx, а не самого числа."
             }
           }
         ],
@@ -202954,7 +203176,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "1431: y = 37, x = 25, 37 · 38 + 25 = 1431."
+              "markdown": "Для каждой пары, при которой 4x1y7₃₈ кратно 37, считаем yx₃₈ и берём наибольшее: y = 37, x = 25, 37 · 38 + 25 = 1431."
             }
           },
           {
@@ -202962,7 +203184,13 @@
             "data": {
               "language": "python",
               "code": "def value(ds, q):\n    v = 0\n    for d in ds:\n        v = v * q + d\n    return v\n\n\nbest = 0\nfor x in range(38):\n    for y in range(38):\n        if value([4, x, 1, y, 7], 38) % 37 == 0:\n            best = max(best, value([y, x], 38))\nprint(best)",
-              "caption": "Решение программой"
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `1431`"
             }
           }
         ],
@@ -202978,7 +203206,7 @@
         "theory_links": [
           {
             "label": "Теория",
-            "section": "sama-para",
+            "section": "dve-cifry",
             "material_id": "numeral-systems"
           }
         ],
@@ -203021,7 +203249,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "В числе 3x5y₄₂ переменные x и y обозначают цифры из алфавита системы счисления с основанием 42. Число кратно 41, а число yx₄₂ — ненулевой полный квадрат. Найдите наибольшее такое значение yx₄₂ и запишите его в десятичной системе счисления."
+              "markdown": "В числе 3x5y₄₂ переменные x и y обозначают цифры из алфавита системы счисления с основанием 42. Число кратно 41, а число yx₄₂ — ненулевой полный квадрат. Найди наибольшее такое значение yx₄₂ и запиши его в десятичной системе счисления."
             }
           }
         ],
@@ -203037,7 +203265,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "484: пары x = 22, y = 11 (yx = 484 = 22²) и x = 25, y = 8 (yx = 361 = 19²); наибольшее 484."
+              "markdown": "Подходят пары x = 22, y = 11 (yx = 484 = 22²) и x = 25, y = 8 (yx = 361 = 19²). Наибольшее значение — 484."
             }
           },
           {
@@ -203045,7 +203273,13 @@
             "data": {
               "language": "python",
               "code": "def value(ds, q):\n    v = 0\n    for d in ds:\n        v = v * q + d\n    return v\n\n\nfrom math import isqrt\n\nbest = 0\nfor x in range(42):\n    for y in range(42):\n        yx = value([y, x], 42)\n        if (value([3, x, 5, y], 42) % 41 == 0 and yx > 0\n                and isqrt(yx) ** 2 == yx):\n            best = max(best, yx)\nprint(best)",
-              "caption": "Решение программой"
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `484`"
             }
           }
         ],
@@ -203061,7 +203295,7 @@
         "theory_links": [
           {
             "label": "Теория",
-            "section": "sama-para",
+            "section": "dve-cifry",
             "material_id": "numeral-systems"
           }
         ],
@@ -203112,7 +203346,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Цифра 4 требует q ≥ 5."
+              "markdown": "Цифра 4 требует основания не меньше 5."
             }
           }
         ],
@@ -203120,7 +203354,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "q = 7. Проверка: 1 · 7² + 2 · 7 + 4 = 49 + 14 + 4 = 67."
+              "markdown": "1 · q² + 2 · q + 4 = 67, то есть q² + 2q = 63. Перебор оснований от 5 даёт q = 7: 49 + 14 + 4 = 67."
             }
           },
           {
@@ -203128,7 +203362,13 @@
             "data": {
               "language": "python",
               "code": "def value(ds, q):\n    v = 0\n    for d in ds:\n        v = v * q + d\n    return v\n\n\nprint(next(q for q in range(5, 100)\n           if value([1, 2, 4], q) == 67))",
-              "caption": "Решение программой"
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `7`"
             }
           }
         ],
@@ -203181,14 +203421,14 @@
         "explanation_kind": "worked_solution",
         "difficulty": 1,
         "estimated_minutes": 3,
-        "answer_instruction": "Введите два числа через пробел в том порядке, в каком их спрашивают.",
+        "answer_instruction": "Введите число.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Найди основание q и цифру x, если запись 1x4 в системе с основанием q равна 85₁₀."
+              "markdown": "Запись 1x4 в системе счисления с основанием q равна 85, x — цифра этой системы. Найди основание q."
             }
           }
         ],
@@ -203196,7 +203436,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Перебирайте основание и цифру вместе."
+              "markdown": "Перебирай основание и цифру вместе; q² ≤ 85."
             }
           }
         ],
@@ -203204,15 +203444,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "q = 9, x = 0: q² + xq + 4 = 85, то есть q(q + x) = 81; цифра 4 требует q ≥ 5, остаётся q = 9."
+              "markdown": "q² + xq + 4 = 85, то есть q(q + x) = 81. Цифра 4 требует q ≥ 5, а q² ≤ 81 — q ≤ 9. Подходит только q = 9 при x = 0."
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "def value(ds, q):\n    v = 0\n    for d in ds:\n        v = v * q + d\n    return v\n\n\nfor q in range(5, 100):\n    for x in range(q):\n        if value([1, x, 4], q) == 85:\n            print(q, x)",
-              "caption": "Решение программой"
+              "code": "def value(ds, q):\n    v = 0\n    for d in ds:\n        v = v * q + d\n    return v\n\n\nfor q in range(5, 10):\n    for x in range(q):\n        if value([1, x, 4], q) == 85:\n            print(q)",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `9`"
             }
           }
         ],
@@ -203251,7 +203497,7 @@
         ],
         "checker": {
           "checker_type": "exact_match",
-          "answer_variants": ["9 0"],
+          "answer_variants": ["9"],
           "numeric_tolerance": null
         }
       },
@@ -203280,7 +203526,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Цифра 7 требует q ≥ 8."
+              "markdown": "Цифра 7 требует основания не меньше 8."
             }
           }
         ],
@@ -203288,7 +203534,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "49. Решений два: q = 8, x = 6, y = 1 (36₈ + 61₈ = 30 + 49 = 79 = 117₈) и q = 10, x = 7, y = 0; для q = 8 число xy = 61₈ = 49."
+              "markdown": "Решений два: q = 8, x = 6, y = 1 (36₈ + 61₈ = 117₈) и q = 10, x = 7, y = 0. Для наименьшего q = 8 запись xy = 61₈ = 49."
             }
           },
           {
@@ -203296,7 +203542,13 @@
             "data": {
               "language": "python",
               "code": "def value(ds, q):\n    v = 0\n    for d in ds:\n        v = v * q + d\n    return v\n\n\nfor q in range(8, 40):\n    found = [value([x, y], q)\n             for x in range(1, q) for y in range(q)\n             if value([3, x], q) + value([x, y], q)\n             == value([1, y, 7], q)]\n    if found:\n        print(found[0])\n        break",
-              "caption": "Решение программой"
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `49`"
             }
           }
         ],
@@ -203372,7 +203624,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "48. Сумма цифр 9 + 11 + 4 + 6 + 10 + 7 = 47, значит q − 1 делит 47, а q ≥ 12: q − 1 = 47."
+              "markdown": "Сумма цифр обоих чисел 9 + 11 + 4 + 6 + 10 + 7 = 47. Значит, q − 1 делит 47, а из-за цифры B = 11 основание не меньше 12. Остаётся q − 1 = 47, q = 48."
             }
           },
           {
@@ -203380,7 +203632,13 @@
             "data": {
               "language": "python",
               "code": "def value(ds, q):\n    v = 0\n    for d in ds:\n        v = v * q + d\n    return v\n\n\nprint(next(q for q in range(12, 1000)\n           if (value([9, 11, 4], q) + value([6, 10, 7], q))\n           % (q - 1) == 0))",
-              "caption": "Решение программой"
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `48`"
             }
           }
         ],
@@ -203448,7 +203706,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "A = N − (M mod N)."
+              "markdown": "Добавка до кратного — N − (M mod N)."
             }
           }
         ],
@@ -203456,7 +203714,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "2: при x = 1 M = 115, N = 13, 115 mod 13 = 11, добавка 13 − 11 = 2."
+              "markdown": "Для каждой цифры x считаем добавку N − M % N и берём наименьшую. При x = 1: M = 115, N = 13, 115 % 13 = 11, добавка 13 − 11 = 2."
             }
           },
           {
@@ -203464,7 +203722,13 @@
             "data": {
               "language": "python",
               "code": "def value(ds, q):\n    v = 0\n    for d in ds:\n        v = v * q + d\n    return v\n\n\nbest = None\nfor x in range(6):\n    m, n = value([3, x, 1], 6), value([2, x], 6)\n    a = n - m % n\n    if best is None or a < best:\n        best = a\nprint(best)",
-              "caption": "Решение программой"
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `2`"
             }
           }
         ],
@@ -203524,7 +203788,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Значение арифметического выражения 2 · 7¹⁸ + 6 · 7¹⁰ + 3 · 7⁶ + 5 · 7² + 4 − x, где x — натуральное число, записали в семеричной системе счисления. Определите наименьшее значение x, при котором в этой записи шестёрок больше, чем нулей."
+              "markdown": "Значение арифметического выражения 2 · 7¹⁸ + 6 · 7¹⁰ + 3 · 7⁶ + 5 · 7² + 4 − x, где x — натуральное число, записали в семеричной системе счисления. Определи наименьшее значение x, при котором в этой записи шестёрок больше, чем нулей."
             }
           }
         ],
@@ -203540,7 +203804,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "353197: младший блок L = 3 · 7⁶ + 5 · 49 + 4 = 353196; пока x ≤ L, нулей не меньше десяти, а шестёрок не больше восьми; x = L + 1 даёт десять шестёрок и семь нулей."
+              "markdown": "Младший блок L = 3 · 7⁶ + 5 · 49 + 4 = 353196. Пока x ≤ L, вычитание не трогает старшие разряды: нулей не меньше десяти, шестёрок не больше восьми. При x = L + 1 = 353197 шестёрок десять, а нулей семь."
             }
           },
           {
@@ -203548,7 +203812,13 @@
             "data": {
               "language": "python",
               "code": "def digits(n, q):\n    if n == 0:\n        return [0]\n\n    result = []\n\n    while n > 0:\n        result.append(n % q)\n        n = n // q\n\n    result.reverse()\n    return result\n\n\nn = 2 * 7 ** 18 + 6 * 7 ** 10 + 3 * 7 ** 6 + 5 * 7 ** 2 + 4\nx = 1\nwhile True:\n    ds = digits(n - x, 7)\n    if ds.count(6) > ds.count(0):\n        break\n    x += 1\nprint(x)",
-              "caption": "Решение программой"
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `353197`"
             }
           }
         ],
@@ -203608,7 +203878,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Значение арифметического выражения 2 · 49¹⁰ + 7¹² − 7⁴ − 3 записали в системе счисления с основанием 7. Сколько цифр 6 содержится в этой записи? (Подтемы 2 и 3: блоки и подсчёт.)"
+              "markdown": "Значение арифметического выражения 2 · 49¹⁰ + 7¹² − 7⁴ − 3 записали в системе счисления с основанием 7. Сколько цифр 6 содержится в этой записи?"
             }
           }
         ],
@@ -203616,7 +203886,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "49¹⁰ = 7²⁰; вычитаемое — блоками."
+              "markdown": "Приведи 49¹⁰ к основанию 7, вычитаемое раздели на блоки."
             }
           }
         ],
@@ -203624,7 +203894,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "10: 2 · 49¹⁰ = 2 · 7²⁰, а 7¹² − 7⁴ − 3 = (7¹² − 7⁵) + (7⁵ − 7⁴ − 3); запись 200000000666666656664₇."
+              "markdown": "2 · 49¹⁰ = 2 · 7²⁰. Вычитаемое: 7¹² − 7⁴ − 3 = (7¹² − 7⁵) + (7⁵ − 7⁴ − 3). Запись 200000000666666656664₇, шестёрок 10."
             }
           },
           {
@@ -203632,7 +203902,13 @@
             "data": {
               "language": "python",
               "code": "def digits(n, q):\n    if n == 0:\n        return [0]\n\n    result = []\n\n    while n > 0:\n        result.append(n % q)\n        n = n // q\n\n    result.reverse()\n    return result\n\n\nn = 2 * 49 ** 10 + 7 ** 12 - 7 ** 4 - 3\nprint(digits(n, 7).count(6))",
-              "caption": "Решение программой"
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `10`"
             }
           }
         ],
@@ -203685,7 +203961,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Значение арифметического выражения 3 · 6⁸⁰ + 6⁵⁰ − 6²⁰ − 1000 записали в системе счисления с основанием 36. Определите количество цифр с числовым значением, превышающим 9. (Подтема 3: свойства цифр.)"
+              "markdown": "Значение арифметического выражения 3 · 6⁸⁰ + 6⁵⁰ − 6²⁰ − 1000 записали в системе счисления с основанием 36. Определи количество цифр с числовым значением, превышающим 9."
             }
           }
         ],
@@ -203693,7 +203969,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Цифры — числа от 0 до 35."
+              "markdown": "Цифры 36-ричной записи — числа от 0 до 35."
             }
           }
         ],
@@ -203701,7 +203977,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "23: запись 3000000000000000ZZZZZZZZZZZZZZYZZZZZZZZ88₃₆, цифры больше 9 — это Z и Y."
+              "markdown": "Программа собирает цифры списком и считает те, что больше 9. В записи 3000000000000000ZZZZZZZZZZZZZZYZZZZZZZZ88₃₆ это Z и Y — 23 цифры."
             }
           },
           {
@@ -203709,7 +203985,13 @@
             "data": {
               "language": "python",
               "code": "def digits(n, q):\n    if n == 0:\n        return [0]\n\n    result = []\n\n    while n > 0:\n        result.append(n % q)\n        n = n // q\n\n    result.reverse()\n    return result\n\n\nn = 3 * 6 ** 80 + 6 ** 50 - 6 ** 20 - 1000\nprint(sum(1 for d in digits(n, 36) if d > 9))",
-              "caption": "Решение программой"
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `23`"
             }
           }
         ],
@@ -203762,7 +204044,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Значение арифметического выражения 6⁸ + 6³ − x, где x — натуральное число, не превышающее 1000, записали в шестеричной системе счисления. Определите наибольшее значение x, при котором в записи ровно три нуля. (Подтема 4.)"
+              "markdown": "Значение арифметического выражения 6⁸ + 6³ − x, где x — натуральное число, не превышающее 1000, записали в шестеричной системе счисления. Определи наибольшее значение x, при котором в записи ровно три нуля."
             }
           }
         ],
@@ -203770,7 +204052,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Перебирайте x до 1000."
+              "markdown": "Перебирай x до 1000 и запоминай последнее подходящее."
             }
           }
         ],
@@ -203778,7 +204060,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "864: три нуля у x = 432, 648 и 864; наибольшее — 864."
+              "markdown": "Ровно три нуля — у x = 432, 648 и 864. Наибольшее — 864."
             }
           },
           {
@@ -203786,7 +204068,13 @@
             "data": {
               "language": "python",
               "code": "def digits(n, q):\n    if n == 0:\n        return [0]\n\n    result = []\n\n    while n > 0:\n        result.append(n % q)\n        n = n // q\n\n    result.reverse()\n    return result\n\n\nprint(max(x for x in range(1, 1001)\n          if digits(6 ** 8 + 6 ** 3 - x, 6).count(0) == 3))",
-              "caption": "Решение программой"
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `864`"
             }
           }
         ],
@@ -203839,7 +204127,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Операнды арифметического выражения записаны в системе счисления с основанием 21: 9x36₂₁ + 3x7Ax₂₁. Переменной x обозначена неизвестная цифра из алфавита 21-ричной системы счисления. Определите значение x, при котором значение выражения кратно 20. Для найденного x вычислите частное от деления значения выражения на 10. (Подтема 5: в ответ — то, что спросили.)"
+              "markdown": "Операнды арифметического выражения записаны в системе счисления с основанием 21: 9x36₂₁ + 3x7Ax₂₁. Переменной x обозначена неизвестная цифра из алфавита 21-ричной системы счисления. Определи значение x, при котором значение выражения кратно 20. Для найденного x вычисли частное от деления значения выражения на 10."
             }
           }
         ],
@@ -203847,7 +204135,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Кратность — 20, а делят на 10."
+              "markdown": "Кратность проверяют на 20, а делят на 10."
             }
           }
         ],
@@ -203855,7 +204143,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "80600: подходит только x = 14, сумма 806000, частное от деления на 10."
+              "markdown": "Подходит только x = 14: сумма 806000 кратна 20. Спрашивают частное от деления на 10: 80600."
             }
           },
           {
@@ -203863,7 +204151,13 @@
             "data": {
               "language": "python",
               "code": "def value(ds, q):\n    v = 0\n    for d in ds:\n        v = v * q + d\n    return v\n\n\nfor x in range(21):\n    s = value([9, x, 3, 6], 21) + value([3, x, 7, 10, x], 21)\n    if s % 20 == 0:\n        print(s // 10)",
-              "caption": "Решение программой"
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `80600`"
             }
           }
         ],
@@ -203916,7 +204210,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Операнды арифметического выражения записаны в системах счисления с основаниями 7 и 8: 1xy3₇ + y2x₈. Переменными x и y обозначены допустимые в данных системах счисления неизвестные цифры. Определите значения x и y, при которых значение выражения будет наименьшим и кратно 13. Для найденных значений вычислите частное от деления значения выражения на 13. (Подтема 6.)"
+              "markdown": "Операнды арифметического выражения записаны в системах счисления с основаниями 7 и 8: 1xy3₇ + y2x₈. Переменными x и y обозначены допустимые в данных системах счисления неизвестные цифры. Определи значения x и y, при которых значение выражения будет наименьшим и кратно 13. Для найденных значений вычисли частное от деления значения выражения на 13."
             }
           }
         ],
@@ -203932,7 +204226,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "41: наименьшая сумма 533 при x = 2, y = 1; первая найденная пара x = 1, y = 5 даёт 767."
+              "markdown": "Сравниваем все пары: наименьшая сумма, кратная 13, — 533 при x = 2, y = 1. Первая найденная пара x = 1, y = 5 дала бы 767. Частное 533 / 13 = 41."
             }
           },
           {
@@ -203940,7 +204234,13 @@
             "data": {
               "language": "python",
               "code": "def value(ds, q):\n    v = 0\n    for d in ds:\n        v = v * q + d\n    return v\n\n\nbest = None\nfor x in range(7):\n    for y in range(7):\n        s = value([1, x, y, 3], 7) + value([y, 2, x], 8)\n        if s % 13 == 0 and (best is None or s < best):\n            best = s\nprint(best // 13)",
-              "caption": "Решение программой"
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `41`"
             }
           }
         ],
@@ -833441,60 +833741,32 @@
       "id": "numeral-systems",
       "sections": [
         "kak-ustroena-tema-14",
-        "chislo-i-zapis-14",
-        "osnovanie",
         "znachenie-zapisi",
         "cifry-bukvy",
-        "naimenshee-osnovanie",
-        "dlina-zapisi-14",
-        "ostatok-i-chastnoe",
         "posledovatelnoe-delenie",
-        "sdvigi",
         "zapis-itogo-14",
-        "bloki-cifr",
-        "slozhenie",
-        "koefficient",
+        "stepen-osnovaniya",
         "minus-edinica",
         "raznost-stepenej",
-        "sborka-iz-blokov",
-        "perevod-gruppami",
-        "odno-osnovanie",
-        "neudobnoe-vychitaemoe",
+        "otvet-zadachi-14",
+        "slozhenie",
         "stepeni-itogo",
         "odin-sposob",
-        "bolshie-stepeni",
-        "podschyot-cifry",
+        "otvet-programmoj",
         "spisok-cifr",
-        "voprosy-o-zapisi",
         "cifry-so-svojstvom",
-        "bin-oct-hex",
         "programma-itogo",
         "perebor-x",
-        "x-chislo",
-        "bez-zaimstvovanij",
-        "maksimalnoe-x",
+        "pochemu-otvet",
         "ne-plavno",
-        "naibolshee-kolichestvo",
-        "while",
+        "naibolshee-i-naimenshee",
         "parametr-itogo",
-        "perebor-cifry",
         "chto-oboznachaet",
-        "dopustimye-znacheniya",
-        "razlozhenie",
-        "naimenshaya-cifra",
-        "funkciya-znacheniya",
-        "strokovyj-perebor",
+        "perebor-cifry",
         "v-otvet",
-        "ves-razryada",
-        "do-programmy",
-        "cifra-itogo",
+        "raznye-osnovaniya",
         "dve-cifry",
-        "diapazony",
-        "vyrazhenie-ot-dvuh",
-        "ne-pervaya-para",
-        "naimenshee-znachenie",
-        "sama-para",
-        "dve-itogo",
+        "cifra-itogo",
         "dopolnitelnyy-urok-osnovanie",
         "osnovanie-po-formule",
         "osnovanie-i-cifra",
@@ -833514,15 +833786,9 @@
           "access": "free",
           "sections": [
             "kak-ustroena-tema-14",
-            "chislo-i-zapis-14",
-            "osnovanie",
             "znachenie-zapisi",
             "cifry-bukvy",
-            "naimenshee-osnovanie",
-            "dlina-zapisi-14",
-            "ostatok-i-chastnoe",
             "posledovatelnoe-delenie",
-            "sdvigi",
             "zapis-itogo-14"
           ]
         },
@@ -833530,15 +833796,11 @@
           "slug": "stepeni-blokami",
           "access": "free",
           "sections": [
-            "bloki-cifr",
-            "slozhenie",
-            "koefficient",
+            "stepen-osnovaniya",
             "minus-edinica",
             "raznost-stepenej",
-            "sborka-iz-blokov",
-            "perevod-gruppami",
-            "odno-osnovanie",
-            "neudobnoe-vychitaemoe",
+            "otvet-zadachi-14",
+            "slozhenie",
             "stepeni-itogo"
           ]
         },
@@ -833547,12 +833809,9 @@
           "access": "free",
           "sections": [
             "odin-sposob",
-            "bolshie-stepeni",
-            "podschyot-cifry",
+            "otvet-programmoj",
             "spisok-cifr",
-            "voprosy-o-zapisi",
             "cifry-so-svojstvom",
-            "bin-oct-hex",
             "programma-itogo"
           ]
         },
@@ -833561,12 +833820,9 @@
           "access": "free",
           "sections": [
             "perebor-x",
-            "x-chislo",
-            "bez-zaimstvovanij",
-            "maksimalnoe-x",
+            "pochemu-otvet",
             "ne-plavno",
-            "naibolshee-kolichestvo",
-            "while",
+            "naibolshee-i-naimenshee",
             "parametr-itogo"
           ]
         },
@@ -833574,30 +833830,12 @@
           "slug": "neizvestnaya-cifra",
           "access": "free",
           "sections": [
-            "perebor-cifry",
             "chto-oboznachaet",
-            "dopustimye-znacheniya",
-            "razlozhenie",
-            "naimenshaya-cifra",
-            "funkciya-znacheniya",
-            "strokovyj-perebor",
+            "perebor-cifry",
             "v-otvet",
-            "ves-razryada",
-            "do-programmy",
-            "cifra-itogo"
-          ]
-        },
-        {
-          "slug": "dve-cifry",
-          "access": "free",
-          "sections": [
+            "raznye-osnovaniya",
             "dve-cifry",
-            "diapazony",
-            "vyrazhenie-ot-dvuh",
-            "ne-pervaya-para",
-            "naimenshee-znachenie",
-            "sama-para",
-            "dve-itogo"
+            "cifra-itogo"
           ]
         },
         {
