@@ -765899,7 +765899,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Окончание — начало плюс длительность."
+              "markdown": "Окончание — начало плюс время работы."
             }
           }
         ],
@@ -765909,6 +765909,12 @@
             "data": {
               "markdown": "19 мс: 12 + 7."
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `19`"
+            }
           }
         ],
         "skills": [],
@@ -765916,14 +765922,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 0,
+            "position": 2,
             "material_id": "parallel-computing"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "dlitelnost-nachalo-okonchanie",
+            "section": "nachalo-i-okonchanie",
             "material_id": "parallel-computing"
           }
         ],
@@ -765974,7 +765980,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Начало — окончание минус длительность."
+              "markdown": "Начало — окончание минус время работы."
             }
           }
         ],
@@ -765984,6 +765990,12 @@
             "data": {
               "markdown": "22 мс: 30 − 8."
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `22`"
+            }
           }
         ],
         "skills": [],
@@ -765991,14 +766003,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 1,
+            "position": 3,
             "material_id": "parallel-computing"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "dlitelnost-nachalo-okonchanie",
+            "section": "nachalo-i-okonchanie",
             "material_id": "parallel-computing"
           }
         ],
@@ -766049,7 +766061,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Параллельно — максимум окончаний."
+              "markdown": "Независимые процессы идут одновременно: всё готово к окончанию самого долгого."
             }
           }
         ],
@@ -766059,6 +766071,12 @@
             "data": {
               "markdown": "9 мс: max(5; 9)."
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `9`"
+            }
           }
         ],
         "skills": [],
@@ -766066,14 +766084,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 2,
+            "position": 0,
             "material_id": "parallel-computing"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "process",
+            "section": "process-i-zavisimost",
             "material_id": "parallel-computing"
           }
         ],
@@ -766124,7 +766142,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Последовательно — сумма."
+              "markdown": "B ждёт A: они идут друг за другом."
             }
           }
         ],
@@ -766134,6 +766152,12 @@
             "data": {
               "markdown": "14 мс: 5 + 9."
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `14`"
+            }
           }
         ],
         "skills": [],
@@ -766141,14 +766165,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 3,
+            "position": 1,
             "material_id": "parallel-computing"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "process",
+            "section": "process-i-zavisimost",
             "material_id": "parallel-computing"
           }
         ],
@@ -766199,7 +766223,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Процесс 3 ждёт оба результата."
+              "markdown": "Процесс 3 ждёт последнего из своих поставщиков."
             }
           }
         ],
@@ -766209,6 +766233,12 @@
             "data": {
               "markdown": "9 мс: процесс 3 ждёт до max(5; 3) = 5 и работает ещё 4."
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `9`"
+            }
           }
         ],
         "skills": [],
@@ -766216,14 +766246,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 4,
+            "position": 6,
             "material_id": "parallel-computing"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "tablica-processov",
+            "section": "raspisanie-po-shagam",
             "material_id": "parallel-computing"
           }
         ],
@@ -766274,7 +766304,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Начало — максимум окончаний."
+              "markdown": "C начинает, когда готов последний из поставщиков."
             }
           }
         ],
@@ -766284,6 +766314,12 @@
             "data": {
               "markdown": "11 мс: max(8; 5) + 3."
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `11`"
+            }
           }
         ],
         "skills": [],
@@ -766291,14 +766327,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 5,
+            "position": 4,
             "material_id": "parallel-computing"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "poslednij-postavshchik",
+            "section": "nachalo-i-okonchanie",
             "material_id": "parallel-computing"
           }
         ],
@@ -766349,7 +766385,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Окончание поставщика — момент на общей шкале."
+              "markdown": "B ждёт окончания A — момента на общих часах, а не его времени работы."
             }
           }
         ],
@@ -766359,6 +766395,12 @@
             "data": {
               "markdown": "16 мс: 10 + 2 + 4."
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `16`"
+            }
           }
         ],
         "skills": [],
@@ -766366,7 +766408,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 6,
+            "position": 5,
             "material_id": "parallel-computing"
           }
         ],
@@ -766424,7 +766466,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Сначала поставщики, потом получатели."
+              "markdown": "Сначала независимые процессы, потом те, кто их ждёт."
             }
           }
         ],
@@ -766433,6 +766475,12 @@
             "type": "text",
             "data": {
               "markdown": "Начало процесса 3 — 7 мс, общее время 12 мс."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `7 12`"
             }
           }
         ],
@@ -766448,7 +766496,7 @@
         "theory_links": [
           {
             "label": "Теория",
-            "section": "raschet-tablicy",
+            "section": "raspisanie-po-shagam",
             "material_id": "parallel-computing"
           }
         ],
@@ -766499,7 +766547,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Порядок расчёта — по готовности поставщиков."
+              "markdown": "Считай процесс, когда окончания его поставщиков уже известны, а не по порядку строк."
             }
           }
         ],
@@ -766508,6 +766556,12 @@
             "type": "text",
             "data": {
               "markdown": "Начало процесса 50 — 12 мс, общее время 14 мс: 10 → 20 → 40 заканчивается в 12, процесс 30 — в 8."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `12 14`"
             }
           }
         ],
@@ -766523,7 +766577,7 @@
         "theory_links": [
           {
             "label": "Теория",
-            "section": "pereputannye-stroki",
+            "section": "raspisanie-po-shagam",
             "material_id": "parallel-computing"
           }
         ],
@@ -766566,7 +766620,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "В основном примере длительность процесса 5 увеличили с 5 до 6 мс. Каким станет общее время? А если вместо этого процесс 3 удлинить с 3 до 5 мс?"
+              "markdown": "В учебном примере время работы процесса 5 увеличили с 5 до 6 мс. Каким станет общее время? А если вместо этого процесс 3 удлинить с 3 до 5 мс?"
             }
           }
         ],
@@ -766574,7 +766628,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Влияет только удлинение на критическом пути."
+              "markdown": "Влияет только удлинение процесса из критической цепочки 2 → 5 → 7 → 8."
             }
           }
         ],
@@ -766584,6 +766638,12 @@
             "data": {
               "markdown": "15 мс: процесс 7 стартует в 12, процесс 8 — в 14; при удлинении процесса 3 итог остаётся 14: процесс 6 закончит в 13, как и процесс 7."
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `15 14`"
+            }
           }
         ],
         "skills": [],
@@ -766591,14 +766651,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 9,
+            "position": 10,
             "material_id": "parallel-computing"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "kriticheskij-put",
+            "section": "kriticheskaya-cepochka",
             "material_id": "parallel-computing"
           }
         ],
@@ -766649,7 +766709,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Таблица начал и окончаний."
+              "markdown": "Построй начала и окончания всех семи процессов; ответ — наибольшее окончание."
             }
           }
         ],
@@ -766659,6 +766719,12 @@
             "data": {
               "markdown": "15."
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `15`"
+            }
           }
         ],
         "skills": [],
@@ -766666,14 +766732,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 10,
+            "position": 9,
             "material_id": "parallel-computing"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "raschet-tablicy",
+            "section": "raspisanie-po-shagam",
             "material_id": "parallel-computing"
           }
         ],
@@ -766724,7 +766790,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Точный поиск в первом столбце."
+              "markdown": "ВПР ищет 30 в первом столбце и берёт значение из второго."
             }
           }
         ],
@@ -766733,6 +766799,12 @@
             "type": "text",
             "data": {
               "markdown": "12."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `12`"
             }
           }
         ],
@@ -766748,7 +766820,7 @@
         "theory_links": [
           {
             "label": "Теория",
-            "section": "funkciya-vpr",
+            "section": "vpr-po-id",
             "material_id": "parallel-computing"
           }
         ],
@@ -766805,7 +766877,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Разделите поставщиков по столбцам и найдите их окончания через ВПР."
+              "markdown": "Разложи поставщиков по столбцам и найди их окончания через ВПР."
             }
           }
         ],
@@ -766813,15 +766885,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "69."
+              "markdown": "69 — наибольшее окончание."
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "text",
-              "code": "C: разделить по «;» на C, D, E, пустые — 0\nСтрока 2 — процесс 0 со временем 0\nF3: =МАКС(ВПР(C3;$A$2:$G2;7;0);ВПР(D3;$A$2:$G2;7;0);\n          ВПР(E3;$A$2:$G2;7;0))\nG3: =F3+B3 — обе формулы протянуть вниз\nОтвет: =МАКС(G3:G20)",
+              "code": "C: Данные → Текст по столбцам, разделитель «;» → C:E\nF2: =ЕСНД(ВПР(C2;$A$1:$J1;10;0);0) — на F2:H…\nI2: =МАКС(F2:H2) — начало\nJ2: =I2+B2 — окончание; всё протянуть вниз\nОтвет: =МАКС(J2:J19)",
               "caption": "Формулы в Excel"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `69`"
             }
           }
         ],
@@ -766846,7 +766924,7 @@
         "theory_links": [
           {
             "label": "Теория",
-            "section": "postavshchiki-po-yachejkam",
+            "section": "nachalo-okonchanie-itog",
             "material_id": "parallel-computing"
           }
         ],
@@ -766889,7 +766967,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Сколько процессов основного примера работают в момент 4?"
+              "markdown": "Сколько процессов учебного примера работают в момент 4?"
             }
           }
         ],
@@ -766897,7 +766975,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Работает на [s; f)."
+              "markdown": "Это момент, а не миллисекунда: начало ≤ 4, окончание > 4."
             }
           }
         ],
@@ -766907,6 +766985,12 @@
             "data": {
               "markdown": "2: процессы 2 и 3; процесс 1 закончился ровно в 4."
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `2`"
+            }
           }
         ],
         "skills": [],
@@ -766914,14 +766998,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 13,
+            "position": 15,
             "material_id": "parallel-computing"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "process-rabotaet",
+            "section": "na-n-j-millisekunde",
             "material_id": "parallel-computing"
           }
         ],
@@ -766964,7 +767048,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Сколько процессов основного примера завершены к моменту 11?"
+              "markdown": "Сколько процессов учебного примера завершились за первые 11 мс?"
             }
           }
         ],
@@ -766980,7 +767064,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "5: окончания 4, 6, 7, 8, 11."
+              "markdown": "5: окончания 4, 6, 7, 8 и 11."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `5`"
             }
           }
         ],
@@ -766989,14 +767079,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 14,
+            "position": 16,
             "material_id": "parallel-computing"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "zavershivshiesya-i-nachavshiesya",
+            "section": "zakonchilis-i-nachalis",
             "material_id": "parallel-computing"
           }
         ],
@@ -767039,7 +767129,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Когда в основном примере завершатся хотя бы шесть процессов?"
+              "markdown": "За какое минимальное время в учебном примере завершатся шесть процессов?"
             }
           }
         ],
@@ -767047,7 +767137,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Шестое по величине окончание."
+              "markdown": "Шестое по возрастанию окончание."
             }
           }
         ],
@@ -767055,7 +767145,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "12."
+              "markdown": "12: окончания 4, 6, 7, 8, 11, 12, …"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `12`"
             }
           }
         ],
@@ -767064,7 +767160,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 15,
+            "position": 18,
             "material_id": "parallel-computing"
           }
         ],
@@ -767107,14 +767203,14 @@
         "explanation_kind": "worked_solution",
         "difficulty": 2,
         "estimated_minutes": 3,
-        "answer_instruction": "Введите количество процессов и сумму их ID через пробел.",
+        "answer_instruction": "Введите через пробел количество процессов, затем сумму их ID.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Сколько процессов основного примера начались не раньше 4 и закончились не позже 12? Найди сумму их ID."
+              "markdown": "Сколько процессов учебного примера начались не раньше момента 4 и закончились не позже момента 12? Найди сумму их ID."
             }
           }
         ],
@@ -767122,7 +767218,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Два условия: начало не раньше 4, окончание не позже 12."
+              "markdown": "Два условия сразу: начало ≥ 4 и окончание ≤ 12."
             }
           }
         ],
@@ -767130,7 +767226,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "4 процесса, сумма ID 18."
+              "markdown": "4 процесса — 3, 4, 5 и 6, сумма ID 18."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `4 18`"
             }
           }
         ],
@@ -767139,14 +767241,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 16,
+            "position": 17,
             "material_id": "parallel-computing"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "vnutri-okna",
+            "section": "zakonchilis-i-nachalis",
             "material_id": "parallel-computing"
           }
         ],
@@ -767189,7 +767291,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Сколько процессов основного примера работают в течение двенадцатой миллисекунды?"
+              "markdown": "Сколько процессов учебного примера выполняются в течение двенадцатой миллисекунды?"
             }
           }
         ],
@@ -767197,7 +767299,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "12-я миллисекунда — [11; 12)."
+              "markdown": "12-я мс — от момента 11 до 12: начало < 12, окончание ≥ 12."
             }
           }
         ],
@@ -767205,7 +767307,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "2: процессы 6 и 7 на [11; 12)."
+              "markdown": "2: процессы 6 (с 8 до 12) и 7 (с 11 до 13)."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `2`"
             }
           }
         ],
@@ -767214,14 +767322,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 17,
+            "position": 13,
             "material_id": "parallel-computing"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "moment-i-millisekunda",
+            "section": "na-n-j-millisekunde",
             "material_id": "parallel-computing"
           }
         ],
@@ -767272,7 +767380,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "10-я миллисекунда — [9; 10)."
+              "markdown": "Построй расписание; на 10-й мс идут процессы с началом < 10 и окончанием ≥ 10."
             }
           }
         ],
@@ -767280,7 +767388,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "2: на [9; 10) работают процессы 4 и 6."
+              "markdown": "2: процессы 4 (с 5 до 10) и 6 (с 5 до 11)."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `2`"
             }
           }
         ],
@@ -767289,14 +767403,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 18,
+            "position": 14,
             "material_id": "parallel-computing"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "moment-i-millisekunda",
+            "section": "na-n-j-millisekunde",
             "material_id": "parallel-computing"
           }
         ],
@@ -767339,7 +767453,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Для той же системы определите минимальное время (в мс), через которое завершится выполнение пяти процессов."
+              "markdown": "Процессы: 1 — 3 мс, 0; 2 — 8 мс, 0; 3 — 2 мс, 1; 4 — 5 мс, 1; 3; 5 — 4 мс, 2; 4; 6 — 6 мс, 3; 7 — 1 мс, 5; 6. Независимые процессы начинаются в момент 0, зависимые — сразу после завершения всех процессов, от которых зависят. Определите минимальное время (в мс), через которое завершится выполнение пяти процессов."
             }
           }
         ],
@@ -767347,7 +767461,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Пятое по величине окончание."
+              "markdown": "Пятое по возрастанию окончание."
             }
           }
         ],
@@ -767355,7 +767469,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "11."
+              "markdown": "11: окончания 3, 5, 8, 10, 11, 14, 15."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `11`"
             }
           }
         ],
@@ -767414,7 +767534,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Три процесса одновременно работают на [2; 6) и [9; 12). Каково суммарное время? Какова длина самого длинного отрезка?"
+              "markdown": "Три процесса идут одновременно с 3-й по 6-ю мс и с 10-й по 12-ю мс. Сколько миллисекунд в сумме они идут вместе? Какова длина самого длинного отрезка?"
             }
           }
         ],
@@ -767422,7 +767542,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Самый длинный отрезок — не сумма."
+              "markdown": "Сумма — все такие миллисекунды, отрезок — только подряд."
             }
           }
         ],
@@ -767432,6 +767552,12 @@
             "data": {
               "markdown": "Суммарно 7 мс, самый длинный отрезок — 4 мс."
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `7 4`"
+            }
           }
         ],
         "skills": [],
@@ -767439,7 +767565,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 20,
+            "position": 25,
             "material_id": "parallel-computing"
           }
         ],
@@ -767489,7 +767615,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Два процесса работают на [1; 8) и [5; 10). Как долго они работают одновременно?"
+              "markdown": "Один процесс идёт с момента 1 до момента 8, другой — с 5 до 10. Сколько миллисекунд они идут одновременно?"
             }
           }
         ],
@@ -767497,7 +767623,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Пересечение промежутков."
+              "markdown": "Вместе они идут с 6-й по 8-ю мс."
             }
           }
         ],
@@ -767505,7 +767631,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "3 мс: общий участок [5; 8)."
+              "markdown": "3 мс: с 6-й по 8-ю."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `3`"
             }
           }
         ],
@@ -767521,7 +767653,7 @@
         "theory_links": [
           {
             "label": "Теория",
-            "section": "vmeste-s-processom",
+            "section": "setka-millisekund",
             "material_id": "parallel-computing"
           }
         ],
@@ -767564,7 +767696,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Для основного примера найди общее время, пик параллельности, самый длинный отрезок с этим пиком и число работающих процессов в момент 7."
+              "markdown": "Для учебного примера найди общее время, наибольшее число одновременно идущих процессов, самый длинный отрезок с таким числом процессов и число процессов, работающих в момент 7."
             }
           }
         ],
@@ -767572,7 +767704,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Постройте строку чисел работающих процессов."
+              "markdown": "Построй строку сумм сетки; момент 7 — граница 7-й и 8-й мс."
             }
           }
         ],
@@ -767580,7 +767712,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Общее время 14, пик 3, отрезок 1 мс, в момент 7 работают 2 процесса."
+              "markdown": "Общее время 14, больше всего — 3 процесса, отрезок 1 мс, в момент 7 работают 2 процесса."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `14 3 1 2`"
             }
           }
         ],
@@ -767589,14 +767727,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 22,
+            "position": 24,
             "material_id": "parallel-computing"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "pik-parallelnosti",
+            "section": "bolshe-vsego",
             "material_id": "parallel-computing"
           }
         ],
@@ -767639,7 +767777,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Как долго в основном примере непрерывно работает не более одного процесса, пока система не завершилась?"
+              "markdown": "Сколько миллисекунд подряд в учебном примере идёт не больше одного процесса, пока все процессы не закончились?"
             }
           }
         ],
@@ -767647,7 +767785,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Отрезок в конце расписания."
+              "markdown": "Посмотри на конец строки сумм."
             }
           }
         ],
@@ -767655,7 +767793,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "2 мс: на [12; 14) работает по одному процессу."
+              "markdown": "2 мс: 13-я и 14-я."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `2`"
             }
           }
         ],
@@ -767664,7 +767808,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 23,
+            "position": 26,
             "material_id": "parallel-computing"
           }
         ],
@@ -767714,7 +767858,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Какое наибольшее число других процессов работало одновременно с процессом 6 основного примера?"
+              "markdown": "Какое наибольшее число других процессов шло одновременно с процессом 6 учебного примера?"
             }
           }
         ],
@@ -767722,7 +767866,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Считайте только на промежутке процесса 6."
+              "markdown": "Посмотри на столбцы с 9-й по 12-ю мс — когда идёт процесс 6."
             }
           }
         ],
@@ -767730,7 +767874,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "1: на [8; 11) рядом работает процесс 5, на [11; 12) — процесс 7."
+              "markdown": "1: на 9–11-й мс рядом идёт процесс 5, на 12-й — процесс 7."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `1`"
             }
           }
         ],
@@ -767739,14 +767889,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 24,
+            "position": 23,
             "material_id": "parallel-computing"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "vmeste-s-processom",
+            "section": "setka-millisekund",
             "material_id": "parallel-computing"
           }
         ],
@@ -767789,7 +767939,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Как долго одновременно работают процессы 3 и 4 основного примера?"
+              "markdown": "Сколько миллисекунд одновременно идут процессы 3 и 4 учебного примера?"
             }
           }
         ],
@@ -767797,7 +767947,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Пересечение их промежутков."
+              "markdown": "Процесс 3 идёт с 5-й по 7-ю мс, процесс 4 — с 7-й по 8-ю."
             }
           }
         ],
@@ -767805,7 +767955,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "1 мс: [6; 7)."
+              "markdown": "1 мс: 7-я."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `1`"
             }
           }
         ],
@@ -767814,14 +767970,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 25,
+            "position": 22,
             "material_id": "parallel-computing"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "vmeste-s-processom",
+            "section": "setka-millisekund",
             "material_id": "parallel-computing"
           }
         ],
@@ -767864,7 +768020,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Процессы: 1 — 3 мс, 0; 2 — 8 мс, 0; 3 — 2 мс, 1; 4 — 5 мс, 1; 3; 5 — 4 мс, 2; 4; 6 — 6 мс, 3; 7 — 1 мс, 5; 6. Все независимые процессы начинаются в 0, зависимые — сразу после завершения всех своих поставщиков. Определите наибольшее количество процессов, выполнявшихся одновременно, и длительность (в мс) самого длинного отрезка, на котором выполнялось столько процессов."
+              "markdown": "Процессы: 1 — 3 мс, 0; 2 — 8 мс, 0; 3 — 2 мс, 1; 4 — 5 мс, 1; 3; 5 — 4 мс, 2; 4; 6 — 6 мс, 3; 7 — 1 мс, 5; 6. Независимые процессы начинаются в момент 0, зависимые — сразу после завершения всех процессов, от которых зависят. Определите наибольшее количество процессов, выполнявшихся одновременно, и длительность (в мс) самого длинного отрезка, на котором выполнялось столько процессов."
             }
           }
         ],
@@ -767872,7 +768028,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Сетка по миллисекундам."
+              "markdown": "Сетка миллисекунд и строка сумм."
             }
           }
         ],
@@ -767880,7 +768036,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "3 процесса, 3 мс: на [5; 8) работают процессы 2, 4 и 6."
+              "markdown": "3 процесса, 3 мс: с 6-й по 8-ю мс идут процессы 2, 4 и 6."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `3 3`"
             }
           }
         ],
@@ -767889,14 +768051,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 26,
+            "position": 27,
             "material_id": "parallel-computing"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "pik-parallelnosti",
+            "section": "samyj-dlinnyj-otrezok",
             "material_id": "parallel-computing"
           }
         ],
@@ -767932,14 +768094,14 @@
         "explanation_kind": "worked_solution",
         "difficulty": 2,
         "estimated_minutes": 3,
-        "answer_instruction": "Введите позднее начало процесса 1 и запас процесса 2 через пробел.",
+        "answer_instruction": "Введите через пробел позднее начало процесса 1, затем запас процесса 2.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "В примере из четырёх процессов (общее время 8) найди позднее начало процесса 1 и запас процесса 2."
+              "markdown": "Процессы 1 и 2 по 4 мс ни от кого не зависят, 3 (2 мс) и 4 (4 мс) ждут процесс 2; общее время 8. Найди позднее начало процесса 1 и запас процесса 2."
             }
           }
         ],
@@ -767947,7 +768109,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Позднее начало — позднее окончание минус длительность."
+              "markdown": "Процесс 1 никто не ждёт: он должен закончиться к 8."
             }
           }
         ],
@@ -767957,6 +768119,12 @@
             "data": {
               "markdown": "Позднее начало процесса 1 — 4; у процесса 2 запаса нет."
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `4 0`"
+            }
           }
         ],
         "skills": [],
@@ -767964,14 +768132,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 27,
+            "position": 29,
             "material_id": "parallel-computing"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "pozdnie-nachala",
+            "section": "pozdnee-nachalo",
             "material_id": "parallel-computing"
           }
         ],
@@ -768014,7 +768182,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "В основном примере найди позднее начало процесса 4 и запас процесса 1."
+              "markdown": "В учебном примере найди позднее начало процесса 4 и запас процесса 1."
             }
           }
         ],
@@ -768022,7 +768190,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Обратный проход от общего времени."
+              "markdown": "Считай с конца от общего времени 14."
             }
           }
         ],
@@ -768032,6 +768200,12 @@
             "data": {
               "markdown": "Позднее начало процесса 4 — 7; запас процесса 1 — 2 мс."
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `7 2`"
+            }
           }
         ],
         "skills": [],
@@ -768039,14 +768213,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 28,
+            "position": 30,
             "material_id": "parallel-computing"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "pozdnie-nachala",
+            "section": "pozdnee-nachalo",
             "material_id": "parallel-computing"
           }
         ],
@@ -768089,7 +768263,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Какие процессы основного примера не имеют запаса?"
+              "markdown": "У каких процессов учебного примера нет запаса?"
             }
           }
         ],
@@ -768105,7 +768279,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "2, 5, 7 и 8 — критический путь."
+              "markdown": "2, 5, 7 и 8 — критическая цепочка."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `2 5 7 8`"
             }
           }
         ],
@@ -768114,14 +768294,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 29,
+            "position": 31,
             "material_id": "parallel-computing"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "pozdnie-nachala",
+            "section": "pozdnee-nachalo",
             "material_id": "parallel-computing"
           }
         ],
@@ -768164,7 +768344,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Сколько процессов основного примера могут начать не раньше 10 мс при минимальном общем времени?"
+              "markdown": "Сколько процессов учебного примера могут начаться не раньше чем через 10 мс, если все процессы должны закончиться за минимальное время?"
             }
           }
         ],
@@ -768172,7 +768352,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Сравнивайте поздние начала с порогом."
+              "markdown": "Сравнивай с порогом поздние начала, а не ранние."
             }
           }
         ],
@@ -768180,7 +768360,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "2: процессы 7 (11) и 8 (13)."
+              "markdown": "2: процессы 7 (позднее начало 11) и 8 (13)."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `2`"
             }
           }
         ],
@@ -768189,7 +768375,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 30,
+            "position": 32,
             "material_id": "parallel-computing"
           }
         ],
@@ -768239,7 +768425,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "В примере из четырёх процессов длительность процесса 3 увеличили до 3 мс. Сколько миллисекунд при разрешённых сдвигах могут одновременно работать три процесса, если общее время остаётся 8?"
+              "markdown": "Процессы 1 и 2 по 4 мс ни от кого не зависят, 3 (3 мс) и 4 (4 мс) ждут процесс 2. Процессы можно запускать позже, но всё должно закончиться к 8. Какое наибольшее число миллисекунд могут одновременно идти три процесса?"
             }
           }
         ],
@@ -768247,7 +768433,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Переберите допустимые сдвиги."
+              "markdown": "Три процесса вместе — это 1, 3 и 4; сдвинь процесс 1."
             }
           }
         ],
@@ -768255,7 +768441,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "3 мс: процесс 1 стартует в 4, тройка 1, 3, 4 работает вместе на [4; 7)."
+              "markdown": "3 мс: процесс 1 начинает в 4, тройка 1, 3, 4 идёт вместе с 5-й по 7-ю мс."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `3`"
             }
           }
         ],
@@ -768264,14 +768456,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 31,
+            "position": 34,
             "material_id": "parallel-computing"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "proverka-sdviga",
+            "section": "vmeste-pri-sdvigah",
             "material_id": "parallel-computing"
           }
         ],
@@ -768322,7 +768514,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Поздние начала системы."
+              "markdown": "Найди поздние начала всех процессов и сравни с порогом."
             }
           }
         ],
@@ -768332,6 +768524,12 @@
             "data": {
               "markdown": "3: процессы 5, 6 и 7."
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `3`"
+            }
           }
         ],
         "skills": [],
@@ -768339,7 +768537,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 32,
+            "position": 33,
             "material_id": "parallel-computing"
           }
         ],
@@ -768397,7 +768595,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Начало = максимум (окончание + задержка)."
+              "markdown": "Начало — самое позднее окончание поставщиков плюс задержка."
             }
           }
         ],
@@ -768407,6 +768605,12 @@
             "data": {
               "markdown": "Начало процесса 4 — 13 мс, общее время 15 мс."
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `13 15`"
+            }
           }
         ],
         "skills": [],
@@ -768414,7 +768618,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 33,
+            "position": 35,
             "material_id": "parallel-computing",
             "counts_toward_mastery": false
           }
@@ -768422,7 +768626,7 @@
         "theory_links": [
           {
             "label": "Теория",
-            "section": "zaderzhka-peredachi",
+            "section": "zaderzhka",
             "material_id": "parallel-computing"
           }
         ],
@@ -768465,7 +768669,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "В основном примере длительность процесса 6 — положительное целое x. Найди x, если общее время равно 16 мс, и наибольшее x при общем времени 14 мс."
+              "markdown": "В учебном примере время работы процесса 6 — натуральное число x. Найди x, если общее время равно 16 мс, и наибольшее x при общем времени 14 мс."
             }
           }
         ],
@@ -768473,7 +768677,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Общее время — максимум ветвей."
+              "markdown": "Общее время — max(9 + x; 14)."
             }
           }
         ],
@@ -768483,6 +768687,12 @@
             "data": {
               "markdown": "x = 7; наибольшее x = 5."
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `7 5`"
+            }
           }
         ],
         "skills": [],
@@ -768490,7 +768700,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 34,
+            "position": 37,
             "material_id": "parallel-computing",
             "counts_toward_mastery": false
           }
@@ -768549,7 +768759,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Максимум по всем связям."
+              "markdown": "У каждой связи своя задержка: сравни «окончание + задержка»."
             }
           }
         ],
@@ -768559,6 +768769,12 @@
             "data": {
               "markdown": "В момент 10: max(6 + 4; 8 + 1)."
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `10`"
+            }
           }
         ],
         "skills": [],
@@ -768566,7 +768782,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 35,
+            "position": 36,
             "material_id": "parallel-computing",
             "counts_toward_mastery": false
           }
@@ -768574,7 +768790,7 @@
         "theory_links": [
           {
             "label": "Теория",
-            "section": "zaderzhka-peredachi",
+            "section": "zaderzhka",
             "material_id": "parallel-computing"
           }
         ],
@@ -768640,22 +768856,10 @@
         "skills": [],
         "exam_numbers": [22],
         "files": [],
-        "lessons": [
-          {
-            "position": 36,
-            "material_id": "parallel-computing",
-            "counts_toward_mastery": false
-          }
-        ],
-        "theory_links": [
-          {
-            "label": "Теория",
-            "section": "sobytiya-vmesto-setki",
-            "material_id": "parallel-computing"
-          }
-        ],
+        "lessons": [],
+        "theory_links": [],
         "catalog_visible": false,
-        "archived": false,
+        "archived": true,
         "sources": [
           {
             "url": null,
@@ -768693,7 +768897,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Для той же системы найди по событиям длину самого длинного отрезка, на котором работают ровно два процесса."
+              "markdown": "Процессы: 1 — 3 мс, 0; 2 — 8 мс, 0; 3 — 2 мс, 1; 4 — 5 мс, 1; 3; 5 — 4 мс, 2; 4; 6 — 6 мс, 3; 7 — 1 мс, 5; 6. Независимые процессы начинаются в момент 0, зависимые — сразу после завершения всех процессов, от которых зависят. Определите длину самого длинного отрезка (в мс), на котором выполняются ровно два процесса."
             }
           }
         ],
@@ -768701,7 +768905,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Серия растёт на длину промежутка."
+              "markdown": "Счётчик подряд по строке сумм с условием «= 2»."
             }
           }
         ],
@@ -768709,7 +768913,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "5 мс: промежутки [0; 3) и [3; 5) подряд."
+              "markdown": "5 мс: с 1-й по 5-ю."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `5`"
             }
           }
         ],
@@ -768718,15 +768928,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 37,
-            "material_id": "parallel-computing",
-            "counts_toward_mastery": false
+            "position": 28,
+            "material_id": "parallel-computing"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "sobytiya-vmesto-setki",
+            "section": "samyj-dlinnyj-otrezok",
             "material_id": "parallel-computing"
           }
         ],
@@ -768777,7 +768986,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Готов — ещё не значит запущен."
+              "markdown": "Готовый процесс ждёт ещё и свободного места."
             }
           }
         ],
@@ -768786,6 +768995,12 @@
             "type": "text",
             "data": {
               "markdown": "8 мс."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `8`"
             }
           }
         ],
@@ -768802,7 +769017,7 @@
         "theory_links": [
           {
             "label": "Теория",
-            "section": "gotov-i-zapushchen",
+            "section": "ogranichennye-resursy",
             "material_id": "parallel-computing"
           }
         ],
@@ -768845,7 +769060,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "В основном примере процессы 4 и 5 не могут работать одновременно, первым идёт меньший ID. Каким станет общее время?"
+              "markdown": "В учебном примере процессы 4 и 5 не могут идти одновременно, первым идёт меньший ID. Каким станет общее время?"
             }
           }
         ],
@@ -768853,7 +769068,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Первым идёт меньший ID."
+              "markdown": "Процесс 5 ждёт ещё и окончания процесса 4."
             }
           }
         ],
@@ -768863,6 +769078,12 @@
             "data": {
               "markdown": "16 мс."
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `16`"
+            }
           }
         ],
         "skills": [],
@@ -768870,7 +769091,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 39,
+            "position": 41,
             "material_id": "parallel-computing",
             "counts_toward_mastery": false
           }
@@ -768929,7 +769150,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Освободить, выбрать, запустить."
+              "markdown": "Освободи места, выбери из готовых меньший ID, запусти."
             }
           }
         ],
@@ -768939,6 +769160,12 @@
             "data": {
               "markdown": "8 мс: 1 и 2 стартуют в 0, 3 — в 2, 4 — в 3, 5 — в 6."
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `8`"
+            }
           }
         ],
         "skills": [],
@@ -768946,7 +769173,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 40,
+            "position": 39,
             "material_id": "parallel-computing",
             "counts_toward_mastery": false
           }
@@ -768954,7 +769181,7 @@
         "theory_links": [
           {
             "label": "Теория",
-            "section": "pravilo-vybora",
+            "section": "ogranichennye-resursy",
             "material_id": "parallel-computing"
           }
         ],
@@ -769005,7 +769232,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Сравните с ограниченным расписанием."
+              "markdown": "Без ограничения — обычное раннее расписание."
             }
           }
         ],
@@ -769015,6 +769242,12 @@
             "data": {
               "markdown": "6 мс; ограничение добавило 2 мс."
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `6 2`"
+            }
           }
         ],
         "skills": [],
@@ -769022,7 +769255,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 41,
+            "position": 40,
             "material_id": "parallel-computing",
             "counts_toward_mastery": false
           }
@@ -769030,7 +769263,7 @@
         "theory_links": [
           {
             "label": "Теория",
-            "section": "pravilo-vybora",
+            "section": "ogranichennye-resursy",
             "material_id": "parallel-computing"
           }
         ],
@@ -769073,7 +769306,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "По файлу 22-6.xlsx определите минимальное время (в мс), через которое завершится выполнение всей совокупности процессов. (Подтемы 2 и 3.)"
+              "markdown": "По файлу 22-6.xlsx определите минимальное время (в мс), через которое завершится выполнение всей совокупности процессов."
             }
           },
           {
@@ -769087,7 +769320,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Подтемы 2 и 3."
+              "markdown": "Расписание через ВПР; ответ — наибольшее окончание."
             }
           }
         ],
@@ -769102,8 +769335,14 @@
             "type": "code_example",
             "data": {
               "language": "text",
-              "code": "C: разделить по «;» на C, D, E, пустые — 0\nСтрока 2 — процесс 0 со временем 0\nF3: =МАКС(ВПР(C3;$A$2:$G2;7;0);ВПР(D3;$A$2:$G2;7;0);\n          ВПР(E3;$A$2:$G2;7;0))\nG3: =F3+B3 — обе формулы протянуть вниз\nОтвет: =МАКС(G3:G32)",
+              "code": "C: Данные → Текст по столбцам, разделитель «;» → C:E\nF2: =ЕСНД(ВПР(C2;$A$1:$J1;10;0);0) — на F2:H…\nI2: =МАКС(F2:H2) — начало\nJ2: =I2+B2 — окончание; всё протянуть вниз\nОтвет: =МАКС(J2:J31)",
               "caption": "Формулы в Excel"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `73`"
             }
           }
         ],
@@ -769165,7 +769404,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "По файлу 22-2.xlsx определите, сколько процессов выполнялось в течение 21-й миллисекунды (миллисекунды нумеруются с 1). (Подтема 4.)"
+              "markdown": "Задача темы. В файле 22-2.xlsx содержится информация о совокупности N вычислительных процессов, которые могут выполняться параллельно или последовательно. Будем говорить, что процесс B зависит от процесса A, если для выполнения процесса B необходимы результаты выполнения процесса A. В этом случае процессы A и B могут выполняться только последовательно. В первом столбце таблицы указан идентификатор процесса (ID), во втором — время его выполнения в миллисекундах, в третьем — с разделителем «;» ID процессов, от которых зависит данный процесс; 0 — процесс независимый. Определите, сколько процессов выполнялось в течение 21-й миллисекунды, при условии, что все независимые друг от друга процессы могут выполняться параллельно. Считать, что каждый процесс начинается в самое раннее допустимое время. Нумерация миллисекунд начинается с 1."
             }
           },
           {
@@ -769179,7 +769418,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Подтема 4."
+              "markdown": "Расписание через ВПР, потом СЧЁТЕСЛИМН с условиями «<21» и «>=21»."
             }
           }
         ],
@@ -769187,15 +769426,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "3."
+              "markdown": "3: на 21-й мс идут процессы 6, 7 и 10."
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "text",
-              "code": "C: разделить по «;» на C, D, E, пустые — 0\nСтрока 2 — процесс 0 со временем 0\nF3: =МАКС(ВПР(C3;$A$2:$G2;7;0);ВПР(D3;$A$2:$G2;7;0);\n          ВПР(E3;$A$2:$G2;7;0))\nG3: =F3+B3 — обе формулы протянуть вниз\nОтвет: =СЧЁТЕСЛИМН(F3:F22;\"<=20\";G3:G22;\">20\")",
+              "code": "C: Данные → Текст по столбцам, разделитель «;» → C:E\nF2: =ЕСНД(ВПР(C2;$A$1:$J1;10;0);0) — на F2:H…\nI2: =МАКС(F2:H2) — начало\nJ2: =I2+B2 — окончание; всё протянуть вниз\nОтвет: =СЧЁТЕСЛИМН(I2:I21;\"<21\";J2:J21;\">=21\")",
               "caption": "Формулы в Excel"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `3`"
             }
           }
         ],
@@ -769213,11 +769458,17 @@
         ],
         "lessons": [
           {
-            "position": 43,
+            "position": 20,
             "material_id": "parallel-computing"
           }
         ],
-        "theory_links": [],
+        "theory_links": [
+          {
+            "label": "Теория",
+            "section": "zadacha-temy",
+            "material_id": "parallel-computing"
+          }
+        ],
         "catalog_visible": false,
         "archived": false,
         "sources": [
@@ -769257,7 +769508,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "По файлу 22-4.xlsx определите минимальное время (в мс), через которое завершится выполнение 10 процессов. (Подтема 4.)"
+              "markdown": "По файлу 22-4.xlsx определите минимальное время (в мс), через которое завершится выполнение 10 процессов."
             }
           },
           {
@@ -769271,7 +769522,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Подтема 4."
+              "markdown": "Десятое по возрастанию окончание."
             }
           }
         ],
@@ -769286,8 +769537,14 @@
             "type": "code_example",
             "data": {
               "language": "text",
-              "code": "C: разделить по «;» на C, D, E, пустые — 0\nСтрока 2 — процесс 0 со временем 0\nF3: =МАКС(ВПР(C3;$A$2:$G2;7;0);ВПР(D3;$A$2:$G2;7;0);\n          ВПР(E3;$A$2:$G2;7;0))\nG3: =F3+B3 — обе формулы протянуть вниз\nОтвет: =НАИМЕНЬШИЙ(G3:G22;10)",
+              "code": "C: Данные → Текст по столбцам, разделитель «;» → C:E\nF2: =ЕСНД(ВПР(C2;$A$1:$J1;10;0);0) — на F2:H…\nI2: =МАКС(F2:H2) — начало\nJ2: =I2+B2 — окончание; всё протянуть вниз\nОтвет: =НАИМЕНЬШИЙ(J2:J21;10)",
               "caption": "Формулы в Excel"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `11`"
             }
           }
         ],
@@ -769305,7 +769562,7 @@
         ],
         "lessons": [
           {
-            "position": 44,
+            "position": 43,
             "material_id": "parallel-computing"
           }
         ],
@@ -769349,7 +769606,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "По файлу 22-3.xlsx определите длительность (в мс) самого длинного отрезка времени, на котором выполнялось наибольшее количество процессов одновременно. (Подтема 5.)"
+              "markdown": "По файлу 22-3.xlsx определите длительность (в мс) самого длинного отрезка времени, на котором выполнялось наибольшее количество процессов одновременно."
             }
           },
           {
@@ -769363,7 +769620,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Подтема 5."
+              "markdown": "Сетка миллисекунд, строка сумм и счётчик подряд."
             }
           }
         ],
@@ -769371,15 +769628,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "3: наибольшее число одновременно работающих процессов — 5."
+              "markdown": "3: наибольшее число одновременно идущих процессов — 5, подряд они идут 3 мс."
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "text",
-              "code": "C: разделить по «;» на C, D, E, пустые — 0\nСтрока 2 — процесс 0 со временем 0\nF3: =МАКС(ВПР(C3;$A$2:$G2;7;0);ВПР(D3;$A$2:$G2;7;0);\n          ВПР(E3;$A$2:$G2;7;0))\nG3: =F3+B3 — обе формулы протянуть вниз\nI1, J1, …: моменты 0, 1, 2, …\nI3: =ЕСЛИ(И($F3<=I$1;I$1<$G3);1;0) — протянуть\nI19: =СУММ(I3:I18) — работающих в [t; t + 1)\nОтвет: самая длинная серия столбцов с =МАКС(19:19)",
+              "code": "C: Данные → Текст по столбцам, разделитель «;» → C:E\nF2: =ЕСНД(ВПР(C2;$A$1:$J1;10;0);0) — на F2:H…\nI2: =МАКС(F2:H2) — начало\nJ2: =I2+B2 — окончание; всё протянуть вниз\nL1, M1, …: номера мс 1, 2, 3, …\nL2: =ЕСЛИ(И(L$1>$I2;L$1<=$J2);1;0) — на сетку\nстрока 18: суммы столбцов, строка 19 — счётчик\nОтвет: МАКС счётчика при k = МАКС(строки сумм)",
               "caption": "Формулы в Excel"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `3`"
             }
           }
         ],
@@ -769397,7 +769660,7 @@
         ],
         "lessons": [
           {
-            "position": 45,
+            "position": 44,
             "material_id": "parallel-computing"
           }
         ],
@@ -769441,7 +769704,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "По файлу 22-5.xlsx: процесс может начаться в любой момент после завершения всех процессов, от которых он зависит. Определите наибольшее количество процессов, которые могут начать выполнение не раньше чем через 20 мс после запуска первого процесса, если все процессы должны завершиться за минимально возможное время. (Подтема 6.)"
+              "markdown": "По файлу 22-5.xlsx: процесс может начаться в любой момент после завершения всех процессов, от которых он зависит. Определите наибольшее количество процессов, которые могут начать выполнение не раньше чем через 20 мс после запуска первого процесса, если все процессы должны завершиться за минимально возможное время."
             }
           },
           {
@@ -769455,7 +769718,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Подтема 6."
+              "markdown": "Поздние начала — с конца; считай те, что не меньше 20."
             }
           }
         ],
@@ -769470,8 +769733,14 @@
             "type": "code_example",
             "data": {
               "language": "text",
-              "code": "C: разделить по «;» на C, D, E, пустые — 0\nСтрока 2 — процесс 0 со временем 0\nF3: =МАКС(ВПР(C3;$A$2:$G2;7;0);ВПР(D3;$A$2:$G2;7;0);\n          ВПР(E3;$A$2:$G2;7;0))\nG3: =F3+B3 — обе формулы протянуть вниз\nH: позднее окончание — МИН поздних начал получателей,\n   у процесса без получателей — общее время =МАКС(G3:G20)\nI3: =H3-B3 — позднее начало\nОтвет: =СЧЁТЕСЛИ(I3:I20;\">=20\")",
+              "code": "C: Данные → Текст по столбцам, разделитель «;» → C:E\nF2: =ЕСНД(ВПР(C2;$A$1:$J1;10;0);0) — на F2:H…\nI2: =МАКС(F2:H2) — начало\nJ2: =I2+B2 — окончание; всё протянуть вниз\nK: позднее окончание — МИН поздних начал тех,\n   кто ждёт; у кого никто — =МАКС(J2:J19)\nL2: =K2-B2 — позднее начало\nОтвет: =СЧЁТЕСЛИ(L2:L19;\">=20\")",
               "caption": "Формулы в Excel"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `13`"
             }
           }
         ],
@@ -769489,7 +769758,7 @@
         ],
         "lessons": [
           {
-            "position": 46,
+            "position": 45,
             "material_id": "parallel-computing"
           }
         ],
@@ -820001,6 +820270,104 @@
         }
       },
       "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "task-22-9-06",
+        "title": "45-я миллисекунда по файлу 22-1",
+        "short_description": null,
+        "explanation_kind": "worked_solution",
+        "difficulty": 2,
+        "estimated_minutes": 6,
+        "answer_instruction": "Введите число.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "По файлу 22-1.xlsx определите, сколько процессов выполнялось в течение 45-й миллисекунды, при условии, что все независимые друг от друга процессы могут выполняться параллельно. Считать, что каждый процесс начинается в самое раннее допустимое время. Нумерация миллисекунд начинается с 1."
+            }
+          },
+          {
+            "type": "attachment",
+            "data": {
+              "usage_id": "statement-1"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Начало < 45, окончание ≥ 45."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "4 — четыре процесса с началом меньше 45 и окончанием не меньше 45."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "text",
+              "code": "C: Данные → Текст по столбцам, разделитель «;» → C:E\nF2: =ЕСНД(ВПР(C2;$A$1:$J1;10;0);0) — на F2:H…\nI2: =МАКС(F2:H2) — начало\nJ2: =I2+B2 — окончание; всё протянуть вниз\nОтвет: =СЧЁТЕСЛИМН(I2:I19;\"<45\";J2:J19;\">=45\")",
+              "caption": "Формулы в Excel"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `4`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [22],
+        "files": [
+          {
+            "id": "statement-1",
+            "purpose": "attachment",
+            "checksum": "729226b6b5a68ce7e38765ded7fbe47861582e0d732e3a934fb9ccdd91f9aaf4",
+            "filename": "22-1.xlsx",
+            "attribution": null,
+            "description": "Процессы — Excel-файл, как на экзамене"
+          }
+        ],
+        "lessons": [
+          {
+            "position": 46,
+            "material_id": "parallel-computing"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["4"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
     }
   ],
   "files": [
@@ -835555,61 +835922,36 @@
     {
       "id": "parallel-computing",
       "sections": [
-        "kak-ustroena-tema-22",
-        "process",
-        "tablica-processov",
-        "dlitelnost-nachalo-okonchanie",
-        "process-itogo",
+        "kak-ustroena-tema",
+        "process-i-zavisimost",
         "nachalo-i-okonchanie",
-        "poslednij-postavshchik",
-        "graf-zavisimostej",
-        "raschet-tablicy",
-        "minimalnoe-obshchee-vremya",
-        "raschet-v-excel",
-        "pereputannye-stroki",
-        "poryadok-rascheta",
-        "kriticheskij-put",
+        "raspisanie-po-shagam",
+        "kriticheskaya-cepochka",
         "raspisanie-itogo",
-        "poisk-postavshchika-po-id",
-        "funkciya-vpr",
-        "postavshchiki-po-yachejkam",
-        "sluzhebnyj-process-0",
-        "tolko-predydushchie-stroki",
-        "znak",
-        "poryadok-strok",
-        "vpr-itogo",
-        "vopros-v-neravenstva",
-        "process-rabotaet",
-        "moment-i-millisekunda",
+        "tablica-v-excel",
+        "postavshchiki-po-stolbcam",
+        "vpr-po-id",
+        "nachalo-okonchanie-itog",
+        "excel-itogo",
+        "na-n-j-millisekunde",
         "scheteslimn",
-        "zavershivshiesya-i-nachavshiesya",
-        "vnutri-okna",
+        "zakonchilis-i-nachalis",
         "k-e-okonchanie",
-        "schitat-itogo",
-        "vremennaya-setka",
+        "zadacha-temy",
+        "skolko-itogo",
+        "setka-millisekund",
         "setka-v-excel",
-        "pik-parallelnosti",
+        "bolshe-vsego",
         "samyj-dlinnyj-otrezok",
-        "sostav-processov",
-        "isklyuchennyj-id",
-        "proverka-po-strokam",
-        "vmeste-s-processom",
         "parallelnost-itogo",
-        "okno-zapuska",
-        "mozhno-li-sdvigat",
-        "proverka-sdviga",
-        "pozdnie-nachala",
+        "kogda-mozhno-sdvigat",
+        "pozdnee-nachalo",
         "ne-ranshe-poroga",
+        "vmeste-pri-sdvigah",
         "sdvigi-itogo",
-        "tri-rasshireniya",
-        "zaderzhka-peredachi",
+        "zaderzhka",
         "neizvestnaya-dlitelnost",
-        "sobytiya-vmesto-setki",
-        "zaderzhki-itogo",
         "ogranichennye-resursy",
-        "gotov-i-zapushchen",
-        "neskolko-mest",
-        "pravilo-vybora",
         "vzaimnoe-isklyuchenie",
         "resursy-itogo"
       ],
@@ -835618,106 +835960,69 @@
       "course_id": null,
       "subtopics": [
         {
-          "slug": "process-i-zavisimost",
+          "slug": "processy-i-raspisanie",
           "access": "free",
           "sections": [
-            "kak-ustroena-tema-22",
-            "process",
-            "tablica-processov",
-            "dlitelnost-nachalo-okonchanie",
-            "process-itogo"
-          ]
-        },
-        {
-          "slug": "rannee-raspisanie",
-          "access": "free",
-          "sections": [
+            "kak-ustroena-tema",
+            "process-i-zavisimost",
             "nachalo-i-okonchanie",
-            "poslednij-postavshchik",
-            "graf-zavisimostej",
-            "raschet-tablicy",
-            "minimalnoe-obshchee-vremya",
-            "raschet-v-excel",
-            "pereputannye-stroki",
-            "poryadok-rascheta",
-            "kriticheskij-put",
+            "raspisanie-po-shagam",
+            "kriticheskaya-cepochka",
             "raspisanie-itogo"
           ]
         },
         {
-          "slug": "excel-po-id",
+          "slug": "raspisanie-v-excel",
           "access": "free",
           "sections": [
-            "poisk-postavshchika-po-id",
-            "funkciya-vpr",
-            "postavshchiki-po-yachejkam",
-            "sluzhebnyj-process-0",
-            "tolko-predydushchie-stroki",
-            "znak",
-            "poryadok-strok",
-            "vpr-itogo"
+            "tablica-v-excel",
+            "postavshchiki-po-stolbcam",
+            "vpr-po-id",
+            "nachalo-okonchanie-itog",
+            "excel-itogo"
           ]
         },
         {
-          "slug": "kogo-schitat",
+          "slug": "skolko-processov",
           "access": "paid",
           "sections": [
-            "vopros-v-neravenstva",
-            "process-rabotaet",
-            "moment-i-millisekunda",
+            "na-n-j-millisekunde",
             "scheteslimn",
-            "zavershivshiesya-i-nachavshiesya",
-            "vnutri-okna",
+            "zakonchilis-i-nachalis",
             "k-e-okonchanie",
-            "schitat-itogo"
+            "zadacha-temy",
+            "skolko-itogo"
           ]
         },
         {
           "slug": "parallelnost",
           "access": "paid",
           "sections": [
-            "vremennaya-setka",
+            "setka-millisekund",
             "setka-v-excel",
-            "pik-parallelnosti",
+            "bolshe-vsego",
             "samyj-dlinnyj-otrezok",
-            "sostav-processov",
-            "isklyuchennyj-id",
-            "proverka-po-strokam",
-            "vmeste-s-processom",
             "parallelnost-itogo"
           ]
         },
         {
-          "slug": "sdvigi-i-zapas",
+          "slug": "sdvigi",
           "access": "paid",
           "sections": [
-            "okno-zapuska",
-            "mozhno-li-sdvigat",
-            "proverka-sdviga",
-            "pozdnie-nachala",
+            "kogda-mozhno-sdvigat",
+            "pozdnee-nachalo",
             "ne-ranshe-poroga",
+            "vmeste-pri-sdvigah",
             "sdvigi-itogo"
           ]
         },
         {
-          "slug": "zaderzhki-i-obratnye-voprosy",
+          "slug": "zaderzhki-i-resursy",
           "access": "paid",
           "sections": [
-            "tri-rasshireniya",
-            "zaderzhka-peredachi",
+            "zaderzhka",
             "neizvestnaya-dlitelnost",
-            "sobytiya-vmesto-setki",
-            "zaderzhki-itogo"
-          ]
-        },
-        {
-          "slug": "ogranichennye-resursy",
-          "access": "paid",
-          "sections": [
             "ogranichennye-resursy",
-            "gotov-i-zapushchen",
-            "neskolko-mest",
-            "pravilo-vybora",
             "vzaimnoe-isklyuchenie",
             "resursy-itogo"
           ]

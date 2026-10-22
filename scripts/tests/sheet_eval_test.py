@@ -131,6 +131,12 @@ class Logic(unittest.TestCase):
     def test_iferror(self):
         self.assertEqual(show("=ЕСЛИОШИБКА(1/0;0)"), "0")
 
+    def test_ifna_replaces_only_not_found(self):
+        cells = {"A1": "1", "B1": "4"}
+        self.assertEqual(show("=ЕСНД(ВПР(2;A1:B1;2;0);0)", cells), "0")
+        self.assertEqual(show("=ЕСНД(ВПР(1;A1:B1;2;0);0)", cells), "4")
+        self.assertEqual(show("=ЕСНД(1/0;0)"), "#ДЕЛ/0!")
+
 
 class Criteria(unittest.TestCase):
     COLUMN = {"A2": "5", "A3": "7", "A4": "10", "A5": "Москва", "A6": "москва", "A7": "Казань"}

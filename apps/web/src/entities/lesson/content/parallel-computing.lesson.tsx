@@ -3,131 +3,77 @@ import { Typography } from "~/shared/components/typography";
 import {
   FormulaBlock,
   LessonDiagram,
+  LessonStepper,
   LessonSummary,
   LessonTable,
+  ProofDisclosure,
   SheetBlock,
 } from "~/shared/components/learning-content";
 import { parallelComputingLessonPublication } from "~/shared/config/lesson-publication.mjs";
 import { defineLesson } from "../lib/define-lesson";
 import { lessonMedia } from "./parallel-computing.media";
+import { ProcessTable, R, THEME_TASK } from "./parallel-computing.theme";
 import { PythonTerm } from "./python-term";
+import { SubtopicLink } from "./subtopic-link";
 
 export const parallelComputingLesson = defineLesson({
   ...parallelComputingLessonPublication,
   masteryThreshold: 0.8,
   learningOutcomes: [
-    "Строить раннее расписание: начало — максимум окончаний поставщиков, окончание — начало плюс длительность",
-    "Считать расписание в Excel ссылками и через ВПР по ID процесса",
-    "Переводить вопросы «сколько процессов» в неравенства для начал и окончаний и считать СЧЁТЕСЛИМН",
-    "Строить временную сетку и находить пик и самые длинные отрезки параллельности",
-    "Находить поздние начала и запас при разрешённых сдвигах запуска",
-    "Для редких задач — задержки передачи, неизвестная длительность и ограниченные ресурсы (дополнительные уроки)",
+    "Строить раннее расписание: начало — самое позднее окончание поставщиков, окончание — начало плюс время",
+    "Считать расписание в Excel: поставщики по столбцам, их окончания через ВПР, начало — МАКС",
+    "Считать процессы на n-й миллисекунде, завершившиеся и начавшиеся — СЧЁТЕСЛИМН",
+    "Строить сетку миллисекунд и находить, сколько процессов идёт одновременно и как долго",
+    "Находить поздние начала и решать задачи, где процессы можно сдвигать",
+    "Для редких задач — задержки передачи, неизвестная длительность и ограниченные ресурсы (дополнительный урок)",
   ],
   accessTier: "paid",
   subtopics: [
     {
-      slug: "process-i-zavisimost",
-      title: "Работа, зависимость и общая шкала",
-      lead: "Процесс, его ID и длительность, список поставщиков и 0, начало и окончание на одной шкале, последовательная и параллельная работа.",
+      slug: "processy-i-raspisanie",
+      title: "Процессы и расписание",
+      lead: "Что спрашивают в задании 22 и как найти, когда каждый процесс начнётся и закончится, если он ждёт результатов других.",
       conceptIds: [
-        "kak-ustroena-tema-22",
-        "process",
-        "tablica-processov",
-        "dlitelnost-nachalo-okonchanie",
-        "process-itogo",
-      ],
-      checkpoint: [
-        {
-          id: "zadacha-5",
-          prompt: (
-            <>Что означает запись «0» в столбце зависимостей? А «4; 2»?</>
-          ),
-          reveal: (
-            <>
-              «0» — поставщиков нет, процесс может начать в 0; «4; 2» — нужны
-              оба результата, порядок записи не важен.
-            </>
-          ),
-        },
-        {
-          id: "zadacha-6",
-          prompt: (
-            <>В таблице f₆ = 25. Сколько миллисекунд работает процесс 6?</>
-          ),
-          reveal: (
-            <>
-              Из одного окончания это не следует: 25 — момент на общей шкале,
-              длительность — 25 минус начало.
-            </>
-          ),
-        },
-      ],
-    },
-    {
-      slug: "rannee-raspisanie",
-      title: "Раннее расписание и критическая цепочка",
-      lead: "Начало как максимум окончаний поставщиков, расчёт строк в допустимом порядке, минимальное общее время, критическая цепочка и прямые ссылки Excel.",
-      conceptIds: [
+        "kak-ustroena-tema",
+        "process-i-zavisimost",
         "nachalo-i-okonchanie",
-        "poslednij-postavshchik",
-        "graf-zavisimostej",
-        "raschet-tablicy",
-        "minimalnoe-obshchee-vremya",
-        "raschet-v-excel",
-        "pereputannye-stroki",
-        "poryadok-rascheta",
-        "kriticheskij-put",
+        "raspisanie-po-shagam",
+        "kriticheskaya-cepochka",
         "raspisanie-itogo",
       ],
       checkpoint: [
         {
-          id: "zadacha-6",
-          prompt: <>В задаче 3 выпиши критический путь.</>,
-          reveal: <>2 → 3 → 4: 7 + 2 + 3 = 12.</>,
+          id: "zadacha-1",
+          prompt: (
+            <>
+              Процесс начинается в момент 12 и работает 7 мс. Когда он
+              закончится и какие миллисекунды займёт?
+            </>
+          ),
+          reveal: <>Закончится в 19 и займёт мс с 13-й по 19-ю.</>,
         },
-      ],
-    },
-    {
-      slug: "excel-po-id",
-      title: "ВПР: окончание поставщика по ID",
-      lead: "Точный поиск по ID, служебная строка 0, растущий диапазон только предыдущих строк и знак $ при копировании.",
-      conceptIds: [
-        "poisk-postavshchika-po-id",
-        "funkciya-vpr",
-        "postavshchiki-po-yachejkam",
-        "sluzhebnyj-process-0",
-        "tolko-predydushchie-stroki",
-        "znak",
-        "poryadok-strok",
-        "vpr-itogo",
-      ],
-      checkpoint: [
         {
           id: "zadacha-2",
           prompt: (
             <>
-              Почему в формуле начала последний аргумент{" "}
-              <Notation>{"ВПР"}</Notation> — 0, а не 1?
+              Процессы A (5 мс) и B (9 мс) ни от кого не зависят. Процесс C ждёт
+              оба и работает 3 мс. Когда начнётся и закончится C?
             </>
           ),
           reveal: (
             <>
-              0 — точное совпадение: при приблизительном поиске можно получить
-              окончание чужого процесса.
+              A готов к 5, B — к 9. C ждёт последнего: начало 9, окончание 9 + 3
+              = 12.
             </>
           ),
         },
         {
           id: "zadacha-3",
-          prompt: (
-            <>
-              Каким станет диапазон поиска в формуле начала, если её протянуть
-              из строки 3 в строку 9?
-            </>
-          ),
+          prompt: <>Почему в прошлой задаче начало C — не 5 + 9 = 14?</>,
           reveal: (
             <>
-              <Notation>{"$A$2:$F8"}</Notation>.
+              A и B шли одновременно, оба с момента 0. Пока B работал свои 9 мс,
+              A успел закончить. Ждать нужно только последнего.
             </>
           ),
         },
@@ -135,14 +81,14 @@ export const parallelComputingLesson = defineLesson({
           id: "zadacha-4",
           prompt: (
             <>
-              Что выдаст формула начала, если процесс 7 со своими поставщиками 4
-              и 5 стоит в строке 6, выше процесса 5?
+              В учебном примере процесс 6 удлинили с 4 до 5 мс. Изменится ли
+              общее время? А если до 6 мс?
             </>
           ),
           reveal: (
             <>
-              Ошибку <Notation>{"#Н/Д"}</Notation>: поставщик 5 ниже, в
-              диапазоне предыдущих строк его нет.
+              До 5 мс — нет: 6 закончится в 13, как и 7, и процесс 8 всё равно
+              начнёт в 13. До 6 мс — да: 6 закончится в 14, 8 — в 15.
             </>
           ),
         },
@@ -150,577 +96,401 @@ export const parallelComputingLesson = defineLesson({
           id: "zadacha-5",
           prompt: (
             <>
-              В таблице 30 процессов, у некоторых по три поставщика. Какие
-              столбцы и какие изменения в формуле нужны?
+              Почему все восемь процессов нельзя закончить быстрее 14 мс,
+              сколько бы процессов ни шло одновременно?
             </>
           ),
           reveal: (
             <>
-              Третий столбец поставщика; окончание сдвигается в G — номер
-              столбца 7, и в <Notation>{"МАКС"}</Notation> добавляется третий{" "}
-              <Notation>{"ВПР"}</Notation>.
-            </>
-          ),
-        },
-        {
-          id: "zadacha-6",
-          prompt: (
-            <>
-              Почему ответ «сколько процессов завершилось к моменту 10» нельзя
-              считать по столбцу F целиком, включая строку 2?
-            </>
-          ),
-          reveal: (
-            <>
-              Служебный процесс 0 с окончанием 0 будет посчитан как завершённый.
+              Цепочка 2 → 5 → 7 → 8 идёт строго по очереди: 6 + 5 + 2 + 1 = 14.
+              Каждый её процесс ждёт предыдущего.
             </>
           ),
         },
       ],
     },
     {
-      slug: "kogo-schitat",
-      title: "Подсчёт процессов в момент и в промежуток",
-      lead: "Активные, начавшиеся и завершённые процессы, момент t против n-й миллисекунды, «ровно k» и «хотя бы k», порядок окончаний.",
+      slug: "raspisanie-v-excel",
+      title: "Расписание в Excel",
+      lead: "Как посчитать начала и окончания для таблицы из файла: поставщики по столбцам, их окончания через ВПР, начало — МАКС.",
+      conceptIds: [
+        "tablica-v-excel",
+        "postavshchiki-po-stolbcam",
+        "vpr-po-id",
+        "nachalo-okonchanie-itog",
+        "excel-itogo",
+      ],
+      checkpoint: [
+        {
+          id: "zadacha-1",
+          prompt: (
+            <>
+              У процесса 6 поставщики 3 и 4 стоят в <Notation>{"C7"}</Notation>{" "}
+              и <Notation>{"D7"}</Notation>. Что покажут{" "}
+              <Notation>{"E7"}</Notation>, <Notation>{"F7"}</Notation> и{" "}
+              <Notation>{"G7"}</Notation>?
+            </>
+          ),
+          reveal: (
+            <>
+              E7 — 7 (окончание процесса 3), F7 — 8 (окончание процесса 4), G7 —
+              их максимум, 8: это начало процесса 6.
+            </>
+          ),
+        },
+        {
+          id: "zadacha-2",
+          prompt: (
+            <>
+              Что вернёт <Notation>{"ВПР(C2;$A$1:$H1;8;0)"}</Notation> для
+              процесса 1, у которого в C2 стоит 0? Зачем вокруг ЕСНД?
+            </>
+          ),
+          reveal: (
+            <>
+              Процесса 0 нет — ВПР вернёт ошибку #Н/Д. ЕСНД заменит её на 0: у
+              процесса без поставщиков ждать некого.
+            </>
+          ),
+        },
+        {
+          id: "zadacha-3",
+          prompt: (
+            <>
+              Почему в формуле <Notation>{"E5"}</Notation> диапазон поиска —{" "}
+              <Notation>{"$A$1:$H4"}</Notation>, а не вся таблица?
+            </>
+          ),
+          reveal: (
+            <>
+              Поставщики стоят выше получателя, поэтому хватает строк выше. А
+              вся таблица включала бы и окончание самого процесса, которое
+              зависит от этой формулы, — Excel увидел бы замкнутую ссылку.
+            </>
+          ),
+        },
+        {
+          id: "zadacha-4",
+          prompt: (
+            <>
+              Что значит число 8 в формуле{" "}
+              <Notation>{"ВПР(C2;$A$1:$H1;8;0)"}</Notation>?
+            </>
+          ),
+          reveal: (
+            <>
+              Номер столбца внутри диапазона A:H. Восьмой — H, окончание
+              процесса. Это не ID и не время.
+            </>
+          ),
+        },
+        {
+          id: "zadacha-5",
+          prompt: (
+            <>
+              В файле у процессов бывает до трёх поставщиков. Сколько столбцов
+              нужно под поставщиков и под их окончания? Какой номер столбца
+              будет в ВПР?
+            </>
+          ),
+          reveal: (
+            <>
+              Три и три: поставщики C:E, их окончания F:H, начало I, окончание
+              J. Окончание — десятый столбец, поэтому в ВПР стоит 10.
+            </>
+          ),
+        },
+      ],
+    },
+    {
+      slug: "skolko-processov",
+      title: "Сколько процессов",
+      lead: "Сколько процессов идёт на n-й миллисекунде, сколько закончилось или началось к моменту — СЧЁТЕСЛИМН; решаем задачу темы.",
       access: "paid",
       conceptIds: [
-        "vopros-v-neravenstva",
-        "process-rabotaet",
-        "moment-i-millisekunda",
+        "na-n-j-millisekunde",
         "scheteslimn",
-        "zavershivshiesya-i-nachavshiesya",
-        "vnutri-okna",
+        "zakonchilis-i-nachalis",
         "k-e-okonchanie",
-        "schitat-itogo",
+        "zadacha-temy",
+        "skolko-itogo",
       ],
       paid: {
         outline: [
-          { id: "vopros-v-neravenstva", navLabel: "Вопрос в неравенства" },
-          { id: "process-rabotaet", navLabel: "Процесс работает" },
-          { id: "moment-i-millisekunda", navLabel: "Момент и миллисекунда" },
+          { id: "na-n-j-millisekunde", navLabel: "На n-й миллисекунде" },
           { id: "scheteslimn", navLabel: "СЧЁТЕСЛИМН" },
-          {
-            id: "zavershivshiesya-i-nachavshiesya",
-            navLabel: "Завершившиеся и начавшиеся",
-          },
-          { id: "vnutri-okna", navLabel: "Внутри окна" },
-          { id: "k-e-okonchanie", navLabel: "k-е окончание" },
-          { id: "schitat-itogo", navLabel: "Итого" },
+          { id: "zakonchilis-i-nachalis", navLabel: "Закончились и начались" },
+          { id: "k-e-okonchanie", navLabel: "Когда закончатся k" },
+          { id: "zadacha-temy", navLabel: "Задача темы" },
+          { id: "skolko-itogo", navLabel: "Итого" },
         ],
         preview: (
           <>
             <Typography.Text>
               <strong>
-                Вопрос «сколько процессов…» переводят в неравенства для начал и
-                окончаний: процесс работает в момент t, если s ≤ t {"<"} f,
-                завершён к моменту t, если f ≤ t.
+                Вопросы «сколько процессов…» решают по готовой таблице начал и
+                окончаний: каждый вопрос — это условие на начало и окончание.
               </strong>{" "}
-              Такие вопросы — в задачах задания с подсчётом процессов, в том
-              числе в задаче ЕГЭ-2026 и в задании 22 проекта демоверсии 2027
-              года.
+              Так спрашивают в проекте демоверсии 2027 года: сколько процессов
+              выполняется на n-й миллисекунде. Здесь решаем задачу темы целиком.
             </Typography.Text>
           </>
         ),
-        selfCheck: 1,
-        load: () => import("./parallel-computing.paid.kogo-schitat"),
+        selfCheck: 5,
+        load: () => import("./parallel-computing.paid.skolko-processov"),
       },
     },
     {
       slug: "parallelnost",
-      title: "Параллельность на временной шкале",
-      lead: "Сетка времени, наибольшее число одновременных процессов, длина непрерывной серии, суммарное время и выбранная группа ID.",
+      title: "Параллельность",
+      lead: "Сетка миллисекунд в Excel: сколько процессов идёт в каждую миллисекунду, наибольшее число и самый длинный отрезок.",
       access: "paid",
       conceptIds: [
-        "vremennaya-setka",
+        "setka-millisekund",
         "setka-v-excel",
-        "pik-parallelnosti",
+        "bolshe-vsego",
         "samyj-dlinnyj-otrezok",
-        "sostav-processov",
-        "isklyuchennyj-id",
-        "proverka-po-strokam",
-        "vmeste-s-processom",
         "parallelnost-itogo",
       ],
       paid: {
         outline: [
-          { id: "vremennaya-setka", navLabel: "Временная сетка" },
+          { id: "setka-millisekund", navLabel: "Сетка миллисекунд" },
           { id: "setka-v-excel", navLabel: "Сетка в Excel" },
-          { id: "pik-parallelnosti", navLabel: "Пик параллельности" },
+          { id: "bolshe-vsego", navLabel: "Больше всего одновременно" },
           { id: "samyj-dlinnyj-otrezok", navLabel: "Самый длинный отрезок" },
-          { id: "sostav-processov", navLabel: "Состав процессов" },
-          { id: "isklyuchennyj-id", navLabel: "Исключённый ID" },
-          { id: "proverka-po-strokam", navLabel: "Проверка по строкам" },
-          { id: "vmeste-s-processom", navLabel: "Вместе с процессом" },
           { id: "parallelnost-itogo", navLabel: "Итого" },
         ],
         preview: (
           <>
             <Typography.Text>
               <strong>
-                Вопросы о параллельности решают по временной сетке: в каждой
-                миллисекунде [t; t + 1) считают работающие процессы, а потом
-                ищут пик, длину непрерывной серии или суммарное время.
+                Сколько процессов идёт одновременно, видно по сетке: строка —
+                процесс, столбец — миллисекунда, внизу — сумма столбца.
               </strong>{" "}
-              Это три разных ответа, и в задачах задания встречаются все три.
+              По этой строке находят наибольшее число одновременно идущих
+              процессов и самый длинный отрезок с нужным числом.
             </Typography.Text>
           </>
         ),
-        selfCheck: 0,
+        selfCheck: 5,
         load: () => import("./parallel-computing.paid.parallelnost"),
       },
     },
     {
-      slug: "sdvigi-i-zapas",
-      title: "Допустимые сдвиги и запас времени",
-      lead: "Поздние начала при том же общем сроке, обратный проход, допустимость сдвига и наибольшее число запусков не раньше порога.",
+      slug: "sdvigi",
+      title: "Сдвиги процессов",
+      lead: "Когда процесс можно запускать позже, позднее начало и запас, процессы «не раньше порога» и самые долгие отрезки при сдвигах.",
       access: "paid",
       conceptIds: [
-        "okno-zapuska",
-        "mozhno-li-sdvigat",
-        "proverka-sdviga",
-        "pozdnie-nachala",
+        "kogda-mozhno-sdvigat",
+        "pozdnee-nachalo",
         "ne-ranshe-poroga",
+        "vmeste-pri-sdvigah",
         "sdvigi-itogo",
       ],
       paid: {
         outline: [
-          { id: "okno-zapuska", navLabel: "Окно запуска" },
-          { id: "mozhno-li-sdvigat", navLabel: "Можно ли сдвигать" },
-          { id: "proverka-sdviga", navLabel: "Проверка сдвига" },
-          { id: "pozdnie-nachala", navLabel: "Поздние начала" },
+          { id: "kogda-mozhno-sdvigat", navLabel: "Когда можно сдвигать" },
+          { id: "pozdnee-nachalo", navLabel: "Позднее начало" },
           { id: "ne-ranshe-poroga", navLabel: "Не раньше порога" },
+          { id: "vmeste-pri-sdvigah", navLabel: "Вместе при сдвигах" },
           { id: "sdvigi-itogo", navLabel: "Итого" },
         ],
         preview: (
           <>
             <Typography.Text>
               <strong>
-                Если запуск разрешено сдвигать, у каждого процесса появляется
-                окно от раннего до позднего начала; ответ ищут среди всех
-                допустимых расписаний, а не только среди раннего.
+                Если условие не требует запускать процессы как можно раньше,
+                некоторые из них можно сдвинуть — и ответ меняется.
               </strong>{" "}
-              Сдвиги встречаются в задачах задания со свободным запуском, в том
-              числе в задаче ЕГЭ-2026 о запуске не раньше заданного момента.
+              Так были устроены задания 22 на экзаменах 2024 и 2025 годов и в
+              основной волне 2026 года.
             </Typography.Text>
           </>
         ),
-        selfCheck: 1,
-        load: () => import("./parallel-computing.paid.sdvigi-i-zapas"),
+        selfCheck: 5,
+        load: () => import("./parallel-computing.paid.sdvigi"),
       },
     },
     {
-      slug: "zaderzhki-i-obratnye-voprosy",
-      title: "Задержки, обратные вопросы и события",
-      lead: "Задержка результата по каждой связи, неизвестная длительность по известному итогу и события с промежутками разной длины.",
+      slug: "zaderzhki-i-resursy",
+      title: "Задержки и ограниченные ресурсы",
+      lead: "Результат приходит с задержкой, длительность неизвестна, процессов одновременно может идти не больше заданного числа.",
       level: "advanced",
       access: "paid",
       conceptIds: [
-        "tri-rasshireniya",
-        "zaderzhka-peredachi",
+        "zaderzhka",
         "neizvestnaya-dlitelnost",
-        "sobytiya-vmesto-setki",
-        "zaderzhki-itogo",
-      ],
-      paid: {
-        outline: [
-          { id: "tri-rasshireniya", navLabel: "Три расширения" },
-          { id: "zaderzhka-peredachi", navLabel: "Задержка передачи" },
-          {
-            id: "neizvestnaya-dlitelnost",
-            navLabel: "Неизвестная длительность",
-          },
-          { id: "sobytiya-vmesto-setki", navLabel: "События вместо сетки" },
-          { id: "zaderzhki-itogo", navLabel: "Итого" },
-        ],
-        preview: (
-          <>
-            <Typography.Text>
-              <strong>
-                Три расширения основной модели: задержка передачи результата,
-                неизвестная длительность и анализ по событиям вместо сетки —
-                каждое меняет одну часть расчёта, а не весь способ.
-              </strong>{" "}
-              Такие задачи — 3 из 83 в подборках; основные задачи и итоговая
-              страница эту подтему не требуют.
-            </Typography.Text>
-          </>
-        ),
-        selfCheck: 1,
-        load: () =>
-          import("./parallel-computing.paid.zaderzhki-i-obratnye-voprosy"),
-      },
-    },
-    {
-      slug: "ogranichennye-resursy",
-      title: "Готовность и запуск при ограниченных ресурсах",
-      lead: "Готов ли процесс и есть ли свободное место, выбор меньшего ID или очередь, взаимное исключение и задача на несколько мест.",
-      level: "advanced",
-      access: "paid",
-      conceptIds: [
         "ogranichennye-resursy",
-        "gotov-i-zapushchen",
-        "neskolko-mest",
-        "pravilo-vybora",
         "vzaimnoe-isklyuchenie",
         "resursy-itogo",
       ],
       paid: {
         outline: [
+          { id: "zaderzhka", navLabel: "Задержка передачи" },
+          {
+            id: "neizvestnaya-dlitelnost",
+            navLabel: "Неизвестная длительность",
+          },
           { id: "ogranichennye-resursy", navLabel: "Ограниченные ресурсы" },
-          { id: "gotov-i-zapushchen", navLabel: "Готов и запущен" },
-          { id: "neskolko-mest", navLabel: "Несколько мест" },
-          { id: "pravilo-vybora", navLabel: "Правило выбора" },
           { id: "vzaimnoe-isklyuchenie", navLabel: "Взаимное исключение" },
           { id: "resursy-itogo", navLabel: "Итого" },
         ],
         preview: (
           <>
             <Typography.Text>
-              <strong>
-                Если одновременно может работать не больше заданного числа
-                процессов, расписание строят по событиям: в каждый момент
-                освобождения места выбирают, кого запустить, по правилу из
-                условия.
-              </strong>{" "}
-              Такие задачи — 8 из 83 в подборках; основные задачи и итоговая
-              страница эту подтему не требуют.
+              <strong>Дополнительный урок — для редких задач.</strong> Задержки
+              передачи, неизвестная длительность и ограниченное число
+              исполнителей встречаются в подборках, но не на экзаменах. Задачи
+              основных подтем решаются без него.
             </Typography.Text>
           </>
         ),
-        selfCheck: 2,
-        load: () => import("./parallel-computing.paid.ogranichennye-resursy"),
+        selfCheck: 4,
+        load: () => import("./parallel-computing.paid.zaderzhki-i-resursy"),
       },
     },
   ],
   theory: [
     {
-      id: "kak-ustroena-tema-22",
+      id: "kak-ustroena-tema",
       navLabel: "Как устроена тема",
       explanation: (
         <>
           <Typography.Text>
-            <strong>
-              В задании 22 нужно понять, когда каждый процесс получит все
-              необходимые результаты и сможет начать работу.
-            </strong>{" "}
-            После этого строится таблица «начало — окончание», и по ней отвечают
-            на вопрос задачи. Эта модель нужна во всех 83 задачах подборок, а
-            приёмы основных подтем 1–6 решают 72 из них.
+            В задании 22 дают таблицу процессов: сколько каждый работает и
+            результатов каких других процессов он ждёт. Нужно понять, когда
+            каждый из них начнётся и закончится, и ответить на вопрос о
+            получившемся расписании. Вот задача, которую мы решим в этой теме:
           </Typography.Text>
+          <Typography.Text>{THEME_TASK}</Typography.Text>
           <Typography.Text>
-            Главный пример темы — таблица из восьми процессов; здесь мы научимся
-            её читать, а в подтеме 2 рассчитаем полностью.
+            <strong>
+              Главное в задании — правильно построить расписание; сам вопрос
+              потом решается одной формулой.
+            </strong>{" "}
+            Разберём условие:
           </Typography.Text>
+          <LessonTable
+            label={"Условие задачи темы по частям"}
+            columns={[{ label: "В условии" }, { label: "Что это значит" }]}
+            rows={[
+              [
+                "процесс B зависит от процесса A",
+                "B может начаться только после того, как A закончится",
+              ],
+              [
+                "ID процессов, от которых зависит данный, через «;»",
+                "процесс ждёт всех из списка — то есть последнего из них",
+              ],
+              ["значение 0", "процесс ни от кого не зависит и начинает сразу"],
+              [
+                "независимые процессы могут выполняться параллельно",
+                "одновременно может идти сколько угодно процессов",
+              ],
+              [
+                "каждый процесс начинается в самое раннее допустимое время",
+                "никаких пауз: процесс стартует, как только готов последний из тех, кого он ждёт",
+              ],
+              [
+                "нумерация миллисекунд начинается с 1",
+                "1-я мс — от момента 0 до момента 1; процесс с 6 до 8 идёт в 7-ю и 8-ю мс",
+              ],
+            ]}
+          />
+          <Typography.Text>
+            Сначала разберёмся на восьми процессах, которые можно посчитать
+            руками, потом перенесём расчёт в Excel и решим задачу из файла. Тема
+            состоит из пяти подтем и дополнительного урока — у каждой своя
+            страница. Идём по ним по порядку:
+          </Typography.Text>
+          <ol>
+            <li>
+              <strong>Процессы и расписание</strong> — ты сейчас здесь: когда
+              процесс начинается и заканчивается.
+            </li>
+            <li>
+              <SubtopicLink routeSlug={R} subtopic="raspisanie-v-excel">
+                Расписание в Excel
+              </SubtopicLink>{" "}
+              — тот же расчёт формулами для таблицы из файла.
+            </li>
+            <li>
+              <SubtopicLink routeSlug={R} subtopic="skolko-processov">
+                Сколько процессов
+              </SubtopicLink>{" "}
+              — вопросы о миллисекундах; решим задачу темы: ответ 3.
+            </li>
+            <li>
+              <SubtopicLink routeSlug={R} subtopic="parallelnost">
+                Параллельность
+              </SubtopicLink>{" "}
+              — сколько процессов идёт одновременно и как долго.
+            </li>
+            <li>
+              <SubtopicLink routeSlug={R} subtopic="sdvigi">
+                Сдвиги процессов
+              </SubtopicLink>{" "}
+              — задачи, где процесс можно запустить позже.
+            </li>
+            <li>
+              <SubtopicLink routeSlug={R} subtopic="zaderzhki-i-resursy">
+                Задержки и ограниченные ресурсы
+              </SubtopicLink>{" "}
+              — дополнительный урок для редких задач.
+            </li>
+          </ol>
         </>
       ),
     },
     {
-      id: "process",
-      navLabel: "Процесс",
+      id: "process-i-zavisimost",
+      navLabel: "Процесс и зависимость",
       explanation: (
         <>
           <Typography.Text>
+            Что значит, что один процесс зависит от другого?
+          </Typography.Text>
+          <Typography.Text>
             <strong>
-              Процесс — отдельная работа компьютера; для решения нужны только её
-              длительность и то, чьи результаты она ждёт.
-            </strong>
+              Зависимый процесс ждёт, пока закончится тот, от кого он зависит.
+              Независимые процессы идут одновременно.
+            </strong>{" "}
+            Процесс — это просто работа, которая длится несколько миллисекунд;
+            что именно он делает, в задании неважно.
           </Typography.Text>
           <Typography.Text>
-            Представь, что компьютеру нужно выполнить несколько отдельных работ:
+            Пусть процесс 1 работает 4 мс, а процесс 2 — 6 мс и ждёт результата
+            процесса 1. Тогда они идут друг за другом: 2 начинает в 4 и
+            заканчивает в 4 + 6 = 10.
           </Typography.Text>
-          <ul>
-            <li>прочитать данные;</li>
-            <li>обработать первую часть данных;</li>
-            <li>обработать вторую часть;</li>
-            <li>объединить результаты;</li>
-            <li>сохранить итог.</li>
-          </ul>
-          <Typography.Text>
-            Каждая такая работа в условии называется <strong>процессом</strong>.
-          </Typography.Text>
-          <Typography.Text>
-            Для решения нам обычно нужны только две характеристики процесса:
-          </Typography.Text>
-          <ol>
-            <li>Сколько времени занимает его выполнение.</li>
-            <li>Результаты каких других процессов нужны для его запуска.</li>
-          </ol>
-          <Typography.Text>
-            Внутреннее устройство работы нас не интересует. Например, процесс
-            может сортировать данные или рассчитывать изображение, но в задаче
-            достаточно знать, что он выполняется 6 мс и ждёт результаты
-            процессов 2 и 5.
-          </Typography.Text>
-          <Typography.Text>
-            <strong>Последовательное выполнение</strong> означает, что одна
-            работа должна закончиться до начала другой.
-          </Typography.Text>
-          <Typography.Text>
-            Если процесс A выполняется 4 мс, а процесс B — 6 мс и B ждёт
-            результат A, то:
-          </Typography.Text>
-          <Typography.Text>4+6=10 мс.</Typography.Text>
-          <Typography.Text>
-            <strong>Параллельное выполнение</strong> означает, что работы могут
-            идти одновременно.
-          </Typography.Text>
-          <Typography.Text>
-            Если A и B не мешают друг другу и запускаются одновременно, то через
-            4 мс A уже завершится, а B будет работать ещё 2 мс. Обе работы
-            закончатся через:
-          </Typography.Text>
-          <Typography.Text>max(4;6)=6 мс.</Typography.Text>
           <LessonDiagram
-            {...lessonMedia.prGantt_93c0f5}
-            caption={
-              <>Последовательно: процесс 2 ждёт процесс 1 — 4 + 6 = 10 мс.</>
-            }
-          />
-          <LessonDiagram
-            {...lessonMedia.prGantt_e7d83c}
+            {...lessonMedia.prCells_seq}
             caption={
               <>
-                Параллельно: оба запускаются в 0 — всё готово к моменту max(4;
-                6) = 6.
+                Процесс 2 ждёт процесс 1: сначала 1 занимает мс с 1-й по 4-ю,
+                потом 2 — с 5-й по 10-ю. Всё готово к 10.
               </>
             }
           />
           <Typography.Text>
-            Здесь появляются две основные операции задания:
+            Если же 2 ни от кого не зависит, оба начинают сразу и идут
+            одновременно. Тогда всё готово к 6 — к окончанию самого долгого:
           </Typography.Text>
-          <ul>
-            <li>
-              <strong>сложение</strong> — когда времена идут последовательно;
-            </li>
-            <li>
-              <strong>максимум</strong> — когда нужно дождаться окончания
-              нескольких параллельных работ.
-            </li>
-          </ul>
-          <Typography.Text>
-            Но применять их нужно к правильным величинам. Именно это мы подробно
-            разберём.
-          </Typography.Text>
-        </>
-      ),
-    },
-    {
-      id: "tablica-processov",
-      navLabel: "Таблица процессов",
-      explanation: (
-        <>
-          <Typography.Text>
-            <strong>
-              В таблице задания у каждого процесса три данных: ID, длительность
-              и список поставщиков.
-            </strong>
-          </Typography.Text>
-          <Typography.Text>
-            В базовых задачах обычно даны три столбца:
-          </Typography.Text>
-          <LessonTable
-            label={"В базовых задачах обычно даны три столбца"}
-            columns={[
-              { label: "ID процесса", numeric: true },
-              { label: "Длительность, мс", numeric: true },
-              { label: "ID процессов, от которых он зависит" },
-            ]}
-            rows={[
-              ["1", "4", "0"],
-              ["2", "6", "0"],
-              ["3", "3", "1"],
-              ["4", "2", "1; 2"],
-            ]}
+          <LessonDiagram
+            {...lessonMedia.prCells_par}
+            caption={
+              <>
+                Независимые процессы идут одновременно: всё готово к 6, а не к 4
+                + 6.
+              </>
+            }
           />
           <Typography.Text>
-            Такое представление используется и в задачах задания: зависимости
-            перечисляются через точку с запятой, а значение{" "}
-            <Notation>{"0"}</Notation> обозначает отсутствие зависимостей.
+            Время на рисунках разбито на миллисекунды, как в задании: 1-я мс —
+            от момента 0 до момента 1, 2-я — от 1 до 2. Справа у каждой строки —
+            моменты начала и окончания.
           </Typography.Text>
-          <Typography.Text>
-            <strong>ID — это обозначение процесса.</strong>
-          </Typography.Text>
-          <Typography.Text>
-            ID расшифровывается как идентификатор. По смыслу это просто имя.
-          </Typography.Text>
-          <Typography.Text>
-            Процесс с ID <Notation>{"20"}</Notation>:
-          </Typography.Text>
-          <ul>
-            <li>не обязан находиться в двадцатой строке;</li>
-            <li>не обязан запускаться двадцатым;</li>
-            <li>
-              не обязан выполняться после процесса с ID{" "}
-              <Notation>{"19"}</Notation>;
-            </li>
-            <li>не выполняется 20 мс только из-за своего номера.</li>
-          </ul>
-          <Typography.Text>
-            Если процесс <Notation>{"20"}</Notation> зависит от процесса{" "}
-            <Notation>{"50"}</Notation>, сначала должен завершиться{" "}
-            <Notation>{"50"}</Notation>, несмотря на то что его номер больше.
-          </Typography.Text>
-          <Typography.Text>
-            <strong>
-              Длительность — это время собственной работы процесса.
-            </strong>
-          </Typography.Text>
-          <Typography.Text>Запись:</Typography.Text>
-          <LessonTable
-            label={"Запись"}
-            columns={[
-              { label: "ID", numeric: true },
-              { label: "Длительность", numeric: true },
-            ]}
-            rows={[["3", "3"]]}
-          />
-          <Typography.Text>
-            означает: после запуска процесс 3 будет работать 3 мс.
-          </Typography.Text>
-          <Typography.Text>
-            Она ещё ничего не говорит о моменте его запуска.
-          </Typography.Text>
-          <Typography.Text>
-            Если он начнёт в момент 10 мс, то завершится в момент:
-          </Typography.Text>
-          <Typography.Text>10+3=13 мс.</Typography.Text>
-          <Typography.Text>
-            <strong>
-              Запись <Notation>{"1; 2"}</Notation> означает, что нужны
-              результаты обоих процессов.
-            </strong>
-          </Typography.Text>
-          <Typography.Text>Процесс 4 должен дождаться:</Typography.Text>
-          <ul>
-            <li>завершения процесса 1;</li>
-            <li>завершения процесса 2.</li>
-          </ul>
-          <Typography.Text>
-            Порядок перечисления не задаёт порядок выполнения. Записи{" "}
-            <Notation>{"1; 2"}</Notation> и <Notation>{"2; 1"}</Notation> имеют
-            одинаковый смысл.
-          </Typography.Text>
-          <Typography.Text>
-            <strong>
-              Запись <Notation>{"0"}</Notation> означает отсутствие поставщиков
-              данных.
-            </strong>
-          </Typography.Text>
-          <Typography.Text>
-            В исходной задаче обычно нет настоящего процесса 0. Это условное
-            обозначение:
-          </Typography.Text>
-          <blockquote>
-            <Typography.Text>
-              Для запуска этого процесса результаты других процессов не нужны.
-            </Typography.Text>
-          </blockquote>
-          <Typography.Text>
-            Позже мы специально добавим в Excel служебную строку с ID 0. Это
-            будет технический приём для удобства формул.
-          </Typography.Text>
-        </>
-      ),
-    },
-    {
-      id: "dlitelnost-nachalo-okonchanie",
-      navLabel: "Длительность, начало, окончание",
-      explanation: (
-        <>
-          <Typography.Text>
-            <strong>
-              Нужно различать длительность, момент начала и момент окончания.
-            </strong>
-          </Typography.Text>
-          <Typography.Text>
-            Пусть процесс работает 5 мс и запускается через 8 мс после начала
-            всей системы.
-          </Typography.Text>
-          <Typography.Text>Тогда:</Typography.Text>
-          <LessonTable
-            label={"Тогда"}
-            columns={[
-              { label: "Величина" },
-              { label: "Значение", numeric: true },
-            ]}
-            rows={[
-              ["Собственная длительность", "5 мс"],
-              ["Момент начала", "8 мс"],
-              ["Момент окончания", "13 мс"],
-            ]}
-          />
-          <Typography.Text>Эти величины связаны так:</Typography.Text>
-          <Typography.Text>Окончание=Начало+Длительность</Typography.Text>
-          <Typography.Text>Или в обратную сторону:</Typography.Text>
-          <Typography.Text>Длительность=Окончание-Начало.</Typography.Text>
-          <Typography.Text>Для удобства введём обозначения:</Typography.Text>
-          <ul>
-            <li>dᵢ — длительность процесса i;</li>
-            <li>sᵢ — момент его начала;</li>
-            <li>fᵢ — момент его окончания.</li>
-          </ul>
-          <Typography.Text>
-            Буква i здесь обозначает конкретный процесс.
-          </Typography.Text>
-          <Typography.Text>Тогда:</Typography.Text>
-          <Typography.Text>fᵢ=sᵢ+dᵢ.</Typography.Text>
-          <Typography.Text>
-            Все моменты измеряем{" "}
-            <strong>от одного общего начала отсчёта</strong>.
-          </Typography.Text>
-          <Typography.Text>
-            Если f₆=25, это означает, что процесс 6 завершится через 25 мс после
-            начала всей системы. Это не означает, что сам процесс 6 работает 25
-            мс.
-          </Typography.Text>
-          <Typography.Text>
-            Именно путаница между этими двумя смыслами часто приводит к
-            неправильному решению.
-          </Typography.Text>
-        </>
-      ),
-    },
-    {
-      id: "process-itogo",
-      navLabel: "Итого",
-      explanation: (
-        <>
-          <LessonSummary
-            items={[
-              {
-                note: (
-                  <>
-                    Процесс — отдельная работа; для решения нужны его
-                    длительность и список поставщиков.
-                  </>
-                ),
-              },
-              {
-                note: (
-                  <>
-                    Последовательные работы складывают, параллельные — берут
-                    максимум окончаний.
-                  </>
-                ),
-              },
-              {
-                note: (
-                  <>
-                    ID — имя процесса, не номер строки и не порядок запуска; «0»
-                    — поставщиков нет; «1; 2» — нужны оба результата.
-                  </>
-                ),
-              },
-              {
-                note: (
-                  <>
-                    Длительность d, начало s и окончание f — разные величины: f
-                    = s + d, все моменты — от одного общего начала.
-                  </>
-                ),
-              },
-            ]}
-          />
         </>
       ),
     },
@@ -730,811 +500,123 @@ export const parallelComputingLesson = defineLesson({
       explanation: (
         <>
           <Typography.Text>
+            Процесс ждёт двух других. Когда он начнёт?
+          </Typography.Text>
+          <Typography.Text>
             <strong>
-              Начало процесса — максимум окончаний его поставщиков, окончание —
-              начало плюс длительность; общее время — максимум всех окончаний.
+              Когда закончится последний из них: начало — самое позднее
+              окончание тех, кого ждёшь. Окончание — начало плюс время работы.
+            </strong>
+          </Typography.Text>
+          <Typography.Text>
+            Пусть процесс C ждёт A и B. A заканчивается в момент 5, B — в момент
+            12. В момент 5 результат A уже есть, а B ещё работает. Оба
+            результата готовы только в 12 — значит, C начинает в 12. Если C
+            работает 3 мс, он закончится в 12 + 3 = 15 и займёт 13-ю, 14-ю и
+            15-ю мс.
+          </Typography.Text>
+          <Typography.Text>
+            Складывать 5 и 12 нельзя: это моменты на общих часах, а не
+            длительности. Пока B работал до 12, A тоже работал — одновременно с
+            ним.
+          </Typography.Text>
+          <Typography.Text>
+            Тех, кого процесс ждёт, будем называть его{" "}
+            <strong>поставщиками</strong>: они поставляют ему результаты. У
+            процесса без поставщиков (в таблице — 0) начало 0.
+          </Typography.Text>
+        </>
+      ),
+    },
+    {
+      id: "raspisanie-po-shagam",
+      navLabel: "Расписание по шагам",
+      explanation: (
+        <>
+          <Typography.Text>
+            Как посчитать начала и окончания для всей таблицы?
+          </Typography.Text>
+          <Typography.Text>
+            <strong>
+              По очереди, от независимых процессов к зависимым: процесс считаем,
+              когда окончания всех его поставщиков уже известны.
             </strong>{" "}
-            Только этот расчёт нужен в 44 задачах подборок, и он лежит в основе
-            всех остальных.
+            Возьмём восемь процессов — на них проверим каждый шаг темы:
           </Typography.Text>
+          <ProcessTable label={"Восемь процессов учебного примера"} />
           <Typography.Text>
-            Главный пример — восемь процессов: итог 14 мс и критическая цепочка
-            2 → 5 → 7 → 8. Сначала считаем руками, потом переносим в Excel
-            обычными ссылками.
-          </Typography.Text>
-        </>
-      ),
-    },
-    {
-      id: "poslednij-postavshchik",
-      navLabel: "Последний поставщик",
-      explanation: (
-        <>
-          <Typography.Text>
-            <strong>
-              Зависимый процесс начинает, когда готов последний из его
-              поставщиков: начало — максимум их окончаний.
-            </strong>
-          </Typography.Text>
-          <Typography.Text>
-            Предположим, процесс C зависит от процессов A и B.
-          </Typography.Text>
-          <Typography.Text>A заканчивается в момент 5 мс.</Typography.Text>
-          <Typography.Text>B заканчивается в момент 12 мс.</Typography.Text>
-          <Typography.Text>Когда C сможет начать работу?</Typography.Text>
-          <Typography.Text>
-            В момент 5 мс результат A уже готов. Но результата B ещё нет.
-          </Typography.Text>
-          <Typography.Text>
-            В момент 10 мс ситуация такая же: одного результата не хватает.
-          </Typography.Text>
-          <Typography.Text>
-            В момент 12 мс готовы оба результата. Теперь можно запускать C.
-          </Typography.Text>
-          <Typography.Text>Следовательно:</Typography.Text>
-          <Typography.Text>s_C=max(5;12)=12.</Typography.Text>
-          <Typography.Text>Почему нельзя складывать 5+12?</Typography.Text>
-          <Typography.Text>
-            Потому что это <strong>моменты времени на общей шкале</strong>. Они
-            оба отсчитываются от одного начала. Пока B работал до момента 12, A
-            тоже успел выполнить свою работу.
-          </Typography.Text>
-          <Typography.Text>
-            Мы не ждём сначала 5 мс, а потом ещё 12 мс. Мы ждём до момента,
-            когда закончит последний поставщик.
-          </Typography.Text>
-          <Typography.Text>Если C работает ещё 3 мс:</Typography.Text>
-          <Typography.Text>f_C=max(5;12)+3=15.</Typography.Text>
-          <Typography.Text>
-            <strong>
-              Для запуска нужны окончания поставщиков, а не их собственные
-              длительности.
-            </strong>
-          </Typography.Text>
-          <Typography.Text>
-            Предположим, процесс A сам работает только 2 мс, но перед этим ждёт
-            результаты других процессов и запускается в момент 20 мс.
-          </Typography.Text>
-          <Typography.Text>Тогда A заканчивается в момент:</Typography.Text>
-          <Typography.Text>20+2=22.</Typography.Text>
-          <Typography.Text>
-            Его получатель должен ждать до момента 22. Число 2 само по себе не
-            говорит, когда результат будет готов.
-          </Typography.Text>
-          <Typography.Text>Поэтому правильное правило:</Typography.Text>
-          <Typography.Text>
-            <strong>
-              Начало процесса =максимум моментов окончания его поставщиков
-            </strong>
-          </Typography.Text>
-          <Typography.Text>
-            Для независимого процесса в расписании с самым ранним запуском:
-          </Typography.Text>
-          <Typography.Text>sᵢ=0, fᵢ=dᵢ.</Typography.Text>
-          <Typography.Text>Для зависимого:</Typography.Text>
-          <Typography.Text>sᵢ=max(f_поставщиков),</Typography.Text>
-          <Typography.Text>fᵢ=max(f_поставщиков)+dᵢ.</Typography.Text>
-          <Typography.Text>Пока предполагаем, что:</Typography.Text>
-          <ul>
-            <li>ресурсов достаточно для всех готовых процессов;</li>
-            <li>дополнительных задержек нет;</li>
-            <li>процессы запускаются как можно раньше.</li>
-          </ul>
-          <Typography.Text>Другие условия рассмотрим отдельно.</Typography.Text>
-        </>
-      ),
-    },
-    {
-      id: "graf-zavisimostej",
-      navLabel: "Граф зависимостей",
-      explanation: (
-        <>
-          <Typography.Text>
-            <strong>
-              Зависимости образуют граф: стрелка ведёт от поставщика к
-              получателю.
-            </strong>
-          </Typography.Text>
-          <Typography.Text>Возьмём учебный пример:</Typography.Text>
-          <LessonTable
-            label={"Возьмём учебный пример"}
-            columns={[
-              { label: "ID", numeric: true },
-              { label: "Длительность, мс", numeric: true },
-              { label: "Зависит от" },
-            ]}
-            rows={[
-              ["1", "4", "0"],
-              ["2", "6", "0"],
-              ["3", "3", "1"],
-              ["4", "2", "1; 2"],
-              ["5", "5", "2"],
-              ["6", "4", "3; 4"],
-              ["7", "2", "4; 5"],
-              ["8", "1", "6; 7"],
-            ]}
-          />
-          <Typography.Text>
-            Стрелка ниже означает: результат первого процесса нужен для запуска
-            второго.
+            Стрелки показывают, кто чей результат ждёт. Процессы разложены по
+            столбцам — шагам расчёта: у каждого процесса все поставщики стоят
+            левее, поэтому его можно считать, когда левые столбцы уже посчитаны.
           </Typography.Text>
           <LessonDiagram
-            {...lessonMedia.prDag_9deccd}
+            {...lessonMedia.prDag}
             caption={
               <>
-                Граф зависимостей восьми процессов: в каждой рамке — ID и
-                длительность; столбцы — шаги расчёта, на каждом шаге все
-                поставщики уже посчитаны.
+                Граф зависимостей: стрелка ведёт от поставщика к тому, кто его
+                ждёт. В рамке — ID и время работы.
               </>
             }
           />
           <Typography.Text>
-            Такая схема называется <strong>графом зависимостей</strong>:
-            процессы изображены отдельными элементами, а стрелки показывают
-            связи между ними.
+            Пройди расчёт по шагам. Пунктир на кадре — момент, когда готов
+            последний поставщик: с него процесс и начинает.
           </Typography.Text>
+          <LessonStepper
+            {...lessonMedia.prCellsStepper}
+            label={"Расписание восьми процессов: процесс за процессом"}
+          />
           <Typography.Text>
-            Обрати внимание на два важных свойства.
-          </Typography.Text>
-          <Typography.Text>
-            <strong>
-              Общий поставщик не заставляет получателей работать
-              последовательно.
-            </strong>
-          </Typography.Text>
-          <Typography.Text>
-            Например, процессы 4 и 5 используют результат процесса 2. После
-            получения нужных результатов они могут работать одновременно.
-          </Typography.Text>
-          <Typography.Text>
-            Результат процесса 2 не «занимается» одним получателем. Его могут
-            использовать несколько процессов.
-          </Typography.Text>
-          <Typography.Text>
-            <strong>Зависимость может быть косвенной.</strong>
-          </Typography.Text>
-          <Typography.Text>Процесс 3 зависит от процесса 1.</Typography.Text>
-          <Typography.Text>Процесс 6 зависит от процесса 3.</Typography.Text>
-          <Typography.Text>
-            Значит, процесс 6 косвенно зависит и от процесса 1, хотя ID 1 не
-            записан в строке процесса 6.
-          </Typography.Text>
-          <Typography.Text>
-            Это уже учтено в моменте окончания процесса 3. Не нужно отдельно
-            добавлять длительности всех его предков.
+            Все процессы закончились к 14 мс — это и есть минимальное время, за
+            которое выполнится вся совокупность. Ищут его как наибольшее из всех
+            окончаний: процесс с последним ID не обязательно заканчивается
+            последним.
           </Typography.Text>
         </>
       ),
     },
     {
-      id: "raschet-tablicy",
-      navLabel: "Расчёт таблицы",
+      id: "kriticheskaya-cepochka",
+      navLabel: "Критическая цепочка",
       explanation: (
         <>
           <Typography.Text>
+            Почему всё нельзя закончить быстрее 14 мс?
+          </Typography.Text>
+          <Typography.Text>
             <strong>
-              Таблицу считают от независимых процессов к зависимым: начало —
-              максимум окончаний поставщиков, окончание — начало плюс
-              длительность.
-            </strong>
+              Есть цепочка, где каждый процесс ждёт предыдущего: 2 → 5 → 7 → 8.
+              Она идёт строго по очереди, 6 + 5 + 2 + 1 = 14 мс.
+            </strong>{" "}
+            Её называют критической: сколько бы процессов ни шло одновременно,
+            быстрее она не пройдёт.
           </Typography.Text>
-          <Typography.Text>
-            Процессы 1 и 2 независимы. Запускаем их в момент 0:
-          </Typography.Text>
-          <Typography.Text>f₁=0+4=4,</Typography.Text>
-          <Typography.Text>f₂=0+6=6.</Typography.Text>
-          <Typography.Text>
-            Процесс 3 зависит только от процесса 1:
-          </Typography.Text>
-          <Typography.Text>s₃=f₁=4,</Typography.Text>
-          <Typography.Text>f₃=4+3=7.</Typography.Text>
-          <Typography.Text>
-            Процесс 4 зависит от процессов 1 и 2:
-          </Typography.Text>
-          <Typography.Text>s₄=max(4;6)=6,</Typography.Text>
-          <Typography.Text>f₄=6+2=8.</Typography.Text>
-          <Typography.Text>
-            Процесс 5 зависит только от процесса 2:
-          </Typography.Text>
-          <Typography.Text>s₅=6,</Typography.Text>
-          <Typography.Text>f₅=6+5=11.</Typography.Text>
-          <Typography.Text>
-            Процесс 6 зависит от процессов 3 и 4:
-          </Typography.Text>
-          <Typography.Text>s₆=max(7;8)=8,</Typography.Text>
-          <Typography.Text>f₆=8+4=12.</Typography.Text>
-          <Typography.Text>
-            Процесс 7 зависит от процессов 4 и 5:
-          </Typography.Text>
-          <Typography.Text>s₇=max(8;11)=11,</Typography.Text>
-          <Typography.Text>f₇=11+2=13.</Typography.Text>
-          <Typography.Text>
-            Процесс 8 зависит от процессов 6 и 7:
-          </Typography.Text>
-          <Typography.Text>s₈=max(12;13)=13,</Typography.Text>
-          <Typography.Text>f₈=13+1=14.</Typography.Text>
-          <Typography.Text>Получилась таблица:</Typography.Text>
-          <LessonTable
-            label={"Получилась таблица"}
-            columns={[
-              { label: "ID", numeric: true },
-              { label: "Длительность", numeric: true },
-              { label: "Зависит от" },
-              { label: "Начало", numeric: true },
-              { label: "Окончание", numeric: true },
-            ]}
-            rows={[
-              ["1", "4", "0", "0", "4"],
-              ["2", "6", "0", "0", "6"],
-              ["3", "3", "1", "4", "7"],
-              ["4", "2", "1; 2", "6", "8"],
-              ["5", "5", "2", "6", "11"],
-              ["6", "4", "3; 4", "8", "12"],
-              ["7", "2", "4; 5", "11", "13"],
-              ["8", "1", "6; 7", "13", "14"],
-            ]}
-          />
           <LessonDiagram
-            {...lessonMedia.prGantt_9deccd}
+            {...lessonMedia.prCells_chain}
             caption={
               <>
-                То же расписание на общей шкале: каждая полоса — от начала до
-                окончания процесса. Процесс 4 стартует в 6 — когда готов
-                последний из его поставщиков, процесс 2.
+                Критическая цепочка 2 → 5 → 7 → 8 выделена: каждый её процесс
+                начинает ровно тогда, когда закончился предыдущий.
               </>
             }
           />
-          <Typography.Text>Когда закончится вся система?</Typography.Text>
           <Typography.Text>
-            Когда завершится последний из процессов:
+            Найти её легко с конца. Процесс 8 начался в 13 — по окончанию 7.
+            Процесс 7 начался в 11 — по окончанию 5. Процесс 5 начался в 6 — по
+            окончанию 2. Каждый раз берём того поставщика, который закончился
+            последним.
           </Typography.Text>
-          <Typography.Text>T=max(f₁;f₂;…;f₈)=14.</Typography.Text>
-          <Typography.Text>
-            <strong>Ответ: 14 мс.</strong>
-          </Typography.Text>
-          <Typography.Text>
-            В этом примере последний по ID процесс действительно заканчивается
-            последним. Но это свойство именно этих данных. В другой таблице
-            последним может завершиться, например, независимый процесс с ID 3.
-          </Typography.Text>
-          <Typography.Text>
-            Например, процессы 1 (10 мс, без поставщиков), 2 (2 мс, без
-            поставщиков) и 3 (1 мс, ждёт процесс 2): процесс 3 заканчивается в
-            3, а процесс 1 — в 10.
-          </Typography.Text>
-          <Typography.Text>
-            Поэтому общее время нужно искать как максимум{" "}
-            <strong>всего столбца окончаний</strong>.
-          </Typography.Text>
-        </>
-      ),
-    },
-    {
-      id: "minimalnoe-obshchee-vremya",
-      navLabel: "Минимальное общее время",
-      explanation: (
-        <>
-          <Typography.Text>
-            <strong>
-              Раннее расписание даёт минимальное общее время: раньше начать
-              нельзя, а такое расписание выполнимо.
-            </strong>
-          </Typography.Text>
-          <Typography.Text>
-            Мы пока рассматриваем систему без ограничения ресурсов.
-          </Typography.Text>
-          <Typography.Text>
-            Зависимый процесс нельзя запустить раньше готовности последнего
-            необходимого результата. Значит, найденные моменты начала являются
-            нижними границами: раньше начать невозможно.
-          </Typography.Text>
-          <Typography.Text>
-            При этом найденное расписание выполнимо:
-          </Typography.Text>
-          <ul>
-            <li>независимые процессы запускаются в 0;</li>
-            <li>
-              каждый зависимый процесс запускается после своих поставщиков;
-            </li>
-            <li>любое число готовых процессов может работать одновременно.</li>
-          </ul>
-          <Typography.Text>
-            Получается, мы построили расписание, в котором каждый процесс
-            стартует в самый ранний разрешённый момент.
-          </Typography.Text>
-          <Typography.Text>
-            Если задержать какой-нибудь процесс, результаты раньше не появятся.
-            Следовательно, задержками нельзя уменьшить время завершения всей
-            системы.
-          </Typography.Text>
-          <Typography.Text>
-            Поэтому для поиска <strong>минимального общего времени</strong> этот
-            метод обоснован.
-          </Typography.Text>
-          <Typography.Text>
-            Позже мы увидим тонкость: минимальное общее время не всегда
-            означает, что для вопросов о параллельности существует только одно
-            допустимое расписание.
-          </Typography.Text>
-        </>
-      ),
-    },
-    {
-      id: "raschet-v-excel",
-      navLabel: "Расчёт в Excel",
-      explanation: (
-        <>
-          <Typography.Text>
-            <strong>
-              В Excel тот же расчёт записывают обычными ссылками: начало — МАКС
-              окончаний поставщиков, окончание — начало плюс длительность.
-            </strong>
-          </Typography.Text>
-          <Typography.Text>
-            Это первый способ, который стоит освоить. В нём хорошо видно, что
-            именно делает каждая формула.
-          </Typography.Text>
-          <Typography.Text>Разместим данные так:</Typography.Text>
-          <LessonTable
-            label={"Разместим данные так"}
-            columns={[{ label: "Столбец" }, { label: "Содержимое" }]}
-            rows={[
-              ["A", "ID процесса"],
-              ["B", "Собственная длительность"],
-              ["C", "ID поставщиков"],
-              ["D", "Момент начала"],
-              ["E", "Момент окончания"],
-            ]}
-          />
-          <Typography.Text>Заголовки находятся в строке 1.</Typography.Text>
-          <Typography.Text>Процесс 1 находится в строке 2.</Typography.Text>
-          <Typography.Text>Процесс 2 — в строке 3.</Typography.Text>
-          <Typography.Text>И так далее.</Typography.Text>
-          <Typography.Text>
-            <strong>Адрес ячейки и ID процесса — разные вещи.</strong>
-          </Typography.Text>
-          <Typography.Text>
-            Процесс с ID 1 находится в строке 2, потому что первая строка занята
-            заголовком.
-          </Typography.Text>
-          <Typography.Text>Поэтому:</Typography.Text>
-          <ul>
-            <li>
-              <Notation>{"E2"}</Notation> — окончание процесса 1;
-            </li>
-            <li>
-              <Notation>{"E3"}</Notation> — окончание процесса 2;
-            </li>
-            <li>
-              <Notation>{"E4"}</Notation> — окончание процесса 3.
-            </li>
-          </ul>
-          <Typography.Text>
-            Буква обозначает столбец, число — строку листа.
-          </Typography.Text>
-          <Typography.Text>
-            Для нашего примера формулы начала будут такими:
-          </Typography.Text>
-          <LessonTable
-            label={"Для нашего примера формулы начала будут такими"}
-            columns={[
-              { label: "Процесс", numeric: true },
-              { label: "Ячейка начала" },
-              { label: "Формула" },
-            ]}
-            rows={[
-              [
-                "1",
-                "D2",
-                <>
-                  <Notation>{"=0"}</Notation>
-                </>,
-              ],
-              [
-                "2",
-                "D3",
-                <>
-                  <Notation>{"=0"}</Notation>
-                </>,
-              ],
-              [
-                "3",
-                "D4",
-                <>
-                  <Notation>{"=E2"}</Notation>
-                </>,
-              ],
-              [
-                "4",
-                "D5",
-                <>
-                  <Notation>{"=МАКС(E2;E3)"}</Notation>
-                </>,
-              ],
-              [
-                "5",
-                "D6",
-                <>
-                  <Notation>{"=E3"}</Notation>
-                </>,
-              ],
-              [
-                "6",
-                "D7",
-                <>
-                  <Notation>{"=МАКС(E4;E5)"}</Notation>
-                </>,
-              ],
-              [
-                "7",
-                "D8",
-                <>
-                  <Notation>{"=МАКС(E5;E6)"}</Notation>
-                </>,
-              ],
-              [
-                "8",
-                "D9",
-                <>
-                  <Notation>{"=МАКС(E7;E8)"}</Notation>
-                </>,
-              ],
-            ]}
-          />
-          <Typography.Text>
-            Функция <Notation>{"МАКС"}</Notation> возвращает наибольшее из
-            переданных значений. Например:
-          </Typography.Text>
-          <FormulaBlock lines={[{ formula: "=МАКС(4;6)" }]} label="Формула" />
-          <Typography.Text>даёт 6.</Typography.Text>
-          <Typography.Text>Запись:</Typography.Text>
-          <FormulaBlock lines={[{ formula: "=МАКС(E2;E3)" }]} label="Формула" />
-          <Typography.Text>
-            означает: взять значения из ячеек E2 и E3 и выбрать большее.
-            Назначение этой функции описано и в официальном справочнике Excel.
-          </Typography.Text>
-          <Typography.Text>
-            <strong>
-              Формула окончания для всех строк имеет одинаковую структуру.
-            </strong>
-          </Typography.Text>
-          <Typography.Text>В E2 вводим:</Typography.Text>
-          <FormulaBlock lines={[{ formula: "=D2+B2" }]} label="Формула" />
-          <Typography.Text>То есть:</Typography.Text>
-          <blockquote>
+          <ProofDisclosure
+            kind="nuance"
+            summary="Тонкости: что даёт ускорение процесса"
+          >
             <Typography.Text>
-              Начало процесса плюс его длительность.
+              Ускорять процесс вне критической цепочки бесполезно. Процесс 6
+              заканчивается в 12, а 8 всё равно ждёт 7 до 13. Его можно даже
+              удлинить на 1 мс — он закончится в 13, и итог останется 14. А вот
+              удлинение на 2 мс уже сдвинет конец: 6 закончится в 14, 8 — в 15.
             </Typography.Text>
-          </blockquote>
-          <Typography.Text>
-            Теперь эту формулу можно скопировать вниз до E9.
-          </Typography.Text>
-          <Typography.Text>Получится:</Typography.Text>
-          <LessonTable
-            label={"Получится"}
-            columns={[{ label: "Ячейка" }, { label: "Формула" }]}
-            rows={[
-              [
-                "E2",
-                <>
-                  <Notation>{"=D2+B2"}</Notation>
-                </>,
-              ],
-              [
-                "E3",
-                <>
-                  <Notation>{"=D3+B3"}</Notation>
-                </>,
-              ],
-              [
-                "E4",
-                <>
-                  <Notation>{"=D4+B4"}</Notation>
-                </>,
-              ],
-              ["…", "…"],
-              [
-                "E9",
-                <>
-                  <Notation>{"=D9+B9"}</Notation>
-                </>,
-              ],
-            ]}
-          />
-          <Typography.Text>
-            При копировании Excel автоматически изменяет номер строки.
-          </Typography.Text>
-          <Typography.Text>
-            Это удобно: в каждой строке окончание рассчитывается по началу и
-            длительности <strong>этой же строки</strong>.
-          </Typography.Text>
-          <Typography.Text>
-            Чтобы скопировать формулу, можно потянуть за маленький квадрат в
-            правом нижнем углу выделенной ячейки.
-          </Typography.Text>
-          <Typography.Text>
-            <strong>
-              Формулы начала в этом способе нельзя бездумно протянуть одной
-              формулой на всю таблицу.
-            </strong>
-          </Typography.Text>
-          <Typography.Text>
-            Для одного процесса нужны результаты 1 и 2.
-          </Typography.Text>
-          <Typography.Text>Для другого — 3 и 4.</Typography.Text>
-          <Typography.Text>Для третьего — только 2.</Typography.Text>
-          <Typography.Text>
-            Поэтому ссылки в столбце D мы составляем по зависимостям конкретной
-            строки.
-          </Typography.Text>
-          <Typography.Text>
-            Формулы в E устроены одинаково. Формулы в D отражают разные связи.
-          </Typography.Text>
-          <Typography.Text>
-            <strong>Общее время:</strong>
-          </Typography.Text>
-          <FormulaBlock lines={[{ formula: "=МАКС(E2:E9)" }]} label="Формула" />
-          <Typography.Text>
-            Двоеточие в <Notation>{"E2:E9"}</Notation> означает непрерывный
-            диапазон: все ячейки от E2 до E9 включительно.
-          </Typography.Text>
-          <Typography.Text>Весь расчёт на одном листе:</Typography.Text>
-          <SheetBlock {...lessonMedia.sheet1} label={"Лист «Разбор»"} />
-          <Typography.Text>
-            Выбери <Notation>{"D5"}</Notation>: рамки стоят на{" "}
-            <Notation>{"E2"}</Notation> и <Notation>{"E3"}</Notation> —
-            окончаниях обоих поставщиков процесса 4. Поменяй длительность
-            процесса 6 в <Notation>{"B7"}</Notation> с 4 на 7 — итог станет 16:
-            теперь ветвь через процесс 6 длиннее. Верни 4.
-          </Typography.Text>
-          <Typography.Text>
-            Здесь берём максимум окончаний всех восьми процессов.
-          </Typography.Text>
-        </>
-      ),
-    },
-    {
-      id: "pereputannye-stroki",
-      navLabel: "Перепутанные строки",
-      explanation: (
-        <>
-          <Typography.Text>
-            <strong>
-              Обычные ссылки работают и при перепутанных строках: Excel может
-              ссылаться на ячейку ниже.
-            </strong>
-          </Typography.Text>
-          <Typography.Text>Допустим, таблица начинается так:</Typography.Text>
-          <LessonTable
-            label={"Допустим, таблица начинается так"}
-            columns={[
-              { label: "Строка Excel", numeric: true },
-              { label: "ID", numeric: true },
-              { label: "Длительность", numeric: true },
-              { label: "Зависит от" },
-            ]}
-            rows={[
-              ["2", "20", "3", "10"],
-              ["3", "10", "5", "0"],
-            ]}
-          />
-          <Typography.Text>
-            Процесс 20 расположен выше своего поставщика 10.
-          </Typography.Text>
-          <Typography.Text>
-            В ячейку начала процесса 20 можно поставить ссылку на окончание
-            процесса 10:
-          </Typography.Text>
-          <FormulaBlock lines={[{ formula: "=E3" }]} label="Формула" />
-          <Typography.Text>
-            Excel умеет ссылаться на ячейки ниже. Сама по себе такая ссылка не
-            является ошибкой.
-          </Typography.Text>
-          <Typography.Text>
-            Главное, чтобы в зависимостях не было замкнутой цепочки.
-          </Typography.Text>
-          <Typography.Text>Например:</Typography.Text>
-          <ul>
-            <li>процесс 1 ждёт процесс 2;</li>
-            <li>процесс 2 ждёт процесс 1.</li>
-          </ul>
-          <Typography.Text>Тогда никто не может начать первым.</Typography.Text>
-          <Typography.Text>
-            Такую замкнутую зависимость называют <strong>циклом</strong>. В
-            корректных задачах с конечным расписанием подобных циклов быть не
-            должно.
-          </Typography.Text>
-          <Typography.Text>
-            При работе с обычными ссылками Excel сам пересчитывает связанные
-            ячейки. Физический порядок строк может отличаться от порядка
-            выполнения.
-          </Typography.Text>
-          <Typography.Text>
-            Однако для понимания полезно считать процессы в таком порядке, чтобы
-            результаты поставщиков уже были известны.
-          </Typography.Text>
-        </>
-      ),
-    },
-    {
-      id: "poryadok-rascheta",
-      navLabel: "Порядок расчёта",
-      explanation: (
-        <>
-          <Typography.Text>
-            <strong>
-              Порядок расчёта строят по готовности поставщиков, а не по номерам
-              процессов.
-            </strong>
-          </Typography.Text>
-          <Typography.Text>Действуй так:</Typography.Text>
-          <ol>
-            <li>
-              Найди все процессы с зависимостью <Notation>{"0"}</Notation>.
-            </li>
-            <li>Рассчитай их окончания.</li>
-            <li>Найди процессы, у которых уже рассчитаны все поставщики.</li>
-            <li>Рассчитай их.</li>
-            <li>Повторяй, пока не обработаешь всю таблицу.</li>
-          </ol>
-          <Typography.Text>
-            В нашем примере это можно сделать по группам:
-          </Typography.Text>
-          <LessonTable
-            label={"В нашем примере это можно сделать по группам"}
-            columns={[
-              { label: "Шаг", numeric: true },
-              { label: "Какие процессы уже можно рассчитать" },
-            ]}
-            rows={[
-              ["1", "1, 2"],
-              ["2", "3, 4, 5"],
-              ["3", "6, 7"],
-              ["4", "8"],
-            ]}
-          />
-          <Typography.Text>
-            Это <strong>порядок вычисления таблицы</strong>, а не приказ
-            процессам работать группами.
-          </Typography.Text>
-          <Typography.Text>
-            Например, процесс 3 начинает в момент 4, а процессы 4 и 5 — в момент
-            6. Они находятся в одной группе расчёта, но запускаются в разное
-            время.
-          </Typography.Text>
-          <Typography.Text>
-            Порядок строк, при котором каждый поставщик расположен выше своего
-            получателя, называется <strong>топологическим порядком</strong>.
-            Сначала мы объяснили его смысл, теперь можно использовать это
-            название.
-          </Typography.Text>
-          <Typography.Text>
-            Сортировка по возрастанию ID создаёт такой порядок только тогда,
-            когда зависимости в исходных данных действительно направлены от
-            меньших ID к большим.
-          </Typography.Text>
-          <Typography.Text>
-            Сортировка по количеству поставщиков тоже не гарантирует нужного
-            порядка. Процесс с одним поставщиком может зависеть от длинной
-            цепочки, которую ещё не рассчитали.
-          </Typography.Text>
-        </>
-      ),
-    },
-    {
-      id: "kriticheskij-put",
-      navLabel: "Критический путь",
-      explanation: (
-        <>
-          <Typography.Text>
-            <strong>
-              Общее время определяет критический путь — самая длинная по сумме
-              длительностей цепочка зависимостей.
-            </strong>
-          </Typography.Text>
-          <Typography.Text>В нашем примере есть цепочка:</Typography.Text>
-          <Typography.Text>2 → 5 → 7 → 8.</Typography.Text>
-          <Typography.Text>
-            Внутри неё процессы должны выполняться последовательно:
-          </Typography.Text>
-          <Typography.Text>6+5+2+1=14.</Typography.Text>
-          <Typography.Text>
-            Даже если компьютер сможет параллельно выполнять тысячу других
-            процессов, эту цепочку нельзя закончить быстрее 14 мс.
-          </Typography.Text>
-          <Typography.Text>
-            При этом мы уже построили расписание, в котором все процессы
-            заканчиваются к моменту 14.
-          </Typography.Text>
-          <Typography.Text>
-            Значит, 14 — и необходимое, и достижимое время.
-          </Typography.Text>
-          <Typography.Text>
-            Самую длинную по суммарной длительности цепочку зависимостей
-            называют <strong>критическим путём</strong>.
-          </Typography.Text>
-          <Typography.Text>
-            Слово «длинную» здесь относится к времени, а не к количеству
-            процессов.
-          </Typography.Text>
-          <Typography.Text>
-            Цепочка из двух процессов по 20 мс длиннее цепочки из пяти процессов
-            по 1 мс.
-          </Typography.Text>
-          <Typography.Text>
-            При достаточных ресурсах и отсутствии дополнительных задержек:
-          </Typography.Text>
-          <Typography.Text>
-            <strong>
-              Минимальное общее время =длительность критического пути
-            </strong>
-            .
-          </Typography.Text>
-          <Typography.Text>
-            Вручную перебирать все пути обычно не нужно. Формулы с максимумами
-            уже находят нужные времена.
-          </Typography.Text>
-          <Typography.Text>
-            Чтобы восстановить критический путь после расчёта:
-          </Typography.Text>
-          <ol>
-            <li>Найди процесс с максимальным окончанием.</li>
-            <li>
-              Среди его поставщиков выбери того, чьё окончание определило
-              запуск.
-            </li>
-            <li>Для выбранного поставщика повтори тот же шаг.</li>
-            <li>Продолжай до независимого процесса.</li>
-          </ol>
-          <Typography.Text>
-            Для процесса 8 поставщики заканчиваются в 12 и 13. Выбираем процесс
-            7.
-          </Typography.Text>
-          <Typography.Text>
-            Для процесса 7 поставщики заканчиваются в 8 и 11. Выбираем процесс
-            5.
-          </Typography.Text>
-          <Typography.Text>Процесс 5 ждёт процесс 2.</Typography.Text>
-          <Typography.Text>Получаем цепочку 2 → 5 → 7 → 8.</Typography.Text>
-          <LessonDiagram
-            {...lessonMedia.prGantt_4808df}
-            caption={
-              <>
-                Критический путь 2 → 5 → 7 → 8 (в рамке): каждый следующий
-                процесс стартует ровно в момент окончания предыдущего, 6 + 5 + 2
-                + 1 = 14.
-              </>
-            }
-          />
-          <Typography.Text>
-            Если у поставщиков одинаковые определяющие окончания, критических
-            путей может быть несколько.
-          </Typography.Text>
-          <Typography.Text>
-            <strong>
-              Из этого становится понятно, почему ускорение отдельного процесса
-              не всегда ускоряет всю систему.
-            </strong>
-          </Typography.Text>
-          <Typography.Text>
-            В нашем примере процесс 6 заканчивается в момент 12, а процесс 7 — в
-            момент 13.
-          </Typography.Text>
-          <Typography.Text>Процесс 8 всё равно ждёт до 13.</Typography.Text>
-          <Typography.Text>
-            Если процесс 6 начнёт завершаться в момент 11, общий итог не
-            изменится: процесс 7 всё ещё не готов до 13.
-          </Typography.Text>
-          <Typography.Text>
-            И наоборот, длительность процесса 6 можно увеличить с 4 до 5 мс. Он
-            закончится в 13, и общее время останется 14.
-          </Typography.Text>
-          <Typography.Text>А увеличение до 6 мс уже даст:</Typography.Text>
-          <Typography.Text>f₆=8+6=14,</Typography.Text>
-          <Typography.Text>f₈=max(14;13)+1=15.</Typography.Text>
-          <Typography.Text>
-            Изменилась ветвь, которая определяет окончание системы.
-          </Typography.Text>
+          </ProofDisclosure>
         </>
       ),
     },
@@ -1546,54 +628,32 @@ export const parallelComputingLesson = defineLesson({
           <LessonSummary
             items={[
               {
-                note: (
-                  <>
-                    Начало зависимого процесса — максимум окончаний всех
-                    поставщиков; независимые — в 0.
-                  </>
-                ),
+                key: "Зависимость",
+                note: <>B начинает только после окончания A</>,
               },
               {
-                note: (
-                  <>
-                    Окончание = начало + длительность; общее время — максимум
-                    всего столбца окончаний, не окончание последнего ID.
-                  </>
-                ),
+                key: "Начало",
+                note: <>самое позднее окончание поставщиков; без них — 0</>,
               },
               {
-                note: (
-                  <>
-                    Раннее расписание даёт минимальное общее время: раньше
-                    начать нельзя, а такое расписание выполнимо.
-                  </>
-                ),
+                key: "Окончание",
+                note: <>начало + время работы</>,
               },
               {
-                note: (
-                  <>
-                    В Excel: <Notation>{"=МАКС(…)"}</Notation> окончаний
-                    поставщиков в столбце начала,{" "}
-                    <Notation>{"=D2+B2"}</Notation> протягивается; ссылки вниз
-                    допустимы.
-                  </>
-                ),
+                key: "Миллисекунды",
+                note: <>процесс с s до f занимает мс с (s + 1)-й по f-ю</>,
               },
               {
-                note: (
-                  <>
-                    Порядок расчёта — по готовности поставщиков
-                    (топологический), а не по ID.
-                  </>
-                ),
+                key: "Порядок расчёта",
+                note: <>сначала поставщики, потом те, кто их ждёт</>,
               },
               {
-                note: (
-                  <>
-                    Критический путь — самая длинная по времени цепочка;
-                    ускорение некритической ветви итог не меняет.
-                  </>
-                ),
+                key: "Общее время",
+                note: <>максимум всех окончаний</>,
+              },
+              {
+                key: "Критическая цепочка",
+                note: <>каждый ждёт предыдущего; её длина — общее время</>,
               },
             ]}
           />
@@ -1601,377 +661,212 @@ export const parallelComputingLesson = defineLesson({
       ),
     },
     {
-      id: "poisk-postavshchika-po-id",
-      navLabel: "Поиск поставщика по ID",
+      id: "tablica-v-excel",
+      navLabel: "Таблица в Excel",
       explanation: (
         <>
           <Typography.Text>
-            <strong>
-              Когда процессов много, поиск поставщика по ID поручают функции{" "}
-              <Notation>{"ВПР"}</Notation>: она находит строку с нужным ID и
-              возвращает из неё момент окончания.
-            </strong>{" "}
-            Это не новый тип задач, а запись уже понятного поиска из подтемы 2 —
-            так решают таблицы экзаменного размера в десятки процессов.
+            В файле экзамена процессов двадцать и больше. Как посчитать
+            расписание, не делая всё руками?
           </Typography.Text>
           <Typography.Text>
-            Главный пример — те же восемь процессов и те же 14 мс. Формула
-            начала станет одинаковой для всех строк, и её можно будет протянуть.
+            <strong>
+              Записать то же правило формулами: для каждого процесса найти
+              окончания его поставщиков, взять из них максимум и прибавить время
+              работы.
+            </strong>{" "}
+            Формулы будут одинаковыми для всех строк — их напишем один раз и
+            протянем. Порядок такой:
+          </Typography.Text>
+          <ol>
+            <li>разложить список поставщиков по отдельным столбцам;</li>
+            <li>для каждого поставщика найти его окончание по ID;</li>
+            <li>
+              начало — максимум этих окончаний, окончание — начало плюс время;
+            </li>
+            <li>общее время — максимум столбца окончаний.</li>
+          </ol>
+          <Typography.Text>
+            Столбцы расположим так: A — ID, B — время работы, C и D —
+            поставщики, E и F — их окончания, G — начало, H — окончание. Покажем
+            на восьми процессах учебного примера — должно получиться то же, что
+            руками: итог 14.
           </Typography.Text>
         </>
       ),
     },
     {
-      id: "funkciya-vpr",
-      navLabel: "Функция ВПР",
+      id: "postavshchiki-po-stolbcam",
+      navLabel: "Поставщики по столбцам",
       explanation: (
         <>
           <Typography.Text>
+            В ячейке записано «1;2». Как искать каждого поставщика отдельно?
+          </Typography.Text>
+          <Typography.Text>
             <strong>
-              <Notation>{"ВПР"}</Notation> ищет значение в первом столбце
-              диапазона и возвращает значение из выбранного столбца той же
-              строки.
-            </strong>
+              Разложить список по столбцам: Данные → Текст по столбцам, с
+              разделителями, разделитель — точка с запятой.
+            </strong>{" "}
+            Тогда «1;2» станет двумя ячейками: 1 и 2. В LibreOffice команда
+            называется так же и стоит в меню «Данные».
           </Typography.Text>
           <Typography.Text>
-            В обычном способе мы сами находили нужную строку и писали, например,{" "}
-            <Notation>{"=E2"}</Notation>. Но если процессов несколько десятков,
-            искать каждый ID глазами неудобно.
+            Столбцов под поставщиков нужно столько, сколько их у процесса с
+            самым длинным списком. У нас их два — C и D. Справа от столбца со
+            списком должны быть пустые столбцы, иначе разложенные значения
+            затрут соседние данные.
           </Typography.Text>
-          <Typography.Text>Нам нужна операция:</Typography.Text>
-          <blockquote>
+          <Typography.Text>
+            После разложения все ID становятся числами. Это важно: в файлах
+            одиночный поставщик часто записан текстом, а ВПР не находит число
+            «5», записанное как текст.
+          </Typography.Text>
+        </>
+      ),
+    },
+    {
+      id: "vpr-po-id",
+      navLabel: "Окончание поставщика: ВПР",
+      explanation: (
+        <>
+          <Typography.Text>
+            Как по ID поставщика найти, когда он закончился?
+          </Typography.Text>
+          <Typography.Text>
+            <strong>
+              Функцией{" "}
+              <PythonTerm term="xl-lookup">
+                <Notation>{"ВПР"}</Notation>
+              </PythonTerm>
+              : она находит строку с нужным ID и берёт из неё окончание.
+            </strong>{" "}
+            Окончания поставщиков ставим в E и F, начало — в G, окончание — в H:
+          </Typography.Text>
+          <FormulaBlock
+            lines={[{ cell: "E2", formula: "=ЕСНД(ВПР(C2;$A$1:$H1;8;0);0)" }]}
+            label="Формула"
+          />
+          <ul>
+            <li>
+              <Notation>{"C2"}</Notation> — ID поставщика, которого ищем.
+            </li>
+            <li>
+              <Notation>{"$A$1:$H1"}</Notation> — где ищем: строки выше текущей.
+              Поставщики стоят выше тех, кто их ждёт, поэтому этого хватает. При
+              протягивании вниз конец диапазона растёт:{" "}
+              <Notation>{"$A$1:$H2"}</Notation>,{" "}
+              <Notation>{"$A$1:$H3"}</Notation> и так далее.
+            </li>
+            <li>
+              <Notation>{"8"}</Notation> — номер столбца в диапазоне: восьмой —
+              H, окончание.
+            </li>
+            <li>
+              <Notation>{"0"}</Notation> — искать точное совпадение ID.
+            </li>
+            <li>
+              <Notation>{"ЕСНД(…;0)"}</Notation> — если ВПР ничего не нашла (ID
+              0 или пустая ячейка), вместо ошибки #Н/Д будет 0.
+            </li>
+          </ul>
+          <Typography.Text>
+            Формулу протягиваем вправо на F2 — там будет второй поставщик из D2
+            — и вниз до девятой строки. Знак{" "}
+            <PythonTerm term="xl-ref">$</PythonTerm> закрепляет столбцы
+            диапазона и его первую строку, а последняя строка без $ — она и
+            растёт.
+          </Typography.Text>
+          <ProofDisclosure
+            kind="nuance"
+            summary="Тонкости: почему не вся таблица"
+          >
             <Typography.Text>
-              Найди строку с указанным ID и возьми из неё момент окончания.
+              Если искать во всём диапазоне, формула строки увидит и окончание
+              своего же процесса, которое от неё зависит. Excel сочтёт это
+              циклической ссылкой. Строки выше этой проблемы не имеют.
             </Typography.Text>
-          </blockquote>
+            <Typography.Text>
+              Но тогда поставщик должен стоять выше. В файлах экзамена так и
+              есть: процесс зависит только от процессов с меньшими ID. Если
+              встретится таблица, где это не так, сначала переставь строки так,
+              чтобы поставщики шли выше тех, кто их ждёт (сортировка по ID это
+              не гарантирует), а ЕСНД здесь опасна — она молча подставит 0
+              вместо ненайденного поставщика.
+            </Typography.Text>
+          </ProofDisclosure>
+        </>
+      ),
+    },
+    {
+      id: "nachalo-okonchanie-itog",
+      navLabel: "Начало, окончание, итог",
+      explanation: (
+        <>
           <Typography.Text>
-            Это умеет делать <strong>ВПР</strong> — функция поиска значения в
-            таблице; как она устроена, объясняет{" "}
-            <PythonTerm term="xl-lookup">урок о поиске по ключу</PythonTerm>. Её
-            общий смысл:
+            Окончания поставщиков найдены. Что дальше?
+          </Typography.Text>
+          <Typography.Text>
+            <strong>
+              Начало — их максимум, окончание — начало плюс время, общее время —
+              максимум столбца окончаний.
+            </strong>
           </Typography.Text>
           <FormulaBlock
             lines={[
-              {
-                formula:
-                  "=ВПР(что_ищем;где_ищем;какой_столбец_вернуть;точный_поиск)",
-              },
+              { cell: "G2", formula: "=МАКС(E2:F2)" },
+              { cell: "H2", formula: "=G2+B2" },
+              { cell: "H11", formula: "=МАКС(H2:H9)" },
             ]}
-            label="Шаблон формулы"
-          />
-          <Typography.Text>Например, есть отдельная таблица:</Typography.Text>
-          <LessonTable
-            label={"Например, есть отдельная таблица"}
-            columns={[
-              { label: "ID", numeric: true },
-              { label: "Окончание", numeric: true },
-            ]}
-            rows={[
-              ["10", "5"],
-              ["20", "8"],
-              ["30", "12"],
-            ]}
+            label="Формулы"
           />
           <Typography.Text>
-            Если она находится в A2:B4, формула{" "}
-            <Notation>{"=ВПР(20;A2:B4;2;0)"}</Notation> даст 8.
+            G2 и H2 протягиваем вниз. Весь расчёт на одном листе — значения те
+            же, что в расчёте руками:
           </Typography.Text>
-          <LessonTable
-            label={
-              "Если она находится в A2:B4, формула =ВПР(20;A2:B4;2;0) даст 8"
-            }
-            columns={[{ label: "Аргумент" }, { label: "Значение" }]}
-            rows={[
-              [
-                <>
-                  <Notation>{"20"}</Notation>
-                </>,
-                "Ищем процесс с ID 20",
-              ],
-              [
-                <>
-                  <Notation>{"A2:B4"}</Notation>
-                </>,
-                "Ищем в этой таблице",
-              ],
-              [
-                <>
-                  <Notation>{"2"}</Notation>
-                </>,
-                "Возвращаем значение из второго столбца диапазона",
-              ],
-              [
-                <>
-                  <Notation>{"0"}</Notation>
-                </>,
-                "Нужен именно ID 20",
-              ],
-            ]}
+          <SheetBlock
+            {...lessonMedia.sheetSchedule}
+            label={"Лист «Расписание»"}
           />
           <Typography.Text>
-            Число 2 здесь означает{" "}
-            <strong>номер столбца внутри диапазона</strong>, а не номер
-            процесса. Точное совпадение обязательно: ID 19 или 21 не может
-            заменять ID 20.
+            Выбери <Notation>{"G5"}</Notation> — начало процесса 4: рамки стоят
+            на окончаниях его поставщиков, 4 и 6. Поменяй время процесса 6 в{" "}
+            <Notation>{"B7"}</Notation> с 4 на 6 — итог станет 15, как в расчёте
+            руками.
           </Typography.Text>
         </>
       ),
     },
     {
-      id: "postavshchiki-po-yachejkam",
-      navLabel: "Поставщики по ячейкам",
-      explanation: (
-        <>
-          <Typography.Text>
-            <strong>
-              Перед использованием <Notation>{"ВПР"}</Notation> список
-              поставщиков делят на отдельные ячейки.
-            </strong>
-          </Typography.Text>
-          <Typography.Text>
-            В одной ячейке может находиться текст <Notation>{"3; 4"}</Notation>.
-            ВПР должна отдельно искать ID 3 и отдельно ID 4. Поэтому подготовим
-            такую структуру:
-          </Typography.Text>
-          <LessonTable
-            label={"Поэтому подготовим такую структуру"}
-            columns={[
-              { label: "A" },
-              { label: "B" },
-              { label: "C" },
-              { label: "D" },
-              { label: "E" },
-              { label: "F" },
-            ]}
-            rows={[
-              [
-                "ID",
-                "Длительность",
-                "Поставщик 1",
-                "Поставщик 2",
-                "Начало",
-                "Окончание",
-              ],
-            ]}
-          />
-          <Typography.Text>
-            В нашем примере у каждого процесса не больше двух поставщиков. Если
-            в задаче их больше, нужно добавить столбцы поставщиков — и в формуле
-            ещё по одному <Notation>{"ВПР"}</Notation> на каждый.
-          </Typography.Text>
-          <Typography.Text>
-            Список можно разделить средствами Excel (
-            <PythonTerm term="xl-csv">разделение текста по столбцам</PythonTerm>
-            ):
-          </Typography.Text>
-          <ol>
-            <li>Выделить ячейки со списками зависимостей.</li>
-            <li>
-              Открыть <strong>Данные → Текст по столбцам</strong>.
-            </li>
-            <li>Выбрать данные с разделителями.</li>
-            <li>
-              Указать разделитель <strong>точка с запятой</strong>.
-            </li>
-            <li>Проверить предварительный просмотр.</li>
-            <li>Указать область, куда поместить результат.</li>
-            <li>Завершить разделение.</li>
-          </ol>
-          <Typography.Text>
-            <strong>Освободи нужные столбцы справа до разделения.</strong> Иначе
-            полученные значения могут занять ячейки с уже существующими данными.
-            После разделения проверь, что ID поставщиков записаны числами и
-            совпадают по типу с ID в основном столбце: число{" "}
-            <Notation>{"3"}</Notation> и текст с лишними пробелами вокруг{" "}
-            <Notation>{"3"}</Notation> могут вызвать проблемы поиска.
-          </Typography.Text>
-        </>
-      ),
-    },
-    {
-      id: "sluzhebnyj-process-0",
-      navLabel: "Служебный процесс 0",
-      explanation: (
-        <>
-          <Typography.Text>
-            <strong>
-              Служебный процесс 0 с окончанием 0 позволяет одной формулой
-              считать и независимые процессы.
-            </strong>
-          </Typography.Text>
-          <Typography.Text>
-            В строке 2 создадим служебную строку: ID 0, длительность 0,
-            поставщики 0, начало и окончание — готовые нули. Настоящие процессы
-            разместим начиная со строки 3. Пустые места в столбцах поставщиков
-            тоже заполним числовыми нулями.
-          </Typography.Text>
-          <Typography.Text>
-            Зачем это нужно? Для процесса без поставщиков получим max(f₀; f₀) =
-            max(0; 0) = 0. Для процесса с одним поставщиком, например 1: max(f₁;
-            f₀) = max(f₁; 0) = f₁. Для процесса с двумя поставщиками — max(f₁;
-            f₂). Отсутствующие поставщики больше не требуют отдельных
-            специальных формул.
-          </Typography.Text>
-          <Typography.Text>
-            Служебный процесс 0 нельзя включать в ответ на вопрос о количестве
-            настоящих процессов.
-          </Typography.Text>
-        </>
-      ),
-    },
-    {
-      id: "tolko-predydushchie-stroki",
-      navLabel: "Только предыдущие строки",
-      explanation: (
-        <>
-          <Typography.Text>
-            <strong>
-              Формула начала ищет поставщиков только в предыдущих строках —
-              диапазоном, который растёт при протягивании.
-            </strong>
-          </Typography.Text>
-          <Typography.Text>
-            Сначала расположим реальные процессы в топологическом порядке:
-            поставщики выше получателей. В <Notation>{"E3"}</Notation> вводим
-            формулу начала, в <Notation>{"F3"}</Notation> — окончания, и
-            протягиваем обе вниз:
-          </Typography.Text>
-          <SheetBlock {...lessonMedia.sheet2} label={"Лист «ВПР»"} />
-          <Typography.Text>
-            Что делает формула <Notation>{"E3"}</Notation>:
-          </Typography.Text>
-          <ol>
-            <li>
-              Берёт ID первого поставщика из <Notation>{"C3"}</Notation>.
-            </li>
-            <li>Ищет его строку.</li>
-            <li>Возвращает окончание из столбца F.</li>
-            <li>
-              Повторяет поиск для <Notation>{"D3"}</Notation>.
-            </li>
-            <li>Выбирает самое позднее окончание.</li>
-          </ol>
-          <Typography.Text>
-            Почему в ВПР стоит число 6? Диапазон начинается с A, и F — его
-            шестой столбец. Если добавить столбец перед окончанием, номер
-            возвращаемого столбца нужно будет изменить.
-          </Typography.Text>
-          <Typography.Text>
-            Выбери <Notation>{"E8"}</Notation> — начало процесса 6: рамки стоят
-            на его поставщиках и на диапазоне <Notation>{"$A$2:$F7"}</Notation>,
-            где идёт поиск. Значения столбцов совпадают с таблицей подтемы 2,
-            итог — те же 14 мс.
-          </Typography.Text>
-        </>
-      ),
-    },
-    {
-      id: "znak",
-      navLabel: "Знак $",
-      explanation: (
-        <>
-          <Typography.Text>
-            <strong>
-              Знак <Notation>{"$"}</Notation> закрепляет начало диапазона, а
-              конец растёт при копировании вниз.
-            </strong>
-          </Typography.Text>
-          <Typography.Text>
-            Диапазон <Notation>{"$A$2:$F2"}</Notation> при копировании вниз
-            становится <Notation>{"$A$2:$F3"}</Notation>, затем{" "}
-            <Notation>{"$A$2:$F4"}</Notation> и так далее. Начало диапазона{" "}
-            <Notation>{"A2"}</Notation> закреплено полностью. У его конца{" "}
-            <Notation>{"$F2"}</Notation> столбец F закреплён, а номер строки —
-            нет (<PythonTerm term="xl-ref">смешанные ссылки</PythonTerm>).
-            Поэтому верхняя граница остаётся на строке 2, а нижняя растёт.
-          </Typography.Text>
-          <Typography.Text>
-            В текущей строке мы ищем только среди предыдущих строк, где
-            расположены поставщики. Для процесса 3, находящегося в строке 5,
-            формула ищет в диапазоне <Notation>{"$A$2:$F4"}</Notation>: там уже
-            есть служебный процесс 0, процесс 1 и процесс 2.
-          </Typography.Text>
-          <Typography.Text>
-            <strong>
-              Почему не стоит сразу искать по всему столбцу собственных
-              результатов.
-            </strong>{" "}
-            Начала и окончания в таблице зависят друг от друга. Диапазон поиска
-            по всей таблице усложняет эти связи и может привести к циклическим
-            ссылкам. Понятнее организовать данные так, чтобы поставщики
-            находились выше, а формула искала только в предыдущих строках: тогда
-            вычисления явно идут от уже рассчитанных процессов к следующим.
-          </Typography.Text>
-          <Typography.Text>
-            Итог для восьми настоящих процессов —{" "}
-            <Notation>{"=МАКС(F3:F10)"}</Notation>; служебную строку 2 в подсчёт
-            количества процессов не включаем.
-          </Typography.Text>
-        </>
-      ),
-    },
-    {
-      id: "poryadok-strok",
-      navLabel: "Порядок строк",
-      explanation: (
-        <>
-          <Typography.Text>
-            <strong>
-              В этом способе порядок строк важен: поставщик ниже текущей строки
-              в диапазон предыдущих строк не попадёт.
-            </strong>
-          </Typography.Text>
-          <Typography.Text>
-            Если нужный поставщик находится ниже, <Notation>{"ВПР"}</Notation>{" "}
-            не найдёт его и вернёт ошибку <Notation>{"#Н/Д"}</Notation>. Порядок
-            данных нужно исправить до протягивания формул: сначала строки, у
-            которых все поставщики уже выше. Сортировка по ID подходит, только
-            если в данных зависимости всегда направлены от меньших ID к большим
-            — в экзаменационных файлах это обычно так, но проверить нужно.
-          </Typography.Text>
-        </>
-      ),
-    },
-    {
-      id: "vpr-itogo",
+      id: "excel-itogo",
       navLabel: "Итого",
       explanation: (
         <>
           <LessonSummary
             items={[
               {
-                note: (
-                  <>
-                    <Notation>{"ВПР(ID; диапазон; номер столбца; 0)"}</Notation>{" "}
-                    — точный поиск строки по ID и окончание из нужного столбца.
-                  </>
-                ),
+                key: "Поставщики",
+                note: <>Данные → Текст по столбцам, разделитель «;»</>,
               },
               {
-                note: (
-                  <>
-                    Список поставщиков делят по столбцам; пустые места — нули;
-                    служебная строка 0 с окончанием 0.
-                  </>
-                ),
+                key: "Окончание поставщика",
+                note: <Notation>{"=ЕСНД(ВПР(C2;$A$1:$H1;8;0);0)"}</Notation>,
               },
               {
-                note: (
-                  <>
-                    Начало = <Notation>{"МАКС"}</Notation> по{" "}
-                    <Notation>{"ВПР"}</Notation> каждого поставщика; диапазон{" "}
-                    <Notation>{"$A$2:$F2"}</Notation> растёт при протягивании и
-                    охватывает только предыдущие строки.
-                  </>
-                ),
+                key: "Где ищем",
+                note: <>строки выше: поставщики стоят выше</>,
               },
               {
-                note: (
-                  <>
-                    Строки — в топологическом порядке; служебную строку не
-                    считают процессом.
-                  </>
-                ),
+                key: "Начало",
+                note: <Notation>{"=МАКС(E2:F2)"}</Notation>,
+              },
+              {
+                key: "Окончание",
+                note: <Notation>{"=G2+B2"}</Notation>,
+              },
+              {
+                key: "Общее время",
+                note: <Notation>{"=МАКС(H2:H9)"}</Notation>,
               },
             ]}
           />

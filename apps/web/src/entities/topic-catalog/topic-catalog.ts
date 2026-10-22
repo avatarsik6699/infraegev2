@@ -35,7 +35,7 @@ const subtopicFacts: Readonly<
   executors: { count: 6, first: "lenta-i-komanda" },
   "branching-and-enumeration": { count: 7, first: "komandy-i-derevo" },
   "logic-transformations": { count: 6, first: "formula-i-parametr" },
-  "parallel-computing": { count: 8, first: "process-i-zavisimost" },
+  "parallel-computing": { count: 6, first: "processy-i-raspisanie" },
 };
 
 const publicationById = new Map(

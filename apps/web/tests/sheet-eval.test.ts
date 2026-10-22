@@ -78,6 +78,11 @@ describe("sheet evaluator against the stand's reference (Change 177)", () => {
     expect(value("=ДАТА(2026;13;1)")).toBe("46388");
     expect(value("=1/0")).toBe("#ДЕЛ/0!");
     expect(value("=СУММА(1)")).toBe("#ИМЯ?");
+    expect(value("=ЕСНД(1/0;0)")).toBe("#ДЕЛ/0!");
+    book.set("Лист", "C1", "1");
+    book.set("Лист", "D1", "4");
+    expect(value("=ЕСНД(ВПР(2;C1:D1;2;0);0)")).toBe("0");
+    expect(value("=ЕСНД(ВПР(1;C1:D1;2;0);0)")).toBe("4");
     book.set("Лист", "A1", "=B1");
     book.set("Лист", "B1", "=A1");
     expect(display(book.value("Лист", "A1"))).toBe("#ЦИКЛ!");

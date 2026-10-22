@@ -192,7 +192,6 @@ def answers() -> dict[str, str]:
         f"{max(x for x in xs if _end({**MAIN, 6: (x, (3, 4))}) == 14)}"
     )
     a["task-22-7-04"] = max(6 + 4, 8 + 1)
-    a["task-22-7-05"] = len({v for se in e.values() for v in se}) - 1
     a["task-22-7-06"] = _run(load_e, 2)
     a["task-22-8-01"] = _places(
         {1: (4, ()), 2: (4, ()), 3: (3, ()), 4: (2, (1,)), 5: (1, (2, 3))}, 2
@@ -209,6 +208,8 @@ def answers() -> dict[str, str]:
     load3 = _load(_book(t["task-22-9-04"]))
     a["task-22-9-04"] = _run(load3, max(load3))
     a["task-22-9-05"] = sum(v >= 20 for v in _late(_book(t["task-22-9-05"])).values())
+    b1 = _times(_book(t["task-22-9-06"]))
+    a["task-22-9-06"] = sum(s <= 44 < f for s, f in b1.values())
     return {k: str(v) for k, v in a.items()}
 
 
@@ -219,9 +220,14 @@ def test_every_answer_matches_independent_recomputation(answers: dict[str, str])
     for task_id, task in tasks.items():
         assert task.checker.answer_variants[0] == answers[task_id], task_id
         assert task.exam_numbers == [22] and not task.catalog_visible and not task.archived
-        on_final_page = task_id.startswith("task-22-9-")
+        # 9-02 is the theme task: it moved into subtopic 3
+        on_final_page = task_id.startswith("task-22-9-") and task_id != "task-22-9-02"
         assert bool(task.theory_links) != on_final_page, task_id
-        advanced = task_id.startswith(("task-22-7-", "task-22-8-"))
+        advanced = task_id.startswith("task-22-8-") or task_id in {
+            "task-22-7-02",
+            "task-22-7-03",
+            "task-22-7-04",
+        }
         assert task.lessons[0].counts_toward_mastery == (not advanced), task_id
 
 

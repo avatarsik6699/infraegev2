@@ -2,31 +2,25 @@
 
 A system of the lesson is given as rows ``(id, duration, suppliers)``; the early
 schedule (start = max of the suppliers' finishes, finish = start + duration) is
-computed here, so every bar, every start and finish and every count of active
+computed here, so every cell, every start and finish and every count of working
 processes in a figure comes from the same calculation as the lesson's table.
 A shifted schedule passes its own ``starts``.
 
-``pr_dag(procs)`` — the dependency graph by calculation steps (replaces the
-author's Mermaid scheme).
-``pr_gantt(procs, starts, chain, t, window)`` — bars on the common time axis;
-the critical chain in accent, a moment t or the n-th millisecond marked.
-``pr_load(procs, starts, horizon)`` — the number of processes working in every
-millisecond [k; k + 1) under the axis, the peak marked.
-``pr_book(name)`` — a collapsed read-only mini-sheet with the table of
-``files/<name>.xlsx``: the stand does not serve workbooks.
+Time is drawn as numbered milliseconds, the way a sheet colours its cells: the
+n-th millisecond runs from moment n − 1 to moment n, and a process with start s
+and finish f occupies the milliseconds s + 1 … f.
+
+``pr_dag(procs, chain)`` — the dependency graph by calculation steps.
+``pr_cells(procs, starts, ms, chain, counts, ghost)`` — the schedule as a grid of
+milliseconds: one row per process, a framed column for the n-th millisecond,
+a row with the number of working processes, early places of shifted processes.
+``pr_cells_stepper(procs)`` — the same grid filled process by process in the
+order of calculation, each frame with its start and finish.
 """
 
 from __future__ import annotations
 
-import html
-import importlib.util
-import sys
-from pathlib import Path
-from types import ModuleType
-
-from figures import ACCENT, FAINT, INK, MUTED, WASH, _text
-
-TOPIC = Path(__file__).resolve().parents[2] / "content/lesson-design/topic-22"
+from figures import ACCENT, FAINT, INK, MUTED, WASH, _arrow, _stepper, _text
 
 W = 660
 
@@ -59,166 +53,220 @@ def levels(procs) -> list[list[int]]:
     return out
 
 
-def active(sched, k: int) -> list[int]:
-    """Processes working in the millisecond [k; k + 1)."""
-    return [i for i, (s, f) in sched.items() if s <= k < f]
-
-
 def pr_dag(procs, chain=(), height: int = 300) -> str:
-    """Boxes «ID · d» by calculation steps, arrows from supplier to receiver."""
+    """Boxes «ID · d мс» by calculation steps, arrows from supplier to receiver."""
     lv = levels(procs)
     d = {p[0]: p[1] for p in procs}
     deps = {p[0]: tuple(p[2]) for p in procs}
-    bw, bh = 74, 34
+    bw, bh = 84, 34
     pos = {}
     for c, step in enumerate(lv):
-        x = 40 + c * (W - 80 - bw) / max(1, len(lv) - 1)
+        x = 30 + c * (W - 60 - bw) / max(1, len(lv) - 1)
         for r, i in enumerate(step):
-            y = 30 + (r + 0.5) * (height - 70) / len(step) - bh / 2
+            y = 24 + (r + 0.5) * (height - 64) / len(step) - bh / 2
             pos[i] = (x, y)
     on = set(zip(chain, chain[1:], strict=False))
+    takers = {i: [k for k in deps if i in deps[k]] for i in deps}
+
+    def spread(n: int, k: int) -> float:
+        """The k-th of n points along an edge, top to bottom."""
+        return bh / 2 if n == 1 else 9 + k * (bh - 18) / (n - 1)
+
     out = [f'<svg viewBox="0 0 {W} {height}" role="img" aria-label="Граф зависимостей процессов">']
     for i, ds in deps.items():
+        into = sorted(ds, key=lambda j: pos[j][1])
         for j in ds:
             (x1, y1), (x2, y2) = pos[j], pos[i]
+            outs = sorted(takers[j], key=lambda k: pos[k][1])
             hot = (j, i) in on
-            color = ACCENT if hot else MUTED
-            ax, ay = x1 + bw, y1 + bh / 2
-            bx, by = x2, y2 + bh / 2
             out.append(
-                f'<line x1="{ax:.1f}" y1="{ay:.1f}" x2="{bx - 7:.1f}" y2="{by:.1f}" stroke="{color}" stroke-width="{2.4 if hot else 1.3}"/>'
+                _arrow(
+                    x1 + bw,
+                    y1 + spread(len(outs), outs.index(i)),
+                    x2 - 2,
+                    y2 + spread(len(into), into.index(j)),
+                    ACCENT if hot else MUTED,
+                    width=2 if hot else 1.25,
+                )
             )
-            out.append(f'<circle cx="{bx - 5:.1f}" cy="{by:.1f}" r="3" fill="{color}"/>')
     for i, (x, y) in pos.items():
         hot = i in chain
         out.append(
             f'<rect x="{x:.1f}" y="{y:.1f}" width="{bw}" height="{bh}" rx="8" fill="#fff" '
-            f'stroke="{ACCENT if hot else INK}" stroke-width="{2.4 if hot else 1.4}"/>'
+            f'stroke="{ACCENT if hot else INK}" stroke-width="{2.2 if hot else 1.3}"/>'
         )
         out.append(_text(x + bw / 2, y + 22, f"{i} · {d[i]} мс", 14, INK, "middle", 600))
     for c in range(len(lv)):
-        x = 40 + c * (W - 80 - bw) / max(1, len(lv) - 1)
+        x = 30 + c * (W - 60 - bw) / max(1, len(lv) - 1)
         out.append(_text(x + bw / 2, height - 12, f"шаг {c + 1}", 13, MUTED, "middle"))
     out.append("</svg>")
     return "".join(out)
 
 
-def _axis(out, x0, sx, y, horizon):
-    out.append(f'<line x1="{x0}" y1="{y}" x2="{x0 + horizon * sx:.1f}" y2="{y}" stroke="{MUTED}"/>')
-    step = 1 if horizon <= 16 else 2
-    for k in range(0, horizon + 1, step):
-        out.append(
-            f'<line x1="{x0 + k * sx:.1f}" y1="{y}" x2="{x0 + k * sx:.1f}" y2="{y + 4}" stroke="{MUTED}"/>'
-        )
-        out.append(_text(x0 + k * sx, y + 18, str(k), 13, MUTED, "middle"))
-
-
-def pr_gantt(procs, starts=None, chain=(), t=None, window=None, horizon=None, height=None) -> str:
-    """Bars of every process on the common time axis.
-    t — a moment (a vertical line); window — the n-th millisecond [n − 1; n)."""
-    sched = schedule(procs, starts)
-    horizon = horizon or max(f for _, f in sched.values())
+def _grid(
+    procs,
+    sched,
+    shown,
+    horizon,
+    ms=None,
+    chain=(),
+    counts=False,
+    early=None,
+    current=None,
+    peak=False,
+    ready=None,
+):
+    """The grid of milliseconds: rows of ``shown`` processes, the others empty."""
     ids = [p[0] for p in procs]
+    x0, right = 48, 70
+    cw = (W - x0 - right) / horizon
     rh = 26
-    height = height or 30 + rh * len(ids) + 40
-    x0 = 60
-    sx = (W - x0 - 30) / horizon
-    out = [f'<svg viewBox="0 0 {W} {height}" role="img" aria-label="Расписание процессов">']
-    top = 14
-    if window:
-        n = window
-        out.append(
-            f'<rect x="{x0 + (n - 1) * sx:.1f}" y="{top}" width="{sx:.1f}" height="{rh * len(ids)}" fill="{WASH}"/>'
-        )
+    top = 34
+    rows = len(ids) + (1 if counts else 0)
+    out = [_text(x0 - 10, top - 10, "мс", 12, MUTED, "end")]
+    step = 1 if horizon <= 20 else 5
+    for n in range(1, horizon + 1):
+        if n % step == 0 or n == 1:
+            out.append(_text(x0 + (n - 0.5) * cw, top - 10, str(n), 12, MUTED, "middle"))
     for r, i in enumerate(ids):
-        s, f = sched[i]
         y = top + r * rh
+        on = i in shown
         hot = i in chain
-        out.append(_text(x0 - 10, y + 18, str(i), 14, INK, "end", 600))
+        out.append(_text(x0 - 10, y + 17, str(i), 14, ACCENT if i == current else INK, "end", 600))
+        s, f = sched[i]
+        for n in range(1, horizon + 1):
+            x = x0 + (n - 1) * cw
+            busy = on and s < n <= f
+            if busy:
+                stroke, width = (ACCENT, 1.6) if hot else (INK, 1)
+                fill = WASH
+                out.append(
+                    f'<rect x="{x + 1:.1f}" y="{y + 2}" width="{cw - 2:.1f}" height="{rh - 4}" '
+                    f'rx="3" fill="{fill}" stroke="{stroke}" stroke-width="{width}"/>'
+                )
+            else:
+                was = early and on and early[i][0] < n <= early[i][1]
+                out.append(
+                    f'<rect x="{x + 1:.1f}" y="{y + 2}" width="{cw - 2:.1f}" height="{rh - 4}" '
+                    f'rx="3" fill="#fff" stroke="{MUTED if was else FAINT}" '
+                    f'stroke-width="1"{' stroke-dasharray="3 3"' if was else ""}/>'
+                )
+        if on:
+            out.append(_text(W - right + 10, y + 17, f"{s} → {f}", 13, MUTED))
+    if counts:
+        y = top + len(ids) * rh
+        totals = [
+            sum(1 for i in shown if sched[i][0] < n <= sched[i][1]) for n in range(1, horizon + 1)
+        ]
+        top_count = max(totals) if peak else None
+        out.append(_text(x0 - 10, y + 17, "всего", 12, MUTED, "end"))
+        for n, c in enumerate(totals, 1):
+            out.append(
+                _text(
+                    x0 + (n - 0.5) * cw,
+                    y + 17,
+                    str(c),
+                    13,
+                    ACCENT if c == top_count else INK,
+                    "middle",
+                    700 if c == top_count else 400,
+                )
+            )
+    if ready is not None:
+        # the moment the last supplier is done: the current process starts here
+        x = x0 + ready * cw
+        y2 = top + (ids.index(current) + 1) * rh
         out.append(
-            f'<rect x="{x0 + s * sx:.1f}" y="{y + 4}" width="{(f - s) * sx:.1f}" height="{rh - 8}" rx="4" '
-            f'fill="{WASH if not hot else "#fff"}" stroke="{ACCENT if hot else INK}" stroke-width="{2.2 if hot else 1.2}"/>'
+            f'<line x1="{x:.1f}" y1="{top - 4}" x2="{x:.1f}" y2="{y2:.1f}" stroke="{ACCENT}" '
+            f'stroke-width="1.5" stroke-dasharray="4 3"/>'
         )
-        if (f - s) * sx > 46:
-            out.append(_text(x0 + (s + f) / 2 * sx, y + 18, f"{s}–{f}", 13, INK, "middle"))
-    if t is not None:
-        x = x0 + t * sx
+    if ms:
+        x = x0 + (ms - 1) * cw
         out.append(
-            f'<line x1="{x:.1f}" y1="{top - 6}" x2="{x:.1f}" y2="{top + rh * len(ids) + 4}" stroke="{ACCENT}" stroke-width="1.8" stroke-dasharray="5 4"/>'
+            f'<rect x="{x - 1:.1f}" y="{top - 26}" width="{cw + 2:.1f}" height="{len(ids) * rh + 28}" '
+            f'rx="4" fill="none" stroke="{ACCENT}" stroke-width="2"/>'
         )
-    _axis(out, x0, sx, top + rh * len(ids) + 6, horizon)
-    out.append("</svg>")
-    return "".join(out)
+        k = sum(1 for i in shown if sched[i][0] < ms <= sched[i][1])
+        out.append(
+            _text(x + cw / 2, top + rows * rh + 20, f"{ms}-я мс: {k}", 13, ACCENT, "middle", 600)
+        )
+    height = top + rows * rh + (34 if ms else 10)
+    return (
+        f'<svg viewBox="0 0 {W} {height}" role="img" aria-label="Расписание процессов по миллисекундам">'
+        + "".join(out)
+        + "</svg>"
+    )
 
 
-def pr_load(procs, starts=None, horizon=None, height: int = 150) -> str:
-    """Number of processes working in every millisecond; the peak framed."""
+def pr_cells(
+    procs, starts=None, ms=None, chain=(), counts=False, ghost=False, horizon=None, peak=False
+) -> str:
+    """The schedule as a grid of numbered milliseconds; ``peak`` marks the largest count."""
     sched = schedule(procs, starts)
     horizon = horizon or max(f for _, f in sched.values())
-    x0 = 60
-    sx = (W - x0 - 30) / horizon
-    counts = [len(active(sched, k)) for k in range(horizon)]
-    peak = max(counts)
-    unit = (height - 60) / max(1, peak)
-    base = height - 40
-    out = [f'<svg viewBox="0 0 {W} {height}" role="img" aria-label="Число работающих процессов">']
-    for k, c in enumerate(counts):
-        hot = c == peak
-        h = c * unit
-        out.append(
-            f'<rect x="{x0 + k * sx + 1:.1f}" y="{base - h:.1f}" width="{sx - 2:.1f}" height="{h:.1f}" '
-            f'fill="{WASH}" stroke="{ACCENT if hot else FAINT}" stroke-width="{2 if hot else 1}"/>'
+    early = schedule(procs) if ghost else None
+    return _grid(procs, sched, set(sched), horizon, ms, chain, counts, early, peak=peak)
+
+
+def pr_cells_frames(procs) -> list[tuple[str, str]]:
+    sched = schedule(procs)
+    horizon = max(f for _, f in sched.values())
+    deps = {p[0]: tuple(p[2]) for p in procs}
+    d = {p[0]: p[1] for p in procs}
+    order = [i for step in levels(procs) for i in step]
+    frames = [
+        (
+            _grid(procs, sched, set(), horizon),
+            "Начинаем с пустой сетки: строка — процесс, столбец — миллисекунда.",
         )
-        out.append(
-            _text(
-                x0 + (k + 0.5) * sx, base - h - 6, str(c), 13, ACCENT if hot else INK, "middle", 600
+    ]
+    shown: set[int] = set()
+    for i in order:
+        shown.add(i)
+        s, f = sched[i]
+        if f == s + 1:
+            cells = f"{f}-ю мс"
+        elif f == s + 2:
+            cells = f"{s + 1}-ю и {f}-ю мс"
+        else:
+            cells = f"мс с {s + 1}-й по {f}-ю"
+        if not deps[i]:
+            text = f"Процесс {i} ни от кого не зависит: начинает сразу, в 0, и заканчивает в {f}."
+        elif len(deps[i]) == 1:
+            j = deps[i][0]
+            text = f"Процесс {i} ждёт процесс {j}, а тот готов к {s}. Окончание {s} + {d[i]} = {f}."
+        else:
+            *head, last = deps[i]
+            names = ", ".join(map(str, head)) + f" и {last}"
+            ready = ", ".join(
+                f"{j} готов к {sched[j][1]}" if n == 0 else f"{j} — к {sched[j][1]}"
+                for n, j in enumerate(deps[i])
             )
+            text = (
+                f"Процесс {i} ждёт процессы {names}: {ready}. Начинает по последнему — "
+                f"в {s}. Окончание {s} + {d[i]} = {f}."
+            )
+        text += f" Занимает {cells}."
+        line = s if deps[i] else None
+        frames.append(
+            (_grid(procs, sched, set(shown), horizon, chain=(i,), current=i, ready=line), text)
         )
-    _axis(out, x0, sx, base, horizon)
-    out.append(_text(x0 - 10, base - 6, "шт.", 13, MUTED, "end"))
-    out.append("</svg>")
-    return "".join(out)
-
-
-def datasets() -> ModuleType:
-    """topic-22/datasets.py, the generator of the workbooks."""
-    if "topic22_datasets" in sys.modules:
-        return sys.modules["topic22_datasets"]
-    spec = importlib.util.spec_from_file_location("topic22_datasets", TOPIC / "datasets.py")
-    assert spec and spec.loader
-    module = importlib.util.module_from_spec(spec)
-    sys.modules["topic22_datasets"] = module  # dataclasses look the module up by name
-    spec.loader.exec_module(module)
-    return module
-
-
-_previews = {"n": 0}
-
-
-def pr_book(name: str) -> str:
-    """A collapsed read-only mini-sheet with the table of ``files/<name>.xlsx``."""
-    from sheetblock import block_html, parse_block
-
-    ds = datasets()
-    rows = ds.system(name).rows
-    lines = ["|   | A | B | C", "| 1 | " + " | ".join(ds.HEAD)]
-    for r, (i, d, deps) in enumerate(rows, start=2):
-        lines.append(f"| {r} | {i} | {d} | {ds.deps_text(deps)}")
-    block = parse_block("Процессы edit=none", "\n".join(lines))
-    _previews["n"] += 1
-    grid = block_html(block, f"book-{name}-{_previews['n']}")
-    return (
-        '<details class="proof book">'
-        f"<summary>Книга из файла {html.escape(name)}.xlsx: {len(rows)} процессов</summary>{grid}</details>"
+    frames[-1] = (
+        frames[-1][0],
+        frames[-1][1] + f" Все процессы закончились к {horizon} мс.",
     )
+    return frames
+
+
+def pr_cells_stepper(procs) -> str:
+    return _stepper(pr_cells_frames(procs))
 
 
 PROCESS_FIGURES: dict = {
     "pr_dag": pr_dag,
-    "pr_gantt": pr_gantt,
-    "pr_load": pr_load,
-    "pr_book": pr_book,
+    "pr_cells": pr_cells,
+    "pr_cells_stepper": pr_cells_stepper,
 }
-PROCESS_STEPPERS: dict = {}
+PROCESS_STEPPERS: dict = {"pr_cells_stepper": pr_cells_frames}
 PROCESS_WIDGETS: dict = {}
 PROCESS_SCRIPTS: dict = {}

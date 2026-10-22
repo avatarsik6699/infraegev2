@@ -893,6 +893,20 @@ const fIferror: LazyImpl = (book, sheet, nodes) => {
   return isErr(v) ? book.eval(nodes[1], sheet) : v;
 };
 
+/** ЕСНД: the second argument replaces only #Н/Д; other errors stay. */
+const fIfna: LazyImpl = (book, sheet, nodes) => {
+  need(nodes, 2);
+  let v: Result;
+  try {
+    v = book.eval(nodes[0], sheet);
+  } catch (e) {
+    if (e instanceof SheetError && e.value.err === NA.err)
+      return book.eval(nodes[1], sheet);
+    throw e;
+  }
+  return isErr(v) && v.err === NA.err ? book.eval(nodes[1], sheet) : v;
+};
+
 const fRow: LazyImpl = (book, _sheet, nodes) => {
   // СТРОКА(): the row of the cell itself; СТРОКА(B7): the row of a reference
   need(nodes, 0, 1);
@@ -1302,6 +1316,7 @@ const FUNCTIONS: Partial<Record<string, Impl>> = {
 const LAZY: Partial<Record<string, LazyImpl>> = {
   ЕСЛИ: fIf,
   ЕСЛИОШИБКА: fIferror,
+  ЕСНД: fIfna,
   СТРОКА: fRow,
 };
 

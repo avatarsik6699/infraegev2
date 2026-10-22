@@ -29,7 +29,7 @@ const authoredContent = [
 ];
 
 describe("task 22 multiprocessor systems lesson (Change 190)", () => {
-  it("has six core subtopics, two advanced and their self-checks", () => {
+  it("has five core subtopics, one advanced and their self-checks", () => {
     expect(lesson).toMatchObject({
       id: "parallel-computing",
       routeSlug: "22-mnogoprocessornye-sistemy",
@@ -40,17 +40,15 @@ describe("task 22 multiprocessor systems lesson (Change 190)", () => {
     });
     const subtopics = lessonSubtopics(lesson);
     expect(subtopics.map(({ slug, level }) => [slug, level])).toEqual([
-      ["process-i-zavisimost", "core"],
-      ["rannee-raspisanie", "core"],
-      ["excel-po-id", "core"],
-      ["kogo-schitat", "core"],
+      ["processy-i-raspisanie", "core"],
+      ["raspisanie-v-excel", "core"],
+      ["skolko-processov", "core"],
       ["parallelnost", "core"],
-      ["sdvigi-i-zapas", "core"],
-      ["zaderzhki-i-obratnye-voprosy", "advanced"],
-      ["ogranichennye-resursy", "advanced"],
+      ["sdvigi", "core"],
+      ["zaderzhki-i-resursy", "advanced"],
     ]);
     expect(subtopics.map(({ checkpoint }) => checkpoint?.length ?? 0)).toEqual([
-      2, 1, 5, 1, 0, 1, 1, 2,
+      5, 5, 5, 5, 5, 4,
     ]);
     expect(lesson.examFocus).toBeDefined();
     expect(lesson.result).toBeDefined();
@@ -71,7 +69,7 @@ describe("task 22 multiprocessor systems lesson (Change 190)", () => {
       status: "published",
     });
     expect(publicPaths).toContain(
-      "/ege/22-mnogoprocessornye-sistemy/process-i-zavisimost",
+      "/ege/22-mnogoprocessornye-sistemy/processy-i-raspisanie",
     );
     expect(publicPaths).toContain("/ege/22-mnogoprocessornye-sistemy/praktika");
   });
@@ -110,7 +108,7 @@ describe("task 22 multiprocessor systems lesson (Change 190)", () => {
     const container = renderAuthoredLessonContent(authoredContent);
     const media = Object.values(lessonMedia);
     const diagrams = media.filter((item) => item.kind === "diagram");
-    expect(diagrams).toHaveLength(11);
+    expect(diagrams).toHaveLength(12);
     expect(
       container.querySelectorAll("figure[data-lesson-diagram]"),
     ).toHaveLength(diagrams.length);

@@ -650,11 +650,12 @@ NAMES_EN = {
     "МЕСЯЦ": "MONTH",
     "ГОД": "YEAR",
     "ЕСЛИОШИБКА": "IFERROR",
+    "ЕСНД": "IFNA",
     "СТРОКА": "ROW",
     "СУММКВ": "SUMSQ",
 }
 # Lazy functions get unevaluated nodes; Excel evaluates only the chosen branch.
-LAZY = {"ЕСЛИ", "ЕСЛИОШИБКА", "СТРОКА"}
+LAZY = {"ЕСЛИ", "ЕСЛИОШИБКА", "ЕСНД", "СТРОКА"}
 
 
 def to_english(formula: str) -> str:
@@ -1006,6 +1007,20 @@ def f_iferror(book: Book, sheet, nodes):
             raise
         return book.eval(nodes[1], sheet)
     if isinstance(v, Err):
+        return book.eval(nodes[1], sheet)
+    return v
+
+
+def f_ifna(book: Book, sheet, nodes):
+    """ЕСНД: the second argument replaces only #Н/Д; other errors stay."""
+    need(nodes, 2)
+    try:
+        v = book.eval(nodes[0], sheet)
+    except SheetError as e:
+        if e.err is NA:
+            return book.eval(nodes[1], sheet)
+        raise
+    if v is NA:
         return book.eval(nodes[1], sheet)
     return v
 
@@ -1462,6 +1477,7 @@ FUNCTIONS = {
     "МЕСЯЦ": date_part("month"),
     "ГОД": date_part("year"),
     "ЕСЛИОШИБКА": f_iferror,
+    "ЕСНД": f_ifna,
     "СТРОКА": f_row,
     "СУММКВ": f_sumsq,
 }
