@@ -77,6 +77,12 @@ function pieces(node: React.ReactNode, out: Piece[] = []): Piece[] {
     out.push({ kind: "text", text: textOf(node.props.children as never) });
     return out;
   }
+  // the panels of LessonTabs are props, not children
+  const tabs = node.props.tabs as { content: React.ReactNode }[] | undefined;
+  if (Array.isArray(tabs)) {
+    for (const tab of tabs) pieces(tab.content, out);
+    return out;
+  }
   return pieces(node.props.children as React.ReactNode, out);
 }
 
@@ -91,7 +97,7 @@ function compiles(code: string): boolean {
 }
 
 describe("task 13 program counting lesson (Change 190)", () => {
-  it("has six core subtopics, two advanced and their self-checks", () => {
+  it("has five core subtopics, two advanced and their self-checks", () => {
     expect(lesson).toMatchObject({
       id: "branching-and-enumeration",
       routeSlug: "13-analiz-hoda-ispolneniya-algoritma",
@@ -107,12 +113,11 @@ describe("task 13 program counting lesson (Change 190)", () => {
       ["etapy-i-zaprety", "core"],
       ["smysl-novoj-komandy", "core"],
       ["ubyvanie-i-delenie", "core"],
-      ["vychislenie-i-proverka", "core"],
       ["gruppy-programm", "advanced"],
       ["dlina-i-pamyat", "advanced"],
     ]);
     expect(subtopics.map(({ checkpoint }) => checkpoint?.length ?? 0)).toEqual([
-      3, 0, 0, 0, 0, 1, 1, 1,
+      5, 5, 5, 5, 5, 4, 4,
     ]);
     expect(lesson.examFocus).toBeDefined();
     expect(lesson.result).toBeDefined();
@@ -202,7 +207,7 @@ describe("task 13 program counting lesson (Change 190)", () => {
           prelude += piece.code + "\n";
       }
     }
-    expect(ran).toBe(12);
+    expect(ran).toBe(14);
   }, 60_000);
 
   it("keeps spaces around inline code, links and emphasis", () => {

@@ -8,6 +8,8 @@ result and the numbers of an exam-format task are read from the bank task's own 
 """
 
 import re
+import subprocess
+import sys
 from pathlib import Path
 
 import pytest
@@ -142,7 +144,7 @@ def answers() -> dict[str, str]:
     a["task-13-1-07"] = _exam(t["task-13-1-07"], ["+1", "*3"])
     a["task-13-2-01"] = _count(2, 8, UP)
     a["task-13-2-02"] = _count(1, 9, ["+1", "+2", "*2"])
-    a["task-13-2-03"] = f"{_count(1, 15, ['+2', '*3'])} {_count(2, 13, ['+2', '*3'])}"
+    a["task-13-2-03"] = _count(2, 13, ["+2", "*3"])
     a["task-13-2-04"] = _count(1, 16, UP)
     a["task-13-2-05"] = _count(3, 25, ["+1", "*3"])
     a["task-13-2-06"] = _exam(t["task-13-2-06"], UP)
@@ -183,19 +185,18 @@ def answers() -> dict[str, str]:
     a["task-13-6-06"] = _count(12, 2, ["-1", "floor2"])
     a["task-13-6-07"] = _count(2, 40, UP, must=[10], forbid=[25])
     paths = list(_paths(2, 6, UP))
-    both = sum(3 in p and 4 in p for p in paths)
     either = sum(3 in p or 4 in p for p in paths)
-    a["task-13-7-01"] = f"{both} {either} {either - both}"
+    a["task-13-7-01"] = either
     a["task-13-7-02"] = _count(2, 11, ["+1", "+3"])
     paths = list(_paths(2, 12, UP))
     both = sum(4 in p and 8 in p for p in paths)
     either = sum(4 in p or 8 in p for p in paths)
-    a["task-13-7-04"] = f"{either} {either - both} {len(paths) - both}"
+    a["task-13-7-04"] = len(paths) - both  # not through both
     a["task-13-7-05"] = sum((6 in p or 8 in p) and 15 not in p for p in _paths(2, 20, UP))
     a["task-13-7-06"] = _count(1, 15, ["+1", "+3"])
-    a["task-13-7-07"] = " ".join(str(n) for n in range(1, 26) if _count(1, n, UP) == 20)
+    a["task-13-7-07"] = min(n for n in range(1, 26) if _count(1, n, UP) == 20)
     five = [path for _, path in _programs(2, UP, 5) if path[-1] == 12]
-    a["task-13-8-01"] = f"{len(five)} {sum(6 in p for p in five)}"
+    a["task-13-8-01"] = len(five)
     a["task-13-8-03"] = sum(1 for _, p in _programs(2, UP, 4) if p[-1] == 12)
     a["task-13-8-04"] = sum(
         1
@@ -203,7 +204,7 @@ def answers() -> dict[str, str]:
         if not any(used[i] == used[i + 1] == "*2" for i in range(len(used) - 1))
     )
     seen = {p[-1] for k in range(6) for _, p in _programs(2, UP, k)}
-    a["task-13-8-05"] = f"{len(seen)} {min(n for n in range(2, 100) if n not in seen)}"
+    a["task-13-8-05"] = min(n for n in range(3, 100) if n not in seen)
     a["task-13-8-06"] = sum(6 in p for p in five)
     a["task-13-9-01"] = _exam(t["task-13-9-01"], UP)
     a["task-13-9-02"] = _exam(t["task-13-9-02"], ["+1", "+2", "*2"])
@@ -233,3 +234,21 @@ def test_checker_accepts_the_answer_and_rejects_an_off_by_one(answers: dict[str,
         tokens = expected.split()
         tokens[-1] = str(int(tokens[-1]) + 1)
         assert not is_correct(task.checker, " ".join(tokens)), task_id
+
+
+def test_solution_programs_print_the_answer(answers: dict[str, str]) -> None:
+    for task_id, task in _entries().items():
+        (code,) = [
+            block.data.code
+            for block in task.explanation
+            if block.type == "code_example" and block.data.language == "python"
+        ]
+        result = subprocess.run(
+            [sys.executable, "-I", "-c", code],
+            capture_output=True,
+            text=True,
+            check=True,
+            timeout=120,
+        )
+        assert result.stdout.strip() == answers[task_id], task_id
+        assert all(len(line) <= 64 for line in code.splitlines()), task_id
