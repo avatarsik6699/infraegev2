@@ -702,7 +702,7 @@
         "theory_links": [
           {
             "label": "Ветвление по чётности",
-            "section": "usloviya-v-opredelenii",
+            "section": "vetvi-v-programme",
             "material_id": "rekursiya"
           }
         ],
@@ -1810,7 +1810,7 @@
         "theory_links": [
           {
             "label": "Ветвление по условию",
-            "section": "usloviya-v-opredelenii",
+            "section": "vetvi-v-programme",
             "material_id": "rekursiya"
           }
         ],
@@ -2029,7 +2029,7 @@
         "theory_links": [
           {
             "label": "Несколько предыдущих значений",
-            "section": "tablica-predydushchih",
+            "section": "baza-i-shag",
             "material_id": "rekursiya"
           }
         ],
@@ -2478,7 +2478,7 @@
         "theory_links": [
           {
             "label": "Подсчёт аргументов",
-            "section": "skolko-argumentov",
+            "section": "perebor-n",
             "material_id": "rekursiya"
           }
         ],
@@ -2715,7 +2715,7 @@
         "theory_links": [
           {
             "label": "Общий алгоритм решения",
-            "section": "baza-i-sootnoshenie",
+            "section": "po-opredeleniyu",
             "material_id": "rekursiya"
           }
         ],
@@ -4403,7 +4403,7 @@
         "theory_links": [
           {
             "label": "Рекурсия вверх и прогрев кеша",
-            "section": "dve-problemy",
+            "section": "progrev-kesha",
             "material_id": "rekursiya"
           }
         ],
@@ -5036,7 +5036,7 @@
         "theory_links": [
           {
             "label": "Рекурсивные вызовы и стек",
-            "section": "do-bazy-i-obratno",
+            "section": "vniz-i-obratno",
             "material_id": "rekursiya"
           }
         ],
@@ -6424,7 +6424,7 @@
         "theory_links": [
           {
             "label": "Ветвление по условию",
-            "section": "usloviya-v-opredelenii",
+            "section": "vetvi-v-programme",
             "material_id": "rekursiya"
           }
         ],
@@ -7321,7 +7321,7 @@
         "theory_links": [
           {
             "label": "Две связанные функции",
-            "section": "svyazannye-funkcii",
+            "section": "dve-funkcii",
             "material_id": "rekursiya"
           }
         ],
@@ -8225,7 +8225,7 @@
         "theory_links": [
           {
             "label": "Две связанные функции",
-            "section": "svyazannye-funkcii",
+            "section": "dve-funkcii-navstrechu",
             "material_id": "rekursiya"
           }
         ],
@@ -8594,7 +8594,7 @@
         "theory_links": [
           {
             "label": "Ветвление по чётности",
-            "section": "usloviya-v-opredelenii",
+            "section": "vetvi-v-programme",
             "material_id": "rekursiya"
           }
         ],
@@ -9484,7 +9484,7 @@
         "theory_links": [
           {
             "label": "Большие n: сокращаем, а не считаем",
-            "section": "smotret-na-vyrazhenie",
+            "section": "otnoshenie",
             "material_id": "rekursiya"
           }
         ],
@@ -11086,7 +11086,7 @@
         "theory_links": [
           {
             "label": "Ветвление по чётности",
-            "section": "usloviya-v-opredelenii",
+            "section": "vetvi-v-programme",
             "material_id": "rekursiya"
           }
         ],
@@ -11284,7 +11284,7 @@
         "theory_links": [
           {
             "label": "Большие n: сокращаем, а не считаем",
-            "section": "smotret-na-vyrazhenie",
+            "section": "otnoshenie",
             "material_id": "rekursiya"
           }
         ],
@@ -12413,7 +12413,7 @@
         "theory_links": [
           {
             "label": "Подсчёт аргументов",
-            "section": "skolko-argumentov",
+            "section": "perebor-n",
             "material_id": "rekursiya"
           }
         ],
@@ -12596,7 +12596,7 @@
         "theory_links": [
           {
             "label": "Ветвление по условию",
-            "section": "usloviya-v-opredelenii",
+            "section": "vetvi-v-programme",
             "material_id": "rekursiya"
           }
         ],
@@ -12951,7 +12951,7 @@
         "theory_links": [
           {
             "label": "Подсчёт аргументов",
-            "section": "skolko-argumentov",
+            "section": "perebor-n",
             "material_id": "rekursiya"
           }
         ],
@@ -13778,7 +13778,7 @@
         "theory_links": [
           {
             "label": "Ветвление по чётности",
-            "section": "usloviya-v-opredelenii",
+            "section": "vetvi-v-programme",
             "material_id": "rekursiya"
           }
         ],
@@ -13976,7 +13976,7 @@
         "theory_links": [
           {
             "label": "Несколько предыдущих значений",
-            "section": "tablica-predydushchih",
+            "section": "baza-i-shag",
             "material_id": "rekursiya"
           }
         ],
@@ -14312,7 +14312,7 @@
         "theory_links": [
           {
             "label": "Отношение при больших n",
-            "section": "smotret-na-vyrazhenie",
+            "section": "otnoshenie",
             "material_id": "rekursiya"
           }
         ],
@@ -14516,7 +14516,7 @@
         "theory_links": [
           {
             "label": "Большие n: сокращаем, а не считаем",
-            "section": "smotret-na-vyrazhenie",
+            "section": "otnoshenie",
             "material_id": "rekursiya"
           }
         ],
@@ -14740,7 +14740,7 @@
         "theory_links": [
           {
             "label": "Две связанные функции",
-            "section": "svyazannye-funkcii",
+            "section": "dve-funkcii-navstrechu",
             "material_id": "rekursiya"
           }
         ],
@@ -15684,7 +15684,7 @@
         "theory_links": [
           {
             "label": "Две связанные функции",
-            "section": "svyazannye-funkcii",
+            "section": "dve-funkcii",
             "material_id": "rekursiya"
           }
         ],
@@ -16736,7 +16736,7 @@
         "theory_links": [
           {
             "label": "Ветвление по чётности",
-            "section": "usloviya-v-opredelenii",
+            "section": "vetvi-v-programme",
             "material_id": "rekursiya"
           }
         ],
@@ -17067,7 +17067,7 @@
         "theory_links": [
           {
             "label": "Ветвление по условию",
-            "section": "usloviya-v-opredelenii",
+            "section": "vetvi-v-programme",
             "material_id": "rekursiya"
           }
         ],
@@ -17243,7 +17243,7 @@
         "theory_links": [
           {
             "label": "Общий алгоритм решения",
-            "section": "baza-i-sootnoshenie",
+            "section": "po-opredeleniyu",
             "material_id": "rekursiya"
           }
         ],
@@ -17626,7 +17626,7 @@
         "theory_links": [
           {
             "label": "Подсчёт аргументов",
-            "section": "skolko-argumentov",
+            "section": "perebor-n",
             "material_id": "rekursiya"
           }
         ],
@@ -17783,7 +17783,7 @@
         "theory_links": [
           {
             "label": "Общий алгоритм решения",
-            "section": "baza-i-sootnoshenie",
+            "section": "po-opredeleniyu",
             "material_id": "rekursiya"
           }
         ],
@@ -18469,7 +18469,7 @@
         "theory_links": [
           {
             "label": "Отношение при больших n",
-            "section": "smotret-na-vyrazhenie",
+            "section": "otnoshenie",
             "material_id": "rekursiya"
           }
         ],
@@ -21074,7 +21074,7 @@
         "theory_links": [
           {
             "label": "Отношение при больших n",
-            "section": "smotret-na-vyrazhenie",
+            "section": "otnoshenie",
             "material_id": "rekursiya"
           }
         ],
@@ -21509,7 +21509,7 @@
         "theory_links": [
           {
             "label": "Две связанные функции",
-            "section": "svyazannye-funkcii",
+            "section": "dve-funkcii-navstrechu",
             "material_id": "rekursiya"
           }
         ],
@@ -21656,7 +21656,7 @@
         "theory_links": [
           {
             "label": "Рекурсивные вызовы и стек",
-            "section": "do-bazy-i-obratno",
+            "section": "vniz-i-obratno",
             "material_id": "rekursiya"
           }
         ],
@@ -22856,7 +22856,7 @@
         "theory_links": [
           {
             "label": "Ветвление по условию",
-            "section": "usloviya-v-opredelenii",
+            "section": "vetvi-v-programme",
             "material_id": "rekursiya"
           }
         ],
@@ -23060,7 +23060,7 @@
         "theory_links": [
           {
             "label": "Большие n: сокращаем, а не считаем",
-            "section": "smotret-na-vyrazhenie",
+            "section": "otnoshenie",
             "material_id": "rekursiya"
           }
         ],
@@ -23755,7 +23755,7 @@
         "theory_links": [
           {
             "label": "Рекурсия вверх и прогрев кеша",
-            "section": "dve-problemy",
+            "section": "progrev-kesha",
             "material_id": "rekursiya"
           }
         ],
@@ -24095,7 +24095,7 @@
         "theory_links": [
           {
             "label": "Две связанные функции",
-            "section": "svyazannye-funkcii",
+            "section": "dve-funkcii",
             "material_id": "rekursiya"
           }
         ],
@@ -24514,7 +24514,7 @@
         "theory_links": [
           {
             "label": "Подсчёт аргументов",
-            "section": "skolko-argumentov",
+            "section": "perebor-n",
             "material_id": "rekursiya"
           }
         ],
@@ -25226,7 +25226,7 @@
         "theory_links": [
           {
             "label": "Несколько предыдущих значений",
-            "section": "tablica-predydushchih",
+            "section": "baza-i-shag",
             "material_id": "rekursiya"
           }
         ],
@@ -25490,7 +25490,7 @@
         "theory_links": [
           {
             "label": "Ветвление по чётности",
-            "section": "usloviya-v-opredelenii",
+            "section": "vetvi-v-programme",
             "material_id": "rekursiya"
           }
         ],
@@ -25718,7 +25718,7 @@
         "theory_links": [
           {
             "label": "Две связанные функции",
-            "section": "svyazannye-funkcii",
+            "section": "dve-funkcii-navstrechu",
             "material_id": "rekursiya"
           }
         ],
@@ -26293,7 +26293,7 @@
         "theory_links": [
           {
             "label": "Отношение при больших n",
-            "section": "smotret-na-vyrazhenie",
+            "section": "otnoshenie",
             "material_id": "rekursiya"
           }
         ],
@@ -26604,7 +26604,7 @@
         "theory_links": [
           {
             "label": "Рекурсивные вызовы и стек",
-            "section": "do-bazy-i-obratno",
+            "section": "vniz-i-obratno",
             "material_id": "rekursiya"
           }
         ],
@@ -26790,7 +26790,7 @@
         "theory_links": [
           {
             "label": "Большие n: сокращаем, а не считаем",
-            "section": "smotret-na-vyrazhenie",
+            "section": "raznost",
             "material_id": "rekursiya"
           }
         ],
@@ -27381,7 +27381,7 @@
         "theory_links": [
           {
             "label": "Две связанные функции",
-            "section": "svyazannye-funkcii",
+            "section": "dve-funkcii",
             "material_id": "rekursiya"
           }
         ],
@@ -27579,7 +27579,7 @@
         "theory_links": [
           {
             "label": "Отношение при больших n",
-            "section": "smotret-na-vyrazhenie",
+            "section": "otnoshenie",
             "material_id": "rekursiya"
           }
         ],
@@ -27922,7 +27922,7 @@
         "theory_links": [
           {
             "label": "Рекурсия вверх и прогрев кеша",
-            "section": "dve-problemy",
+            "section": "progrev-kesha",
             "material_id": "rekursiya"
           }
         ],
@@ -28619,7 +28619,7 @@
         "theory_links": [
           {
             "label": "Отношение при больших n",
-            "section": "smotret-na-vyrazhenie",
+            "section": "otnoshenie",
             "material_id": "rekursiya"
           }
         ],
@@ -28816,7 +28816,7 @@
         "theory_links": [
           {
             "label": "Две связанные функции",
-            "section": "svyazannye-funkcii",
+            "section": "dve-funkcii",
             "material_id": "rekursiya"
           }
         ],
@@ -29470,7 +29470,7 @@
         "theory_links": [
           {
             "label": "Отношение при больших n",
-            "section": "smotret-na-vyrazhenie",
+            "section": "otnoshenie",
             "material_id": "rekursiya"
           }
         ],
@@ -30745,7 +30745,7 @@
         "theory_links": [
           {
             "label": "Две связанные функции",
-            "section": "svyazannye-funkcii",
+            "section": "dve-funkcii-navstrechu",
             "material_id": "rekursiya"
           }
         ],
@@ -31113,7 +31113,7 @@
         "theory_links": [
           {
             "label": "Рекурсия вверх и прогрев кеша",
-            "section": "dve-problemy",
+            "section": "progrev-kesha",
             "material_id": "rekursiya"
           }
         ],
@@ -32454,7 +32454,7 @@
         "theory_links": [
           {
             "label": "Ветвление по условию",
-            "section": "usloviya-v-opredelenii",
+            "section": "vetvi-v-programme",
             "material_id": "rekursiya"
           }
         ],
@@ -32673,7 +32673,7 @@
         "theory_links": [
           {
             "label": "Общий алгоритм решения",
-            "section": "baza-i-sootnoshenie",
+            "section": "po-opredeleniyu",
             "material_id": "rekursiya"
           }
         ],
@@ -32870,7 +32870,7 @@
         "theory_links": [
           {
             "label": "Ветвление по чётности",
-            "section": "usloviya-v-opredelenii",
+            "section": "vetvi-v-programme",
             "material_id": "rekursiya"
           }
         ],
@@ -33942,7 +33942,7 @@
         "theory_links": [
           {
             "label": "Ветвление по чётности",
-            "section": "usloviya-v-opredelenii",
+            "section": "vetvi-v-programme",
             "material_id": "rekursiya"
           }
         ],
@@ -34335,7 +34335,7 @@
         "theory_links": [
           {
             "label": "Подсчёт аргументов",
-            "section": "skolko-argumentov",
+            "section": "perebor-n",
             "material_id": "rekursiya"
           }
         ],
@@ -34740,7 +34740,7 @@
         "theory_links": [
           {
             "label": "Подсчёт аргументов",
-            "section": "skolko-argumentov",
+            "section": "perebor-n",
             "material_id": "rekursiya"
           }
         ],
@@ -35478,7 +35478,7 @@
         "theory_links": [
           {
             "label": "Две связанные функции",
-            "section": "svyazannye-funkcii",
+            "section": "dve-funkcii",
             "material_id": "rekursiya"
           }
         ],
@@ -35848,7 +35848,7 @@
         "theory_links": [
           {
             "label": "Несколько предыдущих значений",
-            "section": "tablica-predydushchih",
+            "section": "baza-i-shag",
             "material_id": "rekursiya"
           }
         ],
@@ -36046,7 +36046,7 @@
         "theory_links": [
           {
             "label": "Рекурсия вверх и прогрев кеша",
-            "section": "dve-problemy",
+            "section": "progrev-kesha",
             "material_id": "rekursiya"
           }
         ],
@@ -37262,7 +37262,7 @@
         "theory_links": [
           {
             "label": "Две связанные функции",
-            "section": "svyazannye-funkcii",
+            "section": "dve-funkcii",
             "material_id": "rekursiya"
           }
         ],
@@ -37450,7 +37450,7 @@
         "theory_links": [
           {
             "label": "Несколько предыдущих значений",
-            "section": "tablica-predydushchih",
+            "section": "baza-i-shag",
             "material_id": "rekursiya"
           }
         ],
@@ -37671,7 +37671,7 @@
         "theory_links": [
           {
             "label": "Несколько предыдущих значений",
-            "section": "tablica-predydushchih",
+            "section": "baza-i-shag",
             "material_id": "rekursiya"
           }
         ],
@@ -37874,7 +37874,7 @@
         "theory_links": [
           {
             "label": "Две связанные функции",
-            "section": "svyazannye-funkcii",
+            "section": "dve-funkcii",
             "material_id": "rekursiya"
           }
         ],
@@ -39020,7 +39020,7 @@
         "theory_links": [
           {
             "label": "Две связанные функции",
-            "section": "svyazannye-funkcii",
+            "section": "dve-funkcii",
             "material_id": "rekursiya"
           }
         ],
@@ -39223,7 +39223,7 @@
         "theory_links": [
           {
             "label": "Две связанные функции",
-            "section": "svyazannye-funkcii",
+            "section": "dve-funkcii",
             "material_id": "rekursiya"
           }
         ],
@@ -39903,7 +39903,7 @@
         "theory_links": [
           {
             "label": "Рекурсия вверх и прогрев кеша",
-            "section": "dve-problemy",
+            "section": "progrev-kesha",
             "material_id": "rekursiya"
           }
         ],
@@ -40335,7 +40335,7 @@
         "theory_links": [
           {
             "label": "Большие n: сокращаем, а не считаем",
-            "section": "smotret-na-vyrazhenie",
+            "section": "raznost",
             "material_id": "rekursiya"
           }
         ],
@@ -41968,7 +41968,7 @@
         "theory_links": [
           {
             "label": "Отношение при больших n",
-            "section": "smotret-na-vyrazhenie",
+            "section": "otnoshenie",
             "material_id": "rekursiya"
           }
         ],
@@ -42166,7 +42166,7 @@
         "theory_links": [
           {
             "label": "Несколько предыдущих значений",
-            "section": "tablica-predydushchih",
+            "section": "baza-i-shag",
             "material_id": "rekursiya"
           }
         ],
@@ -42897,7 +42897,7 @@
         "theory_links": [
           {
             "label": "Две связанные функции",
-            "section": "svyazannye-funkcii",
+            "section": "dve-funkcii",
             "material_id": "rekursiya"
           }
         ],
@@ -43136,7 +43136,7 @@
         "theory_links": [
           {
             "label": "Общий алгоритм решения",
-            "section": "baza-i-sootnoshenie",
+            "section": "po-opredeleniyu",
             "material_id": "rekursiya"
           }
         ],
@@ -43312,7 +43312,7 @@
         "theory_links": [
           {
             "label": "Общий алгоритм решения",
-            "section": "baza-i-sootnoshenie",
+            "section": "po-opredeleniyu",
             "material_id": "rekursiya"
           }
         ],
@@ -44637,7 +44637,7 @@
         "theory_links": [
           {
             "label": "Две связанные функции",
-            "section": "svyazannye-funkcii",
+            "section": "dve-funkcii-navstrechu",
             "material_id": "rekursiya"
           }
         ],
@@ -45769,7 +45769,7 @@
         "theory_links": [
           {
             "label": "Общий алгоритм решения",
-            "section": "baza-i-sootnoshenie",
+            "section": "po-opredeleniyu",
             "material_id": "rekursiya"
           }
         ],
@@ -47300,7 +47300,7 @@
         "theory_links": [
           {
             "label": "Ветвление по условию",
-            "section": "usloviya-v-opredelenii",
+            "section": "vetvi-v-programme",
             "material_id": "rekursiya"
           }
         ],
@@ -48556,7 +48556,7 @@
         "theory_links": [
           {
             "label": "Отношение при больших n",
-            "section": "smotret-na-vyrazhenie",
+            "section": "otnoshenie",
             "material_id": "rekursiya"
           }
         ],
@@ -48754,7 +48754,7 @@
         "theory_links": [
           {
             "label": "Отношение при больших n",
-            "section": "smotret-na-vyrazhenie",
+            "section": "otnoshenie",
             "material_id": "rekursiya"
           }
         ],
@@ -49440,7 +49440,7 @@
         "theory_links": [
           {
             "label": "Отношение при больших n",
-            "section": "smotret-na-vyrazhenie",
+            "section": "otnoshenie",
             "material_id": "rekursiya"
           }
         ],
@@ -50189,7 +50189,7 @@
         "theory_links": [
           {
             "label": "Отношение при больших n",
-            "section": "smotret-na-vyrazhenie",
+            "section": "otnoshenie",
             "material_id": "rekursiya"
           }
         ],
@@ -50602,7 +50602,7 @@
         "theory_links": [
           {
             "label": "Отношение при больших n",
-            "section": "smotret-na-vyrazhenie",
+            "section": "otnoshenie",
             "material_id": "rekursiya"
           }
         ],
@@ -50778,7 +50778,7 @@
         "theory_links": [
           {
             "label": "Общий алгоритм решения",
-            "section": "baza-i-sootnoshenie",
+            "section": "po-opredeleniyu",
             "material_id": "rekursiya"
           }
         ],
@@ -51015,7 +51015,7 @@
         "theory_links": [
           {
             "label": "Ветвление по чётности",
-            "section": "usloviya-v-opredelenii",
+            "section": "vetvi-v-programme",
             "material_id": "rekursiya"
           }
         ],
@@ -51339,7 +51339,7 @@
         "theory_links": [
           {
             "label": "Большие n: сокращаем, а не считаем",
-            "section": "smotret-na-vyrazhenie",
+            "section": "otnoshenie",
             "material_id": "rekursiya"
           }
         ],
@@ -52380,7 +52380,7 @@
         "theory_links": [
           {
             "label": "Большие n: сокращаем, а не считаем",
-            "section": "smotret-na-vyrazhenie",
+            "section": "otnoshenie",
             "material_id": "rekursiya"
           }
         ],
@@ -52750,7 +52750,7 @@
         "theory_links": [
           {
             "label": "Отношение при больших n",
-            "section": "smotret-na-vyrazhenie",
+            "section": "otnoshenie",
             "material_id": "rekursiya"
           }
         ],
@@ -52971,7 +52971,7 @@
         "theory_links": [
           {
             "label": "Две связанные функции",
-            "section": "svyazannye-funkcii",
+            "section": "dve-funkcii",
             "material_id": "rekursiya"
           }
         ],
@@ -53480,7 +53480,7 @@
         "theory_links": [
           {
             "label": "Ветвление по чётности",
-            "section": "usloviya-v-opredelenii",
+            "section": "vetvi-v-programme",
             "material_id": "rekursiya"
           }
         ],
@@ -54838,7 +54838,7 @@
         "theory_links": [
           {
             "label": "Две связанные функции",
-            "section": "svyazannye-funkcii",
+            "section": "dve-funkcii",
             "material_id": "rekursiya"
           }
         ],
@@ -55836,7 +55836,7 @@
         "theory_links": [
           {
             "label": "Отношение при больших n",
-            "section": "smotret-na-vyrazhenie",
+            "section": "otnoshenie",
             "material_id": "rekursiya"
           }
         ],
@@ -56336,7 +56336,7 @@
         "theory_links": [
           {
             "label": "Большие n: сокращаем, а не считаем",
-            "section": "smotret-na-vyrazhenie",
+            "section": "raznost",
             "material_id": "rekursiya"
           }
         ],
@@ -57630,7 +57630,7 @@
         "theory_links": [
           {
             "label": "Подсчёт аргументов",
-            "section": "skolko-argumentov",
+            "section": "perebor-n",
             "material_id": "rekursiya"
           }
         ],
@@ -58619,7 +58619,7 @@
         "theory_links": [
           {
             "label": "Общий алгоритм решения",
-            "section": "baza-i-sootnoshenie",
+            "section": "po-opredeleniyu",
             "material_id": "rekursiya"
           }
         ],
@@ -60013,7 +60013,7 @@
         "theory_links": [
           {
             "label": "Ветвление по условию",
-            "section": "usloviya-v-opredelenii",
+            "section": "vetvi-v-programme",
             "material_id": "rekursiya"
           }
         ],
@@ -61307,7 +61307,7 @@
         "theory_links": [
           {
             "label": "Ветвление по чётности",
-            "section": "usloviya-v-opredelenii",
+            "section": "vetvi-v-programme",
             "material_id": "rekursiya"
           }
         ],
@@ -61831,7 +61831,7 @@
         "theory_links": [
           {
             "label": "Отношение при больших n",
-            "section": "smotret-na-vyrazhenie",
+            "section": "otnoshenie",
             "material_id": "rekursiya"
           }
         ],
@@ -62511,7 +62511,7 @@
         "theory_links": [
           {
             "label": "Общий алгоритм решения",
-            "section": "baza-i-sootnoshenie",
+            "section": "po-opredeleniyu",
             "material_id": "rekursiya"
           }
         ],
@@ -63605,7 +63605,7 @@
         "theory_links": [
           {
             "label": "Подсчёт аргументов",
-            "section": "skolko-argumentov",
+            "section": "perebor-n",
             "material_id": "rekursiya"
           }
         ],
@@ -63752,7 +63752,7 @@
         "theory_links": [
           {
             "label": "Рекурсивные вызовы и стек",
-            "section": "do-bazy-i-obratno",
+            "section": "vniz-i-obratno",
             "material_id": "rekursiya"
           }
         ],
@@ -64426,7 +64426,7 @@
         "theory_links": [
           {
             "label": "Ветвление по условию",
-            "section": "usloviya-v-opredelenii",
+            "section": "vetvi-v-programme",
             "material_id": "rekursiya"
           }
         ],
@@ -65059,7 +65059,7 @@
         "theory_links": [
           {
             "label": "Ветвление по чётности",
-            "section": "usloviya-v-opredelenii",
+            "section": "vetvi-v-programme",
             "material_id": "rekursiya"
           }
         ],
@@ -65497,7 +65497,7 @@
         "theory_links": [
           {
             "label": "Ветвление по чётности",
-            "section": "usloviya-v-opredelenii",
+            "section": "vetvi-v-programme",
             "material_id": "rekursiya"
           }
         ],
@@ -66070,7 +66070,7 @@
         "theory_links": [
           {
             "label": "Общий алгоритм решения",
-            "section": "baza-i-sootnoshenie",
+            "section": "po-opredeleniyu",
             "material_id": "rekursiya"
           }
         ],
@@ -66428,7 +66428,7 @@
         "theory_links": [
           {
             "label": "Большие n: сокращаем, а не считаем",
-            "section": "smotret-na-vyrazhenie",
+            "section": "otnoshenie",
             "material_id": "rekursiya"
           }
         ],
@@ -66626,7 +66626,7 @@
         "theory_links": [
           {
             "label": "Отношение при больших n",
-            "section": "smotret-na-vyrazhenie",
+            "section": "otnoshenie",
             "material_id": "rekursiya"
           }
         ],
@@ -67354,7 +67354,7 @@
         "theory_links": [
           {
             "label": "Отношение при больших n",
-            "section": "smotret-na-vyrazhenie",
+            "section": "otnoshenie",
             "material_id": "rekursiya"
           }
         ],
@@ -69349,7 +69349,7 @@
         "theory_links": [
           {
             "label": "Большие n: сокращаем, а не считаем",
-            "section": "smotret-na-vyrazhenie",
+            "section": "otnoshenie",
             "material_id": "rekursiya"
           }
         ],
@@ -69570,7 +69570,7 @@
         "theory_links": [
           {
             "label": "Две связанные функции",
-            "section": "svyazannye-funkcii",
+            "section": "dve-funkcii",
             "material_id": "rekursiya"
           }
         ],
@@ -70104,7 +70104,7 @@
         "theory_links": [
           {
             "label": "Рекурсивные вызовы и стек",
-            "section": "do-bazy-i-obratno",
+            "section": "vniz-i-obratno",
             "material_id": "rekursiya"
           }
         ],
@@ -70333,7 +70333,7 @@
         "theory_links": [
           {
             "label": "Ветвление по чётности",
-            "section": "usloviya-v-opredelenii",
+            "section": "vetvi-v-programme",
             "material_id": "rekursiya"
           }
         ],
@@ -70971,7 +70971,7 @@
         "theory_links": [
           {
             "label": "Ветвление по условию",
-            "section": "usloviya-v-opredelenii",
+            "section": "vetvi-v-programme",
             "material_id": "rekursiya"
           }
         ],
@@ -71437,7 +71437,7 @@
         "theory_links": [
           {
             "label": "Несколько предыдущих значений",
-            "section": "tablica-predydushchih",
+            "section": "baza-i-shag",
             "material_id": "rekursiya"
           }
         ],
@@ -72464,7 +72464,7 @@
         "theory_links": [
           {
             "label": "Подсчёт аргументов",
-            "section": "skolko-argumentov",
+            "section": "perebor-n",
             "material_id": "rekursiya"
           }
         ],
@@ -72681,7 +72681,7 @@
         "theory_links": [
           {
             "label": "Ветвление по чётности",
-            "section": "usloviya-v-opredelenii",
+            "section": "vetvi-v-programme",
             "material_id": "rekursiya"
           }
         ],
@@ -73866,7 +73866,7 @@
         "theory_links": [
           {
             "label": "Несколько предыдущих значений",
-            "section": "tablica-predydushchih",
+            "section": "baza-i-shag",
             "material_id": "rekursiya"
           }
         ],
@@ -74755,7 +74755,7 @@
         "theory_links": [
           {
             "label": "Рекурсия вверх и прогрев кеша",
-            "section": "dve-problemy",
+            "section": "progrev-kesha",
             "material_id": "rekursiya"
           }
         ],
@@ -74959,7 +74959,7 @@
         "theory_links": [
           {
             "label": "Ветвление по условию",
-            "section": "usloviya-v-opredelenii",
+            "section": "vetvi-v-programme",
             "material_id": "rekursiya"
           }
         ],
@@ -75352,7 +75352,7 @@
         "theory_links": [
           {
             "label": "Две связанные функции",
-            "section": "svyazannye-funkcii",
+            "section": "dve-funkcii",
             "material_id": "rekursiya"
           }
         ],
@@ -76273,7 +76273,7 @@
         "theory_links": [
           {
             "label": "Две связанные функции",
-            "section": "svyazannye-funkcii",
+            "section": "dve-funkcii-navstrechu",
             "material_id": "rekursiya"
           }
         ],
@@ -76643,7 +76643,7 @@
         "theory_links": [
           {
             "label": "Общий алгоритм решения",
-            "section": "baza-i-sootnoshenie",
+            "section": "po-opredeleniyu",
             "material_id": "rekursiya"
           }
         ],
@@ -77332,7 +77332,7 @@
         "theory_links": [
           {
             "label": "Ветвление по чётности",
-            "section": "usloviya-v-opredelenii",
+            "section": "vetvi-v-programme",
             "material_id": "rekursiya"
           }
         ],
@@ -77565,7 +77565,7 @@
         "theory_links": [
           {
             "label": "Ветвление по чётности",
-            "section": "usloviya-v-opredelenii",
+            "section": "vetvi-v-programme",
             "material_id": "rekursiya"
           }
         ],
@@ -77982,7 +77982,7 @@
         "theory_links": [
           {
             "label": "Две связанные функции",
-            "section": "svyazannye-funkcii",
+            "section": "dve-funkcii-navstrechu",
             "material_id": "rekursiya"
           }
         ],
@@ -78225,7 +78225,7 @@
         "theory_links": [
           {
             "label": "Отношение при больших n",
-            "section": "smotret-na-vyrazhenie",
+            "section": "otnoshenie",
             "material_id": "rekursiya"
           }
         ],
@@ -78419,7 +78419,7 @@
         "theory_links": [
           {
             "label": "Рекурсия вверх и прогрев кеша",
-            "section": "dve-problemy",
+            "section": "progrev-kesha",
             "material_id": "rekursiya"
           }
         ],
@@ -78770,7 +78770,7 @@
         "theory_links": [
           {
             "label": "Две связанные функции",
-            "section": "svyazannye-funkcii",
+            "section": "dve-funkcii",
             "material_id": "rekursiya"
           }
         ],
@@ -78999,7 +78999,7 @@
         "theory_links": [
           {
             "label": "Подсчёт аргументов",
-            "section": "skolko-argumentov",
+            "section": "perebor-n",
             "material_id": "rekursiya"
           }
         ],
@@ -80601,7 +80601,7 @@
         "theory_links": [
           {
             "label": "Ветвление по чётности",
-            "section": "usloviya-v-opredelenii",
+            "section": "vetvi-v-programme",
             "material_id": "rekursiya"
           }
         ],
@@ -81773,7 +81773,7 @@
         "theory_links": [
           {
             "label": "Отношение при больших n",
-            "section": "smotret-na-vyrazhenie",
+            "section": "otnoshenie",
             "material_id": "rekursiya"
           }
         ],
@@ -82457,7 +82457,7 @@
         "theory_links": [
           {
             "label": "Большие n: сокращаем, а не считаем",
-            "section": "smotret-na-vyrazhenie",
+            "section": "otnoshenie",
             "material_id": "rekursiya"
           }
         ],
@@ -83341,7 +83341,7 @@
         "theory_links": [
           {
             "label": "Подсчёт аргументов",
-            "section": "skolko-argumentov",
+            "section": "perebor-n",
             "material_id": "rekursiya"
           }
         ],
@@ -83539,7 +83539,7 @@
         "theory_links": [
           {
             "label": "Большие n: сокращаем, а не считаем",
-            "section": "smotret-na-vyrazhenie",
+            "section": "otnoshenie",
             "material_id": "rekursiya"
           }
         ],
@@ -83862,7 +83862,7 @@
         "theory_links": [
           {
             "label": "Общий алгоритм решения",
-            "section": "baza-i-sootnoshenie",
+            "section": "po-opredeleniyu",
             "material_id": "rekursiya"
           }
         ],
@@ -85078,7 +85078,7 @@
         "theory_links": [
           {
             "label": "Несколько предыдущих значений",
-            "section": "tablica-predydushchih",
+            "section": "baza-i-shag",
             "material_id": "rekursiya"
           }
         ],
@@ -85604,7 +85604,7 @@
         "theory_links": [
           {
             "label": "Две связанные функции",
-            "section": "svyazannye-funkcii",
+            "section": "dve-funkcii-navstrechu",
             "material_id": "rekursiya"
           }
         ],
@@ -85802,7 +85802,7 @@
         "theory_links": [
           {
             "label": "Ветвление по условию",
-            "section": "usloviya-v-opredelenii",
+            "section": "vetvi-v-programme",
             "material_id": "rekursiya"
           }
         ],
@@ -86197,7 +86197,7 @@
         "theory_links": [
           {
             "label": "Рекурсия вверх и прогрев кеша",
-            "section": "dve-problemy",
+            "section": "progrev-kesha",
             "material_id": "rekursiya"
           }
         ],
@@ -86492,7 +86492,7 @@
         "theory_links": [
           {
             "label": "Рекурсивные вызовы и стек",
-            "section": "do-bazy-i-obratno",
+            "section": "vniz-i-obratno",
             "material_id": "rekursiya"
           }
         ],
@@ -87039,7 +87039,7 @@
         "theory_links": [
           {
             "label": "Общий алгоритм решения",
-            "section": "baza-i-sootnoshenie",
+            "section": "po-opredeleniyu",
             "material_id": "rekursiya"
           }
         ],
@@ -87535,7 +87535,7 @@
         "theory_links": [
           {
             "label": "Общий алгоритм решения",
-            "section": "baza-i-sootnoshenie",
+            "section": "po-opredeleniyu",
             "material_id": "rekursiya"
           }
         ],
@@ -87740,7 +87740,7 @@
         "theory_links": [
           {
             "label": "Несколько предыдущих значений",
-            "section": "tablica-predydushchih",
+            "section": "baza-i-shag",
             "material_id": "rekursiya"
           }
         ],
@@ -87943,7 +87943,7 @@
         "theory_links": [
           {
             "label": "Две связанные функции",
-            "section": "svyazannye-funkcii",
+            "section": "dve-funkcii",
             "material_id": "rekursiya"
           }
         ],
@@ -88141,7 +88141,7 @@
         "theory_links": [
           {
             "label": "Отношение при больших n",
-            "section": "smotret-na-vyrazhenie",
+            "section": "otnoshenie",
             "material_id": "rekursiya"
           }
         ],
@@ -88437,7 +88437,7 @@
         "theory_links": [
           {
             "label": "Две связанные функции",
-            "section": "svyazannye-funkcii",
+            "section": "dve-funkcii",
             "material_id": "rekursiya"
           }
         ],
@@ -88966,7 +88966,7 @@
         "theory_links": [
           {
             "label": "Отношение при больших n",
-            "section": "smotret-na-vyrazhenie",
+            "section": "otnoshenie",
             "material_id": "rekursiya"
           }
         ],
@@ -89164,7 +89164,7 @@
         "theory_links": [
           {
             "label": "Ветвление по условию",
-            "section": "usloviya-v-opredelenii",
+            "section": "vetvi-v-programme",
             "material_id": "rekursiya"
           }
         ],
@@ -89499,7 +89499,7 @@
         "theory_links": [
           {
             "label": "Две связанные функции",
-            "section": "svyazannye-funkcii",
+            "section": "dve-funkcii",
             "material_id": "rekursiya"
           }
         ],
@@ -89934,7 +89934,7 @@
         "theory_links": [
           {
             "label": "Две связанные функции",
-            "section": "svyazannye-funkcii",
+            "section": "dve-funkcii-navstrechu",
             "material_id": "rekursiya"
           }
         ],
@@ -90292,7 +90292,7 @@
         "theory_links": [
           {
             "label": "Ветвление по условию",
-            "section": "usloviya-v-opredelenii",
+            "section": "vetvi-v-programme",
             "material_id": "rekursiya"
           }
         ],
@@ -90686,7 +90686,7 @@
         "theory_links": [
           {
             "label": "Ветвление по чётности",
-            "section": "usloviya-v-opredelenii",
+            "section": "vetvi-v-programme",
             "material_id": "rekursiya"
           }
         ],
@@ -90903,7 +90903,7 @@
         "theory_links": [
           {
             "label": "Подсчёт аргументов",
-            "section": "skolko-argumentov",
+            "section": "perebor-n",
             "material_id": "rekursiya"
           }
         ],
@@ -92017,7 +92017,7 @@
         "theory_links": [
           {
             "label": "Две связанные функции",
-            "section": "svyazannye-funkcii",
+            "section": "dve-funkcii-navstrechu",
             "material_id": "rekursiya"
           }
         ],
@@ -92379,7 +92379,7 @@
         "theory_links": [
           {
             "label": "Рекурсивные вызовы и стек",
-            "section": "do-bazy-i-obratno",
+            "section": "vniz-i-obratno",
             "material_id": "rekursiya"
           }
         ],
@@ -92603,7 +92603,7 @@
         "theory_links": [
           {
             "label": "Две связанные функции",
-            "section": "svyazannye-funkcii",
+            "section": "dve-funkcii-navstrechu",
             "material_id": "rekursiya"
           }
         ],
@@ -93000,7 +93000,7 @@
         "theory_links": [
           {
             "label": "Ветвление по чётности",
-            "section": "usloviya-v-opredelenii",
+            "section": "vetvi-v-programme",
             "material_id": "rekursiya"
           }
         ],
@@ -93371,7 +93371,7 @@
         "theory_links": [
           {
             "label": "Две связанные функции",
-            "section": "svyazannye-funkcii",
+            "section": "dve-funkcii",
             "material_id": "rekursiya"
           }
         ],
@@ -93595,7 +93595,7 @@
         "theory_links": [
           {
             "label": "Две связанные функции",
-            "section": "svyazannye-funkcii",
+            "section": "dve-funkcii-navstrechu",
             "material_id": "rekursiya"
           }
         ],
@@ -93832,7 +93832,7 @@
         "theory_links": [
           {
             "label": "Ветвление по чётности",
-            "section": "usloviya-v-opredelenii",
+            "section": "vetvi-v-programme",
             "material_id": "rekursiya"
           }
         ],
@@ -95240,7 +95240,7 @@
         "theory_links": [
           {
             "label": "Общий алгоритм решения",
-            "section": "baza-i-sootnoshenie",
+            "section": "po-opredeleniyu",
             "material_id": "rekursiya"
           }
         ],
@@ -97129,7 +97129,7 @@
         "theory_links": [
           {
             "label": "Ветвление по условию",
-            "section": "usloviya-v-opredelenii",
+            "section": "vetvi-v-programme",
             "material_id": "rekursiya"
           }
         ],
@@ -98003,7 +98003,7 @@
         "theory_links": [
           {
             "label": "Ветвление по чётности",
-            "section": "usloviya-v-opredelenii",
+            "section": "vetvi-v-programme",
             "material_id": "rekursiya"
           }
         ],
@@ -98201,7 +98201,7 @@
         "theory_links": [
           {
             "label": "Несколько предыдущих значений",
-            "section": "tablica-predydushchih",
+            "section": "baza-i-shag",
             "material_id": "rekursiya"
           }
         ],
@@ -98383,7 +98383,7 @@
         "theory_links": [
           {
             "label": "Общий алгоритм решения",
-            "section": "baza-i-sootnoshenie",
+            "section": "po-opredeleniyu",
             "material_id": "rekursiya"
           }
         ],
@@ -98702,7 +98702,7 @@
         "theory_links": [
           {
             "label": "Рекурсивные вызовы и стек",
-            "section": "do-bazy-i-obratno",
+            "section": "vniz-i-obratno",
             "material_id": "rekursiya"
           }
         ],
@@ -99107,7 +99107,7 @@
         "theory_links": [
           {
             "label": "Две связанные функции",
-            "section": "svyazannye-funkcii",
+            "section": "dve-funkcii",
             "material_id": "rekursiya"
           }
         ],
@@ -136193,7 +136193,7 @@
     {
       "task": {
         "id": "task-16-1-01",
-        "title": "Значение по одному предыдущему",
+        "title": "Прибавка 2n",
         "short_description": null,
         "explanation_kind": "worked_solution",
         "difficulty": 1,
@@ -136205,7 +136205,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Дано: F(1) = 3, F(n) = F(n − 1) + 2n при n > 1. Найди F(5)."
+              "markdown": "F(1) = 3; F(n) = F(n − 1) + 2n при n > 1. Найди F(5)."
             }
           }
         ],
@@ -136213,7 +136213,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Начните с базы F(1) = 3 и поднимайтесь: F(2), F(3), F(4), F(5)."
+              "markdown": "Начни с базы F(1) = 3 и поднимайся: F(2) = 3 + 2 · 2, потом F(3), F(4), F(5)."
             }
           }
         ],
@@ -136221,7 +136221,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "31: последовательно получаются 3, 7, 13, 21, 31."
+              "markdown": "Считаем от базы: F(2) = 3 + 4 = 7, F(3) = 7 + 6 = 13, F(4) = 13 + 8 = 21, F(5) = 21 + 10 = 31. Проверка программой:"
             }
           },
           {
@@ -136229,7 +136229,13 @@
             "data": {
               "language": "python",
               "code": "def F(n):\n    if n == 1:\n        return 3\n    return F(n - 1) + 2 * n\n\n\nprint(F(5))",
-              "caption": "Решение программой"
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `31`"
             }
           }
         ],
@@ -136245,7 +136251,7 @@
         "theory_links": [
           {
             "label": "Теория",
-            "section": "rekursivnoe-opredelenie",
+            "section": "baza-i-shag",
             "material_id": "rekursiya"
           }
         ],
@@ -136288,7 +136294,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Дано: F(1) = 2, F(n) = 3F(n − 1) − 1 при n > 1. Найди F(4)."
+              "markdown": "F(1) = 2; F(n) = 3 · F(n − 1) − 1 при n > 1. Найди F(4)."
             }
           }
         ],
@@ -136304,7 +136310,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "41: значения 2, 5, 14, 41."
+              "markdown": "F(2) = 3 · 2 − 1 = 5, F(3) = 3 · 5 − 1 = 14, F(4) = 3 · 14 − 1 = 41."
             }
           },
           {
@@ -136312,7 +136318,13 @@
             "data": {
               "language": "python",
               "code": "def F(n):\n    if n == 1:\n        return 2\n    return 3 * F(n - 1) - 1\n\n\nprint(F(4))",
-              "caption": "Решение программой"
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `41`"
             }
           }
         ],
@@ -136328,7 +136340,7 @@
         "theory_links": [
           {
             "label": "Теория",
-            "section": "rekursivnoe-opredelenie",
+            "section": "baza-i-shag",
             "material_id": "rekursiya"
           }
         ],
@@ -136364,14 +136376,14 @@
         "explanation_kind": "worked_solution",
         "difficulty": 1,
         "estimated_minutes": 3,
-        "answer_instruction": "Введите четыре числа через пробел в том порядке, в каком их спрашивают.",
+        "answer_instruction": "Введите число.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Пусть F(n) = 3n − 2. Найди F(5 − 1), F(5) − 1, F(2 · 3) и 2F(3)."
+              "markdown": "Пусть F(n) = 3n − 2. Чему равно F(2 · 3) − 2 · F(3)?"
             }
           }
         ],
@@ -136379,7 +136391,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "F(5 − 1) — значение функции при аргументе 4, а F(5) − 1 — значение при 5 без единицы."
+              "markdown": "F(2 · 3) — функция от 6, а 2 · F(3) — удвоенное значение функции от 3."
             }
           }
         ],
@@ -136387,15 +136399,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "10, 12, 16 и 14: F(4) = 10, F(5) − 1 = 13 − 1, F(6) = 16, 2 · F(3) = 2 · 7."
+              "markdown": "F(2 · 3) = F(6) = 3 · 6 − 2 = 16. 2 · F(3) = 2 · (3 · 3 − 2) = 2 · 7 = 14. Разность: 16 − 14 = 2."
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "def F(n):\n    return 3 * n - 2\n\n\nprint(F(5 - 1), F(5) - 1, F(2 * 3), 2 * F(3))",
-              "caption": "Решение программой"
+              "code": "def F(n):\n    return 3 * n - 2\n\n\nprint(F(2 * 3) - 2 * F(3))",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `2`"
             }
           }
         ],
@@ -136411,7 +136429,7 @@
         "theory_links": [
           {
             "label": "Теория",
-            "section": "zapis-f-n",
+            "section": "baza-i-shag",
             "material_id": "rekursiya"
           }
         ],
@@ -136433,7 +136451,7 @@
         ],
         "checker": {
           "checker_type": "exact_match",
-          "answer_variants": ["10 12 16 14"],
+          "answer_variants": ["2"],
           "numeric_tolerance": null
         }
       },
@@ -136454,7 +136472,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Дано: F(1) = 2, F(2) = 3, F(n) = F(n − 1) + 2F(n − 2) при n > 2. Найди F(6)."
+              "markdown": "F(1) = 2, F(2) = 3; F(n) = F(n − 1) + 2 · F(n − 2) при n > 2. Найди F(6)."
             }
           }
         ],
@@ -136462,7 +136480,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Составьте таблицу F(1), F(2), …, F(6): каждому значению нужны два предыдущих."
+              "markdown": "Каждому значению нужны два предыдущих — составь таблицу от F(1) до F(6)."
             }
           }
         ],
@@ -136470,7 +136488,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "53: значения 2, 3, 7, 13, 27, 53."
+              "markdown": "F(3) = 3 + 2 · 2 = 7, F(4) = 7 + 2 · 3 = 13, F(5) = 13 + 2 · 7 = 27, F(6) = 27 + 2 · 13 = 53."
             }
           },
           {
@@ -136478,7 +136496,13 @@
             "data": {
               "language": "python",
               "code": "def F(n):\n    if n == 1:\n        return 2\n    if n == 2:\n        return 3\n    return F(n - 1) + 2 * F(n - 2)\n\n\nprint(F(6))",
-              "caption": "Решение программой"
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `53`"
             }
           }
         ],
@@ -136494,7 +136518,7 @@
         "theory_links": [
           {
             "label": "Теория",
-            "section": "tablica-predydushchih",
+            "section": "baza-i-shag",
             "material_id": "rekursiya"
           }
         ],
@@ -136537,7 +136561,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Дано: F(1) = F(2) = F(3) = 1, F(n) = F(n − 1) + F(n − 3) при n > 3. Найди F(10)."
+              "markdown": "F(1) = F(2) = F(3) = 1; F(n) = F(n − 1) + F(n − 3) при n > 3. Найди F(10)."
             }
           }
         ],
@@ -136545,7 +136569,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Нужны F(n − 1) и F(n − 3): заполните таблицу от 1 до 10."
+              "markdown": "Заполни таблицу от 1 до 10: каждому значению нужны предыдущее и то, что на три назад."
             }
           }
         ],
@@ -136553,7 +136577,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "19: значения 1, 1, 1, 2, 3, 4, 6, 9, 13, 19."
+              "markdown": "Значения F(1), …, F(10): 1, 1, 1, 2, 3, 4, 6, 9, 13, 19. Например, F(10) = F(9) + F(7) = 13 + 6 = 19."
             }
           },
           {
@@ -136561,7 +136585,13 @@
             "data": {
               "language": "python",
               "code": "def F(n):\n    if n <= 3:\n        return 1\n    return F(n - 1) + F(n - 3)\n\n\nprint(F(10))",
-              "caption": "Решение программой"
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `19`"
             }
           }
         ],
@@ -136577,7 +136607,7 @@
         "theory_links": [
           {
             "label": "Теория",
-            "section": "tablica-predydushchih",
+            "section": "baza-i-shag",
             "material_id": "rekursiya"
           }
         ],
@@ -136628,7 +136658,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "База — n ≤ 2; дальше каждое значение строится по двум предыдущим."
+              "markdown": "Спустись от F(6) до баз F(1) и F(2), а потом поднимайся обратно по формуле."
             }
           }
         ],
@@ -136636,7 +136666,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "48: значения 3, 4, 8, 16, 29, 48; например, F(3) = 2 · 4 − 3 + 3 = 8."
+              "markdown": "Базы: F(1) = 3, F(2) = 4. Обратно: F(3) = 2 · 4 − 3 + 3 = 8, F(4) = 2 · 8 − 4 + 4 = 16, F(5) = 2 · 16 − 8 + 5 = 29, F(6) = 2 · 29 − 16 + 6 = 48."
             }
           },
           {
@@ -136644,7 +136674,13 @@
             "data": {
               "language": "python",
               "code": "def F(n):\n    if n <= 2:\n        return n + 2\n    return 2 * F(n - 1) - F(n - 2) + n\n\n\nprint(F(6))",
-              "caption": "Решение программой"
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `48`"
             }
           }
         ],
@@ -136660,7 +136696,7 @@
         "theory_links": [
           {
             "label": "Теория",
-            "section": "tablica-predydushchih",
+            "section": "vniz-i-obratno",
             "material_id": "rekursiya"
           }
         ],
@@ -136711,7 +136747,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Множитель (n + 1) берётся для текущего аргумента."
+              "markdown": "F(5) ждёт F(4), тот — F(3), и так до базы F(1) = 1. Обратно умножай на n + 1."
             }
           }
         ],
@@ -136719,7 +136755,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "360: значения 1, 3, 12, 60, 360."
+              "markdown": "Вниз: F(5) = F(4) · 6, F(4) = F(3) · 5, F(3) = F(2) · 4, F(2) = F(1) · 3. Обратно: F(2) = 3, F(3) = 12, F(4) = 60, F(5) = 360."
             }
           },
           {
@@ -136727,7 +136763,13 @@
             "data": {
               "language": "python",
               "code": "def F(n):\n    if n == 1:\n        return 1\n    return F(n - 1) * (n + 1)\n\n\nprint(F(5))",
-              "caption": "Решение программой"
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `360`"
             }
           }
         ],
@@ -136743,7 +136785,7 @@
         "theory_links": [
           {
             "label": "Теория",
-            "section": "rekursivnoe-opredelenie",
+            "section": "vniz-i-obratno",
             "material_id": "rekursiya"
           }
         ],
@@ -136779,14 +136821,14 @@
         "explanation_kind": "worked_solution",
         "difficulty": 2,
         "estimated_minutes": 3,
-        "answer_instruction": "Введите подходящие числа через пробел по возрастанию.",
+        "answer_instruction": "Введите число.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Аргумент n — целое неотрицательное число: F(0) = 0; F(n) = F(n − 3) + 1 при n > 0. Для каких из чисел 9, 10, 12 вызов F(n) дойдёт до базы?"
+              "markdown": "n — целое неотрицательное число: F(0) = 0; F(n) = F(n − 3) + 1 при n > 0. Для какого из чисел 10, 11, 12 вызов F(n) дойдёт до базы?"
             }
           }
         ],
@@ -136794,7 +136836,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Шаг 3 не меняет остаток от деления на 3."
+              "markdown": "Шаг 3 не меняет остаток от деления на 3, а база — 0."
             }
           }
         ],
@@ -136802,15 +136844,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Для 9 и 12: шаг 3 сохраняет остаток от деления на 3, поэтому база 0 достижима только из кратных 3; от 10 цепочка 10, 7, 4, 1, −2 проскакивает 0."
+              "markdown": "Вычитание 3 сохраняет остаток от деления на 3, поэтому до 0 доходят только кратные 3: 12, 9, 6, 3, 0. От 10 цепочка 10, 7, 4, 1, −2 проскакивает 0, от 11 — 11, 8, 5, 2, −1. Проверка: пройдём цепочку от каждого числа и посмотрим, попадёт ли она ровно в 0:"
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "def reaches(n):\n    while n > 0:\n        n -= 3\n    return n == 0\n\n\nprint(*[n for n in [9, 10, 12] if reaches(n)])",
-              "caption": "Решение программой"
+              "code": "for start in (10, 11, 12):\n    n = start\n    while n > 0:\n        n -= 3\n    if n == 0:\n        print(start)",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `12`"
             }
           }
         ],
@@ -136819,7 +136867,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 7,
+            "position": 15,
             "material_id": "rekursiya"
           }
         ],
@@ -136848,7 +136896,7 @@
         ],
         "checker": {
           "checker_type": "exact_match",
-          "answer_variants": ["9 12"],
+          "answer_variants": ["12"],
           "numeric_tolerance": null
         }
       },
@@ -136857,7 +136905,7 @@
     {
       "task": {
         "id": "task-16-2-03",
-        "title": "Рекурсия вверх",
+        "title": "База сверху",
         "short_description": null,
         "explanation_kind": "worked_solution",
         "difficulty": 1,
@@ -136869,7 +136917,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Дано: F(n) = n при n ≥ 20; F(n) = F(n + 3) + 2 при n < 20. Найди F(4). Обрати внимание, на каком аргументе достигается база."
+              "markdown": "F(n) = n при n ≥ 20; F(n) = F(n + 3) + 2 при n < 20. Найди F(4)."
             }
           }
         ],
@@ -136877,7 +136925,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Аргумент растёт на 3, пока не станет не меньше 20."
+              "markdown": "Аргумент растёт на 3, пока не станет не меньше 20. На каком числе это случится?"
             }
           }
         ],
@@ -136885,7 +136933,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "34: аргументы 4, 7, 10, 13, 16, 19, 22; шесть прибавлений двойки и база F(22) = 22."
+              "markdown": "Аргументы 4, 7, 10, 13, 16, 19, 22: шесть переходов по +2 и база F(22) = 22 — число 20 в цепочку не попадает. F(4) = 22 + 6 · 2 = 34."
             }
           },
           {
@@ -136893,7 +136941,13 @@
             "data": {
               "language": "python",
               "code": "def F(n):\n    if n >= 20:\n        return n\n    return F(n + 3) + 2\n\n\nprint(F(4))",
-              "caption": "Решение программой"
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `34`"
             }
           }
         ],
@@ -136902,14 +136956,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 8,
+            "position": 10,
             "material_id": "rekursiya"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "dohodyat-do-bazy",
+            "section": "baza-sverhu",
             "material_id": "rekursiya"
           }
         ],
@@ -136952,7 +137006,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Дано: F(n) = n при n > 30; F(n) = F(n + 4) − 1 при n ≤ 30. Найди F(17)."
+              "markdown": "F(n) = n при n > 30; F(n) = F(n + 4) − 1 при n ≤ 30. Найди F(17)."
             }
           }
         ],
@@ -136960,7 +137014,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "База — первый аргумент больше 30 в цепочке 17, 21, 25, …"
+              "markdown": "База — первое число цепочки 17, 21, 25, …, которое больше 30."
             }
           }
         ],
@@ -136968,7 +137022,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "29: аргументы 17, 21, 25, 29, 33; база F(33) = 33 и четыре вычитания единицы."
+              "markdown": "Аргументы 17, 21, 25, 29, 33: четыре перехода по −1 и база F(33) = 33. F(17) = 33 − 4 = 29."
             }
           },
           {
@@ -136976,7 +137030,13 @@
             "data": {
               "language": "python",
               "code": "def F(n):\n    if n > 30:\n        return n\n    return F(n + 4) - 1\n\n\nprint(F(17))",
-              "caption": "Решение программой"
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `29`"
             }
           }
         ],
@@ -136985,14 +137045,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 9,
+            "position": 11,
             "material_id": "rekursiya"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "dohodyat-do-bazy",
+            "section": "baza-sverhu",
             "material_id": "rekursiya"
           }
         ],
@@ -137035,7 +137095,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Дано: F(n) = n при n ≤ 2; F(n) = F(n − 1) + n при n > 2 и чётном n; F(n) = 2F(n − 2) при n > 2 и нечётном n. Найди F(12), вычислив только необходимые значения."
+              "markdown": "F(n) = n при n ≤ 2; F(n) = F(n − 1) + n, если n > 2 и n чётно; F(n) = 2 · F(n − 2), если n > 2 и n нечётно. Найди F(12)."
             }
           }
         ],
@@ -137043,7 +137103,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Чётный аргумент берёт предыдущее, нечётный — через один."
+              "markdown": "У каждого аргумента по пути заново смотри на чётность: 12, потом 11, потом 9, …"
             }
           }
         ],
@@ -137051,15 +137111,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "44: F(11) = 32, поэтому F(12) = 32 + 12."
+              "markdown": "12 чётное: F(12) = F(11) + 12. Дальше только нечётные: F(11) = 2 · F(9), F(9) = 2 · F(7), …, F(3) = 2 · F(1) = 2. Обратно: F(5) = 4, F(7) = 8, F(9) = 16, F(11) = 32, F(12) = 32 + 12 = 44."
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "def F(n):\n    if n <= 2:\n        return n\n    if n % 2 == 0:\n        return F(n - 1) + n\n    return 2 * F(n - 2)\n\n\nprint(F(12))",
-              "caption": "Решение программой"
+              "code": "def F(n):\n    if n <= 2:\n        return n\n    elif n % 2 == 0:\n        return F(n - 1) + n\n    else:\n        return 2 * F(n - 2)\n\n\nprint(F(12))",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `44`"
             }
           }
         ],
@@ -137068,14 +137134,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 10,
+            "position": 7,
             "material_id": "rekursiya"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "usloviya-v-opredelenii",
+            "section": "vetvi",
             "material_id": "rekursiya"
           }
         ],
@@ -137118,7 +137184,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Дано: F(1) = 5; F(n) = F(n − 1) − 2 при чётном n; F(n) = F(n − 1) + 3n при нечётном n > 1. Найди F(6). Ветвь выбирай для аргумента каждого вызова."
+              "markdown": "F(1) = 5; F(n) = F(n − 1) − 2, если n чётно; F(n) = F(n − 1) + 3n, если n > 1 и n нечётно. Найди F(6)."
             }
           }
         ],
@@ -137126,7 +137192,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Чётность проверяется для аргумента каждого вызова, а не только для 6."
+              "markdown": "Чётность проверяй у аргумента каждого шага, а не только у 6."
             }
           }
         ],
@@ -137134,15 +137200,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "23: значения 5, 3, 12, 10, 25, 23."
+              "markdown": "F(2) = 5 − 2 = 3, F(3) = 3 + 9 = 12, F(4) = 12 − 2 = 10, F(5) = 10 + 15 = 25, F(6) = 25 − 2 = 23."
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "def F(n):\n    if n == 1:\n        return 5\n    if n % 2 == 0:\n        return F(n - 1) - 2\n    return F(n - 1) + 3 * n\n\n\nprint(F(6))",
-              "caption": "Решение программой"
+              "code": "def F(n):\n    if n == 1:\n        return 5\n    elif n % 2 == 0:\n        return F(n - 1) - 2\n    else:\n        return F(n - 1) + 3 * n\n\n\nprint(F(6))",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `23`"
             }
           }
         ],
@@ -137151,14 +137223,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 11,
+            "position": 8,
             "material_id": "rekursiya"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "usloviya-v-opredelenii",
+            "section": "vetvi",
             "material_id": "rekursiya"
           }
         ],
@@ -137209,7 +137281,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "F(14) обращается к F(13), а нечётные аргументы идут через один до 1."
+              "markdown": "14 чётное — F(14) = 14 + F(13). Дальше нечётные аргументы идут через один до 1."
             }
           }
         ],
@@ -137217,15 +137289,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "743: F(13) = 3 · F(11) = 729, F(14) = 14 + 729."
+              "markdown": "F(14) = 14 + F(13). Для нечётных F(n) = 3 · F(n − 2): аргументы 13, 11, 9, 7, 5, 3, 1 — шесть переходов, F(13) = 3⁶ · F(1) = 729. Значит, F(14) = 14 + 729 = 743."
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "def F(n):\n    if n == 1:\n        return 1\n    if n % 2 == 0:\n        return n + F(n - 1)\n    return 3 * F(n - 2)\n\n\nprint(F(14))",
-              "caption": "Решение программой"
+              "code": "def F(n):\n    if n == 1:\n        return 1\n    elif n % 2 == 0:\n        return n + F(n - 1)\n    else:\n        return 3 * F(n - 2)\n\n\nprint(F(14))",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `743`"
             }
           }
         ],
@@ -137234,14 +137312,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 12,
+            "position": 9,
             "material_id": "rekursiya"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "usloviya-v-opredelenii",
+            "section": "vetvi",
             "material_id": "rekursiya"
           }
         ],
@@ -137292,7 +137370,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Ветвь зависит от делимости на 3 текущего аргумента."
+              "markdown": "Три ветви — `if`, `elif`, `else`; делимость на 3 проверяй через `n % 3 == 0`."
             }
           }
         ],
@@ -137300,15 +137378,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "77: F(20) = F(18) + 2, F(18) = F(17) + 18 = 57 + 18."
+              "markdown": "Записываем три ветви определения и печатаем F(20). Вручную было бы долго: F(20) = F(18) + 2, F(18) = F(17) + 18 и так далее."
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "def F(n):\n    if n < 3:\n        return n\n    if n % 3 == 0:\n        return F(n - 1) + n\n    return F(n - 2) + 2\n\n\nprint(F(20))",
-              "caption": "Решение программой"
+              "code": "def F(n):\n    if n < 3:\n        return n\n    elif n % 3 == 0:\n        return F(n - 1) + n\n    else:\n        return F(n - 2) + 2\n\n\nprint(F(20))",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `77`"
             }
           }
         ],
@@ -137317,14 +137401,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 13,
+            "position": 14,
             "material_id": "rekursiya"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "usloviya-v-opredelenii",
+            "section": "vetvi-v-programme",
             "material_id": "rekursiya"
           }
         ],
@@ -137355,7 +137439,7 @@
     {
       "task": {
         "id": "task-16-3-01",
-        "title": "Цикл с одной переменной",
+        "title": "Функция по определению",
         "short_description": null,
         "explanation_kind": "worked_solution",
         "difficulty": 1,
@@ -137367,7 +137451,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Дано: F(1) = 4, F(n) = 2F(n − 1) − n при n > 1. Запиши вычисление циклом с одной переменной и найди F(6)."
+              "markdown": "F(1) = 4; F(n) = 2 · F(n − 1) − n при n > 1. Запиши функцию на Python по определению и найди F(6)."
             }
           }
         ],
@@ -137375,7 +137459,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "`value = 2 * value - n` для n от 2 до 6."
+              "markdown": "База — `if n == 1: return 4`, шаг — `return 2 * F(n - 1) - n`."
             }
           }
         ],
@@ -137383,15 +137467,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "40: `value = 2 * value - n` для n от 2 до 6 даёт 6, 9, 14, 23, 40."
+              "markdown": "Программа повторяет определение: база и рекуррентное соотношение. Значения F(2), …, F(6): 6, 9, 14, 23, 40."
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "value = 4\nfor n in range(2, 7):\n    value = 2 * value - n\nprint(value)",
-              "caption": "Решение программой"
+              "code": "def F(n):\n    if n == 1:\n        return 4\n    return 2 * F(n - 1) - n\n\n\nprint(F(6))",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `40`"
             }
           }
         ],
@@ -137400,14 +137490,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 14,
+            "position": 12,
             "material_id": "rekursiya"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "odno-predydushchee",
+            "section": "po-opredeleniyu",
             "material_id": "rekursiya"
           }
         ],
@@ -137438,7 +137528,7 @@
     {
       "task": {
         "id": "task-16-3-02",
-        "title": "Таблица по убыванию",
+        "title": "Таблица справа налево",
         "short_description": null,
         "explanation_kind": "worked_solution",
         "difficulty": 2,
@@ -137450,7 +137540,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Дано: F(n) = n при n ≥ 20; F(n) = F(n + 2) + n при n < 20. В каком порядке заполнять таблицу и какие базовые значения понадобятся для F(15)? Найди F(15)."
+              "markdown": "F(n) = n при n ≥ 20; F(n) = F(n + 2) + n при n < 20. Найди F(15)."
             }
           }
         ],
@@ -137458,7 +137548,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "От 15 аргументы растут через один: 15, 17, 19, 21."
+              "markdown": "Аргументы растут через один: 15, 17, 19, … Какая база попадёт в цепочку?"
             }
           }
         ],
@@ -137466,15 +137556,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "72: таблицу заполняют по убыванию. От 15 аргументы растут через один — 15, 17, 19, 21, — поэтому нужна база F(21) = 21 (чётным аргументам понадобилась бы F(20) = 20); F(15) = 15 + 17 + 19 + 21."
+              "markdown": "Таблицу заполняют справа налево, от верхних баз F(20) = 20 и F(21) = 21. От 15 аргументы 15, 17, 19, 21 — нужна база F(21): F(15) = 15 + 17 + 19 + 21 = 72."
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "F = {}\nfor n in range(21, 0, -1):\n    if n >= 20:\n        F[n] = n\n    else:\n        F[n] = F[n + 2] + n\nprint(F[15])",
-              "caption": "Решение программой"
+              "code": "f = [0] * 22\nf[20] = 20\nf[21] = 21\nfor n in range(19, 0, -1):\n    f[n] = f[n + 2] + n\n\nprint(f[15])",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `72`"
             }
           }
         ],
@@ -137483,14 +137579,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 15,
+            "position": 21,
             "material_id": "rekursiya"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "po-ubyvaniyu",
+            "section": "tablica-ciklom",
             "material_id": "rekursiya"
           }
         ],
@@ -137526,14 +137622,14 @@
         "explanation_kind": "worked_solution",
         "difficulty": 2,
         "estimated_minutes": 4,
-        "answer_instruction": "Введите два числа через пробел в том порядке, в каком их спрашивают.",
+        "answer_instruction": "Введите число.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Дано: F(1) = 2, G(1) = 1; F(n) = F(n − 1) + G(n − 1); G(n) = 2F(n − 1) при n > 1. Найди F(4) и G(4)."
+              "markdown": "F(1) = 2, G(1) = 1; при n > 1 F(n) = F(n − 1) + G(n − 1), G(n) = 2 · F(n − 1). Найди F(4) + G(4)."
             }
           }
         ],
@@ -137541,7 +137637,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Обе функции берут значения предыдущего шага: обновляйте их одновременно."
+              "markdown": "Обе функции берут значения из предыдущей строки — составь таблицу n, F(n), G(n)."
             }
           }
         ],
@@ -137549,15 +137645,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "F(4) = 13, G(4) = 14. Предыдущие пары: (2, 1), (3, 4), (7, 6)."
+              "markdown": "n = 2: F = 2 + 1 = 3, G = 2 · 2 = 4. n = 3: F = 3 + 4 = 7, G = 2 · 3 = 6. n = 4: F = 7 + 6 = 13, G = 2 · 7 = 14. F(4) + G(4) = 13 + 14 = 27."
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "f, g = 2, 1\nfor n in range(2, 5):\n    f, g = f + g, 2 * f\nprint(f, g)",
-              "caption": "Решение программой"
+              "code": "def F(n):\n    if n == 1:\n        return 2\n    return F(n - 1) + G(n - 1)\n\n\ndef G(n):\n    if n == 1:\n        return 1\n    return 2 * F(n - 1)\n\n\nprint(F(4) + G(4))",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `27`"
             }
           }
         ],
@@ -137566,14 +137668,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 16,
+            "position": 23,
             "material_id": "rekursiya"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "svyazannye-funkcii",
+            "section": "dve-funkcii",
             "material_id": "rekursiya"
           }
         ],
@@ -137595,7 +137697,7 @@
         ],
         "checker": {
           "checker_type": "exact_match",
-          "answer_variants": ["13 14"],
+          "answer_variants": ["27"],
           "numeric_tolerance": null
         }
       },
@@ -137604,7 +137706,7 @@
     {
       "task": {
         "id": "task-16-3-06",
-        "title": "Сумма всех предыдущих",
+        "title": "Половина аргумента",
         "short_description": null,
         "explanation_kind": "worked_solution",
         "difficulty": 2,
@@ -137616,7 +137718,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Дано: F(1) = 1; F(n) = F(1) + F(2) + … + F(n − 1) + 2 при n > 1. Найди F(6)."
+              "markdown": "F(1) = 1; F(n) = F(n − 1) + F(n // 2) при n > 1. Найди F(100)."
             }
           }
         ],
@@ -137624,7 +137726,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Храните накопленную сумму: F(n) = сумма + 2."
+              "markdown": "Каждому f[n] нужны f[n − 1] и f[n // 2] — оба левее, заполняй список слева направо."
             }
           }
         ],
@@ -137632,15 +137734,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "48: значения 1, 3, 6, 12, 24, 48; каждое следующее равно накопленной сумме плюс 2."
+              "markdown": "Оба нужных значения — с меньшими аргументами, поэтому список заполняем по возрастанию n:"
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "values = [1]\nfor n in range(2, 7):\n    values.append(sum(values) + 2)\nprint(values[-1])",
-              "caption": "Решение программой"
+              "code": "f = [0] * 101\nf[1] = 1\nfor n in range(2, 101):\n    f[n] = f[n - 1] + f[n // 2]\n\nprint(f[100])",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `102829`"
             }
           }
         ],
@@ -137649,14 +137757,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 17,
+            "position": 22,
             "material_id": "rekursiya"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "summa-predydushchih",
+            "section": "tablica-ciklom",
             "material_id": "rekursiya"
           }
         ],
@@ -137678,7 +137786,7 @@
         ],
         "checker": {
           "checker_type": "exact_match",
-          "answer_variants": ["48"],
+          "answer_variants": ["102829"],
           "numeric_tolerance": null
         }
       },
@@ -137707,7 +137815,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Заполняйте таблицу от баз F(41) и F(40) вниз до 30."
+              "markdown": "F(n) вызывает F(n + 1) и F(n + 2) — с `@cache` это быстро."
             }
           }
         ],
@@ -137715,15 +137823,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "288: от баз F(41) = F(40) = 2 вниз получаются 4, 6, 10, 16, …, а F(30) = 288."
+              "markdown": "Функция вызывает себя дважды, поэтому добавляем `@cache`. От баз F(40) = F(41) = 2 значения вниз: 4, 6, 10, 16, …, и F(30) = 288."
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "F = {}\nfor n in range(41, 29, -1):\n    if n >= 40:\n        F[n] = 2\n    else:\n        F[n] = F[n + 1] + F[n + 2]\nprint(F[30])",
-              "caption": "Решение программой"
+              "code": "from functools import cache\n\n\n@cache\ndef F(n):\n    if n >= 40:\n        return 2\n    return F(n + 1) + F(n + 2)\n\n\nprint(F(30))",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `288`"
             }
           }
         ],
@@ -137732,14 +137846,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 18,
+            "position": 19,
             "material_id": "rekursiya"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "po-ubyvaniyu",
+            "section": "cache",
             "material_id": "rekursiya"
           }
         ],
@@ -137790,7 +137904,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "На каждом шаге новые F и G считаются по старым значениям обеих функций."
+              "markdown": "Новые F и G считаются по старым значениям обеих функций — две `def` и `@cache` у каждой."
             }
           }
         ],
@@ -137798,15 +137912,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "33461: F(12) = 19601, G(12) = 13860."
+              "markdown": "Записываем обе функции по определению и печатаем сумму: F(12) = 19 601, G(12) = 13 860."
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "f, g = 1, 1\nfor n in range(2, 13):\n    f, g = f + 2 * g, f + g\nprint(f + g)",
-              "caption": "Решение программой"
+              "code": "from functools import cache\n\n\n@cache\ndef F(n):\n    if n == 1:\n        return 1\n    return F(n - 1) + 2 * G(n - 1)\n\n\n@cache\ndef G(n):\n    if n == 1:\n        return 1\n    return F(n - 1) + G(n - 1)\n\n\nprint(F(12) + G(12))",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `33461`"
             }
           }
         ],
@@ -137815,14 +137935,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 19,
+            "position": 24,
             "material_id": "rekursiya"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "svyazannye-funkcii",
+            "section": "dve-funkcii",
             "material_id": "rekursiya"
           }
         ],
@@ -137853,19 +137973,19 @@
     {
       "task": {
         "id": "task-16-4-01",
-        "title": "Вызовы Фибоначчи",
+        "title": "Числа Фибоначчи с @cache",
         "short_description": null,
         "explanation_kind": "worked_solution",
         "difficulty": 2,
         "estimated_minutes": 5,
-        "answer_instruction": "Введите три числа через пробел в том порядке, в каком их спрашивают.",
+        "answer_instruction": "Введите число.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Сколько вызовов сделает прямая программа Фибоначчи (без запоминания) для F(6)? Сколько вызовов будет с `@cache` и сколько из них действительно вычисляют значение?"
+              "markdown": "F(n) = 1 при n ≤ 2; F(n) = F(n − 1) + F(n − 2) при n > 2. Найди F(70)."
             }
           }
         ],
@@ -137873,7 +137993,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Число вызовов C(n) = 1 + C(n − 1) + C(n − 2); с кешем каждый аргумент вычисляется один раз."
+              "markdown": "Без запоминания F(70) потребует триллионы вызовов — добавь `@cache` над `def`."
             }
           }
         ],
@@ -137881,15 +138001,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "15 вызовов: C(6) = 1 + C(5) + C(4) = 1 + 9 + 5. С `@cache` — 9 вызовов, вычисляют 6."
+              "markdown": "Программа по определению с `@cache`: каждое значение от F(1) до F(70) считается один раз."
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "from functools import cache\n\ncalls = 0\n\n\ndef F(n):\n    global calls\n    calls += 1\n    if n <= 2:\n        return 1\n    return F(n - 1) + F(n - 2)\n\n\nF(6)\ncached_calls = 0\ncomputed = 0\n\n\n@cache\ndef G(n):\n    global computed\n    computed += 1\n    if n <= 2:\n        return 1\n    return H(n - 1) + H(n - 2)\n\n\ndef H(n):\n    global cached_calls\n    cached_calls += 1\n    return G(n)\n\n\nH(6)\nprint(calls, cached_calls, computed)",
-              "caption": "Решение программой"
+              "code": "from functools import cache\n\n\n@cache\ndef F(n):\n    if n <= 2:\n        return 1\n    return F(n - 1) + F(n - 2)\n\n\nprint(F(70))",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `190392490709135`"
             }
           }
         ],
@@ -137898,90 +138024,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 20,
-            "material_id": "rekursiya"
-          }
-        ],
-        "theory_links": [
-          {
-            "label": "Теория",
-            "section": "povtornye-vychisleniya",
-            "material_id": "rekursiya"
-          }
-        ],
-        "catalog_visible": false,
-        "archived": false,
-        "sources": [
-          {
-            "url": null,
-            "kind": "original",
-            "role": "original",
-            "year": null,
-            "title": null,
-            "author": null,
-            "primary": true,
-            "is_public": true,
-            "adaptation": null,
-            "original_id": null
-          }
-        ],
-        "checker": {
-          "checker_type": "exact_match",
-          "answer_variants": ["15 9 6"],
-          "numeric_tolerance": null
-        }
-      },
-      "solution_revision": 1
-    },
-    {
-      "task": {
-        "id": "task-16-4-02",
-        "title": "Два одинаковых вызова",
-        "short_description": null,
-        "explanation_kind": "worked_solution",
-        "difficulty": 2,
-        "estimated_minutes": 4,
-        "answer_instruction": "Введите три числа через пробел в том порядке, в каком их спрашивают.",
-        "interaction_type": "production",
-        "content_schema_version": 1,
-        "statement": [
-          {
-            "type": "text",
-            "data": {
-              "markdown": "Дано: F(1) = 1, F(n) = F(n − 1) + F(n − 1) при n > 1. Чему равно F(5) и сколько вызовов сделает прямая программа? А с `@cache`?"
-            }
-          }
-        ],
-        "hint": [
-          {
-            "type": "text",
-            "data": {
-              "markdown": "Без кеша каждый уровень удваивает число вызовов; с кешем второй вызов F(k − 1) берёт готовый ответ."
-            }
-          }
-        ],
-        "explanation": [
-          {
-            "type": "text",
-            "data": {
-              "markdown": "F(5) = 16; прямая программа делает 1 + 2 + 4 + 8 + 16 = 31 вызов, с `@cache` — 9: каждый вызов F(k) при k > 1 обращается к F(k − 1) дважды, но второй раз берёт ответ из памяти."
-            }
-          },
-          {
-            "type": "code_example",
-            "data": {
-              "language": "python",
-              "code": "from functools import cache\n\ncalls = 0\n\n\ndef F(n):\n    global calls\n    calls += 1\n    if n == 1:\n        return 1\n    return F(n - 1) + F(n - 1)\n\n\nvalue = F(5)\ncached_calls = 0\n\n\n@cache\ndef G(n):\n    if n == 1:\n        return 1\n    return H(n - 1) + H(n - 1)\n\n\ndef H(n):\n    global cached_calls\n    cached_calls += 1\n    return G(n)\n\n\nH(5)\nprint(value, calls, cached_calls)",
-              "caption": "Решение программой"
-            }
-          }
-        ],
-        "skills": [],
-        "exam_numbers": [16],
-        "files": [],
-        "lessons": [
-          {
-            "position": 21,
+            "position": 18,
             "material_id": "rekursiya"
           }
         ],
@@ -138010,7 +138053,7 @@
         ],
         "checker": {
           "checker_type": "exact_match",
-          "answer_variants": ["16 31 9"],
+          "answer_variants": ["190392490709135"],
           "numeric_tolerance": null
         }
       },
@@ -138018,20 +138061,20 @@
     },
     {
       "task": {
-        "id": "task-16-4-03",
-        "title": "Множитель — не вызов",
+        "id": "task-16-4-02",
+        "title": "Прогрев от верхней базы",
         "short_description": null,
         "explanation_kind": "worked_solution",
-        "difficulty": 1,
-        "estimated_minutes": 3,
-        "answer_instruction": "Введите два числа через пробел в том порядке, в каком их спрашивают.",
+        "difficulty": 2,
+        "estimated_minutes": 4,
+        "answer_instruction": "Введите число.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Дано: F(1) = 1, F(n) = 3F(n − 1) + 1. Найди F(5) и число вызовов при вычислении F(5)."
+              "markdown": "F(n) = n при n ≥ 5000; F(n) = F(n + 2) + 1 при n < 5000. Найди F(1)."
             }
           }
         ],
@@ -138039,7 +138082,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "3F(n − 1) — одно обращение к функции, умноженное на 3."
+              "markdown": "От 1 до базы — 2500 ждущих вызовов. Прогрей кеш по убыванию, от базы."
             }
           }
         ],
@@ -138047,15 +138090,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "F(5) = 121 при 5 вызовах: множитель 3 не создаёт новых вызовов."
+              "markdown": "Аргументы 1, 3, …, 4999, 5001: 2500 переходов по +1 и база F(5001) = 5001, итого 7501. Программа прогревает кеш от базы вниз, поэтому ждущих вызовов всё время мало:"
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "calls = 0\n\n\ndef F(n):\n    global calls\n    calls += 1\n    if n == 1:\n        return 1\n    return 3 * F(n - 1) + 1\n\n\nprint(F(5), calls)",
-              "caption": "Решение программой"
+              "code": "from functools import cache\n\n\n@cache\ndef F(n):\n    if n >= 5000:\n        return n\n    return F(n + 2) + 1\n\n\nfor n in range(5001, 0, -1):\n    F(n)\n\nprint(F(1))",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `7501`"
             }
           }
         ],
@@ -138064,7 +138113,96 @@
         "files": [],
         "lessons": [
           {
-            "position": 22,
+            "position": 20,
+            "material_id": "rekursiya"
+          }
+        ],
+        "theory_links": [
+          {
+            "label": "Теория",
+            "section": "progrev-kesha",
+            "material_id": "rekursiya"
+          }
+        ],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["7501"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "task-16-4-03",
+        "title": "Три предыдущих значения",
+        "short_description": null,
+        "explanation_kind": "worked_solution",
+        "difficulty": 1,
+        "estimated_minutes": 3,
+        "answer_instruction": "Введите число.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "F(n) = 1 при n ≤ 3; F(n) = F(n − 1) + F(n − 2) + F(n − 3) при n > 3. Найди F(40)."
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Функция вызывает себя трижды — без запоминания ответа не дождаться. Добавь `@cache`."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Каждый вызов порождает три новых, и одни и те же значения считаются снова и снова. С `@cache` каждое F(k) считается один раз:"
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "from functools import cache\n\n\n@cache\ndef F(n):\n    if n <= 3:\n        return 1\n    return F(n - 1) + F(n - 2) + F(n - 3)\n\n\nprint(F(40))",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `9129195487`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [16],
+        "files": [],
+        "lessons": [
+          {
+            "position": 17,
             "material_id": "rekursiya"
           }
         ],
@@ -138093,7 +138231,7 @@
         ],
         "checker": {
           "checker_type": "exact_match",
-          "answer_variants": ["121 5"],
+          "answer_variants": ["9129195487"],
           "numeric_tolerance": null
         }
       },
@@ -138107,14 +138245,14 @@
         "explanation_kind": "worked_solution",
         "difficulty": 2,
         "estimated_minutes": 4,
-        "answer_instruction": "Введите два числа через пробел в том порядке, в каком их спрашивают.",
+        "answer_instruction": "Введите число.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Дано: F(1) = 0, F(n) = F(n // 2) + 1 при n > 1. Сколько вызовов понадобится для F(1 000 000) и чему равно значение?"
+              "markdown": "F(1) = 0; F(n) = F(n // 2) + 1 при n > 1. Найди F(1 000 000)."
             }
           }
         ],
@@ -138122,7 +138260,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Каждый вызов делит аргумент пополам: таких шагов до 1 немного."
+              "markdown": "Каждый вызов делит аргумент пополам — шагов до 1 немного, программа справится сразу."
             }
           }
         ],
@@ -138130,15 +138268,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "20 вызовов, F(1 000 000) = 19: аргумент делится пополам 19 раз, пока не станет 1."
+              "markdown": "Аргумент делится пополам: 1 000 000, 500 000, 250 000, …, 1. До единицы — 19 делений, и каждое добавляет 1. Ждущих вызовов мало, предел поднимать не нужно."
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "calls = 0\n\n\ndef F(n):\n    global calls\n    calls += 1\n    if n == 1:\n        return 0\n    return F(n // 2) + 1\n\n\nvalue = F(1000000)\nprint(calls, value)",
-              "caption": "Решение программой"
+              "code": "def F(n):\n    if n == 1:\n        return 0\n    return F(n // 2) + 1\n\n\nprint(F(1_000_000))",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `19`"
             }
           }
         ],
@@ -138147,14 +138291,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 23,
+            "position": 13,
             "material_id": "rekursiya"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "razmer-argumenta",
+            "section": "po-opredeleniyu",
             "material_id": "rekursiya"
           }
         ],
@@ -138176,7 +138320,7 @@
         ],
         "checker": {
           "checker_type": "exact_match",
-          "answer_variants": ["20 19"],
+          "answer_variants": ["19"],
           "numeric_tolerance": null
         }
       },
@@ -138197,7 +138341,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Дано: F(0) = 0, F(n) = F(n // 2) + n % 2 при n > 0. Сколько чисел n от 1 до 100 дают F(n) = 3?"
+              "markdown": "F(0) = 0; F(n) = F(n // 2) + n % 2 при n > 0. Сколько чисел n от 1 до 100 дают F(n) = 3?"
             }
           }
         ],
@@ -138205,7 +138349,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Вызовите функцию для каждого n от 1 до 100 и посчитайте совпадения."
+              "markdown": "Вызови функцию для каждого n от 1 до 100 и считай совпадения."
             }
           }
         ],
@@ -138213,15 +138357,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "33."
+              "markdown": "Перебираем n со счётчиком:"
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "def F(n):\n    if n == 0:\n        return 0\n    return F(n // 2) + n % 2\n\n\nprint(len([n for n in range(1, 101) if F(n) == 3]))",
-              "caption": "Решение программой"
+              "code": "def F(n):\n    if n == 0:\n        return 0\n    return F(n // 2) + n % 2\n\n\ncount = 0\nfor n in range(1, 101):\n    if F(n) == 3:\n        count += 1\nprint(count)",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `33`"
             }
           }
         ],
@@ -138230,14 +138380,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 24,
+            "position": 35,
             "material_id": "rekursiya"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "skolko-argumentov",
+            "section": "perebor-n",
             "material_id": "rekursiya"
           }
         ],
@@ -138268,7 +138418,7 @@
     {
       "task": {
         "id": "task-16-4-07",
-        "title": "Глубина рекурсии",
+        "title": "Предел глубины",
         "short_description": null,
         "explanation_kind": "worked_solution",
         "difficulty": 2,
@@ -138280,7 +138430,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Дано: F(1) = 1, F(n) = F(n − 1) + n % 7 при n > 1. Найди F(3000). Что произойдёт с прямой рекурсией без изменений и как это исправить?"
+              "markdown": "F(1) = 1; F(n) = F(n − 1) + n % 7 при n > 1. Найди F(3000)."
             }
           }
         ],
@@ -138288,7 +138438,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Прямая рекурсия упрётся в предел глубины: прогрейте кеш по возрастанию или посчитайте циклом."
+              "markdown": "Прямая рекурсия упрётся в предел глубины — подними его через `sys.setrecursionlimit`."
             }
           }
         ],
@@ -138296,15 +138446,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "8998. Прямой вызов создаёт цепочку из 3000 ожидающих вызовов и упирается в предел глубины; помогают `sys.setrecursionlimit(5000)`, прогрев кэша по возрастанию или цикл с одной переменной."
+              "markdown": "От F(3000) до базы — почти три тысячи ждущих вызовов, а по умолчанию Python разрешает около тысячи. Поднимаем предел и считаем:"
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "value = 1\nfor n in range(2, 3001):\n    value = value + n % 7\nprint(value)",
-              "caption": "Решение программой"
+              "code": "import sys\n\nsys.setrecursionlimit(5000)\n\n\ndef F(n):\n    if n == 1:\n        return 1\n    return F(n - 1) + n % 7\n\n\nprint(F(3000))",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `8998`"
             }
           }
         ],
@@ -138313,14 +138469,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 25,
+            "position": 16,
             "material_id": "rekursiya"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "dve-problemy",
+            "section": "zadacha-temy-programmoj",
             "material_id": "rekursiya"
           }
         ],
@@ -138371,7 +138527,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Посчитайте F(n) для каждого n от 1 до 700."
+              "markdown": "Посчитай F(n) для каждого n от 1 до 700 и считай, сколько раз вышло 4."
             }
           }
         ],
@@ -138379,15 +138535,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "176."
+              "markdown": "Перебор со счётчиком. Деление на 2 делает вызовы короткими, а n / 2 для чётного n — то же, что n // 2:"
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "from functools import cache\n\n\n@cache\ndef F(n):\n    if n == 0:\n        return 0\n    if n % 2 == 1:\n        return F(n - 1) + 1\n    return F(n // 2)\n\n\nprint(len([n for n in range(1, 701) if F(n) == 4]))",
-              "caption": "Решение программой"
+              "code": "def F(n):\n    if n == 0:\n        return 0\n    elif n % 2 == 1:\n        return F(n - 1) + 1\n    else:\n        return F(n // 2)\n\n\ncount = 0\nfor n in range(1, 701):\n    if F(n) == 4:\n        count += 1\nprint(count)",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `176`"
             }
           }
         ],
@@ -138396,14 +138558,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 26,
+            "position": 36,
             "material_id": "rekursiya"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "skolko-argumentov",
+            "section": "perebor-n",
             "material_id": "rekursiya"
           }
         ],
@@ -138446,7 +138608,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Функция F(n), где n — натуральное число, задана следующими соотношениями: F(n) = n, если n < 100; F(n) = n + F(n / 3), если n ≥ 100 и n делится на 3; F(n) = F(n − 1) + 5, если n ≥ 100 и n не делится на 3. Найдите наименьшее значение n, для которого F(n) > 2000."
+              "markdown": "Функция F(n), где n — натуральное число, задана следующими соотношениями: F(n) = n, если n < 100; F(n) = n + F(n / 3), если n ≥ 100 и n делится на 3; F(n) = F(n − 1) + 5, если n ≥ 100 и n не делится на 3. Найди наименьшее значение n, для которого F(n) > 2000."
             }
           }
         ],
@@ -138454,7 +138616,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Значения не растут монотонно: перебирайте n по возрастанию до первого подходящего."
+              "markdown": "Значения не растут ровно — перебирай n по возрастанию до первого F(n) > 2000."
             }
           }
         ],
@@ -138462,15 +138624,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "1340: F(1340) = 2003. Перебор нельзя останавливать раньше: F(1337) = 1995, а F(1338) = 1993 — значения не растут монотонно."
+              "markdown": "Цикл `while` идёт по n от 1 и останавливается на первом подходящем: F(1340) = 2003. Останавливаться раньше по «кажется, растёт» нельзя: F(1337) = 1995, а F(1338) = 1993."
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "from functools import cache\n\n\n@cache\ndef F(n):\n    if n < 100:\n        return n\n    if n % 3 == 0:\n        return n + F(n // 3)\n    return F(n - 1) + 5\n\n\nn = 1\nwhile F(n) <= 2000:\n    n += 1\nprint(n)",
-              "caption": "Решение программой"
+              "code": "def F(n):\n    if n < 100:\n        return n\n    elif n % 3 == 0:\n        return n + F(n // 3)\n    else:\n        return F(n - 1) + 5\n\n\nn = 1\nwhile F(n) <= 2000:\n    n += 1\nprint(n)",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `1340`"
             }
           }
         ],
@@ -138479,14 +138647,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 27,
+            "position": 37,
             "material_id": "rekursiya"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "poisk-argumenta",
+            "section": "perebor-n",
             "material_id": "rekursiya"
           }
         ],
@@ -138529,7 +138697,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Дано: F(1) = 1, F(n) = nF(n − 1) при n > 1. Найди (F(102) + 3F(101)) / F(100)."
+              "markdown": "F(1) = 1; F(n) = n · F(n − 1) при n > 1. Найди (F(102) − 2 · F(101)) / F(100)."
             }
           }
         ],
@@ -138537,7 +138705,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "F(102) = 102 · 101 · F(100), F(101) = 101 · F(100)."
+              "markdown": "Распиши F(102) и F(101) через F(100) и вынеси его за скобки."
             }
           }
         ],
@@ -138545,15 +138713,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "10605: выражение сокращается до 101(102 + 3)."
+              "markdown": "F(102) = 102 · 101 · F(100), F(101) = 101 · F(100). Числитель: (102 · 101 − 2 · 101) · F(100) = 101 · 100 · F(100). После сокращения: 101 · 100 = 10 100."
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "print(101 * 102 + 3 * 101)",
-              "caption": "Решение программой"
+              "code": "import sys\n\nsys.setrecursionlimit(5000)\n\n\ndef F(n):\n    if n == 1:\n        return 1\n    return n * F(n - 1)\n\n\nprint((F(102) - 2 * F(101)) // F(100))",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `10100`"
             }
           }
         ],
@@ -138562,14 +138736,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 28,
+            "position": 25,
             "material_id": "rekursiya"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "proizvedenie",
+            "section": "otnoshenie",
             "material_id": "rekursiya"
           }
         ],
@@ -138591,7 +138765,7 @@
         ],
         "checker": {
           "checker_type": "exact_match",
-          "answer_variants": ["10605"],
+          "answer_variants": ["10100"],
           "numeric_tolerance": null
         }
       },
@@ -138612,7 +138786,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Дано: F(n) = 1 при n ≤ 3; F(n) = F(n − 2) + n при n > 3. Найди F(101) − F(95)."
+              "markdown": "F(n) = 1 при n ≤ 3; F(n) = F(n − 2) + n при n > 3. Найди F(101) − F(95)."
             }
           }
         ],
@@ -138620,7 +138794,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Общая часть сокращается: остаются прибавления 97, 99, 101."
+              "markdown": "Раскрой F(101) до F(95): F(101) = F(99) + 101 = …"
             }
           }
         ],
@@ -138628,15 +138802,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "297: остаётся сумма 97 + 99 + 101."
+              "markdown": "F(101) = F(95) + 97 + 99 + 101. F(95) вычитается целиком, остаётся 97 + 99 + 101 = 297."
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "print(97 + 99 + 101)",
-              "caption": "Решение программой"
+              "code": "def F(n):\n    if n <= 3:\n        return 1\n    return F(n - 2) + n\n\n\nprint(F(101) - F(95))",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `297`"
             }
           }
         ],
@@ -138645,7 +138825,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 29,
+            "position": 27,
             "material_id": "rekursiya"
           }
         ],
@@ -138695,7 +138875,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Дано: F(n) = 1 при n ≤ 3; F(n) = F(n − 3) + 2n при n > 3. Найди 2F(40) − F(37) − F(34)."
+              "markdown": "F(n) = 1 при n ≤ 3; F(n) = F(n − 3) + 2n при n > 3. Найди 2 · F(40) − F(37) − F(34)."
             }
           }
         ],
@@ -138703,7 +138883,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Обозначьте F(34) = X и выразите F(37) и F(40) через X."
+              "markdown": "Обозначь F(34) = X и вырази F(37) и F(40) через X."
             }
           }
         ],
@@ -138711,15 +138891,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "234: при X = F(34) получаем F(37) = X + 74, F(40) = X + 154, и 2(X + 154) − (X + 74) − X = 234."
+              "markdown": "F(37) = X + 74, F(40) = X + 74 + 80 = X + 154. 2(X + 154) − (X + 74) − X = 308 − 74 = 234 — X сократился."
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "x = 0\nf37 = x + 2 * 37\nf40 = f37 + 2 * 40\nprint(2 * f40 - f37 - x)",
-              "caption": "Решение программой"
+              "code": "def F(n):\n    if n <= 3:\n        return 1\n    return F(n - 3) + 2 * n\n\n\nprint(2 * F(40) - F(37) - F(34))",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `234`"
             }
           }
         ],
@@ -138728,7 +138914,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 30,
+            "position": 29,
             "material_id": "rekursiya"
           }
         ],
@@ -138771,14 +138957,14 @@
         "explanation_kind": "worked_solution",
         "difficulty": 2,
         "estimated_minutes": 4,
-        "answer_instruction": "Введите два числа через пробел в том порядке, в каком их спрашивают.",
+        "answer_instruction": "Введите число.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Дано: F(n) = n при n ≤ 6; F(n) = F(n − 4) + 5 при n > 6. Найди F(50) и F(51)."
+              "markdown": "F(n) = n при n ≤ 6; F(n) = F(n − 4) + 5 при n > 6. Найди F(51) − F(50)."
             }
           }
         ],
@@ -138786,7 +138972,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "От 50 и от 51 цепочки попадают в разные базы."
+              "markdown": "От 50 и от 51 цепочки попадают в разные базы — пройди обе."
             }
           }
         ],
@@ -138794,15 +138980,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "F(50) = 61, F(51) = 63: от 50 одиннадцать переходов до базы F(6) = 6, от 51 — двенадцать до F(3) = 3."
+              "markdown": "От 50: 50, 46, …, 10, 6 — одиннадцать переходов, F(50) = 6 + 55 = 61. От 51: 51, 47, …, 7, 3 — двенадцать переходов, F(51) = 3 + 60 = 63. Разность 2, а не 5: цепочки разные."
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "def F(n):\n    if n <= 6:\n        return n\n    return F(n - 4) + 5\n\n\nprint(F(50), F(51))",
-              "caption": "Решение программой"
+              "code": "def F(n):\n    if n <= 6:\n        return n\n    return F(n - 4) + 5\n\n\nprint(F(51) - F(50))",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `2`"
             }
           }
         ],
@@ -138811,7 +139003,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 31,
+            "position": 32,
             "material_id": "rekursiya"
           }
         ],
@@ -138840,7 +139032,7 @@
         ],
         "checker": {
           "checker_type": "exact_match",
-          "answer_variants": ["61 63"],
+          "answer_variants": ["2"],
           "numeric_tolerance": null
         }
       },
@@ -138861,7 +139053,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Дано: F(1) = F(2) = 1; при n > 2: F(n) = 2F(n − 2), если n нечётно; F(n) = 3nF(n − 1) + F(n − 3), если n чётно. Найди F(10) / F(5)."
+              "markdown": "F(1) = F(2) = 1; при n > 2 F(n) = 2 · F(n − 2), если n нечётно, и F(n) = 3n · F(n − 1) + F(n − 3), если n чётно. Найди F(10) / F(5)."
             }
           }
         ],
@@ -138869,7 +139061,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Выразите F(10) через F(9) и F(7), а их — через F(5)."
+              "markdown": "Вырази F(10) через F(9) и F(7), а их — через F(5)."
             }
           }
         ],
@@ -138877,15 +139069,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "122: F(10) = 30F(9) + F(7), F(9) = 4F(5), F(7) = 2F(5)."
+              "markdown": "10 чётное: F(10) = 30 · F(9) + F(7). 9 и 7 нечётные: F(9) = 2 · F(7) = 4 · F(5), F(7) = 2 · F(5). Значит, F(10) = 120 · F(5) + 2 · F(5) = 122 · F(5)."
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "def F(n):\n    if n <= 2:\n        return 1\n    if n % 2 == 1:\n        return 2 * F(n - 2)\n    return 3 * n * F(n - 1) + F(n - 3)\n\n\nprint(F(10) // F(5))",
-              "caption": "Решение программой"
+              "code": "def F(n):\n    if n <= 2:\n        return 1\n    elif n % 2 == 1:\n        return 2 * F(n - 2)\n    else:\n        return 3 * n * F(n - 1) + F(n - 3)\n\n\nprint(F(10) // F(5))",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `122`"
             }
           }
         ],
@@ -138894,14 +139092,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 32,
+            "position": 30,
             "material_id": "rekursiya"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "chetnost-i-sokrashchenie",
+            "section": "vetvi-i-sokrashchenie",
             "material_id": "rekursiya"
           }
         ],
@@ -138944,7 +139142,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Дано: F(n) = F(n − 5) + 10 при n ≥ 20; F(n) = 2 · G(n + 1) при n < 20; G(n) = n при n ≥ 40; G(n) = G(n + 6) + 1 при n < 40. Найди F(48)."
+              "markdown": "F(n) = F(n − 5) + 10 при n ≥ 20; F(n) = 2 · G(n + 1) при n < 20; G(n) = n при n ≥ 40; G(n) = G(n + 6) + 1 при n < 40. Найди F(48)."
             }
           }
         ],
@@ -138952,7 +139150,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "F уменьшает аргумент на 5 до значения меньше 20, G увеличивает на 6 до 40."
+              "markdown": "Пройди F вниз шагами по 5 до числа меньше 20, затем G — вверх шагами по 6."
             }
           }
         ],
@@ -138960,7 +139158,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "154: шесть переходов F от 48 до 18 дают 60; G(19) = G(43) + 4 = 47, F(18) = 94."
+              "markdown": "F: 48, 43, 38, 33, 28, 23, 18 — шесть переходов, F(48) = F(18) + 60. F(18) = 2 · G(19). G: 19, 25, 31, 37, 43 — четыре перехода, G(19) = 43 + 4 = 47. F(18) = 94, F(48) = 94 + 60 = 154."
             }
           },
           {
@@ -138968,7 +139166,13 @@
             "data": {
               "language": "python",
               "code": "def G(n):\n    if n >= 40:\n        return n\n    return G(n + 6) + 1\n\n\ndef F(n):\n    if n >= 20:\n        return F(n - 5) + 10\n    return 2 * G(n + 1)\n\n\nprint(F(48))",
-              "caption": "Решение программой"
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `154`"
             }
           }
         ],
@@ -138977,14 +139181,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 33,
+            "position": 34,
             "material_id": "rekursiya"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "napravleniya",
+            "section": "dve-funkcii-navstrechu",
             "material_id": "rekursiya"
           }
         ],
@@ -139015,19 +139219,19 @@
     {
       "task": {
         "id": "task-16-5-08",
-        "title": "Деление в базе",
+        "title": "Дробь в базе",
         "short_description": null,
         "explanation_kind": "worked_solution",
         "difficulty": 2,
         "estimated_minutes": 5,
-        "answer_instruction": "Введите два числа через пробел в том порядке, в каком их спрашивают.",
+        "answer_instruction": "Введите число.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Дано: G(n) = n / 4 при n ≥ 20; G(n) = G(n + 3) + 2 при n < 20. Найди 4G(1). Что получится, если в базе заменить деление на `//`?"
+              "markdown": "G(n) = n / 4 при n ≥ 20; G(n) = G(n + 3) + 2 при n < 20. Найди 4 · G(1)."
             }
           }
         ],
@@ -139035,7 +139239,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "G(22) = 5,5 — дробь; `//` отбросит половину."
+              "markdown": "База G(22) = 22 / 4 = 5,5 — дробь: не заменяй / на //."
             }
           }
         ],
@@ -139043,15 +139247,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "78: семь переходов от 1 до 22 дают 14, G(22) = 5,5, 4G(1) = 4 · 19,5. С `//` получится 76."
+              "markdown": "Аргументы 1, 4, 7, 10, 13, 16, 19, 22: семь переходов по +2 и база G(22) = 5,5. G(1) = 5,5 + 14 = 19,5, и 4 · G(1) = 78. С // в базе вышло бы 4 · 19 = 76."
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "def G(n):\n    if n >= 20:\n        return n / 4\n    return G(n + 3) + 2\n\n\ndef H(n):\n    if n >= 20:\n        return n // 4\n    return H(n + 3) + 2\n\n\nprint(int(4 * G(1)), 4 * H(1))",
-              "caption": "Решение программой"
+              "code": "from fractions import Fraction\n\n\ndef G(n):\n    if n >= 20:\n        return Fraction(n, 4)\n    return G(n + 3) + 2\n\n\nprint(4 * G(1))",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `78`"
             }
           }
         ],
@@ -139060,7 +139270,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 34,
+            "position": 31,
             "material_id": "rekursiya"
           }
         ],
@@ -139089,7 +139299,7 @@
         ],
         "checker": {
           "checker_type": "exact_match",
-          "answer_variants": ["78 76"],
+          "answer_variants": ["78"],
           "numeric_tolerance": null
         }
       },
@@ -139118,7 +139328,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "F(2030) = 2032 · F(2029), F(2029) = 2031 · F(2028)."
+              "markdown": "Множитель здесь n + 2: F(2030) = 2032 · F(2029), F(2029) = 2031 · F(2028)."
             }
           }
         ],
@@ -139126,15 +139336,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "4120899: F(2030) = 2032 · F(2029), числитель равен 2029 · F(2029) = 2029 · 2031 · F(2028)."
+              "markdown": "Числитель: 2032 · F(2029) − 3 · F(2029) = 2029 · F(2029) = 2029 · 2031 · F(2028). После сокращения на F(2028): 2029 · 2031 = 4 120 899."
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "print((2032 - 3) * 2031)",
-              "caption": "Решение программой"
+              "code": "import sys\n\nsys.setrecursionlimit(5000)\n\n\ndef F(n):\n    if n == 1:\n        return 1\n    return (n + 2) * F(n - 1)\n\n\nprint((F(2030) - 3 * F(2029)) // F(2028))",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `4120899`"
             }
           }
         ],
@@ -139143,14 +139359,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 35,
+            "position": 26,
             "material_id": "rekursiya"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "proizvedenie",
+            "section": "otnoshenie",
             "material_id": "rekursiya"
           }
         ],
@@ -139201,7 +139417,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "F(3001) раскрывается через F(2997) до F(2993)."
+              "markdown": "Раскрой F(3001) через F(2997) до F(2993)."
             }
           }
         ],
@@ -139209,15 +139425,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "5998: F(3001) = 3001 + 2997 + F(2993), остаётся 3001 + 2997."
+              "markdown": "F(3001) = 3001 + F(2997) = 3001 + 2997 + F(2993). F(2993) вычитается, остаётся 3001 + 2997 = 5998."
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "print(3001 + 2997)",
-              "caption": "Решение программой"
+              "code": "import sys\n\nsys.setrecursionlimit(5000)\n\n\ndef F(n):\n    if n <= 10:\n        return n\n    return n + F(n - 4)\n\n\nprint(F(3001) - F(2993))",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `5998`"
             }
           }
         ],
@@ -139226,7 +139448,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 36,
+            "position": 28,
             "material_id": "rekursiya"
           }
         ],
@@ -139276,7 +139498,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Дано: F(0) = 0; F(n) = F(n // 2) + n mod 2 при n > 0. Сколько чисел 1 ≤ n ≤ 127 удовлетворяют условию F(n) = 2?"
+              "markdown": "F(0) = 0; F(n) = F(n // 2) + n % 2 при n > 0. Сколько чисел от 1 до 127 дают F(n) = 2?"
             }
           }
         ],
@@ -139284,7 +139506,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "F(n) — количество единиц в двоичной записи n."
+              "markdown": "F(n) — количество единиц в двоичной записи. 127 = 1111111₂ — семь позиций."
             }
           }
         ],
@@ -139292,15 +139514,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "21: выбираем две позиции для единиц среди семи, получаем 7 · 6 / 2."
+              "markdown": "Все числа до 127 записываются семью двоичными цифрами. Нужны две единицы: позиции для них выбираются 7 · 6 / 2 = 21 способом. Проверка перебором:"
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "def F(n):\n    if n == 0:\n        return 0\n    return F(n // 2) + n % 2\n\n\nprint(len([n for n in range(1, 128) if F(n) == 2]))",
-              "caption": "Решение программой"
+              "code": "def F(n):\n    if n == 0:\n        return 0\n    return F(n // 2) + n % 2\n\n\ncount = 0\nfor n in range(1, 128):\n    if F(n) == 2:\n        count += 1\nprint(count)",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `21`"
             }
           }
         ],
@@ -139309,7 +139537,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 37,
+            "position": 42,
             "material_id": "rekursiya",
             "counts_toward_mastery": false
           }
@@ -139360,7 +139588,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Дано: F(0) = 0; при n > 0 F(n) = F(n // 10) + 1, если n mod 10 = 7, иначе F(n) = F(n // 10). Сколько трёхзначных чисел дают F(n) = 0?"
+              "markdown": "F(0) = 0; при n > 0 F(n) = F(n // 10) + 1, если n % 10 = 7, иначе F(n) = F(n // 10). Сколько трёхзначных чисел дают F(n) = 0?"
             }
           }
         ],
@@ -139368,7 +139596,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "F(n) считает семёрки в записи числа."
+              "markdown": "F(n) считает семёрки в записи числа; F(n) = 0 — семёрок нет."
             }
           }
         ],
@@ -139376,15 +139604,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "648: первая цифра — 8 вариантов без 0 и 7, вторая и третья — по 9."
+              "markdown": "Первая цифра — любая, кроме 0 и 7: 8 вариантов. Вторая и третья — любые, кроме 7: по 9. Всего 8 · 9 · 9 = 648. Проверка перебором:"
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "def F(n):\n    if n == 0:\n        return 0\n    if n % 10 == 7:\n        return F(n // 10) + 1\n    return F(n // 10)\n\n\nprint(len([n for n in range(100, 1000) if F(n) == 0]))",
-              "caption": "Решение программой"
+              "code": "def F(n):\n    if n == 0:\n        return 0\n    if n % 10 == 7:\n        return F(n // 10) + 1\n    return F(n // 10)\n\n\ncount = 0\nfor n in range(100, 1000):\n    if F(n) == 0:\n        count += 1\nprint(count)",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `648`"
             }
           }
         ],
@@ -139393,7 +139627,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 38,
+            "position": 45,
             "material_id": "rekursiya",
             "counts_toward_mastery": false
           }
@@ -139444,7 +139678,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Для функции суммы чётных цифр из этой подтемы найди, сколько четырёхзначных чисел дают F(n) = 0."
+              "markdown": "F(0) = 0; при n > 0 F(n) = F(n // 10) + n % 10, если n чётно, и F(n) = F(n // 10), если n нечётно. Сколько четырёхзначных чисел дают F(n) = 0?"
             }
           }
         ],
@@ -139452,7 +139686,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Сумма чётных цифр равна 0, если чётных цифр нет или все они нули."
+              "markdown": "Это сумма чётных цифр. Ноль — когда из чётных цифр есть только нули."
             }
           }
         ],
@@ -139460,15 +139694,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "1080: 5 · 6 · 6 · 6."
+              "markdown": "Разрешены цифры 0, 1, 3, 5, 7, 9. Первая цифра не 0: 5 вариантов, остальные три — по 6. Всего 5 · 6 · 6 · 6 = 1080. Проверка перебором:"
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "def F(n):\n    if n == 0:\n        return 0\n    if n % 2 == 0:\n        return F(n // 10) + n % 10\n    return F(n // 10)\n\n\nprint(len([n for n in range(1000, 10000) if F(n) == 0]))",
-              "caption": "Решение программой"
+              "code": "def F(n):\n    if n == 0:\n        return 0\n    if n % 2 == 0:\n        return F(n // 10) + n % 10\n    return F(n // 10)\n\n\ncount = 0\nfor n in range(1000, 10000):\n    if F(n) == 0:\n        count += 1\nprint(count)",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `1080`"
             }
           }
         ],
@@ -139477,7 +139717,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 39,
+            "position": 46,
             "material_id": "rekursiya",
             "counts_toward_mastery": false
           }
@@ -139528,7 +139768,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Пусть F(n) — сумма десятичных цифр. Сколько чисел 1000 ≤ n ≤ 5000 удовлетворяют условию F(n) > F(n + 1)?"
+              "markdown": "Пусть F(n) — сумма десятичных цифр n. Сколько чисел от 1000 до 5000 дают F(n) > F(n + 1)?"
             }
           }
         ],
@@ -139536,7 +139776,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Сумма цифр уменьшается только при переносе — у чисел, оканчивающихся на 9."
+              "markdown": "Сумма цифр падает только у чисел, которые оканчиваются на 9."
             }
           }
         ],
@@ -139544,15 +139784,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "400: числа, оканчивающиеся на 9: 5001 // 10 − 1000 // 10 = 500 − 100."
+              "markdown": "Нужны числа от 1000 до 5000, оканчивающиеся на 9: 1009, 1019, …, 4999. По формуле (R + 1) // 10 − L // 10 = 5001 // 10 − 1000 // 10 = 500 − 100 = 400. Проверка перебором:"
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "def F(n):\n    if n == 0:\n        return 0\n    return F(n // 10) + n % 10\n\n\nprint(len([n for n in range(1000, 5001) if F(n) > F(n + 1)]))",
-              "caption": "Решение программой"
+              "code": "def F(n):\n    if n == 0:\n        return 0\n    return F(n // 10) + n % 10\n\n\ncount = 0\nfor n in range(1000, 5001):\n    if F(n) > F(n + 1):\n        count += 1\nprint(count)",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `400`"
             }
           }
         ],
@@ -139561,7 +139807,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 40,
+            "position": 48,
             "material_id": "rekursiya",
             "counts_toward_mastery": false
           }
@@ -139612,7 +139858,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Пусть F(n) — сумма десятичных цифр. Найди наименьшее n, для которого F(n) − F(n + 1) = 26."
+              "markdown": "Пусть F(n) — сумма десятичных цифр n. Найди наименьшее n, для которого F(n) − F(n + 1) = 26."
             }
           }
         ],
@@ -139628,7 +139874,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "999: нужно 1 − 9t = −26, то есть t = 3; F(999) = 27, F(1000) = 1."
+              "markdown": "Нужно 9t − 1 = 26, то есть t = 3: n оканчивается тремя девятками. Наименьшее такое n — 999: F(999) = 27, F(1000) = 1. Проверка перебором:"
             }
           },
           {
@@ -139636,7 +139882,13 @@
             "data": {
               "language": "python",
               "code": "def F(n):\n    if n == 0:\n        return 0\n    return F(n // 10) + n % 10\n\n\nn = 1\nwhile F(n) - F(n + 1) != 26:\n    n += 1\nprint(n)",
-              "caption": "Решение программой"
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `999`"
             }
           }
         ],
@@ -139645,7 +139897,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 41,
+            "position": 49,
             "material_id": "rekursiya",
             "counts_toward_mastery": false
           }
@@ -139684,7 +139936,7 @@
     {
       "task": {
         "id": "task-16-6-07",
-        "title": "Двойки и пятёрки",
+        "title": "Разность разных цепочек",
         "short_description": null,
         "explanation_kind": "worked_solution",
         "difficulty": 3,
@@ -139696,7 +139948,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Функция задана для натуральных n: если n чётно, F(n) = F(n / 2) + 2; иначе, если n делится на 5, F(n) = F(n / 5) + 3; иначе F(n) = 0. Найди наименьшее n, для которого F(n) = 13."
+              "markdown": "F(n) = n при n ≥ 2000; F(n) = n + F(n + 2) при n < 2000. Найди F(21) − F(20)."
             }
           }
         ],
@@ -139704,7 +139956,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "F(n) = 2a + 3b для n = 2ᵃ · 5ᵇ · c; ищите наименьшее такое число."
+              "markdown": "От 21 и от 20 аргументы идут по разным цепочкам — вычитай слагаемые парами."
             }
           }
         ],
@@ -139712,15 +139964,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "160: F(n) = 2a + 3b для n = 2ᵃ · 5ᵇ · c; пары (5, 1) и (2, 3) дают 2⁵ · 5 = 160 и 2² · 5³ = 500."
+              "markdown": "F(21) = 21 + 23 + … + 1999 + F(2001), F(20) = 20 + 22 + … + 1998 + F(2000). Пар 21 − 20, 23 − 22, …, 1999 − 1998 столько, сколько чисел 20, 22, …, 1998: (1998 − 20) / 2 + 1 = 990, каждая даёт 1. Базы 2001 и 2000 — ещё 1. Ответ: 991."
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "def F(n):\n    if n % 2 == 0:\n        return F(n // 2) + 2\n    if n % 5 == 0:\n        return F(n // 5) + 3\n    return 0\n\n\nn = 1\nwhile F(n) != 13:\n    n += 1\nprint(n)",
-              "caption": "Решение программой"
+              "code": "import sys\n\nsys.setrecursionlimit(5000)\n\n\ndef F(n):\n    if n >= 2000:\n        return n\n    return n + F(n + 2)\n\n\nprint(F(21) - F(20))",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `991`"
             }
           }
         ],
@@ -139729,15 +139987,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 42,
-            "material_id": "rekursiya",
-            "counts_toward_mastery": false
+            "position": 33,
+            "material_id": "rekursiya"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "prostye-mnozhiteli",
+            "section": "raznye-cepochki",
             "material_id": "rekursiya"
           }
         ],
@@ -139759,7 +140016,7 @@
         ],
         "checker": {
           "checker_type": "exact_match",
-          "answer_variants": ["160"],
+          "answer_variants": ["991"],
           "numeric_tolerance": null
         }
       },
@@ -139788,7 +140045,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "F(n) — сумма чётных цифр; ноль, если чётные цифры — только нули."
+              "markdown": "F(n) — сумма чётных цифр; ноль, если из чётных цифр есть только нули. Отдельно проверь границу отрезка."
             }
           }
         ],
@@ -139796,15 +140053,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "7777: числа от 100 000 до 299 999 начинаются с 1 (двойка запрещена), дальше пять цифр по 6 вариантов — 6⁵ = 7776; плюс само 300 000."
+              "markdown": "Числа от 100 000 до 299 999 с разрешёнными цифрами начинаются с 1 (2 — чётная). Остальные пять цифр — любые из 0, 1, 3, 5, 7, 9: 6⁵ = 7776. Плюс само 300 000 — из чётных цифр у него только нули. Итого 7777. Проверка перебором:"
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "def F(n):\n    if n == 0:\n        return 0\n    if n % 2 == 0:\n        return F(n // 10) + n % 10\n    return F(n // 10)\n\n\nnumbers = range(10**5, 3 * 10**5 + 1)\nprint(len([n for n in numbers if F(n) == 0]))",
-              "caption": "Решение программой"
+              "code": "def F(n):\n    if n == 0:\n        return 0\n    if n % 2 == 0:\n        return F(n // 10) + n % 10\n    return F(n // 10)\n\n\ncount = 0\nfor n in range(10**5, 3 * 10**5 + 1):\n    if F(n) == 0:\n        count += 1\nprint(count)",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `7777`"
             }
           }
         ],
@@ -139813,7 +140076,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 43,
+            "position": 47,
             "material_id": "rekursiya",
             "counts_toward_mastery": false
           }
@@ -139872,7 +140135,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "F(n) — число единиц двоичной записи: выберите три позиции из двадцати."
+              "markdown": "F(n) — число единиц двоичной записи: выбери три позиции из двадцати."
             }
           }
         ],
@@ -139880,15 +140143,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "1140: три позиции из двадцати, 20 · 19 · 18 / 6."
+              "markdown": "Числа меньше 2²⁰ — это записи из 20 двоичных цифр. Три позиции для единиц выбираются 20 · 19 · 18 / 6 = 1140 способами: каждая тройка позиций в 20 · 19 · 18 посчитана 6 раз. Проверка перебором — `bin(n)` даёт двоичную запись строкой:"
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "from math import comb\n\nprint(comb(20, 3))",
-              "caption": "Решение программой"
+              "code": "count = 0\nfor n in range(2**20):\n    if bin(n).count('1') == 3:\n        count += 1\nprint(count)",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `1140`"
             }
           }
         ],
@@ -139936,7 +140205,7 @@
     {
       "task": {
         "id": "task-16-7-01",
-        "title": "Сумма цифр 5 до 999",
+        "title": "Сумма цифр 5",
         "short_description": null,
         "explanation_kind": "worked_solution",
         "difficulty": 2,
@@ -139948,7 +140217,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Сколько натуральных чисел до 999 включительно имеют сумму цифр 5? Проверь ответ функцией `count_sum`."
+              "markdown": "F(0) = 0; F(n) = F(n // 10) + n % 10 при n > 0. Сколько натуральных чисел до 999 включительно дают F(n) = 5?"
             }
           }
         ],
@@ -139956,7 +140225,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Проверьте ответ функцией `count_sum(999, 5)`."
+              "markdown": "F(n) — сумма цифр. Перебери n от 1 до 999 со счётчиком."
             }
           }
         ],
@@ -139964,15 +140233,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "21: три позиции и сумма 5 — это выбор мест для двух «перегородок» среди семи мест; `count_sum(999, 5)` даёт то же."
+              "markdown": "Функция считает сумму цифр, а диапазон небольшой — хватит перебора со счётчиком:"
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "from functools import cache\n\n\ndef digits_in_base(number, base):\n    if number == 0:\n        return [0]\n    digits = []\n    while number > 0:\n        digits.append(number % base)\n        number //= base\n    digits.reverse()\n    return digits\n\n\ndef count_sum(bound, target, base=10):\n    if bound < 0:\n        return 0\n    digits = digits_in_base(bound, base)\n\n    @cache\n    def solve(position, remaining, equal):\n        if remaining < 0:\n            return 0\n        if position == len(digits):\n            return 1 if remaining == 0 else 0\n        limit = digits[position] if equal else base - 1\n        total = 0\n        for digit in range(limit + 1):\n            new_equal = equal and digit == digits[position]\n            rest = remaining - digit\n            total += solve(position + 1, rest, new_equal)\n        return total\n\n    return solve(0, target, True)\n\n\nprint(count_sum(999, 5))",
-              "caption": "Решение программой"
+              "code": "def F(n):\n    if n == 0:\n        return 0\n    return F(n // 10) + n % 10\n\n\ncount = 0\nfor n in range(1, 1000):\n    if F(n) == 5:\n        count += 1\nprint(count)",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `21`"
             }
           }
         ],
@@ -139981,7 +140256,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 45,
+            "position": 38,
             "material_id": "rekursiya",
             "counts_toward_mastery": false
           }
@@ -139989,7 +140264,7 @@
         "theory_links": [
           {
             "label": "Теория",
-            "section": "sleva-napravo",
+            "section": "cifry-chisla",
             "material_id": "rekursiya"
           }
         ],
@@ -140020,7 +140295,7 @@
     {
       "task": {
         "id": "task-16-7-02",
-        "title": "Сумма цифр 9 от 100 до 500",
+        "title": "Сумма цифр 9",
         "short_description": null,
         "explanation_kind": "worked_solution",
         "difficulty": 2,
@@ -140032,7 +140307,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Сколько чисел от 100 до 500 имеют сумму цифр 9?"
+              "markdown": "F(0) = 0; F(n) = F(n // 10) + n % 10 при n > 0. Сколько чисел от 100 до 500 дают F(n) = 9?"
             }
           }
         ],
@@ -140040,7 +140315,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Вычтите числа до 99 из чисел до 500."
+              "markdown": "Это сумма цифр: перебери n от 100 до 500 включительно."
             }
           }
         ],
@@ -140048,15 +140323,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "30: `count_sum(500, 9) - count_sum(99, 9)`."
+              "markdown": "Перебор со счётчиком; правая граница `range` не входит, поэтому `range(100, 501)`:"
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "from functools import cache\n\n\ndef digits_in_base(number, base):\n    if number == 0:\n        return [0]\n    digits = []\n    while number > 0:\n        digits.append(number % base)\n        number //= base\n    digits.reverse()\n    return digits\n\n\ndef count_sum(bound, target, base=10):\n    if bound < 0:\n        return 0\n    digits = digits_in_base(bound, base)\n\n    @cache\n    def solve(position, remaining, equal):\n        if remaining < 0:\n            return 0\n        if position == len(digits):\n            return 1 if remaining == 0 else 0\n        limit = digits[position] if equal else base - 1\n        total = 0\n        for digit in range(limit + 1):\n            new_equal = equal and digit == digits[position]\n            rest = remaining - digit\n            total += solve(position + 1, rest, new_equal)\n        return total\n\n    return solve(0, target, True)\n\n\nprint(count_sum(500, 9) - count_sum(99, 9))",
-              "caption": "Решение программой"
+              "code": "def F(n):\n    if n == 0:\n        return 0\n    return F(n // 10) + n % 10\n\n\ncount = 0\nfor n in range(100, 501):\n    if F(n) == 9:\n        count += 1\nprint(count)",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `30`"
             }
           }
         ],
@@ -140065,7 +140346,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 46,
+            "position": 39,
             "material_id": "rekursiya",
             "counts_toward_mastery": false
           }
@@ -140073,7 +140354,7 @@
         "theory_links": [
           {
             "label": "Теория",
-            "section": "sleva-napravo",
+            "section": "cifry-chisla",
             "material_id": "rekursiya"
           }
         ],
@@ -140116,7 +140397,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Сколько натуральных чисел не больше 1000 имеют произведение цифр 12?"
+              "markdown": "F(n) = n при n < 10; F(n) = F(n // 10) · (n % 10) при n ≥ 10. Сколько натуральных чисел до 1000 включительно дают F(n) = 12?"
             }
           }
         ],
@@ -140124,7 +140405,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Ведущие нули не входят в произведение, а нуль внутри числа обнуляет его."
+              "markdown": "F(n) — произведение цифр; ноль внутри числа обнуляет его."
             }
           }
         ],
@@ -140132,15 +140413,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "19: `count_product(1000, 12)`."
+              "markdown": "Функция перемножает цифры. Перебираем n со счётчиком:"
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "from functools import cache\n\n\ndef digits_in_base(number, base):\n    if number == 0:\n        return [0]\n    digits = []\n    while number > 0:\n        digits.append(number % base)\n        number //= base\n    digits.reverse()\n    return digits\n\n\ndef count_product(bound, target, base=10):\n    if bound < 1:\n        return 0\n    digits = digits_in_base(bound, base)\n\n    @cache\n    def solve(position, remaining, equal, started):\n        if position == len(digits):\n            return 1 if started and remaining == 1 else 0\n        limit = digits[position] if equal else base - 1\n        total = 0\n        for digit in range(limit + 1):\n            new_equal = equal and digit == digits[position]\n            nxt = position + 1\n            if not started and digit == 0:\n                total += solve(nxt, remaining, new_equal, False)\n            elif digit > 0 and remaining % digit == 0:\n                rest = remaining // digit\n                total += solve(nxt, rest, new_equal, True)\n        return total\n\n    return solve(0, target, True, False)\n\n\nprint(count_product(1000, 12))",
-              "caption": "Решение программой"
+              "code": "def F(n):\n    if n < 10:\n        return n\n    return F(n // 10) * (n % 10)\n\n\ncount = 0\nfor n in range(1, 1001):\n    if F(n) == 12:\n        count += 1\nprint(count)",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `19`"
             }
           }
         ],
@@ -140149,7 +140436,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 47,
+            "position": 41,
             "material_id": "rekursiya",
             "counts_toward_mastery": false
           }
@@ -140157,7 +140444,7 @@
         "theory_links": [
           {
             "label": "Теория",
-            "section": "vedushchie-nuli",
+            "section": "cifry-chisla",
             "material_id": "rekursiya"
           }
         ],
@@ -140188,7 +140475,7 @@
     {
       "task": {
         "id": "task-16-7-05",
-        "title": "Три единицы в двоичной записи",
+        "title": "Три единицы до 255",
         "short_description": null,
         "explanation_kind": "worked_solution",
         "difficulty": 2,
@@ -140200,7 +140487,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Сколько натуральных чисел не больше 100 имеют ровно три единицы в двоичной записи? Посчитай `count_sum` с основанием 2."
+              "markdown": "Сколько чисел от 1 до 255 имеют в двоичной записи ровно три единицы?"
             }
           }
         ],
@@ -140208,7 +140495,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Сумма двоичных цифр — количество единиц: `count_sum(100, 3, 2)`."
+              "markdown": "255 = 11111111₂ — восемь позиций. Выбери три из них для единиц."
             }
           }
         ],
@@ -140216,15 +140503,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "33: `count_sum(100, 3, 2)`."
+              "markdown": "Числа до 255 — это записи из восьми двоичных цифр. Три позиции для единиц: 8 · 7 · 6 считает упорядоченные тройки, а каждая тройка позиций посчитана 6 раз. 8 · 7 · 6 / 6 = 56. Проверка перебором — `bin(n)` даёт двоичную запись строкой:"
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "from functools import cache\n\n\ndef digits_in_base(number, base):\n    if number == 0:\n        return [0]\n    digits = []\n    while number > 0:\n        digits.append(number % base)\n        number //= base\n    digits.reverse()\n    return digits\n\n\ndef count_sum(bound, target, base=10):\n    if bound < 0:\n        return 0\n    digits = digits_in_base(bound, base)\n\n    @cache\n    def solve(position, remaining, equal):\n        if remaining < 0:\n            return 0\n        if position == len(digits):\n            return 1 if remaining == 0 else 0\n        limit = digits[position] if equal else base - 1\n        total = 0\n        for digit in range(limit + 1):\n            new_equal = equal and digit == digits[position]\n            rest = remaining - digit\n            total += solve(position + 1, rest, new_equal)\n        return total\n\n    return solve(0, target, True)\n\n\nprint(count_sum(100, 3, 2))",
-              "caption": "Решение программой"
+              "code": "count = 0\nfor n in range(1, 256):\n    if bin(n).count('1') == 3:\n        count += 1\nprint(count)",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `56`"
             }
           }
         ],
@@ -140233,7 +140526,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 48,
+            "position": 43,
             "material_id": "rekursiya",
             "counts_toward_mastery": false
           }
@@ -140241,7 +140534,7 @@
         "theory_links": [
           {
             "label": "Теория",
-            "section": "cifry-sleva",
+            "section": "dvoichnye-cifry",
             "material_id": "rekursiya"
           }
         ],
@@ -140263,7 +140556,7 @@
         ],
         "checker": {
           "checker_type": "exact_match",
-          "answer_variants": ["33"],
+          "answer_variants": ["56"],
           "numeric_tolerance": null
         }
       },
@@ -140272,7 +140565,7 @@
     {
       "task": {
         "id": "task-16-7-06",
-        "title": "Сумма цифр 13 от 1000 до 5000",
+        "title": "Сумма цифр 13",
         "short_description": null,
         "explanation_kind": "worked_solution",
         "difficulty": 2,
@@ -140284,7 +140577,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Сколько чисел от 1000 до 5000 имеют сумму цифр 13?"
+              "markdown": "F(0) = 0; F(n) = F(n // 10) + n % 10 при n > 0. Сколько чисел от 1000 до 5000 дают F(n) = 13?"
             }
           }
         ],
@@ -140292,7 +140585,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Вычтите числа до 999 из чисел до 5000."
+              "markdown": "F(n) — сумма цифр; четыре тысячи вызовов программа сделает мгновенно."
             }
           }
         ],
@@ -140300,15 +140593,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "260: `count_sum(5000, 13) - count_sum(999, 13)`."
+              "markdown": "Перебор со счётчиком по всем n от 1000 до 5000:"
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "from functools import cache\n\n\ndef digits_in_base(number, base):\n    if number == 0:\n        return [0]\n    digits = []\n    while number > 0:\n        digits.append(number % base)\n        number //= base\n    digits.reverse()\n    return digits\n\n\ndef count_sum(bound, target, base=10):\n    if bound < 0:\n        return 0\n    digits = digits_in_base(bound, base)\n\n    @cache\n    def solve(position, remaining, equal):\n        if remaining < 0:\n            return 0\n        if position == len(digits):\n            return 1 if remaining == 0 else 0\n        limit = digits[position] if equal else base - 1\n        total = 0\n        for digit in range(limit + 1):\n            new_equal = equal and digit == digits[position]\n            rest = remaining - digit\n            total += solve(position + 1, rest, new_equal)\n        return total\n\n    return solve(0, target, True)\n\n\nprint(count_sum(5000, 13) - count_sum(999, 13))",
-              "caption": "Решение программой"
+              "code": "def F(n):\n    if n == 0:\n        return 0\n    return F(n // 10) + n % 10\n\n\ncount = 0\nfor n in range(1000, 5001):\n    if F(n) == 13:\n        count += 1\nprint(count)",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `260`"
             }
           }
         ],
@@ -140317,7 +140616,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 49,
+            "position": 40,
             "material_id": "rekursiya",
             "counts_toward_mastery": false
           }
@@ -140325,7 +140624,7 @@
         "theory_links": [
           {
             "label": "Теория",
-            "section": "sleva-napravo",
+            "section": "cifry-chisla",
             "material_id": "rekursiya"
           }
         ],
@@ -140399,22 +140698,10 @@
         "skills": [],
         "exam_numbers": [16],
         "files": [],
-        "lessons": [
-          {
-            "position": 50,
-            "material_id": "rekursiya",
-            "counts_toward_mastery": false
-          }
-        ],
-        "theory_links": [
-          {
-            "label": "Теория",
-            "section": "sleva-napravo",
-            "material_id": "rekursiya"
-          }
-        ],
+        "lessons": [],
+        "theory_links": [],
         "catalog_visible": false,
-        "archived": false,
+        "archived": true,
         "sources": [
           {
             "url": null,
@@ -140483,22 +140770,10 @@
         "skills": [],
         "exam_numbers": [16],
         "files": [],
-        "lessons": [
-          {
-            "position": 51,
-            "material_id": "rekursiya",
-            "counts_toward_mastery": false
-          }
-        ],
-        "theory_links": [
-          {
-            "label": "Теория",
-            "section": "vedushchie-nuli",
-            "material_id": "rekursiya"
-          }
-        ],
+        "lessons": [],
+        "theory_links": [],
         "catalog_visible": false,
-        "archived": false,
+        "archived": true,
         "sources": [
           {
             "url": null,
@@ -140536,7 +140811,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Алгоритм вычисления значения функции F(n), где n — натуральное число, задан следующими соотношениями: F(n) = 2 при n = 1; F(n) = F(n − 1) + n, если n чётно; F(n) = 2 · F(n − 2) + n, если n > 1 и при этом n нечётно. Чему равно значение функции F(21)? (Подтема 2: ветвь для каждого вызова.)"
+              "markdown": "Алгоритм вычисления значения функции F(n), где n — натуральное число, задан следующими соотношениями: F(n) = 2 при n = 1; F(n) = F(n − 1) + n, если n чётно; F(n) = 2 · F(n − 2) + n, если n > 1 и при этом n нечётно. Чему равно значение функции F(21)?"
             }
           }
         ],
@@ -140544,7 +140819,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Подтема 2: ветвь выбирается для аргумента каждого вызова."
+              "markdown": "Ветвь выбирай для каждого аргумента: нечётные берут F(n − 2), чётные — F(n − 1)."
             }
           }
         ],
@@ -140552,15 +140827,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "7143: F(21) = 2 · F(19) + 21 = 2 · 3561 + 21; ветвь выбирается для каждого аргумента, первые значения 2, 4, 7, 11, 19, 25, 45."
+              "markdown": "Нечётные n > 1 берут F(n − 2), чётные — F(n − 1). Значения от F(1): 2, 4, 7, 11, 19, 25, 45, … Программа выбирает ветвь в каждом вызове:"
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "def F(n):\n    if n == 1:\n        return 2\n    if n % 2 == 0:\n        return F(n - 1) + n\n    return 2 * F(n - 2) + n\n\n\nprint(F(21))",
-              "caption": "Решение программой"
+              "code": "def F(n):\n    if n == 1:\n        return 2\n    elif n % 2 == 0:\n        return F(n - 1) + n\n    else:\n        return 2 * F(n - 2) + n\n\n\nprint(F(21))",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `7143`"
             }
           }
         ],
@@ -140569,7 +140850,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 52,
+            "position": 50,
             "material_id": "rekursiya"
           }
         ],
@@ -140613,7 +140894,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Алгоритм вычисления значения функции F(n), где n — натуральное число, задан следующими соотношениями: F(n) = 1 при n = 1; F(n) = (n − 1) · F(n − 1), если n > 1. Чему равно значение выражения (F(2027) + 4 · F(2026)) / F(2025)? (Подтема 5: общий множитель.)"
+              "markdown": "Алгоритм вычисления значения функции F(n), где n — натуральное число, задан следующими соотношениями: F(n) = 1 при n = 1; F(n) = (n − 1) · F(n − 1), если n > 1. Чему равно значение выражения (F(2027) + 4 · F(2026)) / F(2025)?"
             }
           }
         ],
@@ -140621,7 +140902,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Подтема 5: F(2027) = 2026 · F(2026), F(2026) = 2025 · F(2025)."
+              "markdown": "Множитель здесь n − 1: F(2027) = 2026 · F(2026), F(2026) = 2025 · F(2025)."
             }
           }
         ],
@@ -140629,15 +140910,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "4110750: F(2027) = 2026 · F(2026), числитель равен 2030 · F(2026) = 2030 · 2025 · F(2025)."
+              "markdown": "Числитель: 2026 · F(2026) + 4 · F(2026) = 2030 · F(2026) = 2030 · 2025 · F(2025). После сокращения на F(2025): 2030 · 2025 = 4 110 750."
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "print((2026 + 4) * 2025)",
-              "caption": "Решение программой"
+              "code": "import sys\n\nsys.setrecursionlimit(5000)\n\n\ndef F(n):\n    if n == 1:\n        return 1\n    return (n - 1) * F(n - 1)\n\n\nprint((F(2027) + 4 * F(2026)) // F(2025))",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `4110750`"
             }
           }
         ],
@@ -140646,7 +140933,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 53,
+            "position": 51,
             "material_id": "rekursiya"
           }
         ],
@@ -140690,7 +140977,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Алгоритм вычисления значения функции F(n), где n — натуральное число, задан следующими соотношениями: F(n) = n при n < 7; F(n) = n + 2 + F(n − 3), если n ≥ 7. Чему равно значение выражения F(4000) − F(3991)? (Подтема 5: разность.)"
+              "markdown": "Алгоритм вычисления значения функции F(n), где n — натуральное число, задан следующими соотношениями: F(n) = n при n < 7; F(n) = n + 2 + F(n − 3), если n ≥ 7. Чему равно значение выражения F(4000) − F(3991)?"
             }
           }
         ],
@@ -140698,7 +140985,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Подтема 5: раскройте F(4000) до F(3991)."
+              "markdown": "Раскрой F(4000) шагами по 3 до F(3991)."
             }
           }
         ],
@@ -140706,15 +140993,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "11997: F(4000) = 4002 + 3999 + 3996 + F(3991)."
+              "markdown": "F(4000) = 4002 + F(3997) = 4002 + 3999 + F(3994) = 4002 + 3999 + 3996 + F(3991). Разность: 4002 + 3999 + 3996 = 11 997."
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "print((4000 + 2) + (3997 + 2) + (3994 + 2))",
-              "caption": "Решение программой"
+              "code": "import sys\n\nsys.setrecursionlimit(5000)\n\n\ndef F(n):\n    if n < 7:\n        return n\n    return n + 2 + F(n - 3)\n\n\nprint(F(4000) - F(3991))",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `11997`"
             }
           }
         ],
@@ -140723,7 +141016,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 54,
+            "position": 52,
             "material_id": "rekursiya"
           }
         ],
@@ -140767,7 +141060,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Алгоритм вычисления значения функции F(n), где n — целое неотрицательное число, задан следующими соотношениями: F(0) = 0; F(n) = F(n / 3), если n > 0 и n делится на 3; F(n) = (n mod 3) + F(n − (n mod 3)), если n не делится на 3. Назовите минимальное значение n, для которого F(n) = 9. (Подтема 4: перебор до первого совпадения.)"
+              "markdown": "Алгоритм вычисления значения функции F(n), где n — целое неотрицательное число, задан следующими соотношениями: F(0) = 0; F(n) = F(n / 3), если n > 0 и n делится на 3; F(n) = (n mod 3) + F(n − (n mod 3)), если n не делится на 3. Назови минимальное значение n, для которого F(n) = 9."
             }
           }
         ],
@@ -140775,7 +141068,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Подтема 4: перебирайте n по возрастанию до первого совпадения."
+              "markdown": "Перебирай n по возрастанию до первого совпадения."
             }
           }
         ],
@@ -140783,15 +141076,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "161: 161 = 12222₃, сумма троичных цифр 1 + 2 + 2 + 2 + 2 = 9; все меньшие n дают F(n) < 9."
+              "markdown": "Функция считает сумму цифр троичной записи. Перебор по возрастанию останавливается на 161 = 12222₃: 1 + 2 + 2 + 2 + 2 = 9."
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "def F(n):\n    if n == 0:\n        return 0\n    if n % 3 == 0:\n        return F(n // 3)\n    return n % 3 + F(n - n % 3)\n\n\nn = 0\nwhile F(n) != 9:\n    n += 1\nprint(n)",
-              "caption": "Решение программой"
+              "code": "def F(n):\n    if n == 0:\n        return 0\n    elif n % 3 == 0:\n        return F(n // 3)\n    else:\n        return n % 3 + F(n - n % 3)\n\n\nn = 1\nwhile F(n) != 9:\n    n += 1\nprint(n)",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `161`"
             }
           }
         ],
@@ -140800,7 +141099,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 55,
+            "position": 53,
             "material_id": "rekursiya"
           }
         ],
@@ -140844,7 +141143,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Алгоритм вычисления значений функций F(n) и G(n), где n — целое число, задан следующими соотношениями: F(n) = F(n − 3) + 7, если n ≥ 15; F(n) = 4 · (G(n + 2) − 3), если n < 15; G(n) = n / 4, если n ≥ 50; G(n) = G(n + 5) + 3, если n < 50. Чему равно значение функции F(100)? (Подтемы 3 и 5: две функции, точное деление.)"
+              "markdown": "Алгоритм вычисления значений функций F(n) и G(n), где n — целое число, задан следующими соотношениями: F(n) = F(n − 3) + 7, если n ≥ 15; F(n) = 4 · (G(n + 2) − 3), если n < 15; G(n) = n / 4, если n ≥ 50; G(n) = G(n + 5) + 3, если n < 50. Чему равно значение функции F(100)?"
             }
           }
         ],
@@ -140852,7 +141151,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Подтемы 3 и 5: F уходит вниз шагами по 3, G — вверх шагами по 5; делите точно."
+              "markdown": "F идёт вниз шагами по 3, G — вверх шагами по 5. В базе G дробь — не заменяй / на //."
             }
           }
         ],
@@ -140860,15 +141159,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "325: от 100 до 13 двадцать девять переходов F дают 203; G(15) = G(50) + 7 · 3 = 12,5 + 21 = 33,5, F(13) = 4 · 30,5 = 122. С `//` в базе G получилось бы 323."
+              "markdown": "F: от 100 до 13 — двадцать девять переходов по 7, это 203. F(13) = 4 · (G(15) − 3). G: 15, 20, …, 50 — семь переходов по 3, G(15) = 50 / 4 + 21 = 33,5. F(13) = 4 · 30,5 = 122, F(100) = 122 + 203 = 325. С // в базе G получилось бы 323."
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "def G(n):\n    if n >= 50:\n        return n / 4\n    return G(n + 5) + 3\n\n\ndef F(n):\n    if n >= 15:\n        return F(n - 3) + 7\n    return 4 * (G(n + 2) - 3)\n\n\nprint(int(F(100)))",
-              "caption": "Решение программой"
+              "code": "from fractions import Fraction\n\n\ndef G(n):\n    if n >= 50:\n        return Fraction(n, 4)\n    return G(n + 5) + 3\n\n\ndef F(n):\n    if n >= 15:\n        return F(n - 3) + 7\n    return 4 * (G(n + 2) - 3)\n\n\nprint(F(100))",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `325`"
             }
           }
         ],
@@ -140877,7 +141182,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 56,
+            "position": 54,
             "material_id": "rekursiya"
           }
         ],
@@ -834813,59 +835118,39 @@
       "id": "rekursiya",
       "sections": [
         "kak-ustroena-tema",
-        "zapis-f-n",
-        "rekursivnoe-opredelenie",
-        "podstanovka",
-        "do-bazy-i-obratno",
-        "tablica-predydushchih",
+        "baza-i-shag",
+        "vniz-i-obratno",
+        "vetvi",
+        "baza-sverhu",
         "opredelenie-itogo",
         "po-opredeleniyu",
-        "baza-i-sootnoshenie",
+        "vetvi-v-programme",
         "dohodyat-do-bazy",
-        "usloviya-v-opredelenii",
+        "zadacha-temy-programmoj",
         "funkciya-itogo",
-        "tablica-ciklom",
-        "odno-predydushchee",
-        "spisok-znachenij",
-        "dva-poslednih",
-        "po-ubyvaniyu",
-        "svyazannye-funkcii",
-        "summa-predydushchih",
-        "tablica-itogo",
-        "zapominanie",
         "povtornye-vychisleniya",
-        "slovar-znachenij",
         "cache",
-        "dve-problemy",
-        "razmer-argumenta",
-        "skolko-argumentov",
-        "poisk-argumenta",
-        "chislo-vyzovov",
+        "progrev-kesha",
+        "tablica-ciklom",
+        "dve-funkcii",
         "vyzovy-itogo",
-        "smotret-na-vyrazhenie",
+        "otnoshenie",
         "raznost",
-        "proizvedenie",
         "obshchee-neizvestnoe",
-        "cepochki",
-        "chetnost-i-sokrashchenie",
-        "perehody-do-bazy",
-        "napravleniya",
+        "vetvi-i-sokrashchenie",
         "arifmetika",
         "bolshie-itogo",
-        "dopolnitelnyj-uroven",
+        "cepochki",
+        "raznye-cepochki",
+        "dve-funkcii-navstrechu",
+        "perebor-n",
+        "cepochki-itogo",
         "cifry-chisla",
         "dvoichnye-cifry",
         "vklad-cifry",
         "perenos",
         "tablica-vkladov",
-        "prostye-mnozhiteli",
-        "dokazat-zakonomernost",
-        "schitaet-itogo",
-        "chisla-do-granicy",
-        "sleva-napravo",
-        "cifry-sleva",
-        "vedushchie-nuli",
-        "podschet-itogo"
+        "schitaet-itogo"
       ],
       "kind": "topic",
       "status": "published",
@@ -834876,11 +835161,10 @@
           "access": "free",
           "sections": [
             "kak-ustroena-tema",
-            "zapis-f-n",
-            "rekursivnoe-opredelenie",
-            "podstanovka",
-            "do-bazy-i-obratno",
-            "tablica-predydushchih",
+            "baza-i-shag",
+            "vniz-i-obratno",
+            "vetvi",
+            "baza-sverhu",
             "opredelenie-itogo"
           ]
         },
@@ -834889,39 +835173,21 @@
           "access": "free",
           "sections": [
             "po-opredeleniyu",
-            "baza-i-sootnoshenie",
+            "vetvi-v-programme",
             "dohodyat-do-bazy",
-            "usloviya-v-opredelenii",
+            "zadacha-temy-programmoj",
             "funkciya-itogo"
-          ]
-        },
-        {
-          "slug": "tablitsa-znacheniy",
-          "access": "free",
-          "sections": [
-            "tablica-ciklom",
-            "odno-predydushchee",
-            "spisok-znachenij",
-            "dva-poslednih",
-            "po-ubyvaniyu",
-            "svyazannye-funkcii",
-            "summa-predydushchih",
-            "tablica-itogo"
           ]
         },
         {
           "slug": "povtornye-vyzovy",
           "access": "free",
           "sections": [
-            "zapominanie",
             "povtornye-vychisleniya",
-            "slovar-znachenij",
             "cache",
-            "dve-problemy",
-            "razmer-argumenta",
-            "skolko-argumentov",
-            "poisk-argumenta",
-            "chislo-vyzovov",
+            "progrev-kesha",
+            "tablica-ciklom",
+            "dve-funkcii",
             "vyzovy-itogo"
           ]
         },
@@ -834929,42 +835195,35 @@
           "slug": "bolshie-argumenty",
           "access": "free",
           "sections": [
-            "smotret-na-vyrazhenie",
+            "otnoshenie",
             "raznost",
-            "proizvedenie",
             "obshchee-neizvestnoe",
-            "cepochki",
-            "chetnost-i-sokrashchenie",
-            "perehody-do-bazy",
-            "napravleniya",
+            "vetvi-i-sokrashchenie",
             "arifmetika",
             "bolshie-itogo"
+          ]
+        },
+        {
+          "slug": "cepochki-i-perebor",
+          "access": "free",
+          "sections": [
+            "cepochki",
+            "raznye-cepochki",
+            "dve-funkcii-navstrechu",
+            "perebor-n",
+            "cepochki-itogo"
           ]
         },
         {
           "slug": "chto-schitaet-funktsiya",
           "access": "free",
           "sections": [
-            "dopolnitelnyj-uroven",
             "cifry-chisla",
             "dvoichnye-cifry",
             "vklad-cifry",
             "perenos",
             "tablica-vkladov",
-            "prostye-mnozhiteli",
-            "dokazat-zakonomernost",
             "schitaet-itogo"
-          ]
-        },
-        {
-          "slug": "podschet-po-tsifram",
-          "access": "free",
-          "sections": [
-            "chisla-do-granicy",
-            "sleva-napravo",
-            "cifry-sleva",
-            "vedushchie-nuli",
-            "podschet-itogo"
           ]
         }
       ],

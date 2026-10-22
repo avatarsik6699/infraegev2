@@ -4,7 +4,7 @@ test("topic routes redirect legacy section links to their owning subtopic", asyn
   topicLessonPage,
 }) => {
   await topicLessonPage.expectLegacySectionRedirect(
-    "baza-i-sootnoshenie",
+    "dohodyat-do-bazy",
     "rekursivnaya-funktsiya",
     "Рекурсивная функция на Python",
   );

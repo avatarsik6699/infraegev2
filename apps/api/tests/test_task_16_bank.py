@@ -1,10 +1,10 @@
-"""Independent answer and content checks for the EGE topic 16 lesson «Рекурсивные алгоритмы».
+"""Independent answer and content checks for the EGE topic 16 lesson «Рекуррентные выражения».
 
 The lesson computes recursively with ``@cache``. Here every answer is recomputed another
-way: tables filled by loops instead of recursion, closed forms for call counts, exact
-fractions for divisions, brute force over strings of digits and a digit-sum polynomial
-for the counts the lesson gets by digit dynamic programming. The bank's own solution
-programs must print the same answers.
+way: tables filled by loops instead of recursion, factorials and exact fractions for
+divisions, brute force over strings of digits. The bank's own solution programs must
+print the same answers. The two digit-DP tasks are archived with their subtopic
+(Change 197).
 """
 
 import subprocess
@@ -64,45 +64,6 @@ def _ones(n: int) -> int:
     return bin(n).count("1")
 
 
-def _sum_count(digits: int, target: int) -> int:
-    """Numbers with at most ``digits`` digits and digit sum ``target``:
-    the coefficient of x^target in (1 + x + … + x⁹)^digits."""
-    poly = [1]
-    for _ in range(digits):
-        out = [0] * (len(poly) + 9)
-        for i, c in enumerate(poly):
-            for d in range(10):
-                out[i + d] += c
-        poly = out
-    return poly[target] if target < len(poly) else 0
-
-
-def _product_count(bound: int, target: int, base: int) -> int:
-    """Numbers 1 ≤ n ≤ bound whose base-``base`` digits multiply to ``target``,
-    by the digits of the bound from the left, states as a counter."""
-    digits = []
-    while bound:
-        digits.append(bound % base)
-        bound //= base
-    digits.reverse()
-    # (product so far or None before the first non-zero digit, tight) -> count
-    states = {(None, True): 1}
-    for top in digits:
-        nxt: dict = {}
-        for (made, tight), count in states.items():
-            for d in range(top + 1 if tight else base):
-                if made is None and d == 0:
-                    key = (None, tight and d == top)
-                else:
-                    value = (1 if made is None else made) * d
-                    if value == 0 or target % value:
-                        continue
-                    key = (value, tight and d == top)
-                nxt[key] = nxt.get(key, 0) + count
-        states = nxt
-    return sum(c for (made, _), c in states.items() if made == target)
-
-
 def _first(start: int, test) -> int:
     n = start
     while not test(n):
@@ -117,7 +78,7 @@ def answers() -> dict[str, str]:
     a["task-16-1-01"] = str(f[5])
     f = _table({1: 2}, 4, lambda v, n: 3 * v[n - 1] - 1)
     a["task-16-1-02"] = str(f[4])
-    a["task-16-1-03"] = " ".join(str(x) for x in (3 * 4 - 2, 3 * 5 - 3, 3 * 6 - 2, 2 * 7))
+    a["task-16-1-03"] = str((3 * 6 - 2) - 2 * (3 * 3 - 2))
     f = _table({1: 2, 2: 3}, 6, lambda v, n: v[n - 1] + 2 * v[n - 2])
     a["task-16-1-06"] = str(f[6])
     f = _table({1: 1, 2: 1, 3: 1}, 10, lambda v, n: v[n - 1] + v[n - 3])
@@ -126,7 +87,7 @@ def answers() -> dict[str, str]:
     a["task-16-1-08"] = str(f[6])
     a["task-16-1-09"] = str(prod(range(3, 7)))
 
-    a["task-16-2-02"] = " ".join(str(n) for n in (9, 10, 12) if n % 3 == 0)
+    a["task-16-2-02"] = " ".join(str(n) for n in (10, 11, 12) if n % 3 == 0)
     a["task-16-2-03"] = str(22 + 2 * len(range(4, 20, 3)))
     a["task-16-2-04"] = str(33 - len(range(17, 31, 4)))
     f = _table({1: 1, 2: 2}, 12, lambda v, n: v[n - 1] + n if n % 2 == 0 else 2 * v[n - 2])
@@ -145,8 +106,9 @@ def answers() -> dict[str, str]:
     for _ in range(3):
         x, y = pairs[-1]
         pairs.append((x + y, 2 * x))
-    a["task-16-3-04"] = f"{pairs[-1][0]} {pairs[-1][1]}"
-    a["task-16-3-06"] = str(3 * 2**4)
+    a["task-16-3-04"] = str(sum(pairs[-1]))
+    f = _table({1: 1}, 100, lambda v, n: v[n - 1] + v[n // 2])
+    a["task-16-3-06"] = str(f[100])
     f = _down({40: 2, 41: 2}, 30, 39, lambda v, n: v[n + 1] + v[n + 2])
     a["task-16-3-07"] = str(f[30])
     x, y = 1, 1
@@ -154,11 +116,13 @@ def answers() -> dict[str, str]:
         x, y = x + 2 * y, x + y
     a["task-16-3-08"] = str(x + y)
 
-    fib = [0, 1, 1, 2, 3, 5, 8]
-    a["task-16-4-01"] = f"{2 * fib[6] - 1} {1 + 2 * (6 - 2)} 6"
-    a["task-16-4-02"] = f"{2**4} {2**5 - 1} {1 + 2 * 4}"
-    a["task-16-4-03"] = f"{(3**5 - 1) // 2} 5"
-    a["task-16-4-05"] = f"{(10**6).bit_length()} {(10**6).bit_length() - 1}"
+    f = _table({1: 1, 2: 1}, 70, lambda v, n: v[n - 1] + v[n - 2])
+    a["task-16-4-01"] = str(f[70])
+    f = _down({5000: 5000, 5001: 5001}, 1, 4999, lambda v, n: v[n + 2] + 1)
+    a["task-16-4-02"] = str(f[1])
+    f = _table({1: 1, 2: 1, 3: 1}, 40, lambda v, n: v[n - 1] + v[n - 2] + v[n - 3])
+    a["task-16-4-03"] = str(f[40])
+    a["task-16-4-05"] = str((10**6).bit_length() - 1)
     a["task-16-4-06"] = str(sum(_ones(n) == 3 for n in range(1, 101)))
     a["task-16-4-07"] = str(1 + sum(n % 7 for n in range(2, 3001)))
     a["task-16-4-08"] = str(sum(_ones(n) == 4 for n in range(1, 701)))
@@ -169,13 +133,13 @@ def answers() -> dict[str, str]:
     )
     a["task-16-4-09"] = str(_first(1, lambda n: f[n] > 2000))
 
-    a["task-16-5-01"] = str((factorial(102) + 3 * factorial(101)) // factorial(100))
+    a["task-16-5-01"] = str((factorial(102) - 2 * factorial(101)) // factorial(100))
     f = _table({1: 1, 2: 1, 3: 1}, 101, lambda v, n: v[n - 2] + n)
     a["task-16-5-02"] = str(f[101] - f[95])
     f = _table({1: 1, 2: 1, 3: 1}, 40, lambda v, n: v[n - 3] + 2 * n)
     a["task-16-5-03"] = str(2 * f[40] - f[37] - f[34])
     f = _table({n: n for n in range(1, 7)}, 51, lambda v, n: v[n - 4] + 5)
-    a["task-16-5-04"] = f"{f[50]} {f[51]}"
+    a["task-16-5-04"] = str(f[51] - f[50])
     f = _table(
         {1: 1, 2: 1},
         10,
@@ -186,8 +150,7 @@ def answers() -> dict[str, str]:
     fv = _table({n: 2 * g[n + 1] for n in range(1, 20)}, 48, lambda v, n: v[n - 5] + 10)
     a["task-16-5-07"] = str(fv[48])
     g = _down({n: Fraction(n, 4) for n in range(20, 23)}, 1, 19, lambda v, n: v[n + 3] + 2)
-    h = _down({n: n // 4 for n in range(20, 23)}, 1, 19, lambda v, n: v[n + 3] + 2)
-    a["task-16-5-08"] = f"{4 * g[1]} {4 * h[1]}"
+    a["task-16-5-08"] = str(4 * g[1])
     a["task-16-5-09"] = str(
         (prod(range(3, 2033)) - 3 * prod(range(3, 2032))) // prod(range(3, 2031))
     )
@@ -204,27 +167,16 @@ def answers() -> dict[str, str]:
     a["task-16-6-05"] = str(sum(_digit_sum(n) > _digit_sum(n + 1) for n in range(1000, 5001)))
     a["task-16-6-06"] = str(_first(1, lambda n: _digit_sum(n) - _digit_sum(n + 1) == 26))
 
-    def twos_fives(n: int) -> int:
-        score = 0
-        while n % 2 == 0:
-            n //= 2
-            score += 2
-        while n % 5 == 0:
-            n //= 5
-            score += 3
-        return score
-
-    a["task-16-6-07"] = str(_first(1, lambda n: twos_fives(n) == 13))
+    f = _down({2000: 2000, 2001: 2001}, 20, 1999, lambda v, n: n + v[n + 2])
+    a["task-16-6-07"] = str(f[21] - f[20])
     a["task-16-6-09"] = str(sum(even_sum(n) == 0 for n in range(10**5, 3 * 10**5 + 1)))
     a["task-16-6-10"] = str(sum(_ones(n) == 3 for n in range(2**20)))
 
     a["task-16-7-01"] = str(sum(_digit_sum(n) == 5 for n in range(1, 1000)))
     a["task-16-7-02"] = str(sum(_digit_sum(n) == 9 for n in range(100, 501)))
     a["task-16-7-03"] = str(sum(prod(int(c) for c in str(n)) == 12 for n in range(1, 1001)))
-    a["task-16-7-05"] = str(sum(_ones(n) == 3 for n in range(1, 101)))
+    a["task-16-7-05"] = str(sum(_ones(n) == 3 for n in range(1, 256)))
     a["task-16-7-06"] = str(sum(_digit_sum(n) == 13 for n in range(1000, 5001)))
-    a["task-16-7-07"] = str(_sum_count(12, 100))
-    a["task-16-7-08"] = str(_product_count(2**40, 30, 12))
 
     f = _table({1: 2, 2: 4}, 21, lambda v, n: v[n - 1] + n if n % 2 == 0 else 2 * v[n - 2] + n)
     a["task-16-8-01"] = str(f[21])
@@ -241,13 +193,13 @@ def answers() -> dict[str, str]:
 def test_every_answer_matches_independent_recomputation(answers: dict[str, str]) -> None:
     tasks = _entries()
     assert sorted(tasks) == sorted(answers)
-    assert sorted(t.lessons[0].position for t in tasks.values()) == list(range(57))
+    assert sorted(t.lessons[0].position for t in tasks.values()) == list(range(55))
     for task_id, task in tasks.items():
         assert task.checker.answer_variants[0] == answers[task_id], task_id
         assert task.exam_numbers == [16] and not task.catalog_visible and not task.archived
         on_final_page = task_id.startswith("task-16-8-")
         assert bool(task.theory_links) != on_final_page, task_id
-        advanced = task_id.startswith(("task-16-6-", "task-16-7-"))
+        advanced = task_id.startswith(("task-16-6-", "task-16-7-")) and task_id != "task-16-6-07"
         assert task.lessons[0].counts_toward_mastery == (not advanced), task_id
 
 

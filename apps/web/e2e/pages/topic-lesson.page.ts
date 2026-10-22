@@ -25,8 +25,8 @@ const recursionLessonConfig: TopicLessonPageConfig = {
   route: "/ege/16-rekursiya/funktsiya-cherez-sebya",
   title: "Рекуррентные выражения",
   taskNumber: 16,
-  taskCount: 57,
-  masteryTaskCount: 42,
+  taskCount: 55,
+  masteryTaskCount: 43,
   diagramCount: 8,
 };
 

@@ -77,8 +77,8 @@ function compiles(code: string): boolean {
   return check.status === 0;
 }
 
-describe("task 16 recursion lesson (Change 184)", () => {
-  it("has five core subtopics, two advanced and their self-checks", () => {
+describe("task 16 recursion lesson (Change 197)", () => {
+  it("has five core subtopics, one advanced and their self-checks", () => {
     expect(lesson).toMatchObject({
       id: "rekursiya",
       routeSlug: "16-rekursiya",
@@ -91,14 +91,13 @@ describe("task 16 recursion lesson (Change 184)", () => {
     expect(subtopics.map(({ slug, level }) => [slug, level])).toEqual([
       ["funktsiya-cherez-sebya", "core"],
       ["rekursivnaya-funktsiya", "core"],
-      ["tablitsa-znacheniy", "core"],
       ["povtornye-vyzovy", "core"],
       ["bolshie-argumenty", "core"],
+      ["cepochki-i-perebor", "core"],
       ["chto-schitaet-funktsiya", "advanced"],
-      ["podschet-po-tsifram", "advanced"],
     ]);
     expect(subtopics.map(({ checkpoint }) => checkpoint?.length ?? 0)).toEqual([
-      2, 1, 2, 1, 1, 2, 1,
+      5, 5, 5, 5, 5, 4,
     ]);
     expect(lesson.examFocus).toBeDefined();
     expect(lesson.result).toBeDefined();
@@ -163,7 +162,7 @@ describe("task 16 recursion lesson (Change 184)", () => {
           prelude += piece.code + "\n";
       }
     }
-    expect(ran).toBe(22);
+    expect(ran).toBe(13);
   }, 60_000);
 
   it("keeps spaces around inline code, links and emphasis", () => {
@@ -187,7 +186,7 @@ describe("task 16 recursion lesson (Change 184)", () => {
       container.querySelectorAll("figure[data-lesson-diagram]"),
     ).toHaveLength(diagrams.length);
     expect(media.filter((item) => item.kind === "stepper")).toHaveLength(1);
-    expect(media.filter((item) => item.kind === "run")).toHaveLength(3);
+    expect(media.filter((item) => item.kind === "run")).toHaveLength(1);
     expect(container.querySelectorAll("img, video")).toHaveLength(0);
     expect(container.querySelectorAll("[data-topic-cheat-sheet]")).toHaveLength(
       1,

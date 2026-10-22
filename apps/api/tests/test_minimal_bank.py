@@ -1784,7 +1784,7 @@ def test_recursion_lesson_tasks_check_answers_and_link_to_real_sections():
         for link in entry.task.lessons
         if link.material_id == "rekursiya"
     )
-    assert [position for position, _ in lesson_tasks] == list(range(57))
+    assert [position for position, _ in lesson_tasks] == list(range(55))
     for _, task in lesson_tasks:
         answer = task.checker.answer_variants[0]
         assert is_correct(task.checker, answer), task.id

@@ -2,9 +2,9 @@
 
 Every number on a figure is computed here from the same data as the picture.
 
-``rec_unfold_stepper(n)`` — F(1) = 2, F(n) = F(n − 1) + 3n by hand: the
-requests go down to the base, the pending calls wait with their «+ 3n», then
-the results come back up.
+``rec_unfold_stepper(n)`` — the function of the topic task, F(1) = 1,
+F(n) = n · F(n − 1), by hand: the calls in a row, the requests go down to the
+base above them, the answers come back below.
 ``rec_chains(starts, delta, base, kind, lo)`` — chains of arguments on a
 number line: where a chain reaches the base (n = base, n ≤ base or n ≥ base)
 and where it jumps over it.
@@ -12,69 +12,123 @@ and where it jumps over it.
 f[n − 1] and f[n − 2] left to right, f[n] from f[n + 1] right to left.
 ``rec_fib_tree(n)`` — the calls of the Fibonacci function without memory and
 with ``@cache``, side by side.
+``rec_ratio(big, small, coef)`` — the topic task: F(big) and coef · F(big − 1)
+written down to F(small); the common factor cancels in the ratio.
 ``rec_diff(big, small)`` — F(big) contains F(small) and the added 3k; the
 common part cancels in the difference.
-``rec_doubling(starts, limit)`` — F(n) = n + F(2n): how many doublings each
-start needs to pass the limit and the resulting G(n) = F(n) / n.
+``rec_pairs(lo, top)`` — F(n) = n + F(n + 2) up to the base n ≥ top: the
+chains of lo + 1 and lo never meet, their terms are subtracted in pairs.
 ``rec_carry(n)`` — n and n + 1 digit by digit: trailing nines turn into
 zeros, the digit before them grows by 1.
-``rec_bound_prefixes(bound)`` — numbers up to a bound built left to right:
-which first digits leave the rest free and which keep it tied to the bound.
 """
 
 from __future__ import annotations
 
-from figures import ACCENT, FAINT, INK, MUTED, WASH, _stack_frame, _stepper, _text, ru_count
+from figures import ACCENT, FAINT, INK, MUTED, WASH, _stepper, _text, ru_count
 
 W = 660
 
 
 def _num(n: int) -> str:
-    """12 586 → «12 586», −4 → «−4»: thin spaces as in the lesson text."""
-    s = f"{abs(n):,}".replace(",", " ")
+    """12 586 → «12 586», 2026 → «2026», −4 → «−4»: as in the lesson text,
+    only numbers of five digits and more are grouped."""
+    s = f"{abs(n):,}".replace(",", "\u202f") if abs(n) >= 10_000 else str(abs(n))
     return ("−" if n < 0 else "") + s
 
 
-# --- subtopic 1: unfolding F(4) -------------------------------------------
+# --- subtopic 1: unfolding F(n) of the topic task -----------------------------
 
 
-def rec_unfold_frames(n: int = 4) -> list[tuple[str, str]]:
-    """F(1) = 2, F(n) = F(n − 1) + 3n: requests down, results up."""
-    frames, stack = [], []
+def _unfold_frame(calls, note, returned: dict) -> str:
+    """The calls F(n), F(n − 1), … left to right: arcs above are the requests
+    down to the base, arcs below carry the answers back; ``calls`` holds
+    (call, line 2, line 3, current)."""
+    box, gap, x0, y = 116, 12, 16, 62
+    out = [f'<svg viewBox="0 0 {W} 200" role="img" aria-hidden="true">']
+    out.append(_text(16, 22, note[0], 14, INK, weight=600))
+    out.append(_text(16 + 9 * len(note[0]) + 12, 22, note[1], 14, MUTED))
+    for i, (call, two, three, hot) in enumerate(calls):
+        x = x0 + i * (box + gap)
+        out.append(
+            f'<rect x="{x}" y="{y}" width="{box}" height="70" rx="8" fill="{WASH if hot else "#fff"}" '
+            f'stroke="{ACCENT if hot else INK}" stroke-width="{2 if hot else 1.25}"/>'
+        )
+        out.append(_text(x + 12, y + 24, call, 15, INK, weight=600))
+        done = three.startswith("= ") and i in returned
+        out.append(_text(x + 12, y + 45, two, 13, MUTED))
+        out.append(
+            _text(x + 12, y + 62, three, 13, ACCENT if done else MUTED, weight=600 if done else 400)
+        )
+        if i:
+            x1, x2 = x - gap - box / 2 + 12, x + box / 2 - 12
+            out.append(
+                f'<path d="M {x1:.1f} {y - 4} Q {(x1 + x2) / 2:.1f} {y - 30} {x2 - 6:.1f} {y - 6}" '
+                f'fill="none" stroke="{INK}" stroke-width="1.3"/>'
+                f'<path d="M {x2:.1f} {y - 3} l -9 -4 l 3 -6 Z" fill="{INK}"/>'
+            )
+    for i, value in returned.items():
+        if i == 0:
+            continue
+        x1 = x0 + i * (box + gap) + box / 2 - 12
+        x2 = x0 + (i - 1) * (box + gap) + box / 2 + 12
+        yb = y + 74
+        out.append(
+            f'<path d="M {x1:.1f} {yb} Q {(x1 + x2) / 2:.1f} {yb + 28} {x2 + 6:.1f} {yb + 2}" '
+            f'fill="none" stroke="{ACCENT}" stroke-width="1.5"/>'
+            f'<path d="M {x2:.1f} {yb - 1} l 9 4 l -3 6 Z" fill="{ACCENT}"/>'
+        )
+        out.append(_text((x1 + x2) / 2, yb + 36, _num(value), 13, ACCENT, "middle", 600))
+    out.append(_text(W - 16, 22, "сверху — запросы, снизу — ответы", 12, MUTED, "end"))
+    out.append("</svg>")
+    return "".join(out)
+
+
+def rec_unfold_frames(n: int = 5) -> list[tuple[str, str]]:
+    """F(1) = 1, F(n) = n · F(n − 1): requests down, results up."""
+    frames, calls = [], []
     for k in range(n, 0, -1):
+        for c in calls:
+            c[3] = False
         if k > 1:
-            stack.append([f"F({k})", f"ждёт F({k - 1}), + {3 * k}", None])
-            note = ("запрос", f"F({k}) = F({k - 1}) + {3 * k}")
+            calls.append([f"F({k})", f"ждёт F({k - 1}),", f"потом · {k}", True])
+            note = ("запрос", f"F({k}) = {k} · F({k - 1})")
             caption = (
-                f"F({k}) = F({k - 1}) + 3 · {k}. Значения F({k - 1}) ещё нет, "
-                f"поэтому F({k}) ждёт и помнит, что потом прибавит {3 * k}."
+                f"F({k}) = {k} · F({k - 1}). Значения F({k - 1}) ещё нет, поэтому "
+                f"F({k}) ждёт и помнит, что потом умножит его на {k}."
             )
         else:
-            stack.append(["F(1)", "база: 2", None])
-            note = ("база", "F(1) = 2")
-            caption = "F(1) = 2 дано в условии — это база, новых запросов нет."
-        frames.append((_stack_frame(stack, note), caption))
-    value = 2
+            calls.append(["F(1)", "база", "= 1", True])
+            note = ("база", "F(1) = 1")
+            caption = "F(1) = 1 дано в условии — это база, новых запросов нет."
+        frames.append((_unfold_frame(calls, note, {}), caption))
+    returned: dict = {}
+    value = 1
     for k in range(1, n + 1):
-        if k > 1:
-            value += 3 * k
-        stack[-1][2] = value
+        i = n - k
+        for c in calls:
+            c[3] = False
+        prev = value
+        value *= k
+        calls[i][3] = True
         if k == 1:
-            note = ("возврат", "F(1) = 2")
-            caption = "F(1) возвращает 2 тому, кто его ждал, — вызову F(2)."
+            returned[i] = 1
+            note = ("ответ", "F(1) = 1 уходит к F(2)")
+            caption = "F(1) возвращает 1 тому, кто его ждал, — вызову F(2)."
         else:
-            note = ("возврат", f"F({k}) = {value - 3 * k} + {3 * k} = {value}")
+            calls[i][1] = f"= {k} · {_num(prev)}"
+            calls[i][2] = f"= {_num(value)}"
+            returned[i] = value
+            note = ("ответ", f"F({k}) = {k} · {_num(prev)} = {_num(value)}")
             caption = (
-                f"F({k}) получил F({k - 1}) = {value - 3 * k} и выполнил отложенное "
-                f"действие: {value - 3 * k} + {3 * k} = {value}."
-                + (" Стек пуст — ответ готов." if k == n else "")
+                f"F({k}) получил F({k - 1}) = {_num(prev)} и выполнил отложенное "
+                f"действие: {k} · {_num(prev)} = {_num(value)}."
+                + (" Ждущих вызовов не осталось — ответ готов." if k == n else "")
             )
-        frames.append((_stack_frame(stack, note), caption))
-        stack.pop()
+        frames.append((_unfold_frame(calls, note, dict(returned)), caption))
     return frames
 
 
-def rec_unfold_stepper(n: int = 4) -> str:
+def rec_unfold_stepper(n: int = 5) -> str:
     return _stepper(rec_unfold_frames(n))
 
 
@@ -185,16 +239,17 @@ def rec_chains(starts, delta: int, base: int, kind: str = "eq", lo: int | None =
 
 
 def rec_fill_order(n_up: int = 6, top: int = 10, n_down: int = 7) -> str:
-    """Two tables: F(n) = F(n − 1) + 2F(n − 2) left to right and
-    F(n) = n + F(n + 1) right to left; arrows show what each cell uses."""
-    up = {1: 1, 2: 3}
+    """Two tables: the Fibonacci numbers F(n) = F(n − 1) + F(n − 2) left to right and
+    F(n) = n + F(n + 1) with F(top) = top right to left; arrows show what
+    each cell uses."""
+    up = {1: 1, 2: 1}
     for k in range(3, n_up + 1):
-        up[k] = up[k - 1] + 2 * up[k - 2]
-    down = {top: 1}
+        up[k] = up[k - 1] + up[k - 2]
+    down = {top: top}
     for k in range(top - 1, 0, -1):
         down[k] = k + down[k + 1]
     cell, gap = 62, 8
-    out = [f'<svg viewBox="0 0 {W} 300" role="img" aria-hidden="true">']
+    out = [f'<svg viewBox="0 0 {W} 284" role="img" aria-hidden="true">']
 
     def row(values: dict, keys: list[int], y: int, hot: int, uses: list[int], title: str):
         x0 = 24
@@ -213,14 +268,19 @@ def rec_fill_order(n_up: int = 6, top: int = 10, n_down: int = 7) -> str:
                 _text(x + cell / 2, y + 26, _num(values[k]) if ready else "", 15, INK, "middle")
             )
         hx = x0 + keys.index(hot) * (cell + gap) + cell / 2
-        for u in uses:
+        # each arrow leaves its cell and enters the computed one straight from
+        # below with its own head; the nearer source enters closer to it and
+        # runs shallower, so the arcs never cross
+        side = -1 if keys.index(uses[0]) < keys.index(hot) else 1
+        for rank, u in enumerate(sorted(uses, key=lambda k: abs(keys.index(k) - keys.index(hot)))):
             ux = x0 + keys.index(u) * (cell + gap) + cell / 2
-            mid = (ux + hx) / 2
+            ex = hx + side * (14 - 26 * rank) if len(uses) > 1 else hx
+            deep = y + 64 + 16 * rank
             out.append(
-                f'<path d="M {ux:.1f} {y + 42} Q {mid:.1f} {y + 70} {hx:.1f} {y + 44}" '
+                f'<path d="M {ux:.1f} {y + 42} C {ux:.1f} {deep} {ex:.1f} {deep} {ex:.1f} {y + 52}" '
                 f'fill="none" stroke="{ACCENT}" stroke-width="1.4"/>'
             )
-            out.append(f'<path d="M {hx:.1f} {y + 42} l -4 9 l 8 0 Z" fill="{ACCENT}"/>')
+            out.append(f'<path d="M {ex:.1f} {y + 42} l -4.5 10 l 9 0 Z" fill="{ACCENT}"/>')
 
     keys = list(range(1, n_up + 1))
     shown = {k: v for k, v in up.items() if k <= n_up}
@@ -230,7 +290,7 @@ def rec_fill_order(n_up: int = 6, top: int = 10, n_down: int = 7) -> str:
         58,
         n_up,
         [n_up - 1, n_up - 2],
-        f"F(n) = F(n − 1) + 2F(n − 2): слева направо, f[{n_up}] = {shown[n_up - 1]} + 2 · {shown[n_up - 2]} = {shown[n_up]}",
+        f"F(n) = F(n − 1) + F(n − 2): слева направо, f[{n_up}] = {shown[n_up - 1]} + {shown[n_up - 2]} = {shown[n_up]}",
     )
     keys = list(range(n_down, top + 1))
     shown = {k: down[k] for k in keys}
@@ -246,7 +306,7 @@ def rec_fill_order(n_up: int = 6, top: int = 10, n_down: int = 7) -> str:
     return "".join(out)
 
 
-# --- subtopic 4: Fibonacci calls ---------------------------------------------
+# --- subtopic 3: Fibonacci calls ---------------------------------------------
 
 
 def _fib_tree(k: int, memo: set, cache: bool):
@@ -356,7 +416,69 @@ def rec_fib_tree(n: int = 5) -> str:
     )
 
 
-# --- subtopic 5: a difference that cancels -------------------------------------
+# --- subtopic 4: expand and cancel -------------------------------------------
+
+
+def rec_ratio(big: int = 2026, small: int = 2024, coef: int = 3) -> str:
+    """(F(big) + coef · F(big − 1)) / F(small) for F(n) = n · F(n − 1): both
+    terms written down to F(small), whose box is common and cancels."""
+    rows = [
+        (f"F({big})", [str(k) for k in range(big, small, -1)]),
+        (f"{coef} · F({big - 1})", [str(coef)] + [str(k) for k in range(big - 1, small, -1)]),
+    ]
+    cols = big - small
+    x0, box, gap, tail = 150, 74, 26, 112
+    out = [
+        f'<svg viewBox="0 0 {W} 232" role="img" aria-label="F({big}) и {coef} · F({big - 1}), '
+        f'расписанные до общего множителя F({small})">'
+    ]
+    for r, (label, factors) in enumerate(rows):
+        y = 24 + r * 66
+        out.append(_text(16, y + 27, label, 15, INK, weight=600))
+        out.append(_text(x0 - 14, y + 27, "=", 16, MUTED, "middle"))
+        for i, f in enumerate(factors):
+            x = x0 + i * (box + gap)
+            first = i == 0
+            out.append(
+                f'<rect x="{x}" y="{y}" width="{box}" height="42" rx="6" fill="#fff" '
+                f'stroke="{ACCENT if first else INK}" stroke-width="{1.6 if first else 1.25}"/>'
+            )
+            out.append(_text(x + box / 2, y + 27, _num(int(f)), 15, INK, "middle", 500))
+            out.append(_text(x + box + gap / 2, y + 27, "·", 18, MUTED, "middle"))
+        x = x0 + cols * (box + gap)
+        out.append(
+            f'<rect x="{x}" y="{y}" width="{tail}" height="42" rx="6" fill="{WASH}" '
+            f'stroke="{MUTED}" stroke-width="1.25"/>'
+        )
+        out.append(_text(x + tail / 2, y + 27, f"F({small})", 15, MUTED, "middle"))
+    x = x0 + cols * (box + gap) + tail + 12
+    out.append(
+        f'<path d="M {x} 26 h 8 v 128 h -8" fill="none" stroke="{ACCENT}" stroke-width="1.5"/>'
+    )
+    out.append(_text(x + 18, 84, "общий", 13, ACCENT))
+    out.append(_text(x + 18, 102, "множитель —", 13, ACCENT))
+    out.append(_text(x + 18, 120, "сокращается", 13, ACCENT))
+    rest = 1
+    for k in range(big - 1, small, -1):
+        rest *= k
+    answer = (big + coef) * rest
+    out.append(
+        _text(
+            16,
+            204,
+            f"делим на F({small}): ({_num(big)} + {coef}) · "
+            f"{' · '.join(_num(k) for k in range(big - 1, small, -1))} = {_num(answer)}",
+            16,
+            ACCENT,
+            weight=600,
+        )
+    )
+    out.append(_text(16, 226, "отмечены множители, которые различаются", 13, MUTED))
+    out.append("</svg>")
+    return "".join(out)
+
+
+# --- subtopic 4: a difference that cancels -------------------------------------
 
 
 def rec_diff(big: int = 2026, small: int = 2023) -> str:
@@ -401,58 +523,63 @@ def rec_diff(big: int = 2026, small: int = 2023) -> str:
     return "".join(out)
 
 
-def rec_doubling(starts=(6, 7, 12, 13), limit: int = 100, mark: int = 7) -> str:
-    """F(n) = n + F(2n) up to the limit: doublings and G(n) = F(n) / n."""
-    rows = []
-    for s in starts:
-        seq = [s]
-        while seq[-1] <= limit:
-            seq.append(seq[-1] * 2)
-        rows.append(seq)
+# --- subtopic 5: chains of different parity -----------------------------------
 
-    def g_of(s: int) -> int:
-        seq = [s]
-        while seq[-1] <= limit:
-            seq.append(seq[-1] * 2)
-        return sum(seq) // s
 
-    target = g_of(mark)
-    box, gap = 58, 14
-    height = 30 + 52 * len(rows)
-    out = [f'<svg viewBox="0 0 {W} {height}" role="img" aria-hidden="true">']
-    for r, seq in enumerate(rows):
-        y = 20 + r * 52
-        for i, v in enumerate(seq):
-            x = 16 + i * (box + gap)
-            over = v > limit
+def rec_pairs(lo: int = 10, top: int = 1000) -> str:
+    """F(n) = n + F(n + 2) for n < top, F(n) = n for n ≥ top: the terms of
+    F(lo + 1) and F(lo) in columns, each pair differs by 1."""
+    odd = list(range(lo + 1, top, 2)) + [top + 1 if (top - lo) % 2 == 0 else top]
+    even = list(range(lo, top, 2)) + [top if (top - lo) % 2 == 0 else top + 1]
+    pairs = len(even) - 1
+    shown = [0, 1, 2, None, pairs - 1, pairs]
+    x0, box, gap = 120, 60, 24
+    out = [
+        f'<svg viewBox="0 0 {W} 214" role="img" aria-label="Слагаемые F({lo + 1}) и F({lo}) '
+        'парами: каждая пара отличается на 1">'
+    ]
+    for r, (label, seq) in enumerate(((f"F({lo + 1})", odd), (f"F({lo})", even))):
+        y = 22 + r * 58
+        out.append(_text(16, y + 26, label, 15, INK, weight=600))
+        for c, i in enumerate(shown):
+            x = x0 + c * (box + gap)
+            if i is None:
+                out.append(_text(x - gap / 2, y + 26, "+", 14, MUTED, "middle"))
+                out.append(_text(x + box / 2, y + 26, "…", 18, MUTED, "middle"))
+                continue
+            base = i == pairs
             out.append(
-                f'<rect x="{x}" y="{y}" width="{box}" height="34" rx="6" fill="{WASH if over else "#fff"}" '
-                f'stroke="{ACCENT if over else INK}" stroke-width="{1.5 if over else 1.25}"/>'
+                f'<rect x="{x}" y="{y}" width="{box}" height="40" rx="6" '
+                f'fill="{WASH if base else "#fff"}" stroke="{MUTED if base else INK}" '
+                'stroke-width="1.25"/>'
             )
-            out.append(_text(x + box / 2, y + 22, _num(v), 14, INK, "middle"))
-            if i:
-                out.append(
-                    f'<line x1="{x - gap + 2}" y1="{y + 17}" x2="{x - 3}" y2="{y + 17}" stroke="{MUTED}"/>'
-                    f'<path d="M {x - 2} {y + 17} l -6 -3.5 l 0 7 Z" fill="{MUTED}"/>'
-                )
-        k = len(seq) - 1
-        total = sum(seq)
-        g = total // seq[0]
-        out.append(
-            _text(
-                16 + 6 * (box + gap) + 8,
-                y + 22,
-                f"{ru_count(k, 'удвоение', 'удвоения', 'удвоений')}, G = {g}",
-                14,
-                ACCENT if g == target else MUTED,
-                weight=500 if g == target else 400,
-            )
+            out.append(_text(x + box / 2, y + 26, _num(seq[i]), 15, INK, "middle", 500))
+            if c:
+                out.append(_text(x - gap / 2, y + 26, "+", 14, MUTED, "middle"))
+    for c, i in enumerate(shown):
+        if i is None:
+            continue
+        x = x0 + c * (box + gap) + box / 2
+        out.append(_text(x, 140, f"{_num(odd[i] - even[i])}", 15, ACCENT, "middle", 600))
+    last = x0 + (len(shown) - 1) * (box + gap) + box / 2
+    out.append(_text(last, 160, "база", 12, MUTED, "middle"))
+    out.append(_text(16, 140, "разность", 13, MUTED))
+    out.append(
+        _text(
+            16,
+            196,
+            f"{ru_count(pairs, 'пара', 'пары', 'пар')} по 1 и разность баз "
+            f"{_num(odd[-1] - even[-1])}: F({lo + 1}) − F({lo}) = {_num(sum(odd) - sum(even))}",
+            15,
+            ACCENT,
+            weight=600,
         )
+    )
     out.append("</svg>")
     return "".join(out)
 
 
-# --- subtopic 6: carry and digits of a bound ---------------------------------------
+# --- subtopic 6: carry -------------------------------------------------------
 
 
 def rec_carry(n: int = 2399) -> str:
@@ -498,54 +625,15 @@ def rec_carry(n: int = 2399) -> str:
     return "".join(out)
 
 
-def rec_bound_prefixes(bound: int = 250) -> str:
-    """Numbers 000 … bound written with the same number of digits: a prefix
-    smaller than the bound's prefix leaves the rest free."""
-    digits = [int(c) for c in str(bound)]
-    k = len(digits)
-    out = [f'<svg viewBox="0 0 {W} {20 + 86 * k}" role="img" aria-hidden="true">']
-    prefix = ""
-    for level, top in enumerate(digits):
-        y = 16 + level * 86
-        rest = k - level - 1
-        out.append(_text(16, y + 25, f"позиция {level + 1}", 13, MUTED))
-        x = 100
-        for d in range(top + 1):
-            tight = d == top
-            label = prefix + str(d) + "_" * rest
-            w = 18 + 11 * len(label)
-            out.append(
-                f'<rect x="{x}" y="{y}" width="{w}" height="38" rx="6" '
-                f'fill="{"#fff" if tight else WASH}" stroke="{ACCENT if tight else MUTED}" '
-                f'stroke-width="{1.6 if tight else 1.1}"/>'
-            )
-            out.append(_text(x + w / 2, y + 25, label, 14, INK, "middle", 500))
-            x += w + 8
-        free = top * 10**rest
-        if rest and top:
-            note = (
-                f"{ru_count(free, 'число', 'числа', 'чисел')} с началом меньше "
-                f"{prefix + str(top)}: дальше любые цифры; {prefix + str(top)} — снова по границе"
-            )
-        elif rest:
-            note = f"меньших начал нет: {prefix}0 — снова по границе"
-        else:
-            note = "последняя цифра — только 0" if top == 0 else f"последняя цифра — от 0 до {top}"
-        out.append(_text(100, y + 60, note, 13, MUTED))
-        prefix += str(top)
-    out.append("</svg>")
-    return "".join(out)
-
-
 RECURSION_FIGURES: dict = {
     "rec_unfold_stepper": rec_unfold_stepper,
     "rec_chains": rec_chains,
     "rec_fill_order": rec_fill_order,
     "rec_fib_tree": rec_fib_tree,
+    "rec_ratio": rec_ratio,
     "rec_diff": rec_diff,
-    "rec_doubling": rec_doubling,
+    "rec_pairs": rec_pairs,
     "rec_carry": rec_carry,
-    "rec_bound_prefixes": rec_bound_prefixes,
 }
 RECURSION_STEPPERS: dict = {"rec_unfold_stepper": rec_unfold_frames}
 RECURSION_WIDGETS: dict = {}

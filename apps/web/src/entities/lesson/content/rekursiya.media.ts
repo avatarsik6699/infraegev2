@@ -3,49 +3,59 @@
 import type { LessonMediaTypes } from "~/shared/components/learning-content";
 
 export const lessonMedia = {
-  // %%rec_unfold_stepper(4)%%
-  recUnfoldStepper4: {
+  // %%rec_unfold_stepper(5)%%
+  recUnfoldStepper5: {
     kind: "stepper",
     width: 660,
-    height: 330,
+    height: 200,
     frames: [
       {
-        svg: '<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" viewBox="0 0 660 330"><rect x="16" y="240" width="330" height="42" rx="8" fill="#f3f3f1" stroke="#ff6a00" stroke-width="2"/><text x="30.0" y="267.0" font-family="inherit" font-size="16" font-weight="600" fill="#17191e" text-anchor="start" style="font-variant-numeric:tabular-nums">F(4)</text><text x="170.0" y="267.0" font-family="inherit" font-size="15" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">ждёт F(3), + 12</text><text x="16.0" y="318.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">дно стека — первый вызов</text><text x="370.0" y="40.0" font-family="inherit" font-size="14" font-weight="400" fill="#17191e" text-anchor="start" style="font-variant-numeric:tabular-nums">запрос</text><text x="370.0" y="64.0" font-family="inherit" font-size="14" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">F(4) = F(3) + 12</text></svg>',
+        svg: '<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" viewBox="0 0 660 200"><text x="16.0" y="22.0" font-family="inherit" font-size="14" font-weight="600" fill="#17191e" text-anchor="start" style="font-variant-numeric:tabular-nums">запрос</text><text x="82.0" y="22.0" font-family="inherit" font-size="14" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">F(5) = 5 · F(4)</text><rect x="16" y="62" width="116" height="70" rx="8" fill="#f3f3f1" stroke="#ff6a00" stroke-width="2"/><text x="28.0" y="86.0" font-family="inherit" font-size="15" font-weight="600" fill="#17191e" text-anchor="start" style="font-variant-numeric:tabular-nums">F(5)</text><text x="28.0" y="107.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">ждёт F(4),</text><text x="28.0" y="124.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">потом · 5</text><text x="644.0" y="22.0" font-family="inherit" font-size="12" font-weight="400" fill="#4d535e" text-anchor="end" style="font-variant-numeric:tabular-nums">сверху — запросы, снизу — ответы</text></svg>',
         caption:
-          "F(4) = F(3) + 3 · 4. Значения F(3) ещё нет, поэтому F(4) ждёт и помнит, что потом прибавит 12.",
+          "F(5) = 5 · F(4). Значения F(4) ещё нет, поэтому F(5) ждёт и помнит, что потом умножит его на 5.",
       },
       {
-        svg: '<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" viewBox="0 0 660 330"><rect x="16" y="240" width="330" height="42" rx="8" fill="#fff" stroke="#17191e" stroke-width="1.25"/><text x="30.0" y="267.0" font-family="inherit" font-size="16" font-weight="600" fill="#17191e" text-anchor="start" style="font-variant-numeric:tabular-nums">F(4)</text><text x="170.0" y="267.0" font-family="inherit" font-size="15" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">ждёт F(3), + 12</text><rect x="16" y="190" width="330" height="42" rx="8" fill="#f3f3f1" stroke="#ff6a00" stroke-width="2"/><text x="30.0" y="217.0" font-family="inherit" font-size="16" font-weight="600" fill="#17191e" text-anchor="start" style="font-variant-numeric:tabular-nums">F(3)</text><text x="170.0" y="217.0" font-family="inherit" font-size="15" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">ждёт F(2), + 9</text><text x="16.0" y="318.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">дно стека — первый вызов</text><text x="370.0" y="40.0" font-family="inherit" font-size="14" font-weight="400" fill="#17191e" text-anchor="start" style="font-variant-numeric:tabular-nums">запрос</text><text x="370.0" y="64.0" font-family="inherit" font-size="14" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">F(3) = F(2) + 9</text></svg>',
+        svg: '<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" viewBox="0 0 660 200"><text x="16.0" y="22.0" font-family="inherit" font-size="14" font-weight="600" fill="#17191e" text-anchor="start" style="font-variant-numeric:tabular-nums">запрос</text><text x="82.0" y="22.0" font-family="inherit" font-size="14" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">F(4) = 4 · F(3)</text><rect x="16" y="62" width="116" height="70" rx="8" fill="#fff" stroke="#17191e" stroke-width="1.25"/><text x="28.0" y="86.0" font-family="inherit" font-size="15" font-weight="600" fill="#17191e" text-anchor="start" style="font-variant-numeric:tabular-nums">F(5)</text><text x="28.0" y="107.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">ждёт F(4),</text><text x="28.0" y="124.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">потом · 5</text><rect x="144" y="62" width="116" height="70" rx="8" fill="#f3f3f1" stroke="#ff6a00" stroke-width="2"/><text x="156.0" y="86.0" font-family="inherit" font-size="15" font-weight="600" fill="#17191e" text-anchor="start" style="font-variant-numeric:tabular-nums">F(4)</text><text x="156.0" y="107.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">ждёт F(3),</text><text x="156.0" y="124.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">потом · 4</text><path d="M 86.0 58 Q 138.0 32 184.0 56" fill="none" stroke="#17191e" stroke-width="1.3"/><path d="M 190.0 59 l -9 -4 l 3 -6 Z" fill="#17191e"/><text x="644.0" y="22.0" font-family="inherit" font-size="12" font-weight="400" fill="#4d535e" text-anchor="end" style="font-variant-numeric:tabular-nums">сверху — запросы, снизу — ответы</text></svg>',
         caption:
-          "F(3) = F(2) + 3 · 3. Значения F(2) ещё нет, поэтому F(3) ждёт и помнит, что потом прибавит 9.",
+          "F(4) = 4 · F(3). Значения F(3) ещё нет, поэтому F(4) ждёт и помнит, что потом умножит его на 4.",
       },
       {
-        svg: '<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" viewBox="0 0 660 330"><rect x="16" y="240" width="330" height="42" rx="8" fill="#fff" stroke="#17191e" stroke-width="1.25"/><text x="30.0" y="267.0" font-family="inherit" font-size="16" font-weight="600" fill="#17191e" text-anchor="start" style="font-variant-numeric:tabular-nums">F(4)</text><text x="170.0" y="267.0" font-family="inherit" font-size="15" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">ждёт F(3), + 12</text><rect x="16" y="190" width="330" height="42" rx="8" fill="#fff" stroke="#17191e" stroke-width="1.25"/><text x="30.0" y="217.0" font-family="inherit" font-size="16" font-weight="600" fill="#17191e" text-anchor="start" style="font-variant-numeric:tabular-nums">F(3)</text><text x="170.0" y="217.0" font-family="inherit" font-size="15" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">ждёт F(2), + 9</text><rect x="16" y="140" width="330" height="42" rx="8" fill="#f3f3f1" stroke="#ff6a00" stroke-width="2"/><text x="30.0" y="167.0" font-family="inherit" font-size="16" font-weight="600" fill="#17191e" text-anchor="start" style="font-variant-numeric:tabular-nums">F(2)</text><text x="170.0" y="167.0" font-family="inherit" font-size="15" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">ждёт F(1), + 6</text><text x="16.0" y="318.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">дно стека — первый вызов</text><text x="370.0" y="40.0" font-family="inherit" font-size="14" font-weight="400" fill="#17191e" text-anchor="start" style="font-variant-numeric:tabular-nums">запрос</text><text x="370.0" y="64.0" font-family="inherit" font-size="14" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">F(2) = F(1) + 6</text></svg>',
+        svg: '<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" viewBox="0 0 660 200"><text x="16.0" y="22.0" font-family="inherit" font-size="14" font-weight="600" fill="#17191e" text-anchor="start" style="font-variant-numeric:tabular-nums">запрос</text><text x="82.0" y="22.0" font-family="inherit" font-size="14" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">F(3) = 3 · F(2)</text><rect x="16" y="62" width="116" height="70" rx="8" fill="#fff" stroke="#17191e" stroke-width="1.25"/><text x="28.0" y="86.0" font-family="inherit" font-size="15" font-weight="600" fill="#17191e" text-anchor="start" style="font-variant-numeric:tabular-nums">F(5)</text><text x="28.0" y="107.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">ждёт F(4),</text><text x="28.0" y="124.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">потом · 5</text><rect x="144" y="62" width="116" height="70" rx="8" fill="#fff" stroke="#17191e" stroke-width="1.25"/><text x="156.0" y="86.0" font-family="inherit" font-size="15" font-weight="600" fill="#17191e" text-anchor="start" style="font-variant-numeric:tabular-nums">F(4)</text><text x="156.0" y="107.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">ждёт F(3),</text><text x="156.0" y="124.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">потом · 4</text><path d="M 86.0 58 Q 138.0 32 184.0 56" fill="none" stroke="#17191e" stroke-width="1.3"/><path d="M 190.0 59 l -9 -4 l 3 -6 Z" fill="#17191e"/><rect x="272" y="62" width="116" height="70" rx="8" fill="#f3f3f1" stroke="#ff6a00" stroke-width="2"/><text x="284.0" y="86.0" font-family="inherit" font-size="15" font-weight="600" fill="#17191e" text-anchor="start" style="font-variant-numeric:tabular-nums">F(3)</text><text x="284.0" y="107.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">ждёт F(2),</text><text x="284.0" y="124.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">потом · 3</text><path d="M 214.0 58 Q 266.0 32 312.0 56" fill="none" stroke="#17191e" stroke-width="1.3"/><path d="M 318.0 59 l -9 -4 l 3 -6 Z" fill="#17191e"/><text x="644.0" y="22.0" font-family="inherit" font-size="12" font-weight="400" fill="#4d535e" text-anchor="end" style="font-variant-numeric:tabular-nums">сверху — запросы, снизу — ответы</text></svg>',
         caption:
-          "F(2) = F(1) + 3 · 2. Значения F(1) ещё нет, поэтому F(2) ждёт и помнит, что потом прибавит 6.",
+          "F(3) = 3 · F(2). Значения F(2) ещё нет, поэтому F(3) ждёт и помнит, что потом умножит его на 3.",
       },
       {
-        svg: '<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" viewBox="0 0 660 330"><rect x="16" y="240" width="330" height="42" rx="8" fill="#fff" stroke="#17191e" stroke-width="1.25"/><text x="30.0" y="267.0" font-family="inherit" font-size="16" font-weight="600" fill="#17191e" text-anchor="start" style="font-variant-numeric:tabular-nums">F(4)</text><text x="170.0" y="267.0" font-family="inherit" font-size="15" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">ждёт F(3), + 12</text><rect x="16" y="190" width="330" height="42" rx="8" fill="#fff" stroke="#17191e" stroke-width="1.25"/><text x="30.0" y="217.0" font-family="inherit" font-size="16" font-weight="600" fill="#17191e" text-anchor="start" style="font-variant-numeric:tabular-nums">F(3)</text><text x="170.0" y="217.0" font-family="inherit" font-size="15" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">ждёт F(2), + 9</text><rect x="16" y="140" width="330" height="42" rx="8" fill="#fff" stroke="#17191e" stroke-width="1.25"/><text x="30.0" y="167.0" font-family="inherit" font-size="16" font-weight="600" fill="#17191e" text-anchor="start" style="font-variant-numeric:tabular-nums">F(2)</text><text x="170.0" y="167.0" font-family="inherit" font-size="15" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">ждёт F(1), + 6</text><rect x="16" y="90" width="330" height="42" rx="8" fill="#f3f3f1" stroke="#ff6a00" stroke-width="2"/><text x="30.0" y="117.0" font-family="inherit" font-size="16" font-weight="600" fill="#17191e" text-anchor="start" style="font-variant-numeric:tabular-nums">F(1)</text><text x="170.0" y="117.0" font-family="inherit" font-size="15" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">база: 2</text><text x="16.0" y="318.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">дно стека — первый вызов</text><text x="370.0" y="40.0" font-family="inherit" font-size="14" font-weight="400" fill="#17191e" text-anchor="start" style="font-variant-numeric:tabular-nums">база</text><text x="370.0" y="64.0" font-family="inherit" font-size="14" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">F(1) = 2</text></svg>',
-        caption: "F(1) = 2 дано в условии — это база, новых запросов нет.",
-      },
-      {
-        svg: '<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" viewBox="0 0 660 330"><rect x="16" y="240" width="330" height="42" rx="8" fill="#fff" stroke="#17191e" stroke-width="1.25"/><text x="30.0" y="267.0" font-family="inherit" font-size="16" font-weight="600" fill="#17191e" text-anchor="start" style="font-variant-numeric:tabular-nums">F(4)</text><text x="170.0" y="267.0" font-family="inherit" font-size="15" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">ждёт F(3), + 12</text><rect x="16" y="190" width="330" height="42" rx="8" fill="#fff" stroke="#17191e" stroke-width="1.25"/><text x="30.0" y="217.0" font-family="inherit" font-size="16" font-weight="600" fill="#17191e" text-anchor="start" style="font-variant-numeric:tabular-nums">F(3)</text><text x="170.0" y="217.0" font-family="inherit" font-size="15" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">ждёт F(2), + 9</text><rect x="16" y="140" width="330" height="42" rx="8" fill="#fff" stroke="#17191e" stroke-width="1.25"/><text x="30.0" y="167.0" font-family="inherit" font-size="16" font-weight="600" fill="#17191e" text-anchor="start" style="font-variant-numeric:tabular-nums">F(2)</text><text x="170.0" y="167.0" font-family="inherit" font-size="15" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">ждёт F(1), + 6</text><rect x="16" y="90" width="330" height="42" rx="8" fill="#f3f3f1" stroke="#ff6a00" stroke-width="2"/><text x="30.0" y="117.0" font-family="inherit" font-size="16" font-weight="600" fill="#17191e" text-anchor="start" style="font-variant-numeric:tabular-nums">F(1)</text><text x="170.0" y="117.0" font-family="inherit" font-size="15" font-weight="400" fill="#ff6a00" text-anchor="start" style="font-variant-numeric:tabular-nums">→ 2</text><text x="16.0" y="318.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">дно стека — первый вызов</text><text x="370.0" y="40.0" font-family="inherit" font-size="14" font-weight="400" fill="#17191e" text-anchor="start" style="font-variant-numeric:tabular-nums">возврат</text><text x="370.0" y="64.0" font-family="inherit" font-size="14" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">F(1) = 2</text></svg>',
-        caption: "F(1) возвращает 2 тому, кто его ждал, — вызову F(2).",
-      },
-      {
-        svg: '<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" viewBox="0 0 660 330"><rect x="16" y="240" width="330" height="42" rx="8" fill="#fff" stroke="#17191e" stroke-width="1.25"/><text x="30.0" y="267.0" font-family="inherit" font-size="16" font-weight="600" fill="#17191e" text-anchor="start" style="font-variant-numeric:tabular-nums">F(4)</text><text x="170.0" y="267.0" font-family="inherit" font-size="15" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">ждёт F(3), + 12</text><rect x="16" y="190" width="330" height="42" rx="8" fill="#fff" stroke="#17191e" stroke-width="1.25"/><text x="30.0" y="217.0" font-family="inherit" font-size="16" font-weight="600" fill="#17191e" text-anchor="start" style="font-variant-numeric:tabular-nums">F(3)</text><text x="170.0" y="217.0" font-family="inherit" font-size="15" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">ждёт F(2), + 9</text><rect x="16" y="140" width="330" height="42" rx="8" fill="#f3f3f1" stroke="#ff6a00" stroke-width="2"/><text x="30.0" y="167.0" font-family="inherit" font-size="16" font-weight="600" fill="#17191e" text-anchor="start" style="font-variant-numeric:tabular-nums">F(2)</text><text x="170.0" y="167.0" font-family="inherit" font-size="15" font-weight="400" fill="#ff6a00" text-anchor="start" style="font-variant-numeric:tabular-nums">→ 8</text><text x="16.0" y="318.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">дно стека — первый вызов</text><text x="370.0" y="40.0" font-family="inherit" font-size="14" font-weight="400" fill="#17191e" text-anchor="start" style="font-variant-numeric:tabular-nums">возврат</text><text x="370.0" y="64.0" font-family="inherit" font-size="14" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">F(2) = 2 + 6 = 8</text></svg>',
+        svg: '<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" viewBox="0 0 660 200"><text x="16.0" y="22.0" font-family="inherit" font-size="14" font-weight="600" fill="#17191e" text-anchor="start" style="font-variant-numeric:tabular-nums">запрос</text><text x="82.0" y="22.0" font-family="inherit" font-size="14" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">F(2) = 2 · F(1)</text><rect x="16" y="62" width="116" height="70" rx="8" fill="#fff" stroke="#17191e" stroke-width="1.25"/><text x="28.0" y="86.0" font-family="inherit" font-size="15" font-weight="600" fill="#17191e" text-anchor="start" style="font-variant-numeric:tabular-nums">F(5)</text><text x="28.0" y="107.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">ждёт F(4),</text><text x="28.0" y="124.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">потом · 5</text><rect x="144" y="62" width="116" height="70" rx="8" fill="#fff" stroke="#17191e" stroke-width="1.25"/><text x="156.0" y="86.0" font-family="inherit" font-size="15" font-weight="600" fill="#17191e" text-anchor="start" style="font-variant-numeric:tabular-nums">F(4)</text><text x="156.0" y="107.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">ждёт F(3),</text><text x="156.0" y="124.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">потом · 4</text><path d="M 86.0 58 Q 138.0 32 184.0 56" fill="none" stroke="#17191e" stroke-width="1.3"/><path d="M 190.0 59 l -9 -4 l 3 -6 Z" fill="#17191e"/><rect x="272" y="62" width="116" height="70" rx="8" fill="#fff" stroke="#17191e" stroke-width="1.25"/><text x="284.0" y="86.0" font-family="inherit" font-size="15" font-weight="600" fill="#17191e" text-anchor="start" style="font-variant-numeric:tabular-nums">F(3)</text><text x="284.0" y="107.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">ждёт F(2),</text><text x="284.0" y="124.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">потом · 3</text><path d="M 214.0 58 Q 266.0 32 312.0 56" fill="none" stroke="#17191e" stroke-width="1.3"/><path d="M 318.0 59 l -9 -4 l 3 -6 Z" fill="#17191e"/><rect x="400" y="62" width="116" height="70" rx="8" fill="#f3f3f1" stroke="#ff6a00" stroke-width="2"/><text x="412.0" y="86.0" font-family="inherit" font-size="15" font-weight="600" fill="#17191e" text-anchor="start" style="font-variant-numeric:tabular-nums">F(2)</text><text x="412.0" y="107.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">ждёт F(1),</text><text x="412.0" y="124.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">потом · 2</text><path d="M 342.0 58 Q 394.0 32 440.0 56" fill="none" stroke="#17191e" stroke-width="1.3"/><path d="M 446.0 59 l -9 -4 l 3 -6 Z" fill="#17191e"/><text x="644.0" y="22.0" font-family="inherit" font-size="12" font-weight="400" fill="#4d535e" text-anchor="end" style="font-variant-numeric:tabular-nums">сверху — запросы, снизу — ответы</text></svg>',
         caption:
-          "F(2) получил F(1) = 2 и выполнил отложенное действие: 2 + 6 = 8.",
+          "F(2) = 2 · F(1). Значения F(1) ещё нет, поэтому F(2) ждёт и помнит, что потом умножит его на 2.",
       },
       {
-        svg: '<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" viewBox="0 0 660 330"><rect x="16" y="240" width="330" height="42" rx="8" fill="#fff" stroke="#17191e" stroke-width="1.25"/><text x="30.0" y="267.0" font-family="inherit" font-size="16" font-weight="600" fill="#17191e" text-anchor="start" style="font-variant-numeric:tabular-nums">F(4)</text><text x="170.0" y="267.0" font-family="inherit" font-size="15" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">ждёт F(3), + 12</text><rect x="16" y="190" width="330" height="42" rx="8" fill="#f3f3f1" stroke="#ff6a00" stroke-width="2"/><text x="30.0" y="217.0" font-family="inherit" font-size="16" font-weight="600" fill="#17191e" text-anchor="start" style="font-variant-numeric:tabular-nums">F(3)</text><text x="170.0" y="217.0" font-family="inherit" font-size="15" font-weight="400" fill="#ff6a00" text-anchor="start" style="font-variant-numeric:tabular-nums">→ 17</text><text x="16.0" y="318.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">дно стека — первый вызов</text><text x="370.0" y="40.0" font-family="inherit" font-size="14" font-weight="400" fill="#17191e" text-anchor="start" style="font-variant-numeric:tabular-nums">возврат</text><text x="370.0" y="64.0" font-family="inherit" font-size="14" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">F(3) = 8 + 9 = 17</text></svg>',
-        caption:
-          "F(3) получил F(2) = 8 и выполнил отложенное действие: 8 + 9 = 17.",
+        svg: '<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" viewBox="0 0 660 200"><text x="16.0" y="22.0" font-family="inherit" font-size="14" font-weight="600" fill="#17191e" text-anchor="start" style="font-variant-numeric:tabular-nums">база</text><text x="64.0" y="22.0" font-family="inherit" font-size="14" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">F(1) = 1</text><rect x="16" y="62" width="116" height="70" rx="8" fill="#fff" stroke="#17191e" stroke-width="1.25"/><text x="28.0" y="86.0" font-family="inherit" font-size="15" font-weight="600" fill="#17191e" text-anchor="start" style="font-variant-numeric:tabular-nums">F(5)</text><text x="28.0" y="107.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">ждёт F(4),</text><text x="28.0" y="124.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">потом · 5</text><rect x="144" y="62" width="116" height="70" rx="8" fill="#fff" stroke="#17191e" stroke-width="1.25"/><text x="156.0" y="86.0" font-family="inherit" font-size="15" font-weight="600" fill="#17191e" text-anchor="start" style="font-variant-numeric:tabular-nums">F(4)</text><text x="156.0" y="107.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">ждёт F(3),</text><text x="156.0" y="124.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">потом · 4</text><path d="M 86.0 58 Q 138.0 32 184.0 56" fill="none" stroke="#17191e" stroke-width="1.3"/><path d="M 190.0 59 l -9 -4 l 3 -6 Z" fill="#17191e"/><rect x="272" y="62" width="116" height="70" rx="8" fill="#fff" stroke="#17191e" stroke-width="1.25"/><text x="284.0" y="86.0" font-family="inherit" font-size="15" font-weight="600" fill="#17191e" text-anchor="start" style="font-variant-numeric:tabular-nums">F(3)</text><text x="284.0" y="107.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">ждёт F(2),</text><text x="284.0" y="124.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">потом · 3</text><path d="M 214.0 58 Q 266.0 32 312.0 56" fill="none" stroke="#17191e" stroke-width="1.3"/><path d="M 318.0 59 l -9 -4 l 3 -6 Z" fill="#17191e"/><rect x="400" y="62" width="116" height="70" rx="8" fill="#fff" stroke="#17191e" stroke-width="1.25"/><text x="412.0" y="86.0" font-family="inherit" font-size="15" font-weight="600" fill="#17191e" text-anchor="start" style="font-variant-numeric:tabular-nums">F(2)</text><text x="412.0" y="107.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">ждёт F(1),</text><text x="412.0" y="124.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">потом · 2</text><path d="M 342.0 58 Q 394.0 32 440.0 56" fill="none" stroke="#17191e" stroke-width="1.3"/><path d="M 446.0 59 l -9 -4 l 3 -6 Z" fill="#17191e"/><rect x="528" y="62" width="116" height="70" rx="8" fill="#f3f3f1" stroke="#ff6a00" stroke-width="2"/><text x="540.0" y="86.0" font-family="inherit" font-size="15" font-weight="600" fill="#17191e" text-anchor="start" style="font-variant-numeric:tabular-nums">F(1)</text><text x="540.0" y="107.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">база</text><text x="540.0" y="124.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">= 1</text><path d="M 470.0 58 Q 522.0 32 568.0 56" fill="none" stroke="#17191e" stroke-width="1.3"/><path d="M 574.0 59 l -9 -4 l 3 -6 Z" fill="#17191e"/><text x="644.0" y="22.0" font-family="inherit" font-size="12" font-weight="400" fill="#4d535e" text-anchor="end" style="font-variant-numeric:tabular-nums">сверху — запросы, снизу — ответы</text></svg>',
+        caption: "F(1) = 1 дано в условии — это база, новых запросов нет.",
       },
       {
-        svg: '<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" viewBox="0 0 660 330"><rect x="16" y="240" width="330" height="42" rx="8" fill="#f3f3f1" stroke="#ff6a00" stroke-width="2"/><text x="30.0" y="267.0" font-family="inherit" font-size="16" font-weight="600" fill="#17191e" text-anchor="start" style="font-variant-numeric:tabular-nums">F(4)</text><text x="170.0" y="267.0" font-family="inherit" font-size="15" font-weight="400" fill="#ff6a00" text-anchor="start" style="font-variant-numeric:tabular-nums">→ 29</text><text x="16.0" y="318.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">дно стека — первый вызов</text><text x="370.0" y="40.0" font-family="inherit" font-size="14" font-weight="400" fill="#17191e" text-anchor="start" style="font-variant-numeric:tabular-nums">возврат</text><text x="370.0" y="64.0" font-family="inherit" font-size="14" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">F(4) = 17 + 12 = 29</text></svg>',
+        svg: '<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" viewBox="0 0 660 200"><text x="16.0" y="22.0" font-family="inherit" font-size="14" font-weight="600" fill="#17191e" text-anchor="start" style="font-variant-numeric:tabular-nums">ответ</text><text x="73.0" y="22.0" font-family="inherit" font-size="14" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">F(1) = 1 уходит к F(2)</text><rect x="16" y="62" width="116" height="70" rx="8" fill="#fff" stroke="#17191e" stroke-width="1.25"/><text x="28.0" y="86.0" font-family="inherit" font-size="15" font-weight="600" fill="#17191e" text-anchor="start" style="font-variant-numeric:tabular-nums">F(5)</text><text x="28.0" y="107.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">ждёт F(4),</text><text x="28.0" y="124.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">потом · 5</text><rect x="144" y="62" width="116" height="70" rx="8" fill="#fff" stroke="#17191e" stroke-width="1.25"/><text x="156.0" y="86.0" font-family="inherit" font-size="15" font-weight="600" fill="#17191e" text-anchor="start" style="font-variant-numeric:tabular-nums">F(4)</text><text x="156.0" y="107.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">ждёт F(3),</text><text x="156.0" y="124.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">потом · 4</text><path d="M 86.0 58 Q 138.0 32 184.0 56" fill="none" stroke="#17191e" stroke-width="1.3"/><path d="M 190.0 59 l -9 -4 l 3 -6 Z" fill="#17191e"/><rect x="272" y="62" width="116" height="70" rx="8" fill="#fff" stroke="#17191e" stroke-width="1.25"/><text x="284.0" y="86.0" font-family="inherit" font-size="15" font-weight="600" fill="#17191e" text-anchor="start" style="font-variant-numeric:tabular-nums">F(3)</text><text x="284.0" y="107.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">ждёт F(2),</text><text x="284.0" y="124.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">потом · 3</text><path d="M 214.0 58 Q 266.0 32 312.0 56" fill="none" stroke="#17191e" stroke-width="1.3"/><path d="M 318.0 59 l -9 -4 l 3 -6 Z" fill="#17191e"/><rect x="400" y="62" width="116" height="70" rx="8" fill="#fff" stroke="#17191e" stroke-width="1.25"/><text x="412.0" y="86.0" font-family="inherit" font-size="15" font-weight="600" fill="#17191e" text-anchor="start" style="font-variant-numeric:tabular-nums">F(2)</text><text x="412.0" y="107.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">ждёт F(1),</text><text x="412.0" y="124.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">потом · 2</text><path d="M 342.0 58 Q 394.0 32 440.0 56" fill="none" stroke="#17191e" stroke-width="1.3"/><path d="M 446.0 59 l -9 -4 l 3 -6 Z" fill="#17191e"/><rect x="528" y="62" width="116" height="70" rx="8" fill="#f3f3f1" stroke="#ff6a00" stroke-width="2"/><text x="540.0" y="86.0" font-family="inherit" font-size="15" font-weight="600" fill="#17191e" text-anchor="start" style="font-variant-numeric:tabular-nums">F(1)</text><text x="540.0" y="107.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">база</text><text x="540.0" y="124.0" font-family="inherit" font-size="13" font-weight="600" fill="#ff6a00" text-anchor="start" style="font-variant-numeric:tabular-nums">= 1</text><path d="M 470.0 58 Q 522.0 32 568.0 56" fill="none" stroke="#17191e" stroke-width="1.3"/><path d="M 574.0 59 l -9 -4 l 3 -6 Z" fill="#17191e"/><path d="M 574.0 136 Q 522.0 164 476.0 138" fill="none" stroke="#ff6a00" stroke-width="1.5"/><path d="M 470.0 135 l 9 4 l -3 6 Z" fill="#ff6a00"/><text x="522.0" y="172.0" font-family="inherit" font-size="13" font-weight="600" fill="#ff6a00" text-anchor="middle" style="font-variant-numeric:tabular-nums">1</text><text x="644.0" y="22.0" font-family="inherit" font-size="12" font-weight="400" fill="#4d535e" text-anchor="end" style="font-variant-numeric:tabular-nums">сверху — запросы, снизу — ответы</text></svg>',
+        caption: "F(1) возвращает 1 тому, кто его ждал, — вызову F(2).",
+      },
+      {
+        svg: '<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" viewBox="0 0 660 200"><text x="16.0" y="22.0" font-family="inherit" font-size="14" font-weight="600" fill="#17191e" text-anchor="start" style="font-variant-numeric:tabular-nums">ответ</text><text x="73.0" y="22.0" font-family="inherit" font-size="14" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">F(2) = 2 · 1 = 2</text><rect x="16" y="62" width="116" height="70" rx="8" fill="#fff" stroke="#17191e" stroke-width="1.25"/><text x="28.0" y="86.0" font-family="inherit" font-size="15" font-weight="600" fill="#17191e" text-anchor="start" style="font-variant-numeric:tabular-nums">F(5)</text><text x="28.0" y="107.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">ждёт F(4),</text><text x="28.0" y="124.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">потом · 5</text><rect x="144" y="62" width="116" height="70" rx="8" fill="#fff" stroke="#17191e" stroke-width="1.25"/><text x="156.0" y="86.0" font-family="inherit" font-size="15" font-weight="600" fill="#17191e" text-anchor="start" style="font-variant-numeric:tabular-nums">F(4)</text><text x="156.0" y="107.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">ждёт F(3),</text><text x="156.0" y="124.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">потом · 4</text><path d="M 86.0 58 Q 138.0 32 184.0 56" fill="none" stroke="#17191e" stroke-width="1.3"/><path d="M 190.0 59 l -9 -4 l 3 -6 Z" fill="#17191e"/><rect x="272" y="62" width="116" height="70" rx="8" fill="#fff" stroke="#17191e" stroke-width="1.25"/><text x="284.0" y="86.0" font-family="inherit" font-size="15" font-weight="600" fill="#17191e" text-anchor="start" style="font-variant-numeric:tabular-nums">F(3)</text><text x="284.0" y="107.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">ждёт F(2),</text><text x="284.0" y="124.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">потом · 3</text><path d="M 214.0 58 Q 266.0 32 312.0 56" fill="none" stroke="#17191e" stroke-width="1.3"/><path d="M 318.0 59 l -9 -4 l 3 -6 Z" fill="#17191e"/><rect x="400" y="62" width="116" height="70" rx="8" fill="#f3f3f1" stroke="#ff6a00" stroke-width="2"/><text x="412.0" y="86.0" font-family="inherit" font-size="15" font-weight="600" fill="#17191e" text-anchor="start" style="font-variant-numeric:tabular-nums">F(2)</text><text x="412.0" y="107.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">= 2 · 1</text><text x="412.0" y="124.0" font-family="inherit" font-size="13" font-weight="600" fill="#ff6a00" text-anchor="start" style="font-variant-numeric:tabular-nums">= 2</text><path d="M 342.0 58 Q 394.0 32 440.0 56" fill="none" stroke="#17191e" stroke-width="1.3"/><path d="M 446.0 59 l -9 -4 l 3 -6 Z" fill="#17191e"/><rect x="528" y="62" width="116" height="70" rx="8" fill="#fff" stroke="#17191e" stroke-width="1.25"/><text x="540.0" y="86.0" font-family="inherit" font-size="15" font-weight="600" fill="#17191e" text-anchor="start" style="font-variant-numeric:tabular-nums">F(1)</text><text x="540.0" y="107.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">база</text><text x="540.0" y="124.0" font-family="inherit" font-size="13" font-weight="600" fill="#ff6a00" text-anchor="start" style="font-variant-numeric:tabular-nums">= 1</text><path d="M 470.0 58 Q 522.0 32 568.0 56" fill="none" stroke="#17191e" stroke-width="1.3"/><path d="M 574.0 59 l -9 -4 l 3 -6 Z" fill="#17191e"/><path d="M 574.0 136 Q 522.0 164 476.0 138" fill="none" stroke="#ff6a00" stroke-width="1.5"/><path d="M 470.0 135 l 9 4 l -3 6 Z" fill="#ff6a00"/><text x="522.0" y="172.0" font-family="inherit" font-size="13" font-weight="600" fill="#ff6a00" text-anchor="middle" style="font-variant-numeric:tabular-nums">1</text><path d="M 446.0 136 Q 394.0 164 348.0 138" fill="none" stroke="#ff6a00" stroke-width="1.5"/><path d="M 342.0 135 l 9 4 l -3 6 Z" fill="#ff6a00"/><text x="394.0" y="172.0" font-family="inherit" font-size="13" font-weight="600" fill="#ff6a00" text-anchor="middle" style="font-variant-numeric:tabular-nums">2</text><text x="644.0" y="22.0" font-family="inherit" font-size="12" font-weight="400" fill="#4d535e" text-anchor="end" style="font-variant-numeric:tabular-nums">сверху — запросы, снизу — ответы</text></svg>',
         caption:
-          "F(4) получил F(3) = 17 и выполнил отложенное действие: 17 + 12 = 29. Стек пуст — ответ готов.",
+          "F(2) получил F(1) = 1 и выполнил отложенное действие: 2 · 1 = 2.",
+      },
+      {
+        svg: '<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" viewBox="0 0 660 200"><text x="16.0" y="22.0" font-family="inherit" font-size="14" font-weight="600" fill="#17191e" text-anchor="start" style="font-variant-numeric:tabular-nums">ответ</text><text x="73.0" y="22.0" font-family="inherit" font-size="14" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">F(3) = 3 · 2 = 6</text><rect x="16" y="62" width="116" height="70" rx="8" fill="#fff" stroke="#17191e" stroke-width="1.25"/><text x="28.0" y="86.0" font-family="inherit" font-size="15" font-weight="600" fill="#17191e" text-anchor="start" style="font-variant-numeric:tabular-nums">F(5)</text><text x="28.0" y="107.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">ждёт F(4),</text><text x="28.0" y="124.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">потом · 5</text><rect x="144" y="62" width="116" height="70" rx="8" fill="#fff" stroke="#17191e" stroke-width="1.25"/><text x="156.0" y="86.0" font-family="inherit" font-size="15" font-weight="600" fill="#17191e" text-anchor="start" style="font-variant-numeric:tabular-nums">F(4)</text><text x="156.0" y="107.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">ждёт F(3),</text><text x="156.0" y="124.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">потом · 4</text><path d="M 86.0 58 Q 138.0 32 184.0 56" fill="none" stroke="#17191e" stroke-width="1.3"/><path d="M 190.0 59 l -9 -4 l 3 -6 Z" fill="#17191e"/><rect x="272" y="62" width="116" height="70" rx="8" fill="#f3f3f1" stroke="#ff6a00" stroke-width="2"/><text x="284.0" y="86.0" font-family="inherit" font-size="15" font-weight="600" fill="#17191e" text-anchor="start" style="font-variant-numeric:tabular-nums">F(3)</text><text x="284.0" y="107.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">= 3 · 2</text><text x="284.0" y="124.0" font-family="inherit" font-size="13" font-weight="600" fill="#ff6a00" text-anchor="start" style="font-variant-numeric:tabular-nums">= 6</text><path d="M 214.0 58 Q 266.0 32 312.0 56" fill="none" stroke="#17191e" stroke-width="1.3"/><path d="M 318.0 59 l -9 -4 l 3 -6 Z" fill="#17191e"/><rect x="400" y="62" width="116" height="70" rx="8" fill="#fff" stroke="#17191e" stroke-width="1.25"/><text x="412.0" y="86.0" font-family="inherit" font-size="15" font-weight="600" fill="#17191e" text-anchor="start" style="font-variant-numeric:tabular-nums">F(2)</text><text x="412.0" y="107.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">= 2 · 1</text><text x="412.0" y="124.0" font-family="inherit" font-size="13" font-weight="600" fill="#ff6a00" text-anchor="start" style="font-variant-numeric:tabular-nums">= 2</text><path d="M 342.0 58 Q 394.0 32 440.0 56" fill="none" stroke="#17191e" stroke-width="1.3"/><path d="M 446.0 59 l -9 -4 l 3 -6 Z" fill="#17191e"/><rect x="528" y="62" width="116" height="70" rx="8" fill="#fff" stroke="#17191e" stroke-width="1.25"/><text x="540.0" y="86.0" font-family="inherit" font-size="15" font-weight="600" fill="#17191e" text-anchor="start" style="font-variant-numeric:tabular-nums">F(1)</text><text x="540.0" y="107.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">база</text><text x="540.0" y="124.0" font-family="inherit" font-size="13" font-weight="600" fill="#ff6a00" text-anchor="start" style="font-variant-numeric:tabular-nums">= 1</text><path d="M 470.0 58 Q 522.0 32 568.0 56" fill="none" stroke="#17191e" stroke-width="1.3"/><path d="M 574.0 59 l -9 -4 l 3 -6 Z" fill="#17191e"/><path d="M 574.0 136 Q 522.0 164 476.0 138" fill="none" stroke="#ff6a00" stroke-width="1.5"/><path d="M 470.0 135 l 9 4 l -3 6 Z" fill="#ff6a00"/><text x="522.0" y="172.0" font-family="inherit" font-size="13" font-weight="600" fill="#ff6a00" text-anchor="middle" style="font-variant-numeric:tabular-nums">1</text><path d="M 446.0 136 Q 394.0 164 348.0 138" fill="none" stroke="#ff6a00" stroke-width="1.5"/><path d="M 342.0 135 l 9 4 l -3 6 Z" fill="#ff6a00"/><text x="394.0" y="172.0" font-family="inherit" font-size="13" font-weight="600" fill="#ff6a00" text-anchor="middle" style="font-variant-numeric:tabular-nums">2</text><path d="M 318.0 136 Q 266.0 164 220.0 138" fill="none" stroke="#ff6a00" stroke-width="1.5"/><path d="M 214.0 135 l 9 4 l -3 6 Z" fill="#ff6a00"/><text x="266.0" y="172.0" font-family="inherit" font-size="13" font-weight="600" fill="#ff6a00" text-anchor="middle" style="font-variant-numeric:tabular-nums">6</text><text x="644.0" y="22.0" font-family="inherit" font-size="12" font-weight="400" fill="#4d535e" text-anchor="end" style="font-variant-numeric:tabular-nums">сверху — запросы, снизу — ответы</text></svg>',
+        caption:
+          "F(3) получил F(2) = 2 и выполнил отложенное действие: 3 · 2 = 6.",
+      },
+      {
+        svg: '<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" viewBox="0 0 660 200"><text x="16.0" y="22.0" font-family="inherit" font-size="14" font-weight="600" fill="#17191e" text-anchor="start" style="font-variant-numeric:tabular-nums">ответ</text><text x="73.0" y="22.0" font-family="inherit" font-size="14" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">F(4) = 4 · 6 = 24</text><rect x="16" y="62" width="116" height="70" rx="8" fill="#fff" stroke="#17191e" stroke-width="1.25"/><text x="28.0" y="86.0" font-family="inherit" font-size="15" font-weight="600" fill="#17191e" text-anchor="start" style="font-variant-numeric:tabular-nums">F(5)</text><text x="28.0" y="107.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">ждёт F(4),</text><text x="28.0" y="124.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">потом · 5</text><rect x="144" y="62" width="116" height="70" rx="8" fill="#f3f3f1" stroke="#ff6a00" stroke-width="2"/><text x="156.0" y="86.0" font-family="inherit" font-size="15" font-weight="600" fill="#17191e" text-anchor="start" style="font-variant-numeric:tabular-nums">F(4)</text><text x="156.0" y="107.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">= 4 · 6</text><text x="156.0" y="124.0" font-family="inherit" font-size="13" font-weight="600" fill="#ff6a00" text-anchor="start" style="font-variant-numeric:tabular-nums">= 24</text><path d="M 86.0 58 Q 138.0 32 184.0 56" fill="none" stroke="#17191e" stroke-width="1.3"/><path d="M 190.0 59 l -9 -4 l 3 -6 Z" fill="#17191e"/><rect x="272" y="62" width="116" height="70" rx="8" fill="#fff" stroke="#17191e" stroke-width="1.25"/><text x="284.0" y="86.0" font-family="inherit" font-size="15" font-weight="600" fill="#17191e" text-anchor="start" style="font-variant-numeric:tabular-nums">F(3)</text><text x="284.0" y="107.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">= 3 · 2</text><text x="284.0" y="124.0" font-family="inherit" font-size="13" font-weight="600" fill="#ff6a00" text-anchor="start" style="font-variant-numeric:tabular-nums">= 6</text><path d="M 214.0 58 Q 266.0 32 312.0 56" fill="none" stroke="#17191e" stroke-width="1.3"/><path d="M 318.0 59 l -9 -4 l 3 -6 Z" fill="#17191e"/><rect x="400" y="62" width="116" height="70" rx="8" fill="#fff" stroke="#17191e" stroke-width="1.25"/><text x="412.0" y="86.0" font-family="inherit" font-size="15" font-weight="600" fill="#17191e" text-anchor="start" style="font-variant-numeric:tabular-nums">F(2)</text><text x="412.0" y="107.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">= 2 · 1</text><text x="412.0" y="124.0" font-family="inherit" font-size="13" font-weight="600" fill="#ff6a00" text-anchor="start" style="font-variant-numeric:tabular-nums">= 2</text><path d="M 342.0 58 Q 394.0 32 440.0 56" fill="none" stroke="#17191e" stroke-width="1.3"/><path d="M 446.0 59 l -9 -4 l 3 -6 Z" fill="#17191e"/><rect x="528" y="62" width="116" height="70" rx="8" fill="#fff" stroke="#17191e" stroke-width="1.25"/><text x="540.0" y="86.0" font-family="inherit" font-size="15" font-weight="600" fill="#17191e" text-anchor="start" style="font-variant-numeric:tabular-nums">F(1)</text><text x="540.0" y="107.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">база</text><text x="540.0" y="124.0" font-family="inherit" font-size="13" font-weight="600" fill="#ff6a00" text-anchor="start" style="font-variant-numeric:tabular-nums">= 1</text><path d="M 470.0 58 Q 522.0 32 568.0 56" fill="none" stroke="#17191e" stroke-width="1.3"/><path d="M 574.0 59 l -9 -4 l 3 -6 Z" fill="#17191e"/><path d="M 574.0 136 Q 522.0 164 476.0 138" fill="none" stroke="#ff6a00" stroke-width="1.5"/><path d="M 470.0 135 l 9 4 l -3 6 Z" fill="#ff6a00"/><text x="522.0" y="172.0" font-family="inherit" font-size="13" font-weight="600" fill="#ff6a00" text-anchor="middle" style="font-variant-numeric:tabular-nums">1</text><path d="M 446.0 136 Q 394.0 164 348.0 138" fill="none" stroke="#ff6a00" stroke-width="1.5"/><path d="M 342.0 135 l 9 4 l -3 6 Z" fill="#ff6a00"/><text x="394.0" y="172.0" font-family="inherit" font-size="13" font-weight="600" fill="#ff6a00" text-anchor="middle" style="font-variant-numeric:tabular-nums">2</text><path d="M 318.0 136 Q 266.0 164 220.0 138" fill="none" stroke="#ff6a00" stroke-width="1.5"/><path d="M 214.0 135 l 9 4 l -3 6 Z" fill="#ff6a00"/><text x="266.0" y="172.0" font-family="inherit" font-size="13" font-weight="600" fill="#ff6a00" text-anchor="middle" style="font-variant-numeric:tabular-nums">6</text><path d="M 190.0 136 Q 138.0 164 92.0 138" fill="none" stroke="#ff6a00" stroke-width="1.5"/><path d="M 86.0 135 l 9 4 l -3 6 Z" fill="#ff6a00"/><text x="138.0" y="172.0" font-family="inherit" font-size="13" font-weight="600" fill="#ff6a00" text-anchor="middle" style="font-variant-numeric:tabular-nums">24</text><text x="644.0" y="22.0" font-family="inherit" font-size="12" font-weight="400" fill="#4d535e" text-anchor="end" style="font-variant-numeric:tabular-nums">сверху — запросы, снизу — ответы</text></svg>',
+        caption:
+          "F(4) получил F(3) = 6 и выполнил отложенное действие: 4 · 6 = 24.",
+      },
+      {
+        svg: '<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" viewBox="0 0 660 200"><text x="16.0" y="22.0" font-family="inherit" font-size="14" font-weight="600" fill="#17191e" text-anchor="start" style="font-variant-numeric:tabular-nums">ответ</text><text x="73.0" y="22.0" font-family="inherit" font-size="14" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">F(5) = 5 · 24 = 120</text><rect x="16" y="62" width="116" height="70" rx="8" fill="#f3f3f1" stroke="#ff6a00" stroke-width="2"/><text x="28.0" y="86.0" font-family="inherit" font-size="15" font-weight="600" fill="#17191e" text-anchor="start" style="font-variant-numeric:tabular-nums">F(5)</text><text x="28.0" y="107.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">= 5 · 24</text><text x="28.0" y="124.0" font-family="inherit" font-size="13" font-weight="600" fill="#ff6a00" text-anchor="start" style="font-variant-numeric:tabular-nums">= 120</text><rect x="144" y="62" width="116" height="70" rx="8" fill="#fff" stroke="#17191e" stroke-width="1.25"/><text x="156.0" y="86.0" font-family="inherit" font-size="15" font-weight="600" fill="#17191e" text-anchor="start" style="font-variant-numeric:tabular-nums">F(4)</text><text x="156.0" y="107.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">= 4 · 6</text><text x="156.0" y="124.0" font-family="inherit" font-size="13" font-weight="600" fill="#ff6a00" text-anchor="start" style="font-variant-numeric:tabular-nums">= 24</text><path d="M 86.0 58 Q 138.0 32 184.0 56" fill="none" stroke="#17191e" stroke-width="1.3"/><path d="M 190.0 59 l -9 -4 l 3 -6 Z" fill="#17191e"/><rect x="272" y="62" width="116" height="70" rx="8" fill="#fff" stroke="#17191e" stroke-width="1.25"/><text x="284.0" y="86.0" font-family="inherit" font-size="15" font-weight="600" fill="#17191e" text-anchor="start" style="font-variant-numeric:tabular-nums">F(3)</text><text x="284.0" y="107.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">= 3 · 2</text><text x="284.0" y="124.0" font-family="inherit" font-size="13" font-weight="600" fill="#ff6a00" text-anchor="start" style="font-variant-numeric:tabular-nums">= 6</text><path d="M 214.0 58 Q 266.0 32 312.0 56" fill="none" stroke="#17191e" stroke-width="1.3"/><path d="M 318.0 59 l -9 -4 l 3 -6 Z" fill="#17191e"/><rect x="400" y="62" width="116" height="70" rx="8" fill="#fff" stroke="#17191e" stroke-width="1.25"/><text x="412.0" y="86.0" font-family="inherit" font-size="15" font-weight="600" fill="#17191e" text-anchor="start" style="font-variant-numeric:tabular-nums">F(2)</text><text x="412.0" y="107.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">= 2 · 1</text><text x="412.0" y="124.0" font-family="inherit" font-size="13" font-weight="600" fill="#ff6a00" text-anchor="start" style="font-variant-numeric:tabular-nums">= 2</text><path d="M 342.0 58 Q 394.0 32 440.0 56" fill="none" stroke="#17191e" stroke-width="1.3"/><path d="M 446.0 59 l -9 -4 l 3 -6 Z" fill="#17191e"/><rect x="528" y="62" width="116" height="70" rx="8" fill="#fff" stroke="#17191e" stroke-width="1.25"/><text x="540.0" y="86.0" font-family="inherit" font-size="15" font-weight="600" fill="#17191e" text-anchor="start" style="font-variant-numeric:tabular-nums">F(1)</text><text x="540.0" y="107.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">база</text><text x="540.0" y="124.0" font-family="inherit" font-size="13" font-weight="600" fill="#ff6a00" text-anchor="start" style="font-variant-numeric:tabular-nums">= 1</text><path d="M 470.0 58 Q 522.0 32 568.0 56" fill="none" stroke="#17191e" stroke-width="1.3"/><path d="M 574.0 59 l -9 -4 l 3 -6 Z" fill="#17191e"/><path d="M 574.0 136 Q 522.0 164 476.0 138" fill="none" stroke="#ff6a00" stroke-width="1.5"/><path d="M 470.0 135 l 9 4 l -3 6 Z" fill="#ff6a00"/><text x="522.0" y="172.0" font-family="inherit" font-size="13" font-weight="600" fill="#ff6a00" text-anchor="middle" style="font-variant-numeric:tabular-nums">1</text><path d="M 446.0 136 Q 394.0 164 348.0 138" fill="none" stroke="#ff6a00" stroke-width="1.5"/><path d="M 342.0 135 l 9 4 l -3 6 Z" fill="#ff6a00"/><text x="394.0" y="172.0" font-family="inherit" font-size="13" font-weight="600" fill="#ff6a00" text-anchor="middle" style="font-variant-numeric:tabular-nums">2</text><path d="M 318.0 136 Q 266.0 164 220.0 138" fill="none" stroke="#ff6a00" stroke-width="1.5"/><path d="M 214.0 135 l 9 4 l -3 6 Z" fill="#ff6a00"/><text x="266.0" y="172.0" font-family="inherit" font-size="13" font-weight="600" fill="#ff6a00" text-anchor="middle" style="font-variant-numeric:tabular-nums">6</text><path d="M 190.0 136 Q 138.0 164 92.0 138" fill="none" stroke="#ff6a00" stroke-width="1.5"/><path d="M 86.0 135 l 9 4 l -3 6 Z" fill="#ff6a00"/><text x="138.0" y="172.0" font-family="inherit" font-size="13" font-weight="600" fill="#ff6a00" text-anchor="middle" style="font-variant-numeric:tabular-nums">24</text><text x="644.0" y="22.0" font-family="inherit" font-size="12" font-weight="400" fill="#4d535e" text-anchor="end" style="font-variant-numeric:tabular-nums">сверху — запросы, снизу — ответы</text></svg>',
+        caption:
+          "F(5) получил F(4) = 24 и выполнил отложенное действие: 5 · 24 = 120. Ждущих вызовов не осталось — ответ готов.",
       },
     ],
   },
@@ -60,9 +70,9 @@ export const lessonMedia = {
   // %%rec_fill_order(6, 10, 7)%%
   recFillOrder6_10_7: {
     kind: "diagram",
-    svg: '<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" viewBox="0 0 660 300"><text x="24.0" y="14.0" font-family="inherit" font-size="14" font-weight="600" fill="#17191e" text-anchor="start" style="font-variant-numeric:tabular-nums">F(n) = F(n − 1) + 2F(n − 2): слева направо, f[6] = 21 + 2 · 11 = 43</text><rect x="24" y="58" width="62" height="40" rx="6" fill="#fff" stroke="#17191e" stroke-width="1.25"/><text x="55.0" y="50.0" font-family="inherit" font-size="12" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">f[1]</text><text x="55.0" y="84.0" font-family="inherit" font-size="15" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">1</text><rect x="94" y="58" width="62" height="40" rx="6" fill="#fff" stroke="#17191e" stroke-width="1.25"/><text x="125.0" y="50.0" font-family="inherit" font-size="12" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">f[2]</text><text x="125.0" y="84.0" font-family="inherit" font-size="15" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">3</text><rect x="164" y="58" width="62" height="40" rx="6" fill="#fff" stroke="#17191e" stroke-width="1.25"/><text x="195.0" y="50.0" font-family="inherit" font-size="12" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">f[3]</text><text x="195.0" y="84.0" font-family="inherit" font-size="15" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">5</text><rect x="234" y="58" width="62" height="40" rx="6" fill="#f3f3f1" stroke="#17191e" stroke-width="1.25"/><text x="265.0" y="50.0" font-family="inherit" font-size="12" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">f[4]</text><text x="265.0" y="84.0" font-family="inherit" font-size="15" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">11</text><rect x="304" y="58" width="62" height="40" rx="6" fill="#f3f3f1" stroke="#17191e" stroke-width="1.25"/><text x="335.0" y="50.0" font-family="inherit" font-size="12" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">f[5]</text><text x="335.0" y="84.0" font-family="inherit" font-size="15" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">21</text><rect x="374" y="58" width="62" height="40" rx="6" fill="#fff" stroke="#ff6a00" stroke-width="2"/><text x="405.0" y="50.0" font-family="inherit" font-size="12" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">f[6]</text><text x="405.0" y="84.0" font-family="inherit" font-size="15" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">43</text><path d="M 335.0 100 Q 370.0 128 405.0 102" fill="none" stroke="#ff6a00" stroke-width="1.4"/><path d="M 405.0 100 l -4 9 l 8 0 Z" fill="#ff6a00"/><path d="M 265.0 100 Q 335.0 128 405.0 102" fill="none" stroke="#ff6a00" stroke-width="1.4"/><path d="M 405.0 100 l -4 9 l 8 0 Z" fill="#ff6a00"/><text x="24.0" y="156.0" font-family="inherit" font-size="14" font-weight="600" fill="#17191e" text-anchor="start" style="font-variant-numeric:tabular-nums">F(n) = n + F(n + 1): справа налево от f[10] = 1, f[7] = 7 + 18 = 25</text><rect x="24" y="200" width="62" height="40" rx="6" fill="#fff" stroke="#ff6a00" stroke-width="2"/><text x="55.0" y="192.0" font-family="inherit" font-size="12" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">f[7]</text><text x="55.0" y="226.0" font-family="inherit" font-size="15" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">25</text><rect x="94" y="200" width="62" height="40" rx="6" fill="#f3f3f1" stroke="#17191e" stroke-width="1.25"/><text x="125.0" y="192.0" font-family="inherit" font-size="12" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">f[8]</text><text x="125.0" y="226.0" font-family="inherit" font-size="15" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">18</text><rect x="164" y="200" width="62" height="40" rx="6" fill="#fff" stroke="#17191e" stroke-width="1.25"/><text x="195.0" y="192.0" font-family="inherit" font-size="12" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">f[9]</text><text x="195.0" y="226.0" font-family="inherit" font-size="15" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">10</text><rect x="234" y="200" width="62" height="40" rx="6" fill="#fff" stroke="#17191e" stroke-width="1.25"/><text x="265.0" y="192.0" font-family="inherit" font-size="12" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">f[10]</text><text x="265.0" y="226.0" font-family="inherit" font-size="15" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">1</text><path d="M 125.0 242 Q 90.0 270 55.0 244" fill="none" stroke="#ff6a00" stroke-width="1.4"/><path d="M 55.0 242 l -4 9 l 8 0 Z" fill="#ff6a00"/></svg>',
+    svg: '<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" viewBox="0 0 660 284"><text x="24.0" y="14.0" font-family="inherit" font-size="14" font-weight="600" fill="#17191e" text-anchor="start" style="font-variant-numeric:tabular-nums">F(n) = F(n − 1) + F(n − 2): слева направо, f[6] = 5 + 3 = 8</text><rect x="24" y="58" width="62" height="40" rx="6" fill="#fff" stroke="#17191e" stroke-width="1.25"/><text x="55.0" y="50.0" font-family="inherit" font-size="12" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">f[1]</text><text x="55.0" y="84.0" font-family="inherit" font-size="15" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">1</text><rect x="94" y="58" width="62" height="40" rx="6" fill="#fff" stroke="#17191e" stroke-width="1.25"/><text x="125.0" y="50.0" font-family="inherit" font-size="12" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">f[2]</text><text x="125.0" y="84.0" font-family="inherit" font-size="15" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">1</text><rect x="164" y="58" width="62" height="40" rx="6" fill="#fff" stroke="#17191e" stroke-width="1.25"/><text x="195.0" y="50.0" font-family="inherit" font-size="12" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">f[3]</text><text x="195.0" y="84.0" font-family="inherit" font-size="15" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">2</text><rect x="234" y="58" width="62" height="40" rx="6" fill="#f3f3f1" stroke="#17191e" stroke-width="1.25"/><text x="265.0" y="50.0" font-family="inherit" font-size="12" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">f[4]</text><text x="265.0" y="84.0" font-family="inherit" font-size="15" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">3</text><rect x="304" y="58" width="62" height="40" rx="6" fill="#f3f3f1" stroke="#17191e" stroke-width="1.25"/><text x="335.0" y="50.0" font-family="inherit" font-size="12" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">f[5]</text><text x="335.0" y="84.0" font-family="inherit" font-size="15" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">5</text><rect x="374" y="58" width="62" height="40" rx="6" fill="#fff" stroke="#ff6a00" stroke-width="2"/><text x="405.0" y="50.0" font-family="inherit" font-size="12" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">f[6]</text><text x="405.0" y="84.0" font-family="inherit" font-size="15" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">8</text><path d="M 335.0 100 C 335.0 122 391.0 122 391.0 110" fill="none" stroke="#ff6a00" stroke-width="1.4"/><path d="M 391.0 100 l -4.5 10 l 9 0 Z" fill="#ff6a00"/><path d="M 265.0 100 C 265.0 138 417.0 138 417.0 110" fill="none" stroke="#ff6a00" stroke-width="1.4"/><path d="M 417.0 100 l -4.5 10 l 9 0 Z" fill="#ff6a00"/><text x="24.0" y="156.0" font-family="inherit" font-size="14" font-weight="600" fill="#17191e" text-anchor="start" style="font-variant-numeric:tabular-nums">F(n) = n + F(n + 1): справа налево от f[10] = 10, f[7] = 7 + 27 = 34</text><rect x="24" y="200" width="62" height="40" rx="6" fill="#fff" stroke="#ff6a00" stroke-width="2"/><text x="55.0" y="192.0" font-family="inherit" font-size="12" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">f[7]</text><text x="55.0" y="226.0" font-family="inherit" font-size="15" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">34</text><rect x="94" y="200" width="62" height="40" rx="6" fill="#f3f3f1" stroke="#17191e" stroke-width="1.25"/><text x="125.0" y="192.0" font-family="inherit" font-size="12" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">f[8]</text><text x="125.0" y="226.0" font-family="inherit" font-size="15" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">27</text><rect x="164" y="200" width="62" height="40" rx="6" fill="#fff" stroke="#17191e" stroke-width="1.25"/><text x="195.0" y="192.0" font-family="inherit" font-size="12" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">f[9]</text><text x="195.0" y="226.0" font-family="inherit" font-size="15" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">19</text><rect x="234" y="200" width="62" height="40" rx="6" fill="#fff" stroke="#17191e" stroke-width="1.25"/><text x="265.0" y="192.0" font-family="inherit" font-size="12" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">f[10]</text><text x="265.0" y="226.0" font-family="inherit" font-size="15" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">10</text><path d="M 125.0 242 C 125.0 264 55.0 264 55.0 252" fill="none" stroke="#ff6a00" stroke-width="1.4"/><path d="M 55.0 242 l -4.5 10 l 9 0 Z" fill="#ff6a00"/></svg>',
     width: 660,
-    height: 300,
+    height: 284,
     alt: "Стрелки ведут от уже готовых ячеек к вычисляемой. Для F(n − 1) и F(n − 2) готовы ячейки слева — таблицу заполняют слева направо; для F(n + 1) готова ячейка справа — справа налево.",
   },
   // %%rec_fib_tree(5)%%
@@ -73,10 +83,18 @@ export const lessonMedia = {
     height: 294,
     alt: "Дерево вызовов F(5) без запоминания и с запоминанием",
   },
+  // %%rec_ratio(2026, 2024, 3)%%
+  recRatio2026_2024_3: {
+    kind: "diagram",
+    svg: '<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" viewBox="0 0 660 232"><text x="16.0" y="51.0" font-family="inherit" font-size="15" font-weight="600" fill="#17191e" text-anchor="start" style="font-variant-numeric:tabular-nums">F(2026)</text><text x="136.0" y="51.0" font-family="inherit" font-size="16" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">=</text><rect x="150" y="24" width="74" height="42" rx="6" fill="#fff" stroke="#ff6a00" stroke-width="1.6"/><text x="187.0" y="51.0" font-family="inherit" font-size="15" font-weight="500" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">2026</text><text x="237.0" y="51.0" font-family="inherit" font-size="18" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">·</text><rect x="250" y="24" width="74" height="42" rx="6" fill="#fff" stroke="#17191e" stroke-width="1.25"/><text x="287.0" y="51.0" font-family="inherit" font-size="15" font-weight="500" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">2025</text><text x="337.0" y="51.0" font-family="inherit" font-size="18" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">·</text><rect x="350" y="24" width="112" height="42" rx="6" fill="#f3f3f1" stroke="#4d535e" stroke-width="1.25"/><text x="406.0" y="51.0" font-family="inherit" font-size="15" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">F(2024)</text><text x="16.0" y="117.0" font-family="inherit" font-size="15" font-weight="600" fill="#17191e" text-anchor="start" style="font-variant-numeric:tabular-nums">3 · F(2025)</text><text x="136.0" y="117.0" font-family="inherit" font-size="16" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">=</text><rect x="150" y="90" width="74" height="42" rx="6" fill="#fff" stroke="#ff6a00" stroke-width="1.6"/><text x="187.0" y="117.0" font-family="inherit" font-size="15" font-weight="500" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">3</text><text x="237.0" y="117.0" font-family="inherit" font-size="18" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">·</text><rect x="250" y="90" width="74" height="42" rx="6" fill="#fff" stroke="#17191e" stroke-width="1.25"/><text x="287.0" y="117.0" font-family="inherit" font-size="15" font-weight="500" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">2025</text><text x="337.0" y="117.0" font-family="inherit" font-size="18" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">·</text><rect x="350" y="90" width="112" height="42" rx="6" fill="#f3f3f1" stroke="#4d535e" stroke-width="1.25"/><text x="406.0" y="117.0" font-family="inherit" font-size="15" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">F(2024)</text><path d="M 474 26 h 8 v 128 h -8" fill="none" stroke="#ff6a00" stroke-width="1.5"/><text x="492.0" y="84.0" font-family="inherit" font-size="13" font-weight="400" fill="#ff6a00" text-anchor="start" style="font-variant-numeric:tabular-nums">общий</text><text x="492.0" y="102.0" font-family="inherit" font-size="13" font-weight="400" fill="#ff6a00" text-anchor="start" style="font-variant-numeric:tabular-nums">множитель —</text><text x="492.0" y="120.0" font-family="inherit" font-size="13" font-weight="400" fill="#ff6a00" text-anchor="start" style="font-variant-numeric:tabular-nums">сокращается</text><text x="16.0" y="204.0" font-family="inherit" font-size="16" font-weight="600" fill="#ff6a00" text-anchor="start" style="font-variant-numeric:tabular-nums">делим на F(2024): (2026 + 3) · 2025 = 4 108 725</text><text x="16.0" y="226.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">отмечены множители, которые различаются</text></svg>',
+    width: 660,
+    height: 232,
+    alt: "F(2026) и 3 · F(2025), расписанные до общего множителя F(2024)",
+  },
   // %%rec_diff(2026, 2023)%%
   recDiff2026_2023: {
     kind: "diagram",
-    svg: '<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" viewBox="0 0 660 196"><text x="16.0" y="66.0" font-family="inherit" font-size="15" font-weight="600" fill="#17191e" text-anchor="start" style="font-variant-numeric:tabular-nums">F(2026)</text><rect x="120" y="40" width="220" height="40" rx="6" fill="#f3f3f1" stroke="#4d535e" stroke-width="1.25"/><text x="230.0" y="66.0" font-family="inherit" font-size="14" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">F(2023)</text><rect x="344.0" y="40" width="94.7" height="40" rx="6" fill="#fff" stroke="#ff6a00" stroke-width="1.5"/><text x="391.3" y="58.0" font-family="inherit" font-size="12" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">3 · 2024</text><text x="391.3" y="74.0" font-family="inherit" font-size="14" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">6 072</text><rect x="442.7" y="40" width="94.7" height="40" rx="6" fill="#fff" stroke="#ff6a00" stroke-width="1.5"/><text x="490.0" y="58.0" font-family="inherit" font-size="12" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">3 · 2025</text><text x="490.0" y="74.0" font-family="inherit" font-size="14" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">6 075</text><rect x="541.3" y="40" width="94.7" height="40" rx="6" fill="#fff" stroke="#ff6a00" stroke-width="1.5"/><text x="588.7" y="58.0" font-family="inherit" font-size="12" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">3 · 2026</text><text x="588.7" y="74.0" font-family="inherit" font-size="14" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">6 078</text><text x="16.0" y="136.0" font-family="inherit" font-size="15" font-weight="600" fill="#17191e" text-anchor="start" style="font-variant-numeric:tabular-nums">F(2023)</text><rect x="120" y="110" width="220" height="40" rx="6" fill="#f3f3f1" stroke="#4d535e" stroke-width="1.25"/><text x="230.0" y="136.0" font-family="inherit" font-size="14" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">F(2023)</text><line x1="342" y1="96" x2="342" y2="160" stroke="#ff6a00" stroke-dasharray="4 3"/><text x="354.0" y="134.0" font-family="inherit" font-size="14" font-weight="500" fill="#ff6a00" text-anchor="start" style="font-variant-numeric:tabular-nums">разность: 6 072 + 6 075 + 6 078</text><text x="354.0" y="156.0" font-family="inherit" font-size="14" font-weight="500" fill="#ff6a00" text-anchor="start" style="font-variant-numeric:tabular-nums">= 18 225</text><text x="120.0" y="186.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">общая часть одинакова в обоих значениях и сокращается</text></svg>',
+    svg: '<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" viewBox="0 0 660 196"><text x="16.0" y="66.0" font-family="inherit" font-size="15" font-weight="600" fill="#17191e" text-anchor="start" style="font-variant-numeric:tabular-nums">F(2026)</text><rect x="120" y="40" width="220" height="40" rx="6" fill="#f3f3f1" stroke="#4d535e" stroke-width="1.25"/><text x="230.0" y="66.0" font-family="inherit" font-size="14" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">F(2023)</text><rect x="344.0" y="40" width="94.7" height="40" rx="6" fill="#fff" stroke="#ff6a00" stroke-width="1.5"/><text x="391.3" y="58.0" font-family="inherit" font-size="12" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">3 · 2024</text><text x="391.3" y="74.0" font-family="inherit" font-size="14" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">6072</text><rect x="442.7" y="40" width="94.7" height="40" rx="6" fill="#fff" stroke="#ff6a00" stroke-width="1.5"/><text x="490.0" y="58.0" font-family="inherit" font-size="12" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">3 · 2025</text><text x="490.0" y="74.0" font-family="inherit" font-size="14" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">6075</text><rect x="541.3" y="40" width="94.7" height="40" rx="6" fill="#fff" stroke="#ff6a00" stroke-width="1.5"/><text x="588.7" y="58.0" font-family="inherit" font-size="12" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">3 · 2026</text><text x="588.7" y="74.0" font-family="inherit" font-size="14" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">6078</text><text x="16.0" y="136.0" font-family="inherit" font-size="15" font-weight="600" fill="#17191e" text-anchor="start" style="font-variant-numeric:tabular-nums">F(2023)</text><rect x="120" y="110" width="220" height="40" rx="6" fill="#f3f3f1" stroke="#4d535e" stroke-width="1.25"/><text x="230.0" y="136.0" font-family="inherit" font-size="14" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">F(2023)</text><line x1="342" y1="96" x2="342" y2="160" stroke="#ff6a00" stroke-dasharray="4 3"/><text x="354.0" y="134.0" font-family="inherit" font-size="14" font-weight="500" fill="#ff6a00" text-anchor="start" style="font-variant-numeric:tabular-nums">разность: 6072 + 6075 + 6078</text><text x="354.0" y="156.0" font-family="inherit" font-size="14" font-weight="500" fill="#ff6a00" text-anchor="start" style="font-variant-numeric:tabular-nums">= 18 225</text><text x="120.0" y="186.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">общая часть одинакова в обоих значениях и сокращается</text></svg>',
     width: 660,
     height: 196,
     alt: "F(2026) — это всё значение F(2023) плюс три прибавления 6072, 6075 и 6078. Общая часть в разности сокращается, остаётся 18 225. Длины полос не в масштабе.",
@@ -89,13 +107,13 @@ export const lessonMedia = {
     height: 218,
     alt: "Шаг −3: цепочка от 20 входит в зону базы n ≤ 5 ровно в 5 после 5 переходов, цепочка от 21 — в 3 после 6 переходов. Конец цепочки зависит от остатка при делении на 3.",
   },
-  // %%rec_doubling((6, 7, 12, 13), 100)%%
-  recDoubling671213_100: {
+  // %%rec_pairs(10, 1000)%%
+  recPairs10_1000: {
     kind: "diagram",
-    svg: '<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" viewBox="0 0 660 238"><rect x="16" y="20" width="58" height="34" rx="6" fill="#fff" stroke="#17191e" stroke-width="1.25"/><text x="45.0" y="42.0" font-family="inherit" font-size="14" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">6</text><rect x="88" y="20" width="58" height="34" rx="6" fill="#fff" stroke="#17191e" stroke-width="1.25"/><text x="117.0" y="42.0" font-family="inherit" font-size="14" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">12</text><line x1="76" y1="37" x2="85" y2="37" stroke="#4d535e"/><path d="M 86 37 l -6 -3.5 l 0 7 Z" fill="#4d535e"/><rect x="160" y="20" width="58" height="34" rx="6" fill="#fff" stroke="#17191e" stroke-width="1.25"/><text x="189.0" y="42.0" font-family="inherit" font-size="14" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">24</text><line x1="148" y1="37" x2="157" y2="37" stroke="#4d535e"/><path d="M 158 37 l -6 -3.5 l 0 7 Z" fill="#4d535e"/><rect x="232" y="20" width="58" height="34" rx="6" fill="#fff" stroke="#17191e" stroke-width="1.25"/><text x="261.0" y="42.0" font-family="inherit" font-size="14" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">48</text><line x1="220" y1="37" x2="229" y2="37" stroke="#4d535e"/><path d="M 230 37 l -6 -3.5 l 0 7 Z" fill="#4d535e"/><rect x="304" y="20" width="58" height="34" rx="6" fill="#fff" stroke="#17191e" stroke-width="1.25"/><text x="333.0" y="42.0" font-family="inherit" font-size="14" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">96</text><line x1="292" y1="37" x2="301" y2="37" stroke="#4d535e"/><path d="M 302 37 l -6 -3.5 l 0 7 Z" fill="#4d535e"/><rect x="376" y="20" width="58" height="34" rx="6" fill="#f3f3f1" stroke="#ff6a00" stroke-width="1.5"/><text x="405.0" y="42.0" font-family="inherit" font-size="14" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">192</text><line x1="364" y1="37" x2="373" y2="37" stroke="#4d535e"/><path d="M 374 37 l -6 -3.5 l 0 7 Z" fill="#4d535e"/><text x="456.0" y="42.0" font-family="inherit" font-size="14" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">5 удвоений, G = 63</text><rect x="16" y="72" width="58" height="34" rx="6" fill="#fff" stroke="#17191e" stroke-width="1.25"/><text x="45.0" y="94.0" font-family="inherit" font-size="14" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">7</text><rect x="88" y="72" width="58" height="34" rx="6" fill="#fff" stroke="#17191e" stroke-width="1.25"/><text x="117.0" y="94.0" font-family="inherit" font-size="14" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">14</text><line x1="76" y1="89" x2="85" y2="89" stroke="#4d535e"/><path d="M 86 89 l -6 -3.5 l 0 7 Z" fill="#4d535e"/><rect x="160" y="72" width="58" height="34" rx="6" fill="#fff" stroke="#17191e" stroke-width="1.25"/><text x="189.0" y="94.0" font-family="inherit" font-size="14" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">28</text><line x1="148" y1="89" x2="157" y2="89" stroke="#4d535e"/><path d="M 158 89 l -6 -3.5 l 0 7 Z" fill="#4d535e"/><rect x="232" y="72" width="58" height="34" rx="6" fill="#fff" stroke="#17191e" stroke-width="1.25"/><text x="261.0" y="94.0" font-family="inherit" font-size="14" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">56</text><line x1="220" y1="89" x2="229" y2="89" stroke="#4d535e"/><path d="M 230 89 l -6 -3.5 l 0 7 Z" fill="#4d535e"/><rect x="304" y="72" width="58" height="34" rx="6" fill="#f3f3f1" stroke="#ff6a00" stroke-width="1.5"/><text x="333.0" y="94.0" font-family="inherit" font-size="14" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">112</text><line x1="292" y1="89" x2="301" y2="89" stroke="#4d535e"/><path d="M 302 89 l -6 -3.5 l 0 7 Z" fill="#4d535e"/><text x="456.0" y="94.0" font-family="inherit" font-size="14" font-weight="500" fill="#ff6a00" text-anchor="start" style="font-variant-numeric:tabular-nums">4 удвоения, G = 31</text><rect x="16" y="124" width="58" height="34" rx="6" fill="#fff" stroke="#17191e" stroke-width="1.25"/><text x="45.0" y="146.0" font-family="inherit" font-size="14" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">12</text><rect x="88" y="124" width="58" height="34" rx="6" fill="#fff" stroke="#17191e" stroke-width="1.25"/><text x="117.0" y="146.0" font-family="inherit" font-size="14" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">24</text><line x1="76" y1="141" x2="85" y2="141" stroke="#4d535e"/><path d="M 86 141 l -6 -3.5 l 0 7 Z" fill="#4d535e"/><rect x="160" y="124" width="58" height="34" rx="6" fill="#fff" stroke="#17191e" stroke-width="1.25"/><text x="189.0" y="146.0" font-family="inherit" font-size="14" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">48</text><line x1="148" y1="141" x2="157" y2="141" stroke="#4d535e"/><path d="M 158 141 l -6 -3.5 l 0 7 Z" fill="#4d535e"/><rect x="232" y="124" width="58" height="34" rx="6" fill="#fff" stroke="#17191e" stroke-width="1.25"/><text x="261.0" y="146.0" font-family="inherit" font-size="14" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">96</text><line x1="220" y1="141" x2="229" y2="141" stroke="#4d535e"/><path d="M 230 141 l -6 -3.5 l 0 7 Z" fill="#4d535e"/><rect x="304" y="124" width="58" height="34" rx="6" fill="#f3f3f1" stroke="#ff6a00" stroke-width="1.5"/><text x="333.0" y="146.0" font-family="inherit" font-size="14" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">192</text><line x1="292" y1="141" x2="301" y2="141" stroke="#4d535e"/><path d="M 302 141 l -6 -3.5 l 0 7 Z" fill="#4d535e"/><text x="456.0" y="146.0" font-family="inherit" font-size="14" font-weight="500" fill="#ff6a00" text-anchor="start" style="font-variant-numeric:tabular-nums">4 удвоения, G = 31</text><rect x="16" y="176" width="58" height="34" rx="6" fill="#fff" stroke="#17191e" stroke-width="1.25"/><text x="45.0" y="198.0" font-family="inherit" font-size="14" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">13</text><rect x="88" y="176" width="58" height="34" rx="6" fill="#fff" stroke="#17191e" stroke-width="1.25"/><text x="117.0" y="198.0" font-family="inherit" font-size="14" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">26</text><line x1="76" y1="193" x2="85" y2="193" stroke="#4d535e"/><path d="M 86 193 l -6 -3.5 l 0 7 Z" fill="#4d535e"/><rect x="160" y="176" width="58" height="34" rx="6" fill="#fff" stroke="#17191e" stroke-width="1.25"/><text x="189.0" y="198.0" font-family="inherit" font-size="14" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">52</text><line x1="148" y1="193" x2="157" y2="193" stroke="#4d535e"/><path d="M 158 193 l -6 -3.5 l 0 7 Z" fill="#4d535e"/><rect x="232" y="176" width="58" height="34" rx="6" fill="#f3f3f1" stroke="#ff6a00" stroke-width="1.5"/><text x="261.0" y="198.0" font-family="inherit" font-size="14" font-weight="400" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">104</text><line x1="220" y1="193" x2="229" y2="193" stroke="#4d535e"/><path d="M 230 193 l -6 -3.5 l 0 7 Z" fill="#4d535e"/><text x="456.0" y="198.0" font-family="inherit" font-size="14" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">3 удвоения, G = 15</text></svg>',
+    svg: '<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" viewBox="0 0 660 214"><text x="16.0" y="48.0" font-family="inherit" font-size="15" font-weight="600" fill="#17191e" text-anchor="start" style="font-variant-numeric:tabular-nums">F(11)</text><rect x="120" y="22" width="60" height="40" rx="6" fill="#fff" stroke="#17191e" stroke-width="1.25"/><text x="150.0" y="48.0" font-family="inherit" font-size="15" font-weight="500" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">11</text><rect x="204" y="22" width="60" height="40" rx="6" fill="#fff" stroke="#17191e" stroke-width="1.25"/><text x="234.0" y="48.0" font-family="inherit" font-size="15" font-weight="500" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">13</text><text x="192.0" y="48.0" font-family="inherit" font-size="14" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">+</text><rect x="288" y="22" width="60" height="40" rx="6" fill="#fff" stroke="#17191e" stroke-width="1.25"/><text x="318.0" y="48.0" font-family="inherit" font-size="15" font-weight="500" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">15</text><text x="276.0" y="48.0" font-family="inherit" font-size="14" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">+</text><text x="360.0" y="48.0" font-family="inherit" font-size="14" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">+</text><text x="402.0" y="48.0" font-family="inherit" font-size="18" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">…</text><rect x="456" y="22" width="60" height="40" rx="6" fill="#fff" stroke="#17191e" stroke-width="1.25"/><text x="486.0" y="48.0" font-family="inherit" font-size="15" font-weight="500" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">999</text><text x="444.0" y="48.0" font-family="inherit" font-size="14" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">+</text><rect x="540" y="22" width="60" height="40" rx="6" fill="#f3f3f1" stroke="#4d535e" stroke-width="1.25"/><text x="570.0" y="48.0" font-family="inherit" font-size="15" font-weight="500" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">1001</text><text x="528.0" y="48.0" font-family="inherit" font-size="14" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">+</text><text x="16.0" y="106.0" font-family="inherit" font-size="15" font-weight="600" fill="#17191e" text-anchor="start" style="font-variant-numeric:tabular-nums">F(10)</text><rect x="120" y="80" width="60" height="40" rx="6" fill="#fff" stroke="#17191e" stroke-width="1.25"/><text x="150.0" y="106.0" font-family="inherit" font-size="15" font-weight="500" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">10</text><rect x="204" y="80" width="60" height="40" rx="6" fill="#fff" stroke="#17191e" stroke-width="1.25"/><text x="234.0" y="106.0" font-family="inherit" font-size="15" font-weight="500" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">12</text><text x="192.0" y="106.0" font-family="inherit" font-size="14" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">+</text><rect x="288" y="80" width="60" height="40" rx="6" fill="#fff" stroke="#17191e" stroke-width="1.25"/><text x="318.0" y="106.0" font-family="inherit" font-size="15" font-weight="500" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">14</text><text x="276.0" y="106.0" font-family="inherit" font-size="14" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">+</text><text x="360.0" y="106.0" font-family="inherit" font-size="14" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">+</text><text x="402.0" y="106.0" font-family="inherit" font-size="18" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">…</text><rect x="456" y="80" width="60" height="40" rx="6" fill="#fff" stroke="#17191e" stroke-width="1.25"/><text x="486.0" y="106.0" font-family="inherit" font-size="15" font-weight="500" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">998</text><text x="444.0" y="106.0" font-family="inherit" font-size="14" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">+</text><rect x="540" y="80" width="60" height="40" rx="6" fill="#f3f3f1" stroke="#4d535e" stroke-width="1.25"/><text x="570.0" y="106.0" font-family="inherit" font-size="15" font-weight="500" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">1000</text><text x="528.0" y="106.0" font-family="inherit" font-size="14" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">+</text><text x="150.0" y="140.0" font-family="inherit" font-size="15" font-weight="600" fill="#ff6a00" text-anchor="middle" style="font-variant-numeric:tabular-nums">1</text><text x="234.0" y="140.0" font-family="inherit" font-size="15" font-weight="600" fill="#ff6a00" text-anchor="middle" style="font-variant-numeric:tabular-nums">1</text><text x="318.0" y="140.0" font-family="inherit" font-size="15" font-weight="600" fill="#ff6a00" text-anchor="middle" style="font-variant-numeric:tabular-nums">1</text><text x="486.0" y="140.0" font-family="inherit" font-size="15" font-weight="600" fill="#ff6a00" text-anchor="middle" style="font-variant-numeric:tabular-nums">1</text><text x="570.0" y="140.0" font-family="inherit" font-size="15" font-weight="600" fill="#ff6a00" text-anchor="middle" style="font-variant-numeric:tabular-nums">1</text><text x="570.0" y="160.0" font-family="inherit" font-size="12" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">база</text><text x="16.0" y="140.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">разность</text><text x="16.0" y="196.0" font-family="inherit" font-size="15" font-weight="600" fill="#ff6a00" text-anchor="start" style="font-variant-numeric:tabular-nums">495 пар по 1 и разность баз 1: F(11) − F(10) = 496</text></svg>',
     width: 660,
-    height: 238,
-    alt: "Удвоения до первого числа больше 100: у 7 и 12 их по четыре, поэтому G = 31; у 6 — пять удвоений, у 13 — три. Подходят ровно числа от 7 до 12.",
+    height: 214,
+    alt: "Слагаемые F(11) и F(10) парами: каждая пара отличается на 1",
   },
   // %%rec_carry(2399)%%
   recCarry2399: {
@@ -105,19 +123,12 @@ export const lessonMedia = {
     height: 200,
     alt: "2399 → 2400: две девятки в конце стали нулями (по −9), тройка перед ними стала четвёркой (+1). Сумма цифр 23 → 6, изменение 1 − 9 · 2 = −17.",
   },
-  // %%rec_bound_prefixes(250)%%
-  recBoundPrefixes250: {
-    kind: "diagram",
-    svg: '<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" viewBox="0 0 660 278"><text x="16.0" y="41.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">позиция 1</text><rect x="100" y="16" width="51" height="38" rx="6" fill="#f3f3f1" stroke="#4d535e" stroke-width="1.1"/><text x="125.5" y="41.0" font-family="inherit" font-size="14" font-weight="500" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">0__</text><rect x="159" y="16" width="51" height="38" rx="6" fill="#f3f3f1" stroke="#4d535e" stroke-width="1.1"/><text x="184.5" y="41.0" font-family="inherit" font-size="14" font-weight="500" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">1__</text><rect x="218" y="16" width="51" height="38" rx="6" fill="#fff" stroke="#ff6a00" stroke-width="1.6"/><text x="243.5" y="41.0" font-family="inherit" font-size="14" font-weight="500" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">2__</text><text x="100.0" y="76.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">200 чисел с началом меньше 2: дальше любые цифры; 2 — снова по границе</text><text x="16.0" y="127.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">позиция 2</text><rect x="100" y="102" width="51" height="38" rx="6" fill="#f3f3f1" stroke="#4d535e" stroke-width="1.1"/><text x="125.5" y="127.0" font-family="inherit" font-size="14" font-weight="500" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">20_</text><rect x="159" y="102" width="51" height="38" rx="6" fill="#f3f3f1" stroke="#4d535e" stroke-width="1.1"/><text x="184.5" y="127.0" font-family="inherit" font-size="14" font-weight="500" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">21_</text><rect x="218" y="102" width="51" height="38" rx="6" fill="#f3f3f1" stroke="#4d535e" stroke-width="1.1"/><text x="243.5" y="127.0" font-family="inherit" font-size="14" font-weight="500" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">22_</text><rect x="277" y="102" width="51" height="38" rx="6" fill="#f3f3f1" stroke="#4d535e" stroke-width="1.1"/><text x="302.5" y="127.0" font-family="inherit" font-size="14" font-weight="500" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">23_</text><rect x="336" y="102" width="51" height="38" rx="6" fill="#f3f3f1" stroke="#4d535e" stroke-width="1.1"/><text x="361.5" y="127.0" font-family="inherit" font-size="14" font-weight="500" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">24_</text><rect x="395" y="102" width="51" height="38" rx="6" fill="#fff" stroke="#ff6a00" stroke-width="1.6"/><text x="420.5" y="127.0" font-family="inherit" font-size="14" font-weight="500" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">25_</text><text x="100.0" y="162.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">50 чисел с началом меньше 25: дальше любые цифры; 25 — снова по границе</text><text x="16.0" y="213.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">позиция 3</text><rect x="100" y="188" width="51" height="38" rx="6" fill="#fff" stroke="#ff6a00" stroke-width="1.6"/><text x="125.5" y="213.0" font-family="inherit" font-size="14" font-weight="500" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">250</text><text x="100.0" y="248.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="start" style="font-variant-numeric:tabular-nums">последняя цифра — только 0</text></svg>',
-    width: 660,
-    height: 278,
-    alt: "Начала 0__ и 1__ уже меньше 250: дальше любые две цифры. Только начало 2__ остаётся привязанным к границе, на второй позиции привязано только 25_, а там последняя цифра — только 0.",
-  },
+  // run notes: "1: Создана функция `F` — пока только правило. Её тело выполнится, когда функцию вызовут.\n2.1: `n` = `5` — не база. Чтобы умножить на 5, нужен `F(4)`: `F(5)` ждёт.\n2.2: `n` = `4` — не база: `F(4)` ждёт `F(3)`.\n2.3: `n` = `3` — не база: `F(3)` ждёт `F(2)`.\n2.4: `n` = `2` — не база: `F(2)` ждёт `F(1)`.\n2.5: `n` = `1` — база.\n3: `F(1)` возвращает `1` без новых вызовов — тому, кто его ждал, вызову `F(2)`.\n4.1: `F(2)` получил `1` и возвращает `2 * 1` = `2` вызову `F(3)`.\n4.2: `F(3)` получил `2` и возвращает `3 * 2` = `6` вызову `F(4)`.\n4.3: `F(4)` получил `6` и возвращает `4 * 6` = `24` вызову `F(5)`.\n4.4: `F(5)` получил `24` и возвращает `5 * 24` = `120` в строку 7.\n7: `print` выводит `120`."
   runF: {
     kind: "run",
-    code: "def F(n):\n    if n == 1:\n        return 2\n    return F(n - 1) + 3 * n\n\n\nprint(F(4))",
+    code: "def F(n):\n    if n == 1:\n        return 1\n    return n * F(n - 1)\n\n\nprint(F(5))",
     fileName: "f.py",
-    output: "29",
+    output: "120",
     steps: [
       {
         line: null,
@@ -129,7 +140,7 @@ export const lessonMedia = {
       },
       {
         line: 1,
-        text: "Создана функция `F`. Её тело выполнится, когда функцию вызовут.",
+        text: "Создана функция `F` — пока только правило. Её тело выполнится, когда функцию вызовут.",
         kind: "line",
         frames: [
           {
@@ -142,792 +153,46 @@ export const lessonMedia = {
       },
       {
         line: 7,
-        text: "Вызывается функция `F`. У вызова свои переменные: `n` = `4`.",
-        kind: "call",
-        frames: [
-          {
-            title: "программа",
-            names: [{ n: "F", v: "функция", ref: null, ch: false }],
-          },
-          {
-            title: "вызов F(4)",
-            names: [{ n: "n", v: "4", ref: null, ch: true }],
-          },
-        ],
-        objs: {},
-        out: "",
-      },
-      {
-        line: 2,
-        text: "Проверка `n == 1` даёт `False` — блок пропускается.",
-        kind: "line",
-        frames: [
-          {
-            title: "программа",
-            names: [{ n: "F", v: "функция", ref: null, ch: false }],
-          },
-          {
-            title: "вызов F(4)",
-            names: [{ n: "n", v: "4", ref: null, ch: false }],
-          },
-        ],
-        objs: {},
-        out: "",
-      },
-      {
-        line: 4,
-        text: "Вызывается функция `F`. У вызова свои переменные: `n` = `3`.",
-        kind: "call",
-        frames: [
-          {
-            title: "программа",
-            names: [{ n: "F", v: "функция", ref: null, ch: false }],
-          },
-          {
-            title: "вызов F(4)",
-            names: [{ n: "n", v: "4", ref: null, ch: false }],
-          },
-          {
-            title: "вызов F(3)",
-            names: [{ n: "n", v: "3", ref: null, ch: true }],
-          },
-        ],
-        objs: {},
-        out: "",
-      },
-      {
-        line: 2,
-        text: "Проверка `n == 1` даёт `False` — блок пропускается.",
-        kind: "line",
-        frames: [
-          {
-            title: "программа",
-            names: [{ n: "F", v: "функция", ref: null, ch: false }],
-          },
-          {
-            title: "вызов F(4)",
-            names: [{ n: "n", v: "4", ref: null, ch: true }],
-          },
-          {
-            title: "вызов F(3)",
-            names: [{ n: "n", v: "3", ref: null, ch: true }],
-          },
-        ],
-        objs: {},
-        out: "",
-      },
-      {
-        line: 4,
-        text: "Вызывается функция `F`. У вызова свои переменные: `n` = `2`.",
-        kind: "call",
-        frames: [
-          {
-            title: "программа",
-            names: [{ n: "F", v: "функция", ref: null, ch: false }],
-          },
-          {
-            title: "вызов F(4)",
-            names: [{ n: "n", v: "4", ref: null, ch: true }],
-          },
-          {
-            title: "вызов F(3)",
-            names: [{ n: "n", v: "3", ref: null, ch: true }],
-          },
-          {
-            title: "вызов F(2)",
-            names: [{ n: "n", v: "2", ref: null, ch: true }],
-          },
-        ],
-        objs: {},
-        out: "",
-      },
-      {
-        line: 2,
-        text: "Проверка `n == 1` даёт `False` — блок пропускается.",
-        kind: "line",
-        frames: [
-          {
-            title: "программа",
-            names: [{ n: "F", v: "функция", ref: null, ch: false }],
-          },
-          {
-            title: "вызов F(4)",
-            names: [{ n: "n", v: "4", ref: null, ch: true }],
-          },
-          {
-            title: "вызов F(3)",
-            names: [{ n: "n", v: "3", ref: null, ch: true }],
-          },
-          {
-            title: "вызов F(2)",
-            names: [{ n: "n", v: "2", ref: null, ch: true }],
-          },
-        ],
-        objs: {},
-        out: "",
-      },
-      {
-        line: 4,
-        text: "Вызывается функция `F`. У вызова свои переменные: `n` = `1`.",
-        kind: "call",
-        frames: [
-          {
-            title: "программа",
-            names: [{ n: "F", v: "функция", ref: null, ch: false }],
-          },
-          {
-            title: "вызов F(4)",
-            names: [{ n: "n", v: "4", ref: null, ch: true }],
-          },
-          {
-            title: "вызов F(3)",
-            names: [{ n: "n", v: "3", ref: null, ch: true }],
-          },
-          {
-            title: "вызов F(2)",
-            names: [{ n: "n", v: "2", ref: null, ch: true }],
-          },
-          {
-            title: "вызов F(1)",
-            names: [{ n: "n", v: "1", ref: null, ch: true }],
-          },
-        ],
-        objs: {},
-        out: "",
-      },
-      {
-        line: 2,
-        text: "Проверка `n == 1` даёт `True` — выполняется блок под этим условием.",
-        kind: "line",
-        frames: [
-          {
-            title: "программа",
-            names: [{ n: "F", v: "функция", ref: null, ch: false }],
-          },
-          {
-            title: "вызов F(4)",
-            names: [{ n: "n", v: "4", ref: null, ch: true }],
-          },
-          {
-            title: "вызов F(3)",
-            names: [{ n: "n", v: "3", ref: null, ch: true }],
-          },
-          {
-            title: "вызов F(2)",
-            names: [{ n: "n", v: "2", ref: null, ch: true }],
-          },
-          {
-            title: "вызов F(1)",
-            names: [{ n: "n", v: "1", ref: null, ch: true }],
-          },
-        ],
-        objs: {},
-        out: "",
-      },
-      {
-        line: 3,
-        text: "Функция возвращает `2` в строку, откуда её вызвали. Переменные вызова больше не нужны и исчезают.",
-        kind: "return",
-        frames: [
-          {
-            title: "программа",
-            names: [{ n: "F", v: "функция", ref: null, ch: false }],
-          },
-          {
-            title: "вызов F(4)",
-            names: [{ n: "n", v: "4", ref: null, ch: true }],
-          },
-          {
-            title: "вызов F(3)",
-            names: [{ n: "n", v: "3", ref: null, ch: true }],
-          },
-          {
-            title: "вызов F(2)",
-            names: [{ n: "n", v: "2", ref: null, ch: true }],
-          },
-          {
-            title: "вызов F(1)",
-            names: [{ n: "n", v: "1", ref: null, ch: true }],
-          },
-        ],
-        objs: {},
-        out: "",
-      },
-      {
-        line: 4,
-        text: "Функция возвращает `8` в строку, откуда её вызвали. Переменные вызова больше не нужны и исчезают.",
-        kind: "return",
-        frames: [
-          {
-            title: "программа",
-            names: [{ n: "F", v: "функция", ref: null, ch: false }],
-          },
-          {
-            title: "вызов F(4)",
-            names: [{ n: "n", v: "4", ref: null, ch: true }],
-          },
-          {
-            title: "вызов F(3)",
-            names: [{ n: "n", v: "3", ref: null, ch: true }],
-          },
-          {
-            title: "вызов F(2)",
-            names: [{ n: "n", v: "2", ref: null, ch: true }],
-          },
-        ],
-        objs: {},
-        out: "",
-      },
-      {
-        line: 4,
-        text: "Функция возвращает `17` в строку, откуда её вызвали. Переменные вызова больше не нужны и исчезают.",
-        kind: "return",
-        frames: [
-          {
-            title: "программа",
-            names: [{ n: "F", v: "функция", ref: null, ch: false }],
-          },
-          {
-            title: "вызов F(4)",
-            names: [{ n: "n", v: "4", ref: null, ch: true }],
-          },
-          {
-            title: "вызов F(3)",
-            names: [{ n: "n", v: "3", ref: null, ch: true }],
-          },
-        ],
-        objs: {},
-        out: "",
-      },
-      {
-        line: 4,
-        text: "Функция возвращает `29` в строку, откуда её вызвали. Переменные вызова больше не нужны и исчезают.",
-        kind: "return",
-        frames: [
-          {
-            title: "программа",
-            names: [{ n: "F", v: "функция", ref: null, ch: false }],
-          },
-          {
-            title: "вызов F(4)",
-            names: [{ n: "n", v: "4", ref: null, ch: true }],
-          },
-        ],
-        objs: {},
-        out: "",
-      },
-      {
-        line: 7,
-        text: "На экран выводится «29».",
-        kind: "line",
-        frames: [
-          {
-            title: "программа",
-            names: [{ n: "F", v: "функция", ref: null, ch: false }],
-          },
-        ],
-        objs: {},
-        out: "29\n",
-      },
-    ],
-  },
-  runLastTwo: {
-    kind: "run",
-    code: "N = 6\n\na = 1\nb = 3\n\nfor n in range(3, N + 1):\n    current = b + 2 * a\n    a = b\n    b = current\n\nprint(b)",
-    fileName: "last_two.py",
-    output: "43",
-    steps: [
-      {
-        line: null,
-        text: "Программа ещё не запущена.",
-        kind: "start",
-        frames: [{ title: "программа", names: [] }],
-        objs: {},
-        out: "",
-      },
-      {
-        line: 1,
-        text: "`N` получает значение `6`.",
-        kind: "line",
-        frames: [
-          {
-            title: "программа",
-            names: [{ n: "N", v: "6", ref: null, ch: true }],
-          },
-        ],
-        objs: {},
-        out: "",
-      },
-      {
-        line: 3,
-        text: "`a` получает значение `1`.",
-        kind: "line",
-        frames: [
-          {
-            title: "программа",
-            names: [
-              { n: "N", v: "6", ref: null, ch: false },
-              { n: "a", v: "1", ref: null, ch: true },
-            ],
-          },
-        ],
-        objs: {},
-        out: "",
-      },
-      {
-        line: 4,
-        text: "`b` получает значение `3`.",
-        kind: "line",
-        frames: [
-          {
-            title: "программа",
-            names: [
-              { n: "N", v: "6", ref: null, ch: false },
-              { n: "a", v: "1", ref: null, ch: false },
-              { n: "b", v: "3", ref: null, ch: true },
-            ],
-          },
-        ],
-        objs: {},
-        out: "",
-      },
-      {
-        line: 6,
-        text: "`for` берёт первое значение: `n` = `3`.",
-        kind: "line",
-        frames: [
-          {
-            title: "программа",
-            names: [
-              { n: "N", v: "6", ref: null, ch: false },
-              { n: "a", v: "1", ref: null, ch: false },
-              { n: "b", v: "3", ref: null, ch: false },
-              { n: "n", v: "3", ref: null, ch: true },
-            ],
-          },
-        ],
-        objs: {},
-        out: "",
-      },
-      {
-        line: 7,
-        text: "Python вычисляет `b + 2 * a` → `5`, и `current` получает это значение.",
-        kind: "line",
-        frames: [
-          {
-            title: "программа",
-            names: [
-              { n: "N", v: "6", ref: null, ch: false },
-              { n: "a", v: "1", ref: null, ch: false },
-              { n: "b", v: "3", ref: null, ch: false },
-              { n: "n", v: "3", ref: null, ch: false },
-              { n: "current", v: "5", ref: null, ch: true },
-            ],
-          },
-        ],
-        objs: {},
-        out: "",
-      },
-      {
-        line: 8,
-        text: "`a` получает то же, что `b`: теперь оба имени ведут к `3`. Прежнее значение `1` больше не связано с `a`.",
-        kind: "line",
-        frames: [
-          {
-            title: "программа",
-            names: [
-              { n: "N", v: "6", ref: null, ch: false },
-              { n: "a", v: "3", ref: null, ch: true },
-              { n: "b", v: "3", ref: null, ch: false },
-              { n: "n", v: "3", ref: null, ch: false },
-              { n: "current", v: "5", ref: null, ch: false },
-            ],
-          },
-        ],
-        objs: {},
-        out: "",
-      },
-      {
-        line: 9,
-        text: "`b` получает то же, что `current`: теперь оба имени ведут к `5`. Прежнее значение `3` больше не связано с `b`.",
-        kind: "line",
-        frames: [
-          {
-            title: "программа",
-            names: [
-              { n: "N", v: "6", ref: null, ch: false },
-              { n: "a", v: "3", ref: null, ch: false },
-              { n: "b", v: "5", ref: null, ch: true },
-              { n: "n", v: "3", ref: null, ch: false },
-              { n: "current", v: "5", ref: null, ch: false },
-            ],
-          },
-        ],
-        objs: {},
-        out: "",
-      },
-      {
-        line: 6,
-        text: "`for` берёт следующее значение: `n` = `4`.",
-        kind: "line",
-        frames: [
-          {
-            title: "программа",
-            names: [
-              { n: "N", v: "6", ref: null, ch: false },
-              { n: "a", v: "3", ref: null, ch: false },
-              { n: "b", v: "5", ref: null, ch: false },
-              { n: "n", v: "4", ref: null, ch: true },
-              { n: "current", v: "5", ref: null, ch: false },
-            ],
-          },
-        ],
-        objs: {},
-        out: "",
-      },
-      {
-        line: 7,
-        text: "Python вычисляет `b + 2 * a` → `11`, и `current` получает это значение. Прежнее значение `5` больше не связано с `current`.",
-        kind: "line",
-        frames: [
-          {
-            title: "программа",
-            names: [
-              { n: "N", v: "6", ref: null, ch: false },
-              { n: "a", v: "3", ref: null, ch: false },
-              { n: "b", v: "5", ref: null, ch: false },
-              { n: "n", v: "4", ref: null, ch: false },
-              { n: "current", v: "11", ref: null, ch: true },
-            ],
-          },
-        ],
-        objs: {},
-        out: "",
-      },
-      {
-        line: 8,
-        text: "`a` получает то же, что `b`: теперь оба имени ведут к `5`. Прежнее значение `3` больше не связано с `a`.",
-        kind: "line",
-        frames: [
-          {
-            title: "программа",
-            names: [
-              { n: "N", v: "6", ref: null, ch: false },
-              { n: "a", v: "5", ref: null, ch: true },
-              { n: "b", v: "5", ref: null, ch: false },
-              { n: "n", v: "4", ref: null, ch: false },
-              { n: "current", v: "11", ref: null, ch: false },
-            ],
-          },
-        ],
-        objs: {},
-        out: "",
-      },
-      {
-        line: 9,
-        text: "`b` получает то же, что `current`: теперь оба имени ведут к `11`. Прежнее значение `5` больше не связано с `b`.",
-        kind: "line",
-        frames: [
-          {
-            title: "программа",
-            names: [
-              { n: "N", v: "6", ref: null, ch: false },
-              { n: "a", v: "5", ref: null, ch: false },
-              { n: "b", v: "11", ref: null, ch: true },
-              { n: "n", v: "4", ref: null, ch: false },
-              { n: "current", v: "11", ref: null, ch: false },
-            ],
-          },
-        ],
-        objs: {},
-        out: "",
-      },
-      {
-        line: 6,
-        text: "`for` берёт следующее значение: `n` = `5`.",
-        kind: "line",
-        frames: [
-          {
-            title: "программа",
-            names: [
-              { n: "N", v: "6", ref: null, ch: false },
-              { n: "a", v: "5", ref: null, ch: false },
-              { n: "b", v: "11", ref: null, ch: false },
-              { n: "n", v: "5", ref: null, ch: true },
-              { n: "current", v: "11", ref: null, ch: false },
-            ],
-          },
-        ],
-        objs: {},
-        out: "",
-      },
-      {
-        line: 7,
-        text: "Python вычисляет `b + 2 * a` → `21`, и `current` получает это значение. Прежнее значение `11` больше не связано с `current`.",
-        kind: "line",
-        frames: [
-          {
-            title: "программа",
-            names: [
-              { n: "N", v: "6", ref: null, ch: false },
-              { n: "a", v: "5", ref: null, ch: false },
-              { n: "b", v: "11", ref: null, ch: false },
-              { n: "n", v: "5", ref: null, ch: false },
-              { n: "current", v: "21", ref: null, ch: true },
-            ],
-          },
-        ],
-        objs: {},
-        out: "",
-      },
-      {
-        line: 8,
-        text: "`a` получает то же, что `b`: теперь оба имени ведут к `11`. Прежнее значение `5` больше не связано с `a`.",
-        kind: "line",
-        frames: [
-          {
-            title: "программа",
-            names: [
-              { n: "N", v: "6", ref: null, ch: false },
-              { n: "a", v: "11", ref: null, ch: true },
-              { n: "b", v: "11", ref: null, ch: false },
-              { n: "n", v: "5", ref: null, ch: false },
-              { n: "current", v: "21", ref: null, ch: false },
-            ],
-          },
-        ],
-        objs: {},
-        out: "",
-      },
-      {
-        line: 9,
-        text: "`b` получает то же, что `current`: теперь оба имени ведут к `21`. Прежнее значение `11` больше не связано с `b`.",
-        kind: "line",
-        frames: [
-          {
-            title: "программа",
-            names: [
-              { n: "N", v: "6", ref: null, ch: false },
-              { n: "a", v: "11", ref: null, ch: false },
-              { n: "b", v: "21", ref: null, ch: true },
-              { n: "n", v: "5", ref: null, ch: false },
-              { n: "current", v: "21", ref: null, ch: false },
-            ],
-          },
-        ],
-        objs: {},
-        out: "",
-      },
-      {
-        line: 6,
-        text: "`for` берёт следующее значение: `n` = `6`.",
-        kind: "line",
-        frames: [
-          {
-            title: "программа",
-            names: [
-              { n: "N", v: "6", ref: null, ch: false },
-              { n: "a", v: "11", ref: null, ch: false },
-              { n: "b", v: "21", ref: null, ch: false },
-              { n: "n", v: "6", ref: null, ch: true },
-              { n: "current", v: "21", ref: null, ch: false },
-            ],
-          },
-        ],
-        objs: {},
-        out: "",
-      },
-      {
-        line: 7,
-        text: "Python вычисляет `b + 2 * a` → `43`, и `current` получает это значение. Прежнее значение `21` больше не связано с `current`.",
-        kind: "line",
-        frames: [
-          {
-            title: "программа",
-            names: [
-              { n: "N", v: "6", ref: null, ch: false },
-              { n: "a", v: "11", ref: null, ch: false },
-              { n: "b", v: "21", ref: null, ch: false },
-              { n: "n", v: "6", ref: null, ch: false },
-              { n: "current", v: "43", ref: null, ch: true },
-            ],
-          },
-        ],
-        objs: {},
-        out: "",
-      },
-      {
-        line: 8,
-        text: "`a` получает то же, что `b`: теперь оба имени ведут к `21`. Прежнее значение `11` больше не связано с `a`.",
-        kind: "line",
-        frames: [
-          {
-            title: "программа",
-            names: [
-              { n: "N", v: "6", ref: null, ch: false },
-              { n: "a", v: "21", ref: null, ch: true },
-              { n: "b", v: "21", ref: null, ch: false },
-              { n: "n", v: "6", ref: null, ch: false },
-              { n: "current", v: "43", ref: null, ch: false },
-            ],
-          },
-        ],
-        objs: {},
-        out: "",
-      },
-      {
-        line: 9,
-        text: "`b` получает то же, что `current`: теперь оба имени ведут к `43`. Прежнее значение `21` больше не связано с `b`.",
-        kind: "line",
-        frames: [
-          {
-            title: "программа",
-            names: [
-              { n: "N", v: "6", ref: null, ch: false },
-              { n: "a", v: "21", ref: null, ch: false },
-              { n: "b", v: "43", ref: null, ch: true },
-              { n: "n", v: "6", ref: null, ch: false },
-              { n: "current", v: "43", ref: null, ch: false },
-            ],
-          },
-        ],
-        objs: {},
-        out: "",
-      },
-      {
-        line: 6,
-        text: "Значения закончились — цикл `for` завершён.",
-        kind: "line",
-        frames: [
-          {
-            title: "программа",
-            names: [
-              { n: "N", v: "6", ref: null, ch: false },
-              { n: "a", v: "21", ref: null, ch: false },
-              { n: "b", v: "43", ref: null, ch: false },
-              { n: "n", v: "6", ref: null, ch: false },
-              { n: "current", v: "43", ref: null, ch: false },
-            ],
-          },
-        ],
-        objs: {},
-        out: "",
-      },
-      {
-        line: 11,
-        text: "На экран выводится «43».",
-        kind: "line",
-        frames: [
-          {
-            title: "программа",
-            names: [
-              { n: "N", v: "6", ref: null, ch: false },
-              { n: "a", v: "21", ref: null, ch: false },
-              { n: "b", v: "43", ref: null, ch: false },
-              { n: "n", v: "6", ref: null, ch: false },
-              { n: "current", v: "43", ref: null, ch: false },
-            ],
-          },
-        ],
-        objs: {},
-        out: "43\n",
-      },
-    ],
-  },
-  runMemo: {
-    kind: "run",
-    code: "memo = {1: 1, 2: 1}\n\n\ndef F(n):\n    if n not in memo:\n        memo[n] = F(n - 1) + F(n - 2)\n\n    return memo[n]\n\n\nprint(F(5))",
-    fileName: "memo.py",
-    output: "5",
-    steps: [
-      {
-        line: null,
-        text: "Программа ещё не запущена.",
-        kind: "start",
-        frames: [{ title: "программа", names: [] }],
-        objs: {},
-        out: "",
-      },
-      {
-        line: 1,
-        text: "`memo` получает значение `{1: 1, 2: 1}`.",
-        kind: "line",
-        frames: [
-          {
-            title: "программа",
-            names: [{ n: "memo", v: "{1: 1, 2: 1}", ref: 0, ch: true }],
-          },
-        ],
-        objs: { "0": { v: "{1: 1, 2: 1}", ch: true } },
-        out: "",
-      },
-      {
-        line: 4,
-        text: "Создана функция `F`. Её тело выполнится, когда функцию вызовут.",
-        kind: "line",
-        frames: [
-          {
-            title: "программа",
-            names: [
-              { n: "memo", v: "{1: 1, 2: 1}", ref: 0, ch: false },
-              { n: "F", v: "функция", ref: null, ch: true },
-            ],
-          },
-        ],
-        objs: { "0": { v: "{1: 1, 2: 1}", ch: false } },
-        out: "",
-      },
-      {
-        line: 11,
         text: "Вызывается функция `F`. У вызова свои переменные: `n` = `5`.",
         kind: "call",
         frames: [
           {
             title: "программа",
-            names: [
-              { n: "memo", v: "{1: 1, 2: 1}", ref: 0, ch: false },
-              { n: "F", v: "функция", ref: null, ch: false },
-            ],
+            names: [{ n: "F", v: "функция", ref: null, ch: false }],
           },
           {
             title: "вызов F(5)",
             names: [{ n: "n", v: "5", ref: null, ch: true }],
           },
         ],
-        objs: { "0": { v: "{1: 1, 2: 1}", ch: false } },
+        objs: {},
         out: "",
       },
       {
-        line: 5,
-        text: "Проверка `n not in memo` даёт `True` — выполняется блок под этим условием.",
+        line: 2,
+        text: "`n` = `5` — не база. Чтобы умножить на 5, нужен `F(4)`: `F(5)` ждёт.",
         kind: "line",
         frames: [
           {
             title: "программа",
-            names: [
-              { n: "memo", v: "{1: 1, 2: 1}", ref: 0, ch: false },
-              { n: "F", v: "функция", ref: null, ch: false },
-            ],
+            names: [{ n: "F", v: "функция", ref: null, ch: false }],
           },
           {
             title: "вызов F(5)",
             names: [{ n: "n", v: "5", ref: null, ch: false }],
           },
         ],
-        objs: { "0": { v: "{1: 1, 2: 1}", ch: false } },
+        objs: {},
         out: "",
       },
       {
-        line: 6,
+        line: 4,
         text: "Вызывается функция `F`. У вызова свои переменные: `n` = `4`.",
         kind: "call",
         frames: [
           {
             title: "программа",
-            names: [
-              { n: "memo", v: "{1: 1, 2: 1}", ref: 0, ch: false },
-              { n: "F", v: "функция", ref: null, ch: false },
-            ],
+            names: [{ n: "F", v: "функция", ref: null, ch: false }],
           },
           {
             title: "вызов F(5)",
@@ -938,20 +203,17 @@ export const lessonMedia = {
             names: [{ n: "n", v: "4", ref: null, ch: true }],
           },
         ],
-        objs: { "0": { v: "{1: 1, 2: 1}", ch: false } },
+        objs: {},
         out: "",
       },
       {
-        line: 5,
-        text: "Проверка `n not in memo` даёт `True` — выполняется блок под этим условием.",
+        line: 2,
+        text: "`n` = `4` — не база: `F(4)` ждёт `F(3)`.",
         kind: "line",
         frames: [
           {
             title: "программа",
-            names: [
-              { n: "memo", v: "{1: 1, 2: 1}", ref: 0, ch: false },
-              { n: "F", v: "функция", ref: null, ch: false },
-            ],
+            names: [{ n: "F", v: "функция", ref: null, ch: false }],
           },
           {
             title: "вызов F(5)",
@@ -962,20 +224,17 @@ export const lessonMedia = {
             names: [{ n: "n", v: "4", ref: null, ch: true }],
           },
         ],
-        objs: { "0": { v: "{1: 1, 2: 1}", ch: false } },
+        objs: {},
         out: "",
       },
       {
-        line: 6,
+        line: 4,
         text: "Вызывается функция `F`. У вызова свои переменные: `n` = `3`.",
         kind: "call",
         frames: [
           {
             title: "программа",
-            names: [
-              { n: "memo", v: "{1: 1, 2: 1}", ref: 0, ch: false },
-              { n: "F", v: "функция", ref: null, ch: false },
-            ],
+            names: [{ n: "F", v: "функция", ref: null, ch: false }],
           },
           {
             title: "вызов F(5)",
@@ -990,20 +249,17 @@ export const lessonMedia = {
             names: [{ n: "n", v: "3", ref: null, ch: true }],
           },
         ],
-        objs: { "0": { v: "{1: 1, 2: 1}", ch: false } },
+        objs: {},
         out: "",
       },
       {
-        line: 5,
-        text: "Проверка `n not in memo` даёт `True` — выполняется блок под этим условием.",
+        line: 2,
+        text: "`n` = `3` — не база: `F(3)` ждёт `F(2)`.",
         kind: "line",
         frames: [
           {
             title: "программа",
-            names: [
-              { n: "memo", v: "{1: 1, 2: 1}", ref: 0, ch: false },
-              { n: "F", v: "функция", ref: null, ch: false },
-            ],
+            names: [{ n: "F", v: "функция", ref: null, ch: false }],
           },
           {
             title: "вызов F(5)",
@@ -1018,20 +274,17 @@ export const lessonMedia = {
             names: [{ n: "n", v: "3", ref: null, ch: true }],
           },
         ],
-        objs: { "0": { v: "{1: 1, 2: 1}", ch: false } },
+        objs: {},
         out: "",
       },
       {
-        line: 6,
+        line: 4,
         text: "Вызывается функция `F`. У вызова свои переменные: `n` = `2`.",
         kind: "call",
         frames: [
           {
             title: "программа",
-            names: [
-              { n: "memo", v: "{1: 1, 2: 1}", ref: 0, ch: false },
-              { n: "F", v: "функция", ref: null, ch: false },
-            ],
+            names: [{ n: "F", v: "функция", ref: null, ch: false }],
           },
           {
             title: "вызов F(5)",
@@ -1050,20 +303,17 @@ export const lessonMedia = {
             names: [{ n: "n", v: "2", ref: null, ch: true }],
           },
         ],
-        objs: { "0": { v: "{1: 1, 2: 1}", ch: false } },
+        objs: {},
         out: "",
       },
       {
-        line: 5,
-        text: "Проверка `n not in memo` даёт `False` — блок пропускается.",
+        line: 2,
+        text: "`n` = `2` — не база: `F(2)` ждёт `F(1)`.",
         kind: "line",
         frames: [
           {
             title: "программа",
-            names: [
-              { n: "memo", v: "{1: 1, 2: 1}", ref: 0, ch: false },
-              { n: "F", v: "функция", ref: null, ch: false },
-            ],
+            names: [{ n: "F", v: "функция", ref: null, ch: false }],
           },
           {
             title: "вызов F(5)",
@@ -1082,52 +332,17 @@ export const lessonMedia = {
             names: [{ n: "n", v: "2", ref: null, ch: true }],
           },
         ],
-        objs: { "0": { v: "{1: 1, 2: 1}", ch: false } },
+        objs: {},
         out: "",
       },
       {
-        line: 8,
-        text: "Функция возвращает `1` в строку, откуда её вызвали. Переменные вызова больше не нужны и исчезают.",
-        kind: "return",
-        frames: [
-          {
-            title: "программа",
-            names: [
-              { n: "memo", v: "{1: 1, 2: 1}", ref: 0, ch: false },
-              { n: "F", v: "функция", ref: null, ch: false },
-            ],
-          },
-          {
-            title: "вызов F(5)",
-            names: [{ n: "n", v: "5", ref: null, ch: true }],
-          },
-          {
-            title: "вызов F(4)",
-            names: [{ n: "n", v: "4", ref: null, ch: true }],
-          },
-          {
-            title: "вызов F(3)",
-            names: [{ n: "n", v: "3", ref: null, ch: true }],
-          },
-          {
-            title: "вызов F(2)",
-            names: [{ n: "n", v: "2", ref: null, ch: true }],
-          },
-        ],
-        objs: { "0": { v: "{1: 1, 2: 1}", ch: false } },
-        out: "",
-      },
-      {
-        line: 6,
+        line: 4,
         text: "Вызывается функция `F`. У вызова свои переменные: `n` = `1`.",
         kind: "call",
         frames: [
           {
             title: "программа",
-            names: [
-              { n: "memo", v: "{1: 1, 2: 1}", ref: 0, ch: false },
-              { n: "F", v: "функция", ref: null, ch: false },
-            ],
+            names: [{ n: "F", v: "функция", ref: null, ch: false }],
           },
           {
             title: "вызов F(5)",
@@ -1140,26 +355,27 @@ export const lessonMedia = {
           {
             title: "вызов F(3)",
             names: [{ n: "n", v: "3", ref: null, ch: true }],
+          },
+          {
+            title: "вызов F(2)",
+            names: [{ n: "n", v: "2", ref: null, ch: true }],
           },
           {
             title: "вызов F(1)",
             names: [{ n: "n", v: "1", ref: null, ch: true }],
           },
         ],
-        objs: { "0": { v: "{1: 1, 2: 1}", ch: false } },
+        objs: {},
         out: "",
       },
       {
-        line: 5,
-        text: "Проверка `n not in memo` даёт `False` — блок пропускается.",
+        line: 2,
+        text: "`n` = `1` — база.",
         kind: "line",
         frames: [
           {
             title: "программа",
-            names: [
-              { n: "memo", v: "{1: 1, 2: 1}", ref: 0, ch: false },
-              { n: "F", v: "функция", ref: null, ch: false },
-            ],
+            names: [{ n: "F", v: "функция", ref: null, ch: false }],
           },
           {
             title: "вызов F(5)",
@@ -1172,26 +388,27 @@ export const lessonMedia = {
           {
             title: "вызов F(3)",
             names: [{ n: "n", v: "3", ref: null, ch: true }],
+          },
+          {
+            title: "вызов F(2)",
+            names: [{ n: "n", v: "2", ref: null, ch: true }],
           },
           {
             title: "вызов F(1)",
             names: [{ n: "n", v: "1", ref: null, ch: true }],
           },
         ],
-        objs: { "0": { v: "{1: 1, 2: 1}", ch: false } },
+        objs: {},
         out: "",
       },
       {
-        line: 8,
-        text: "Функция возвращает `1` в строку, откуда её вызвали. Переменные вызова больше не нужны и исчезают.",
+        line: 3,
+        text: "`F(1)` возвращает `1` без новых вызовов — тому, кто его ждал, вызову `F(2)`.",
         kind: "return",
         frames: [
           {
             title: "программа",
-            names: [
-              { n: "memo", v: "{1: 1, 2: 1}", ref: 0, ch: false },
-              { n: "F", v: "функция", ref: null, ch: false },
-            ],
+            names: [{ n: "F", v: "функция", ref: null, ch: false }],
           },
           {
             title: "вызов F(5)",
@@ -1204,54 +421,27 @@ export const lessonMedia = {
           {
             title: "вызов F(3)",
             names: [{ n: "n", v: "3", ref: null, ch: true }],
+          },
+          {
+            title: "вызов F(2)",
+            names: [{ n: "n", v: "2", ref: null, ch: true }],
           },
           {
             title: "вызов F(1)",
             names: [{ n: "n", v: "1", ref: null, ch: true }],
           },
         ],
-        objs: { "0": { v: "{1: 1, 2: 1}", ch: false } },
+        objs: {},
         out: "",
       },
       {
-        line: 6,
-        text: "Python вычисляет `F(n - 1) + F(n - 2)` → `2` и записывает это в `memo[3]`.",
-        kind: "line",
-        frames: [
-          {
-            title: "программа",
-            names: [
-              { n: "memo", v: "{1: 1, 2: 1, 3: 2}", ref: 0, ch: true },
-              { n: "F", v: "функция", ref: null, ch: false },
-            ],
-          },
-          {
-            title: "вызов F(5)",
-            names: [{ n: "n", v: "5", ref: null, ch: true }],
-          },
-          {
-            title: "вызов F(4)",
-            names: [{ n: "n", v: "4", ref: null, ch: true }],
-          },
-          {
-            title: "вызов F(3)",
-            names: [{ n: "n", v: "3", ref: null, ch: true }],
-          },
-        ],
-        objs: { "0": { v: "{1: 1, 2: 1, 3: 2}", ch: true } },
-        out: "",
-      },
-      {
-        line: 8,
-        text: "Функция возвращает `2` в строку, откуда её вызвали. Переменные вызова больше не нужны и исчезают.",
+        line: 4,
+        text: "`F(2)` получил `1` и возвращает `2 * 1` = `2` вызову `F(3)`.",
         kind: "return",
         frames: [
           {
             title: "программа",
-            names: [
-              { n: "memo", v: "{1: 1, 2: 1, 3: 2}", ref: 0, ch: false },
-              { n: "F", v: "функция", ref: null, ch: false },
-            ],
+            names: [{ n: "F", v: "функция", ref: null, ch: false }],
           },
           {
             title: "вызов F(5)",
@@ -1264,78 +454,23 @@ export const lessonMedia = {
           {
             title: "вызов F(3)",
             names: [{ n: "n", v: "3", ref: null, ch: true }],
-          },
-        ],
-        objs: { "0": { v: "{1: 1, 2: 1, 3: 2}", ch: false } },
-        out: "",
-      },
-      {
-        line: 6,
-        text: "Вызывается функция `F`. У вызова свои переменные: `n` = `2`.",
-        kind: "call",
-        frames: [
-          {
-            title: "программа",
-            names: [
-              { n: "memo", v: "{1: 1, 2: 1, 3: 2}", ref: 0, ch: false },
-              { n: "F", v: "функция", ref: null, ch: false },
-            ],
-          },
-          {
-            title: "вызов F(5)",
-            names: [{ n: "n", v: "5", ref: null, ch: true }],
-          },
-          {
-            title: "вызов F(4)",
-            names: [{ n: "n", v: "4", ref: null, ch: true }],
           },
           {
             title: "вызов F(2)",
             names: [{ n: "n", v: "2", ref: null, ch: true }],
           },
         ],
-        objs: { "0": { v: "{1: 1, 2: 1, 3: 2}", ch: false } },
+        objs: {},
         out: "",
       },
       {
-        line: 5,
-        text: "Проверка `n not in memo` даёт `False` — блок пропускается.",
-        kind: "line",
-        frames: [
-          {
-            title: "программа",
-            names: [
-              { n: "memo", v: "{1: 1, 2: 1, 3: 2}", ref: 0, ch: false },
-              { n: "F", v: "функция", ref: null, ch: false },
-            ],
-          },
-          {
-            title: "вызов F(5)",
-            names: [{ n: "n", v: "5", ref: null, ch: true }],
-          },
-          {
-            title: "вызов F(4)",
-            names: [{ n: "n", v: "4", ref: null, ch: true }],
-          },
-          {
-            title: "вызов F(2)",
-            names: [{ n: "n", v: "2", ref: null, ch: true }],
-          },
-        ],
-        objs: { "0": { v: "{1: 1, 2: 1, 3: 2}", ch: false } },
-        out: "",
-      },
-      {
-        line: 8,
-        text: "Функция возвращает `1` в строку, откуда её вызвали. Переменные вызова больше не нужны и исчезают.",
+        line: 4,
+        text: "`F(3)` получил `2` и возвращает `3 * 2` = `6` вызову `F(4)`.",
         kind: "return",
         frames: [
           {
             title: "программа",
-            names: [
-              { n: "memo", v: "{1: 1, 2: 1, 3: 2}", ref: 0, ch: false },
-              { n: "F", v: "функция", ref: null, ch: false },
-            ],
+            names: [{ n: "F", v: "функция", ref: null, ch: false }],
           },
           {
             title: "вызов F(5)",
@@ -1344,205 +479,65 @@ export const lessonMedia = {
           {
             title: "вызов F(4)",
             names: [{ n: "n", v: "4", ref: null, ch: true }],
-          },
-          {
-            title: "вызов F(2)",
-            names: [{ n: "n", v: "2", ref: null, ch: true }],
-          },
-        ],
-        objs: { "0": { v: "{1: 1, 2: 1, 3: 2}", ch: false } },
-        out: "",
-      },
-      {
-        line: 6,
-        text: "Python вычисляет `F(n - 1) + F(n - 2)` → `3` и записывает это в `memo[4]`.",
-        kind: "line",
-        frames: [
-          {
-            title: "программа",
-            names: [
-              { n: "memo", v: "{1: 1, 2: 1, 3: 2, 4: 3}", ref: 0, ch: true },
-              { n: "F", v: "функция", ref: null, ch: false },
-            ],
-          },
-          {
-            title: "вызов F(5)",
-            names: [{ n: "n", v: "5", ref: null, ch: true }],
-          },
-          {
-            title: "вызов F(4)",
-            names: [{ n: "n", v: "4", ref: null, ch: true }],
-          },
-        ],
-        objs: { "0": { v: "{1: 1, 2: 1, 3: 2, 4: 3}", ch: true } },
-        out: "",
-      },
-      {
-        line: 8,
-        text: "Функция возвращает `3` в строку, откуда её вызвали. Переменные вызова больше не нужны и исчезают.",
-        kind: "return",
-        frames: [
-          {
-            title: "программа",
-            names: [
-              { n: "memo", v: "{1: 1, 2: 1, 3: 2, 4: 3}", ref: 0, ch: false },
-              { n: "F", v: "функция", ref: null, ch: false },
-            ],
-          },
-          {
-            title: "вызов F(5)",
-            names: [{ n: "n", v: "5", ref: null, ch: true }],
-          },
-          {
-            title: "вызов F(4)",
-            names: [{ n: "n", v: "4", ref: null, ch: true }],
-          },
-        ],
-        objs: { "0": { v: "{1: 1, 2: 1, 3: 2, 4: 3}", ch: false } },
-        out: "",
-      },
-      {
-        line: 6,
-        text: "Вызывается функция `F`. У вызова свои переменные: `n` = `3`.",
-        kind: "call",
-        frames: [
-          {
-            title: "программа",
-            names: [
-              { n: "memo", v: "{1: 1, 2: 1, 3: 2, 4: 3}", ref: 0, ch: false },
-              { n: "F", v: "функция", ref: null, ch: false },
-            ],
-          },
-          {
-            title: "вызов F(5)",
-            names: [{ n: "n", v: "5", ref: null, ch: true }],
           },
           {
             title: "вызов F(3)",
             names: [{ n: "n", v: "3", ref: null, ch: true }],
           },
         ],
-        objs: { "0": { v: "{1: 1, 2: 1, 3: 2, 4: 3}", ch: false } },
+        objs: {},
         out: "",
       },
       {
-        line: 5,
-        text: "Проверка `n not in memo` даёт `False` — блок пропускается.",
-        kind: "line",
-        frames: [
-          {
-            title: "программа",
-            names: [
-              { n: "memo", v: "{1: 1, 2: 1, 3: 2, 4: 3}", ref: 0, ch: false },
-              { n: "F", v: "функция", ref: null, ch: false },
-            ],
-          },
-          {
-            title: "вызов F(5)",
-            names: [{ n: "n", v: "5", ref: null, ch: true }],
-          },
-          {
-            title: "вызов F(3)",
-            names: [{ n: "n", v: "3", ref: null, ch: true }],
-          },
-        ],
-        objs: { "0": { v: "{1: 1, 2: 1, 3: 2, 4: 3}", ch: false } },
-        out: "",
-      },
-      {
-        line: 8,
-        text: "Функция возвращает `2` в строку, откуда её вызвали. Переменные вызова больше не нужны и исчезают.",
+        line: 4,
+        text: "`F(4)` получил `6` и возвращает `4 * 6` = `24` вызову `F(5)`.",
         kind: "return",
         frames: [
           {
             title: "программа",
-            names: [
-              { n: "memo", v: "{1: 1, 2: 1, 3: 2, 4: 3}", ref: 0, ch: false },
-              { n: "F", v: "функция", ref: null, ch: false },
-            ],
+            names: [{ n: "F", v: "функция", ref: null, ch: false }],
           },
           {
             title: "вызов F(5)",
             names: [{ n: "n", v: "5", ref: null, ch: true }],
           },
           {
-            title: "вызов F(3)",
-            names: [{ n: "n", v: "3", ref: null, ch: true }],
+            title: "вызов F(4)",
+            names: [{ n: "n", v: "4", ref: null, ch: true }],
           },
         ],
-        objs: { "0": { v: "{1: 1, 2: 1, 3: 2, 4: 3}", ch: false } },
+        objs: {},
         out: "",
       },
       {
-        line: 6,
-        text: "Python вычисляет `F(n - 1) + F(n - 2)` → `5` и записывает это в `memo[5]`.",
-        kind: "line",
-        frames: [
-          {
-            title: "программа",
-            names: [
-              {
-                n: "memo",
-                v: "{1: 1, 2: 1, 3: 2, 4: 3, 5: 5}",
-                ref: 0,
-                ch: true,
-              },
-              { n: "F", v: "функция", ref: null, ch: false },
-            ],
-          },
-          {
-            title: "вызов F(5)",
-            names: [{ n: "n", v: "5", ref: null, ch: true }],
-          },
-        ],
-        objs: { "0": { v: "{1: 1, 2: 1, 3: 2, 4: 3, 5: 5}", ch: true } },
-        out: "",
-      },
-      {
-        line: 8,
-        text: "Функция возвращает `5` в строку, откуда её вызвали. Переменные вызова больше не нужны и исчезают.",
+        line: 4,
+        text: "`F(5)` получил `24` и возвращает `5 * 24` = `120` в строку 7.",
         kind: "return",
         frames: [
           {
             title: "программа",
-            names: [
-              {
-                n: "memo",
-                v: "{1: 1, 2: 1, 3: 2, 4: 3, 5: 5}",
-                ref: 0,
-                ch: false,
-              },
-              { n: "F", v: "функция", ref: null, ch: false },
-            ],
+            names: [{ n: "F", v: "функция", ref: null, ch: false }],
           },
           {
             title: "вызов F(5)",
-            names: [{ n: "n", v: "5", ref: null, ch: false }],
+            names: [{ n: "n", v: "5", ref: null, ch: true }],
           },
         ],
-        objs: { "0": { v: "{1: 1, 2: 1, 3: 2, 4: 3, 5: 5}", ch: false } },
+        objs: {},
         out: "",
       },
       {
-        line: 11,
-        text: "На экран выводится «5».",
+        line: 7,
+        text: "`print` выводит `120`.",
         kind: "line",
         frames: [
           {
             title: "программа",
-            names: [
-              {
-                n: "memo",
-                v: "{1: 1, 2: 1, 3: 2, 4: 3, 5: 5}",
-                ref: 0,
-                ch: false,
-              },
-              { n: "F", v: "функция", ref: null, ch: false },
-            ],
+            names: [{ n: "F", v: "функция", ref: null, ch: false }],
           },
         ],
-        objs: { "0": { v: "{1: 1, 2: 1, 3: 2, 4: 3, 5: 5}", ch: false } },
-        out: "5\n",
+        objs: {},
+        out: "120\n",
       },
     ],
   },
