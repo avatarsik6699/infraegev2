@@ -30,7 +30,24 @@ ROOT = Path(__file__).resolve().parents[3]
 BANK_DIR = ROOT / "content/practice-bank"
 FILES = ROOT / "content/lesson-files/topic-24"
 MATERIAL = "string-processing"
-RETIRED = [f"task-24-{number:02d}" for number in range(1, 9)]
+RETIRED = [f"task-24-{number:02d}" for number in range(1, 9)] + [
+    f"task-24-{n}"
+    for n in (
+        "3-05",
+        "3-09",
+        "3-10",
+        "4-04",
+        "5-05",
+        "5-06",
+        "8-03",
+        "8-05",
+        "8-06",
+        "8-07",
+        "8-08",
+        "9-02",
+    )
+]
+FINAL_PAGE = {"task-24-9-01", "task-24-9-03", "task-24-9-04", "task-24-9-05"}
 VOWELS = "AEIOUY"
 LETTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 NUMBER = "(?:0|[1-9][0-9]*)"
@@ -83,14 +100,6 @@ def _neighbours(t: str, good) -> bool:
 
 def _expression(t: str, number: str, signs: str) -> bool:
     return re.fullmatch(number + f"(?:[{re.escape(signs)}]{number})*", t) is not None
-
-
-def _first_alphabet(counter: Counter, pick_max: bool = True) -> str:
-    best = max(counter.values()) if pick_max else min(counter.values())
-    return min(c for c, v in counter.items() if v == best)
-
-
-# --- second methods for the files ---------------------------------------------------------
 
 
 def _avoiding(n: int, bad_starts: list[int], m: int) -> int:
@@ -246,37 +255,50 @@ def _sums_after(s: str, letter: str, signs: str):
             yield text, values
 
 
-def _combo(s: str, letter: str, k: int, word: str, t: int) -> int:
-    """Exactly k letters and at least t words: the widest windows by two pointers, the
-    words counted incrementally."""
-    m, n = len(word), len(s)
-    starts = {i for i in range(n - m + 1) if s.startswith(word, i)}
-    pos = [i for i, c in enumerate(s) if c == letter]
-    best, left, words, right = 0, 0, 0, -1
-    for j in range(len(pos) - k + 1):
-        lo = pos[j - 1] + 1 if j > 0 else 0
-        hi = pos[j + k] - 1 if j + k < len(pos) else n - 1
-        while right < hi:
-            right += 1
-            if right - m + 1 >= left and right - m + 1 in starts:
-                words += 1
-        while left < lo:
-            if left in starts and left + m - 1 <= right:
-                words -= 1
-            left += 1
-        if words >= t:
-            best = max(best, hi - lo + 1)
+def _alphabet_one_vowel(s: str) -> int:
+    """Alphabetical runs cut where a letter is smaller than the previous one; inside a
+    run, at most one vowel: from one after the vowel j to one before the vowel j + 2."""
+    best, start = 0, 0
+    for i in range(1, len(s) + 1):
+        if i == len(s) or s[i] < s[i - 1]:
+            run = s[start:i]
+            v = [-1, *(k for k, c in enumerate(run) if c in VOWELS), len(run)]
+            if len(v) <= 3:
+                best = max(best, len(run))
+            else:
+                best = max(best, *(v[j + 2] - v[j] - 1 for j in range(len(v) - 2)))
+            start = i
     return best
 
 
-def _objects(s: str, k: int) -> int:
-    """Letter runs with a digit on both sides, by groupby; k consecutive ones."""
-    found = []
-    for start, text in _runs(s, LETTERS):
-        end = start + len(text)
-        if start > 0 and end < len(s) and s[start - 1].isdigit() and s[end].isdigit():
-            found.append((start - 1, end))
-    return min(found[j + k - 1][1] - found[j][0] + 1 for j in range(len(found) - k + 1))
+def _zero_value(t: str) -> bool:
+    return all("0" in term.split("*") for term in t.split("+"))
+
+
+def _zero_expression(s: str) -> int:
+    """Every correct expression is a substring of a maximal one; inside each maximal
+    expression all substrings are checked by hand: each product holds the number 0."""
+    best = 0
+    for m in re.finditer(NUMBER + r"(?:[+*]" + NUMBER + r")*", s):
+        e = m.group()
+        for i in range(len(e)):
+            for j in range(i + 1 + best, len(e) + 1):
+                t = e[i:j]
+                if _expression(t, NUMBER, "+*") and _zero_value(t):
+                    best = j - i
+    return best
+
+
+def _double_letters(s: str) -> int:
+    """Letters twice the digits: the first and the last position of every balance."""
+    first: dict[int, int] = {0: -1}
+    last: dict[int, int] = {0: -1}
+    balance = 0
+    for i, c in enumerate(s):
+        balance += -2 if c.isdigit() else 1
+        first.setdefault(balance, i)
+        last[balance] = i
+    return max(last[b] - first[b] for b in first)
 
 
 @pytest.fixture(scope="module")
@@ -319,28 +341,17 @@ def answers() -> dict[str, str]:
         if len(t) % 2 == 0 and all(t[i] in "BCDF" and t[i + 1] in "AE" for i in range(0, len(t), 2))
     ]
     a["task-24-3-04"] = f"{max(chains)} {2 * max(chains)}"
-    s = "CADACABAA"
-    a["task-24-3-05"] = _first_alphabet(
-        Counter(y for x, y in zip(s, s[1:], strict=False) if x == "A")
-    )
     runs = [(len(t), i) for i, t in _substrings("YXXYXXYXX") if set(t) == {"X"}]
     start = max(runs)[1]
     a["task-24-3-06"] = f"{start} {start + 1}"
     a["task-24-3-07"] = str(max(len(m.group()) for m in re.finditer(r"X(?:YZX)*(?:YZ|Y)?", f1)))
     vowel_pairs = re.finditer(r"(?=((?:[AEIOUY][B-DF-HJ-NP-TV-XZ])+))", f4)
     a["task-24-3-08"] = str(max(len(m.group(1)) // 2 for m in vowel_pairs))
-    a["task-24-3-09"] = _first_alphabet(
-        Counter(x for x, y in zip(f4, f4[1:], strict=False) if y == "R")
-    )
-    lines = _lines("24-3.txt")
-    line = max(enumerate(lines), key=lambda p: (p[1].count("Q"), p[0]))[1]
-    a["task-24-3-10"] = _first_alphabet(Counter(line), pick_max=False)
     # subtopic 4
     s = "ABCABBACB"
     a["task-24-4-01"] = str(_max(s, lambda t: t.count("A") <= 2))
     a["task-24-4-02"] = str(_max(s, lambda t: t.count("A") == 2))
     a["task-24-4-03"] = str(_min(s, lambda t: t.count("A") >= 2))
-    a["task-24-4-04"] = str(_max("ABCXABYABCZ", lambda t: "ABC" not in t))
     a["task-24-4-05"] = str(_max("ABCBADAB", lambda t: t.count("A") <= 1 and t.count("B") <= 1))
     a["task-24-4-06"] = str(_max("AAABAAB", lambda t: _occurrences(t, "AA") <= 1))
     a["task-24-4-08"] = str(_at_most(f4, "Q", 12))
@@ -353,26 +364,6 @@ def answers() -> dict[str, str]:
     a["task-24-5-03"] = str(_min("ABACABAABA", lambda t: _occurrences(t, "ABA") >= 2))
     a["task-24-5-04"] = str(_max("ABYCDXEFGHYXI", lambda t: not set(t) & {"X", "Y"}))
 
-    def f_chain(t: str) -> bool:
-        inner = t.split("F")[1:-1]
-        return len(t) > 1 and t[0] == t[-1] == "F" and all(p.count("A") <= 1 for p in inner)
-
-    a["task-24-5-05"] = str(_max("AFBAFCFAAFDF", f_chain))
-    s = "KLMNBCABXYZACBQ"
-    marked = {
-        i + k
-        for i in range(len(s) - 2)
-        if Counter(s[i : i + 3]) == Counter("ABC")
-        for k in range(3)
-    }
-    a["task-24-5-06"] = str(
-        max(
-            j - i
-            for i in range(len(s))
-            for j in range(i, len(s) + 1)
-            if not marked & set(range(i, j))
-        )
-    )
     a["task-24-5-07"] = str(_shortest(f4, "Q", 50))
     best = len(f5) + 1
     for part in f5.split("0")[:-1]:  # every part but the last is followed by a 0
@@ -425,25 +416,37 @@ def answers() -> dict[str, str]:
     a["task-24-7-08"] = str(_order_brute(f7))
     a["task-24-7-09"] = str(max(v[-1] for _, v in _sums_after(f8, "C", "+")))
     a["task-24-7-10"] = str(max((len(t), v[-1]) for t, v in _sums_after(f8, "B", "+-"))[1])
-    # subtopic 8
     a["task-24-8-02"] = str(_max("ABBBAAB", lambda t: t.count("A") == t.count("B")))
-    a["task-24-8-03"] = str(_max("ABCADEB", lambda t: len(set(t)) == len(t)))
-
-    def objects(t: str) -> int:
-        return len(re.findall(r"(?=[A-Z][0-9]+[A-Z])", t))
-
-    a["task-24-8-05"] = str(_min("X12Y3Z45W", lambda t: objects(t) >= 2))
-    a["task-24-8-06"] = str(
-        _max("ABAYABABAYXYABA", lambda t: t.count("Y") == 1 and _occurrences(t, "ABA") >= 2)
+    # new tasks (Change 197)
+    a["task-24-10-01"] = str(max(len(list(g)) for _, g in groupby(f1)))
+    same = [i for i in range(len(f1) - 1) if f1[i] == f1[i + 1]]
+    a["task-24-10-02"] = str(_avoiding(len(f1), same, 2))
+    xx_zz = [i for i in range(len(f1) - 1) if f1[i : i + 2] in ("XX", "ZZ")]
+    a["task-24-10-03"] = str(_avoiding(len(f1), xx_zz, 2))
+    a["task-24-10-04"] = str(
+        sum(f4[i] == f4[i + 4] and f4[i + 1] == f4[i + 3] for i in range(len(f4) - 4))
     )
-    a["task-24-8-07"] = str(_combo(f5, "Y", 30, "2025", 4))
-    a["task-24-8-08"] = str(_objects(f5, 500))
+    a["task-24-10-05"] = str(_max("PSQRPSQRXSQRPSQ", lambda t: t in "SQRP" * 10 and len(t) >= 4))
+    a["task-24-10-06"] = str(_alphabet_one_vowel(f4))
+    w = [-1, *(i for i, c in enumerate(f4) if c == "W"), len(f4)]
+    a["task-24-10-07"] = str(max(w[j + 100] - w[j - 1] - 1 for j in range(1, len(w) - 100)))
+    nums = [int(x) for x in re.split("[A-Z]+", f5) if x]
+    a["task-24-10-08"] = str(max(nums))
+    a["task-24-10-09"] = str(max(x for x in nums if x % 2 == 0))
+    a["task-24-10-10"] = str(_zero_expression(f6))
+    a["task-24-10-11"] = str(_double_letters(f5))
+    a["task-24-10-12"] = str(
+        _max(
+            "CBABXABCBAB",
+            lambda t: (
+                len(t) % 2 == 0 and all(t[i : i + 2] in ("AB", "CB") for i in range(0, len(t), 2))
+            ),
+        )
+        // 2
+    )
     # Практика и итог
     bad = [i for i in range(len(f9) - 1) if f9[i] in VOWELS and f9[i + 1] in VOWELS]
     a["task-24-9-01"] = str(_avoiding(len(f9), bad, 2))
-    a["task-24-9-02"] = _first_alphabet(
-        Counter(y for x, y, z in zip(f9, f9[1:], f9[2:], strict=False) if x == z)
-    )
     a["task-24-9-03"] = str(_each_queue(f9, "QXZ", 40))
     a["task-24-9-04"] = str(max(len(p) + 2 for c in "ABCDEF" for p in f9.split(c)[1:-1]))
     a["task-24-9-05"] = str(_longest_expression(f6, "+", zero_alone=True))
@@ -473,9 +476,11 @@ def test_every_answer_matches_independent_recomputation(answers: dict[str, str])
     for task_id, task in tasks.items():
         assert task.checker.answer_variants[0] == answers[task_id], task_id
         assert task.exam_numbers == [24] and not task.catalog_visible and not task.archived
-        on_final_page = task_id.startswith("task-24-9-")
-        assert bool(task.theory_links) != on_final_page, task_id
-        advanced = task_id.startswith(("task-24-7-", "task-24-8-"))
+        assert bool(task.theory_links) != (task_id in FINAL_PAGE), task_id
+        advanced = task_id.startswith(("task-24-7-", "task-24-8-")) or task_id in (
+            "task-24-10-10",
+            "task-24-10-11",
+        )
         assert task.lessons[0].counts_toward_mastery == (not advanced), task_id
         assert task.files or not re.search(r"24-\d\.txt", str(task.statement)), task_id
 

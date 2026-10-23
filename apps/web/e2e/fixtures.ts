@@ -72,13 +72,13 @@ const numberSequencesLessonConfig = {
 };
 
 const stringProcessingLessonConfig = {
-  route: "/ege/24-obrabotka-simvolnyh-strok/stroka-i-fragment",
+  route: "/ege/24-obrabotka-simvolnyh-strok/stroka-i-cepochka",
   title: "Обработка символьной информации",
   taskNumber: 24,
   taskCount: 66,
-  masteryTaskCount: 51,
-  diagramCount: 8,
-  downloadCount: 30,
+  masteryTaskCount: 54,
+  diagramCount: 6,
+  downloadCount: 35,
 };
 
 const graphAnalysisLessonConfig = {

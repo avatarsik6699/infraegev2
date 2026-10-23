@@ -126,7 +126,7 @@ export class TopicCatalogPage {
       }),
     ).toHaveAttribute(
       "href",
-      "/ege/24-obrabotka-simvolnyh-strok/stroka-i-fragment",
+      "/ege/24-obrabotka-simvolnyh-strok/stroka-i-cepochka",
     );
     await expect(
       this.page.getByRole("link", {

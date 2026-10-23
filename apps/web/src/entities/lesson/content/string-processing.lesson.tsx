@@ -2,48 +2,45 @@ import { CodeBlock } from "~/shared/components/code-block";
 import { Notation } from "~/shared/components/notation";
 import { Typography } from "~/shared/components/typography";
 import {
-  CodeRunner,
   LessonDiagram,
   LessonStepper,
   LessonSummary,
   LessonTable,
+  ProofDisclosure,
   VariantPicker,
 } from "~/shared/components/learning-content";
 import { stringProcessingLessonPublication } from "~/shared/config/lesson-publication.mjs";
 import { defineLesson } from "../lib/define-lesson";
 import { lessonMedia } from "./string-processing.media";
+import { R, THEME_TASK } from "./string-processing.theme";
 import { PythonTerm } from "./python-term";
+import { SubtopicLink } from "./subtopic-link";
 
 export const stringProcessingLesson = defineLesson({
   ...stringProcessingLessonPublication,
   masteryThreshold: 0.8,
   learningOutcomes: [
-    "Читать файл без перевода строки и переводить условие в три вопроса: допустимый фрагмент, что оптимизируем, что выводим",
-    "Хранить текущую длину цепочки и сбрасывать её до 0, 1 или 2 по условию на символ, соседей или тройку",
-    "Искать образцы и считать частоты одним проходом, явно выбирая при равенстве",
-    "Двигать границы скользящего окна для условий «не более», «ровно» и «не менее K»",
-    "Хранить позиции нужных символов, разбивать строку и учитывать особые начало и конец фрагмента",
-    "Описывать число и корректное выражение регулярным выражением",
-    "Для редких задач — дополнительные условия на выражение и накопленные количества (дополнительные уроки)",
+    "Читать строку из файла и находить самую длинную цепочку одним проходом: текущая длина и лучшая",
+    "Сбрасывать цепочку до 0, 1 или 2 по условию на символ, на соседей или на тройку",
+    "Находить повторяющийся образец, цепочки пар и троек, короткие фрагменты вроде палиндромов",
+    "Двигать границы скользящего окна для условий «не более K» и «ровно K»",
+    "Решать задачи через список позиций: K подряд идущих вхождений, особые начало и конец",
+    "Находить числа и корректные выражения регулярным выражением; решать задачу темы",
+    "Для сложных вариаций — значение выражения, не более K чисел и баланс (дополнительный урок)",
   ],
   accessTier: "paid",
   subtopics: [
     {
-      slug: "stroka-i-fragment",
-      title: "Строка, фрагмент и файл",
-      lead: "Подстрока и «идущие подряд», индексы и включённые границы, чтение файла без перевода строки, три вопроса к условию и цена полного перебора.",
+      slug: "stroka-i-cepochka",
+      title: "Строка и цепочка",
+      lead: "Что спрашивают в задании 24, как прочитать строку из файла и найти самую длинную цепочку за один проход.",
       conceptIds: [
-        "kak-ustroena-tema-24",
-        "stroka",
-        "podstroka",
-        "indeksy",
-        "srezy",
+        "kak-ustroena-tema",
+        "podryad",
         "chtenie-fayla",
-        "chto-udalyaet-strip",
-        "stroki-fayla",
-        "tri-voprosa",
-        "polnyy-perebor",
-        "stroka-itogo",
+        "tekushchaya-dlina",
+        "chto-vyvodit",
+        "cepochka-itogo",
       ],
       checkpoint: [
         {
@@ -57,9 +54,23 @@ export const stringProcessingLesson = defineLesson({
           ),
           reveal: (
             <>
-              <Notation>{"W"}</Notation>, <Notation>{"Y"}</Notation>,{" "}
-              <Notation>{"ERT"}</Notation> и 6: срез{" "}
-              <Notation>{"s[2:5]"}</Notation> берёт индексы 2, 3, 4.
+              W, Y, ERT и 6: срез <Notation>{"s[2:5]"}</Notation> берёт символы
+              с номерами 2, 3 и 4.
+            </>
+          ),
+        },
+        {
+          id: "zadacha-2",
+          prompt: (
+            <>
+              В строке <Notation>{"BBBABBBBAB"}</Notation> найди самую длинную
+              цепочку букв B, идущих подряд. Почему ответ не 7?
+            </>
+          ),
+          reveal: (
+            <>
+              4: цепочка BBBB с 4-го по 7-й символ. Семь букв B получились бы
+              только с пропуском A, а «подряд» пропусков не допускает.
             </>
           ),
         },
@@ -67,17 +78,97 @@ export const stringProcessingLesson = defineLesson({
           id: "zadacha-3",
           prompt: (
             <>
-              В строке <Notation>{"BBBABBBBAB"}</Notation> найди самую длинную
-              цепочку букв <Notation>{"B"}</Notation>, идущих подряд. Почему
-              ответ не 7?
+              Файл — одна строка <Notation>{"XYZX"}</Notation> с переводом
+              строки в конце. Сколько символов, отличных от X, насчитает
+              программа, если забыть <Notation>{"strip()"}</Notation>?
+            </>
+          ),
+          reveal: <>3 вместо 2: перевод строки — тоже символ, и он не X.</>,
+        },
+        {
+          id: "zadacha-4",
+          prompt: (
+            <>
+              Программа обновляет <Notation>{"best"}</Notation> только тогда,
+              когда цепочка обрывается. Что она напечатает для{" "}
+              <Notation>{"XXAXXX"}</Notation>, если ищем цепочку X?
             </>
           ),
           reveal: (
             <>
-              4: цепочка <Notation>{"BBBB"}</Notation> на позициях 4–7. Семь
-              букв <Notation>{"B"}</Notation> получились бы только с пропуском
-              буквы <Notation>{"A"}</Notation>, а «подряд» пропусков не
-              допускает.
+              2 вместо 3: последняя цепочка XXX не попала в ответ — после неё
+              обрыва уже не было.
+            </>
+          ),
+        },
+        {
+          id: "zadacha-5",
+          prompt: (
+            <>
+              «Найдите самый длинный фрагмент без буквы Q; если таких несколько,
+              укажите номер первого символа последнего из них». Что здесь
+              сравниваем и что выводим?
+            </>
+          ),
+          reveal: (
+            <>
+              Сравниваем длину, при равной длине берём фрагмент правее, а
+              выводим номер его первого символа, а не длину.
+            </>
+          ),
+        },
+      ],
+    },
+    {
+      slug: "sosedi",
+      title: "Условия на соседей",
+      lead: "Одинаковые подряд, соседи различны, запретные пары, тройки: после нарушения цепочка начинается заново с 1 или 2 символов.",
+      conceptIds: [
+        "odinakovye-podryad",
+        "sosedi-razlichny",
+        "zapretnye-pary",
+        "trojki",
+        "sosedi-itogo",
+      ],
+      checkpoint: [
+        {
+          id: "zadacha-1",
+          prompt: (
+            <>
+              Найди самую длинную цепочку одинаковых символов в{" "}
+              <Notation>{"ZZYYYZYYYYZ"}</Notation>.
+            </>
+          ),
+          reveal: <>4: YYYY ближе к концу строки.</>,
+        },
+        {
+          id: "zadacha-2",
+          prompt: (
+            <>
+              Почему при разрыве цепочки одинаковых символов{" "}
+              <Notation>{"current"}</Notation> становится 1, а не 0?
+            </>
+          ),
+          reveal: (
+            <>
+              Символ, на котором цепочка оборвалась, сам начинает новую цепочку
+              длины 1: условие связывает пару, а один символ ему не мешает.
+            </>
+          ),
+        },
+        {
+          id: "zadacha-3",
+          prompt: (
+            <>
+              Что напечатает <Notation>{"print(s[i - 1])"}</Notation> при{" "}
+              <Notation>{"i = 0"}</Notation> для{" "}
+              <Notation>{"s = 'KLMN'"}</Notation>?
+            </>
+          ),
+          reveal: (
+            <>
+              N: <Notation>{"s[-1]"}</Notation> — последний символ. Поэтому цикл
+              по соседям начинают с <Notation>{"i = 1"}</Notation>.
             </>
           ),
         },
@@ -85,646 +176,371 @@ export const stringProcessingLesson = defineLesson({
           id: "zadacha-4",
           prompt: (
             <>
-              <Typography.Text>
-                Что напечатает программа для <Notation>{"s = 'KLMN'"}</Notation>
-                ?
-              </Typography.Text>
-              <CodeBlock
-                code={"for i in range(3):\n    print(s[i - 1])"}
-                label={"Что напечатает программа для s = 'KLMN'?"}
-                language="python"
-              />
+              В строке <Notation>{"KLAKKLB"}</Notation> найди самый длинный
+              фрагмент, где буквы K и L не стоят рядом (KK можно).
             </>
           ),
           reveal: (
             <>
-              <Notation>{"N"}</Notation>, <Notation>{"K"}</Notation>,{" "}
-              <Notation>{"L"}</Notation>: при <Notation>{"i = 0"}</Notation>{" "}
-              запись <Notation>{"s[-1]"}</Notation> — последний символ.
+              4: LAKK. Пары KL на позициях 0–1 и 4–5 обрывают цепочку, но L
+              после разрыва начинает новую.
             </>
           ),
         },
         {
-          id: "zadacha-6",
+          id: "zadacha-5",
           prompt: (
             <>
-              Строка файла — <Notation>{"ABCA"}</Notation>, перевода строки в
-              конце нет. Что дадут <Notation>{"[:-1]"}</Notation> и{" "}
-              <Notation>{"rstrip('\\r\\n')"}</Notation>? А если перевод строки в
-              конце есть?
+              Условие задано для каждых трёх соседних цифр. До скольких символов
+              сбрасывается цепочка на плохой тройке и почему?
             </>
           ),
           reveal: (
             <>
-              Без перевода строки <Notation>{"[:-1]"}</Notation> даст{" "}
-              <Notation>{"ABC"}</Notation> — потерян полезный символ, а{" "}
-              <Notation>{"rstrip('\\r\\n')"}</Notation> оставит{" "}
-              <Notation>{"ABCA"}</Notation>. С переводом строки оба способа
-              дадут <Notation>{"ABCA"}</Notation>.
-            </>
-          ),
-        },
-        {
-          id: "zadacha-7",
-          prompt: (
-            <>
-              Условие: «Найдите самый длинный фрагмент, в котором нет буквы Q;
-              если таких несколько, выберите последний и укажите номер его
-              первого символа (с нуля)». Ответь на три вопроса: какие фрагменты
-              допустимы, что оптимизируем, что выводим.
-            </>
-          ),
-          reveal: (
-            <>
-              Допустимы фрагменты без буквы <Notation>{"Q"}</Notation>;
-              оптимизируем длину, а при равенстве выбираем фрагмент, который
-              начинается правее; выводим номер первого символа, а не длину.
+              До 2: две последние цифры плохой тройки ещё не образуют ни одной
+              тройки, поэтому фрагмент из них допустим.
             </>
           ),
         },
       ],
     },
     {
-      slug: "cepochka",
-      title: "Цепочка: текущая длина и сброс",
-      lead: "Длина подходящей цепочки, которая кончается на текущем символе: сброс до 0, 1 или 2 для условий на символ, соседей и тройки.",
+      slug: "obrazcy-i-bloki",
+      title: "Образцы и блоки",
+      lead: "Повторяющийся образец вроде DOGDOG…, цепочки пар и троек со смещением, короткие фрагменты и палиндромы.",
+      access: "paid",
       conceptIds: [
-        "tekushchaya-dlina",
-        "dve-peremennye",
-        "obnovlenie-maksimuma",
-        "uslovie-na-simvol",
-        "sosednie-simvoly",
-        "sosedi-razlichny",
-        "drugie-usloviya-sosedey",
-        "zapreshchyonnye-pary",
-        "usloviya-po-troykam",
-        "sbros-0-1-2",
-        "cepochka-itogo",
-      ],
-      checkpoint: [
-        {
-          id: "zadacha-6",
-          prompt: (
-            <>
-              Что напечатает для строки <Notation>{"XXAXXX"}</Notation>{" "}
-              программа, которая обновляет <Notation>{"best"}</Notation> только
-              при разрыве цепочки? Каким должен быть ответ?
-            </>
-          ),
-          reveal: (
-            <>
-              2 вместо 3: последняя цепочка <Notation>{"XXX"}</Notation> не
-              попала в ответ, потому что после неё не было разрыва.
-            </>
-          ),
-        },
-      ],
-    },
-    {
-      slug: "obrazcy-i-chastoty",
-      title: "Образцы, блоки и частоты",
-      lead: "Перекрывающиеся вхождения, повторяющийся образец, цепочки пар со смещениями, словарь частот, строки файла и выбор при равенстве.",
-      conceptIds: [
-        "obrazcy-za-odin-prohod",
-        "poisk-obrazca",
-        "korotkie-fragmenty",
         "povtoryayushchiysya-obrazec",
-        "cepochki-par",
-        "chastoty",
-        "ravnye-chastoty",
-        "dopolnitelnyy-kriteriy",
-        "mnogo-strok",
-        "rasstoyanie-mezhdu-bukvami",
+        "obrazec-s-variantami",
+        "bloki",
+        "korotkie-fragmenty",
         "obrazcy-itogo",
       ],
+      paid: {
+        outline: [
+          {
+            id: "povtoryayushchiysya-obrazec",
+            navLabel: "Повторяющийся образец",
+          },
+          { id: "obrazec-s-variantami", navLabel: "Начало с любого места" },
+          { id: "bloki", navLabel: "Цепочки пар и троек" },
+          { id: "korotkie-fragmenty", navLabel: "Короткие фрагменты" },
+          { id: "obrazcy-itogo", navLabel: "Итого" },
+        ],
+        preview: (
+          <>
+            <Typography.Text>
+              <strong>
+                Если фрагмент повторяет образец, на каждом шаге известно, какой
+                символ должен идти следующим.
+              </strong>{" "}
+              Так ищут цепочки DOGDOG…, цепочки пар и троек и считают короткие
+              фрагменты вроде палиндромов.
+            </Typography.Text>
+          </>
+        ),
+        selfCheck: 5,
+        load: () => import("./string-processing.paid.obrazcy-i-bloki"),
+      },
     },
     {
       slug: "skolzyashchee-okno",
       title: "Скользящее окно",
-      lead: "Две границы фрагмента: не более, ровно и не менее K символов, несколько счётчиков, пары букв внутри окна и запрещённое слово.",
+      lead: "Две границы фрагмента: не более K и ровно K букв, несколько условий сразу, пары букв внутри окна.",
       access: "paid",
       conceptIds: [
         "dve-granicy",
-        "okno",
-        "sdvig-levoy-granicy",
-        "pochemu-okno-rabotaet",
         "rovno-k",
-        "minimalnaya-dlina",
-        "neskolko-ogranicheniy",
-        "slovar-schyotchikov",
+        "neskolko-usloviy",
         "pary-v-okne",
-        "zapreshchyonnoe-slovo",
         "okno-itogo",
       ],
       paid: {
         outline: [
           { id: "dve-granicy", navLabel: "Две границы" },
-          { id: "okno", navLabel: "Окно" },
-          { id: "sdvig-levoy-granicy", navLabel: "Сдвиг левой границы" },
-          { id: "pochemu-okno-rabotaet", navLabel: "Почему окно работает" },
-          { id: "rovno-k", navLabel: "Ровно K букв" },
-          { id: "minimalnaya-dlina", navLabel: "Минимальная длина" },
-          { id: "neskolko-ogranicheniy", navLabel: "Несколько ограничений" },
-          { id: "slovar-schyotchikov", navLabel: "Словарь счётчиков" },
+          { id: "rovno-k", navLabel: "Ровно K" },
+          { id: "neskolko-usloviy", navLabel: "Несколько условий" },
           { id: "pary-v-okne", navLabel: "Пары в окне" },
-          { id: "zapreshchyonnoe-slovo", navLabel: "Запрещённое слово" },
           { id: "okno-itogo", navLabel: "Итого" },
         ],
         preview: (
           <>
             <Typography.Text>
               <strong>
-                Второй основной приём — хранить две границы фрагмента и
-                постепенно их передвигать.
+                Если условие ограничивает количество букв во фрагменте, храни
+                две границы: правая идёт вперёд, левая догоняет, когда букв
+                стало слишком много.
               </strong>{" "}
-              Так решаются задачи вида «не более K букв», «ровно K букв»,
-              «каждая из нескольких букв не более K раз», «не более K пар букв»
-              и «без запрещённого слова».
+              Так решаются задачи вида «не более 130 пар» и «буква T ровно 100
+              раз».
             </Typography.Text>
           </>
         ),
-        selfCheck: 1,
+        selfCheck: 5,
         load: () => import("./string-processing.paid.skolzyashchee-okno"),
       },
     },
     {
       slug: "pozicii-i-granicy",
-      title: "Позиции, разбиение и границы",
-      lead: "Список позиций и K подряд идущих вхождений, разбиение без склеивания частей, особые начало и конец фрагмента, все символы набора.",
+      title: "Позиции и границы",
+      lead: "Список позиций нужных символов: K подряд идущих вхождений, самый короткий и самый длинный фрагмент, особые начало и конец.",
       access: "paid",
       conceptIds: [
-        "pozicii-simvolov",
         "spisok-poziciy",
-        "maksimum-s-rovno-k",
+        "rovno-k-pozicii",
         "vhozhdeniya-slova",
-        "zameny-i-razbienie",
-        "chasti-mezhdu-razdelitelyami",
-        "peresekayushchiesya-razdeliteli",
         "nachalo-i-konec",
-        "odinakovye-koncy",
-        "vse-simvoly-nabora",
         "pozicii-itogo",
       ],
       paid: {
         outline: [
-          { id: "pozicii-simvolov", navLabel: "Позиции символов" },
           { id: "spisok-poziciy", navLabel: "Список позиций" },
-          { id: "maksimum-s-rovno-k", navLabel: "Максимум с ровно K" },
+          { id: "rovno-k-pozicii", navLabel: "Ровно K: до соседей" },
           { id: "vhozhdeniya-slova", navLabel: "Вхождения слова" },
-          { id: "zameny-i-razbienie", navLabel: "Замены и разбиение" },
-          {
-            id: "chasti-mezhdu-razdelitelyami",
-            navLabel: "Части между разделителями",
-          },
-          {
-            id: "peresekayushchiesya-razdeliteli",
-            navLabel: "Перекрывающиеся разделители",
-          },
-          { id: "nachalo-i-konec", navLabel: "Начало и конец фрагмента" },
-          { id: "odinakovye-koncy", navLabel: "Одинаковые концы" },
-          { id: "vse-simvoly-nabora", navLabel: "Все символы набора" },
+          { id: "nachalo-i-konec", navLabel: "Начало и конец" },
           { id: "pozicii-itogo", navLabel: "Итого" },
         ],
         preview: (
           <>
             <Typography.Text>
               <strong>
-                Третий основной приём — хранить позиции только тех символов,
-                которые влияют на условие.
+                Часто достаточно запомнить, где стоят нужные символы: фрагмент с
+                K такими символами начинается и кончается рядом с ними.
               </strong>{" "}
-              Так решаются задачи о самом коротком фрагменте с K буквами или
-              парами, о фрагментах с особыми началом и концом, о частях строки
-              между разделителями и о блоке, где есть все символы набора.
+              Так решают задачи о K подряд идущих вхождениях и об особых начале
+              и конце — они часто встречаются в вариантах последних лет.
             </Typography.Text>
           </>
         ),
-        selfCheck: 0,
+        selfCheck: 5,
         load: () => import("./string-processing.paid.pozicii-i-granicy"),
       },
     },
     {
       slug: "chisla-i-vyrazheniya",
-      title: "Числа и корректные выражения",
-      lead: "Число без ведущих нулей и шаблон выражения в регулярном выражении, поиск re.finditer, запись числа в системе счисления.",
+      title: "Числа и выражения",
+      lead: "Наибольшее число в строке, запись числа в системе счисления, корректное выражение регулярным выражением; решаем задачу темы.",
       access: "paid",
       conceptIds: [
-        "struktura-vyrazheniya",
-        "regulyarnye-vyrazheniya",
-        "dopustimoe-chislo",
-        "shablon-vyrazheniya",
-        "shablon-po-usloviyu",
+        "chisla-v-stroke",
         "zapis-v-sisteme",
-        "vedushchie-nuli",
+        "shablon-vyrazheniya",
+        "zadacha-temy",
         "vyrazheniya-itogo",
       ],
       paid: {
         outline: [
-          { id: "struktura-vyrazheniya", navLabel: "Структура выражения" },
-          { id: "regulyarnye-vyrazheniya", navLabel: "Регулярные выражения" },
-          { id: "dopustimoe-chislo", navLabel: "Допустимое число" },
-          { id: "shablon-vyrazheniya", navLabel: "Шаблон выражения" },
-          { id: "shablon-po-usloviyu", navLabel: "Шаблон по условию" },
+          { id: "chisla-v-stroke", navLabel: "Числа в строке" },
           { id: "zapis-v-sisteme", navLabel: "Запись в системе счисления" },
-          { id: "vedushchie-nuli", navLabel: "Ведущие нули" },
+          { id: "shablon-vyrazheniya", navLabel: "Шаблон выражения" },
+          { id: "zadacha-temy", navLabel: "Задача темы" },
           { id: "vyrazheniya-itogo", navLabel: "Итого" },
         ],
         preview: (
           <>
             <Typography.Text>
               <strong>
-                Корректное арифметическое выражение ищут не вычислением, а
-                проверкой структуры записи: число, знак, число, знак…
+                Число и корректное выражение описывают шаблоном — регулярным
+                выражением, а Python сам находит все подходящие фрагменты.
               </strong>{" "}
-              Тот же шаблон числа описывает и запись числа в системе счисления.
+              Так устроено задание 24 в демоверсии 2025 года и на ЕГЭ-2026.
+              Здесь решаем задачу темы целиком.
             </Typography.Text>
           </>
         ),
-        selfCheck: 4,
+        selfCheck: 5,
         load: () => import("./string-processing.paid.chisla-i-vyrazheniya"),
       },
     },
     {
-      slug: "usloviya-na-vyrazhenie",
-      title: "Выражения с дополнительными условиями",
-      lead: "Не более K чисел в выражении, порядок действий слева направо, значение правильной суммы после буквы.",
+      slug: "usloviya-i-balans",
+      title: "Выражения с условиями и баланс",
+      lead: "Выражение со значением 0, не более K чисел, порядок действий, сумма после буквы и «букв вдвое больше цифр».",
       level: "advanced",
       access: "paid",
       conceptIds: [
-        "dopolnitelnyy-urok-vyrazheniya",
+        "znachenie-nol",
         "ne-bolee-k-chisel",
-        "dopolnitelnye-trebovaniya",
-        "naibolshee-znachenie",
+        "poryadok-dejstvij",
         "summa-posle-bukvy",
+        "balans",
         "usloviya-itogo",
       ],
       paid: {
         outline: [
-          {
-            id: "dopolnitelnyy-urok-vyrazheniya",
-            navLabel: "Дополнительный урок",
-          },
+          { id: "znachenie-nol", navLabel: "Значение равно нулю" },
           { id: "ne-bolee-k-chisel", navLabel: "Не более K чисел" },
-          {
-            id: "dopolnitelnye-trebovaniya",
-            navLabel: "Дополнительные требования",
-          },
-          { id: "naibolshee-znachenie", navLabel: "Наибольшее значение" },
+          { id: "poryadok-dejstvij", navLabel: "Порядок действий" },
           { id: "summa-posle-bukvy", navLabel: "Сумма после буквы" },
+          { id: "balans", navLabel: "Баланс" },
           { id: "usloviya-itogo", navLabel: "Итого" },
         ],
         preview: (
           <>
             <Typography.Text>
-              <strong>Дополнительный урок — для продвинутых.</strong> Он для
-              тех, кто хочет закрыть все возможные случаи задания 24: здесь от
-              выражения требуют больше, чем корректность, — не более K чисел,
-              порядок действий слева направо или наибольшее значение суммы после
-              буквы. На реальных экзаменах такие условия не встречались. Задачи
-              основных подтем решаются без него.
+              <strong>Дополнительный урок — для сложных вариаций.</strong> Здесь
+              от выражения требуют больше, чем корректность, а количества букв и
+              цифр сравнивают через баланс. Такие задачи есть в сборниках и
+              пробниках; задачи основных подтем решаются без этого урока.
             </Typography.Text>
           </>
         ),
-        selfCheck: 1,
-        load: () => import("./string-processing.paid.usloviya-na-vyrazhenie"),
-      },
-    },
-    {
-      slug: "nakoplennye-kolichestva",
-      title: "Накопленные количества и составные условия",
-      lead: "Префиксные суммы, ровно K символов и не менее T слов сразу, баланс, все символы различны, объекты с общими границами.",
-      level: "advanced",
-      access: "paid",
-      conceptIds: [
-        "dopolnitelnyy-urok-kolichestva",
-        "prefiksnye-summy",
-        "sovmeshchyonnye-usloviya",
-        "nachalo-so-slova",
-        "kogda-okno-ne-szhimaetsya",
-        "vse-simvoly-razlichny",
-        "obshchie-granicy",
-        "chislo-mezhdu-bukvami",
-        "kolichestva-itogo",
-      ],
-      paid: {
-        outline: [
-          {
-            id: "dopolnitelnyy-urok-kolichestva",
-            navLabel: "Дополнительный урок",
-          },
-          { id: "prefiksnye-summy", navLabel: "Префиксные суммы" },
-          { id: "sovmeshchyonnye-usloviya", navLabel: "Совмещённые условия" },
-          { id: "nachalo-so-slova", navLabel: "Начало со слова" },
-          {
-            id: "kogda-okno-ne-szhimaetsya",
-            navLabel: "Когда окно не сжимается",
-          },
-          { id: "vse-simvoly-razlichny", navLabel: "Все символы различны" },
-          { id: "obshchie-granicy", navLabel: "Общие границы" },
-          { id: "chislo-mezhdu-bukvami", navLabel: "Число между буквами" },
-          { id: "kolichestva-itogo", navLabel: "Итого" },
-        ],
-        preview: (
-          <>
-            <Typography.Text>
-              <strong>Дополнительный урок — для продвинутых.</strong> Он для
-              тех, кто хочет закрыть все возможные случаи задания 24: два
-              условия сразу (ровно K букв и не менее T слов) и «слова» с общими
-              граничными символами. На реальных экзаменах такие условия не
-              встречались. Здесь же два приёма, которые показывают, где обычное
-              окно не работает. Задачи основных подтем решаются без него.
-            </Typography.Text>
-          </>
-        ),
-        selfCheck: 2,
-        load: () => import("./string-processing.paid.nakoplennye-kolichestva"),
+        selfCheck: 4,
+        load: () => import("./string-processing.paid.usloviya-i-balans"),
       },
     },
   ],
   theory: [
     {
-      id: "kak-ustroena-tema-24",
+      id: "kak-ustroena-tema",
       navLabel: "Как устроена тема",
       explanation: (
         <>
           <Typography.Text>
+            В задании 24 дают файл — одну длинную строку примерно из миллиона
+            символов. Нужно найти в ней самый длинный (иногда самый короткий)
+            кусок, идущий подряд, с заданным свойством. Вот задача, которую мы
+            решим в этой теме:
+          </Typography.Text>
+          <Typography.Text>{THEME_TASK}</Typography.Text>
+          <Typography.Text>
             <strong>
-              Задание 24 лучше изучать через несколько общих способов
-              рассуждения.
+              Перебрать все куски строки не получится — их сотни миллиардов.
+              Поэтому строку проходят один раз и по дороге помнят только то, что
+              нужно для ответа.
             </strong>{" "}
-            Тогда новые условия будут восприниматься как сочетания знакомых
-            идей: продолжить цепочку, передвинуть границу, посчитать нужные
-            символы, выделить числа или проверить структуру выражения.
+            Разберём, что значат слова условия:
           </Typography.Text>
-          <Typography.Text>
-            На экзамене дают файл примерно из миллиона символов, и почти всегда
-            нужно найти в нём самый длинный или самый короткий непрерывный
-            фрагмент с заданным свойством: цепочку одинаковых символов, фрагмент
-            с ограничением на количество букв, запись числа или корректное
-            арифметическое выражение. Разберём весь этот круг задач.
-          </Typography.Text>
-          <Typography.Text>
-            Сначала разберём, что такое фрагмент строки и как правильно
-            прочитать файл, затем постепенно перейдём к алгоритмам. Все
-            маленькие примеры ниже — учебные: на них удобно понимать и проверять
-            решение, прежде чем запускать его на большом файле. Основы Python —{" "}
-            <PythonTerm term="eq">
-              сравнения <Notation>{"=="}</Notation> и{" "}
-              <Notation>{"!="}</Notation>
-            </PythonTerm>
-            ,{" "}
-            <PythonTerm term="augassign">
-              <Notation>{"+="}</Notation>
-            </PythonTerm>
-            ,{" "}
-            <PythonTerm term="in">
-              <Notation>{"in"}</Notation>
-            </PythonTerm>
-            ,{" "}
-            <PythonTerm term="andor">
-              <Notation>{"and"}</Notation> и <Notation>{"or"}</Notation>
-            </PythonTerm>
-            ,{" "}
-            <PythonTerm term="agg">
-              <Notation>{"max"}</Notation> и <Notation>{"min"}</Notation>
-            </PythonTerm>
-            ,{" "}
-            <PythonTerm term="if">
-              <Notation>{"if"}</Notation>
-            </PythonTerm>{" "}
-            и{" "}
-            <PythonTerm term="elif">
-              <Notation>{"elif"}</Notation>
-            </PythonTerm>
-            ,{" "}
-            <PythonTerm term="for">
-              <Notation>{"for"}</Notation> и <Notation>{"range"}</Notation>
-            </PythonTerm>
-            ,{" "}
-            <PythonTerm term="while">
-              <Notation>{"while"}</Notation>
-            </PythonTerm>{" "}
-            — уже объяснены в курсе Python, подсказка у термина напомнит
-            главное.
-          </Typography.Text>
-        </>
-      ),
-    },
-    {
-      id: "stroka",
-      navLabel: "Строка",
-      explanation: (
-        <>
-          <Typography.Text>
-            <strong>
-              Строка — это последовательность символов, у которых есть
-              определённый порядок.
-            </strong>
-          </Typography.Text>
-          <Typography.Text>
-            Например, в строке <Notation>{"s = 'AB12CA'"}</Notation> шесть
-            символов: <Notation>{"'A'"}</Notation>, <Notation>{"'B'"}</Notation>
-            , <Notation>{"'1'"}</Notation>, <Notation>{"'2'"}</Notation>,{" "}
-            <Notation>{"'C'"}</Notation>, <Notation>{"'A'"}</Notation>. Здесь{" "}
-            <Notation>{"'1'"}</Notation> и <Notation>{"'2'"}</Notation> —
-            символы, а не числа. Поэтому <Notation>{"'1' + '2'"}</Notation>{" "}
-            склеивает строки, а сложение чисел получится только после
-            преобразования{" "}
-            <PythonTerm term="str">
-              <Notation>{"int()"}</Notation>
-            </PythonTerm>
-            :
-          </Typography.Text>
-          <CodeBlock
-            code={"print('1' + '2')\nprint(int('1') + int('2'))"}
-            label={"Код на Python: print('1' + '2')"}
-            language="python"
-            output={"12\n3"}
-          />
-          <Typography.Text>
-            Функция <Notation>{"int()"}</Notation> преобразует подходящую строку
-            в целое число. Это понадобится, например, если в условии требуется
-            сравнивать суммы соседних цифр.
-          </Typography.Text>
-        </>
-      ),
-    },
-    {
-      id: "podstroka",
-      navLabel: "Подстрока",
-      explanation: (
-        <>
-          <Typography.Text>
-            <strong>
-              В большинстве задач 24 нас интересует непрерывный фрагмент
-              исходной строки.
-            </strong>{" "}
-            Его также называют <strong>подстрокой</strong>.
-          </Typography.Text>
-          <Typography.Text>
-            Пусть дана строка <Notation>{"ABCDE"}</Notation>. Выбери фрагмент,
-            чтобы увидеть, подстрока ли он:
-          </Typography.Text>
-          <VariantPicker
-            label={"Фрагмент строки ABCDE и подстрока ли он"}
-            variants={[
-              {
-                label: "ABC",
-                value: <>подстрока</>,
-                note: <>первые три символа подряд</>,
-              },
-              {
-                label: "BCD",
-                value: <>подстрока</>,
-                note: <>со второго по четвёртый символ подряд</>,
-              },
-              {
-                label: "E",
-                value: <>подстрока</>,
-                note: <>один символ — тоже фрагмент</>,
-              },
-              { label: "ABCDE", value: <>подстрока</>, note: <>вся строка</> },
-              {
-                label: "ACE",
-                value: <>не подстрока</>,
-                note: <>для её получения пришлось пропустить символы</>,
-              },
+          <LessonTable
+            label={"Слова условия задания 24"}
+            columns={[{ label: "В условии" }, { label: "Что это значит" }]}
+            rows={[
+              [
+                "текстовый файл из 10⁶ символов",
+                "одна строка; кусков в ней около 5 · 10¹¹ — перебор не успеет",
+              ],
+              [
+                "идущие подряд, непрерывная последовательность, подстрока",
+                "кусок строки без пропусков: символы пропускать и переставлять нельзя",
+              ],
+              [
+                "максимальное количество символов",
+                "длина самого длинного подходящего куска",
+              ],
+              [
+                "корректное арифметическое выражение",
+                "число, знак, число, знак, …, число — ни двух знаков рядом, ни знака на краю",
+              ],
+              [
+                "нет незначащих (ведущих) нулей",
+                "число не начинается с 0, кроме самого числа 0",
+              ],
+              [
+                "если таких несколько, …",
+                "правило выбора при равной длине — его выполняют дословно",
+              ],
             ]}
           />
           <Typography.Text>
-            Вообще последовательность с пропусками называют
-            *подпоследовательностью*. В формулировках задач это слово иногда
-            используется вместе с уточнением «непрерывная» или «идущие подряд».
-            Именно это уточнение определяет, разрешены ли пропуски.
+            Начнём с простых цепочек — на них видна главная идея одного прохода,
+            — потом дойдём до окон, позиций и выражений. Тема состоит из шести
+            подтем и дополнительного урока — у каждой своя страница:
           </Typography.Text>
-          <Typography.Text>
-            <strong>
-              Если сказано «идущие подряд», нельзя удалять внутренние символы,
-              переставлять их или склеивать раздельные участки.
-            </strong>{" "}
-            Например, в строке <Notation>{"AAAXAAAA"}</Notation> самая длинная
-            цепочка букв <Notation>{"A"}</Notation> имеет длину{" "}
-            <Notation>{"4"}</Notation>, а не <Notation>{"7"}</Notation>.
-          </Typography.Text>
+          <ol>
+            <li>
+              <strong>Строка и цепочка</strong> — ты сейчас здесь: чтение файла
+              и самая длинная цепочка.
+            </li>
+            <li>
+              <SubtopicLink routeSlug={R} subtopic="sosedi">
+                Условия на соседей
+              </SubtopicLink>{" "}
+              — одинаковые подряд, соседи различны, запретные пары.
+            </li>
+            <li>
+              <SubtopicLink routeSlug={R} subtopic="obrazcy-i-bloki">
+                Образцы и блоки
+              </SubtopicLink>{" "}
+              — DOGDOG…, цепочки пар, палиндромы.
+            </li>
+            <li>
+              <SubtopicLink routeSlug={R} subtopic="skolzyashchee-okno">
+                Скользящее окно
+              </SubtopicLink>{" "}
+              — не более K и ровно K букв во фрагменте.
+            </li>
+            <li>
+              <SubtopicLink routeSlug={R} subtopic="pozicii-i-granicy">
+                Позиции и границы
+              </SubtopicLink>{" "}
+              — K подряд идущих вхождений, особые начало и конец.
+            </li>
+            <li>
+              <SubtopicLink routeSlug={R} subtopic="chisla-i-vyrazheniya">
+                Числа и выражения
+              </SubtopicLink>{" "}
+              — регулярные выражения; решим задачу темы: ответ 172.
+            </li>
+            <li>
+              <SubtopicLink routeSlug={R} subtopic="usloviya-i-balans">
+                Выражения с условиями и баланс
+              </SubtopicLink>{" "}
+              — дополнительный урок для сложных вариаций.
+            </li>
+          </ol>
         </>
       ),
     },
     {
-      id: "indeksy",
-      navLabel: "Индексы",
+      id: "podryad",
+      navLabel: "Подряд — без пропусков",
       explanation: (
         <>
+          <Typography.Text>Что значит «идущие подряд символы»?</Typography.Text>
           <Typography.Text>
             <strong>
-              Чтобы указывать на символы строки, используются их номера —
-              индексы.
+              Кусок строки без пропусков: символы берут один за другим, ничего
+              не выкидывая из середины.
             </strong>{" "}
-            В Python нумерация начинается с нуля, а{" "}
-            <PythonTerm term="len">
-              <Notation>{"len"}</Notation>
-            </PythonTerm>{" "}
-            даёт количество символов. Поэтому последний неотрицательный индекс
-            равен <Notation>{"len(s) - 1"}</Notation>. Python также позволяет
-            считать с конца: <Notation>{"s[-1]"}</Notation> — последний символ,{" "}
-            <Notation>{"s[-2]"}</Notation> — предпоследний.
+            В строке <Notation>{"AAAXAAAA"}</Notation> самая длинная цепочка
+            букв A — четыре, а не семь: чтобы получить семь, пришлось бы
+            выкинуть X. Такой кусок ещё называют подстрокой или фрагментом.
           </Typography.Text>
           <Typography.Text>
-            Возьмём строку <Notation>{"CABAC"}</Notation>:
+            В Python к символу обращаются по номеру — индексу. Счёт идёт с нуля:{" "}
+            <Notation>{"s[0]"}</Notation> — первый символ,{" "}
+            <Notation>{"s[-1]"}</Notation> — последний,{" "}
+            <Notation>{"len(s)"}</Notation> — длина. Кусок вырезают{" "}
+            <PythonTerm term="slice">срезом</PythonTerm>{" "}
+            <Notation>{"s[a:b]"}</Notation>: от a включительно до b не
+            включительно.
           </Typography.Text>
           <CodeBlock
+            collapsible={false}
             code={
-              "s = 'CABAC'\nprint(s[0], s[2], s[4])\nprint(len(s), len(s) - 1)\nprint(s[-1], s[-2])"
+              "s = 'CABAC'\nprint(s[0], s[4], s[-1], len(s))\nprint(s[1:4])"
             }
-            label={"Возьмём строку CABAC"}
+            label={"Индексы и срез"}
             language="python"
-            output={"C B C\n5 4\nC A"}
+            output={"C C C 5\nABA"}
           />
           <Typography.Text>
-            Обращение <Notation>{"s[5]"}</Notation> в этом примере приведёт к
-            ошибке: шестого символа нет.
-          </Typography.Text>
-          <Typography.Text>
-            Отсюда возникает важная ловушка. Запись{" "}
-            <Notation>{"s[i - 1]"}</Notation> при <Notation>{"i = 0"}</Notation>{" "}
-            — это не «несуществующий предыдущий символ», а{" "}
-            <strong>последний символ строки</strong>:
-          </Typography.Text>
-          <CodeBlock
-            code={"s = 'CABAC'\ni = 0\nprint(s[i - 1])"}
-            label={"Код на Python: s = 'CABAC'"}
-            language="python"
-            output={"C"}
-          />
-          <Typography.Text>
-            Поэтому при сравнении с предыдущим символом обычно начинают с
-            индекса <Notation>{"1"}</Notation> либо отдельно проверяют, что{" "}
-            <Notation>{"i > 0"}</Notation>.
-          </Typography.Text>
-        </>
-      ),
-    },
-    {
-      id: "srezy",
-      navLabel: "Срезы",
-      explanation: (
-        <>
-          <Typography.Text>
-            <strong>Несколько соседних символов можно получить срезом.</strong>{" "}
-            <PythonTerm term="slice">Срез</PythonTerm>{" "}
-            <Notation>{"s[a:b]"}</Notation> означает: взять символы от индекса{" "}
-            <Notation>{"a"}</Notation> включительно до индекса{" "}
-            <Notation>{"b"}</Notation> не включительно. Поэтому длина такого
-            среза, если границы находятся внутри строки, равна b − a. Например,{" "}
-            <Notation>{"s[1:4]"}</Notation> для <Notation>{"CABAC"}</Notation> —
-            это <Notation>{"'ABA'"}</Notation>:
+            Срез <Notation>{"s[1:4]"}</Notation> взял символы с номерами 1, 2 и
+            3 — правая граница не входит:
           </Typography.Text>
           <LessonDiagram
-            {...lessonMedia.sliceCABAC_1_4}
+            {...lessonMedia.sliceCabac}
             caption={
               <>
-                Срез s[1:4] берёт символы с индексами 1, 2, 3: правая граница 4
-                не входит, длина 4 − 1 = 3.
+                Срез s[1:4] — символы 1, 2, 3; длина 4 − 1 = 3. Под строкой —
+                отрицательные индексы: s[-1] — последний символ.
               </>
             }
           />
           <Typography.Text>
-            Часто удобнее рассуждать о двух <strong>включённых</strong>{" "}
-            границах: <Notation>{"left"}</Notation> и{" "}
-            <Notation>{"right"}</Notation>. Тогда фрагмент — это{" "}
-            <Notation>{"s[left:right + 1]"}</Notation>, а его длина —{" "}
-            <Notation>{"right - left + 1"}</Notation>.
-          </Typography.Text>
-          <Typography.Text>
-            Почему появляется <Notation>{"+1"}</Notation>? Например, позиции{" "}
-            <Notation>{"2"}</Notation>, <Notation>{"3"}</Notation>,{" "}
-            <Notation>{"4"}</Notation> — это три символа: 4 − 2 + 1 = 3.
-          </Typography.Text>
-          <CodeBlock
-            code={
-              "s = 'XXAXXXXBXX'\nleft = 3\nright = 6\nprint(s[left:right + 1], right - left + 1)"
-            }
-            label={
-              "Почему появляется +1? Например, позиции 2, 3, 4 — это три символа: 4 − 2 + 1 = 3"
-            }
-            language="python"
-            output={"XXXX 4"}
-          />
-          <Typography.Text>
-            Полезно сразу различать три величины, которые получаются из тех же
-            двух концов: длину фрагмента вместе с обоими концами, количество
-            символов строго между концами и разность номеров позиций.
-          </Typography.Text>
-          <LessonDiagram
-            {...lessonMedia.stringBoundsXXAXXXXBXX_3_6}
-            caption={
-              <>
-                Концы left = 3 и right = 6: длина фрагмента 4, строго между
-                концами 2 символа, разность номеров 3.
-              </>
-            }
-          />
-          <Typography.Text>
-            Если задача использует слово «расстояние», нужно проверить по
-            условию и примеру, какая именно величина имеется в виду.
+            Если кусок задан двумя включёнными концами left и right, его длина —{" "}
+            <Notation>{"right - left + 1"}</Notation>: символы с номерами 3, 4,
+            5 и 6 — это четыре символа, хотя 6 − 3 = 3.
           </Typography.Text>
         </>
       ),
@@ -734,805 +550,143 @@ export const stringProcessingLesson = defineLesson({
       navLabel: "Чтение файла",
       explanation: (
         <>
+          <Typography.Text>Как прочитать строку из файла?</Typography.Text>
           <Typography.Text>
             <strong>
-              Прежде чем решать задачу, нужно правильно прочитать файл.
+              Одной строкой:{" "}
+              <Notation>{"s = open('24.txt').readline().strip()"}</Notation>.
+              Без <Notation>{"strip()"}</Notation> в конце останется перевод
+              строки — лишний символ.
             </strong>{" "}
-            Если в файле одна строка с исходной последовательностью, её читает{" "}
             <PythonTerm term="readline">
               <Notation>{"readline()"}</Notation>
-            </PythonTerm>
-            :
-          </Typography.Text>
-          <CodeBlock
-            code={
-              "with open('24.txt') as f:\n    s = f.readline().rstrip('\\r\\n')\n\nprint(s, len(s))"
-            }
-            label={
-              "Если в файле одна строка с исходной последовательностью, её читает {{readline|readline()}}"
-            }
-            language="python"
-            output={"XXAXXXXBXX 10"}
-          />
-          <Typography.Text>
-            Здесь{" "}
-            <PythonTerm term="file">
-              <Notation>{"with open"}</Notation>
             </PythonTerm>{" "}
-            открывает файл и закрывает его после чтения,{" "}
-            <Notation>{"readline()"}</Notation> читает одну строку, а{" "}
-            <Notation>{"rstrip('\\r\\n')"}</Notation> удаляет с правого края
-            символы перевода строки.
-          </Typography.Text>
-          <Typography.Text>
-            <strong>Перевод строки — тоже символ.</strong> Если его оставить,
-            программа иногда посчитает его частью последовательности. Например,
-            проверка <Notation>{"c != 'A'"}</Notation> истинна и для буквы{" "}
-            <Notation>{"B"}</Notation>, и для символа перевода строки. Посчитаем
-            символы, отличные от <Notation>{"A"}</Notation>, в прочитанной
-            строке с переводом и без него:
-          </Typography.Text>
-          <CodeBlock
-            code={
-              "with open('24.txt') as f:\n    line = f.readline()\n\ns = line.rstrip('\\r\\n')\nwith_newline = 0\nfor c in line:\n    if c != 'A':\n        with_newline += 1\n\nclean = 0\nfor c in s:\n    if c != 'A':\n        clean += 1\n\nprint(len(line), len(s))\nprint(with_newline, clean)"
-            }
-            label={
-              "Посчитаем символы, отличные от A, в прочитанной строке с переводом и без него"
-            }
-            language="python"
-            output={"11 10\n10 9"}
-          />
-          <Typography.Text>
-            Поэтому лишний перевод строки способен увеличить ответ.
-          </Typography.Text>
-        </>
-      ),
-    },
-    {
-      id: "chto-udalyaet-strip",
-      navLabel: "Что удаляет strip",
-      explanation: (
-        <>
-          <Typography.Text>
-            <strong>
-              Сокращения при чтении удобны, только если понятно, что именно они
-              удаляют.
-            </strong>
-          </Typography.Text>
-          <Typography.Text>
-            Часто встречается сокращение{" "}
-            <Notation>{"s = open('24.txt').readline().strip()"}</Notation>.{" "}
+            читает первую строку файла вместе с невидимым символом перевода
+            строки,{" "}
             <PythonTerm term="strip">
               <Notation>{"strip()"}</Notation>
             </PythonTerm>{" "}
-            удаляет пробельные символы с обоих краёв. Для последовательности из
-            букв и цифр это обычно подходит. Но если пробелы являются частью
-            данных, удалять их без причины нельзя.
-          </Typography.Text>
-          <Typography.Text>
-            Также не стоит автоматически писать{" "}
-            <Notation>{"s = f.readline()[:-1]"}</Notation>. Это удаляет{" "}
-            <strong>
-              последний символ независимо от того, является ли он переводом
-              строки
-            </strong>
-            . Если файл заканчивается без перевода строки, потеряется полезный
-            символ:
+            убирает его. В учебном файле 24.txt одна строка — XXAXXXXBXX:
           </Typography.Text>
           <CodeBlock
-            code={"s = 'XXAXXXXBXX'\nprint(s[:-1])"}
-            label={
-              "Если файл заканчивается без перевода строки, потеряется полезный символ"
-            }
-            language="python"
-            output={"XXAXXXXBX"}
-          />
-          <Typography.Text>
-            Если нужно прочитать весь файл, используют{" "}
-            <Notation>{"f.read()"}</Notation>. Но{" "}
-            <Notation>{"read()"}</Notation> сохраняет внутренние переводы строк.
-            Поэтому сначала выясняем, что дано:
-          </Typography.Text>
-          <ul>
-            <li>одна последовательность;</li>
-            <li>несколько независимых строк;</li>
-            <li>последовательность, специально разбитая на строки.</li>
-          </ul>
-        </>
-      ),
-    },
-    {
-      id: "stroki-fayla",
-      navLabel: "Строки файла",
-      explanation: (
-        <>
-          <Typography.Text>
-            <strong>
-              Если строки файла независимы, обрабатываем их отдельно.
-            </strong>{" "}
-            Цикл <Notation>{"for line in f"}</Notation> выдаёт строки по одной,
-            и каждую нужно очистить от перевода строки. Например, посчитаем
-            буквы <Notation>{"B"}</Notation> в каждой строке маленького файла:
-          </Typography.Text>
-          <CodeBlock
+            collapsible={false}
             code={
-              "with open('24-stroki.txt') as f:\n    for line in f:\n        s = line.rstrip('\\r\\n')\n\n        # Здесь обработка одной строки.\n        print(s, s.count('B'))"
+              "s = open('24.txt').readline().strip()\nprint(s, len(s))\n\nline = open('24.txt').readline()\nprint(len(line), len(line.strip()))"
             }
-            label={
-              "Например, посчитаем буквы B в каждой строке маленького файла"
-            }
+            label={"Строка из файла"}
             language="python"
-            output={"ABBACAB 3\nBCCB 2\nCAXXXAB 1\nAAB 1"}
+            output={"XXAXXXXBXX 10\n11 10"}
           />
           <Typography.Text>
-            Комментарий начинается с <Notation>{"#"}</Notation>; Python его не
-            выполняет. Метод{" "}
-            <PythonTerm term="strmeth">
-              <Notation>{"count"}</Notation>
-            </PythonTerm>{" "}
-            считает, сколько раз символ встречается в строке.
+            С переводом строки символов 11, без него — 10. Если ищем «символы,
+            отличные от A», перевод строки тоже посчитается — и ответ станет на
+            единицу больше. Поэтому <Notation>{"strip()"}</Notation> пишем
+            всегда.
           </Typography.Text>
-          <Typography.Text>
-            <strong>
-              Далее в примерах <Notation>{"s"}</Notation> — уже прочитанная
-              строка.
-            </strong>{" "}
-            Разные алгоритмы ниже — самостоятельные варианты решения, а не части
-            одной программы, которую нужно целиком скопировать.
-          </Typography.Text>
-        </>
-      ),
-    },
-    {
-      id: "tri-voprosa",
-      navLabel: "Три вопроса к условию",
-      explanation: (
-        <>
-          <Typography.Text>
-            <strong>
-              Перед написанием кода полезно разделить условие на три вопроса.
-            </strong>
-          </Typography.Text>
-          <ol>
-            <li>
-              <strong>Какие фрагменты допустимы?</strong> Например, содержат не
-              более трёх букв <Notation>{"A"}</Notation>.
-            </li>
-            <li>
-              <strong>Что нужно оптимизировать?</strong> Например, длину: найти
-              самую большую.
-            </li>
-            <li>
-              <strong>Что нужно вывести?</strong> Длину, начальную позицию,
-              количество фрагментов, букву, значение выражения?
-            </li>
-          </ol>
-          <Typography.Text>
-            Последние два вопроса могут иметь разные ответы. Например:
-          </Typography.Text>
-          <blockquote>
+          <ProofDisclosure
+            kind="nuance"
+            summary="Тонкости: [:-1] и файлы из многих строк"
+          >
             <Typography.Text>
-              Найдите самый длинный подходящий фрагмент и укажите номер его
-              первого символа.
+              <Notation>{"readline()[:-1]"}</Notation> отрезает последний
+              символ, даже если перевода строки в файле нет, — тогда пропадёт
+              настоящий символ данных. <Notation>{"strip()"}</Notation> убирает
+              только пробелы и переводы строк, а в файлах задания 24 их внутри
+              строки не бывает.
             </Typography.Text>
-          </blockquote>
-          <Typography.Text>
-            Здесь выбираем по длине, а выводим позицию. Ещё пример:
-          </Typography.Text>
-          <blockquote>
             <Typography.Text>
-              Найдите букву, образующую самую длинную цепочку, и укажите
-              количество этой буквы во всей строке.
+              Если в файле много независимых строк, их перебирают циклом{" "}
+              <Notation>{"for line in open('24.txt')"}</Notation> и каждую
+              очищают <Notation>{"strip()"}</Notation> отдельно.
             </Typography.Text>
-          </blockquote>
-          <Typography.Text>
-            Здесь длина цепочки определяет выбор, но сама по себе не является
-            ответом. Это одна из причин, по которым механическое использование
-            шаблонов приводит к ошибкам.
-          </Typography.Text>
-        </>
-      ),
-    },
-    {
-      id: "polnyy-perebor",
-      navLabel: "Цена полного перебора",
-      explanation: (
-        <>
-          <Typography.Text>
-            <strong>
-              Полный перебор всех подстрок обычно слишком медленный.
-            </strong>
-          </Typography.Text>
-          <Typography.Text>
-            В строке длины n с первой позиции начинается n непустых подстрок, со
-            второй — n − 1, с третьей — n − 2, с последней — одна. Всего n + (n
-            − 1) + … + 1 = n(n + 1)/2. Посчитаем это число для разных длин:
-          </Typography.Text>
-          <CodeBlock
-            code={
-              "for n in [10, 1000, 1000000]:\n    print(n, n * (n + 1) // 2)"
-            }
-            label={"Посчитаем это число для разных длин"}
-            language="python"
-            output={"10 55\n1000 500500\n1000000 500000500000"}
-          />
-          <Typography.Text>
-            При миллионе символов это примерно 5 · 10¹¹ фрагментов. Причём
-            каждый фрагмент ещё нужно проверить. Поэтому задача обычно состоит в
-            том, чтобы{" "}
-            <strong>не рассматривать каждую подстроку отдельно</strong>.
-          </Typography.Text>
-          <Typography.Text>
-            Если число действий растёт примерно пропорционально длине строки,
-            говорят о <strong>линейном алгоритме</strong> и обозначают его
-            сложность как <Notation>{"O(n)"}</Notation>. Если число действий
-            растёт примерно как квадрат длины строки —{" "}
-            <PythonTerm term="bigo">
-              <Notation>{"O(n²)"}</Notation>
-            </PythonTerm>
-            .
-          </Typography.Text>
-          <Typography.Text>
-            Для задания 24 особенно полезны алгоритмы, которые проходят по
-            данным один или несколько раз.
-          </Typography.Text>
-        </>
-      ),
-    },
-    {
-      id: "stroka-itogo",
-      navLabel: "Итого",
-      explanation: (
-        <>
-          <LessonSummary
-            items={[
-              {
-                note: (
-                  <>
-                    Подстрока — непрерывный фрагмент: «идущие подряд» запрещают
-                    пропуски и склеивание.
-                  </>
-                ),
-              },
-              {
-                note: (
-                  <>
-                    Индексы идут с нуля; <Notation>{"s[i - 1]"}</Notation> при{" "}
-                    <Notation>{"i = 0"}</Notation> — последний символ, а не
-                    «пустота».
-                  </>
-                ),
-              },
-              {
-                note: (
-                  <>
-                    Фрагмент с включёнными концами —{" "}
-                    <Notation>{"s[left:right + 1]"}</Notation>, его длина{" "}
-                    <Notation>{"right - left + 1"}</Notation>; «между» и
-                    «разность номеров» — другие числа.
-                  </>
-                ),
-              },
-              {
-                note: (
-                  <>
-                    Строку файла читают{" "}
-                    <Notation>{"readline().rstrip('\\r\\n')"}</Notation>;
-                    многострочный файл — по одной строке.
-                  </>
-                ),
-              },
-              {
-                note: (
-                  <>
-                    Перед кодом три вопроса: что допустимо, что оптимизируем,
-                    что выводим. Перебор всех подстрок — n(n + 1)/2 фрагментов,
-                    поэтому нужны линейные алгоритмы.
-                  </>
-                ),
-              },
-            ]}
-          />
+          </ProofDisclosure>
         </>
       ),
     },
     {
       id: "tekushchaya-dlina",
-      navLabel: "Текущая длина",
+      navLabel: "Текущая и лучшая длина",
       explanation: (
         <>
           <Typography.Text>
+            Как найти самую длинную цепочку букв X, не перебирая все куски
+            строки?
+          </Typography.Text>
+          <Typography.Text>
             <strong>
-              Первый основной приём — хранить длину подходящей цепочки,
-              заканчивающейся в текущем месте.
+              Идти по строке и помнить два числа: current — длину цепочки,
+              которая кончается на текущем символе, и best — лучшую длину из уже
+              виденных.
             </strong>{" "}
-            Так решаются задачи, где условие касается отдельного символа, пары
-            соседей или тройки: цепочка одной буквы, различные соседи,
-            запрещённые пары.
+            Подходящий символ продлевает цепочку на единицу, неподходящий
+            обрывает её: current = 0. После каждого символа best сравнивается с
+            current.
           </Typography.Text>
+          <CodeBlock
+            collapsible={false}
+            code={
+              "s = open('24.txt').readline().strip()\n\ncurrent = 0\nbest = 0\nfor c in s:\n    if c == 'X':\n        current += 1\n    else:\n        current = 0\n    best = max(best, current)\n\nprint(best)"
+            }
+            label={"Самая длинная цепочка X"}
+            language="python"
+            output={"4"}
+          />
           <Typography.Text>
-            Начнём со строки <Notation>{"XXAXXXXBXX"}</Notation> из файла{" "}
-            <Notation>{"24.txt"}</Notation> подтемы 1: в ней ищем самую длинную
-            цепочку букв <Notation>{"X"}</Notation>. Чтение файла и индексы
-            считаем знакомыми по подтеме 1.
-          </Typography.Text>
-        </>
-      ),
-    },
-    {
-      id: "dve-peremennye",
-      navLabel: "Две переменные",
-      explanation: (
-        <>
-          <Typography.Text>
-            <strong>
-              Для цепочки нужны две переменные: длина текущей цепочки и лучшая
-              длина.
-            </strong>
-          </Typography.Text>
-          <Typography.Text>Начнём с простой задачи:</Typography.Text>
-          <blockquote>
-            <Typography.Text>
-              Найти максимальное количество букв <Notation>{"X"}</Notation>,
-              идущих подряд.
-            </Typography.Text>
-          </blockquote>
-          <Typography.Text>
-            В строке <Notation>{"XXAXXXXBXX"}</Notation> ответ:{" "}
-            <Notation>{"4"}</Notation>. Нужны две переменные:{" "}
-            <Notation>{"current"}</Notation> — длина цепочки{" "}
-            <Notation>{"X"}</Notation>, которая продолжается прямо сейчас, и{" "}
-            <Notation>{"best"}</Notation> — наибольшая длина среди всех уже
-            просмотренных цепочек. Обе начинаются с нуля.
-          </Typography.Text>
-          <Typography.Text>
-            Пройди строку по шагам: заливка показывает текущую цепочку, скобка —
-            лучшую из уже найденных.
+            Пройди строку XXAXXXXBXX по шагам: заливка — текущая цепочка, скобка
+            — лучшая из найденных.
           </Typography.Text>
           <LessonStepper
-            {...lessonMedia.stringRunStepperXXAXXXXBXX_only_X}
+            {...lessonMedia.runStepperX}
             label={"Самая длинная цепочка X в строке XXAXXXXBXX: шаг за шагом"}
           />
-          <Typography.Text>Алгоритм:</Typography.Text>
-          <CodeBlock
-            code={
-              "with open('24.txt') as f:\n    s = f.readline().rstrip('\\r\\n')\n\ncurrent = 0\nbest = 0\n\nfor c in s:\n    if c == 'X':\n        current += 1\n    else:\n        current = 0\n\n    best = max(best, current)\n\nprint(best)"
-            }
-            label={"Алгоритм"}
-            language="python"
-            output={"4"}
-          />
+          <Typography.Text>
+            Сравнивать best с current нужно на каждом шаге, а не только при
+            обрыве. Иначе цепочка в самом конце строки в ответ не попадёт: после
+            неё обрыва уже не будет. Строка проходится один раз — миллион
+            символов программа обработает за доли секунды.
+          </Typography.Text>
+        </>
+      ),
+    },
+    {
+      id: "chto-vyvodit",
+      navLabel: "Что выводить",
+      explanation: (
+        <>
+          <Typography.Text>
+            В условии просят не длину самой длинной цепочки X, а номер её
+            первого символа, а если таких цепочек несколько — последней из них.
+            Что меняется?
+          </Typography.Text>
           <Typography.Text>
             <strong>
-              Почему при <Notation>{"A"}</Notation> мы записываем ноль?
+              Меняется только то, что запоминаем: вместе с длиной храним начало
+              лучшей цепочки, а правило «при равенстве» записываем явно.
             </strong>{" "}
-            Потому что подходящий фрагмент должен состоять только из{" "}
-            <Notation>{"X"}</Notation>. Сам символ <Notation>{"A"}</Notation> не
-            может входить даже в цепочку длины один.
-          </Typography.Text>
-        </>
-      ),
-    },
-    {
-      id: "obnovlenie-maksimuma",
-      navLabel: "Обновление максимума",
-      explanation: (
-        <>
-          <Typography.Text>
-            <strong>
-              Максимум обновляется после каждого символа — так учитывается и
-              цепочка в конце файла.
-            </strong>
-          </Typography.Text>
-          <Typography.Text>
-            Если обновлять максимум только в момент разрыва, последняя цепочка
-            может остаться неучтённой. Возьмём строку, где самая длинная цепочка
-            стоит в конце, и обновим <Notation>{"best"}</Notation> только при
-            разрыве:
+            Перед кодом ответь на три вопроса: какие куски подходят, что
+            сравниваем, что выводим.
           </Typography.Text>
           <CodeBlock
+            collapsible={false}
             code={
-              "s = 'XXAXXXXBXXXXX'\ncurrent = 0\nbest = 0\n\nfor c in s:\n    if c == 'X':\n        current += 1\n    else:\n        best = max(best, current)\n        current = 0\n\nprint(best)"
+              "s = 'XXAXXBXXAX'\ncurrent = 0\nbest_length = 0\nbest_start = 0\nfor i in range(len(s)):\n    if s[i] == 'X':\n        current += 1\n    else:\n        current = 0\n    if current > 0 and current >= best_length:\n        best_length = current\n        best_start = i - current + 1\n\nprint(best_length, best_start)"
             }
-            label={
-              "Возьмём строку, где самая длинная цепочка стоит в конце, и обновим best только при разрыве"
-            }
+            label={"Длина и начало последней из самых длинных"}
             language="python"
-            output={"4"}
+            output={"2 6"}
           />
           <Typography.Text>
-            Цепочка <Notation>{"XXXXX"}</Notation> длины 5 в конце строки не
-            попала в ответ: после неё разрыва уже не было. Программа с
-            обновлением после каждого символа на этой строке печатает 5.
-          </Typography.Text>
-        </>
-      ),
-    },
-    {
-      id: "uslovie-na-simvol",
-      navLabel: "Условие на символ",
-      explanation: (
-        <>
-          <Typography.Text>
-            <strong>
-              Та же идея работает для разных условий на отдельный символ.
-            </strong>{" "}
-            Меняется только проверка в <Notation>{"if"}</Notation>. Выбери
-            условие, чтобы увидеть, какую цепочку оно описывает:
-          </Typography.Text>
-          <VariantPicker
-            label={"Условие на символ и цепочка, которую оно описывает"}
-            variants={[
-              {
-                label: "c == 'X'",
-                value: (
-                  <>
-                    цепочка только из <Notation>{"X"}</Notation>
-                  </>
-                ),
-                note: <>любой другой символ разрывает её</>,
-              },
-              {
-                label: "c in 'ABC'",
-                value: (
-                  <>
-                    цепочка только из <Notation>{"A"}</Notation>,{" "}
-                    <Notation>{"B"}</Notation>, <Notation>{"C"}</Notation>
-                  </>
-                ),
-                note: (
-                  <>
-                    <Notation>{"in"}</Notation> проверяет символ по набору
-                  </>
-                ),
-              },
-              {
-                label: "c != 'D'",
-                value: (
-                  <>
-                    цепочка без <Notation>{"D"}</Notation>
-                  </>
-                ),
-                note: (
-                  <>
-                    разрывает только <Notation>{"D"}</Notation>
-                  </>
-                ),
-              },
-              {
-                label: "c in '0123456789'",
-                value: <>цепочка десятичных цифр</>,
-                note: <>буквы и знаки разрывают её</>,
-              },
-            ]}
-          />
-          <Typography.Text>
-            У всех этих задач одинаковая логика:
-          </Typography.Text>
-          <blockquote>
-            <Typography.Text>
-              Текущий символ сам по себе либо допустим, либо полностью разрывает
-              цепочку.
-            </Typography.Text>
-          </blockquote>
-        </>
-      ),
-    },
-    {
-      id: "sosednie-simvoly",
-      navLabel: "Соседние символы",
-      explanation: (
-        <>
-          <Typography.Text>
-            <strong>
-              Если условие связывает соседние символы, при разрыве часто
-              остаётся цепочка длины один.
-            </strong>
-          </Typography.Text>
-          <Typography.Text>Теперь требуется:</Typography.Text>
-          <blockquote>
-            <Typography.Text>
-              Найти самую длинную цепочку одинаковых символов.
-            </Typography.Text>
-          </blockquote>
-          <Typography.Text>
-            Например, в строке <Notation>{"AABBBBCCAAA"}</Notation> ответ:{" "}
-            <Notation>{"4"}</Notation>.
-          </Typography.Text>
-          <CodeBlock
-            code={
-              "s = 'AABBBBCCAAA'\ncurrent = 0\nbest = 0\n\nfor i in range(len(s)):\n    if i > 0 and s[i] == s[i - 1]:\n        current += 1\n    else:\n        current = 1\n\n    best = max(best, current)\n\nprint(best)"
-            }
-            label={"Например, в строке AABBBBCCAAA ответ: 4"}
-            language="python"
-            output={"4"}
-          />
-          <Typography.Text>
-            Почему здесь <Notation>{"current = 1"}</Notation>, а не{" "}
-            <Notation>{"0"}</Notation>? Допустим, после нескольких{" "}
-            <Notation>{"A"}</Notation> встретилась <Notation>{"B"}</Notation>.
-            Цепочка из <Notation>{"A"}</Notation> закончилась. Но символ{" "}
-            <Notation>{"B"}</Notation>{" "}
-            <strong>сам образует новую подходящую цепочку длины один</strong>.
+            Цепочка, которая кончается на символе i, начинается на{" "}
+            <Notation>{"i - current + 1"}</Notation>. Проверка{" "}
+            <Notation>{"current > 0"}</Notation> не даёт «цепочке» нулевой длины
+            на символе A занять место ответа. Три цепочки длины 2 начинаются с
+            0-го, 3-го и 6-го символа. Знак <Notation>{">="}</Notation> пускает
+            более позднюю цепочку при равенстве, поэтому выбрана последняя. Для
+            первой из равных нужен строгий <Notation>{">"}</Notation>.
           </Typography.Text>
           <Typography.Text>
-            Это различие нужно понимать, а не заучивать:
-          </Typography.Text>
-          <LessonTable
-            label={"Это различие нужно понимать, а не заучивать"}
-            columns={[
-              { label: "Условие" },
-              { label: "Что происходит при нарушении" },
-            ]}
-            rows={[
-              [
-                <>
-                  Фрагмент состоит только из <Notation>{"X"}</Notation>,
-                  встретилась <Notation>{"A"}</Notation>
-                </>,
-                <>
-                  <Notation>{"A"}</Notation> непригодна сама по себе → длина{" "}
-                  <Notation>{"0"}</Notation>
-                </>,
-              ],
-              [
-                <>
-                  Все символы фрагмента одинаковы, после{" "}
-                  <Notation>{"A"}</Notation> встретилась{" "}
-                  <Notation>{"B"}</Notation>
-                </>,
-                <>
-                  <Notation>{"B"}</Notation> начинает новую цепочку → длина{" "}
-                  <Notation>{"1"}</Notation>
-                </>,
-              ],
-            ]}
-          />
-          <Typography.Text>
-            Проверка <Notation>{"i > 0 and s[i] == s[i - 1]"}</Notation> сначала
-            проверяет <Notation>{"i > 0"}</Notation>. Если это неправда, вторая
-            часть не вычисляется. Поэтому в начале строки мы не сравниваем
-            первый символ с последним — ту самую ловушку{" "}
-            <Notation>{"s[i - 1]"}</Notation> при <Notation>{"i = 0"}</Notation>{" "}
-            из подтемы 1.
-          </Typography.Text>
-        </>
-      ),
-    },
-    {
-      id: "sosedi-razlichny",
-      navLabel: "Соседи различны",
-      explanation: (
-        <>
-          <Typography.Text>
-            <strong>
-              Условие «каждые два соседних символа различны» проверяется почти
-              так же.
-            </strong>
-          </Typography.Text>
-          <Typography.Text>
-            Подходит, например, строка <Notation>{"ABACA"}</Notation>: несмотря
-            на повторение <Notation>{"A"}</Notation>, каждая соседняя пара
-            состоит из разных символов. Пройди по шагам строку{" "}
-            <Notation>{"ABBACAB"}</Notation>:
-          </Typography.Text>
-          <LessonStepper
-            {...lessonMedia.stringRunStepperABBACAB_diff}
-            label={"Цепочка различных соседей в строке ABBACAB: шаг за шагом"}
-          />
-          <CodeBlock
-            code={
-              "s = 'ABBACAB'\ncurrent = 0\nbest = 0\n\nfor i in range(len(s)):\n    if i > 0 and s[i] != s[i - 1]:\n        current += 1\n    else:\n        current = 1\n\n    best = max(best, current)\n\nprint(best)"
-            }
-            label={"Пройди по шагам строку ABBACAB"}
-            language="python"
-            output={"5"}
-          />
-          <Typography.Text>
-            Ответ: <Notation>{"5"}</Notation>, фрагмент{" "}
-            <Notation>{"BACAB"}</Notation>.
-          </Typography.Text>
-          <Typography.Text>
-            <strong>Не путай два разных требования:</strong> соседние символы
-            различны и все символы фрагмента различны. В{" "}
-            <Notation>{"ABACA"}</Notation> первое требование выполнено, второе —
-            нет. Для второго нужен другой алгоритм; он разобран в дополнительном
-            уроке 8.
-          </Typography.Text>
-        </>
-      ),
-    },
-    {
-      id: "drugie-usloviya-sosedey",
-      navLabel: "Другие условия на соседей",
-      explanation: (
-        <>
-          <Typography.Text>
-            <strong>
-              Другие условия на соседей меняют только проверку пары.
-            </strong>{" "}
-            Цикл, <Notation>{"i > 0"}</Notation> и сброс до единицы остаются
-            прежними. Выбери условие:
-          </Typography.Text>
-          <VariantPicker
-            label={"Условие на соседей и проверка пары"}
-            variants={[
-              {
-                label: "различны",
-                value: (
-                  <>
-                    <Notation>{"s[i] != s[i - 1]"}</Notation>
-                  </>
-                ),
-                note: <>соседние символы разные</>,
-              },
-              {
-                label: "одинаковы",
-                value: (
-                  <>
-                    <Notation>{"s[i] == s[i - 1]"}</Notation>
-                  </>
-                ),
-                note: <>цепочка одного символа</>,
-              },
-              {
-                label: "цифры строго убывают",
-                value: (
-                  <>
-                    <Notation>{"s[i] < s[i - 1]"}</Notation>
-                  </>
-                ),
-                note: (
-                  <>
-                    символы цифр сравниваются в том же порядке, что и сами
-                    цифры: <Notation>{"'3' < '7'"}</Notation>
-                  </>
-                ),
-              },
-              {
-                label: "буква и цифра чередуются",
-                value: (
-                  <>
-                    <Notation>
-                      {"(s[i] in digits) != (s[i - 1] in digits)"}
-                    </Notation>
-                  </>
-                ),
-                note: (
-                  <>
-                    <Notation>{"digits = '0123456789'"}</Notation>; рядом не
-                    стоят две буквы или две цифры
-                  </>
-                ),
-              },
-            ]}
-          />
-        </>
-      ),
-    },
-    {
-      id: "zapreshchyonnye-pary",
-      navLabel: "Запрещённые пары",
-      explanation: (
-        <>
-          <Typography.Text>
-            <strong>
-              Запрет на определённые соседние пары тоже решается через текущую
-              длину.
-            </strong>
-          </Typography.Text>
-          <Typography.Text>Например:</Typography.Text>
-          <blockquote>
-            <Typography.Text>
-              Никакие две буквы из набора <Notation>{"ABC"}</Notation> не должны
-              стоять рядом, в том числе одинаковые.
-            </Typography.Text>
-          </blockquote>
-          <Typography.Text>
-            Запрещены пары <Notation>{"AA"}</Notation>,{" "}
-            <Notation>{"AB"}</Notation>, <Notation>{"AC"}</Notation>,{" "}
-            <Notation>{"BA"}</Notation>, <Notation>{"BB"}</Notation>,{" "}
-            <Notation>{"BC"}</Notation>, <Notation>{"CA"}</Notation>,{" "}
-            <Notation>{"CB"}</Notation>, <Notation>{"CC"}</Notation>. Нарушение
-            возникает, когда <strong>оба</strong> соседних символа принадлежат
-            набору: <Notation>{"s[i - 1] in 'ABC' and s[i] in 'ABC'"}</Notation>
-            . Проверку удобно записать цепочкой{" "}
-            <PythonTerm term="elif">
-              <Notation>{"elif"}</Notation>
-            </PythonTerm>{" "}
-            — «иначе, если выполнено следующее условие»:
-          </Typography.Text>
-          <CodeBlock
-            code={
-              "s = 'DXABY'\ncurrent = 0\nbest = 0\n\nfor i in range(len(s)):\n    if i == 0:\n        current = 1\n    elif s[i - 1] in 'ABC' and s[i] in 'ABC':\n        current = 1\n    else:\n        current += 1\n\n    best = max(best, current)\n\nprint(best)"
-            }
-            label={"Код на Python: s = 'DXABY'"}
-            language="python"
-            output={"3"}
-          />
-          <Typography.Text>
-            При запрещённой паре отбрасываем предыдущую цепочку, но оставляем
-            текущий символ. В строке <Notation>{"DXABY"}</Notation> пара{" "}
-            <Notation>{"AB"}</Notation> запрещена. Однако фрагмент{" "}
-            <Notation>{"BY"}</Notation> допустим. Поэтому обнулить длину на{" "}
-            <Notation>{"B"}</Notation> было бы ошибкой. Лучший фрагмент здесь —{" "}
-            <Notation>{"DXA"}</Notation>.
-          </Typography.Text>
-        </>
-      ),
-    },
-    {
-      id: "usloviya-po-troykam",
-      navLabel: "Условия по тройкам",
-      explanation: (
-        <>
-          <Typography.Text>
-            <strong>
-              Иногда условие проверяется по тройкам, а при нарушении нужно
-              сохранить два последних символа.
-            </strong>
-          </Typography.Text>
-          <Typography.Text>
-            Пусть строка состоит из цифр. Требуется максимальный фрагмент, в
-            котором для каждых трёх соседних цифр:
-          </Typography.Text>
-          <blockquote>
-            <Typography.Text>Сумма первых двух больше третьей.</Typography.Text>
-          </blockquote>
-          <Typography.Text>
-            Например, тройка <Notation>{"245"}</Notation> подходит: 2 + 4 {">"}{" "}
-            5. А <Notation>{"124"}</Notation> не подходит: 1 + 2 не больше 4.
-            Если встретилась плохая тройка <Notation>{"124"}</Notation>,
-            фрагмент <Notation>{"24"}</Notation> всё ещё допустим: в нём пока
-            нет ни одной тройки, нарушающей правило.
-          </Typography.Text>
-          <CodeBlock
-            code={
-              "s = '2451246'\ncurrent = min(len(s), 2)\nbest = current\n\nfor i in range(2, len(s)):\n    a = int(s[i - 2])\n    b = int(s[i - 1])\n    c = int(s[i])\n\n    if a + b > c:\n        current += 1\n    else:\n        current = 2\n\n    best = max(best, current)\n\nprint(best)"
-            }
-            label={"Код на Python: s = '2451246'"}
-            language="python"
-            output={"5"}
-          />
-          <Typography.Text>
-            Первоначально учитываем первые два символа. Если строка короче,
-            берём её фактическую длину. Здесь лучший фрагмент —{" "}
-            <Notation>{"24512"}</Notation>: тройка <Notation>{"124"}</Notation>{" "}
-            его обрывает, и с цифр <Notation>{"24"}</Notation> начинается новый
-            фрагмент, а тройка <Notation>{"246"}</Notation> (2 + 4 = 6, не
-            больше) снова оставляет два символа.
-          </Typography.Text>
-          <Typography.Text>
-            Этот алгоритм предполагает, что фрагменты длины один и два
-            разрешены. Если условие отдельно требует хотя бы три символа, это
-            ограничение нужно учитывать при обновлении ответа.
-          </Typography.Text>
-        </>
-      ),
-    },
-    {
-      id: "sbros-0-1-2",
-      navLabel: "Сброс до 0, 1, 2",
-      explanation: (
-        <>
-          <Typography.Text>
-            <strong>
-              Общая причина сбросов <Notation>{"0"}</Notation>,{" "}
-              <Notation>{"1"}</Notation>, <Notation>{"2"}</Notation> теперь
-              видна.
-            </strong>
-          </Typography.Text>
-          <blockquote>
-            <Typography.Text>
-              После нарушения нужно оставить самый длинный конец текущего
-              фрагмента, который всё ещё удовлетворяет условию.
-            </Typography.Text>
-          </blockquote>
-          <Typography.Text>
-            Условие на один символ — недопустимый символ не остаётся вовсе,
-            сброс до 0. Условие на пару — остаётся текущий символ, сброс до 1.
-            Условие на тройку — остаются два последних символа, сброс до 2. В
-            других задачах длина такого конца может быть и больше двух.
+            Нумерацию берут из условия: если символы считают с единицы, к
+            индексу Python прибавляют 1.
           </Typography.Text>
         </>
       ),
@@ -1544,48 +698,25 @@ export const stringProcessingLesson = defineLesson({
         <>
           <LessonSummary
             items={[
+              { key: "Подряд", note: <>кусок без пропусков — подстрока</> },
               {
+                key: "Чтение файла",
                 note: (
-                  <>
-                    <Notation>{"current"}</Notation> — длина подходящей цепочки,
-                    которая заканчивается на текущем символе;{" "}
-                    <Notation>{"best"}</Notation> — лучшая из уже просмотренных.
-                  </>
+                  <Notation>{"s = open('24.txt').readline().strip()"}</Notation>
                 ),
               },
               {
-                note: (
-                  <>
-                    <Notation>{"best"}</Notation> обновляется после каждого
-                    символа, иначе теряется цепочка в конце файла.
-                  </>
-                ),
+                key: "Длина куска",
+                note: <>right − left + 1 при включённых концах</>,
               },
               {
-                note: (
-                  <>
-                    Сброс равен длине самого длинного конца, который ещё
-                    подходит: 0 для условия на символ, 1 для пары соседей, 2 для
-                    тройки.
-                  </>
-                ),
+                key: "current",
+                note: <>длина цепочки, которая кончается на текущем символе</>,
               },
+              { key: "best", note: <>обновлять после каждого символа</> },
               {
-                note: (
-                  <>
-                    Сравнение с предыдущим символом защищается проверкой{" "}
-                    <Notation>{"i > 0 and …"}</Notation>.
-                  </>
-                ),
-              },
-              {
-                note: (
-                  <>
-                    Запрещённая пара — условие{" "}
-                    <Notation>{"s[i - 1] in набор and s[i] in набор"}</Notation>{" "}
-                    и сброс до 1.
-                  </>
-                ),
+                key: "При равенстве",
+                note: <>«&gt;=» — последний из равных, «&gt;» — первый</>,
               },
             ]}
           />
@@ -1593,597 +724,210 @@ export const stringProcessingLesson = defineLesson({
       ),
     },
     {
-      id: "obrazcy-za-odin-prohod",
-      navLabel: "Один проход",
+      id: "odinakovye-podryad",
+      navLabel: "Одинаковые подряд",
       explanation: (
         <>
           <Typography.Text>
+            Как найти самую длинную цепочку одинаковых символов, если буква
+            заранее не известна?
+          </Typography.Text>
+          <Typography.Text>
             <strong>
-              Короткие образцы, повторяющиеся цепочки и частоты символов
-              решаются одним проходом, если заранее понять, что проверять на
-              каждой позиции.
+              Сравнивать каждый символ с предыдущим. Совпал — цепочка растёт. Не
+              совпал — новая цепочка начинается с этого символа: current = 1, а
+              не 0.
             </strong>{" "}
-            Это повторяющийся образец вида <Notation>{"XYZXYZ…"}</Notation>,
-            цепочки целых пар и троек, самый частый символ в окружении и файлы
-            из многих строк.
+            Условие здесь на пару соседей, а один символ сам по себе ему не
+            мешает.
           </Typography.Text>
+          <CodeBlock
+            collapsible={false}
+            code={
+              "s = 'AABBBBCCAAA'\ncurrent = 1\nbest = 1\nfor i in range(1, len(s)):\n    if s[i] == s[i - 1]:\n        current += 1\n    else:\n        current = 1\n    best = max(best, current)\n\nprint(best)"
+            }
+            label={"Самая длинная цепочка одинаковых"}
+            language="python"
+            output={"4"}
+          />
           <Typography.Text>
-            Примеры здесь — короткие строки вроде <Notation>{"ABABA"}</Notation>{" "}
-            и <Notation>{"ABACABAD"}</Notation>: на них всё проверяется руками.
-            Цепочку с текущей длиной <Notation>{"current"}</Notation> и лучшей{" "}
-            <Notation>{"best"}</Notation> считаем знакомой по подтеме 2.
+            Цикл начинается с <Notation>{"i = 1"}</Notation>: у первого символа
+            соседа слева нет. Если начать с нуля,{" "}
+            <Notation>{"s[i - 1]"}</Notation> при <Notation>{"i = 0"}</Notation>{" "}
+            — это <Notation>{"s[-1]"}</Notation>, последний символ строки, и
+            первый символ сравнится с последним.
           </Typography.Text>
         </>
       ),
     },
     {
-      id: "poisk-obrazca",
-      navLabel: "Поиск образца",
+      id: "sosedi-razlichny",
+      navLabel: "Соседи различны",
       explanation: (
         <>
           <Typography.Text>
-            <strong>
-              Для поиска короткого образца нужно перебрать все возможные позиции
-              его начала.
-            </strong>
-          </Typography.Text>
-          <Typography.Text>
-            Пусть требуется посчитать вхождения{" "}
-            <Notation>{"word = 'ABA'"}</Notation> в строке{" "}
-            <Notation>{"ABABA"}</Notation>. Вхождений два: с позиции{" "}
-            <Notation>{"0"}</Notation> (символы <Notation>{"0–2"}</Notation>) и
-            с позиции <Notation>{"2"}</Notation> (символы{" "}
-            <Notation>{"2–4"}</Notation>). Они имеют общий символ, то есть{" "}
-            <strong>перекрываются</strong>.
-          </Typography.Text>
-          <Typography.Text>Проверяем каждый возможный старт:</Typography.Text>
-          <CodeBlock
-            code={
-              "s = 'ABABA'\nword = 'ABA'\nm = len(word)\ncount = 0\n\nfor i in range(len(s) - m + 1):\n    if s[i:i + m] == word:\n        count += 1\n\nprint(count)"
-            }
-            label={"Проверяем каждый возможный старт"}
-            language="python"
-            output={"2"}
-          />
-          <Typography.Text>
-            Почему диапазон заканчивается на{" "}
-            <Notation>{"len(s) - m + 1"}</Notation>? Последнее возможное начало
-            имеет индекс <Notation>{"len(s) - m"}</Notation>. Но правая граница{" "}
-            <Notation>{"range()"}</Notation> не включается. Поэтому прибавляем
-            один.
+            А если каждые два соседних символа должны быть разными?
           </Typography.Text>
           <Typography.Text>
             <strong>
-              Метод <Notation>{"count()"}</Notation> не всегда заменяет такой
-              перебор.
+              Тот же цикл, только проверка обратная:{" "}
+              <Notation>{"s[i] != s[i - 1]"}</Notation>. Два одинаковых символа
+              рядом обрывают цепочку, второй из них начинает новую.
             </strong>{" "}
-            Он считает неперекрывающиеся вхождения: найдя вхождение, продолжает
-            поиск после его конца.
+            Подходит, например, ABACA: буква A повторяется, но не рядом.
           </Typography.Text>
-          <LessonDiagram
-            {...lessonMedia.overlapABABA_ABA}
-            caption={
-              <>
-                ABA в ABABA начинается на позициях 0 и 2; count находит первое
-                вхождение и пропускает второе, потому что оно перекрывается с
-                найденным.
-              </>
-            }
-          />
-          <CodeBlock
-            code={"print('ABABA'.count('ABA'), 'ABABA'.count('A'))"}
-            label={
-              "Он считает неперекрывающиеся вхождения: найдя вхождение, продолжает поиск после его конца"
-            }
-            language="python"
-            output={"1 3"}
+          <Typography.Text>
+            Пройди по шагам строку ABBACAB: пара BB обрывает цепочку AB, и
+            вторая B начинает цепочку BACAB.
+          </Typography.Text>
+          <LessonStepper
+            {...lessonMedia.runStepperDiff}
+            label={"Цепочка различных соседей в строке ABBACAB: шаг за шагом"}
           />
           <Typography.Text>
-            Поэтому при допустимых перекрытиях нужно проверять позиции
-            самостоятельно. Для одного символа проблемы нет:{" "}
-            <Notation>{"s.count('A')"}</Notation> корректно считает все буквы{" "}
-            <Notation>{"A"}</Notation>.
+            Ответ — 5. Не путай с условием «все символы фрагмента различны»: в
+            ABACA соседи различны, а все символы — нет. Это другая задача, она
+            решается окном.
           </Typography.Text>
         </>
       ),
     },
     {
-      id: "korotkie-fragmenty",
-      navLabel: "Короткие фрагменты",
+      id: "zapretnye-pary",
+      navLabel: "Запретные пары",
       explanation: (
         <>
           <Typography.Text>
+            Условие запрещает некоторые пары рядом: «никакие две буквы из A, B,
+            C не стоят подряд». Как это проверить?
+          </Typography.Text>
+          <Typography.Text>
             <strong>
-              Условия на короткие фрагменты проверяются тем же перебором начал.
+              Так же, как соседей: меняется только проверка пары. Запретная пара
+              обрывает цепочку, а её второй символ начинает новую.
             </strong>{" "}
-            Например:
+            Выбери условие из подборок, чтобы увидеть проверку:
           </Typography.Text>
-          <blockquote>
-            <Typography.Text>
-              Сколько троек имеют одинаковые крайние символы?
-            </Typography.Text>
-          </blockquote>
-          <CodeBlock
-            code={
-              "s = 'ABACABAD'\ncount = 0\n\nfor i in range(len(s) - 2):\n    if s[i] == s[i + 2]:\n        count += 1\n\nprint(count)"
-            }
-            label={
-              "Условия на короткие фрагменты проверяются тем же перебором начал. Например"
-            }
-            language="python"
-            output={"3"}
+          <VariantPicker
+            label={"Условие и когда пара запретна"}
+            variants={[
+              {
+                label: "две из A, B, C",
+                value: (
+                  <Notation>{"s[i - 1] in 'ABC' and s[i] in 'ABC'"}</Notation>
+                ),
+                note: <>пара плохая — сброс до 1</>,
+              },
+              {
+                label: "I не рядом с T",
+                value: <Notation>{"s[i - 1] + s[i] in ('IT', 'TI')"}</Notation>,
+                note: <>обе пары, IT и TI</>,
+              },
+              {
+                label: "нет XX и YY",
+                value: <Notation>{"s[i - 1] + s[i] in ('XX', 'YY')"}</Notation>,
+                note: <>XY, YX и ZZ разрешены</>,
+              },
+              {
+                label: "по алфавиту",
+                value: <Notation>{"s[i - 1] > s[i]"}</Notation>,
+                note: <>буквы сравниваются по алфавиту, как строки</>,
+              },
+            ]}
           />
           <Typography.Text>
-            Подходят тройки <Notation>{"ABA"}</Notation>,{" "}
-            <Notation>{"ACA"}</Notation> и ещё раз <Notation>{"ABA"}</Notation>.
-            Средний символ здесь может быть любым, если условие не говорит
-            обратного.
+            Посмотрим на условие про A, B, C в строке DXABYCZ. Пара AB запретна:
+            цепочка DXA обрывается, B начинает новую — BYCZ:
+          </Typography.Text>
+          <CodeBlock
+            collapsible={false}
+            code={
+              "s = 'DXABYCZ'\ncurrent = 1\nbest = 1\nfor i in range(1, len(s)):\n    if s[i - 1] in 'ABC' and s[i] in 'ABC':\n        current = 1\n    else:\n        current += 1\n    best = max(best, current)\n\nprint(best)"
+            }
+            label={"Никакие две из A, B, C не подряд"}
+            language="python"
+            output={"4"}
+          />
+          <Typography.Text>
+            Обнулить длину на B было бы ошибкой: сама B не запрещена, запрещена
+            только пара. Ответ — 4, фрагмент BYCZ.
           </Typography.Text>
         </>
       ),
     },
     {
-      id: "povtoryayushchiysya-obrazec",
-      navLabel: "Повторяющийся образец",
+      id: "trojki",
+      navLabel: "Тройки: сброс до 2",
       explanation: (
         <>
           <Typography.Text>
-            <strong>
-              Для повторяющейся последовательности важно знать, какой символ
-              должен идти следующим.
-            </strong>
-          </Typography.Text>
-          <Typography.Text>
-            Рассмотрим цепочку <Notation>{"ABCABCABC..."}</Notation>. Пусть она
-            должна начинаться с <Notation>{"A"}</Notation>, а последний блок
-            может быть неполным. Тогда подходят <Notation>{"A"}</Notation>,{" "}
-            <Notation>{"AB"}</Notation>, <Notation>{"ABC"}</Notation>,{" "}
-            <Notation>{"ABCA"}</Notation>, <Notation>{"ABCAB"}</Notation>,{" "}
-            <Notation>{"ABCABC"}</Notation>… Но не подходит{" "}
-            <Notation>{"BCA"}</Notation>, если начало именно с{" "}
-            <Notation>{"A"}</Notation> обязательно.
-          </Typography.Text>
-          <Typography.Text>
-            Обозначим уже набранную длину через <Notation>{"current"}</Notation>
-            . После <Notation>{"ABC"}</Notation> снова ожидается{" "}
-            <Notation>{"A"}</Notation>, после <Notation>{"ABCA"}</Notation> —{" "}
-            <Notation>{"B"}</Notation>: ожидание повторяется через каждые три
-            символа. Номер ожидаемого символа в образце — остаток от деления{" "}
-            <PythonTerm term="intdiv">
-              <Notation>{"%"}</Notation>
-            </PythonTerm>
-            : <Notation>{"0 % 3"}</Notation>, <Notation>{"1 % 3"}</Notation>,{" "}
-            <Notation>{"2 % 3"}</Notation>, <Notation>{"3 % 3"}</Notation> дают
-            0, 1, 2, 0. Поэтому ожидаемый символ —{" "}
-            <Notation>{"pattern[current % 3]"}</Notation>, где{" "}
-            <Notation>{"pattern = 'ABC'"}</Notation>.
-          </Typography.Text>
-          <LessonDiagram
-            {...lessonMedia.stringExpectedABC_7}
-            caption={
-              <>
-                Набрано current символов — следующим ожидается pattern[current %
-                3]: после 0, 3, 6 символов снова A.
-              </>
-            }
-          />
-          <Typography.Text>Полный код:</Typography.Text>
-          <CodeBlock
-            code={
-              "s = 'BABCABCABB'\npattern = 'ABC'\ncurrent = 0\nbest = 0\n\nfor c in s:\n    expected = pattern[current % 3]\n\n    if c == expected:\n        current += 1\n    elif c == 'A':\n        current = 1\n    else:\n        current = 0\n\n    best = max(best, current)\n\nprint(best)"
-            }
-            label={"Полный код"}
-            language="python"
-            output={"8"}
-          />
-          <Typography.Text>
-            При несовпадении новый <Notation>{"A"}</Notation> начинает новую
-            цепочку, а <Notation>{"B"}</Notation> или <Notation>{"C"}</Notation>{" "}
-            не могут её начать. В строке <Notation>{"BABCABCABB"}</Notation>{" "}
-            первая <Notation>{"B"}</Notation> цепочку не начинает, а лучшая
-            цепочка — <Notation>{"ABCABCAB"}</Notation> с позиции 1: последний
-            блок <Notation>{"AB"}</Notation> неполный.
+            Условие задано для каждых трёх соседних цифр: «сумма первых двух
+            больше третьей». До скольких символов сбрасывать цепочку?
           </Typography.Text>
           <Typography.Text>
             <strong>
-              Этот простой перезапуск нельзя без проверки переносить на любой
-              повторяющийся образец.
+              До двух: после плохой тройки две её последние цифры ещё не
+              образуют ни одной тройки, поэтому фрагмент из них допустим.
             </strong>{" "}
-            Например, для образца <Notation>{"AAB"}</Notation> в строке{" "}
-            <Notation>{"AAAB"}</Notation> при несовпадении нужно сохранить две
-            последние <Notation>{"A"}</Notation>. Сброс до одной{" "}
-            <Notation>{"A"}</Notation> потеряет правильное начало. Для{" "}
-            <Notation>{"ABC"}</Notation> показанный алгоритм работает благодаря
-            структуре образца: буква <Notation>{"A"}</Notation> встречается в
-            нём один раз.
-          </Typography.Text>
-          <Typography.Text>
-            Если разрешены только целые блоки <Notation>{"ABC"}</Notation>,
-            длина должна быть кратна трём. В рамках именно этой модели из
-            найденной максимальной длины можно убрать неполный последний блок:{" "}
-            <Notation>{"answer = best - best % 3"}</Notation>. Для нашей строки
-            это 8 − 8 % 3 = 6 — два целых блока <Notation>{"ABCABC"}</Notation>.
-          </Typography.Text>
-        </>
-      ),
-    },
-    {
-      id: "cepochki-par",
-      navLabel: "Цепочки пар и троек",
-      explanation: (
-        <>
-          <Typography.Text>
-            <strong>
-              Цепочки из пар или троек нужно отличать от проверки всех соседних
-              пар или троек.
-            </strong>
-          </Typography.Text>
-          <Typography.Text>Сравни:</Typography.Text>
-          <blockquote>
-            <Typography.Text>
-              Каждые две соседние буквы различны.
-            </Typography.Text>
-          </blockquote>
-          <Typography.Text>
-            Проверяются пары с началами <Notation>{"0"}</Notation>,{" "}
-            <Notation>{"1"}</Notation>, <Notation>{"2"}</Notation>,{" "}
-            <Notation>{"3"}</Notation>… И другое условие:
-          </Typography.Text>
-          <blockquote>
-            <Typography.Text>
-              Фрагмент состоит из пар «согласная + гласная».
-            </Typography.Text>
-          </blockquote>
-          <Typography.Text>
-            Здесь фрагмент разбивается на непересекающиеся пары, например{" "}
-            <Notation>{"BA CE FA"}</Notation>. Начала пар отличаются на два. Но
-            подходящая цепочка может начаться как на чётной, так и на нечётной
-            позиции исходной строки. Поэтому проверяем оба варианта:
-          </Typography.Text>
-          <LessonDiagram
-            {...lessonMedia.stringOffsetsABACEFAED_BCDF_AE}
-            caption={
-              <>
-                Пары с начал 0, 2, 4, 6 не подходят, а пары с начал 1, 3, 5 —
-                BA, CE, FA — дают цепочку из трёх пар.
-              </>
-            }
-          />
-          <Typography.Text>
-            <PythonTerm term="for">
-              Третий аргумент <Notation>{"range()"}</Notation>
-            </PythonTerm>{" "}
-            — шаг: <Notation>{"range(1, 8, 2)"}</Notation> даёт 1, 3, 5, 7.
-            Сначала проверяем пары с началами{" "}
-            <Notation>{"0, 2, 4, ..."}</Notation>, затем —{" "}
-            <Notation>{"1, 3, 5, ..."}</Notation>:
+            Общее правило: после нарушения оставляем самый длинный конец
+            цепочки, который ещё подходит.
           </Typography.Text>
           <CodeBlock
+            collapsible={false}
             code={
-              "s = 'ABACEFAED'\nconsonants = 'BCDF'\nvowels = 'AE'\n\nbest_pairs = 0\n\nfor offset in range(2):\n    current_pairs = 0\n\n    for i in range(offset, len(s) - 1, 2):\n        if s[i] in consonants and s[i + 1] in vowels:\n            current_pairs += 1\n        else:\n            current_pairs = 0\n\n        best_pairs = max(best_pairs, current_pairs)\n\nprint(best_pairs, 2 * best_pairs)"
+              "s = '2451246'\ncurrent = 2\nbest = 2\nfor i in range(2, len(s)):\n    if int(s[i - 2]) + int(s[i - 1]) > int(s[i]):\n        current += 1\n    else:\n        current = 2\n    best = max(best, current)\n\nprint(best)"
             }
-            label={
-              "Сначала проверяем пары с началами 0, 2, 4, ..., затем — 1, 3, 5,"
-            }
+            label={"Каждая тройка: сумма первых двух больше третьей"}
             language="python"
-            output={"3 6"}
+            output={"5"}
           />
           <Typography.Text>
-            Если спрашивают количество пар, выводим{" "}
-            <Notation>{"best_pairs"}</Notation>; если количество символов —{" "}
-            <Notation>{"2 * best_pairs"}</Notation>. Для блоков длины три
-            аналогично проверяют три возможных смещения.
+            Тройки 245, 451 и 512 подходят — цепочка 24512 длины 5. Тройка 124
+            плохая: 1 + 2 не больше 4, и с цифр 24 начинается новая цепочка.
           </Typography.Text>
-        </>
-      ),
-    },
-    {
-      id: "chastoty",
-      navLabel: "Частоты символов",
-      explanation: (
-        <>
-          <Typography.Text>
-            <strong>
-              Когда нужно посчитать частоты разных символов, удобно хранить
-              отдельный счётчик для каждого.
-            </strong>
-          </Typography.Text>
-          <Typography.Text>Например:</Typography.Text>
-          <blockquote>
-            <Typography.Text>
-              Какая буква чаще всего встречается непосредственно после{" "}
-              <Notation>{"A"}</Notation>?
-            </Typography.Text>
-          </blockquote>
-          <Typography.Text>
-            В строке <Notation>{"ABACABAD"}</Notation> после{" "}
-            <Notation>{"A"}</Notation> стоят <Notation>{"B"}</Notation>,{" "}
-            <Notation>{"C"}</Notation>, <Notation>{"B"}</Notation>,{" "}
-            <Notation>{"D"}</Notation>. Значит, <Notation>{"B"}</Notation> — два
-            раза, <Notation>{"C"}</Notation> — один, <Notation>{"D"}</Notation>{" "}
-            — один.
-          </Typography.Text>
-          <Typography.Text>
-            Для хранения соответствий «буква → количество» используется{" "}
-            <PythonTerm term="dict">словарь</PythonTerm>:{" "}
-            <Notation>{"freq = {}"}</Notation> — пустой словарь,{" "}
-            <Notation>{"freq['B'] = 2"}</Notation> сохраняет для буквы{" "}
-            <Notation>{"B"}</Notation> значение <Notation>{"2"}</Notation>.
-            Чтобы увеличить счётчик, пишут{" "}
-            <PythonTerm term="dictget">
-              <Notation>{"freq[c] = freq.get(c, 0) + 1"}</Notation>
-            </PythonTerm>
-            : <Notation>{"freq.get(c, 0)"}</Notation> возвращает уже сохранённое
-            значение, если буква есть в словаре, и <Notation>{"0"}</Notation>,
-            если её пока нет. Запусти программу по шагам и посмотри, как растёт
-            словарь:
-          </Typography.Text>
-          <CodeRunner
-            {...lessonMedia.runFreq}
-            label={"Запусти программу по шагам и посмотри, как растёт словарь"}
-          />
-          <Typography.Text>
-            Последнюю позицию не рассматриваем как начало пары: после неё нет
-            символа.
-          </Typography.Text>
-        </>
-      ),
-    },
-    {
-      id: "ravnye-chastoty",
-      navLabel: "Равные частоты",
-      explanation: (
-        <>
-          <Typography.Text>
-            <strong>
-              Если при равных частотах нужно выбрать одну букву, правило выбора
-              записывают явно.
-            </strong>
-          </Typography.Text>
-          <Typography.Text>
-            Допустим, при равных частотах нужно выбрать букву, которая раньше в
-            алфавите.{" "}
-            <PythonTerm term="sorted">
-              <Notation>{"sorted(freq)"}</Notation>
-            </PythonTerm>{" "}
-            перебирает буквы в отсортированном порядке:
-          </Typography.Text>
-          <CodeBlock
-            code={
-              "freq = {'D': 2, 'B': 2, 'C': 1}\nanswer = ''\nbest_count = 0\n\nfor c in sorted(freq):\n    if freq[c] > best_count:\n        best_count = freq[c]\n        answer = c\n\nprint(answer)"
-            }
-            label={
-              "{{sorted|sorted(freq)}} перебирает буквы в отсортированном порядке"
-            }
-            language="python"
-            output={"B"}
-          />
-          <Typography.Text>
-            Почему сравнение строгое — <Notation>{">"}</Notation>? Первой
-            встретится меньшая по алфавиту буква. При равной частоте следующая
-            буква её не заменит. Если требовалась последняя по алфавиту, можно
-            было бы обновлять ответ и при равенстве (<Notation>{">="}</Notation>
-            ).
-          </Typography.Text>
-          <Typography.Text>
-            <strong>
-              Если нужно сохранить все буквы с максимальной частотой, выбрать
-              одну нельзя.
-            </strong>{" "}
-            Тогда сначала находим наибольшую частоту, а затем собираем в{" "}
-            <PythonTerm term="list">список</PythonTerm> все буквы с ней:
-          </Typography.Text>
-          <CodeBlock
-            code={
-              "freq = {'D': 2, 'B': 2, 'C': 1}\nbest_count = 0\nfor c in freq:\n    best_count = max(best_count, freq[c])\n\nwinners = []\nfor c in freq:\n    if freq[c] == best_count:\n        winners.append(c)\n\nprint(winners)"
-            }
-            label={"Код на Python: freq = {'D': 2, 'B': 2, 'C': 1}"}
-            language="python"
-            output={"['D', 'B']"}
+          <LessonTable
+            label={"До скольких символов сбрасывать цепочку"}
+            columns={[
+              { label: "Условие на" },
+              { label: "Сброс до", numeric: true },
+              { label: "Что остаётся" },
+            ]}
+            rows={[
+              [
+                "один символ",
+                "0",
+                "ничего: плохой символ не входит ни в какую цепочку",
+              ],
+              ["пару соседей", "1", "второй символ плохой пары"],
+              ["тройку соседей", "2", "два последних символа плохой тройки"],
+            ]}
           />
         </>
       ),
     },
     {
-      id: "dopolnitelnyy-kriteriy",
-      navLabel: "Дополнительный критерий",
-      explanation: (
-        <>
-          <Typography.Text>
-            <strong>
-              При равенстве основного критерия нужно явно реализовать
-              дополнительный.
-            </strong>
-          </Typography.Text>
-          <Typography.Text>Например:</Typography.Text>
-          <blockquote>
-            <Typography.Text>
-              Найти самый длинный фрагмент; если таких несколько, выбрать
-              начинающийся правее.
-            </Typography.Text>
-          </blockquote>
-          <Typography.Text>
-            Храним <Notation>{"best_length"}</Notation> и{" "}
-            <Notation>{"best_start"}</Notation>. Для каждого кандидата с концами{" "}
-            <Notation>{"left"}</Notation> и <Notation>{"right"}</Notation> длина{" "}
-            <Notation>{"length = right - left + 1"}</Notation>; если она больше
-            лучшей, запоминаем обе величины, а если равна и начало правее —
-            только начало. Применим это к цепочкам <Notation>{"X"}</Notation> из
-            подтемы 2: цепочка, заканчивающаяся на{" "}
-            <Notation>{"right"}</Notation>, начинается на{" "}
-            <Notation>{"right - current + 1"}</Notation>.
-          </Typography.Text>
-          <CodeBlock
-            code={
-              "s = 'XXAXXBXXAX'\ncurrent = 0\nbest_length = 0\nbest_start = -1\n\nfor right in range(len(s)):\n    if s[right] == 'X':\n        current += 1\n    else:\n        current = 0\n\n    left = right - current + 1\n    length = current\n\n    if length > best_length:\n        best_length = length\n        best_start = left\n    elif length == best_length and left > best_start:\n        best_start = left\n\nprint(best_length, best_start)"
-            }
-            label={"Код на Python: s = 'XXAXXBXXAX'"}
-            language="python"
-            output={"2 6"}
-          />
-          <Typography.Text>
-            Три цепочки длины 2 начинаются на позициях 0, 3 и 6, выбрана самая
-            правая. Если нужно вывести начальную позицию, печатаем{" "}
-            <Notation>{"best_start"}</Notation>, а не{" "}
-            <Notation>{"best_length"}</Notation>.
-          </Typography.Text>
-          <Typography.Text>
-            Обрати внимание и на нумерацию: если в условии позиции считаются с
-            нуля, используем индекс Python; если с единицы — прибавляем один. Не
-            следует автоматически прибавлять единицу только потому, что в
-            обычной речи говорят «первый символ».
-          </Typography.Text>
-        </>
-      ),
-    },
-    {
-      id: "mnogo-strok",
-      navLabel: "Много строк",
-      explanation: (
-        <>
-          <Typography.Text>
-            <strong>
-              Если в файле много строк, счётчики заводятся заново для каждой
-              строки.
-            </strong>
-          </Typography.Text>
-          <Typography.Text>
-            При обработке многих строк внимательно различай счётчики внутри
-            одной строки и общий результат по всему файлу. Внутренние счётчики
-            создаются заново для каждой строки, а лучший результат — один раз до
-            цикла.
-          </Typography.Text>
-          <Typography.Text>
-            Учебное условие для файла <Notation>{"24-stroki.txt"}</Notation> из
-            подтемы 1:
-          </Typography.Text>
-          <blockquote>
-            <Typography.Text>
-              Найти строку, в которой больше всего букв{" "}
-              <Notation>{"A"}</Notation> (если таких несколько — первую), и
-              определить, какая буква встречается в ней чаще всего (если
-              несколько — та, что позже в алфавите).
-            </Typography.Text>
-          </blockquote>
-          <Typography.Text>
-            Строку выбираем по одному признаку, а ответ берём по другому:
-          </Typography.Text>
-          <CodeBlock
-            code={
-              "best_line = ''\nbest_a = -1\n\nwith open('24-stroki.txt') as f:\n    for line in f:\n        s = line.rstrip('\\r\\n')\n        if s.count('A') > best_a:\n            best_a = s.count('A')\n            best_line = s\n\nfreq = {}\nfor c in best_line:\n    freq[c] = freq.get(c, 0) + 1\n\nanswer = ''\nbest_count = 0\nfor c in sorted(freq):\n    if freq[c] >= best_count:\n        best_count = freq[c]\n        answer = c\n\nprint(best_line, answer)"
-            }
-            label={
-              "Строку выбираем по одному признаку, а ответ берём по другому"
-            }
-            language="python"
-            output={"ABBACAB B"}
-          />
-          <Typography.Text>
-            В строке <Notation>{"ABBACAB"}</Notation> три буквы{" "}
-            <Notation>{"A"}</Notation> и три <Notation>{"B"}</Notation>; при
-            равенстве выбрана <Notation>{"B"}</Notation> — она позже в алфавите,
-            поэтому сравнение нестрогое. Строгое <Notation>{">"}</Notation> при
-            выборе строки оставляет первую из строк с равным количеством{" "}
-            <Notation>{"A"}</Notation>.
-          </Typography.Text>
-        </>
-      ),
-    },
-    {
-      id: "rasstoyanie-mezhdu-bukvami",
-      navLabel: "Расстояние между буквами",
-      explanation: (
-        <>
-          <Typography.Text>
-            <strong>
-              Для максимального расстояния между одинаковыми буквами достаточно
-              помнить их первые появления.
-            </strong>
-          </Typography.Text>
-          <Typography.Text>
-            Предположим, буква <Notation>{"A"}</Notation> встретилась на
-            позициях 2, 7, 11, 18. Самое большое расстояние между двумя{" "}
-            <Notation>{"A"}</Notation> — 18 − 2. Нет необходимости проверять все
-            пары позиций. При движении слева направо для каждой новой{" "}
-            <Notation>{"A"}</Notation> выгоднее всего брать самую первую{" "}
-            <Notation>{"A"}</Notation>.
-          </Typography.Text>
-          <CodeBlock
-            code={
-              "s = 'CABBAGE'\nfirst = {}\nbest = 0\n\nfor i in range(len(s)):\n    c = s[i]\n\n    if c in first:\n        distance = i - first[c]\n        best = max(best, distance)\n    else:\n        first[c] = i\n\nprint(best)"
-            }
-            label={
-              "При движении слева направо для каждой новой A выгоднее всего брать самую первую A"
-            }
-            language="python"
-            output={"3"}
-          />
-          <Typography.Text>
-            Здесь расстояние — разность номеров: две <Notation>{"A"}</Notation>{" "}
-            стоят на позициях 1 и 4. <Notation>{"first[c]"}</Notation> не
-            обновляется после первого появления.
-          </Typography.Text>
-          <Typography.Text>Это общий принцип:</Typography.Text>
-          <blockquote>
-            <Typography.Text>
-              Если при фиксированной правой границе выгодна максимально ранняя
-              левая, сохраняй самое раннее подходящее положение.
-            </Typography.Text>
-          </blockquote>
-          <Typography.Text>
-            Он появится снова в дополнительном уроке 8 — там самое раннее
-            положение хранится для накопленной разности.
-          </Typography.Text>
-        </>
-      ),
-    },
-    {
-      id: "obrazcy-itogo",
+      id: "sosedi-itogo",
       navLabel: "Итого",
       explanation: (
         <>
           <LessonSummary
             items={[
               {
-                note: (
-                  <>
-                    Короткий образец ищут перебором всех начал{" "}
-                    <Notation>{"range(len(s) - m + 1)"}</Notation>;{" "}
-                    <Notation>{"count"}</Notation> не видит перекрытий.
-                  </>
-                ),
+                key: "Одинаковые подряд",
+                note: <Notation>{"s[i] == s[i - 1]"}</Notation>,
               },
               {
-                note: (
-                  <>
-                    Для повторяющегося образца ожидаемый символ —{" "}
-                    <Notation>{"pattern[current % len(pattern)]"}</Notation>;
-                    перезапуск при несовпадении зависит от образца.
-                  </>
-                ),
+                key: "Соседи различны",
+                note: <Notation>{"s[i] != s[i - 1]"}</Notation>,
               },
               {
-                note: (
-                  <>Цепочки целых пар проверяют с шагом 2 от двух смещений.</>
-                ),
+                key: "Запретная пара",
+                note: <>сброс до 1: второй символ начинает новую цепочку</>,
               },
+              { key: "Тройки", note: <>сброс до 2</> },
               {
-                note: (
-                  <>
-                    Частоты — словарь{" "}
-                    <Notation>{"freq[c] = freq.get(c, 0) + 1"}</Notation>;
-                    правило при равенстве задаёт строгость сравнения и порядок
-                    перебора.
-                  </>
-                ),
-              },
-              {
-                note: (
-                  <>
-                    Счётчики строки создаются заново для каждой строки; выбор и
-                    ответ — разные величины.
-                  </>
-                ),
+                key: "Начало цикла",
+                note: <>с i = 1 (для троек — с 2): s[-1] — последний символ</>,
               },
             ]}
           />

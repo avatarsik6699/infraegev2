@@ -6,6 +6,7 @@ import { Typography } from "~/shared/components/typography";
 import {
   LessonStepper,
   LessonSummary,
+  ProofDisclosure,
 } from "~/shared/components/learning-content";
 import type { LessonContent } from "../lib/define-lesson.types";
 import { lessonMedia } from "./string-processing.paid.skolzyashchee-okno.media";
@@ -19,354 +20,126 @@ const content: LessonContent.PaidSubtopicContent = {
       explanation: (
         <>
           <Typography.Text>
+            Как найти самый длинный фрагмент, в котором не больше двух букв A?
+            Цепочка здесь не поможет: одна лишняя A не обнуляет всё, что было до
+            неё.
+          </Typography.Text>
+          <Typography.Text>
             <strong>
-              Второй основной приём — хранить две границы фрагмента и постепенно
-              их передвигать.
+              Хранить две границы фрагмента — окна. Правая идёт по строке по
+              одному символу. Когда букв A стало больше двух, левая сдвигается
+              вправо, пока лишняя A не уйдёт из окна.
             </strong>{" "}
-            Так решаются задачи вида «не более K букв», «ровно K букв», «каждая
-            из нескольких букв не более K раз», «не более K пар букв» и «без
-            запрещённого слова».
+            Количество A в окне хранится в счётчике: правая граница добавляет
+            символ, левая убирает.
           </Typography.Text>
-          <Typography.Text>
-            Все шаги разберём на строке <Notation>{"BABAACB"}</Notation> и
-            ограничении на буквы <Notation>{"A"}</Notation>. Индексы и
-            включённые границы <Notation>{"left"}</Notation>,{" "}
-            <Notation>{"right"}</Notation> — из подтемы 1, текущая длина — из
-            подтемы 2.
-          </Typography.Text>
-        </>
-      ),
-    },
-    {
-      id: "okno",
-      navLabel: "Окно",
-      explanation: (
-        <>
-          <Typography.Text>
-            <strong>Фрагмент между двумя границами называют окном.</strong>
-          </Typography.Text>
-          <Typography.Text>
-            Пусть <Notation>{"left = 2"}</Notation> и{" "}
-            <Notation>{"right = 6"}</Notation>. Тогда окно — это{" "}
-            <Notation>{"s[2:7]"}</Notation>. Правая граница обычно двигается по
-            строке по одному символу. Левая — сдвигается, когда это нужно для
-            выполнения условия.
-          </Typography.Text>
-          <Typography.Text>
-            Такой способ называют <strong>скользящим окном</strong> или{" "}
-            <strong>методом двух указателей</strong>. Указателями здесь служат
-            обычные индексы <Notation>{"left"}</Notation> и{" "}
-            <Notation>{"right"}</Notation>.
-          </Typography.Text>
-        </>
-      ),
-    },
-    {
-      id: "sdvig-levoy-granicy",
-      navLabel: "Сдвиг левой границы",
-      explanation: (
-        <>
-          <Typography.Text>
-            <strong>
-              Если в окне стало слишком много нужных букв, левая граница
-              сдвигается, пока ограничение снова не выполнится.
-            </strong>
-          </Typography.Text>
-          <Typography.Text>Начнём с задачи:</Typography.Text>
-          <blockquote>
-            <Typography.Text>
-              Найти самый длинный фрагмент, содержащий не более двух букв{" "}
-              <Notation>{"A"}</Notation>.
-            </Typography.Text>
-          </blockquote>
-          <Typography.Text>
-            Будем хранить <Notation>{"left = 0"}</Notation>,{" "}
-            <Notation>{"count_a = 0"}</Notation> и{" "}
-            <Notation>{"best = 0"}</Notation>. При добавлении символа справа
-            увеличиваем счётчик, если это <Notation>{"A"}</Notation>. Если букв{" "}
-            <Notation>{"A"}</Notation> стало больше двух, удаляем символы слева,
-            пока ограничение снова не выполнится. Пройди строку{" "}
-            <Notation>{"BABAACB"}</Notation> по шагам:
-          </Typography.Text>
-          <LessonStepper
-            {...lessonMedia.stringWindowStepperBABAACB_A_2}
-            label={"Окно с не более чем двумя A в строке BABAACB: шаг за шагом"}
-          />
           <CodeBlock
+            collapsible={false}
             code={
-              "s = 'BABAACB'\nK = 2\n\nleft = 0\ncount_a = 0\nbest = 0\n\nfor right in range(len(s)):\n    if s[right] == 'A':\n        count_a += 1\n\n    while count_a > K:\n        if s[left] == 'A':\n            count_a -= 1\n\n        left += 1\n\n    best = max(best, right - left + 1)\n\nprint(best)"
+              "s = 'BABAACB'\nleft = 0\ncount = 0\nbest = 0\nfor right in range(len(s)):\n    if s[right] == 'A':\n        count += 1\n    while count > 2:\n        if s[left] == 'A':\n            count -= 1\n        left += 1\n    best = max(best, right - left + 1)\n\nprint(best)"
             }
-            label={"Пройди строку BABAACB по шагам"}
+            label={"Не больше двух A — скользящее окно"}
             language="python"
             output={"5"}
           />
           <Typography.Text>
-            Разберём самый важный момент — добавление <Notation>{"A"}</Notation>{" "}
-            на позиции <Notation>{"4"}</Notation>. Получилось{" "}
-            <Notation>{"BABAA"}</Notation>: три буквы <Notation>{"A"}</Notation>
-            , условие нарушено. Удаляем первый <Notation>{"B"}</Notation> —
-            получается <Notation>{"ABAA"}</Notation>, букв{" "}
-            <Notation>{"A"}</Notation> всё ещё три. Удаляем первую{" "}
-            <Notation>{"A"}</Notation> — получается <Notation>{"BAA"}</Notation>
-            , теперь их две.
+            Пройди строку BABAACB по шагам. Самый важный момент — третья A на
+            позиции 4: окно BABAA плохое. Убираем B — в ABAA всё ещё три A.
+            Убираем A — в BAA их две. Поэтому нужен{" "}
+            <PythonTerm term="while">
+              <Notation>{"while"}</Notation>
+            </PythonTerm>
+            , а не <Notation>{"if"}</Notation>: иногда убрать надо несколько
+            символов.
           </Typography.Text>
+          <LessonStepper
+            {...lessonMedia.windowStepperA}
+            label={"Окно с не более чем двумя A в строке BABAACB: шаг за шагом"}
+          />
           <Typography.Text>
-            <strong>
-              Поэтому нужен{" "}
-              <PythonTerm term="while">
-                <Notation>{"while"}</Notation>
-              </PythonTerm>
-              , а не одноразовый <Notation>{"if"}</Notation>.
-            </strong>{" "}
-            Для исправления окна иногда требуется убрать несколько символов.
+            Ответ — 5, окно BAACB. Вложенный цикл не делает программу медленной:
+            left никогда не идёт назад, поэтому за весь проход он сдвинется не
+            больше len(s) раз. Миллион символов — около двух миллионов шагов.
           </Typography.Text>
-        </>
-      ),
-    },
-    {
-      id: "pochemu-okno-rabotaet",
-      navLabel: "Почему окно работает",
-      explanation: (
-        <>
-          <Typography.Text>
-            <strong>
-              Скользящее окно работает здесь потому, что лишние буквы невозможно
-              убрать расширением вправо.
-            </strong>
-          </Typography.Text>
-          <Typography.Text>
-            Если во фрагменте уже три <Notation>{"A"}</Notation>, добавление
-            новых символов не превратит их обратно в две. Значит, пока мы не
-            передвинем левую границу, такое начало больше не пригодится.
-          </Typography.Text>
-          <Typography.Text>
-            После сжатия окна условие выполнено, а <Notation>{"left"}</Notation>{" "}
-            находится настолько далеко слева, насколько возможно. Следовательно,
-            найдено самое длинное допустимое окно с текущим правым концом. Мы
-            рассматриваем каждый правый конец, поэтому среди этих окон
-            обязательно встретится глобальный максимум.
-          </Typography.Text>
-          <Typography.Text>
-            Такое сохраняемое утверждение о состоянии алгоритма называют{" "}
-            <strong>инвариантом</strong>. Для данного решения инвариант:
-          </Typography.Text>
-          <blockquote>
+          <ProofDisclosure kind="nuance" summary="Почему окно ничего не теряет">
             <Typography.Text>
-              После завершения <Notation>{"while"}</Notation> окно содержит не
-              более <Notation>{"K"}</Notation> букв <Notation>{"A"}</Notation>,
-              а его левая граница минимально возможна для данного правого конца.
+              Если в окне уже три A, расширение вправо их не уберёт: такое
+              начало больше не пригодится, и его можно отбросить. После сдвига
+              left стоит так далеко слева, как только можно для текущего правого
+              конца. Значит, для каждого right найдено самое длинное подходящее
+              окно, а среди них — и ответ.
             </Typography.Text>
-          </blockquote>
-          <Typography.Text>
-            Термин полезен, но важнее сама мысль:{" "}
-            <strong>
-              ты должен уметь объяснить, что означают переменные после каждого
-              шага
-            </strong>
-            .
-          </Typography.Text>
-          <Typography.Text>
-            <strong>
-              Почему два вложенных цикла здесь не дают{" "}
-              <Notation>{"O(n²)"}</Notation>?
-            </strong>{" "}
-            Потому что <Notation>{"left"}</Notation> не возвращается назад. За
-            всё выполнение <Notation>{"right"}</Notation> проходит строку один
-            раз, и <Notation>{"left"}</Notation> тоже проходит её не более
-            одного раза. Суммарно получается порядка 2n перемещений, то есть{" "}
-            <Notation>{"O(n)"}</Notation>. Вложенные циклы сами по себе ещё не
-            означают квадратичную сложность.
-          </Typography.Text>
+          </ProofDisclosure>
         </>
       ),
     },
     {
       id: "rovno-k",
-      navLabel: "Ровно K букв",
+      navLabel: "Ровно K",
       explanation: (
         <>
           <Typography.Text>
-            <strong>
-              Для самого длинного фрагмента с ровно <Notation>{"K"}</Notation>{" "}
-              буквами можно использовать то же окно.
-            </strong>
+            В условии: «буква T встречается ровно 100 раз». Что поменять в окне?
           </Typography.Text>
           <Typography.Text>
-            Различие — ответ обновляется только при точном равенстве:
+            <strong>
+              Окно то же — левая граница двигается, пока букв больше K. А ответ
+              обновляется, только когда их ровно K.
+            </strong>{" "}
+            Меньше K — фрагмент ещё не подходит, а сужение окна букв не
+            прибавит.
           </Typography.Text>
           <CodeBlock
+            collapsible={false}
             code={
-              "s = 'BABAACB'\nK = 2\n\nleft = 0\ncount_a = 0\nbest = 0\n\nfor right in range(len(s)):\n    if s[right] == 'A':\n        count_a += 1\n\n    while count_a > K:\n        if s[left] == 'A':\n            count_a -= 1\n\n        left += 1\n\n    if count_a == K:\n        best = max(best, right - left + 1)\n\nprint(best)"
+              "s = 'BABAACB'\nleft = 0\ncount = 0\nbest = 0\nfor right in range(len(s)):\n    if s[right] == 'A':\n        count += 1\n    while count > 2:\n        if s[left] == 'A':\n            count -= 1\n        left += 1\n    if count == 2:\n        best = max(best, right - left + 1)\n\nprint(best)"
             }
-            label={"Различие — ответ обновляется только при точном равенстве"}
+            label={"Ровно две A"}
             language="python"
             output={"5"}
           />
           <Typography.Text>
-            Почему не нужно специально двигать границу, когда букв меньше{" "}
-            <Notation>{"K"}</Notation>? Удаление символов не увеличит количество{" "}
-            <Notation>{"A"}</Notation>. Значит, если даже в самом широком
-            допустимом окне их недостаточно, более короткое окно с тем же правым
-            концом не поможет. А если букв ровно <Notation>{"K"}</Notation>,
-            самое широкое окно — как раз лучшее по длине.
-          </Typography.Text>
-          <Typography.Text>
-            Значение <Notation>{"best = 0"}</Notation> означает, что подходящий
-            непустой фрагмент пока не найден. Если условие не гарантирует
-            существование ответа, ситуацию отсутствия подходящих фрагментов
-            нужно обрабатывать согласно условию.
+            На экзамене K = 100, а файл — миллион символов: программа та же,
+            меняется только число. Если в строке меньше K нужных букв, best
+            останется 0 — подходящего фрагмента нет.
           </Typography.Text>
         </>
       ),
     },
     {
-      id: "minimalnaya-dlina",
-      navLabel: "Минимальная длина",
+      id: "neskolko-usloviy",
+      navLabel: "Несколько условий",
       explanation: (
         <>
           <Typography.Text>
+            Нужен самый длинный фрагмент, где буквы идут в алфавитном порядке и
+            гласных не больше одной. Как совместить два условия?
+          </Typography.Text>
+          <Typography.Text>
             <strong>
-              Поиск минимальной длины требует другой логики обновления ответа.
+              Каждое условие — своим приёмом. Нарушение порядка — условие на
+              соседей: окно начинается заново с текущей буквы. Лишняя гласная —
+              ограничение на количество: левая граница догоняет.
             </strong>
           </Typography.Text>
-          <Typography.Text>Задача:</Typography.Text>
-          <blockquote>
-            <Typography.Text>
-              Найти самый короткий фрагмент, содержащий не менее{" "}
-              <Notation>{"K"}</Notation> букв <Notation>{"A"}</Notation>.
-            </Typography.Text>
-          </blockquote>
-          <Typography.Text>
-            Здесь недостаток букв исправляется расширением вправо. Когда букв
-            стало достаточно, пробуем уменьшать окно слева.
-          </Typography.Text>
           <CodeBlock
+            collapsible={false}
             code={
-              "s = 'BABAACB'\nK = 2    # Здесь K >= 1\n\nleft = 0\ncount_a = 0\nbest = len(s) + 1\n\nfor right in range(len(s)):\n    if s[right] == 'A':\n        count_a += 1\n\n    while count_a >= K:\n        best = min(best, right - left + 1)\n\n        if s[left] == 'A':\n            count_a -= 1\n\n        left += 1\n\nif best == len(s) + 1:\n    print('Подходящего фрагмента нет')\nelse:\n    print(best)"
+              "s = 'AEKZIOPSW'\nvowels = 'AEIOUY'\nleft = 0\ncount = 0\nbest = 0\nfor right in range(len(s)):\n    if right > 0 and s[right] < s[right - 1]:\n        left = right\n        count = 0\n    if s[right] in vowels:\n        count += 1\n    while count > 1:\n        if s[left] in vowels:\n            count -= 1\n        left += 1\n    best = max(best, right - left + 1)\n\nprint(best)"
             }
-            label={"Когда букв стало достаточно, пробуем уменьшать окно слева"}
-            language="python"
-            output={"2"}
-          />
-          <Typography.Text>
-            Начальное значение <Notation>{"len(s) + 1"}</Notation> больше длины
-            любой подстроки. Поэтому любой найденный ответ окажется меньше. Если
-            значение не изменилось, подходящего фрагмента не было.
-          </Typography.Text>
-          <Typography.Text>
-            <strong>
-              Почему ответ обновляется до удаления левого символа?
-            </strong>{" "}
-            Пока условие <Notation>{"count_a >= K"}</Notation> выполнено, окно
-            подходит. После удаления оно может перестать подходить. Поэтому
-            сначала учитываем текущее окно, затем пробуем его сократить.
-          </Typography.Text>
-          <Typography.Text>
-            Сравни две схемы: при поиске максимальной длины с ограничением «не
-            более <Notation>{"K"}</Notation>» внутренний цикл сжимает окно,{" "}
-            <strong>пока оно плохое</strong>; при поиске минимальной длины с
-            ограничением «не менее <Notation>{"K"}</Notation>» —{" "}
-            <strong>пока оно хорошее</strong>, запоминая ответы.
-          </Typography.Text>
-          <Typography.Text>
-            Для одного ограничения на количество символа, без дополнительных
-            требований, минимальный фрагмент с не менее{" "}
-            <Notation>{"K"}</Notation> буквами будет содержать ровно{" "}
-            <Notation>{"K"}</Notation>: лишние крайние вхождения можно
-            отбросить. Но при дополнительных ограничениях на начало, конец или
-            структуру такое рассуждение нужно проверять заново.
-          </Typography.Text>
-          <Typography.Text>
-            Также замечай простые случаи. «Максимальная длина фрагмента с не
-            менее <Notation>{"K"}</Notation> буквами <Notation>{"A"}</Notation>
-            »: если других ограничений нет и во всей строке достаточно{" "}
-            <Notation>{"A"}</Notation>, ответ — длина всей строки. Не каждой
-            формулировке нужен сложный алгоритм.
-          </Typography.Text>
-        </>
-      ),
-    },
-    {
-      id: "neskolko-ogranicheniy",
-      navLabel: "Несколько ограничений",
-      explanation: (
-        <>
-          <Typography.Text>
-            <strong>
-              Несколько верхних ограничений можно поддерживать одновременно.
-            </strong>
-          </Typography.Text>
-          <Typography.Text>Например:</Typography.Text>
-          <blockquote>
-            <Typography.Text>
-              Не более двух <Notation>{"A"}</Notation> и не более одной{" "}
-              <Notation>{"B"}</Notation>.
-            </Typography.Text>
-          </blockquote>
-          <Typography.Text>
-            Условие допустимости —{" "}
-            <Notation>{"count_a <= 2 and count_b <= 1"}</Notation>. Значит, окно
-            нужно сжимать, если{" "}
-            <Notation>{"count_a > 2 or count_b > 1"}</Notation>: достаточно
-            нарушения хотя бы одного ограничения.
-          </Typography.Text>
-          <CodeBlock
-            code={
-              "s = 'BABAACB'\nleft = 0\ncount_a = 0\ncount_b = 0\nbest = 0\n\nfor right in range(len(s)):\n    if s[right] == 'A':\n        count_a += 1\n\n    if s[right] == 'B':\n        count_b += 1\n\n    while count_a > 2 or count_b > 1:\n        if s[left] == 'A':\n            count_a -= 1\n\n        if s[left] == 'B':\n            count_b -= 1\n\n        left += 1\n\n    best = max(best, right - left + 1)\n\nprint(best)"
-            }
-            label={"Код на Python: s = 'BABAACB'"}
+            label={"По алфавиту и не больше одной гласной"}
             language="python"
             output={"4"}
           />
           <Typography.Text>
-            Лучшие окна — <Notation>{"BAAC"}</Notation> и{" "}
-            <Notation>{"AACB"}</Notation>. Если требуется{" "}
-            <strong>
-              ровно две <Notation>{"A"}</Notation> и ровно одна{" "}
-              <Notation>{"B"}</Notation>
-            </strong>
-            , после сжатия ответ обновляют только при{" "}
-            <Notation>{"count_a == 2 and count_b == 1"}</Notation>.
+            Ответ — 4, фрагмент OPSW. EKZ тоже по алфавиту, но короче, а после Z
+            порядок рушится: I меньше Z.
           </Typography.Text>
           <Typography.Text>
-            <strong>Важно различать:</strong> каждая буква из набора встречается
-            не более двух раз — и суммарно буквы из набора встречаются не более
-            двух раз. В первом случае нужны отдельные счётчики, во втором — один
-            общий.
-          </Typography.Text>
-        </>
-      ),
-    },
-    {
-      id: "slovar-schyotchikov",
-      navLabel: "Словарь счётчиков",
-      explanation: (
-        <>
-          <Typography.Text>
-            <strong>
-              Если контролируемых букв много, отдельные переменные заменяют
-              словарём счётчиков.
-            </strong>
-          </Typography.Text>
-          <Typography.Text>
-            Ключ словаря — буква, значение — сколько раз она есть в окне.
-            Сжимать окно нужно, только когда превышен счётчик той буквы, которую
-            сейчас добавили: остальные ограничения уже выполнялись. Например,
-            каждая из букв <Notation>{"A"}</Notation>,{" "}
-            <Notation>{"B"}</Notation>, <Notation>{"C"}</Notation> — не более
-            одного раза:
-          </Typography.Text>
-          <CodeBlock
-            code={
-              "s = 'BABAACB'\nK = 1\ncount = {'A': 0, 'B': 0, 'C': 0}\nleft = 0\nbest = 0\n\nfor right in range(len(s)):\n    c = s[right]\n    if c in count:\n        count[c] += 1\n        while count[c] > K:\n            if s[left] in count:\n                count[s[left]] -= 1\n            left += 1\n\n    best = max(best, right - left + 1)\n\nprint(best)"
-            }
-            label={"Например, каждая из букв A, B, C — не более одного раза"}
-            language="python"
-            output={"3"}
-          />
-          <Typography.Text>
-            Лучшее окно — <Notation>{"ACB"}</Notation>. Символы, которых нет в
-            словаре, ограничений не имеют и счётчиков не требуют.
+            Если ограничение на каждую из нескольких букв — «J, K, X и Z не
+            больше 6 раз каждая», — счётчики держат в{" "}
+            <PythonTerm term="dict">словаре</PythonTerm>, а окно сжимают, пока
+            превышен счётчик только что добавленной буквы.
           </Typography.Text>
         </>
       ),
@@ -377,106 +150,45 @@ const content: LessonContent.PaidSubtopicContent = {
       explanation: (
         <>
           <Typography.Text>
+            Ограничение бывает на пары: «пара гласная + согласная встречается не
+            больше 130 раз». Когда пара входит в окно и когда уходит?
+          </Typography.Text>
+          <Typography.Text>
             <strong>
-              Пару букв в окне учитывают, только когда она целиком лежит внутри
-              окна.
-            </strong>
+              Пара считается, только когда лежит в окне целиком. Она входит,
+              когда правая граница добавляет её второй символ, и уходит, когда
+              левая проходит её первый.
+            </strong>{" "}
+            Пары могут перекрываться: в TTT две пары TT. Пара, которая кончается
+            на right, — это срез <Notation>{"s[right - 1:right + 1]"}</Notation>
+            , а пара, которая начинается на left, —{" "}
+            <Notation>{"s[left:left + 2]"}</Notation>.
           </Typography.Text>
-          <Typography.Text>
-            Пусть ограничение задано не на букву, а на пару букв, например{" "}
-            <Notation>{"TT"}</Notation>, и пары могут перекрываться: в{" "}
-            <Notation>{"TTT"}</Notation> две пары <Notation>{"TT"}</Notation>.
-            Пара начинается на позиции <Notation>{"i"}</Notation> и занимает
-            символы <Notation>{"i"}</Notation> и <Notation>{"i + 1"}</Notation>.
-            Поэтому:
-          </Typography.Text>
-          <ul>
-            <li>
-              при добавлении символа справа новая пара появляется, если{" "}
-              <Notation>{"s[right - 1:right + 1]"}</Notation> — это{" "}
-              <Notation>{"TT"}</Notation> и её начало{" "}
-              <Notation>{"right - 1"}</Notation> не левее{" "}
-              <Notation>{"left"}</Notation>;
-            </li>
-            <li>
-              при удалении символа слева пара уходит из окна, если{" "}
-              <Notation>{"s[left:left + 2]"}</Notation> — это{" "}
-              <Notation>{"TT"}</Notation> и её конец{" "}
-              <Notation>{"left + 1"}</Notation> не правее{" "}
-              <Notation>{"right"}</Notation>.
-            </li>
-          </ul>
-          <Typography.Text>
-            Пройди по шагам строку <Notation>{"TTATTTB"}</Notation> с
-            ограничением «не более одной пары <Notation>{"TT"}</Notation>»:
-          </Typography.Text>
-          <LessonStepper
-            {...lessonMedia.stringWindowStepperTTATTTB_TT_1}
-            label={
-              "Окно с не более чем одной парой TT в строке TTATTTB: шаг за шагом"
-            }
-          />
           <CodeBlock
+            collapsible={false}
             code={
-              "s = 'TTATTTB'\nword = 'TT'\nK = 1\nleft = 0\ncount = 0\nbest = 0\n\nfor right in range(len(s)):\n    start = right - 1\n    if start >= left and s[start:right + 1] == word:\n        count += 1\n\n    while count > K:\n        if s[left:left + 2] == word and left + 1 <= right:\n            count -= 1\n        left += 1\n\n    best = max(best, right - left + 1)\n\nprint(best)"
+              "s = 'TTATTTB'\nleft = 0\npairs = 0\nbest = 0\nfor right in range(len(s)):\n    if right > 0 and s[right - 1:right + 1] == 'TT':\n        pairs += 1\n    while pairs > 1:\n        if s[left:left + 2] == 'TT':\n            pairs -= 1\n        left += 1\n    best = max(best, right - left + 1)\n\nprint(best)"
             }
-            label={
-              "Пройди по шагам строку TTATTTB с ограничением «не более одной пары TT»"
-            }
+            label={"Не больше одной пары TT"}
             language="python"
             output={"4"}
           />
           <Typography.Text>
-            Окна <Notation>{"TTAT"}</Notation> и <Notation>{"TATT"}</Notation>{" "}
-            содержат по одной целой паре. В <Notation>{"TATTT"}</Notation> пар
-            уже две — <Notation>{"TT"}</Notation> на позициях 3 и 4
-            перекрываются. Для условия «ровно <Notation>{"K"}</Notation> пар»
-            ответ обновляют только при <Notation>{"count == K"}</Notation>, как
-            для букв.
+            Пройди по шагам: на позиции 5 появляется пара TT, которая
+            перекрывается с парой 3–4. Пар стало две, и левая граница уходит за
+            T на позиции 3.
           </Typography.Text>
-        </>
-      ),
-    },
-    {
-      id: "zapreshchyonnoe-slovo",
-      navLabel: "Запрещённое слово",
-      explanation: (
-        <>
-          <Typography.Text>
-            <strong>
-              Запрещённое слово тоже можно обрабатывать через границу окна.
-            </strong>
-          </Typography.Text>
-          <Typography.Text>Задача:</Typography.Text>
-          <blockquote>
-            <Typography.Text>
-              Найти самый длинный фрагмент без подстроки{" "}
-              <Notation>{"ABC"}</Notation>.
-            </Typography.Text>
-          </blockquote>
-          <Typography.Text>
-            Пусть новое запрещённое вхождение заканчивается на позиции{" "}
-            <Notation>{"right"}</Notation>. Его начало —{" "}
-            <Notation>{"start = right - len(word) + 1"}</Notation>. Чтобы
-            фрагмент больше не содержал это вхождение целиком, достаточно
-            поставить левую границу <strong>после его первого символа</strong>:{" "}
-            <Notation>{"left = start + 1"}</Notation>. Не обязательно
-            выбрасывать всё слово. Например, из <Notation>{"ABC"}</Notation>{" "}
-            можно оставить <Notation>{"BC"}</Notation>.
-          </Typography.Text>
-          <CodeBlock
-            code={
-              "s = 'XABCYABZ'\nword = 'ABC'\nm = len(word)\n\nleft = 0\nbest = 0\n\nfor right in range(len(s)):\n    if right >= m - 1:\n        start = right - m + 1\n\n        if s[start:right + 1] == word:\n            left = max(left, start + 1)\n\n    best = max(best, right - left + 1)\n\nprint(best)"
-            }
-            label={"Например, из ABC можно оставить BC"}
-            language="python"
-            output={"6"}
+          <LessonStepper
+            {...lessonMedia.windowStepperTt}
+            label={"Окно с не более чем одной парой TT: шаг за шагом"}
           />
           <Typography.Text>
-            После обнаружения <Notation>{"ABC"}</Notation> остаётся возможным
-            фрагмент <Notation>{"BCYABZ"}</Notation> длины 6. Это ещё один
-            пример того, почему полный сброс счётчика часто неверен:
-            значительная часть текущего фрагмента может оставаться подходящей.
+            Окна TTAT и TATT содержат по одной целой паре — ответ 4. Для пары
+            «гласная + согласная» меняется только проверка:{" "}
+            <Notation>
+              {"s[right - 1] in vowels and s[right] not in vowels"}
+            </Notation>
+            .
           </Typography.Text>
         </>
       ),
@@ -489,52 +201,20 @@ const content: LessonContent.PaidSubtopicContent = {
           <LessonSummary
             items={[
               {
-                note: (
-                  <>
-                    Окно — фрагмент <Notation>{"s[left:right + 1]"}</Notation>;{" "}
-                    <Notation>{"right"}</Notation> идёт по одному символу,{" "}
-                    <Notation>{"left"}</Notation> только догоняет.
-                  </>
-                ),
+                key: "Окно",
+                note: <>right идёт вперёд, left догоняет по while</>,
+              },
+              { key: "Не более K", note: <>сжимать, пока count &gt; K</> },
+              { key: "Ровно K", note: <>ответ — только при count == K</> },
+              {
+                key: "Порядок и количество",
+                note: <>нарушен порядок — left = right; лишняя буква — while</>,
               },
               {
-                note: (
-                  <>
-                    «Не более <Notation>{"K"}</Notation>»: сжимать, пока окно
-                    плохое, затем обновлять максимум. «Ровно{" "}
-                    <Notation>{"K"}</Notation>»: то же окно, ответ — только при
-                    равенстве. «Не менее <Notation>{"K"}</Notation>» для
-                    минимума: сжимать, пока окно хорошее, обновляя минимум до
-                    удаления.
-                  </>
-                ),
+                key: "Пары",
+                note: <>входит со вторым символом, уходит с первым</>,
               },
-              {
-                note: (
-                  <>
-                    Несколько ограничений — несколько счётчиков или словарь;
-                    «каждая» и «суммарно» — разные условия.
-                  </>
-                ),
-              },
-              {
-                note: (
-                  <>
-                    Пара или слово учитываются, только когда целиком лежат в
-                    окне; запрещённое слово —{" "}
-                    <Notation>{"left = start + 1"}</Notation>.
-                  </>
-                ),
-              },
-              {
-                note: (
-                  <>
-                    <Notation>{"left"}</Notation> не возвращается назад, поэтому
-                    вложенный <Notation>{"while"}</Notation> даёт{" "}
-                    <Notation>{"O(n)"}</Notation>.
-                  </>
-                ),
-              },
+              { key: "Скорость", note: <>left не идёт назад: O(n)</> },
             ]}
           />
         </>
@@ -543,21 +223,64 @@ const content: LessonContent.PaidSubtopicContent = {
   ],
   checkpoint: [
     {
-      id: "zadacha-7",
+      id: "zadacha-1",
       prompt: (
         <>
-          Строка содержит 300 000 символов. Сколько раз всего может сдвинуться{" "}
-          <Notation>{"left"}</Notation> за всю работу программы с окном? Почему
-          программа не делает около 300 000² действий?
+          Почему для сдвига левой границы нужен <Notation>{"while"}</Notation>,
+          а не <Notation>{"if"}</Notation>?
         </>
       ),
       reveal: (
         <>
-          Не более 300 000 раз: <Notation>{"left"}</Notation> не возвращается
-          назад. Вместе с <Notation>{"right"}</Notation> это около 600 000
-          перемещений, то есть <Notation>{"O(n)"}</Notation>.
+          Иногда, чтобы убрать одну лишнюю A, приходится выкинуть несколько
+          символов перед ней: в BABAA сначала уходит B, потом A.
         </>
       ),
+    },
+    {
+      id: "zadacha-2",
+      prompt: (
+        <>
+          В строке 300 000 символов. Сколько раз всего может сдвинуться left?
+          Почему программа не делает 300 000² действий?
+        </>
+      ),
+      reveal: (
+        <>
+          Не больше 300 000 раз: left не возвращается назад. Вместе с right —
+          около 600 000 шагов.
+        </>
+      ),
+    },
+    {
+      id: "zadacha-3",
+      prompt: (
+        <>
+          Найди самый длинный фрагмент строки AABAB, в котором не больше одной
+          A.
+        </>
+      ),
+      reveal: <>3: BAB. Окна AB и AB короче.</>,
+    },
+    {
+      id: "zadacha-4",
+      prompt: (
+        <>
+          Чем программа для «ровно K букв» отличается от программы для «не более
+          K»?
+        </>
+      ),
+      reveal: (
+        <>
+          Только условием перед обновлением ответа:{" "}
+          <Notation>{"if count == K"}</Notation>. Сжатие окна то же.
+        </>
+      ),
+    },
+    {
+      id: "zadacha-5",
+      prompt: <>Сколько пар TT в окне TTTT? Пары могут перекрываться.</>,
+      reveal: <>Три: с позиций 0, 1 и 2.</>,
     },
   ],
 };

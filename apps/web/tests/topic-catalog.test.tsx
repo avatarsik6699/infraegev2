@@ -229,7 +229,7 @@ describe("TopicCatalogPage", () => {
       screen
         .getByRole("link", { name: "Обработка символьной информации" })
         .getAttribute("href"),
-    ).toBe("/ege/24-obrabotka-simvolnyh-strok/stroka-i-fragment");
+    ).toBe("/ege/24-obrabotka-simvolnyh-strok/stroka-i-cepochka");
     expect(
       container.querySelector('[data-topic-id="winning-strategy"]')
         ?.textContent,

@@ -93,7 +93,7 @@ function compiles(code: string): boolean {
 }
 
 describe("task 24 string processing lesson (Change 184)", () => {
-  it("has six core subtopics, two advanced and their self-checks", () => {
+  it("has six core subtopics, one advanced and their self-checks", () => {
     expect(lesson).toMatchObject({
       id: "string-processing",
       routeSlug: "24-obrabotka-simvolnyh-strok",
@@ -104,17 +104,16 @@ describe("task 24 string processing lesson (Change 184)", () => {
     });
     const subtopics = lessonSubtopics(lesson);
     expect(subtopics.map(({ slug, level }) => [slug, level])).toEqual([
-      ["stroka-i-fragment", "core"],
-      ["cepochka", "core"],
-      ["obrazcy-i-chastoty", "core"],
+      ["stroka-i-cepochka", "core"],
+      ["sosedi", "core"],
+      ["obrazcy-i-bloki", "core"],
       ["skolzyashchee-okno", "core"],
       ["pozicii-i-granicy", "core"],
       ["chisla-i-vyrazheniya", "core"],
-      ["usloviya-na-vyrazhenie", "advanced"],
-      ["nakoplennye-kolichestva", "advanced"],
+      ["usloviya-i-balans", "advanced"],
     ]);
     expect(subtopics.map(({ checkpoint }) => checkpoint?.length ?? 0)).toEqual([
-      5, 1, 0, 1, 0, 4, 1, 2,
+      5, 5, 5, 5, 5, 5, 4,
     ]);
     expect(lesson.examFocus).toBeDefined();
     expect(lesson.result).toBeDefined();
@@ -135,7 +134,7 @@ describe("task 24 string processing lesson (Change 184)", () => {
       status: "published",
     });
     expect(publicPaths).toContain(
-      "/ege/24-obrabotka-simvolnyh-strok/stroka-i-fragment",
+      "/ege/24-obrabotka-simvolnyh-strok/stroka-i-cepochka",
     );
     expect(publicPaths).toContain("/ege/24-obrabotka-simvolnyh-strok/praktika");
   });
@@ -194,7 +193,7 @@ describe("task 24 string processing lesson (Change 184)", () => {
           prelude += piece.code + "\n";
       }
     }
-    expect(ran).toBe(61);
+    expect(ran).toBe(29);
   }, 60_000);
 
   it("keeps spaces around inline code, links and emphasis", () => {
@@ -218,7 +217,8 @@ describe("task 24 string processing lesson (Change 184)", () => {
       container.querySelectorAll("figure[data-lesson-diagram]"),
     ).toHaveLength(diagrams.length);
     expect(media.filter((item) => item.kind === "stepper")).toHaveLength(4);
-    expect(media.filter((item) => item.kind === "run")).toHaveLength(3);
+    expect(media.filter((item) => item.kind === "run")).toHaveLength(1);
+    expect(diagrams).toHaveLength(6);
     expect(container.querySelectorAll("img, video")).toHaveLength(0);
     expect(container.querySelectorAll("[data-topic-cheat-sheet]")).toHaveLength(
       1,

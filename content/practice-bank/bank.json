@@ -149877,6 +149877,12 @@
               "code": "left, right = 4, 9\nprint(right - left + 1, right - left - 1, right - left)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `6 4 5`"
+            }
           }
         ],
         "skills": [],
@@ -149884,14 +149890,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 0,
+            "position": 1,
             "material_id": "string-processing"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "indeksy",
+            "section": "podryad",
             "material_id": "string-processing"
           }
         ],
@@ -149960,6 +149966,12 @@
               "code": "for n in (8, 300_000):\n    print(n * (n + 1) // 2)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `36 45000150000`"
+            }
           }
         ],
         "skills": [],
@@ -149967,14 +149979,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 1,
+            "position": 0,
             "material_id": "string-processing"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "polnyy-perebor",
+            "section": "kak-ustroena-tema",
             "material_id": "string-processing"
           }
         ],
@@ -150031,7 +150043,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Каждую строку очистите от перевода строки и сравните два count."
+              "markdown": "Каждую строку очисти strip() и сравни два count."
             }
           }
         ],
@@ -150048,6 +150060,12 @@
               "language": "python",
               "code": "count = 0\nwith open('24-3.txt') as f:\n    for line in f:\n        line = line.rstrip('\\r\\n')\n        if line.count('K') > line.count('L'):\n            count += 1\nprint(count)",
               "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `425`"
             }
           }
         ],
@@ -150072,7 +150090,7 @@
         "theory_links": [
           {
             "label": "Теория",
-            "section": "stroki-fayla",
+            "section": "chtenie-fayla",
             "material_id": "string-processing"
           }
         ],
@@ -150141,6 +150159,12 @@
               "code": "s = 'AXXXBXXXXXAX'\ncurrent = best = 0\nfor c in s:\n    current = current + 1 if c == 'X' else 0\n    best = max(best, current)\nprint(best)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `5`"
+            }
           }
         ],
         "skills": [],
@@ -150155,7 +150179,7 @@
         "theory_links": [
           {
             "label": "Теория",
-            "section": "dve-peremennye",
+            "section": "tekushchaya-dlina",
             "material_id": "string-processing"
           }
         ],
@@ -150224,6 +150248,12 @@
               "code": "s = 'CAABCBCC'\ncurrent = best = 0\nfor i in range(len(s)):\n    if i > 0 and s[i] != s[i - 1]:\n        current += 1\n    else:\n        current = 1\n    best = max(best, current)\nprint(best)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `5`"
+            }
           }
         ],
         "skills": [],
@@ -150231,7 +150261,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 4,
+            "position": 9,
             "material_id": "string-processing"
           }
         ],
@@ -150307,6 +150337,12 @@
               "code": "s = 'ZZYYYZYYYYZ'\ncurrent = best = 0\nfor i in range(len(s)):\n    if i > 0 and s[i] == s[i - 1]:\n        current += 1\n    else:\n        current = 1\n    best = max(best, current)\nprint(best)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `4`"
+            }
           }
         ],
         "skills": [],
@@ -150314,14 +150350,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 5,
+            "position": 7,
             "material_id": "string-processing"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "drugie-usloviya-sosedey",
+            "section": "odinakovye-podryad",
             "material_id": "string-processing"
           }
         ],
@@ -150390,6 +150426,12 @@
               "code": "s = '12456'\ncurrent = best = min(len(s), 2)\nfor i in range(2, len(s)):\n    if int(s[i - 2]) + int(s[i - 1]) > int(s[i]):\n        current += 1\n    else:\n        current = 2\n    best = max(best, current)\nprint(best)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `4`"
+            }
           }
         ],
         "skills": [],
@@ -150397,14 +150439,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 6,
+            "position": 14,
             "material_id": "string-processing"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "usloviya-po-troykam",
+            "section": "trojki",
             "material_id": "string-processing"
           }
         ],
@@ -150473,6 +150515,12 @@
               "code": "s = 'KLAKKLB'\ncurrent = best = 0\nfor i in range(len(s)):\n    if i > 0 and s[i - 1:i + 1] in ('KL', 'LK'):\n        current = 1\n    else:\n        current += 1\n    best = max(best, current)\nprint(best)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `4`"
+            }
           }
         ],
         "skills": [],
@@ -150480,14 +150528,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 7,
+            "position": 11,
             "material_id": "string-processing"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "zapreshchyonnye-pary",
+            "section": "zapretnye-pary",
             "material_id": "string-processing"
           }
         ],
@@ -150544,7 +150592,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Обновляйте ответ после каждого символа, а не только при разрыве."
+              "markdown": "Обновляй ответ после каждого символа, а не только при разрыве."
             }
           }
         ],
@@ -150559,8 +150607,14 @@
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "with open('24-1.txt') as f:\n    s = f.readline().rstrip('\\r\\n')\n\ncurrent = best = 0\nfor c in s:\n    current = current + 1 if c != 'Y' else 0\n    best = max(best, current)\nprint(best)",
+              "code": "s = open('24-1.txt').readline().strip()\n\ncurrent = best = 0\nfor c in s:\n    current = current + 1 if c != 'Y' else 0\n    best = max(best, current)\nprint(best)",
               "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `47`"
             }
           }
         ],
@@ -150578,14 +150632,14 @@
         ],
         "lessons": [
           {
-            "position": 8,
+            "position": 4,
             "material_id": "string-processing"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "obnovlenie-maksimuma",
+            "section": "tekushchaya-dlina",
             "material_id": "string-processing"
           }
         ],
@@ -150657,8 +150711,14 @@
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "with open('24-1.txt') as f:\n    s = f.readline().rstrip('\\r\\n')\n\ncurrent = best = 0\nfor i in range(len(s)):\n    if i > 0 and s[i - 1] in 'XZ' and s[i] in 'XZ':\n        current = 1\n    else:\n        current += 1\n    best = max(best, current)\nprint(best)",
+              "code": "s = open('24-1.txt').readline().strip()\n\ncurrent = best = 0\nfor i in range(len(s)):\n    if i > 0 and s[i - 1] in 'XZ' and s[i] in 'XZ':\n        current = 1\n    else:\n        current += 1\n    best = max(best, current)\nprint(best)",
               "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `31`"
             }
           }
         ],
@@ -150676,14 +150736,14 @@
         ],
         "lessons": [
           {
-            "position": 9,
+            "position": 12,
             "material_id": "string-processing"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "zapreshchyonnye-pary",
+            "section": "zapretnye-pary",
             "material_id": "string-processing"
           }
         ],
@@ -150740,7 +150800,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Проверяйте тройку, которая заканчивается текущей цифрой; при нарушении сброс до 2."
+              "markdown": "Проверяй тройку, которая кончается текущей цифрой; при нарушении сброс до 2."
             }
           }
         ],
@@ -150755,8 +150815,14 @@
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "with open('24-2.txt') as f:\n    s = f.readline().rstrip('\\r\\n')\n\ncurrent = best = min(len(s), 2)\nfor i in range(2, len(s)):\n    if int(s[i - 2]) + int(s[i]) > int(s[i - 1]):\n        current += 1\n    else:\n        current = 2\n    best = max(best, current)\nprint(best)",
+              "code": "s = open('24-2.txt').readline().strip()\n\ncurrent = best = min(len(s), 2)\nfor i in range(2, len(s)):\n    if int(s[i - 2]) + int(s[i]) > int(s[i - 1]):\n        current += 1\n    else:\n        current = 2\n    best = max(best, current)\nprint(best)",
               "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `43`"
             }
           }
         ],
@@ -150774,14 +150840,14 @@
         ],
         "lessons": [
           {
-            "position": 10,
+            "position": 15,
             "material_id": "string-processing"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "usloviya-po-troykam",
+            "section": "trojki",
             "material_id": "string-processing"
           }
         ],
@@ -150832,7 +150898,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Перебирайте каждое начало; count перекрытия не считает."
+              "markdown": "Перебери каждое начало: count перекрытия не считает."
             }
           }
         ],
@@ -150850,6 +150916,12 @@
               "code": "s = 'ABABABA'\ncount = 0\nfor i in range(len(s) - 2):\n    if s[i:i + 3] == 'ABA':\n        count += 1\nprint(count)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `3`"
+            }
           }
         ],
         "skills": [],
@@ -150857,14 +150929,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 11,
+            "position": 22,
             "material_id": "string-processing"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "poisk-obrazca",
+            "section": "korotkie-fragmenty",
             "material_id": "string-processing"
           }
         ],
@@ -150933,6 +151005,12 @@
               "code": "s = 'ABABBAB'\ncount = 0\nfor i in range(len(s) - 2):\n    if s[i] == s[i + 2]:\n        count += 1\nprint(count)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `3`"
+            }
           }
         ],
         "skills": [],
@@ -150940,7 +151018,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 12,
+            "position": 23,
             "material_id": "string-processing"
           }
         ],
@@ -151016,6 +151094,12 @@
               "code": "s = 'ABABCABCA'\npattern = 'ABC'\ncurrent = best = 0\nfor c in s:\n    if c == pattern[current % len(pattern)]:\n        current += 1\n    elif c == pattern[0]:\n        current = 1\n    else:\n        current = 0\n    best = max(best, current)\nprint(best)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `7`"
+            }
           }
         ],
         "skills": [],
@@ -151023,7 +151107,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 13,
+            "position": 16,
             "material_id": "string-processing"
           }
         ],
@@ -151081,7 +151165,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Пары идут целиком: проверьте оба смещения, 0 и 1."
+              "markdown": "Пары идут целиком: проверь оба смещения, 0 и 1."
             }
           }
         ],
@@ -151099,6 +151183,12 @@
               "code": "s = 'BABEDACA'\nbest = 0\nfor offset in range(2):\n    current = 0\n    for i in range(offset, len(s) - 1, 2):\n        if s[i] in 'BCDF' and s[i + 1] in 'AE':\n            current += 1\n        else:\n            current = 0\n        best = max(best, current)\nprint(best, 2 * best)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `4 8`"
+            }
           }
         ],
         "skills": [],
@@ -151106,14 +151196,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 14,
+            "position": 19,
             "material_id": "string-processing"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "cepochki-par",
+            "section": "bloki",
             "material_id": "string-processing"
           }
         ],
@@ -151187,21 +151277,10 @@
         "skills": [],
         "exam_numbers": [24],
         "files": [],
-        "lessons": [
-          {
-            "position": 15,
-            "material_id": "string-processing"
-          }
-        ],
-        "theory_links": [
-          {
-            "label": "Теория",
-            "section": "ravnye-chastoty",
-            "material_id": "string-processing"
-          }
-        ],
+        "lessons": [],
+        "theory_links": [],
         "catalog_visible": false,
-        "archived": false,
+        "archived": true,
         "sources": [
           {
             "url": null,
@@ -151247,7 +151326,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "При равной длине берите цепочку правее: сравнение >=."
+              "markdown": "При равной длине бери цепочку правее: сравнение >=."
             }
           }
         ],
@@ -151265,6 +151344,12 @@
               "code": "s = 'YXXYXXYXX'\ncurrent = best = start = 0\nfor i in range(len(s)):\n    current = current + 1 if s[i] == 'X' else 0\n    if current > 0 and current >= best:\n        best = current\n        start = i - current + 1\nprint(start, start + 1)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `7 8`"
+            }
           }
         ],
         "skills": [],
@@ -151272,14 +151357,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 16,
+            "position": 6,
             "material_id": "string-processing"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "dopolnitelnyy-kriteriy",
+            "section": "chto-vyvodit",
             "material_id": "string-processing"
           }
         ],
@@ -151351,8 +151436,14 @@
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "with open('24-1.txt') as f:\n    s = f.readline().rstrip('\\r\\n')\n\npattern = 'XYZ'\ncurrent = best = 0\nfor c in s:\n    if c == pattern[current % len(pattern)]:\n        current += 1\n    elif c == pattern[0]:\n        current = 1\n    else:\n        current = 0\n    best = max(best, current)\nprint(best)",
+              "code": "s = open('24-1.txt').readline().strip()\n\npattern = 'XYZ'\ncurrent = best = 0\nfor c in s:\n    if c == pattern[current % len(pattern)]:\n        current += 1\n    elif c == pattern[0]:\n        current = 1\n    else:\n        current = 0\n    best = max(best, current)\nprint(best)",
               "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `51`"
             }
           }
         ],
@@ -151434,7 +151525,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Пары идут целиком: проверьте оба смещения."
+              "markdown": "Пары идут целиком: проверь оба смещения."
             }
           }
         ],
@@ -151449,8 +151540,14 @@
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "with open('24-4.txt') as f:\n    s = f.readline().rstrip('\\r\\n')\n\nvowels = 'AEIOUY'\nbest = 0\nfor offset in range(2):\n    current = 0\n    for i in range(offset, len(s) - 1, 2):\n        if s[i] in vowels and s[i + 1] not in vowels:\n            current += 1\n        else:\n            current = 0\n        best = max(best, current)\nprint(best)",
+              "code": "s = open('24-4.txt').readline().strip()\n\nvowels = 'AEIOUY'\nbest = 0\nfor offset in range(2):\n    current = 0\n    for i in range(offset, len(s) - 1, 2):\n        if s[i] in vowels and s[i + 1] not in vowels:\n            current += 1\n        else:\n            current = 0\n        best = max(best, current)\nprint(best)",
               "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `9`"
             }
           }
         ],
@@ -151468,14 +151565,14 @@
         ],
         "lessons": [
           {
-            "position": 18,
+            "position": 21,
             "material_id": "string-processing"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "cepochki-par",
+            "section": "bloki",
             "material_id": "string-processing"
           }
         ],
@@ -151564,21 +151661,10 @@
             "description": "Строка из заглавных латинских букв"
           }
         ],
-        "lessons": [
-          {
-            "position": 19,
-            "material_id": "string-processing"
-          }
-        ],
-        "theory_links": [
-          {
-            "label": "Теория",
-            "section": "ravnye-chastoty",
-            "material_id": "string-processing"
-          }
-        ],
+        "lessons": [],
+        "theory_links": [],
         "catalog_visible": false,
-        "archived": false,
+        "archived": true,
         "sources": [
           {
             "url": null,
@@ -151662,21 +151748,10 @@
             "description": "Строки из заглавных латинских букв"
           }
         ],
-        "lessons": [
-          {
-            "position": 20,
-            "material_id": "string-processing"
-          }
-        ],
-        "theory_links": [
-          {
-            "label": "Теория",
-            "section": "mnogo-strok",
-            "material_id": "string-processing"
-          }
-        ],
+        "lessons": [],
+        "theory_links": [],
         "catalog_visible": false,
-        "archived": false,
+        "archived": true,
         "sources": [
           {
             "url": null,
@@ -151722,7 +151797,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Когда A стало три, сдвигайте left, пока одна A не уйдёт из окна."
+              "markdown": "Когда A стало три, сдвигай left, пока одна A не уйдёт из окна."
             }
           }
         ],
@@ -151740,6 +151815,12 @@
               "code": "s = 'ABCABBACB'\nleft = count = best = 0\nfor right in range(len(s)):\n    if s[right] == 'A':\n        count += 1\n    while count > 2:\n        if s[left] == 'A':\n            count -= 1\n        left += 1\n    best = max(best, right - left + 1)\nprint(best)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `8`"
+            }
           }
         ],
         "skills": [],
@@ -151747,14 +151828,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 21,
+            "position": 25,
             "material_id": "string-processing"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "sdvig-levoy-granicy",
+            "section": "dve-granicy",
             "material_id": "string-processing"
           }
         ],
@@ -151797,7 +151878,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Для той же строки найди максимальную длину фрагмента с ровно двумя `A`."
+              "markdown": "В строке `ABCABBACB` найди максимальную длину фрагмента, в котором ровно две буквы `A`."
             }
           }
         ],
@@ -151823,6 +151904,12 @@
               "code": "s = 'ABCABBACB'\nleft = count = best = 0\nfor right in range(len(s)):\n    if s[right] == 'A':\n        count += 1\n    while count > 2:\n        if s[left] == 'A':\n            count -= 1\n        left += 1\n    if count == 2:\n        best = max(best, right - left + 1)\nprint(best)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `8`"
+            }
           }
         ],
         "skills": [],
@@ -151830,7 +151917,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 22,
+            "position": 27,
             "material_id": "string-processing"
           }
         ],
@@ -151880,7 +151967,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Для той же строки найди минимальную длину фрагмента с не менее чем двумя `A`."
+              "markdown": "В строке `ABCABBACB` найди минимальную длину фрагмента, в котором не менее двух букв `A`."
             }
           }
         ],
@@ -151888,7 +151975,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Пока букв достаточно, обновляйте ответ и сжимайте окно слева."
+              "markdown": "Самый короткий фрагмент начинается на A и кончается на следующей A из списка позиций."
             }
           }
         ],
@@ -151906,6 +151993,12 @@
               "code": "s = 'ABCABBACB'\nleft = count = 0\nbest = len(s) + 1\nfor right in range(len(s)):\n    if s[right] == 'A':\n        count += 1\n    while count >= 2:\n        best = min(best, right - left + 1)\n        if s[left] == 'A':\n            count -= 1\n        left += 1\nprint(best)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `4`"
+            }
           }
         ],
         "skills": [],
@@ -151913,14 +152006,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 23,
+            "position": 35,
             "material_id": "string-processing"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "minimalnaya-dlina",
+            "section": "spisok-poziciy",
             "material_id": "string-processing"
           }
         ],
@@ -151994,21 +152087,10 @@
         "skills": [],
         "exam_numbers": [24],
         "files": [],
-        "lessons": [
-          {
-            "position": 24,
-            "material_id": "string-processing"
-          }
-        ],
-        "theory_links": [
-          {
-            "label": "Теория",
-            "section": "zapreshchyonnoe-slovo",
-            "material_id": "string-processing"
-          }
-        ],
+        "lessons": [],
+        "theory_links": [],
         "catalog_visible": false,
-        "archived": false,
+        "archived": true,
         "sources": [
           {
             "url": null,
@@ -152072,6 +152154,12 @@
               "code": "s = 'ABCBADAB'\ncount = {'A': 0, 'B': 0}\nleft = best = 0\nfor right in range(len(s)):\n    c = s[right]\n    if c in count:\n        count[c] += 1\n        while count[c] > 1:\n            if s[left] in count:\n                count[s[left]] -= 1\n            left += 1\n    best = max(best, right - left + 1)\nprint(best)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `4`"
+            }
           }
         ],
         "skills": [],
@@ -152079,14 +152167,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 25,
+            "position": 29,
             "material_id": "string-processing"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "neskolko-ogranicheniy",
+            "section": "neskolko-usloviy",
             "material_id": "string-processing"
           }
         ],
@@ -152155,6 +152243,12 @@
               "code": "s = 'AAABAAB'\nleft = count = best = 0\nfor right in range(len(s)):\n    if right >= 1 and s[right - 1:right + 1] == 'AA':\n        if right - 1 >= left:\n            count += 1\n    while count > 1:\n        if s[left:left + 2] == 'AA' and left + 1 <= right:\n            count -= 1\n        left += 1\n    best = max(best, right - left + 1)\nprint(best)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `5`"
+            }
           }
         ],
         "skills": [],
@@ -152162,7 +152256,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 26,
+            "position": 32,
             "material_id": "string-processing"
           }
         ],
@@ -152241,8 +152335,14 @@
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "with open('24-4.txt') as f:\n    s = f.readline().rstrip('\\r\\n')\n\nleft = count = best = 0\nfor right in range(len(s)):\n    if s[right] == 'Q':\n        count += 1\n    while count > 12:\n        if s[left] == 'Q':\n            count -= 1\n        left += 1\n    best = max(best, right - left + 1)\nprint(best)",
+              "code": "s = open('24-4.txt').readline().strip()\n\nleft = count = best = 0\nfor right in range(len(s)):\n    if s[right] == 'Q':\n        count += 1\n    while count > 12:\n        if s[left] == 'Q':\n            count -= 1\n        left += 1\n    best = max(best, right - left + 1)\nprint(best)",
               "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `5647`"
             }
           }
         ],
@@ -152260,14 +152360,14 @@
         ],
         "lessons": [
           {
-            "position": 27,
+            "position": 26,
             "material_id": "string-processing"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "sdvig-levoy-granicy",
+            "section": "dve-granicy",
             "material_id": "string-processing"
           }
         ],
@@ -152339,8 +152439,14 @@
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "with open('24-4.txt') as f:\n    s = f.readline().rstrip('\\r\\n')\n\ncount = {c: 0 for c in 'JKXZ'}\nleft = best = 0\nfor right in range(len(s)):\n    c = s[right]\n    if c in count:\n        count[c] += 1\n        while count[c] > 6:\n            if s[left] in count:\n                count[s[left]] -= 1\n            left += 1\n    best = max(best, right - left + 1)\nprint(best)",
+              "code": "s = open('24-4.txt').readline().strip()\n\ncount = {c: 0 for c in 'JKXZ'}\nleft = best = 0\nfor right in range(len(s)):\n    c = s[right]\n    if c in count:\n        count[c] += 1\n        while count[c] > 6:\n            if s[left] in count:\n                count[s[left]] -= 1\n            left += 1\n    best = max(best, right - left + 1)\nprint(best)",
               "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `797`"
             }
           }
         ],
@@ -152358,14 +152464,14 @@
         ],
         "lessons": [
           {
-            "position": 28,
+            "position": 30,
             "material_id": "string-processing"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "slovar-schyotchikov",
+            "section": "neskolko-usloviy",
             "material_id": "string-processing"
           }
         ],
@@ -152422,7 +152528,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Пары перекрываются; учитывайте пару, только когда оба символа в окне."
+              "markdown": "Пары перекрываются; учитывай пару, только когда оба символа в окне."
             }
           }
         ],
@@ -152437,8 +152543,14 @@
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "with open('24-4.txt') as f:\n    s = f.readline().rstrip('\\r\\n')\n\nleft = count = best = 0\nfor right in range(len(s)):\n    if right >= 1 and s[right - 1:right + 1] == 'TT':\n        if right - 1 >= left:\n            count += 1\n    while count > 25:\n        if s[left:left + 2] == 'TT' and left + 1 <= right:\n            count -= 1\n        left += 1\n    if count == 25:\n        best = max(best, right - left + 1)\nprint(best)",
+              "code": "s = open('24-4.txt').readline().strip()\n\nleft = count = best = 0\nfor right in range(len(s)):\n    if right >= 1 and s[right - 1:right + 1] == 'TT':\n        if right - 1 >= left:\n            count += 1\n    while count > 25:\n        if s[left:left + 2] == 'TT' and left + 1 <= right:\n            count -= 1\n        left += 1\n    if count == 25:\n        best = max(best, right - left + 1)\nprint(best)",
               "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `29516`"
             }
           }
         ],
@@ -152456,7 +152568,7 @@
         ],
         "lessons": [
           {
-            "position": 29,
+            "position": 33,
             "material_id": "string-processing"
           }
         ],
@@ -152532,6 +152644,12 @@
               "code": "s = 'CAABACAB'\nk = 3\npositions = [i for i in range(len(s)) if s[i] == 'A']\nbest = len(s) + 1\nfor j in range(len(positions) - k + 1):\n    length = positions[j + k - 1] - positions[j] + 1\n    best = min(best, length)\nprint(best)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `4`"
+            }
           }
         ],
         "skills": [],
@@ -152539,7 +152657,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 30,
+            "position": 34,
             "material_id": "string-processing"
           }
         ],
@@ -152589,7 +152707,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Для той же строки найди максимальную длину фрагмента с ровно двумя `A`."
+              "markdown": "В строке `CAABACAB` найди максимальную длину фрагмента, в котором ровно две буквы `A`."
             }
           }
         ],
@@ -152597,7 +152715,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Добавьте границы −1 и len(s) и растяните фрагмент до соседних A."
+              "markdown": "Добавь границы −1 и len(s) и растяни фрагмент до соседних A."
             }
           }
         ],
@@ -152615,6 +152733,12 @@
               "code": "s = 'CAABACAB'\nk = 2\npositions = [i for i in range(len(s)) if s[i] == 'A']\npositions = [-1] + positions + [len(s)]\nbest = 0\nfor j in range(1, len(positions) - k):\n    left = positions[j - 1] + 1\n    right = positions[j + k] - 1\n    best = max(best, right - left + 1)\nprint(best)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `5`"
+            }
           }
         ],
         "skills": [],
@@ -152622,14 +152746,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 31,
+            "position": 37,
             "material_id": "string-processing"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "maksimum-s-rovno-k",
+            "section": "rovno-k-pozicii",
             "material_id": "string-processing"
           }
         ],
@@ -152698,6 +152822,12 @@
               "code": "s = 'ABACABAABA'\nword, k = 'ABA', 2\nm = len(word)\npositions = [i for i in range(len(s) - m + 1)\n             if s[i:i + m] == word]\nbest = len(s) + 1\nfor j in range(len(positions) - k + 1):\n    length = positions[j + k - 1] - positions[j] + m\n    best = min(best, length)\nprint(best)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `6`"
+            }
           }
         ],
         "skills": [],
@@ -152705,7 +152835,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 32,
+            "position": 38,
             "material_id": "string-processing"
           }
         ],
@@ -152763,7 +152893,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Замените Y на X и разбейте строку по X."
+              "markdown": "Цепочка допустимых символов: X и Y обрывают её, сброс до 0."
             }
           }
         ],
@@ -152781,6 +152911,12 @@
               "code": "s = 'ABYCDXEFGHYXI'\nparts = s.replace('Y', 'X').split('X')\nprint(max(len(p) for p in parts))",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `4`"
+            }
           }
         ],
         "skills": [],
@@ -152788,14 +152924,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 33,
+            "position": 5,
             "material_id": "string-processing"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "zameny-i-razbienie",
+            "section": "tekushchaya-dlina",
             "material_id": "string-processing"
           }
         ],
@@ -152869,21 +153005,10 @@
         "skills": [],
         "exam_numbers": [24],
         "files": [],
-        "lessons": [
-          {
-            "position": 34,
-            "material_id": "string-processing"
-          }
-        ],
-        "theory_links": [
-          {
-            "label": "Теория",
-            "section": "chasti-mezhdu-razdelitelyami",
-            "material_id": "string-processing"
-          }
-        ],
+        "lessons": [],
+        "theory_links": [],
         "catalog_visible": false,
-        "archived": false,
+        "archived": true,
         "sources": [
           {
             "url": null,
@@ -152952,21 +153077,10 @@
         "skills": [],
         "exam_numbers": [24],
         "files": [],
-        "lessons": [
-          {
-            "position": 35,
-            "material_id": "string-processing"
-          }
-        ],
-        "theory_links": [
-          {
-            "label": "Теория",
-            "section": "peresekayushchiesya-razdeliteli",
-            "material_id": "string-processing"
-          }
-        ],
+        "lessons": [],
+        "theory_links": [],
         "catalog_visible": false,
-        "archived": false,
+        "archived": true,
         "sources": [
           {
             "url": null,
@@ -153033,8 +153147,14 @@
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "with open('24-4.txt') as f:\n    s = f.readline().rstrip('\\r\\n')\n\nk = 50\npositions = [i for i in range(len(s)) if s[i] == 'Q']\nbest = len(s) + 1\nfor j in range(len(positions) - k + 1):\n    length = positions[j + k - 1] - positions[j] + 1\n    best = min(best, length)\nprint(best)",
+              "code": "s = open('24-4.txt').readline().strip()\n\nk = 50\npositions = [i for i in range(len(s)) if s[i] == 'Q']\nbest = len(s) + 1\nfor j in range(len(positions) - k + 1):\n    length = positions[j + k - 1] - positions[j] + 1\n    best = min(best, length)\nprint(best)",
               "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `7345`"
             }
           }
         ],
@@ -153131,8 +153251,14 @@
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "with open('24-5.txt') as f:\n    s = f.readline().rstrip('\\r\\n')\n\nk = 6\npositions = []\nbest = len(s) + 1\nfor i in range(len(s)):\n    if s[i] == 'K':\n        positions.append(i)\n    elif s[i] == '0':\n        if len(positions) >= k:\n            best = min(best, i - positions[-k] + 1)\n        positions = []\nprint(best)",
+              "code": "s = open('24-5.txt').readline().strip()\n\nk = 6\npositions = []\nbest = len(s) + 1\nfor i in range(len(s)):\n    if s[i] == 'K':\n        positions.append(i)\n    elif s[i] == '0':\n        if len(positions) >= k:\n            best = min(best, i - positions[-k] + 1)\n        positions = []\nprint(best)",
               "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `43`"
             }
           }
         ],
@@ -153150,7 +153276,7 @@
         ],
         "lessons": [
           {
-            "position": 37,
+            "position": 39,
             "material_id": "string-processing"
           }
         ],
@@ -153214,7 +153340,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Концы — соседние цифры файла; при равной длине берите больший номер начала."
+              "markdown": "Концы — соседние цифры файла; при равной длине бери больший номер начала."
             }
           }
         ],
@@ -153229,8 +153355,14 @@
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "with open('24-5.txt') as f:\n    s = f.readline().rstrip('\\r\\n')\n\nvowels = 'AEIOUY'\ndigits = [i for i in range(len(s)) if s[i].isdigit()]\nbest, start = 0, -1\nfor a, b in zip(digits, digits[1:]):\n    if s[a] == s[b] and s[a] in '0369' and b - a > 1:\n        inside = s[a + 1:b]\n        v = sum(c in vowels for c in inside)\n        if 2 * v == len(inside) and b - a + 1 >= best:\n            best, start = b - a + 1, a\nprint(start)",
+              "code": "s = open('24-5.txt').readline().strip()\n\nvowels = 'AEIOUY'\ndigits = [i for i in range(len(s)) if s[i].isdigit()]\nbest, start = 0, -1\nfor a, b in zip(digits, digits[1:]):\n    if s[a] == s[b] and s[a] in '0369' and b - a > 1:\n        inside = s[a + 1:b]\n        v = sum(c in vowels for c in inside)\n        if 2 * v == len(inside) and b - a + 1 >= best:\n            best, start = b - a + 1, a\nprint(start)",
               "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `210001`"
             }
           }
         ],
@@ -153248,14 +153380,14 @@
         ],
         "lessons": [
           {
-            "position": 38,
+            "position": 40,
             "material_id": "string-processing"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "odinakovye-koncy",
+            "section": "nachalo-i-konec",
             "material_id": "string-processing"
           }
         ],
@@ -153327,8 +153459,14 @@
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "with open('24-5.txt') as f:\n    s = f.readline().rstrip('\\r\\n')\n\nvowels = 'AEIOUY'\ncurrent, seen, best = 0, set(), 0\nfor c in s:\n    if c.isalpha():\n        current += 1\n        if c in vowels:\n            seen.add(c)\n    else:\n        current, seen = 0, set()\n    if len(seen) == len(vowels):\n        best = max(best, current)\nprint(best)",
+              "code": "s = open('24-5.txt').readline().strip()\n\nvowels = 'AEIOUY'\ncurrent, seen, best = 0, set(), 0\nfor c in s:\n    if c.isalpha():\n        current += 1\n        if c in vowels:\n            seen.add(c)\n    else:\n        current, seen = 0, set()\n    if len(seen) == len(vowels):\n        best = max(best, current)\nprint(best)",
               "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `44`"
             }
           }
         ],
@@ -153346,14 +153484,14 @@
         ],
         "lessons": [
           {
-            "position": 39,
+            "position": 41,
             "material_id": "string-processing"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "vse-simvoly-nabora",
+            "section": "nachalo-i-konec",
             "material_id": "string-processing"
           }
         ],
@@ -153422,6 +153560,12 @@
               "code": "import re\n\ns = '5+*12+0*07+3'\nnumber = r'(?:0|[1-9][0-9]*)'\npattern = number + r'(?:[+*]' + number + r')*'\nprint(max(len(m.group()) for m in re.finditer(pattern, s)))",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `6`"
+            }
           }
         ],
         "skills": [],
@@ -153429,7 +153573,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 40,
+            "position": 47,
             "material_id": "string-processing"
           }
         ],
@@ -153505,6 +153649,12 @@
               "code": "import re\n\ns = '0A9BC00B1A20X'\npattern = r'[1-9AB][0-9AB]*'\nprint(max(len(m.group()) for m in re.finditer(pattern, s)))",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `5`"
+            }
           }
         ],
         "skills": [],
@@ -153512,7 +153662,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 41,
+            "position": 44,
             "material_id": "string-processing"
           }
         ],
@@ -153562,7 +153712,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Текстовый файл 24-6.txt состоит из десятичных цифр и знаков «+» и «*». Определите максимальное количество символов в непрерывной последовательности, которая является корректным арифметическим выражением с целыми неотрицательными числами. В этом выражении никакие два знака не стоят рядом, в записи чисел нет незначащих (ведущих) нулей. В ответе укажите количество символов."
+              "markdown": "Задача темы. Текстовый файл 24-6.txt состоит из десятичных цифр и знаков «+» и «*» (сложения и умножения). Определите максимальное количество символов в непрерывной последовательности, являющейся корректным арифметическим выражением с целыми неотрицательными числами (без знака). В этом выражении никакие два знака арифметических операций не стоят рядом, в записи чисел отсутствуют незначащие (ведущие) нули. В ответе укажите количество символов."
             }
           },
           {
@@ -153591,8 +153741,14 @@
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "import re\n\nwith open('24-6.txt') as f:\n    s = f.readline().rstrip('\\r\\n')\n\nnumber = r'(?:0|[1-9][0-9]*)'\npattern = number + r'(?:[+*]' + number + r')*'\nprint(max(len(m.group()) for m in re.finditer(pattern, s)))",
+              "code": "import re\n\ns = open('24-6.txt').readline().strip()\n\nnumber = r'(?:0|[1-9][0-9]*)'\npattern = number + r'(?:[+*]' + number + r')*'\nprint(max(len(m.group()) for m in re.finditer(pattern, s)))",
               "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `172`"
             }
           }
         ],
@@ -153610,14 +153766,14 @@
         ],
         "lessons": [
           {
-            "position": 42,
+            "position": 49,
             "material_id": "string-processing"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "shablon-vyrazheniya",
+            "section": "zadacha-temy",
             "material_id": "string-processing"
           }
         ],
@@ -153689,8 +153845,14 @@
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "import re\n\nwith open('24-7.txt') as f:\n    s = f.readline().rstrip('\\r\\n')\n\nnumber = r'[1-9][0-9]*'\npattern = number + r'(?:[-*]' + number + r')*'\nprint(max(len(m.group()) for m in re.finditer(pattern, s)))",
+              "code": "import re\n\ns = open('24-7.txt').readline().strip()\n\nnumber = r'[1-9][0-9]*'\npattern = number + r'(?:[-*]' + number + r')*'\nprint(max(len(m.group()) for m in re.finditer(pattern, s)))",
               "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `147`"
             }
           }
         ],
@@ -153708,14 +153870,14 @@
         ],
         "lessons": [
           {
-            "position": 43,
+            "position": 48,
             "material_id": "string-processing"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "shablon-po-usloviyu",
+            "section": "shablon-vyrazheniya",
             "material_id": "string-processing"
           }
         ],
@@ -153787,8 +153949,14 @@
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "import re\n\nwith open('24-5.txt') as f:\n    s = f.readline().rstrip('\\r\\n')\n\npattern = r'[1-9A-J][0-9A-J]*'\nprint(max(len(m.group()) for m in re.finditer(pattern, s)))",
+              "code": "import re\n\ns = open('24-5.txt').readline().strip()\n\npattern = r'[1-9A-J][0-9A-J]*'\nprint(max(len(m.group()) for m in re.finditer(pattern, s)))",
               "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `22`"
             }
           }
         ],
@@ -153806,7 +153974,7 @@
         ],
         "lessons": [
           {
-            "position": 44,
+            "position": 45,
             "material_id": "string-processing"
           }
         ],
@@ -153870,7 +154038,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Уберите ведущие нули блока, обрежьте его до последней чётной цифры и сравнивайте по длине, затем по записи."
+              "markdown": "Убери ведущие нули блока, обрежь его до последней чётной цифры и сравнивай по длине, затем по записи."
             }
           }
         ],
@@ -153885,8 +154053,14 @@
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "import re\n\nwith open('24-5.txt') as f:\n    s = f.readline().rstrip('\\r\\n')\n\ndigits = '0123456789ABCDEF'\nbest = ''\nfor m in re.finditer('[0-9A-F]+', s):\n    block = m.group().lstrip('0')\n    end = -1\n    for i in range(len(block)):\n        if digits.index(block[i]) % 2 == 0:\n            end = i\n    if end >= 0:\n        candidate = block[:end + 1]\n    else:\n        candidate = '0' if '0' in m.group() else ''\n    if (len(candidate), candidate) > (len(best), best):\n        best = candidate\nprint(len(best))",
+              "code": "import re\n\ns = open('24-5.txt').readline().strip()\n\ndigits = '0123456789ABCDEF'\nbest = ''\nfor m in re.finditer('[0-9A-F]+', s):\n    block = m.group().lstrip('0')\n    end = -1\n    for i in range(len(block)):\n        if digits.index(block[i]) % 2 == 0:\n            end = i\n    if end >= 0:\n        candidate = block[:end + 1]\n    else:\n        candidate = '0' if '0' in m.group() else ''\n    if (len(candidate), candidate) > (len(best), best):\n        best = candidate\nprint(len(best))",
               "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `18`"
             }
           }
         ],
@@ -153904,14 +154078,14 @@
         ],
         "lessons": [
           {
-            "position": 45,
+            "position": 46,
             "material_id": "string-processing"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "vedushchie-nuli",
+            "section": "zapis-v-sisteme",
             "material_id": "string-processing"
           }
         ],
@@ -153980,6 +154154,12 @@
               "code": "import re\n\ns = '9*8+76+5+4321'\nk = 2\nbest = 0\nfor e in re.finditer(r'[0-9]+(?:[-+*][0-9]+)*', s):\n    numbers = list(re.finditer(r'[0-9]+', e.group()))\n    for j in range(len(numbers)):\n        i = max(0, j - k + 1)\n        length = numbers[j].end() - numbers[i].start()\n        best = max(best, length)\nprint(best)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `6`"
+            }
           }
         ],
         "skills": [],
@@ -153987,7 +154167,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 46,
+            "position": 51,
             "material_id": "string-processing",
             "counts_toward_mastery": false
           }
@@ -154064,6 +154244,12 @@
               "code": "import re\n\ns = '1+22*333+4444'\nk = 3\nbest = 0\nfor e in re.finditer(r'[0-9]+(?:[-+*][0-9]+)*', s):\n    numbers = list(re.finditer(r'[0-9]+', e.group()))\n    for j in range(len(numbers)):\n        i = max(0, j - k + 1)\n        length = numbers[j].end() - numbers[i].start()\n        best = max(best, length)\nprint(best)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `11`"
+            }
           }
         ],
         "skills": [],
@@ -154071,7 +154257,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 47,
+            "position": 52,
             "material_id": "string-processing",
             "counts_toward_mastery": false
           }
@@ -154148,6 +154334,12 @@
               "code": "s = '4-3*2*5-1'\nstart = best = 0\nfor i in range(len(s)):\n    if s[i] == '*':\n        minus = s.rfind('-', start, i)\n        if minus != -1:\n            start = minus + 1\n    best = max(best, i - start + 1)\nprint(best)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `7`"
+            }
           }
         ],
         "skills": [],
@@ -154155,7 +154347,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 48,
+            "position": 54,
             "material_id": "string-processing",
             "counts_toward_mastery": false
           }
@@ -154163,7 +154355,7 @@
         "theory_links": [
           {
             "label": "Теория",
-            "section": "dopolnitelnye-trebovaniya",
+            "section": "poryadok-dejstvij",
             "material_id": "string-processing"
           }
         ],
@@ -154214,7 +154406,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Проверьте все начальные части, которые заканчиваются целым числом."
+              "markdown": "Проверь все начальные части, которые кончаются целым числом."
             }
           }
         ],
@@ -154232,6 +154424,12 @@
               "code": "import re\n\ns = 'A12-25+3'\nbest = None\nfor m in re.finditer(r'A([1-9][0-9]*(?:[-+][1-9][0-9]*)*)', s):\n    total = 0\n    for t in re.findall(r'[-+]?[0-9]+', m.group(1)):\n        total += int(t)\n        if best is None or total > best:\n            best = total\nprint(best)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `12`"
+            }
           }
         ],
         "skills": [],
@@ -154239,7 +154437,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 49,
+            "position": 56,
             "material_id": "string-processing",
             "counts_toward_mastery": false
           }
@@ -154298,7 +154496,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Сравнивайте пары (длина, значение)."
+              "markdown": "Сравнивай пары (длина, значение)."
             }
           }
         ],
@@ -154316,6 +154514,12 @@
               "code": "import re\n\ns = 'B12-3CB21+5'\nbest = None\nfor m in re.finditer(r'B([1-9][0-9]*(?:[-+][1-9][0-9]*)*)', s):\n    text = m.group(1)\n    terms = re.findall(r'[-+]?[0-9]+', text)\n    value = sum(int(t) for t in terms)\n    if best is None or (len(text), value) > best:\n        best = (len(text), value)\nprint(best[1])",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `26`"
+            }
           }
         ],
         "skills": [],
@@ -154323,7 +154527,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 50,
+            "position": 57,
             "material_id": "string-processing",
             "counts_toward_mastery": false
           }
@@ -154331,7 +154535,7 @@
         "theory_links": [
           {
             "label": "Теория",
-            "section": "naibolshee-znachenie",
+            "section": "summa-posle-bukvy",
             "material_id": "string-processing"
           }
         ],
@@ -154403,8 +154607,14 @@
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "import re\n\nwith open('24-8.txt') as f:\n    s = f.readline().rstrip('\\r\\n')\n\nk = 20\nbest = 0\nfor e in re.finditer(r'[1-9]+(?:[-+*][1-9]+)*', s):\n    numbers = list(re.finditer(r'[1-9]+', e.group()))\n    for j in range(len(numbers)):\n        i = max(0, j - k + 1)\n        length = numbers[j].end() - numbers[i].start()\n        best = max(best, length)\nprint(best)",
+              "code": "import re\n\ns = open('24-8.txt').readline().strip()\n\nk = 20\nbest = 0\nfor e in re.finditer(r'[1-9]+(?:[-+*][1-9]+)*', s):\n    numbers = list(re.finditer(r'[1-9]+', e.group()))\n    for j in range(len(numbers)):\n        i = max(0, j - k + 1)\n        length = numbers[j].end() - numbers[i].start()\n        best = max(best, length)\nprint(best)",
               "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `72`"
             }
           }
         ],
@@ -154422,7 +154632,7 @@
         ],
         "lessons": [
           {
-            "position": 51,
+            "position": 53,
             "material_id": "string-processing",
             "counts_toward_mastery": false
           }
@@ -154502,8 +154712,14 @@
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "import re\n\nwith open('24-7.txt') as f:\n    s = f.readline().rstrip('\\r\\n')\n\nnumber = r'(?:0|[1-7][0-7]*)'\npattern = number + r'(?:[-*]' + number + r')*'\nbest = 0\nfor m in re.finditer(pattern, s):\n    e = m.group()\n    start = 0\n    for i in range(len(e)):\n        if e[i] == '*':\n            minus = e.rfind('-', start, i)\n            if minus != -1:\n                start = minus + 1\n        best = max(best, i - start + 1)\nprint(best)",
+              "code": "import re\n\ns = open('24-7.txt').readline().strip()\n\nnumber = r'(?:0|[1-7][0-7]*)'\npattern = number + r'(?:[-*]' + number + r')*'\nbest = 0\nfor m in re.finditer(pattern, s):\n    e = m.group()\n    start = 0\n    for i in range(len(e)):\n        if e[i] == '*':\n            minus = e.rfind('-', start, i)\n            if minus != -1:\n                start = minus + 1\n        best = max(best, i - start + 1)\nprint(best)",
               "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `47`"
             }
           }
         ],
@@ -154521,7 +154737,7 @@
         ],
         "lessons": [
           {
-            "position": 52,
+            "position": 55,
             "material_id": "string-processing",
             "counts_toward_mastery": false
           }
@@ -154529,7 +154745,7 @@
         "theory_links": [
           {
             "label": "Теория",
-            "section": "dopolnitelnye-trebovaniya",
+            "section": "poryadok-dejstvij",
             "material_id": "string-processing"
           }
         ],
@@ -154586,7 +154802,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Со знаком + значение растёт с каждым числом: берите сумму целиком."
+              "markdown": "Со знаком + значение растёт с каждым числом: бери сумму целиком."
             }
           }
         ],
@@ -154601,8 +154817,14 @@
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "import re\n\nwith open('24-8.txt') as f:\n    s = f.readline().rstrip('\\r\\n')\n\nbest = 0\nfor m in re.finditer(r'C([1-9]+(?:\\+[1-9]+)*)', s):\n    total = sum(int(t) for t in m.group(1).split('+'))\n    best = max(best, total)\nprint(best)",
+              "code": "import re\n\ns = open('24-8.txt').readline().strip()\n\nbest = 0\nfor m in re.finditer(r'C([1-9]+(?:\\+[1-9]+)*)', s):\n    total = sum(int(t) for t in m.group(1).split('+'))\n    best = max(best, total)\nprint(best)",
               "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `16467`"
             }
           }
         ],
@@ -154620,7 +154842,7 @@
         ],
         "lessons": [
           {
-            "position": 53,
+            "position": 58,
             "material_id": "string-processing",
             "counts_toward_mastery": false
           }
@@ -154685,7 +154907,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Сравнивайте пары (длина, значение); значение может быть отрицательным."
+              "markdown": "Сравнивай пары (длина, значение); значение может быть отрицательным."
             }
           }
         ],
@@ -154700,8 +154922,14 @@
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "import re\n\nwith open('24-8.txt') as f:\n    s = f.readline().rstrip('\\r\\n')\n\nbest = None\nfor m in re.finditer(r'B([1-9]+(?:[-+][1-9]+)*)', s):\n    text = m.group(1)\n    terms = re.findall(r'[-+]?[1-9]+', text)\n    value = sum(int(t) for t in terms)\n    if best is None or (len(text), value) > best:\n        best = (len(text), value)\nprint(best[1])",
+              "code": "import re\n\ns = open('24-8.txt').readline().strip()\n\nbest = None\nfor m in re.finditer(r'B([1-9]+(?:[-+][1-9]+)*)', s):\n    text = m.group(1)\n    terms = re.findall(r'[-+]?[1-9]+', text)\n    value = sum(int(t) for t in terms)\n    if best is None or (len(text), value) > best:\n        best = (len(text), value)\nprint(best[1])",
               "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `-5709`"
             }
           }
         ],
@@ -154719,7 +154947,7 @@
         ],
         "lessons": [
           {
-            "position": 54,
+            "position": 59,
             "material_id": "string-processing",
             "counts_toward_mastery": false
           }
@@ -154727,7 +154955,7 @@
         "theory_links": [
           {
             "label": "Теория",
-            "section": "naibolshee-znachenie",
+            "section": "summa-posle-bukvy",
             "material_id": "string-processing"
           }
         ],
@@ -154778,7 +155006,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Баланс: +1 за A, −1 за B; запоминайте первое появление каждого баланса."
+              "markdown": "Баланс: +1 за A, −1 за B; запоминай первое появление каждого баланса."
             }
           }
         ],
@@ -154796,6 +155024,12 @@
               "code": "s = 'ABBBAAB'\nfirst = {0: -1}\nbalance = best = 0\nfor i in range(len(s)):\n    balance += 1 if s[i] == 'A' else -1\n    if balance in first:\n        best = max(best, i - first[balance])\n    else:\n        first[balance] = i\nprint(best)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `6`"
+            }
           }
         ],
         "skills": [],
@@ -154803,7 +155037,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 55,
+            "position": 60,
             "material_id": "string-processing",
             "counts_toward_mastery": false
           }
@@ -154811,7 +155045,7 @@
         "theory_links": [
           {
             "label": "Теория",
-            "section": "kogda-okno-ne-szhimaetsya",
+            "section": "balans",
             "material_id": "string-processing"
           }
         ],
@@ -154885,22 +155119,10 @@
         "skills": [],
         "exam_numbers": [24],
         "files": [],
-        "lessons": [
-          {
-            "position": 56,
-            "material_id": "string-processing",
-            "counts_toward_mastery": false
-          }
-        ],
-        "theory_links": [
-          {
-            "label": "Теория",
-            "section": "vse-simvoly-razlichny",
-            "material_id": "string-processing"
-          }
-        ],
+        "lessons": [],
+        "theory_links": [],
         "catalog_visible": false,
-        "archived": false,
+        "archived": true,
         "sources": [
           {
             "url": null,
@@ -154969,22 +155191,10 @@
         "skills": [],
         "exam_numbers": [24],
         "files": [],
-        "lessons": [
-          {
-            "position": 57,
-            "material_id": "string-processing",
-            "counts_toward_mastery": false
-          }
-        ],
-        "theory_links": [
-          {
-            "label": "Теория",
-            "section": "chislo-mezhdu-bukvami",
-            "material_id": "string-processing"
-          }
-        ],
+        "lessons": [],
+        "theory_links": [],
         "catalog_visible": false,
-        "archived": false,
+        "archived": true,
         "sources": [
           {
             "url": null,
@@ -155053,22 +155263,10 @@
         "skills": [],
         "exam_numbers": [24],
         "files": [],
-        "lessons": [
-          {
-            "position": 58,
-            "material_id": "string-processing",
-            "counts_toward_mastery": false
-          }
-        ],
-        "theory_links": [
-          {
-            "label": "Теория",
-            "section": "sovmeshchyonnye-usloviya",
-            "material_id": "string-processing"
-          }
-        ],
+        "lessons": [],
+        "theory_links": [],
         "catalog_visible": false,
-        "archived": false,
+        "archived": true,
         "sources": [
           {
             "url": null,
@@ -155152,22 +155350,10 @@
             "description": "Строка из заглавных латинских букв и цифр"
           }
         ],
-        "lessons": [
-          {
-            "position": 59,
-            "material_id": "string-processing",
-            "counts_toward_mastery": false
-          }
-        ],
-        "theory_links": [
-          {
-            "label": "Теория",
-            "section": "sovmeshchyonnye-usloviya",
-            "material_id": "string-processing"
-          }
-        ],
+        "lessons": [],
+        "theory_links": [],
         "catalog_visible": false,
-        "archived": false,
+        "archived": true,
         "sources": [
           {
             "url": null,
@@ -155251,22 +155437,10 @@
             "description": "Строка из заглавных латинских букв и цифр"
           }
         ],
-        "lessons": [
-          {
-            "position": 60,
-            "material_id": "string-processing",
-            "counts_toward_mastery": false
-          }
-        ],
-        "theory_links": [
-          {
-            "label": "Теория",
-            "section": "chislo-mezhdu-bukvami",
-            "material_id": "string-processing"
-          }
-        ],
+        "lessons": [],
+        "theory_links": [],
         "catalog_visible": false,
-        "archived": false,
+        "archived": true,
         "sources": [
           {
             "url": null,
@@ -155304,7 +155478,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Текстовый файл 24-9.txt содержит только заглавные латинские буквы. Определите максимальное количество идущих подряд символов, среди которых никакие две гласные (A, E, I, O, U, Y) не стоят рядом. (Подтема 2: запрещённые пары.)"
+              "markdown": "Текстовый файл 24-9.txt содержит только заглавные латинские буквы. Определите максимальное количество идущих подряд символов, среди которых никакие две гласные (A, E, I, O, U, Y) не стоят рядом."
             }
           },
           {
@@ -155333,8 +155507,14 @@
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "with open('24-9.txt') as f:\n    s = f.readline().rstrip('\\r\\n')\n\nvowels = 'AEIOUY'\ncurrent = best = 0\nfor i in range(len(s)):\n    if i > 0 and s[i - 1] in vowels and s[i] in vowels:\n        current = 1\n    else:\n        current += 1\n    best = max(best, current)\nprint(best)",
+              "code": "s = open('24-9.txt').readline().strip()\n\nvowels = 'AEIOUY'\ncurrent = best = 0\nfor i in range(len(s)):\n    if i > 0 and s[i - 1] in vowels and s[i] in vowels:\n        current = 1\n    else:\n        current += 1\n    best = max(best, current)\nprint(best)",
               "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `89`"
             }
           }
         ],
@@ -155352,7 +155532,7 @@
         ],
         "lessons": [
           {
-            "position": 61,
+            "position": 62,
             "material_id": "string-processing"
           }
         ],
@@ -155442,15 +155622,10 @@
             "description": "Строка из миллиона заглавных латинских букв"
           }
         ],
-        "lessons": [
-          {
-            "position": 62,
-            "material_id": "string-processing"
-          }
-        ],
+        "lessons": [],
         "theory_links": [],
         "catalog_visible": false,
-        "archived": false,
+        "archived": true,
         "sources": [
           {
             "url": null,
@@ -155488,7 +155663,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Для файла 24-9.txt определите максимальное количество идущих подряд символов, среди которых каждая из букв Q, X, Z встречается не более 40 раз. (Подтема 4: словарь счётчиков в окне.)"
+              "markdown": "Для файла 24-9.txt определите максимальное количество идущих подряд символов, среди которых каждая из букв Q, X, Z встречается не более 40 раз."
             }
           },
           {
@@ -155517,8 +155692,14 @@
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "with open('24-9.txt') as f:\n    s = f.readline().rstrip('\\r\\n')\n\ncount = {c: 0 for c in 'QXZ'}\nleft = best = 0\nfor right in range(len(s)):\n    c = s[right]\n    if c in count:\n        count[c] += 1\n        while count[c] > 40:\n            if s[left] in count:\n                count[s[left]] -= 1\n            left += 1\n    best = max(best, right - left + 1)\nprint(best)",
+              "code": "s = open('24-9.txt').readline().strip()\n\ncount = {c: 0 for c in 'QXZ'}\nleft = best = 0\nfor right in range(len(s)):\n    c = s[right]\n    if c in count:\n        count[c] += 1\n        while count[c] > 40:\n            if s[left] in count:\n                count[s[left]] -= 1\n            left += 1\n    best = max(best, right - left + 1)\nprint(best)",
               "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `4237`"
             }
           }
         ],
@@ -155580,7 +155761,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Для файла 24-9.txt определите максимальную длину фрагмента, который начинается и заканчивается одной и той же буквой из набора A, B, C, D, E, F и не содержит эту букву внутри. (Подтема 5: соседние вхождения одной буквы.)"
+              "markdown": "Для файла 24-9.txt определите максимальную длину фрагмента, который начинается и заканчивается одной и той же буквой из набора A, B, C, D, E, F и не содержит эту букву внутри."
             }
           },
           {
@@ -155594,7 +155775,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Концы — соседние вхождения одной буквы: помните последнее появление каждой."
+              "markdown": "Концы — соседние вхождения одной буквы: части s.split(c) между ними."
             }
           }
         ],
@@ -155609,8 +155790,14 @@
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "with open('24-9.txt') as f:\n    s = f.readline().rstrip('\\r\\n')\n\nlast = {}\nbest = 0\nfor i in range(len(s)):\n    c = s[i]\n    if c in 'ABCDEF':\n        if c in last:\n            best = max(best, i - last[c] + 1)\n        last[c] = i\nprint(best)",
+              "code": "s = open('24-9.txt').readline().strip()\n\nlast = {}\nbest = 0\nfor i in range(len(s)):\n    c = s[i]\n    if c in 'ABCDEF':\n        if c in last:\n            best = max(best, i - last[c] + 1)\n        last[c] = i\nprint(best)",
               "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `355`"
             }
           }
         ],
@@ -155672,7 +155859,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Текстовый файл 24-6.txt состоит из десятичных цифр и знаков «+» и «*». Определите максимальное количество символов в непрерывной последовательности, которая является корректной суммой: целые неотрицательные числа без ведущих нулей, между соседними числами ровно один знак «+», других знаков нет. (Подтема 6: шаблон выражения.)"
+              "markdown": "Текстовый файл 24-6.txt состоит из десятичных цифр и знаков «+» и «*». Определите максимальное количество символов в непрерывной последовательности, которая является корректной суммой: целые неотрицательные числа без ведущих нулей, между соседними числами ровно один знак «+», других знаков нет."
             }
           },
           {
@@ -155701,8 +155888,14 @@
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "import re\n\nwith open('24-6.txt') as f:\n    s = f.readline().rstrip('\\r\\n')\n\nnumber = r'(?:0|[1-9][0-9]*)'\npattern = number + r'(?:\\+' + number + r')*'\nprint(max(len(m.group()) for m in re.finditer(pattern, s)))",
+              "code": "import re\n\ns = open('24-6.txt').readline().strip()\n\nnumber = r'(?:0|[1-9][0-9]*)'\npattern = number + r'(?:\\+' + number + r')*'\nprint(max(len(m.group()) for m in re.finditer(pattern, s)))",
               "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `67`"
             }
           }
         ],
@@ -822134,6 +822327,1226 @@
         }
       },
       "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "task-24-10-01",
+        "title": "Одинаковые подряд в файле",
+        "short_description": null,
+        "explanation_kind": "worked_solution",
+        "difficulty": 1,
+        "estimated_minutes": 5,
+        "answer_instruction": "Введите число.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Текстовый файл 24-1.txt состоит не более чем из 10⁶ символов X, Y и Z. Определите максимальное количество идущих подряд одинаковых символов."
+            }
+          },
+          {
+            "type": "attachment",
+            "data": {
+              "usage_id": "statement-1"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Сравнивай символ с предыдущим: совпал — цепочка растёт, нет — сброс до 1."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "11."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "s = open('24-1.txt').readline().strip()\ncurrent = 1\nbest = 1\nfor i in range(1, len(s)):\n    if s[i] == s[i - 1]:\n        current += 1\n    else:\n        current = 1\n    best = max(best, current)\n\nprint(best)",
+              "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `11`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [24],
+        "files": [
+          {
+            "id": "statement-1",
+            "purpose": "attachment",
+            "checksum": "cb806f1257c5a4f4d9259b6b736ff13ece39030a04d58a178b18f561c45fcb7a",
+            "filename": "24-1.txt",
+            "attribution": null,
+            "description": "Строка из символов X, Y и Z"
+          }
+        ],
+        "lessons": [
+          {
+            "position": 8,
+            "material_id": "string-processing"
+          }
+        ],
+        "theory_links": [
+          {
+            "label": "Теория",
+            "section": "odinakovye-podryad",
+            "material_id": "string-processing"
+          }
+        ],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["11"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "task-24-10-02",
+        "title": "Соседи различны в файле",
+        "short_description": null,
+        "explanation_kind": "worked_solution",
+        "difficulty": 1,
+        "estimated_minutes": 5,
+        "answer_instruction": "Введите число.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Текстовый файл 24-1.txt состоит не более чем из 10⁶ символов X, Y и Z. Определите максимальное количество идущих подряд символов, среди которых каждые два соседних различны."
+            }
+          },
+          {
+            "type": "attachment",
+            "data": {
+              "usage_id": "statement-1"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Два одинаковых символа рядом обрывают цепочку, второй начинает новую."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "58."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "s = open('24-1.txt').readline().strip()\ncurrent = 1\nbest = 1\nfor i in range(1, len(s)):\n    if s[i] != s[i - 1]:\n        current += 1\n    else:\n        current = 1\n    best = max(best, current)\n\nprint(best)",
+              "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `58`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [24],
+        "files": [
+          {
+            "id": "statement-1",
+            "purpose": "attachment",
+            "checksum": "cb806f1257c5a4f4d9259b6b736ff13ece39030a04d58a178b18f561c45fcb7a",
+            "filename": "24-1.txt",
+            "attribution": null,
+            "description": "Строка из символов X, Y и Z"
+          }
+        ],
+        "lessons": [
+          {
+            "position": 10,
+            "material_id": "string-processing"
+          }
+        ],
+        "theory_links": [
+          {
+            "label": "Теория",
+            "section": "sosedi-razlichny",
+            "material_id": "string-processing"
+          }
+        ],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["58"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "task-24-10-03",
+        "title": "Без XX и ZZ",
+        "short_description": null,
+        "explanation_kind": "worked_solution",
+        "difficulty": 1,
+        "estimated_minutes": 5,
+        "answer_instruction": "Введите число.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Текстовый файл 24-1.txt состоит не более чем из 10⁶ символов X, Y и Z. Найдите длину самой длинной цепочки символов, не содержащей подряд двух X или двух Z."
+            }
+          },
+          {
+            "type": "attachment",
+            "data": {
+              "usage_id": "statement-1"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Запретные пары — XX и ZZ; пара YY разрешена. Сброс до 1."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "67."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "s = open('24-1.txt').readline().strip()\ncurrent = 1\nbest = 1\nfor i in range(1, len(s)):\n    if s[i - 1] + s[i] not in ('XX', 'ZZ'):\n        current += 1\n    else:\n        current = 1\n    best = max(best, current)\n\nprint(best)",
+              "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `67`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [24],
+        "files": [
+          {
+            "id": "statement-1",
+            "purpose": "attachment",
+            "checksum": "cb806f1257c5a4f4d9259b6b736ff13ece39030a04d58a178b18f561c45fcb7a",
+            "filename": "24-1.txt",
+            "attribution": null,
+            "description": "Строка из символов X, Y и Z"
+          }
+        ],
+        "lessons": [
+          {
+            "position": 13,
+            "material_id": "string-processing"
+          }
+        ],
+        "theory_links": [
+          {
+            "label": "Теория",
+            "section": "zapretnye-pary",
+            "material_id": "string-processing"
+          }
+        ],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["67"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "task-24-10-04",
+        "title": "Палиндромы длины 5",
+        "short_description": null,
+        "explanation_kind": "worked_solution",
+        "difficulty": 1,
+        "estimated_minutes": 5,
+        "answer_instruction": "Введите число.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Текстовый файл 24-4.txt состоит не более чем из 10⁶ заглавных букв латинского алфавита. Определите количество непрерывных последовательностей длины 5, являющихся палиндромами — читающихся одинаково слева направо и справа налево."
+            }
+          },
+          {
+            "type": "attachment",
+            "data": {
+              "usage_id": "statement-1"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Перебери все начала: кусок s[i:i + 5] — палиндром, если совпадает с t[::-1]."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "667 палиндромов."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "s = open('24-4.txt').readline().strip()\ncount = 0\nfor i in range(len(s) - 4):\n    t = s[i:i + 5]\n    if t == t[::-1]:\n        count += 1\n\nprint(count)",
+              "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `667`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [24],
+        "files": [
+          {
+            "id": "statement-1",
+            "purpose": "attachment",
+            "checksum": "3614caefb99636965bbcc0126b9b70d1e9c765c6c7943637850fad1716c9e8cc",
+            "filename": "24-4.txt",
+            "attribution": null,
+            "description": "Строка из заглавных латинских букв"
+          }
+        ],
+        "lessons": [
+          {
+            "position": 24,
+            "material_id": "string-processing"
+          }
+        ],
+        "theory_links": [
+          {
+            "label": "Теория",
+            "section": "korotkie-fragmenty",
+            "material_id": "string-processing"
+          }
+        ],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["667"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "task-24-10-05",
+        "title": "Группы SQRP с любого места",
+        "short_description": null,
+        "explanation_kind": "worked_solution",
+        "difficulty": 1,
+        "estimated_minutes": 4,
+        "answer_instruction": "Введите число.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Строка `PSQRPSQRXSQRPSQ` состоит из символов P, Q, R, S и X. Найди максимальное количество символов в цепочке из идущих подряд групп SQRP; в начале и в конце цепочки группа может быть неполной."
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "За S идёт Q, за Q — R, за R — P, за P — S: это условие на пару, сброс до 1."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "8: PSQRPSQR, X обрывает цепочку."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "s = 'PSQRPSQRXSQRPSQ'\nnxt = {'S': 'Q', 'Q': 'R', 'R': 'P', 'P': 'S'}\ncurrent = 1\nbest = 1\nfor i in range(1, len(s)):\n    if nxt.get(s[i - 1]) == s[i]:\n        current += 1\n    else:\n        current = 1\n    best = max(best, current)\n\nprint(best)",
+              "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `8`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [24],
+        "files": [],
+        "lessons": [
+          {
+            "position": 18,
+            "material_id": "string-processing"
+          }
+        ],
+        "theory_links": [
+          {
+            "label": "Теория",
+            "section": "obrazec-s-variantami",
+            "material_id": "string-processing"
+          }
+        ],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["8"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "task-24-10-06",
+        "title": "По алфавиту и не больше одной гласной",
+        "short_description": null,
+        "explanation_kind": "worked_solution",
+        "difficulty": 3,
+        "estimated_minutes": 10,
+        "answer_instruction": "Введите число.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Текстовый файл 24-4.txt состоит из заглавных букв латинского алфавита. Определите длину самой длинной последовательности идущих подряд символов, в которой символы идут в алфавитном порядке и находится не более одной гласной (A, E, I, O, U, Y)."
+            }
+          },
+          {
+            "type": "attachment",
+            "data": {
+              "usage_id": "statement-1"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Нарушен порядок — окно начинается заново с текущей буквы; лишняя гласная — левая граница догоняет."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "8."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "s = open('24-4.txt').readline().strip()\nvowels = 'AEIOUY'\nleft = 0\ncount = 0\nbest = 0\nfor right in range(len(s)):\n    if right > 0 and s[right] < s[right - 1]:\n        left = right\n        count = 0\n    if s[right] in vowels:\n        count += 1\n    while count > 1:\n        if s[left] in vowels:\n            count -= 1\n        left += 1\n    best = max(best, right - left + 1)\n\nprint(best)",
+              "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `8`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [24],
+        "files": [
+          {
+            "id": "statement-1",
+            "purpose": "attachment",
+            "checksum": "3614caefb99636965bbcc0126b9b70d1e9c765c6c7943637850fad1716c9e8cc",
+            "filename": "24-4.txt",
+            "attribution": null,
+            "description": "Строка из заглавных латинских букв"
+          }
+        ],
+        "lessons": [
+          {
+            "position": 31,
+            "material_id": "string-processing"
+          }
+        ],
+        "theory_links": [
+          {
+            "label": "Теория",
+            "section": "neskolko-usloviy",
+            "material_id": "string-processing"
+          }
+        ],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["8"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "task-24-10-07",
+        "title": "Буква W ровно 100 раз",
+        "short_description": null,
+        "explanation_kind": "worked_solution",
+        "difficulty": 2,
+        "estimated_minutes": 8,
+        "answer_instruction": "Введите число.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Текстовый файл 24-4.txt состоит из заглавных букв латинского алфавита. Определите максимальное количество идущих подряд символов, среди которых буква W встречается ровно 100 раз."
+            }
+          },
+          {
+            "type": "attachment",
+            "data": {
+              "usage_id": "statement-1"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Окно сжимается, пока W больше 100, а ответ обновляется только при ровно 100."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "3677."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "s = open('24-4.txt').readline().strip()\nleft = 0\ncount = 0\nbest = 0\nfor right in range(len(s)):\n    if s[right] == 'W':\n        count += 1\n    while count > 100:\n        if s[left] == 'W':\n            count -= 1\n        left += 1\n    if count == 100:\n        best = max(best, right - left + 1)\n\nprint(best)",
+              "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `3677`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [24],
+        "files": [
+          {
+            "id": "statement-1",
+            "purpose": "attachment",
+            "checksum": "3614caefb99636965bbcc0126b9b70d1e9c765c6c7943637850fad1716c9e8cc",
+            "filename": "24-4.txt",
+            "attribution": null,
+            "description": "Строка из заглавных латинских букв"
+          }
+        ],
+        "lessons": [
+          {
+            "position": 28,
+            "material_id": "string-processing"
+          }
+        ],
+        "theory_links": [
+          {
+            "label": "Теория",
+            "section": "rovno-k",
+            "material_id": "string-processing"
+          }
+        ],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["3677"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "task-24-10-08",
+        "title": "Наибольшее число в файле",
+        "short_description": null,
+        "explanation_kind": "worked_solution",
+        "difficulty": 1,
+        "estimated_minutes": 6,
+        "answer_instruction": "Введите число.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Текстовый файл 24-5.txt состоит из заглавных латинских букв и десятичных цифр. Числом считается последовательность цифр, ограниченная отличными от цифр символами, началом или концом строки. Определите наибольшее число в файле."
+            }
+          },
+          {
+            "type": "attachment",
+            "data": {
+              "usage_id": "statement-1"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "re.findall(r'[0-9]+', s) и сравнение через int, не как строки."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "89242025401723."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "import re\n\ns = open('24-5.txt').readline().strip()\nnumbers = re.findall(r'[0-9]+', s)\nprint(max(int(x) for x in numbers))",
+              "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `89242025401723`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [24],
+        "files": [
+          {
+            "id": "statement-1",
+            "purpose": "attachment",
+            "checksum": "ac01e44693b7035b6f95220c8521d772559f9ed0d3192c0b9c794b2a65c29646",
+            "filename": "24-5.txt",
+            "attribution": null,
+            "description": "Строка из заглавных латинских букв и цифр"
+          }
+        ],
+        "lessons": [
+          {
+            "position": 42,
+            "material_id": "string-processing"
+          }
+        ],
+        "theory_links": [
+          {
+            "label": "Теория",
+            "section": "chisla-v-stroke",
+            "material_id": "string-processing"
+          }
+        ],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["89242025401723"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "task-24-10-09",
+        "title": "Наибольшее чётное число в файле",
+        "short_description": null,
+        "explanation_kind": "worked_solution",
+        "difficulty": 1,
+        "estimated_minutes": 6,
+        "answer_instruction": "Введите число.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Текстовый файл 24-5.txt состоит из заглавных латинских букв и десятичных цифр. Числом считается последовательность цифр, ограниченная отличными от цифр символами, началом или концом строки. Определите наибольшее чётное число в файле."
+            }
+          },
+          {
+            "type": "attachment",
+            "data": {
+              "usage_id": "statement-1"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Среди всех чисел оставь те, что делятся на 2, и возьми наибольшее через int."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "95225202546."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "import re\n\ns = open('24-5.txt').readline().strip()\nnumbers = re.findall(r'[0-9]+', s)\nprint(max(int(x) for x in numbers if int(x) % 2 == 0))",
+              "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `95225202546`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [24],
+        "files": [
+          {
+            "id": "statement-1",
+            "purpose": "attachment",
+            "checksum": "ac01e44693b7035b6f95220c8521d772559f9ed0d3192c0b9c794b2a65c29646",
+            "filename": "24-5.txt",
+            "attribution": null,
+            "description": "Строка из заглавных латинских букв и цифр"
+          }
+        ],
+        "lessons": [
+          {
+            "position": 43,
+            "material_id": "string-processing"
+          }
+        ],
+        "theory_links": [
+          {
+            "label": "Теория",
+            "section": "chisla-v-stroke",
+            "material_id": "string-processing"
+          }
+        ],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["95225202546"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "task-24-10-10",
+        "title": "Выражение со значением 0",
+        "short_description": null,
+        "explanation_kind": "worked_solution",
+        "difficulty": 3,
+        "estimated_minutes": 12,
+        "answer_instruction": "Введите число.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Текстовый файл 24-6.txt состоит из десятичных цифр и знаков «+» и «*». Определите максимальное количество символов в непрерывной последовательности — корректном арифметическом выражении с целыми неотрицательными числами без ведущих нулей, значение которого равно нулю. Никакие два знака не стоят рядом, порядок действий — по правилам математики."
+            }
+          },
+          {
+            "type": "attachment",
+            "data": {
+              "usage_id": "statement-1"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Сумма равна нулю, когда каждое слагаемое — произведение, в котором есть число 0."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "50."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "import re\n\ns = open('24-6.txt').readline().strip()\nnumber = r'(?:0|[1-9][0-9]*)'\nterm = r'(?:' + number + r'\\*)*0(?:\\*' + number + r')*'\npattern = term + r'(?:\\+' + term + r')*'\nprint(max(len(m.group()) for m in re.finditer(pattern, s)))",
+              "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `50`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [24],
+        "files": [
+          {
+            "id": "statement-1",
+            "purpose": "attachment",
+            "checksum": "2d7a3b45ee43c71af41557b3f4084a7d68d08cbacc1be60b73ea4ede7d6d70a4",
+            "filename": "24-6.txt",
+            "attribution": null,
+            "description": "Строка из цифр и знаков + и *"
+          }
+        ],
+        "lessons": [
+          {
+            "position": 50,
+            "material_id": "string-processing",
+            "counts_toward_mastery": false
+          }
+        ],
+        "theory_links": [
+          {
+            "label": "Теория",
+            "section": "znachenie-nol",
+            "material_id": "string-processing"
+          }
+        ],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["50"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "task-24-10-11",
+        "title": "Букв вдвое больше цифр",
+        "short_description": null,
+        "explanation_kind": "worked_solution",
+        "difficulty": 3,
+        "estimated_minutes": 12,
+        "answer_instruction": "Введите число.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Текстовый файл 24-5.txt состоит из заглавных латинских букв и десятичных цифр. Определите максимальное количество идущих подряд символов, среди которых букв ровно в два раза больше, чем цифр."
+            }
+          },
+          {
+            "type": "attachment",
+            "data": {
+              "usage_id": "statement-1"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Баланс: +1 за букву, −2 за цифру; запоминай первое появление каждого баланса."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "51339."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "s = open('24-5.txt').readline().strip()\nbalance = 0\nfirst = {0: -1}\nbest = 0\nfor i in range(len(s)):\n    if s[i].isdigit():\n        balance -= 2\n    else:\n        balance += 1\n    if balance in first:\n        best = max(best, i - first[balance])\n    else:\n        first[balance] = i\n\nprint(best)",
+              "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `51339`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [24],
+        "files": [
+          {
+            "id": "statement-1",
+            "purpose": "attachment",
+            "checksum": "ac01e44693b7035b6f95220c8521d772559f9ed0d3192c0b9c794b2a65c29646",
+            "filename": "24-5.txt",
+            "attribution": null,
+            "description": "Строка из заглавных латинских букв и цифр"
+          }
+        ],
+        "lessons": [
+          {
+            "position": 61,
+            "material_id": "string-processing",
+            "counts_toward_mastery": false
+          }
+        ],
+        "theory_links": [
+          {
+            "label": "Теория",
+            "section": "balans",
+            "material_id": "string-processing"
+          }
+        ],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["51339"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "task-24-10-12",
+        "title": "Пары AB и CB подряд",
+        "short_description": null,
+        "explanation_kind": "worked_solution",
+        "difficulty": 1,
+        "estimated_minutes": 4,
+        "answer_instruction": "Введите число.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Найди максимальное количество идущих подряд пар символов AB или CB в строке `CBABXABCBAB`. Пары могут идти в любом порядке."
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Пары идут целиком: проверь оба смещения, 0 и 1."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "3: AB, CB, AB с первой позиции."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "s = 'CBABXABCBAB'\nbest = 0\nfor start in (0, 1):\n    current = 0\n    for i in range(start, len(s) - 1, 2):\n        if s[i:i + 2] in ('AB', 'CB'):\n            current += 1\n        else:\n            current = 0\n        best = max(best, current)\n\nprint(best)",
+              "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `3`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [24],
+        "files": [],
+        "lessons": [
+          {
+            "position": 20,
+            "material_id": "string-processing"
+          }
+        ],
+        "theory_links": [
+          {
+            "label": "Теория",
+            "section": "bloki",
+            "material_id": "string-processing"
+          }
+        ],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["3"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
     }
   ],
   "files": [
@@ -838639,137 +840052,79 @@
     {
       "id": "string-processing",
       "sections": [
-        "kak-ustroena-tema-24",
-        "stroka",
-        "podstroka",
-        "indeksy",
-        "srezy",
+        "kak-ustroena-tema",
+        "podryad",
         "chtenie-fayla",
-        "chto-udalyaet-strip",
-        "stroki-fayla",
-        "tri-voprosa",
-        "polnyy-perebor",
-        "stroka-itogo",
         "tekushchaya-dlina",
-        "dve-peremennye",
-        "obnovlenie-maksimuma",
-        "uslovie-na-simvol",
-        "sosednie-simvoly",
-        "sosedi-razlichny",
-        "drugie-usloviya-sosedey",
-        "zapreshchyonnye-pary",
-        "usloviya-po-troykam",
-        "sbros-0-1-2",
+        "chto-vyvodit",
         "cepochka-itogo",
-        "obrazcy-za-odin-prohod",
-        "poisk-obrazca",
-        "korotkie-fragmenty",
+        "odinakovye-podryad",
+        "sosedi-razlichny",
+        "zapretnye-pary",
+        "trojki",
+        "sosedi-itogo",
         "povtoryayushchiysya-obrazec",
-        "cepochki-par",
-        "chastoty",
-        "ravnye-chastoty",
-        "dopolnitelnyy-kriteriy",
-        "mnogo-strok",
-        "rasstoyanie-mezhdu-bukvami",
+        "obrazec-s-variantami",
+        "bloki",
+        "korotkie-fragmenty",
         "obrazcy-itogo",
         "dve-granicy",
-        "okno",
-        "sdvig-levoy-granicy",
-        "pochemu-okno-rabotaet",
         "rovno-k",
-        "minimalnaya-dlina",
-        "neskolko-ogranicheniy",
-        "slovar-schyotchikov",
+        "neskolko-usloviy",
         "pary-v-okne",
-        "zapreshchyonnoe-slovo",
         "okno-itogo",
-        "pozicii-simvolov",
         "spisok-poziciy",
-        "maksimum-s-rovno-k",
+        "rovno-k-pozicii",
         "vhozhdeniya-slova",
-        "zameny-i-razbienie",
-        "chasti-mezhdu-razdelitelyami",
-        "peresekayushchiesya-razdeliteli",
         "nachalo-i-konec",
-        "odinakovye-koncy",
-        "vse-simvoly-nabora",
         "pozicii-itogo",
-        "struktura-vyrazheniya",
-        "regulyarnye-vyrazheniya",
-        "dopustimoe-chislo",
-        "shablon-vyrazheniya",
-        "shablon-po-usloviyu",
+        "chisla-v-stroke",
         "zapis-v-sisteme",
-        "vedushchie-nuli",
+        "shablon-vyrazheniya",
+        "zadacha-temy",
         "vyrazheniya-itogo",
-        "dopolnitelnyy-urok-vyrazheniya",
+        "znachenie-nol",
         "ne-bolee-k-chisel",
-        "dopolnitelnye-trebovaniya",
-        "naibolshee-znachenie",
+        "poryadok-dejstvij",
         "summa-posle-bukvy",
-        "usloviya-itogo",
-        "dopolnitelnyy-urok-kolichestva",
-        "prefiksnye-summy",
-        "sovmeshchyonnye-usloviya",
-        "nachalo-so-slova",
-        "kogda-okno-ne-szhimaetsya",
-        "vse-simvoly-razlichny",
-        "obshchie-granicy",
-        "chislo-mezhdu-bukvami",
-        "kolichestva-itogo"
+        "balans",
+        "usloviya-itogo"
       ],
       "kind": "topic",
       "status": "published",
       "course_id": null,
       "subtopics": [
         {
-          "slug": "stroka-i-fragment",
+          "slug": "stroka-i-cepochka",
           "access": "free",
           "sections": [
-            "kak-ustroena-tema-24",
-            "stroka",
-            "podstroka",
-            "indeksy",
-            "srezy",
+            "kak-ustroena-tema",
+            "podryad",
             "chtenie-fayla",
-            "chto-udalyaet-strip",
-            "stroki-fayla",
-            "tri-voprosa",
-            "polnyy-perebor",
-            "stroka-itogo"
-          ]
-        },
-        {
-          "slug": "cepochka",
-          "access": "free",
-          "sections": [
             "tekushchaya-dlina",
-            "dve-peremennye",
-            "obnovlenie-maksimuma",
-            "uslovie-na-simvol",
-            "sosednie-simvoly",
-            "sosedi-razlichny",
-            "drugie-usloviya-sosedey",
-            "zapreshchyonnye-pary",
-            "usloviya-po-troykam",
-            "sbros-0-1-2",
+            "chto-vyvodit",
             "cepochka-itogo"
           ]
         },
         {
-          "slug": "obrazcy-i-chastoty",
+          "slug": "sosedi",
           "access": "free",
           "sections": [
-            "obrazcy-za-odin-prohod",
-            "poisk-obrazca",
-            "korotkie-fragmenty",
+            "odinakovye-podryad",
+            "sosedi-razlichny",
+            "zapretnye-pary",
+            "trojki",
+            "sosedi-itogo"
+          ]
+        },
+        {
+          "slug": "obrazcy-i-bloki",
+          "access": "paid",
+          "sections": [
             "povtoryayushchiysya-obrazec",
-            "cepochki-par",
-            "chastoty",
-            "ravnye-chastoty",
-            "dopolnitelnyy-kriteriy",
-            "mnogo-strok",
-            "rasstoyanie-mezhdu-bukvami",
+            "obrazec-s-variantami",
+            "bloki",
+            "korotkie-fragmenty",
             "obrazcy-itogo"
           ]
         },
@@ -838778,15 +840133,9 @@
           "access": "paid",
           "sections": [
             "dve-granicy",
-            "okno",
-            "sdvig-levoy-granicy",
-            "pochemu-okno-rabotaet",
             "rovno-k",
-            "minimalnaya-dlina",
-            "neskolko-ogranicheniy",
-            "slovar-schyotchikov",
+            "neskolko-usloviy",
             "pary-v-okne",
-            "zapreshchyonnoe-slovo",
             "okno-itogo"
           ]
         },
@@ -838794,16 +840143,10 @@
           "slug": "pozicii-i-granicy",
           "access": "paid",
           "sections": [
-            "pozicii-simvolov",
             "spisok-poziciy",
-            "maksimum-s-rovno-k",
+            "rovno-k-pozicii",
             "vhozhdeniya-slova",
-            "zameny-i-razbienie",
-            "chasti-mezhdu-razdelitelyami",
-            "peresekayushchiesya-razdeliteli",
             "nachalo-i-konec",
-            "odinakovye-koncy",
-            "vse-simvoly-nabora",
             "pozicii-itogo"
           ]
         },
@@ -838811,41 +840154,23 @@
           "slug": "chisla-i-vyrazheniya",
           "access": "paid",
           "sections": [
-            "struktura-vyrazheniya",
-            "regulyarnye-vyrazheniya",
-            "dopustimoe-chislo",
-            "shablon-vyrazheniya",
-            "shablon-po-usloviyu",
+            "chisla-v-stroke",
             "zapis-v-sisteme",
-            "vedushchie-nuli",
+            "shablon-vyrazheniya",
+            "zadacha-temy",
             "vyrazheniya-itogo"
           ]
         },
         {
-          "slug": "usloviya-na-vyrazhenie",
+          "slug": "usloviya-i-balans",
           "access": "paid",
           "sections": [
-            "dopolnitelnyy-urok-vyrazheniya",
+            "znachenie-nol",
             "ne-bolee-k-chisel",
-            "dopolnitelnye-trebovaniya",
-            "naibolshee-znachenie",
+            "poryadok-dejstvij",
             "summa-posle-bukvy",
+            "balans",
             "usloviya-itogo"
-          ]
-        },
-        {
-          "slug": "nakoplennye-kolichestva",
-          "access": "paid",
-          "sections": [
-            "dopolnitelnyy-urok-kolichestva",
-            "prefiksnye-summy",
-            "sovmeshchyonnye-usloviya",
-            "nachalo-so-slova",
-            "kogda-okno-ne-szhimaetsya",
-            "vse-simvoly-razlichny",
-            "obshchie-granicy",
-            "chislo-mezhdu-bukvami",
-            "kolichestva-itogo"
           ]
         }
       ],

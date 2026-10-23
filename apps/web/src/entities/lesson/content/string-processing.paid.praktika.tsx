@@ -1,15 +1,13 @@
 // Paid content (Change 192): served only after an access check; never
 // import it statically.
-import { CodeBlock } from "~/shared/components/code-block";
 import { Notation } from "~/shared/components/notation";
 import { Typography } from "~/shared/components/typography";
 import {
-  LessonTable,
   TopicCheatSheet,
   VariantPicker,
 } from "~/shared/components/learning-content";
 import type { LessonContent } from "../lib/define-lesson.types";
-import { PythonTerm } from "./python-term";
+import { R } from "./string-processing.theme";
 import { SubtopicLink } from "./subtopic-link";
 
 const content: LessonContent.PaidPracticeContent = {
@@ -17,329 +15,56 @@ const content: LessonContent.PaidPracticeContent = {
     <>
       <Typography.Text>
         <strong>
-          Проверка решения должна начинаться с маленьких строк, для которых
-          ответ очевиден.
+          Программу проверяют на короткой строке, где ответ виден глазами:
+          прежде чем запускать её на миллионе символов, подставь строку из урока
+          и сравни.
         </strong>{" "}
-        Выбери случай, чтобы увидеть, какую ошибку он ловит:
+        Выбери ошибку, чтобы увидеть, как себя проверить:
       </Typography.Text>
       <VariantPicker
-        label={"Проверочный случай и что он проверяет"}
+        label={"Ошибка и как себя проверить"}
         variants={[
           {
-            label: "один символ",
-            value: (
-              <>
-                <Notation>{"A"}</Notation>
-              </>
-            ),
-            note: <>начальные значения</>,
+            label: "перевод строки",
+            value: <>Строка прочитана без strip()</>,
+            note: <>лишний символ в конце: сравни len(s) с ожидаемым</>,
           },
           {
-            label: "вся строка подходит",
-            value: (
-              <>
-                <Notation>{"AAAAA"}</Notation>
-              </>
-            ),
-            note: <>учёт последней цепочки</>,
+            label: "best при обрыве",
+            value: <>Ответ обновляется только при разрыве цепочки</>,
+            note: <>проверь строку, где лучшая цепочка в самом конце</>,
           },
           {
-            label: "ни один символ не подходит",
-            value: (
-              <>
-                <Notation>{"BBBBB"}</Notation> при поиске{" "}
-                <Notation>{"A"}</Notation>
-              </>
-            ),
-            note: (
-              <>
-                возможный ответ <Notation>{"0"}</Notation>
-              </>
-            ),
+            label: "s[i − 1] при i = 0",
+            value: <>Цикл по соседям начат с нуля</>,
+            note: <>первый символ сравнится с последним — начинай с i = 1</>,
           },
           {
-            label: "лучший фрагмент в начале",
-            value: (
-              <>
-                <Notation>{"AAAABC"}</Notation>
-              </>
-            ),
-            note: <>левый край</>,
+            label: "сброс до 0",
+            value: <>На запретной паре цепочка обнулена</>,
+            note: <>второй символ пары начинает новую цепочку — сброс до 1</>,
           },
           {
-            label: "лучший фрагмент в конце",
-            value: (
-              <>
-                <Notation>{"BCAAAA"}</Notation>
-              </>
-            ),
-            note: <>правый край</>,
+            label: "if вместо while",
+            value: <>Левая граница окна сдвинута один раз</>,
+            note: <>проверь строку, где лишняя буква стоит не первой</>,
           },
           {
-            label: "несколько равных максимумов",
-            value: (
-              <>
-                <Notation>{"AAABAAA"}</Notation>
-              </>
-            ),
-            note: <>правило выбора при равенстве</>,
+            label: "count и перекрытия",
+            value: <>Вхождения слова посчитаны методом count</>,
+            note: <>в ABABA два ABA, а count даст 1</>,
           },
           {
-            label: "соседние запрещённые символы",
-            value: (
-              <>
-                <Notation>{"ABXXCD"}</Notation>
-              </>
-            ),
-            note: <>пустые части после разбиения</>,
-          },
-          {
-            label: "перекрывающиеся слова",
-            value: (
-              <>
-                <Notation>{"ABABA"}</Notation> и образец{" "}
-                <Notation>{"ABA"}</Notation>
-              </>
-            ),
-            note: <>правильный подсчёт вхождений</>,
-          },
-          {
-            label: "ровно нужное число вхождений",
-            value: (
-              <>
-                <Notation>{"BAAB"}</Notation>, <Notation>{"K = 2"}</Notation>
-              </>
-            ),
-            note: (
-              <>
-                отличие <Notation>{"<"}</Notation> от{" "}
-                <Notation>{"<="}</Notation>
-              </>
-            ),
-          },
-          {
-            label: "одно лишнее вхождение",
-            value: (
-              <>
-                <Notation>{"BAAAB"}</Notation>, <Notation>{"K = 2"}</Notation>
-              </>
-            ),
-            note: <>сжатие окна</>,
-          },
-          {
-            label: "ведущие нули",
-            value: (
-              <>
-                <Notation>{"0012+3"}</Notation>
-              </>
-            ),
-            note: <>правило записи чисел</>,
-          },
-          {
-            label: "соседние операции",
-            value: (
-              <>
-                <Notation>{"12++3"}</Notation>
-              </>
-            ),
-            note: <>граница корректного выражения</>,
+            label: "числа как строки",
+            value: <>Наибольшее число выбрано max по строкам</>,
+            note: <>'45' больше '131' — переводи в int</>,
           },
         ]}
       />
       <Typography.Text>
-        Для сложного алгоритма можно временно написать медленное решение,
-        перебирающее все подстроки <strong>короткой</strong> строки, и
-        сравнивать результаты. Такой перебор не годится для большого
-        экзаменационного файла, но отлично помогает проверить рассуждение.
-        Например, сравним окно из подтемы 4 с перебором всех подстрок на всех
-        строках из букв <Notation>{"A"}</Notation> и <Notation>{"B"}</Notation>{" "}
-        длиной до восьми — их перебирает{" "}
-        <PythonTerm term="product">
-          <Notation>{"product"}</Notation>
-        </PythonTerm>
-        , а обе программы оформлены{" "}
-        <PythonTerm term="def">функциями</PythonTerm>:
-      </Typography.Text>
-      <CodeBlock
-        code={
-          "from itertools import product\n\n\ndef by_window(s, K):\n    left = 0\n    count_a = 0\n    best = 0\n    for right in range(len(s)):\n        if s[right] == 'A':\n            count_a += 1\n        while count_a > K:\n            if s[left] == 'A':\n                count_a -= 1\n            left += 1\n        best = max(best, right - left + 1)\n    return best\n\n\ndef by_search(s, K):\n    best = 0\n    for i in range(len(s)):\n        for j in range(i, len(s)):\n            if s[i:j + 1].count('A') <= K:\n                best = max(best, j - i + 1)\n    return best\n\n\nchecked = 0\nfor n in range(1, 9):\n    for letters in product('AB', repeat=n):\n        s = ''.join(letters)\n        if by_window(s, 2) != by_search(s, 2):\n            print('Разные ответы:', s)\n        checked += 1\n\nprint('Проверено строк:', checked)"
-        }
-        label={"Код на Python: from itertools import product"}
-        language="python"
-        output={"Проверено строк: 510"}
-      />
-      <Typography.Text>
-        Ни одной строки с разными ответами: окно и перебор согласны на всех 510
-        строках. Если бы окно ошибалось, программа напечатала бы строку, на
-        которой это видно, — её удобно разобрать руками.
-      </Typography.Text>
-      <Typography.Text>
-        <strong>
-          Вот ошибки, которые стоит научиться замечать ещё до запуска программы.
-        </strong>{" "}
-        Выбери ошибку, чтобы увидеть, что проверить:
-      </Typography.Text>
-      <VariantPicker
-        label={"Ошибка и что проверить"}
-        variants={[
-          {
-            label: "количество вместо длины",
-            value: (
-              <>
-                пять букв <Notation>{"A"}</Notation> внутри фрагмента не
-                означают, что длина фрагмента равна пяти
-              </>
-            ),
-            note: <>что спрашивают: длину или количество</>,
-          },
-          {
-            label: "«ровно» и «не более»",
-            value: (
-              <>
-                окно с одной <Notation>{"A"}</Notation> не подходит, если
-                требуется ровно две
-              </>
-            ),
-            note: (
-              <>
-                ответ обновляется только при <Notation>{"count == K"}</Notation>
-              </>
-            ),
-          },
-          {
-            label: "неправильный сброс",
-            value: (
-              <>
-                после нарушения остаётся <Notation>{"0"}</Notation>,{" "}
-                <Notation>{"1"}</Notation>, <Notation>{"2"}</Notation> или
-                другая длина
-              </>
-            ),
-            note: <>какой самый длинный конец ещё подходит</>,
-          },
-          {
-            label: "потеря последнего фрагмента",
-            value: <>ответ обновляется только при разрыве</>,
-            note: (
-              <>
-                <Notation>{"best = max(…)"}</Notation> после каждого символа
-              </>
-            ),
-          },
-          {
-            label: "символ на границе",
-            value: <>лишний или недостающий символ</>,
-            note: <>включённый конец против правой границы среза</>,
-          },
-          {
-            label: "левая граница назад",
-            value: (
-              <>
-                <Notation>{"left"}</Notation> вернулась к старому появлению
-              </>
-            ),
-            note: (
-              <>
-                нужен <Notation>{"max(left, …)"}</Notation>
-              </>
-            ),
-          },
-          {
-            label: "count() для перекрывающихся слов",
-            value: (
-              <>
-                <Notation>{"'ABABA'.count('ABA')"}</Notation> даёт 1
-              </>
-            ),
-            note: <>перебор всех начал</>,
-          },
-          {
-            label: "склеивание частей",
-            value: <>разделитель удалили без разбиения</>,
-            note: (
-              <>
-                <Notation>{"split"}</Notation>, а не{" "}
-                <Notation>{"replace(…, '')"}</Notation>
-              </>
-            ),
-          },
-          {
-            label: "только первая строка",
-            value: (
-              <>
-                многострочный файл прочитан одним{" "}
-                <Notation>{"readline"}</Notation>
-              </>
-            ),
-            note: (
-              <>
-                цикл <Notation>{"for line in f"}</Notation>
-              </>
-            ),
-          },
-          {
-            label: "счётчики между строками",
-            value: <>счётчики не созданы заново для новой строки</>,
-            note: <>счётчики строки — внутри цикла по строкам</>,
-          },
-          {
-            label: "дорогая операция в цикле",
-            value: (
-              <>
-                длинный срез и <Notation>{".count()"}</Notation> на каждом шаге
-              </>
-            ),
-            note: <>накопленные счётчики или префиксы</>,
-          },
-          {
-            label: "величина выбора вместо ответа",
-            value: <>вывели длину, а спрашивали позицию или букву</>,
-            note: <>третий вопрос: что выводим</>,
-          },
-          {
-            label: "русская буква вместо латинской",
-            value: (
-              <>
-                латинская <Notation>{"A"}</Notation> и русская{" "}
-                <Notation>{"А"}</Notation> для Python — разные символы
-              </>
-            ),
-            note: <>набирать буквы условия латиницей</>,
-          },
-        ]}
-      />
-      <Typography.Text>
-        <strong>
-          При разборе каждой следующей задачи записывай перед кодом три коротких
-          объяснения:
-        </strong>
-      </Typography.Text>
-      <ol>
-        <li>
-          <strong>Что именно означает каждая переменная?</strong>
-        </li>
-        <li>
-          <strong>
-            Почему при добавлении нового символа я меняю её именно так?
-          </strong>
-        </li>
-        <li>
-          <strong>
-            Почему среди рассмотренных кандидатов обязательно есть правильный
-            ответ?
-          </strong>
-        </li>
-      </ol>
-      <Typography.Text>
-        Если на эти вопросы есть ясные ответы, алгоритм можно восстановить
-        самостоятельно, даже если готовый код забылся.
-      </Typography.Text>
-      <Typography.Text>
-        <strong>Что дальше.</strong> Если задачи этой страницы получаются,
-        основные подтемы освоены. Дополнительный урок 7 нужен для выражений с
-        дополнительными условиями — количеством чисел, порядком действий и
-        значением суммы; урок 8 — для сочетаний условий через префиксные суммы,
-        равенства количеств и объектов с общими границами.
+        Для сложного условия полезно написать медленную проверку: перебрать все
+        куски короткой строки и сравнить ответ с быстрой программой. Для файла
+        такой перебор не годится, а для строки из 10 символов — в самый раз.
       </Typography.Text>
     </>
   ),
@@ -347,386 +72,123 @@ const content: LessonContent.PaidPracticeContent = {
     <>
       <Typography.Text>
         <strong>
-          Любая задача задания 24 начинается с трёх вопросов — какие фрагменты
-          допустимы, что оптимизируем, что выводим, — а способ решения
-          выбирается по тому, какая информация определяет допустимость
-          фрагмента.
-        </strong>{" "}
-        На экзамене файл содержит около миллиона символов, поэтому годится
-        только решение, которое проходит по строке один или несколько раз.
+          Любая задача задания 24 решается одним проходом по строке: выбери, что
+          помнить по дороге, — текущую цепочку, границы окна, позиции нужных
+          символов или шаблон выражения.
+        </strong>
       </Typography.Text>
       <Typography.Text>
         Всё главное из подтем собрано на одной схеме. Номер раздела ведёт на его
-        подтему, а ниже схемы выбор способа и проверка разобраны подробнее.
+        подтему.
       </Typography.Text>
       <TopicCheatSheet
         label={"Задание 24 на одной схеме"}
         flow={[
-          {
-            name: "Чтение",
-            note: "`readline().rstrip('\\r\\n')`; много строк — по одной",
-          },
-          {
-            name: "Три вопроса",
-            note: "что допустимо, что оптимизируем, что выводим",
-          },
-          {
-            name: "Способ",
-            note: "по тому, что определяет допустимость фрагмента",
-          },
-          {
-            name: "Проверка",
-            note: "маленькие строки и медленный перебор подстрок",
-          },
+          { name: "Строка", note: "open(…).readline().strip()" },
+          { name: "Один проход", note: "что помнить по дороге" },
+          { name: "Ответ", note: "длина, позиция или число" },
         ]}
         groups={[
           {
             number: 1,
             title: (
-              <SubtopicLink
-                routeSlug="24-obrabotka-simvolnyh-strok"
-                subtopic="stroka-i-fragment"
-              >
-                Строка, фрагмент и файл
+              <SubtopicLink routeSlug={R} subtopic="stroka-i-cepochka">
+                Строка и цепочка
               </SubtopicLink>
             ),
             rows: [
-              {
-                key: <>«подряд»</>,
-                note: <>без пропусков и склеивания частей</>,
-              },
-              {
-                key: (
-                  <>
-                    <Notation>{"s[left:right + 1]"}</Notation>
-                  </>
-                ),
-                note: (
-                  <>
-                    длина <Notation>{"right - left + 1"}</Notation>
-                  </>
-                ),
-              },
-              {
-                key: (
-                  <>
-                    <Notation>{"s[i - 1]"}</Notation> при{" "}
-                    <Notation>{"i = 0"}</Notation>
-                  </>
-                ),
-                note: (
-                  <>
-                    последний символ — нужно <Notation>{"i > 0"}</Notation>
-                  </>
-                ),
-              },
-              {
-                key: <>n(n + 1)/2 подстрок</>,
-                note: (
-                  <>
-                    перебор всех недопустим, нужен <Notation>{"O(n)"}</Notation>
-                  </>
-                ),
-              },
+              { key: <>current</>, note: <>цепочка до текущего символа</> },
+              { key: <>best</>, note: <>после каждого символа</> },
             ],
           },
           {
             number: 2,
             title: (
-              <SubtopicLink
-                routeSlug="24-obrabotka-simvolnyh-strok"
-                subtopic="cepochka"
-              >
-                Цепочка: текущая длина
+              <SubtopicLink routeSlug={R} subtopic="sosedi">
+                Условия на соседей
               </SubtopicLink>
             ),
             rows: [
-              {
-                key: (
-                  <>
-                    <Notation>{"current"}</Notation>,{" "}
-                    <Notation>{"best"}</Notation>
-                  </>
-                ),
-                note: (
-                  <>
-                    <Notation>{"best = max(best, current)"}</Notation> после
-                    каждого символа
-                  </>
-                ),
-              },
-              { key: <>сброс до 0</>, note: <>условие на один символ</> },
-              { key: <>сброс до 1</>, note: <>условие на пару соседей</> },
-              { key: <>сброс до 2</>, note: <>условие на тройку</> },
+              { key: <>символ</>, note: <>сброс до 0</> },
+              { key: <>пара</>, note: <>сброс до 1</> },
+              { key: <>тройка</>, note: <>сброс до 2</> },
             ],
           },
           {
             number: 3,
             title: (
-              <SubtopicLink
-                routeSlug="24-obrabotka-simvolnyh-strok"
-                subtopic="obrazcy-i-chastoty"
-              >
-                Образцы, блоки и частоты
+              <SubtopicLink routeSlug={R} subtopic="obrazcy-i-bloki">
+                Образцы и блоки
               </SubtopicLink>
             ),
             rows: [
               {
-                key: (
-                  <>
-                    <Notation>{"range(len(s) - m + 1)"}</Notation>
-                  </>
-                ),
-                note: (
-                  <>
-                    все начала; <Notation>{"count"}</Notation> не видит
-                    перекрытий
-                  </>
-                ),
+                key: <Notation>{"pattern[current % m]"}</Notation>,
+                note: <>следующий ожидаемый символ</>,
               },
-              {
-                key: (
-                  <>
-                    <Notation>{"pattern[current % 3]"}</Notation>
-                  </>
-                ),
-                note: <>ожидаемый символ образца</>,
-              },
-              {
-                key: (
-                  <>
-                    <Notation>{"range(offset, len(s) - 1, 2)"}</Notation>
-                  </>
-                ),
-                note: <>целые пары с двух смещений</>,
-              },
-              {
-                key: (
-                  <>
-                    <Notation>{"freq[c] = freq.get(c, 0) + 1"}</Notation>
-                  </>
-                ),
-                note: <>частоты; при равенстве — правило условия</>,
-              },
+              { key: <>пары</>, note: <>шаг 2, два смещения</> },
             ],
           },
           {
             number: 4,
             title: (
-              <SubtopicLink
-                routeSlug="24-obrabotka-simvolnyh-strok"
-                subtopic="skolzyashchee-okno"
-              >
+              <SubtopicLink routeSlug={R} subtopic="skolzyashchee-okno">
                 Скользящее окно
               </SubtopicLink>
             ),
             rows: [
-              {
-                key: (
-                  <>
-                    <Notation>{"while count > K: left += 1"}</Notation>
-                  </>
-                ),
-                note: <>максимум при «не более K»</>,
-              },
-              {
-                key: (
-                  <>
-                    <Notation>{"if count == K"}</Notation>
-                  </>
-                ),
-                note: <>ровно K — то же окно</>,
-              },
-              {
-                key: (
-                  <>
-                    <Notation>{"while count >= K"}</Notation>
-                  </>
-                ),
-                note: <>минимум при «не менее K»</>,
-              },
-              {
-                key: <>пара в окне</>,
-                note: <>только если оба символа внутри</>,
-              },
+              { key: <>не более K</>, note: <>while count &gt; K</> },
+              { key: <>ровно K</>, note: <>ответ при count == K</> },
             ],
           },
           {
             number: 5,
             title: (
-              <SubtopicLink
-                routeSlug="24-obrabotka-simvolnyh-strok"
-                subtopic="pozicii-i-granicy"
-              >
-                Позиции, разбиение и границы
+              <SubtopicLink routeSlug={R} subtopic="pozicii-i-granicy">
+                Позиции и границы
               </SubtopicLink>
             ),
             rows: [
-              {
-                key: (
-                  <>
-                    <Notation>{"p[j + K - 1] - p[j] + m"}</Notation>
-                  </>
-                ),
-                note: <>самый короткий с K вхождениями</>,
-              },
-              {
-                key: (
-                  <>
-                    <Notation>{"p[j + K] - p[j - 1] - 1"}</Notation>
-                  </>
-                ),
-                note: <>самый длинный с ровно K; границы −1 и n</>,
-              },
-              {
-                key: (
-                  <>
-                    <Notation>{"s.split('X')"}</Notation>
-                  </>
-                ),
-                note: <>части без склеивания</>,
-              },
-              {
-                key: <>соседние вхождения</>,
-                note: <>концы — одинаковые символы без таких внутри</>,
-              },
+              { key: <>K подряд</>, note: <>по списку позиций</> },
+              { key: <>−1 и len(s)</>, note: <>искусственные границы</> },
             ],
           },
           {
             number: 6,
             title: (
-              <SubtopicLink
-                routeSlug="24-obrabotka-simvolnyh-strok"
-                subtopic="chisla-i-vyrazheniya"
-              >
+              <SubtopicLink routeSlug={R} subtopic="chisla-i-vyrazheniya">
                 Числа и выражения
               </SubtopicLink>
             ),
             rows: [
               {
-                key: (
-                  <>
-                    <Notation>{"(?:0|[1-9][0-9]*)"}</Notation>
-                  </>
-                ),
+                key: <Notation>{"(?:0|[1-9][0-9]*)"}</Notation>,
                 note: <>число без ведущих нулей</>,
               },
-              {
-                key: (
-                  <>
-                    <Notation>
-                      {"number + r'(?:[+*]' + number + r')*'"}
-                    </Notation>
-                  </>
-                ),
-                note: <>корректное выражение</>,
-              },
-              {
-                key: (
-                  <>
-                    <Notation>{"m.end() - m.start()"}</Notation>
-                  </>
-                ),
-                note: (
-                  <>
-                    длина совпадения <Notation>{"re.finditer"}</Notation>
-                  </>
-                ),
-              },
-              {
-                key: <>основание b</>,
-                note: <>свой набор цифр; длиннее — больше</>,
-              },
+              { key: <>172</>, note: <>ответ задачи темы</> },
             ],
           },
           {
             number: 7,
             title: (
-              <SubtopicLink
-                routeSlug="24-obrabotka-simvolnyh-strok"
-                subtopic="usloviya-na-vyrazhenie"
-              >
-                Выражения с условиями
+              <SubtopicLink routeSlug={R} subtopic="usloviya-i-balans">
+                Выражения с условиями и баланс
               </SubtopicLink>
             ),
-            level: "дополнительный",
+            level: "дополнительный урок",
             rows: [
-              {
-                key: <>не более K чисел</>,
-                note: <>окно по числам выражения</>,
-              },
-              {
-                key: <>порядок слева направо</>,
-                note: (
-                  <>
-                    нет <Notation>{"*"}</Notation> после{" "}
-                    <Notation>{"+"}</Notation> или <Notation>{"-"}</Notation>
-                  </>
-                ),
-              },
-              {
-                key: <>наибольшая сумма</>,
-                note: <>суммы после каждого целого числа</>,
-              },
-            ],
-          },
-          {
-            number: 8,
-            title: (
-              <SubtopicLink
-                routeSlug="24-obrabotka-simvolnyh-strok"
-                subtopic="nakoplennye-kolichestva"
-              >
-                Накопленные количества
-              </SubtopicLink>
-            ),
-            level: "дополнительный",
-            rows: [
-              {
-                key: (
-                  <>
-                    <Notation>{"prefix[right + 1] - prefix[left]"}</Notation>
-                  </>
-                ),
-                note: <>сколько символов в окне</>,
-              },
-              {
-                key: (
-                  <>
-                    <Notation>{"first = {0: -1}"}</Notation>
-                  </>
-                ),
-                note: <>баланс: поровну двух букв</>,
-              },
-              {
-                key: (
-                  <>
-                    <Notation>{"left = max(left, last[c] + 1)"}</Notation>
-                  </>
-                ),
-                note: <>все символы различны</>,
-              },
-              {
-                key: (
-                  <>
-                    <Notation>{"(?=(...))"}</Notation>
-                  </>
-                ),
-                note: <>объекты с общей границей</>,
-              },
+              { key: <>значение 0</>, note: <>произведение с нулём</> },
+              { key: <>баланс</>, note: <>первые появления в словаре</> },
             ],
           },
         ]}
         sections={[
           {
-            title: "Три вопроса перед кодом",
+            title: "Три вопроса к условию",
             steps: [
-              <>Что именно означает каждая переменная?</>,
-              <>Почему при добавлении нового символа я меняю её именно так?</>,
-              <>
-                Почему среди рассмотренных кандидатов обязательно есть
-                правильный ответ?
-              </>,
+              <>Какие куски подходят: символы, соседи, количество, шаблон?</>,
+              <>Что сравниваем: длину, количество, значение?</>,
+              <>Что выводим и как выбирать при равенстве?</>,
             ],
           },
         ]}
@@ -737,86 +199,6 @@ const content: LessonContent.PaidPracticeContent = {
           </>
         }
       />
-      <Typography.Text>
-        <strong>
-          Выбирать алгоритм удобно по тому, какая информация определяет
-          допустимость фрагмента.
-        </strong>
-      </Typography.Text>
-      <LessonTable
-        label={
-          "Выбирать алгоритм удобно по тому, какая информация определяет допустимость фрагмента"
-        }
-        columns={[
-          { label: "Что определяет условие" },
-          { label: "Основная идея" },
-          { label: "Подтема", numeric: true },
-        ]}
-        rows={[
-          [
-            "Допустимость каждого отдельного символа",
-            "Текущая длина цепочки",
-            "2",
-          ],
-          [
-            "Отношение соседних символов",
-            "Сравнение соседей и текущая длина",
-            "2",
-          ],
-          [
-            "Условие на каждую соседнюю тройку",
-            "Проверка тройки и сохранение допустимого конца",
-            "2",
-          ],
-          [
-            "Повторение фиксированного цикла",
-            "Следующий ожидаемый символ",
-            "3",
-          ],
-          [
-            "Цепочка целых пар или троек",
-            "Проверка блоков по всем возможным смещениям",
-            "3",
-          ],
-          ["Количество коротких образцов", "Перебор позиций начала", "3"],
-          ["Частоты букв в определённом окружении", "Словарь счётчиков", "3"],
-          [
-            "Максимум при верхних ограничениях",
-            "Расширять окно, сжимать при нарушении",
-            "4",
-          ],
-          [
-            "Минимум при нижних ограничениях",
-            "Расширять до выполнения, затем сжимать",
-            "4",
-          ],
-          [
-            <>
-              <Notation>{"K"}</Notation> вхождений символа или слова
-            </>,
-            "Список позиций",
-            "5",
-          ],
-          ["Особые начало и конец", "Перебор возможных границ", "5"],
-          [
-            "Числа и арифметические записи",
-            "Описание структуры, выделение чисел",
-            "6",
-          ],
-          [
-            "Много запросов о количестве внутри фрагментов",
-            "Префиксные суммы",
-            "8",
-          ],
-          ["Равенство количеств двух типов", "Накопленный баланс", "8"],
-          ["Все символы различны", "Последние позиции и левая граница", "8"],
-          ["Несколько условий", "Сочетание подходящих методов", "4, 5, 8"],
-        ]}
-      />
-      <Typography.Text>
-        Эта таблица — ориентир. Перед использованием метода нужно объяснить,
-        почему он подходит именно к данному условию.
-      </Typography.Text>
     </>
   ),
 };

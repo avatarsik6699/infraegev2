@@ -30,7 +30,7 @@ const firstTopicSubtopicByRouteSlug: Readonly<Record<string, string>> = {
   "19-21-vyigryshnaya-strategiya": "igra-i-strategiya",
   "22-mnogoprocessornye-sistemy": "process-i-zavisimost",
   "23-analiz-grafov": "graf-i-put",
-  "24-obrabotka-simvolnyh-strok": "stroka-i-fragment",
+  "24-obrabotka-simvolnyh-strok": "stroka-i-cepochka",
   "25-deliteli-i-maski": "perebor-i-proverki",
   "26-sortirovka-i-otbor": "zapisi-i-rejting",
   "27-analiz-dannyh-i-klasterizatsiya": "tochki-i-rasstoyaniya",

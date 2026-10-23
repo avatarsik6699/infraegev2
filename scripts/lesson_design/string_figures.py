@@ -19,6 +19,8 @@ moves by one, the left end catches up while there are more than k whole
 occurrences of word inside.
 ``string_positions(text, letter, k)`` — positions of letter with the
 sentinels −1 and n: for every k consecutive occurrences the widest fragment.
+``string_overlap(text, word)`` — every start of word, including overlapping
+ones, against what str.count finds: count continues after the end of a match.
 ``string_matches(text, pattern)`` — the matches of re.finditer as brackets
 under the string; the longest one is accented.
 ``string_prefix(text, letter, left, right)`` — prefix counts on the
@@ -181,8 +183,20 @@ def _run_frame(text, i, current, best, best_end, cell=44):
 
 
 def string_run_frames(text: str = "XXAXXXXBXX", mode: str = "only", target: str = "X"):
-    frames = [(_run_frame(text, -1, 0, 0, -1), "До цикла: current = 0, best = 0.")]
-    for i, (current, best, best_end, why) in enumerate(_run_states(text, mode, target)):
+    states = list(enumerate(_run_states(text, mode, target)))
+    if mode == "only":
+        frames = [(_run_frame(text, -1, 0, 0, -1), "До цикла: current = 0, best = 0.")]
+    else:
+        # the program starts with current = best = 1 and the loop from i = 1
+        frames = [
+            (
+                _run_frame(text, 0, 1, 1, 0),
+                f"До цикла: первый символ '{text[0]}' — цепочка длины 1, current = 1, "
+                "best = 1. Цикл начинается с i = 1.",
+            )
+        ]
+        states = states[1:]
+    for i, (current, best, best_end, why) in states:
         frames.append(
             (
                 _run_frame(text, i, current, best, best_end),
@@ -277,6 +291,51 @@ def string_offsets(text: str = "ABACEFAED", first: str = "BCDF", second: str = "
     return "".join(out)
 
 
+# --- overlapping occurrences ----------------------------------------------------------------------
+
+
+def string_overlap(text: str = "ABABA", word: str = "ABA") -> str:
+    n, m, cell = len(text), len(word), 46
+    starts = [i for i in range(n - m + 1) if text.startswith(word, i)]
+    counted, i = [], 0
+    while (j := text.find(word, i)) >= 0:
+        counted.append(j)
+        i = j + m
+    x0 = _left(n, cell)
+    row = 56
+    h = 92 + row * len(starts) + 24
+    out = [f'<svg viewBox="0 0 {WIDTH} {h}" role="img" aria-label="Перекрывающиеся вхождения">']
+    out += _indexes(x0, 20, n, cell)
+    out += _cells(x0, 30, text, cell)
+    for k, st in enumerate(starts):
+        y = 92 + row * k
+        xl, xr = x0 + st * cell + 3, x0 + (st + m) * cell - 3
+        found = st in counted
+        color = ACCENT if found else MUTED
+        width = 2 if found else 1.5
+        dash = "" if found else ' stroke-dasharray="6 4"'
+        out.append(
+            f'<path d="M {xl:.1f} {y - 7} v 7 M {xr:.1f} {y - 7} v 7" fill="none" '
+            f'stroke="{color}" stroke-width="{width}"/>'
+            f'<path d="M {xl:.1f} {y} H {xr:.1f}" fill="none" stroke="{color}" '
+            f'stroke-width="{width}"{dash}/>'
+        )
+        note = f"с позиции {st}: count находит" if found else f"с позиции {st}: count пропускает"
+        out.append(_text((xl + xr) / 2, y + 22, note, 13, color, "middle", 600 if found else 400))
+    out.append(
+        _text(
+            WIDTH / 2,
+            h - 8,
+            f"вхождений {len(starts)}, count насчитает {len(counted)}",
+            13,
+            MUTED,
+            "middle",
+        )
+    )
+    out.append("</svg>")
+    return "".join(out)
+
+
 # --- sliding window -------------------------------------------------------------------------------
 
 
@@ -301,17 +360,19 @@ def _window_frame(text, word, k, left, right, best, cell=44, removing=None):
         )
     if removing is not None:
         x = x0 + removing * cell + cell / 2
-        out.append(_text(x, 98, "↑ убираем", 13, ACCENT, "middle", 600))
+        out.append(_text(x, 98, "↑ убрали", 13, ACCENT, "middle", 600))
     out.append(_text(WIDTH / 2 - 170, 140, f"left = {left}", 16, INK, "middle", 600))
-    out.append(_text(WIDTH / 2 - 55, 140, f"right = {right}", 16, INK, "middle", 600))
+    shown = f"right = {right}" if right >= 0 else "right: —"
+    out.append(_text(WIDTH / 2 - 55, 140, shown, 16, INK, "middle", 600))
     label = f"{word}" if len(word) > 1 else f"{word}"
     out.append(_text(WIDTH / 2 + 70, 140, f"{label} в окне: {count}", 16, ACCENT, "middle", 600))
     out.append(_text(WIDTH / 2 + 195, 140, f"best = {best}", 16, INK, "middle", 600))
+    limit = "одного вхождения" if k == 1 else f"{k} вхождений"
     out.append(
         _text(
             WIDTH / 2,
             182,
-            f"окно — символы от left до right; нужно не больше {k} вхождений {word}",
+            f"окно — символы от left до right; нужно не больше {limit} {word}",
             13,
             MUTED,
             "middle",
@@ -339,8 +400,8 @@ def string_window_frames(text: str = "BABAACB", word: str = "A", k: int = 2):
         while _inside(text, word, left, right) > k:
             frames.append(
                 (
-                    _window_frame(text, word, k, left, right, best, removing=left),
-                    f"Убираем s[{left}] = '{text[left]}': теперь left = {left + 1}, "
+                    _window_frame(text, word, k, left + 1, right, best, removing=left),
+                    f"Убрали s[{left}] = '{text[left]}': теперь left = {left + 1}, "
                     f"вхождений {word} в окне: {_inside(text, word, left + 1, right)}.",
                 )
             )
@@ -520,6 +581,7 @@ STRING_FIGURES: dict = {
     "string_offsets": string_offsets,
     "string_window_stepper": string_window_stepper,
     "string_positions": string_positions,
+    "string_overlap": string_overlap,
     "string_matches": string_matches,
     "string_prefix": string_prefix,
 }
