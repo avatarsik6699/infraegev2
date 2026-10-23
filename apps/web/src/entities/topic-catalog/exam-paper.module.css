@@ -41,3 +41,29 @@
   font-weight: 700;
   letter-spacing: 0.02em;
 }
+
+/* Change 197: a topic head's ink drawing over the paper — the picture in the
+   free top-right corner, the signs fading out downwards and to the left so
+   the title and the lead stay in front. */
+.drawing {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 45rem;
+  max-width: none;
+  height: auto;
+  mask-image:
+    linear-gradient(180deg, currentColor 55%, transparent 95%),
+    linear-gradient(90deg, transparent 0%, currentColor 45%);
+  mask-composite: intersect;
+  pointer-events: none;
+}
+
+/* On a phone the drawing becomes a band over «Задание N»: the head makes room
+   for it, so it never runs behind the text. */
+@media (max-width: 44rem) {
+  .drawing {
+    width: 22.5rem;
+    mask-image: linear-gradient(90deg, transparent 0%, currentColor 35%);
+  }
+}

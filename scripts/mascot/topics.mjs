@@ -3,6 +3,7 @@
 // Static: they sit in catalog rows and must not pull the eye.
 //
 // Usage: node topics.mjs <out-dir>
+import { pathToFileURL } from "node:url";
 import {
   blob,
   el,
@@ -19,7 +20,6 @@ import {
 } from "./doodles.mjs";
 import { INK, ORANGE } from "./pen.mjs";
 
-const [out] = process.argv.slice(2);
 const W = 180;
 const H = 120;
 
@@ -98,7 +98,7 @@ const node = (g, x, y, label, r, rad = 10) => {
   if (label) txt(g, x, y + 5, label, 15);
 };
 
-const TOPICS = {
+export const TOPICS = {
   // 1. Information models: a graph and the table that describes it.
   1(g, r) {
     const pts = { А: [30, 34], Б: [76, 34], В: [53, 88] };
@@ -818,14 +818,20 @@ const TOPICS = {
   },
 };
 
-for (const [n, draw] of Object.entries(TOPICS)) {
-  const svg = el("svg", {
-    xmlns: "http://www.w3.org/2000/svg",
-    viewBox: `0 0 ${W} ${H}`,
-  });
-  const defs = el("defs", {}, svg);
-  const id = `topic-${n}-ink`;
-  inkFilter(defs, id);
-  draw(el("g", { filter: `url(#${id})` }, svg), rng(200 + Number(n)));
-  writeScene(out, `topic-${n}`, svg, { motion: false });
+// Shared with topic_heads.mjs, which redraws the pictures in the topic heads.
+export { arrow, arrowHead, between, grid, node, ring };
+
+if (import.meta.url === pathToFileURL(process.argv[1]).href) {
+  const [out] = process.argv.slice(2);
+  for (const [n, draw] of Object.entries(TOPICS)) {
+    const svg = el("svg", {
+      xmlns: "http://www.w3.org/2000/svg",
+      viewBox: `0 0 ${W} ${H}`,
+    });
+    const defs = el("defs", {}, svg);
+    const id = `topic-${n}-ink`;
+    inkFilter(defs, id);
+    draw(el("g", { filter: `url(#${id})` }, svg), rng(200 + Number(n)));
+    writeScene(out, `topic-${n}`, svg, { motion: false });
+  }
 }

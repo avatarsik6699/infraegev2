@@ -321,9 +321,14 @@ the practice eyebrow in exam ink (#b54700, 5.4:1), outcome rules in exam mark, t
 mark as white letters on an exam badge square (#d0651a, like a course chip). Buttons stay ink
 (#17191e, a near-black, never pure black); an orange button edge was tried and dropped (F53). The vivid «you are here» orange
 keeps its own job (subtopic position, current file bar). Catalog rows keep their own look; the exam
-level dots stay the only other colour. No illustration and no repeated number box in the lesson's
-topic head: «Задание N», the title and lead, and one meta line with subtopics, tasks, level and
-minutes.
+level dots stay the only other colour. No repeated number box in the lesson's topic head:
+«Задание N», the title and lead, and one meta line with subtopics, tasks, level and minutes. Since
+Change 197 (architect, 2026-10-23) the topic head is recognisable at a glance: over its squared paper
+sits the topic's own ink drawing — the catalog picture at 0.8 in the top-right corner (the title
+wraps before it) and a faint scatter of the topic's signs and the catalog's pen marks, denser to the
+right and fading towards the text; on a phone it is a band of its own above «Задание N», never
+behind text. Drawn with the shared pen (`scripts/mascot/topic_heads.mjs`), grey and the one orange
+accent of the picture, no new hue.
 
 ## Typography
 

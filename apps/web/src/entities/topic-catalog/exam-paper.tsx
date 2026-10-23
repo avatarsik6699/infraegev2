@@ -1,8 +1,19 @@
+import { TopicHeadDrawing } from "~/shared/components/object-illustration";
 import styles from "./exam-paper.module.css";
 
-/** Change 186 (F46): the squared-paper backdrop of the EGE page heads. */
-export const ExamPaper: React.FC = () => (
-  <div className={styles.paper} aria-hidden="true" />
+/**
+ * Change 186 (F46): the squared-paper backdrop of the EGE page heads. A
+ * topic's head (Change 197) adds its ink drawing over the paper: the topic's
+ * catalog picture and its signs scattered round it, made by
+ * scripts/mascot/topic_heads.mjs.
+ */
+export const ExamPaper: React.FC<{ task?: number }> = (props) => (
+  <>
+    <div className={styles.paper} aria-hidden="true" />
+    {props.task === undefined ? null : (
+      <TopicHeadDrawing topic={props.task} className={styles.drawing} />
+    )}
+  </>
 );
 
 /** Change 186 (F49): the EGE mark beside «Темы ЕГЭ» in the lesson rail. */

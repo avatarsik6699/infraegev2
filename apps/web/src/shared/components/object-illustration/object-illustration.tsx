@@ -64,3 +64,31 @@ export const ObjectIllustration: React.FC<ObjectIllustrationTypes.Props> = (
     />
   );
 };
+
+/**
+ * Change 197: the ink drawing behind an EGE topic's head — its catalog
+ * picture and its signs (scripts/mascot/topic_heads.mjs) — wide in a column
+ * and a narrower band on a phone. Decorative; the slot class places it.
+ */
+export const TopicHeadDrawing: React.FC<{
+  topic: number;
+  className?: string;
+}> = (props) => (
+  <picture>
+    <source
+      media="(max-width: 44rem)"
+      srcSet={`/images/topics/head-${String(props.topic)}-narrow.svg`}
+      width={360}
+      height={110}
+    />
+    <img
+      className={cssUtils.cx(styles.root, props.className)}
+      data-object-illustration={`topic-head-${String(props.topic)}`}
+      src={`/images/topics/head-${String(props.topic)}.svg`}
+      alt=""
+      width={720}
+      height={220}
+      decoding="async"
+    />
+  </picture>
+);

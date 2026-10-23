@@ -89,7 +89,7 @@ export const TopicSubtopicPage: React.FC<TopicLessonPageTypes.SubtopicProps> = (
           }
           title={props.lesson.title}
           examMeta={topicExamMeta(props.lesson.taskNumbers)}
-          backdrop={<ExamPaper />}
+          backdrop={<ExamPaper task={props.lesson.taskNumbers[0]} />}
         />
       ) : null}
       <header
