@@ -421,74 +421,66 @@ export const TOPICS = {
     txt(g, 136, 66, "Кбайт", 17);
   },
 
-  // 12. Executors: rewrite 22 into 1 while the rule applies.
+  // 12. Executors: a machine on a tape — the head under one cell, its state.
   12(g, r) {
-    txt(g, 50, 62, "22", 34);
-    arrow(
-      g,
-      [
-        [72, 52],
-        [104, 52],
-      ],
-      r,
-    );
-    txt(g, 128, 62, "1", 34);
+    grid(g, 18, 40, [24, 24, 24, 24, 24, 24], [28], r);
+    for (const [i, c] of ["", "1", "0", "1", "1", ""].entries())
+      if (c) txt(g, 30 + i * 24, 61, c, 20);
     line(
       g,
       [
-        [130, 76],
-        [118, 98],
-        [62, 98],
-        [50, 78],
+        [102, 74],
+        [110, 88],
+        [94, 88],
+        [102, 74],
       ],
       r,
       2.4,
       0.2,
       ORANGE,
     );
-    arrowHead(g, [50, 78], -0.4, -1, r, ORANGE);
+    txt(g, 102, 108, "q1", 16);
+    arrow(
+      g,
+      [
+        [92, 26],
+        [120, 26],
+      ],
+      r,
+      INK,
+      2,
+    );
   },
 
-  // 13. Branching: a condition and the two ways out of it.
+  // 13. Counting programs: numbers joined by the commands +1 and ×2.
   13(g, r) {
-    line(
-      g,
-      [
-        [90, 10],
-        [114, 30],
-        [90, 50],
-        [66, 30],
-        [90, 10],
-      ],
-      r,
-      2.4,
-      0.4,
-    );
-    txt(g, 90, 37, "?", 20);
-    line(
-      g,
-      [
-        [70, 40],
-        [44, 70],
-      ],
-      r,
-      2.2,
-      0.2,
-    );
-    arrow(
-      g,
-      [
-        [110, 40],
-        [136, 70],
-      ],
-      r,
-      ORANGE,
-      2.6,
-    );
-    line(g, rectPts(24, 74, 40, 26), r, 2.4, 0.4);
-    line(g, rectPts(116, 74, 40, 26), r, 2.4, 0.4);
-    txt(g, 40, 44, "нет", 13);
-    txt(g, 140, 44, "да", 13);
+    const x = { 2: 24, 3: 66, 4: 108, 8: 154 };
+    const y = 74;
+    const curve = (from, to, lift) =>
+      Array.from({ length: 9 }, (_, i) => {
+        const t = i / 8;
+        return [
+          from + (to - from) * t,
+          y + (lift < 0 ? -13 : 13) + 4 * lift * t * (1 - t),
+        ];
+      });
+    for (const [a, b] of [
+      [2, 3],
+      [3, 4],
+    ]) {
+      const pts = curve(x[a] + 6, x[b] - 6, 10);
+      line(g, pts, r, 2, 0.2);
+      arrowHead(g, pts.at(-1), 1, -1, r);
+    }
+    const twice = curve(x[2] + 4, x[4] - 4, -38);
+    line(g, twice, r, 2, 0.2);
+    arrowHead(g, twice.at(-1), 0.6, 1, r);
+    const accent = curve(x[4] + 4, x[8] - 4, -30);
+    line(g, accent, r, 2.4, 0.2, ORANGE);
+    arrowHead(g, accent.at(-1), 0.6, 1, r, ORANGE);
+    for (const [n, cx] of Object.entries(x)) node(g, cx, y, n, r, 11);
+    txt(g, 66, 14, "×2", 15);
+    txt(g, 46, 112, "+1", 15);
   },
 
   // 14. Numeral systems: digits and their place weights.
