@@ -974,14 +974,15 @@ def _unit(a, b):
     return dx / n, dy / n
 
 
-def graph_layout(edges, *, order=None, up: bool = False, width: int = 660) -> dict:
+def graph_layout(edges, *, order=None, up: bool = False, under=(), width: int = 660) -> dict:
     """Geometry of a weighted directed graph, the single source for the stand
     picture (graph_svg) and the site sandbox (PathBuilder, via site_media).
 
     Vertices go by layers from left to right; an edge is a quadratic curve,
     bent when a vertex lies on its straight line. order — every vertex in one
     row in this order (a backward edge bends below; the graph may have a cycle);
-    up — bend arcs upwards only (room under the vertices for values).
+    up — bend arcs upwards only (room under the vertices for values);
+    under — edges (u, v) whose arc bends downwards all the same.
     Returns width, the vertical extent (top, bottom) and per vertex (x, y),
     per edge u, v, w, the curve and arrow paths, the label box and backward.
     """
@@ -1033,7 +1034,7 @@ def graph_layout(edges, *, order=None, up: bool = False, width: int = 660) -> di
             if order:
                 bend = (-1 if backward else 1) * (10 + 0.18 * length)
             else:
-                sign = 1 if up or flip % 2 == 0 else -1
+                sign = -1 if (u, v) in under else 1 if up or flip % 2 == 0 else -1
                 flip += 1
                 bend = sign * (22 + 0.14 * length)
         mid = ((p0[0] + p2[0]) / 2, (p0[1] + p2[1]) / 2)
@@ -1160,6 +1161,8 @@ def graph_svg(
     interactive: bool = False,
     width: int = 660,
     label: str | None = None,
+    under=(),
+    above=(),
 ) -> str:
     """Weighted directed graph drawn from graph_layout.
 
@@ -1169,9 +1172,17 @@ def graph_svg(
     whose value has just changed; order — every vertex in one row in this
     order (a backward edge is accented); footer — lines of text under the
     graph; faded — vertices already removed (topological sort);
-    interactive — vertices and edges carry data-v / data-e for a page script.
+    interactive — vertices and edges carry data-v / data-e for a page script;
+    under — edges (u, v) whose arc bends downwards; above — vertices whose
+    value stands above them.
     """
-    g = graph_layout(edges, order=order, up=values is not None or footer is not None, width=width)
+    g = graph_layout(
+        edges,
+        order=order,
+        up=values is not None or footer is not None,
+        under={tuple(e) for e in under},
+        width=width,
+    )
     pos = g["pos"]
     on_path = set(zip(path, path[1:], strict=False)) if path else set()
     banned, faded = set(banned), set(faded)
@@ -1233,7 +1244,12 @@ def graph_svg(
         if values and v in values:
             hot = v == changed
             # above a vertex of the upper row, under the others
-            vy = y - NODE_R - 9 if y < 0 else y + NODE_R + 19
+            upper = (
+                v in above
+                or y < 0
+                or y == min(p[1] for p in pos.values()) < max(p[1] for p in pos.values())
+            )
+            vy = y - NODE_R - 9 if upper else y + NODE_R + 19
             parts.append(
                 _text(x, vy, values[v], 14, ACCENT if hot else INK, "middle", 600 if hot else 400)
             )
@@ -1259,8 +1275,8 @@ def _f(x) -> str:
     return "∞" if x == float("inf") else f"{x:g}"
 
 
-def best_frames(edges, source=1, target=100) -> list[tuple[str, str]]:
-    """best(v) with @cache, call by call: the call stack, the saved values and
+def best_frames(edges, source=1, target=100, name="best") -> list[tuple[str, str]]:
+    """name(v) with @cache, call by call: the call stack, the saved values and
     the moment a repeated call takes its value from memory."""
     graph: dict[int, list] = {}
     for u, v, w in edges:
@@ -1271,7 +1287,7 @@ def best_frames(edges, source=1, target=100) -> list[tuple[str, str]]:
 
     def snap(caption, cur=None, edge=None, changed=None):
         values = {v: f"f = {_f(x)}" for v, x in memo.items()}
-        chain = " → ".join(f"best({v})" for v in stack) or "пуст"
+        chain = " → ".join(f"{name}({v})" for v in stack) or "пуст"
         frames.append(
             (
                 graph_svg(
@@ -1293,22 +1309,22 @@ def best_frames(edges, source=1, target=100) -> list[tuple[str, str]]:
         if v == target:
             memo[v] = 0.0
             snap(
-                f"best({v}): это цель, идти больше не нужно — f({v}) = 0. Значение сохранено.",
+                f"{name}({v}): это цель, идти больше не нужно — f({v}) = 0. Значение сохранено.",
                 v,
                 changed=v,
             )
             stack.pop()
             return 0.0
-        snap(f"Вызов best({v}): ответа для {v} ещё нет, перебираем рёбра из {v}.", v)
+        snap(f"Вызов {name}({v}): ответа для {v} ещё нет, перебираем рёбра из {v}.", v)
         answer = float("inf")
         for nxt, w in graph.get(v, []):
             known = nxt in memo
             rest = best(nxt)
             cand = w + rest
             got = (
-                f"best({nxt}) уже сохранено — берём из памяти: {_f(rest)}."
+                f"{name}({nxt}) уже сохранено — берём из памяти: {_f(rest)}."
                 if known
-                else (f"best({nxt}) вернул {_f(rest)}.")
+                else (f"{name}({nxt}) вернул {_f(rest)}.")
             )
             better = cand < answer
             answer = min(answer, cand)
@@ -1328,13 +1344,13 @@ def best_frames(edges, source=1, target=100) -> list[tuple[str, str]]:
         return answer
 
     result = best(source)
-    snap(f"Ответ: best({source}) = {_f(result)}. Каждая вершина вычислена один раз.")
+    snap(f"Ответ: {name}({source}) = {_f(result)}. Каждая вершина вычислена один раз.")
     return frames
 
 
-def best_stepper(edges, source=1, target=100) -> str:
+def best_stepper(edges, source=1, target=100, name="best") -> str:
     """Recursion with memoization on a small graph, step by step."""
-    return _stepper(best_frames(edges, source, target))
+    return _stepper(best_frames(edges, source, target, name))
 
 
 def passes_frames(edges, source=1) -> list[tuple[str, str]]:
@@ -1483,51 +1499,102 @@ def backward_stepper(edges, source=1, target=100) -> str:
     return _stepper(backward_frames(edges, source, target))
 
 
-def adjacency_svg(edges, focus=None, width: int = 660) -> str:
-    """File lines on the left, the dictionary graph on the right: every line
-    goes into the list of its start vertex."""
+def _spans(x, y, pieces, size=15) -> str:
+    """One line of text from (text, color, weight) pieces: the pieces follow
+    each other without measuring their widths."""
+    inner = "".join(
+        f'<tspan fill="{c}" font-weight="{wt}">{html.escape(t)}</tspan>' for t, c, wt in pieces
+    )
+    return (
+        f'<text x="{x:.1f}" y="{y:.1f}" font-family="{SANS}" font-size="{size}" '
+        f'style="font-variant-numeric:tabular-nums" xml:space="preserve">{inner}</text>'
+    )
+
+
+def adjacency_frames(edges, width: int = 660) -> list[tuple[str, str]]:
+    """The file read line by line: every line puts its pair (where to, weight)
+    at the end of the list of its start vertex in the dictionary graph."""
     keys = list(dict.fromkeys(u for u, _, _ in edges))
     targets = [v for v in dict.fromkeys(v for _, v, _ in edges) if v not in keys]
-    row, top = 30, 44
-    lx, rx = 24, 300
-    h = top + row * max(len(edges), len(keys) + len(targets)) + 16
-    out = [
-        f'<svg viewBox="0 0 {width} {h}" role="img" '
-        f'aria-label="Строки файла раскладываются в словарь graph по начальной вершине">'
-    ]
-    out.append(_text(lx, 22, "строки файла", 13, MUTED))
-    out.append(_text(rx, 22, "graph: вершина → её переходы", 13, MUTED))
-    key_y = {k: top + row * i for i, k in enumerate(keys)}
-    for i, (u, v, w) in enumerate(edges):
-        y = top + row * i
-        hot = u == focus
-        color = ACCENT if hot else INK
-        out.append(_text(lx, y + 5, f"{u} {v} {_num(w)}", 15, color, "start", 600 if hot else 400))
-        out.append(
-            f'<path d="M {lx + 110} {y} C {lx + 190} {y}, '
-            f'{rx - 80} {key_y[u]}, {rx - 12} {key_y[u]}" '
-            f'fill="none" stroke="{ACCENT if hot else FAINT}" stroke-width="{2 if hot else 1.25}"/>'
-        )
-    for k in keys:
-        y = key_y[k]
-        hot = k == focus
-        items = ", ".join(f"({v}, {_num(w)})" for u, v, w in edges if u == k)
-        out.append(
-            _text(
-                rx,
-                y + 5,
-                f"{k}: [{items}]",
-                15,
-                ACCENT if hot else INK,
-                "start",
-                600 if hot else 400,
+    row, top = 30, 50
+    lx, rx = 24, 230
+    h = top + row * max(len(edges), len(keys) + len(targets)) + 4
+    frames = []
+
+    def pair(v, w):
+        return f"({v}, {_num(w)})"
+
+    def snap(done, caption, final=False):
+        out = [
+            f'<svg viewBox="0 0 {width} {h}" role="img" '
+            f'aria-label="Строки файла по одной раскладываются в словарь graph">'
+        ]
+        out.append(_text(lx, 22, "строки файла", 13, MUTED))
+        out.append(_text(rx, 22, "graph: вершина → список (куда, вес)", 13, MUTED))
+        cur = done - 1 if done and not final else None
+        seen = list(dict.fromkeys(u for u, _, _ in edges[:done]))
+        key_y = {k: top + row * i for i, k in enumerate(seen)}
+        for i, (u, v, w) in enumerate(edges):
+            y = top + row * i
+            hot = i == cur
+            color = ACCENT if hot else MUTED if i < done else INK
+            out.append(
+                _text(lx, y + 5, f"{u} {v} {_num(w)}", 15, color, "start", 600 if hot else 400)
             )
+        if cur is not None:
+            u = edges[cur][0]
+            y0, y1 = top + row * cur, key_y[u]
+            x0, x1 = lx + 128, rx - 14
+            out.append(
+                f'<path d="M {x0} {y0} C {x0 + 40} {y0}, {x1 - 40} {y1}, {x1 - 9} {y1}" '
+                f'fill="none" stroke="{ACCENT}" stroke-width="1.6"/>'
+                f'<path d="M {x1} {y1} L {x1 - 9} {y1 - 4.5} L {x1 - 9} {y1 + 4.5} Z" fill="{ACCENT}"/>'
+            )
+        for k in seen:
+            items = [(i, v, w) for i, (u, v, w) in enumerate(edges[:done]) if u == k]
+            pieces = [(f"{k}: [", INK, 400)]
+            for j, (i, v, w) in enumerate(items):
+                if j:
+                    pieces.append((", ", INK, 400))
+                pieces.append((pair(v, w), ACCENT if i == cur else INK, 600 if i == cur else 400))
+            pieces.append(("]", INK, 400))
+            out.append(_spans(rx, key_y[k] + 5, pieces))
+        if final:
+            for i, t in enumerate(targets):
+                y = top + row * (len(keys) + i)
+                out.append(
+                    _text(rx, y + 5, f"{t}: ключа нет, graph.get({t}, []) даёт []", 15, MUTED)
+                )
+        out.append("</svg>")
+        frames.append(("".join(out), caption))
+
+    snap(0, "Словарь graph пока пуст. Читаем файл строку за строкой.")
+    for i, (u, v, w) in enumerate(edges):
+        first = all(x != u for x, _, _ in edges[:i])
+        where = (
+            f"Ключа {u} ещё нет — заводим для него список с этой парой."
+            if first
+            else f"Ключ {u} уже есть — пара встаёт в конец его списка."
         )
-    for i, t in enumerate(targets):
-        y = top + row * (len(keys) + i)
-        out.append(_text(rx, y + 5, f"{t}: записи нет — graph.get({t}, []) даёт []", 15, MUTED))
-    out.append("</svg>")
-    return "".join(out)
+        snap(i + 1, f"Строка «{u} {v} {_num(w)}»: из {u} в {v} за {_num(w)}. {where}")
+    tail = (
+        " Из "
+        + ", ".join(map(str, targets))
+        + " рёбер нет: ключа нет, и graph.get вернёт пустой список."
+        if targets
+        else ""
+    )
+    snap(
+        len(edges),
+        "Все строки прочитаны: у каждой вершины — список, куда из неё можно перейти." + tail,
+        True,
+    )
+    return frames
+
+
+def adjacency_stepper(edges) -> str:
+    """The dictionary graph built from the file line by line."""
+    return _stepper(adjacency_frames(edges))
 
 
 def _call_tree(edges, v, target, memo, cache):
@@ -1565,8 +1632,8 @@ def _tree_layout(tree) -> dict:
     return pos
 
 
-def call_tree_svg(edges, source=1, target=100, width: int = 660) -> str:
-    """Calls of best() without and with @cache, side by side."""
+def call_tree_svg(edges, source=1, target=100, width: int = 660, name="best") -> str:
+    """Calls of name() without and with @cache, side by side."""
     half = width / 2
     inset = 46  # half a call box plus a gap from the edge and the divider
     out, height = [], 0
@@ -1599,7 +1666,7 @@ def call_tree_svg(edges, source=1, target=100, width: int = 660) -> str:
                     f'y2="{py(cd) - 12}" stroke="{FAINT}" stroke-width="1.25"/>'
                 )
         for x, d, v, mem, _ids in pos.values():
-            label = f"best({v})"
+            label = f"{name}({v})"
             tw = 6.9 * len(label) + 10
             dash = ' stroke-dasharray="4 3"' if mem else ""
             out.append(
@@ -1617,7 +1684,7 @@ def call_tree_svg(edges, source=1, target=100, width: int = 660) -> str:
     out.insert(0, f'<line x1="{half}" y1="8" x2="{half}" y2="{height - 8}" stroke="{FAINT}"/>')
     return (
         f'<svg viewBox="0 0 {width} {height}" role="img" '
-        f'aria-label="Дерево вызовов best без запоминания и с запоминанием">'
+        f'aria-label="Дерево вызовов {name} без запоминания и с запоминанием">'
         + "".join(out)
         + "</svg>"
     )
@@ -5368,7 +5435,7 @@ FIGURES = {
     "best_stepper": best_stepper,
     "passes_stepper": passes_stepper,
     "backward_stepper": backward_stepper,
-    "adjacency": adjacency_svg,
+    "adjacency_stepper": adjacency_stepper,
     "call_tree": call_tree_svg,
     "topo_stepper": topo_stepper,
     "path_builder": path_builder,
@@ -5449,6 +5516,7 @@ STEPPERS = {
     "search_stepper": search_frames,
     "factor_stepper": factor_frames,
     "best_stepper": best_frames,
+    "adjacency_stepper": adjacency_frames,
     "passes_stepper": passes_frames,
     "backward_stepper": backward_frames,
     "topo_stepper": topo_frames,

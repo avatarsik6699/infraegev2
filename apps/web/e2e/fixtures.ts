@@ -82,11 +82,11 @@ const stringProcessingLessonConfig = {
 };
 
 const graphAnalysisLessonConfig = {
-  route: "/ege/23-analiz-grafov/luchshij-ostatok",
+  route: "/ege/23-analiz-grafov/put-do-celi",
   title: "Анализ графов",
   taskNumber: 23,
-  taskCount: 25,
-  masteryTaskCount: 17,
+  taskCount: 37,
+  masteryTaskCount: 32,
 };
 
 const divisorsAndMasksLessonConfig = {

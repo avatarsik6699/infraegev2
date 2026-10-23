@@ -24,7 +24,7 @@ const subtopicFacts: Readonly<
   "number-sequences": { count: 7, first: "chisla-i-proverki" },
   "spreadsheet-optimization": { count: 6, first: "luchshaya-summa-do-kletki" },
   "winning-strategy": { count: 6, first: "igra-i-strategiya" },
-  "graph-analysis": { count: 7, first: "graf-i-put" },
+  "graph-analysis": { count: 6, first: "graf-i-put" },
   "string-processing": { count: 8, first: "stroka-i-fragment" },
   "divisors-and-masks": { count: 6, first: "perebor-i-proverki" },
   "array-processing": { count: 8, first: "zapisi-i-rejting" },

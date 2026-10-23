@@ -1,9 +1,10 @@
 """Independent answer and content checks for the EGE topic 23 lesson «Анализ графов».
 
-The lesson solves its tasks by recursion with @cache. Here every answer is recomputed by
-another method: small graphs by enumerating every path, the attached graph files by
-Dijkstra's algorithm with a heap and by dynamic programming over a topological order.
-The bank's own solution programs, run next to their attached file, must print the same.
+The lesson solves its tasks by recursion with @cache over float weights. Here every answer
+is recomputed by another method with exact decimals: small graphs by enumerating every
+path, the attached graph files by Dijkstra's algorithm with a heap and by dynamic
+programming over a topological order or over the number of edges. The bank's own solution
+programs, run next to their attached file, must print the same.
 """
 
 import heapq
@@ -106,22 +107,41 @@ def _count_and_longest(edges: list[Edge], start: int, goal: int) -> tuple[int, D
             if u == v and v in count:
                 count[x] = count.get(x, 0) + count[v]
                 longest[x] = max(longest.get(x, -INF), longest[v] + w)
-    return count[goal], longest[goal]
+    return count.get(goal, 0), longest.get(goal, -INF)
 
 
-def _passes_until_stable(edges: list[Edge]) -> int:
-    """Full passes over the edges in file order, the last one without change."""
-    cost = {1: Decimal(0)}
-    passes = 0
-    while True:
-        passes += 1
-        changed = False
-        for u, v, w in edges:
-            if u in cost and cost[u] + w < cost.get(v, INF):
-                cost[v] = cost[u] + w
-                changed = True
-        if not changed:
-            return passes
+def _edge_counts(edges: list[Edge], start: int, goal: int) -> tuple[int, int]:
+    """The fewest and the most edges on a path, over a topological order."""
+    fewest, most = {start: 0}, {start: 0}
+    for v in _topological(edges):
+        for u, x, _ in edges:
+            if u == v and v in fewest:
+                fewest[x] = min(fewest.get(x, 10**9), fewest[v] + 1)
+                most[x] = max(most.get(x, -1), most[v] + 1)
+    return fewest[goal], most[goal]
+
+
+def _to_any_dead_end(edges: list[Edge], start: int) -> Decimal:
+    starts = {u for u, _, _ in edges}
+    ends = {x for _, x, _ in edges} - starts
+    return max(_count_and_longest(edges, start, end)[1] for end in ends)
+
+
+def _by_edges(edges: list[Edge], start: int, goal: int, most: int) -> list[tuple[Decimal, int]]:
+    """For k = 0 … most: the shortest length and the number of paths of exactly k edges,
+    layer by layer forwards from the start."""
+    cost, count = {start: Decimal(0)}, {start: 1}
+    out = [(cost.get(goal, INF), count.get(goal, 0))]
+    for _ in range(most):
+        nxt_cost: dict[int, Decimal] = {}
+        nxt_count: dict[int, int] = {}
+        for u, x, w in edges:
+            if u in cost:
+                nxt_cost[x] = min(nxt_cost.get(x, INF), cost[u] + w)
+                nxt_count[x] = nxt_count.get(x, 0) + count[u]
+        cost, count = nxt_cost, nxt_count
+        out.append((cost.get(goal, INF), count.get(goal, 0)))
+    return out
 
 
 def _file(task: TaskData) -> tuple[str, Path]:
@@ -137,6 +157,9 @@ def _graph(task: TaskData) -> list[Edge]:
 G3 = _edges("1 20 2.4; 1 7 6.0; 20 7 1.3; 7 100 3.2; 20 100 8.0; 1 100 15.0")
 G7 = _edges("1 12 3.4; 1 5 6.1; 12 5 1.9; 12 30 7.2; 5 30 2.6; 5 100 9.8; 30 100 4.7; 1 100 16.5")
 G26 = _edges("1 4 2.5; 1 6 4.1; 4 6 1.2; 4 15 0.6; 6 15 2.9; 6 100 7.4; 15 100 5.8; 15 22 0.3")
+EXAMPLE = _edges("100 12 1.0; 6 7 7.0; 6 1 1.0; 1 7 5.5; 7 100 2.0; 4 100 8.0; 1 100 12.0; 1 4 2.5")
+FINAL_PAGE = {"task-23-6-06", "task-23-8-03", "task-23-8-04", "task-23-8-05"}
+ADVANCED = {"task-23-7-04", "task-23-9-13", "task-23-9-14", "task-23-9-15", "task-23-9-16"}
 
 
 def _min_enumerated(edges: list[Edge], banned: frozenset[int] = frozenset()) -> Decimal:
@@ -159,59 +182,93 @@ def answers() -> dict[str, str]:
         return _graph(tasks[task_id])
 
     def integer(value: Decimal) -> str:
-        assert value != INF
+        assert value not in (INF, -INF)
         return str(int(value))
 
     e1, e2, e3 = graph("task-23-4-06"), graph("task-23-5-06"), graph("task-23-6-06")
     e4, e5, e6 = graph("task-23-7-06"), graph("task-23-8-01"), graph("task-23-8-04")
-    path3, v = [100], 100
-    d3 = _dijkstra(e3, 1)
-    while v != 1:
-        v = next(u for u, x, w in e3 if x == v and u in d3 and d3[u] + w == d3[v])
-        path3.append(v)
-    count4, longest4 = _count_and_longest(e4, 1, 100)
+    weight = {(u, v): w for edges in (e2, e6) for u, v, w in edges}
     via5 = min(
         _dist(e5, 1, 342) + _dist(e5, 342, 423) + _dist(e5, 423, 100),
         _dist(e5, 1, 423) + _dist(e5, 423, 342) + _dist(e5, 342, 100),
     )
-    dijkstra_order = []
-    costs = {1: Decimal(0)}
-    while len(dijkstra_order) < 4:
-        v = min((c, x) for x, c in costs.items() if x not in dijkstra_order)[1]
-        dijkstra_order.append(v)
-        for u, x, w in G3:
-            if u == v:
-                costs[x] = min(costs.get(x, INF), costs[v] + w)
-    two_edges = min(c for c, p in _all_paths(G3, 1, 100) if len(p) == 3)
+    count4, longest4 = _count_and_longest(e4, 1, 100)
+    fewest3, most3 = _edge_counts(e3, 1, 100)
+    layers1, layers3, layers4 = (_by_edges(e, 1, 100, 200) for e in (e1, e3, e4))
+    cycle = _edges("3 8 1.0; 8 5 2.0; 5 3 1.5; 8 9 4.0; 9 4 0.5")
+
+    def reachable(edges: list[Edge], v: int) -> set[int]:
+        seen: set[int] = set()
+        todo = [v]
+        while todo:
+            here = todo.pop()
+            for u, x, _ in edges:
+                if u == here and x not in seen:
+                    seen.add(x)
+                    todo.append(x)
+        return seen
+
+    on_cycle = [v for v in {x for e in cycle for x in e[:2]} if v in reachable(cycle, v)]
+
+    def greedy(edges: list[Edge], v: int, goal: int) -> Decimal:
+        total = Decimal(0)
+        while v != goal:
+            w, v = min((w, x) for u, x, w in edges if u == v)
+            total += w
+        return total
+
+    from_6 = _all_paths(EXAMPLE, 6, 100)
+    dead_zero = _edges(
+        "100 12 1.0; 6 7 7.0; 6 1 1.0; 1 7 5.5; 7 100 2.0; 4 100 8.0; 1 100 12.0; 1 4 2.5; 4 12 0.5"
+    )
     return {
         "task-23-1-02": str(
             len({x for e in _edges("1 40 0; 40 7 0; 7 100 0; 1 100 0") for x in e[:2]})
         ),
         "task-23-1-05": integer(_min_enumerated(G3)),
+        "task-23-9-01": str(len(from_6)),
         "task-23-1-07": integer(_min_enumerated(G7)),
+        "task-23-9-02": str(len(on_cycle)),
+        "task-23-9-03": integer(greedy(EXAMPLE, 6, 100) - min(c for c, _ in from_6)),
+        "task-23-9-06": str(min(c for c, p in from_6 if 7 in p)),
+        "task-23-9-04": f"{_min_enumerated(EXAMPLE)} {min(c for c, _ in from_6)}",
         "task-23-2-06": integer(_min_enumerated(G26)),
+        # a zero in the dead end 12 counts paths that stop there, not at 100
+        "task-23-9-05": integer(
+            min(
+                c
+                for c, p in _all_paths(dead_zero, 1, 12) + _all_paths(dead_zero, 1, 100)
+                if 100 not in p[:-1]
+            )
+        ),
         "task-23-3-01": "125 17",
-        "task-23-3-06": "False True",
+        "task-23-3-06": "False 6",
         "task-23-3-07": str(len({x for e in e1 for x in e[:2]})),
         "task-23-4-06": integer(_dist(e1, 1, 100)),
         "task-23-4-07": integer(_dist(e1, 1, 255)),
+        "task-23-8-01": integer(_dist(e5, 1, 100)),
         "task-23-5-05": str(
             _dist(G26, 1, 15, frozenset({4})) + _dist(G26, 15, 100, frozenset({4}))
         ),
         "task-23-5-06": integer(_dist(e2, 1, 264) + _dist(e2, 264, 100)),
-        "task-23-5-07": integer(_dist(e2, 1, 100, frozenset({975}))),
-        "task-23-6-02": str(_passes_until_stable(_edges("1 40 2; 40 7 1; 7 100 3"))),
-        "task-23-6-06": integer(_dist(e3, 1, 100)),
-        "task-23-6-07": " ".join(map(str, reversed(path3))),
-        "task-23-7-01": " ".join(
-            map(str, _topological(_edges("5 3 1; 5 8 1; 3 8 1; 8 2 1; 3 2 1")))
-        ),
-        "task-23-7-02": " ".join(map(str, dijkstra_order)),
-        "task-23-7-04": str(two_edges),
-        "task-23-7-06": str(count4),
-        "task-23-7-07": integer(longest4),
-        "task-23-8-01": integer(_dist(e5, 1, 100)),
         "task-23-8-02": integer(via5),
+        "task-23-5-07": integer(_dist(e2, 1, 100, frozenset({975}))),
+        "task-23-9-07": integer(_dist(e2, 1, 921) + weight[921, 305] + _dist(e2, 305, 100)),
+        "task-23-9-08": integer(weight[1, 554] + _dist(e6, 554, 53) + weight[53, 100]),
+        "task-23-7-06": str(count4),
+        "task-23-9-09": str(
+            _count_and_longest(e4, 1, 472)[0] * _count_and_longest(e4, 139, 100)[0]
+        ),
+        "task-23-7-07": integer(longest4),
+        "task-23-9-12": integer(_to_any_dead_end(e6, 1)),
+        "task-23-9-10": str(fewest3),
+        "task-23-9-11": str(most3),
+        "task-23-7-04": str(min(c for c, p in _all_paths(G3, 1, 100) if len(p) == 3)),
+        "task-23-9-13": integer(layers3[10][0]),
+        "task-23-9-14": integer(min(c for c, _ in layers1[20:])),
+        "task-23-9-15": str(layers4[5][1]),
+        "task-23-9-16": str(sum(n for _, n in layers4[1:7])),
+        "task-23-6-06": integer(_dist(e3, 1, 100)),
         "task-23-8-03": integer(_dist(e5, 1, 100, frozenset({722}))),
         "task-23-8-04": integer(_dist(e6, 1, 100)),
         "task-23-8-05": integer(_dist(e6, 1, 429) + _dist(e6, 429, 100)),
@@ -238,16 +295,15 @@ def test_material_is_published() -> None:
 def test_every_answer_matches_independent_recomputation(answers: dict[str, str]) -> None:
     tasks = _entries()
     assert sorted(tasks) == sorted(answers)
-    assert sorted(task.lessons[0].position for task in tasks.values()) == list(range(25))
+    assert sorted(task.lessons[0].position for task in tasks.values()) == list(range(37))
     sections = next(m for m in _bank().materials if m.id == MATERIAL).sections
     for task_id, task in tasks.items():
         assert task.checker.answer_variants[0] == answers[task_id], task_id
         assert task.exam_numbers == [23] and not task.catalog_visible and not task.archived
         assert task.sources[0].kind == "original" and task.hint and task.explanation
-        on_final_page = task_id.startswith("task-23-8-")
-        assert bool(task.theory_links) != on_final_page, task_id
+        assert bool(task.theory_links) != (task_id in FINAL_PAGE), task_id
         assert all(link.section in sections for link in task.theory_links)
-        advanced = task_id.startswith(("task-23-6-", "task-23-7-"))
+        advanced = task_id in ADVANCED
         assert task.lessons[0].counts_toward_mastery == (not advanced), task_id
 
 
@@ -281,8 +337,8 @@ def test_checker_accepts_the_answer_and_rejects_an_off_by_one(
     for task_id, task in _entries().items():
         expected = answers[task_id]
         assert is_correct(task.checker, expected), task_id
-        if expected == "False True":
-            assert not is_correct(task.checker, "True True"), task_id
+        if expected == "False 6":
+            assert not is_correct(task.checker, "True 6"), task_id
             continue
         tokens = expected.split()
         last = tokens[-1]

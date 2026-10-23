@@ -35,19 +35,19 @@ describe("path rules", () => {
   });
 
   it("moves only along arrows and explains a refused move", () => {
-    const refused = walk(40, 7, 40);
-    expect(refused.path).toEqual([1, 40, 7]);
+    const refused = walk(7, 1);
+    expect(refused.path).toEqual([1, 7]);
     expect(statusText(graph, refused)).toBe(
-      "Путь: 1 → 40 → 7 · длина 2 + 1 = 3. Из 7 в 40 ребра нет: стрелка идёт только 40 → 7",
+      "Путь: 1 → 7 · длина 5.5. Из 7 в 1 ребра нет: стрелка идёт только 1 → 7",
     );
   });
 
   it("compares the finished path with the shortest one", () => {
-    expect(statusText(graph, walk(40, 7, 100))).toBe(
-      "Путь: 1 → 40 → 7 → 100 · длина 2 + 1 + 3 = 6. Дошли до цели. Это кратчайший путь",
+    expect(statusText(graph, walk(7, 100))).toBe(
+      "Путь: 1 → 7 → 100 · длина 5.5 + 2.0 = 7.5. Дошли до цели. Это кратчайший путь",
     );
-    expect(statusText(graph, walk(100))).toBe(
-      "Путь: 1 → 100 · длина 12. Дошли до цели. Есть путь короче — попробуйте найти его",
+    expect(statusText(graph, walk(4, 100))).toBe(
+      "Путь: 1 → 4 → 100 · длина 2.5 + 8.0 = 10.5. Дошли до цели. Есть путь короче — попробуйте найти его",
     );
     expect(walk(100, 7).path).toEqual([1, 100]);
   });
@@ -69,15 +69,14 @@ describe("PathBuilder", () => {
     render(<PathBuilder {...graph} caption="Подпись" />);
     const status = () => screen.getByText(/^Путь:/u).textContent;
     expect(status()).toBe("Путь: 1. Начинаем в вершине 1: выберите, куда идти");
-    fireEvent.click(screen.getByRole("button", { name: "Вершина 40" }));
-    fireEvent.keyDown(screen.getByRole("button", { name: "Вершина 7" }), {
+    fireEvent.click(screen.getByRole("button", { name: "Вершина 6" }));
+    fireEvent.click(screen.getByRole("button", { name: "Вершина 7" }));
+    fireEvent.keyDown(screen.getByRole("button", { name: "Вершина 12" }), {
       key: "Enter",
     });
-    expect(status()).toBe(
-      "Путь: 1 → 40 → 7 · длина 2 + 1 = 3. Выберите следующую вершину",
-    );
+    expect(status()).toBe("Путь: 1 → 7 · длина 5.5. Из 7 в 12 ребра нет");
     fireEvent.click(screen.getByRole("button", { name: "Шаг назад" }));
-    expect(status()).toBe("Путь: 1 → 40 · длина 2");
+    expect(status()).toBe("Путь: 1. Начинаем в вершине 1: выберите, куда идти");
     fireEvent.click(screen.getByRole("button", { name: "Сначала" }));
     expect(status()).toBe("Путь: 1. Начинаем в вершине 1: выберите, куда идти");
     expect(screen.getByText(/^Путь:/u).getAttribute("aria-live")).toBe(

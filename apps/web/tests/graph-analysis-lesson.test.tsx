@@ -85,7 +85,7 @@ function compiles(code: string): boolean {
 }
 
 describe("task 23 graph analysis lesson", () => {
-  it("has five core subtopics, two advanced and their self-checks", () => {
+  it("has five core subtopics, one advanced and their self-checks", () => {
     expect(lesson).toMatchObject({
       id: "graph-analysis",
       routeSlug: "23-analiz-grafov",
@@ -97,17 +97,15 @@ describe("task 23 graph analysis lesson", () => {
     const subtopics = lessonSubtopics(lesson);
     expect(subtopics.map(({ slug, level }) => [slug, level])).toEqual([
       ["graf-i-put", "core"],
-      ["luchshij-ostatok", "core"],
-      ["graf-iz-fajla", "core"],
-      ["rekursiya-s-zapominaniem", "core"],
+      ["put-do-celi", "core"],
+      ["programma", "core"],
       ["usloviya-na-put", "core"],
-      ["povtornye-prohody", "advanced"],
-      ["drugie-sposoby", "advanced"],
+      ["drugie-voprosy", "core"],
+      ["k-reber", "advanced"],
     ]);
     expect(subtopics.map(({ checkpoint }) => checkpoint?.length ?? 0)).toEqual([
-      4, 4, 3, 4, 3, 4, 2,
+      5, 5, 5, 5, 5, 4,
     ]);
-    expect(lesson.checkpoint?.length).toBe(2);
     expect(lesson.examFocus).toBeDefined();
     expect(lesson.result).toBeDefined();
   });
@@ -125,7 +123,7 @@ describe("task 23 graph analysis lesson", () => {
       status: "published",
     });
     expect(publicPaths).toContain("/ege/23-analiz-grafov/graf-i-put");
-    expect(publicPaths).toContain("/ege/23-analiz-grafov/drugie-sposoby");
+    expect(publicPaths).toContain("/ege/23-analiz-grafov/k-reber");
     expect(publicPaths).toContain("/ege/23-analiz-grafov/praktika");
   });
 
@@ -172,7 +170,7 @@ describe("task 23 graph analysis lesson", () => {
           prelude += piece.code + "\n";
       }
     }
-    expect(ran).toBe(16);
+    expect(ran).toBe(15);
   }, 60_000);
 
   it("keeps spaces around inline code, links and emphasis", () => {
@@ -199,21 +197,20 @@ describe("task 23 graph analysis lesson", () => {
     expect(
       container.querySelectorAll("figure[data-lesson-stepper]"),
     ).toHaveLength(steppers.length);
-    expect(steppers).toHaveLength(4);
+    expect(diagrams).toHaveLength(10);
+    expect(steppers).toHaveLength(3);
     expect(container.querySelectorAll("img")).toHaveLength(0);
     expect(container.querySelectorAll("[data-path-builder]")).toHaveLength(1);
     expect(container.querySelectorAll("[data-topic-cheat-sheet]")).toHaveLength(
       1,
     );
-    expect(
-      container.querySelectorAll("[data-variant-picker]").length,
-    ).toBeGreaterThanOrEqual(2);
+    expect(container.querySelectorAll("[data-variant-picker]")).toHaveLength(1);
     expect(
       container.querySelectorAll("[data-python-term]").length,
     ).toBeGreaterThanOrEqual(10);
     expect(
       container.querySelectorAll("details[data-proof-disclosure]"),
-    ).toHaveLength(1);
+    ).toHaveLength(2);
     // No stand links to graph files: on the site they are task attachments.
     expect(container.innerHTML).not.toContain("topic-23/files");
     expect(container.querySelectorAll("aside, [role='note']")).toHaveLength(0);
