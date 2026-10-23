@@ -4,9 +4,8 @@ Usage:
     python3 -I scripts/lesson_design/docx_to_md.py SOURCE.docx OUT.md
     python3 -I scripts/lesson_design/docx_to_md.py SOURCE.xlsx OUT.md
 
-The pipeline addresses a source by line numbers (split_source.py), so an author's
-material that arrives as a Word document is first converted into the same Markdown
-the other sources use (html_to_md.py does this for an HTML textbook). Only the
+An author's material that arrives as a Word document is converted into the same
+Markdown the other sources in docs/artifacts/lessons use (html_to_md.py does this for an HTML textbook). Only the
 standard library is used: a .docx/.xlsx file is a zip of XML parts.
 
 Document: Title → `#`, Heading1 → `##` (a chapter keeps its number), Heading2 →

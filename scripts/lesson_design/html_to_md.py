@@ -3,9 +3,8 @@
 Usage:
     python3 -I scripts/lesson_design/html_to_md.py SOURCE.html OUT.md
 
-The pipeline addresses a source by line numbers (split_source.py), so an
-author's material that arrives as a standalone HTML page is first converted
-into the same Markdown the other sources use. Only the <article> is kept:
+An author's material that arrives as a standalone HTML page is converted
+into the same Markdown the other sources in docs/artifacts/lessons use. Only the <article> is kept:
 navigation, toolbar, styles and scripts are dropped. Headings become `#`/`##`/
 `###` (a chapter keeps its number), code blocks become fenced blocks with
 their language, tables become Markdown tables, «Разбор» disclosures become

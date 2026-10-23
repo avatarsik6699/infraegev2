@@ -18,7 +18,7 @@ from app.core.config import settings
 from app.core.database import database_engine
 from app.main import create_app
 from app.modules.practice import catalog, readers
-from app.modules.practice.models import TaskRecord
+from app.modules.practice.models import TaskChecker, TaskRecord
 from app.modules.practice.schemas import Bank, TheoryLink
 from app.modules.practice.service import export_bank, import_bank
 
@@ -258,6 +258,41 @@ def test_pagination_next_and_lesson_membership(database):
                         result = await readers.lesson(session, material.kind, material.id)
                         assert [t.id for t in result.tasks] == [i for _, i in expected]
                 assert len(list(await session.scalars(select(TaskRecord.id)))) == BANK_TASKS
+        finally:
+            await engine.dispose()
+
+    asyncio.run(scenario())
+
+
+def test_import_clears_parts_when_a_task_becomes_single_field(database):
+    """T258: a task that stops being multi-part keeps no stale checker parts."""
+
+    async def scenario():
+        engine = database_engine(database("import"))
+        source = Bank.model_validate_json((BANK / "bank.json").read_bytes())
+        entry = next(e for e in source.tasks if e.task.checker.parts)
+        source.tasks = [entry]
+        try:
+            async with AsyncSession(engine) as session:
+                transaction = await session.begin()
+                try:
+                    before = await session.get(TaskRecord, entry.task.id)
+                    assert before is not None
+                    original = before.solution_revision
+                    entry.task.answer_parts = None
+                    entry.task.checker.parts = None
+                    await import_bank(session, source, BANK / "files")
+                    checker = await session.get(TaskChecker, entry.task.id)
+                    record = await session.get(TaskRecord, entry.task.id)
+                    assert checker is not None and record is not None
+                    await session.refresh(checker)
+                    await session.refresh(record)
+                    assert checker.parts is None
+                    assert record.solution_revision == original + 1
+                    exported = {e.task.id: e for e in (await export_bank(session)).tasks}
+                    assert exported[entry.task.id].task.checker.parts is None
+                finally:
+                    await transaction.rollback()
         finally:
             await engine.dispose()
 

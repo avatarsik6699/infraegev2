@@ -22,8 +22,9 @@ type SheetCase = {
   expected: Record<string, string>;
 };
 
-// conformance cases of the evaluator, written by verify_sheets.py --cases from the
-// archived stand sheets (Change 177); the reference semantics stay sheet_eval.py
+// conformance cases of the evaluator, written once from the stand sheets (Change 177;
+// the stand and its writer were removed in Change 197, T259); the reference
+// semantics stay sheet_eval.py
 const cases = JSON.parse(
   readFileSync(
     resolve(process.cwd(), "tests/fixtures/sheet-cases.json"),

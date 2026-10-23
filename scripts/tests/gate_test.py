@@ -158,13 +158,6 @@ class AffectedTest(unittest.TestCase):
         self.assertIn("lesson-media", suggestion.groups)
         self.assertIn("paid-leak", suggestion.groups)
 
-    def test_archived_stand_is_read_only(self) -> None:
-        suggestion = core.suggest(("content/lesson-design/topic-25/05-maski.md",))
-
-        self.assertNotIn("lesson-media", suggestion.groups)
-        self.assertNotIn("content-static", suggestion.groups)
-        self.assertTrue(any("read-only" in item for item in suggestion.reminders))
-
     def test_paths_map_to_owning_groups(self) -> None:
         cases = {
             "apps/api/app/main.py": (

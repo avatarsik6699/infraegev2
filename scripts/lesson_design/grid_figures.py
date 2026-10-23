@@ -26,7 +26,7 @@ from types import ModuleType
 from figures import ACCENT, FAINT, INK, MUTED, WASH, _arrow, _stepper, _text
 
 HERE = Path(__file__).resolve().parent
-TOPIC = HERE.parents[1] / "content" / "lesson-design" / "topic-18"
+TOPIC = HERE.parents[1] / "content" / "lesson-files" / "topic-18"
 LETTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 FIELD_4 = [[2, 7, 4, 1], [5, 1, 8, 3], [2, 6, 2, 9], [4, 3, 7, 2]]
 

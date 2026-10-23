@@ -1739,11 +1739,14 @@ def final_figure_frames(lesson: str) -> list[tuple[str, str]]:
         for name, args, kwargs, caption in FINALS[lesson]["frames"]
     ]
     box = re.compile(r'viewBox="0 0 (\d+(?:\.\d+)?) (\d+(?:\.\d+)?)"')
-    sizes = [box.search(svg) for svg, _ in drawn]
-    assert all(sizes), f"{lesson}: a frame without viewBox"
-    widths = {float(m.group(1)) for m in sizes}
+    sizes = []
+    for svg, _ in drawn:
+        found = box.search(svg)
+        assert found, f"{lesson}: a frame without viewBox"
+        sizes.append((float(found.group(1)), float(found.group(2))))
+    widths = {width for width, _ in sizes}
     assert len(widths) == 1, f"{lesson}: frames of different width {widths}"
-    tallest = max(float(m.group(2)) for m in sizes)
+    tallest = max(height for _, height in sizes)
     frames = []
     for svg, caption in drawn:
         svg = box.sub(lambda m: f'viewBox="0 0 {m.group(1)} {tallest:g}"', svg, count=1)

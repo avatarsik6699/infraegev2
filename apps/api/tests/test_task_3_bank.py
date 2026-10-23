@@ -25,7 +25,7 @@ pytestmark = pytest.mark.pure
 
 ROOT = Path(__file__).resolve().parents[3]
 BANK_DIR = ROOT / "content/practice-bank"
-TOPIC = ROOT / "content/lesson-design/topic-3"
+TOPIC = ROOT / "content/lesson-files/topic-3"
 MATERIAL = "relational-databases"
 DAY = datetime.date
 

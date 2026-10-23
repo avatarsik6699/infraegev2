@@ -5,8 +5,8 @@ Usage:
     uv run --no-project --with openpyxl --with formulas python -I \
         scripts/lesson_design/excel_workbook.py --check
 
-Since Change 197 the site lessons are the source (the stand's
-``content/lesson-design/course-excel/workbook.py`` stays as an archive). The
+Since Change 197 the site lessons are the source (the stand and its
+``workbook.py`` were removed in T259; they stay in git history). The
 book is built from the live sheets of the lesson media
 (``apps/web/src/entities/course/content/excel-*.media.ts``), read through Node:
 

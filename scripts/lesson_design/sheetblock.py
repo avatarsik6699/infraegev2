@@ -14,8 +14,7 @@ A block is a small workbook written as a grid::
 - The first grid line names the columns (any start: ``| | F | G``); every other
   line starts with its row number. A blank cell is empty.
 - ``=…`` is a formula (Russian locale). ``⇒ 200`` after it, or alone in a cell
-  filled by ``fill``, is the value the reader is told; ``verify_sheets.py`` fails
-  when the sheet computes something else.
+  filled by ``fill``, is the value the reader is told.
 - ``'00127`` is text, as typed in Excel; ``ИСТИНА``/``ЛОЖЬ`` are logical.
 - Directives after a grid: ``fill D2:E3`` copies the formulas of the first row
   (or column) of the range over the rest with ``sheet_eval.shift`` — the copies

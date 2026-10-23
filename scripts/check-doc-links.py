@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """Fail when a relative Markdown link in current documentation points to a missing path.
 
-Archived changes are immutable history and lesson-design stands resolve their links from the
-generated stand pages, so both are outside this check. Fenced code blocks are ignored.
+Archived changes are immutable history, so they are outside this check. Fenced code blocks are
+ignored.
 """
 
 from __future__ import annotations
@@ -14,7 +14,7 @@ import sys
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[1]
-SKIPPED = ("docs/changes/archive/", "content/lesson-design/")
+SKIPPED = ("docs/changes/archive/",)
 FENCE = re.compile(r"^(```|~~~).*?^\1", re.S | re.M)
 LINK = re.compile(r"\]\(([^)\s]+)\)")
 

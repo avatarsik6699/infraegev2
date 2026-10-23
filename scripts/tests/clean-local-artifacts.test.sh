@@ -18,7 +18,7 @@ mkdir -p \
   "$test_root/apps/web/.impeccable/live/sessions" \
   "$test_root/docs/artifacts/pipeline/__pycache__" \
   "$test_root/docs/artifacts/pipeline/.ruff_cache" \
-  "$test_root/content/lesson-design/__pycache__" \
+  "$test_root/content/lesson-files/__pycache__" \
   "$test_root/apps/api/.pytest_cache" \
   "$test_root/docs/artifacts/pipeline/node_modules/keep" \
   "$test_root/infra/practice-import-120.local" \
@@ -38,7 +38,7 @@ touch \
   "$test_root/docs/artifacts/authored.md" \
   "$test_root/docs/artifacts/pipeline/__pycache__/prepare.pyc" \
   "$test_root/docs/artifacts/pipeline/.ruff_cache/cache" \
-  "$test_root/content/lesson-design/__pycache__/bank.pyc" \
+  "$test_root/content/lesson-files/__pycache__/bank.pyc" \
   "$test_root/apps/api/.pytest_cache/lastfailed" \
   "$test_root/apps/web/.eslintcache" \
   "$test_root/docs/artifacts/pipeline/node_modules/keep/package.json" \
@@ -75,7 +75,7 @@ test ! -e "$test_root/C:\Users\user\AppData\Local\lighthouse.1234"
 test -f "$test_root/apps/ops/source/main.py"
 test ! -e "$test_root/apps/api/app/__pycache__"
 test ! -e "$test_root/apps/web/.impeccable/live/sessions"
-test ! -e "$test_root/content/lesson-design/__pycache__"
+test ! -e "$test_root/content/lesson-files/__pycache__"
 test -f "$test_root/apps/api/.pytest_cache/lastfailed"
 test -f "$test_root/apps/web/.eslintcache"
 test ! -e "$test_root/apps/web/.fallow"

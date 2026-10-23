@@ -8,7 +8,7 @@ apps/web/src/routeTree.gen.ts
 apps/web/src/shared/api/schema.ts
 contracts/openapi.json
 pnpm-lock.yaml
-# Conformance cases of the sheet evaluator: one case per line (verify_sheets.py --cases)
+# Conformance cases of the sheet evaluator: one case per line (written once from the stand, Change 177)
 apps/web/tests/fixtures/sheet-cases.json
 
 # Documentation and authored learning content retain intentional wrapping.

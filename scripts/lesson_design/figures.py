@@ -3,7 +3,6 @@
 import html
 import json
 import re
-from pathlib import Path
 
 INK = "#17191e"
 MUTED = "#4d535e"
@@ -374,72 +373,12 @@ REMAINDER_JS = r"""<script>
 </script>"""
 
 
-STAND = Path(__file__).resolve().parents[2] / "content" / "lesson-design"
-
-
 def _inline(text: str) -> str:
     """`code` in cheat-sheet rows; everything else is escaped text."""
     parts = re.split(r"(`[^`]+`)", text)
     return "".join(
         f"<code>{html.escape(p[1:-1])}</code>" if p.startswith("`") else html.escape(p)
         for p in parts
-    )
-
-
-def cheatsheet(source: str) -> str:
-    """The whole topic on one sheet: solving order, one block per subtopic
-    with its key code and topic-wide sections (rows, numbered steps, note).
-    HTML rather than SVG so it reflows to one column on a phone. Group titles
-    link to the stand pages of the topic: topic-NN/… → NN-<page>.html."""
-    path = STAND / source
-    data = json.loads(path.read_text(encoding="utf-8"))
-    prefix = path.parent.name.removeprefix("topic-")
-    flow = "".join(
-        f"<li><b>{html.escape(name)}</b><span>{html.escape(note)}</span></li>"
-        for name, note in data["flow"]
-    )
-
-    def rows(items, columns=False) -> str:
-        cols = " data-columns" if columns else ""
-        return (
-            f"<ul{cols}>"
-            + "".join(
-                f"<li><span class='cs-k'>{_inline(k)}</span>"
-                f"<span class='cs-v'>{_inline(v)}</span></li>"
-                for k, v in items
-            )
-            + "</ul>"
-        )
-
-    groups = []
-    for g in data["groups"]:
-        level = f"<small>{html.escape(g['level'])}</small>" if g.get("level") else ""
-        groups.append(
-            f'<section class="cs-group"><h3><a href="{prefix}-{g["page"]}.html">'
-            f'<span class="cs-n">{g["page"]}</span>{html.escape(g["title"])}</a>{level}</h3>'
-            f"{rows(g['items'])}</section>"
-        )
-    sections = []
-    for sec in data.get("sections", []):
-        body = rows(sec["rows"], sec.get("columns", False)) if "rows" in sec else ""
-        if "steps" in sec:
-            body += (
-                '<ol class="cs-checks">'
-                + "".join(f"<li>{_inline(c)}</li>" for c in sec["steps"])
-                + "</ol>"
-            )
-        if sec.get("note"):
-            body += f'<p class="cs-note">{_inline(sec["note"])}</p>'
-        wide = " data-wide" if sec.get("columns") else ""
-        sections.append(
-            f'<section class="cs-group"{wide}><h3>{html.escape(sec["title"])}</h3>{body}</section>'
-        )
-    foot = f'<div class="cs-foot">{"".join(sections)}</div>' if sections else ""
-    return (
-        f'<figure class="cheatsheet" data-cheatsheet aria-label="{html.escape(data["title"])}">'
-        f'<ol class="cs-flow">{flow}</ol>'
-        f'<div class="cs-grid">{"".join(groups)}</div>{foot}'
-        f"<figcaption>{_inline(data['caption'])}</figcaption></figure>"
     )
 
 
@@ -5455,7 +5394,6 @@ FIGURES = {
     "mask_try": mask_try,
     "divisor_grid": divisor_grid_svg,
     "remainder_widget": remainder_widget,
-    "cheatsheet": cheatsheet,
     "graph": graph_svg,
     "best_stepper": best_stepper,
     "passes_stepper": passes_stepper,
@@ -5562,7 +5500,6 @@ STEPPERS = {
 WIDGETS = {
     "mask_try": "MaskSandbox",
     "remainder_widget": "RemainderExplorer",
-    "cheatsheet": "TopicCheatSheet",
     "path_builder": "PathBuilder",
     "range_try": "RangeSandbox",
 }

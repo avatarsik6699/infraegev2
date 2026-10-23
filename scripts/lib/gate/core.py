@@ -209,7 +209,7 @@ RULES: tuple[Rule, ...] = (
     Rule(
         MARKDOWN,
         ("docs-links",),
-        exclude=("docs/changes/archive/*", "content/lesson-design/*"),
+        exclude=("docs/changes/archive/*",),
     ),
     Rule(FORMATTED, ("format",)),
     Rule(("*.py",), ("python-format",)),
@@ -241,7 +241,7 @@ RULES: tuple[Rule, ...] = (
     Rule(
         ("content/*",),
         ("content-static",),
-        exclude=(*MARKDOWN, "content/lesson-design/*"),
+        exclude=MARKDOWN,
     ),
     Rule(
         (
@@ -267,10 +267,6 @@ RULES: tuple[Rule, ...] = (
     Rule(
         ("content/lesson-files/*",),
         reminders=("the topic's lesson test and apps/api/tests/test_task_NN_bank.py",),
-    ),
-    Rule(
-        ("content/lesson-design/*",),
-        reminders=("archived stand (Change 197): read-only, edit the site lesson instead",),
     ),
     Rule(
         ("scripts/*.py", "scripts/pyrightconfig.json", "scripts/ruff.toml"),

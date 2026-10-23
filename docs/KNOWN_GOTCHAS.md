@@ -224,13 +224,6 @@ parent command lines, start ordinary Chrome with `--profile-directory=Default`, 
 [STACK's procedure](STACK.md#interactive-browser-connection-wsl). Playwriter `-f` scripts start
 without a page: `state.page = state.page ?? await context.newPage()` before `bringToFront()`.
 
-### Headless Chromium dies under `ulimit -v`
-
-`scripts/lesson_design/svg_png.mjs` (PNG figures of bank statements, Change 190) launches the
-Playwright Chromium. Under the `ulimit -v 3000000` used for brute-force checks it exits with
-`SIGTRAP` («Target page, context or browser has been closed»): Chromium reserves far more virtual
-memory than it uses. Run `topic-NN/bank.py` without the limit; its searches are small.
-
 ### Cleanup or compaction refuses a symlinked parent directory
 
 A repository-looking path can traverse a symlink into another checkout or external data. Inspect
@@ -355,18 +348,6 @@ timers/services, volumes and install directory, disable, bring down, remove what
 covers, then check `docker ps -a`, `systemctl list-timers`, `docker volume ls`.
 
 ## Lesson pipeline
-
-### «Решу ЕГЭ»: обычная страница подборки не читается целиком
-
-- **Symptoms**: WebFetch на `inf-ege.sdamgia.ru/test?theme=…` возвращает только меню и base64-картинки, а список задач не попадает в обработанный фрагмент.
-- **Root cause**: страница подборки встраивает изображения как `data:` URI на сотни килобайт, поэтому текст условий оказывается далеко за пределом одного фрагмента.
-- **Fix**: использовать версию для печати `test?theme=ID&print=true` и скрипт `scripts/lesson_design/sdamgia.py`. Он сам вырезает `data:`-картинки и разбирает задачи в JSON. Скачанное хранить только в scratch-папке: это недоверенные данные, условия не копируются в уроки. Категории задания (id подборок) печатает `sdamgia.py catalog`.
-
-### Сборка стенда уроков: `-I` и соседние модули, Markdown внутри HTML
-
-- **Symptoms**: `python -I scripts/lesson_design/build.py` падает с `ModuleNotFoundError: figures`. Или текст внутри `<details>` либо `<figure>` выводится с сырыми `**` и обратными кавычками.
-- **Root cause**: флаг `-I` убирает папку скрипта из `sys.path`. Python-Markdown не обрабатывает разметку внутри сырого HTML-блока.
-- **Fix**: скрипты `scripts/lesson_design/` сами добавляют свою папку в `sys.path`. Для Markdown внутри блока используется атрибут `markdown="1"` (расширение `md_in_html`, например `<details class="proof" markdown="1">`). В `<figcaption>` код пишется тегом `<code>`, а не обратными кавычками.
 
 ### SVG-диаграмма урока в `<img>`: веб-шрифты не загружаются, кадры без рамки ломают ширину
 

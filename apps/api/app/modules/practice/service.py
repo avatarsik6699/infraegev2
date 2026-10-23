@@ -47,6 +47,9 @@ async def import_bank(session: AsyncSession, bank: Bank, storage: Path) -> int:
         old = await session.get(TaskRecord, task.id)
         old_checker = await session.get(TaskChecker, task.id)
         content = task.model_dump(mode="json", exclude={"checker"})
+        # `parts` leaves model_dump() when None; a task that stopped being multi-part must
+        # still clear its stored parts and count as a changed solution (Change 197, T258).
+        checker = {"parts": None, **task.checker.model_dump()}
         revision = entry.solution_revision
         if old is not None:
             changed = (
@@ -55,10 +58,7 @@ async def import_bank(session: AsyncSession, bank: Bank, storage: Path) -> int:
                     for key in ("statement", "answer_instruction", "files")
                 )
                 or old_checker is None
-                or any(
-                    getattr(old_checker, key) != value
-                    for key, value in task.checker.model_dump().items()
-                )
+                or any(getattr(old_checker, key) != value for key, value in checker.items())
             )
             revision = max(revision, old.solution_revision + int(changed))
         await session.merge(
@@ -72,7 +72,7 @@ async def import_bank(session: AsyncSession, bank: Bank, storage: Path) -> int:
             )
         )
         await session.flush()
-        await session.merge(TaskChecker(task_id=task.id, **task.checker.model_dump()))
+        await session.merge(TaskChecker(task_id=task.id, **checker))
         await session.execute(delete(LessonTask).where(LessonTask.task_id == task.id))
         for link in task.lessons:
             material = materials.get(link.material_id)

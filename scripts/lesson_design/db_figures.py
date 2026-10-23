@@ -35,7 +35,7 @@ from types import ModuleType
 from figures import ACCENT, FAINT, INK, MUTED, WASH, _text
 
 HERE = Path(__file__).resolve().parent
-TOPIC = HERE.parents[1] / "content" / "lesson-design" / "topic-3"
+TOPIC = HERE.parents[1] / "content" / "lesson-files" / "topic-3"
 LETTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
 _module: dict[str, ModuleType] = {}
