@@ -1,4 +1,4 @@
-import { readFileSync } from "node:fs";
+import { readFileSync, readdirSync } from "node:fs";
 import { resolve } from "node:path";
 import { describe, expect, it, vi } from "vitest";
 import {
@@ -7,10 +7,13 @@ import {
   lessonPublications,
   lessonSubtopics,
 } from "~/entities/lesson";
-import { lessonMedia } from "~/entities/lesson/content/information-models.media";
 import { topicCatalog } from "~/entities/topic-catalog";
 import { publicPaths } from "~/pages/site-discovery/public-paths";
-import { renderAuthoredLessonContent } from "./lesson-content-test-utils";
+import {
+  renderAuthoredLessonContent,
+  topicMedia,
+  wholeLesson,
+} from "./lesson-content-test-utils";
 
 vi.mock("~/shared/components/action-link", () => ({
   ActionLink: ({ children }: { children: React.ReactNode }) => (
@@ -18,12 +21,14 @@ vi.mock("~/shared/components/action-link", () => ({
   ),
 }));
 
-const lesson = informationModelsLesson;
+const lesson = await wholeLesson(informationModelsLesson);
+const lessonMedia = topicMedia("information-models");
 const ROUTE = "1-analiz-informacionnyh-modelej";
-const LESSON_FILE = resolve(
-  process.cwd(),
-  "src/entities/lesson/content/information-models.lesson.tsx",
-);
+const CONTENT = resolve(process.cwd(), "src/entities/lesson/content");
+const sources = readdirSync(CONTENT)
+  .filter((name) => /^information-models\..*tsx$/u.test(name))
+  .map((name) => readFileSync(resolve(CONTENT, name), "utf8"))
+  .join("\n");
 const subtopics = lessonSubtopics(lesson);
 const checkpoints = subtopics.flatMap(
   ({ checkpoint }) => checkpoint?.map(({ prompt }) => prompt) ?? [],
@@ -34,8 +39,8 @@ const authoredContent = [
   lesson.result,
 ];
 
-describe("task 1 information models lesson (Change 190)", () => {
-  it("has five core subtopics, one advanced and their self-checks", () => {
+describe("task 1 information models lesson (Change 197)", () => {
+  it("has four core subtopics, one advanced and their self-checks", () => {
     expect(lesson).toMatchObject({
       id: "information-models",
       routeSlug: ROUTE,
@@ -43,18 +48,22 @@ describe("task 1 information models lesson (Change 190)", () => {
       taskNumbers: [1],
       status: "published",
       masteryThreshold: 0.8,
+      accessTier: "free",
     });
     expect(subtopics.map(({ slug, level }) => [slug, level])).toEqual([
-      ["model-i-stepeni", "core"],
-      ["sosedi-i-opory", "core"],
-      ["kandidaty-i-proverka", "core"],
+      ["graf-i-tablica", "core"],
+      ["edinstvennye-stepeni", "core"],
+      ["odinakovye-stepeni", "core"],
       ["simmetriya-i-otvet", "core"],
-      ["dliny-i-format", "core"],
-      ["dopolnitelnye-usloviya-i-marshruty", "advanced"],
+      ["dopolnitelnye-usloviya", "advanced"],
     ]);
     expect(subtopics.map(({ checkpoint }) => checkpoint?.length ?? 0)).toEqual([
-      5, 5, 5, 4, 4, 5,
+      5, 5, 5, 5, 4,
     ]);
+    // tasks 1–11 are free as a whole (SPEC §2.2)
+    expect(
+      informationModelsLesson.subtopics?.map(({ access }) => access ?? "free"),
+    ).toEqual(["free", "free", "free", "free", "free"]);
   });
 
   it("is the lesson of the catalog topic of task 1", () => {
@@ -68,9 +77,9 @@ describe("task 1 information models lesson (Change 190)", () => {
       id: "information-models",
       routeSlug: ROUTE,
       status: "published",
-      subtopicCount: 6,
+      subtopicCount: 5,
     });
-    expect(publicPaths).toContain(`/ege/${ROUTE}/model-i-stepeni`);
+    expect(publicPaths).toContain(`/ege/${ROUTE}/graf-i-tablica`);
     expect(publicPaths).toContain(`/ege/${ROUTE}/praktika`);
   });
 
@@ -85,21 +94,23 @@ describe("task 1 information models lesson (Change 190)", () => {
     expect(container.querySelectorAll("aside, [role='note']")).toHaveLength(0);
   });
 
-  it("shows the scheme and the table of a self-check question", () => {
+  it("states the theme task of the 2027 demo and solves it in subtopic 4", () => {
+    const text = renderAuthoredLessonContent(authoredContent).textContent;
+    expect(text).toContain("проекта демоверсии ЕГЭ 2027 года");
+    expect(text).toContain("Ответ задачи темы: 26");
+  });
+
+  it("asks the self-check questions from the lesson itself", () => {
     const container = renderAuthoredLessonContent(checkpoints);
-    expect(container.querySelectorAll("table").length).toBeGreaterThan(2);
-    expect(
-      container.querySelectorAll("figure[data-lesson-diagram]").length,
-    ).toBeGreaterThan(0);
+    expect(container.querySelectorAll("table").length).toBeGreaterThan(0);
     expect(container.textContent).not.toContain("%%");
   });
 
   it("uses every generated figure, with the matching and assumption steppers", () => {
-    const source = readFileSync(LESSON_FILE, "utf8");
     for (const key of Object.keys(lessonMedia))
-      expect(source, key).toContain(`lessonMedia.${key}}`);
+      expect(sources, key).toContain(`lessonMedia.${key}}`);
     const media = Object.values(lessonMedia);
-    expect(media.filter((item) => item.kind === "stepper")).toHaveLength(2);
+    expect(media.filter((item) => item.kind === "stepper")).toHaveLength(3);
   });
 
   it("keeps spaces around inline code, links and emphasis", () => {

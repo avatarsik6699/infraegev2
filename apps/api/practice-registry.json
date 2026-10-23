@@ -1123,40 +1123,26 @@
       "id": "information-models",
       "sections": [
         "kak-ustroena-tema-1",
-        "informacionnaya-model",
-        "graf-dorog",
-        "doroga-i-marshrut",
-        "tablica-dorog",
-        "stepen-punkta",
-        "proverka-chisla-dorog",
-        "model-itogo",
-        "okruzhenie-punkta",
-        "profil-sosedej",
-        "opornyj-punkt",
+        "graf",
+        "tablica",
+        "stepen",
+        "graf-itogo",
+        "edinstvennaya-stepen",
+        "sosed-najdennogo",
+        "obshchij-sosed",
         "polnyj-primer",
-        "sosedi-itogo",
-        "pohozhie-punkty",
-        "sovpadenie-ne-dokazatelstvo",
-        "treugolnik-i-svyazi",
-        "obshchie-sosedi",
-        "predel-priznakov",
-        "proverka-predpolozheniya",
-        "kandidaty-itogo",
-        "neskolko-sootvetstvij",
+        "stepeni-itogo",
+        "stepeni-sosedej",
+        "svyazi-sosedej",
+        "primer-bez-edinstvennyh",
+        "odinakovye-itogo",
+        "kogda-nomer-ne-najti",
         "simmetriya",
-        "tri-situacii",
-        "odnoznachnyj-otvet",
+        "otvet-odinakov",
+        "forma-otveta",
         "simmetriya-itogo",
-        "dejstvie-po-voprosu",
-        "bukvy-v-nomera",
-        "dliny-kak-priznak",
-        "format-otveta",
-        "dliny-itogo",
-        "redkie-usloviya",
         "sravnenie-dlin",
-        "propushchennaya-doroga",
-        "kratchajshij-marshrut",
-        "dalnee-okruzhenie-i-mosty",
+        "kratchajshij-put",
         "dopolnitelnye-itogo"
       ],
       "kind": "topic",
@@ -1164,74 +1150,54 @@
       "course_id": null,
       "subtopics": [
         {
-          "slug": "model-i-stepeni",
+          "slug": "graf-i-tablica",
           "access": "free",
           "sections": [
             "kak-ustroena-tema-1",
-            "informacionnaya-model",
-            "graf-dorog",
-            "doroga-i-marshrut",
-            "tablica-dorog",
-            "stepen-punkta",
-            "proverka-chisla-dorog",
-            "model-itogo"
+            "graf",
+            "tablica",
+            "stepen",
+            "graf-itogo"
           ]
         },
         {
-          "slug": "sosedi-i-opory",
+          "slug": "edinstvennye-stepeni",
           "access": "free",
           "sections": [
-            "okruzhenie-punkta",
-            "profil-sosedej",
-            "opornyj-punkt",
+            "edinstvennaya-stepen",
+            "sosed-najdennogo",
+            "obshchij-sosed",
             "polnyj-primer",
-            "sosedi-itogo"
+            "stepeni-itogo"
           ]
         },
         {
-          "slug": "kandidaty-i-proverka",
+          "slug": "odinakovye-stepeni",
           "access": "free",
           "sections": [
-            "pohozhie-punkty",
-            "sovpadenie-ne-dokazatelstvo",
-            "treugolnik-i-svyazi",
-            "obshchie-sosedi",
-            "predel-priznakov",
-            "proverka-predpolozheniya",
-            "kandidaty-itogo"
+            "stepeni-sosedej",
+            "svyazi-sosedej",
+            "primer-bez-edinstvennyh",
+            "odinakovye-itogo"
           ]
         },
         {
           "slug": "simmetriya-i-otvet",
           "access": "free",
           "sections": [
-            "neskolko-sootvetstvij",
+            "kogda-nomer-ne-najti",
             "simmetriya",
-            "tri-situacii",
-            "odnoznachnyj-otvet",
+            "otvet-odinakov",
+            "forma-otveta",
             "simmetriya-itogo"
           ]
         },
         {
-          "slug": "dliny-i-format",
+          "slug": "dopolnitelnye-usloviya",
           "access": "free",
           "sections": [
-            "dejstvie-po-voprosu",
-            "bukvy-v-nomera",
-            "dliny-kak-priznak",
-            "format-otveta",
-            "dliny-itogo"
-          ]
-        },
-        {
-          "slug": "dopolnitelnye-usloviya-i-marshruty",
-          "access": "free",
-          "sections": [
-            "redkie-usloviya",
             "sravnenie-dlin",
-            "propushchennaya-doroga",
-            "kratchajshij-marshrut",
-            "dalnee-okruzhenie-i-mosty",
+            "kratchajshij-put",
             "dopolnitelnye-itogo"
           ]
         }

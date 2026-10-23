@@ -29,7 +29,7 @@ const subtopicFacts: Readonly<
   "divisors-and-masks": { count: 6, first: "perebor-i-proverki" },
   "array-processing": { count: 7, first: "zapisi-i-rejting" },
   "data-analysis": { count: 6, first: "tochki-i-rasstoyaniya" },
-  "information-models": { count: 6, first: "model-i-stepeni" },
+  "information-models": { count: 5, first: "graf-i-tablica" },
   "truth-tables": { count: 4, first: "logicheskie-operacii" },
   "simple-algorithms": { count: 6, first: "sostoyanie-i-komandy" },
   executors: { count: 6, first: "lenta-i-komanda" },

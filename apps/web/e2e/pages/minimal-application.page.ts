@@ -9,7 +9,7 @@ import { expectNoHorizontalOverflow } from "./layout.assertions";
 
 /** First subtopic per published topic; mirrors `subtopicFacts` in `topic-catalog.ts`. */
 const firstTopicSubtopicByRouteSlug: Readonly<Record<string, string>> = {
-  "1-analiz-informacionnyh-modelej": "model-i-stepeni",
+  "1-analiz-informacionnyh-modelej": "graf-i-tablica",
   "2-tablicy-istinnosti": "logicheskie-operacii",
   "3-svyazannye-tablicy": "tablicy-i-klyuchi",
   "4-kodirovanie-i-uslovie-fano": "kod-i-uslovie-fano",
