@@ -302,7 +302,9 @@ def answers() -> dict[str, str]:
 
 
 # book tasks of the topic's final page, beyond the four subtopics
-FINAL = {"task-3-4-09", "task-3-5-09", "task-3-6-07", "task-3-6-08", "task-3-6-09"}
+# T257: «Рост запаса гречневой крупы» (8-02) and «Магазины с выручкой больше 20 000» (6-09)
+# moved to their sections; the final page keeps 8 mixed tasks
+FINAL = {"task-3-4-09", "task-3-5-09", "task-3-6-07", "task-3-6-08"}
 
 
 def test_every_answer_matches_independent_recomputation(answers: dict[str, str]) -> None:
@@ -312,7 +314,9 @@ def test_every_answer_matches_independent_recomputation(answers: dict[str, str])
     for task_id, task in tasks.items():
         assert task.checker.answer_variants[0] == answers[task_id], task_id
         assert task.exam_numbers == [3] and not task.catalog_visible and not task.archived
-        on_final_page = task_id.startswith("task-3-8-") or task_id in FINAL
+        on_final_page = (
+            task_id.startswith("task-3-8-") and task_id != "task-3-8-02"
+        ) or task_id in FINAL
         assert bool(task.theory_links) != on_final_page, task_id
         assert task.lessons[0].counts_toward_mastery, task_id
 

@@ -31,7 +31,8 @@ RD = ((0, 1), (1, 0))
 LD = ((0, -1), (1, 0))
 DIAG = ((0, 1), (1, 0), (1, 1))
 Cell = tuple[int, int]
-FINAL = {"task-18-9-02", "task-18-9-05"}
+# T257: three full tasks of subtopics 3–5 joined the final page
+FINAL = {"task-18-3-07", "task-18-4-07", "task-18-5-06", "task-18-9-02", "task-18-9-05"}
 ADVANCED = {
     "task-18-5-05",
     "task-18-5-07",

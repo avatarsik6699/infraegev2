@@ -47,7 +47,7 @@ RETIRED = [f"task-24-{number:02d}" for number in range(1, 9)] + [
         "9-02",
     )
 ]
-FINAL_PAGE = {"task-24-9-01", "task-24-9-03", "task-24-9-04", "task-24-9-05"}
+FINAL_PAGE = {"task-24-9-01", "task-24-9-03", "task-24-9-04", "task-24-9-05", "task-24-10-08"}
 VOWELS = "AEIOUY"
 LETTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 NUMBER = "(?:0|[1-9][0-9]*)"

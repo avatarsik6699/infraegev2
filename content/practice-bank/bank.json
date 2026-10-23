@@ -117211,13 +117211,7 @@
             "material_id": "graph-analysis"
           }
         ],
-        "theory_links": [
-          {
-            "label": "Теория",
-            "section": "chislo-putej",
-            "material_id": "graph-analysis"
-          }
-        ],
+        "theory_links": [],
         "catalog_visible": false,
         "archived": false,
         "sources": [
@@ -199503,13 +199497,7 @@
             "material_id": "spreadsheet-optimization"
           }
         ],
-        "theory_links": [
-          {
-            "label": "Теория",
-            "section": "steny-v-fajle",
-            "material_id": "spreadsheet-optimization"
-          }
-        ],
+        "theory_links": [],
         "catalog_visible": false,
         "archived": false,
         "sources": [
@@ -199792,13 +199780,7 @@
             "material_id": "spreadsheet-optimization"
           }
         ],
-        "theory_links": [
-          {
-            "label": "Теория",
-            "section": "nedostizhimye",
-            "material_id": "spreadsheet-optimization"
-          }
-        ],
+        "theory_links": [],
         "catalog_visible": false,
         "archived": false,
         "sources": [
@@ -200227,13 +200209,7 @@
             "material_id": "spreadsheet-optimization"
           }
         ],
-        "theory_links": [
-          {
-            "label": "Теория",
-            "section": "drugie-napravleniya",
-            "material_id": "spreadsheet-optimization"
-          }
-        ],
+        "theory_links": [],
         "catalog_visible": false,
         "archived": false,
         "sources": [
@@ -208989,7 +208965,13 @@
             "material_id": "relational-databases"
           }
         ],
-        "theory_links": [],
+        "theory_links": [
+          {
+            "label": "Теория",
+            "section": "itog-obekta",
+            "material_id": "relational-databases"
+          }
+        ],
         "catalog_visible": false,
         "archived": false,
         "sources": [
@@ -209551,7 +209533,13 @@
             "material_id": "relational-databases"
           }
         ],
-        "theory_links": [],
+        "theory_links": [
+          {
+            "label": "Теория",
+            "section": "izmenenie-zapasa",
+            "material_id": "relational-databases"
+          }
+        ],
         "catalog_visible": false,
         "archived": false,
         "sources": [
@@ -823833,13 +823821,7 @@
             "material_id": "string-processing"
           }
         ],
-        "theory_links": [
-          {
-            "label": "Теория",
-            "section": "chisla-v-stroke",
-            "material_id": "string-processing"
-          }
-        ],
+        "theory_links": [],
         "catalog_visible": false,
         "archived": false,
         "sources": [
