@@ -22,7 +22,11 @@ for (const [kind, publications] of [
   ["course", courseLessonPublications],
 ]) {
   for (const publication of publications) {
-    const source = lessonSource(kind, publication.id);
+    // T254: the sections of «Практика и итог» (from `finalLead` on, after the
+    // theory) are not theory anchors: tasks never link to them.
+    const source = lessonSource(kind, publication.id).split(
+      /\n {2}finalLead:/,
+    )[0];
     // Current authored shape is literal id immediately before literal navLabel. A shape change
     // fails closed and requires updating this extractor; checkpoints are not section anchors.
     const sections = [

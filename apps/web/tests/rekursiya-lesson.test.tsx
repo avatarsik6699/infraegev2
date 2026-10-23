@@ -23,7 +23,7 @@ vi.mock("~/shared/components/action-link", () => ({
 const lesson = rekursiyaLesson;
 const authoredContent = [
   ...lesson.theory.map(({ explanation }) => explanation),
-  lesson.examFocus,
+  ...(lesson.finalSections ?? []).map(({ explanation }) => explanation),
   lesson.result,
 ];
 
@@ -99,7 +99,7 @@ describe("task 16 recursion lesson (Change 197)", () => {
     expect(subtopics.map(({ checkpoint }) => checkpoint?.length ?? 0)).toEqual([
       5, 5, 5, 5, 5, 4,
     ]);
-    expect(lesson.examFocus).toBeDefined();
+    expect(lesson.finalLead).toBeTruthy();
     expect(lesson.result).toBeDefined();
   });
 
@@ -185,7 +185,7 @@ describe("task 16 recursion lesson (Change 197)", () => {
     expect(
       container.querySelectorAll("figure[data-lesson-diagram]"),
     ).toHaveLength(diagrams.length);
-    expect(media.filter((item) => item.kind === "stepper")).toHaveLength(1);
+    expect(media.filter((item) => item.kind === "stepper")).toHaveLength(2);
     expect(media.filter((item) => item.kind === "run")).toHaveLength(1);
     expect(container.querySelectorAll("img, video")).toHaveLength(0);
     expect(container.querySelectorAll("[data-topic-cheat-sheet]")).toHaveLength(

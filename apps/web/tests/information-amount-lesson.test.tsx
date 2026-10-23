@@ -24,7 +24,7 @@ vi.mock("~/shared/components/action-link", () => ({
 const lesson = informationAmountLesson;
 const authoredContent = [
   ...lesson.theory.map(({ explanation }) => explanation),
-  lesson.examFocus,
+  ...(lesson.finalSections ?? []).map(({ explanation }) => explanation),
   lesson.result,
 ];
 
@@ -113,7 +113,7 @@ describe("task 11 passwords lesson (Change 184)", () => {
     expect(subtopics.map(({ checkpoint }) => checkpoint?.length ?? 0)).toEqual([
       5, 5, 5, 5, 5, 4,
     ]);
-    expect(lesson.examFocus).toBeDefined();
+    expect(lesson.finalLead).toBeTruthy();
     expect(lesson.result).toBeDefined();
   });
 

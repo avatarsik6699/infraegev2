@@ -30,7 +30,7 @@ const lessonMedia = topicMedia("graph-analysis");
 const FILES = resolve(process.cwd(), "../..", "content/lesson-files/topic-23");
 const authoredContent = [
   ...lesson.theory.map(({ explanation }) => explanation),
-  lesson.examFocus,
+  ...(lesson.finalSections ?? []).map(({ explanation }) => explanation),
   lesson.result,
 ];
 
@@ -106,7 +106,7 @@ describe("task 23 graph analysis lesson", () => {
     expect(subtopics.map(({ checkpoint }) => checkpoint?.length ?? 0)).toEqual([
       5, 5, 5, 5, 5, 4,
     ]);
-    expect(lesson.examFocus).toBeDefined();
+    expect(lesson.finalLead).toBeTruthy();
     expect(lesson.result).toBeDefined();
   });
 
@@ -197,8 +197,8 @@ describe("task 23 graph analysis lesson", () => {
     expect(
       container.querySelectorAll("figure[data-lesson-stepper]"),
     ).toHaveLength(steppers.length);
-    expect(diagrams).toHaveLength(10);
-    expect(steppers).toHaveLength(3);
+    expect(diagrams).toHaveLength(11);
+    expect(steppers).toHaveLength(4);
     expect(container.querySelectorAll("img")).toHaveLength(0);
     expect(container.querySelectorAll("[data-path-builder]")).toHaveLength(1);
     expect(container.querySelectorAll("[data-topic-cheat-sheet]")).toHaveLength(

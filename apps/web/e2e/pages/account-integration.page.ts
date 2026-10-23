@@ -4,7 +4,7 @@ export class AccountIntegrationPage {
   constructor(private readonly page: Page) {}
 
   async expectGuestCheckStaysTransient(): Promise<void> {
-    await this.page.goto("/ege/16-rekursiya/praktika");
+    await this.page.goto("/ege/16-rekursiya/funktsiya-cherez-sebya");
     const panel = this.page.locator('[data-practice-task="task-16-1-01"]');
     const answer = panel.getByRole("textbox", { name: "Ответ" });
     await expect(answer).toBeEnabled();
@@ -50,7 +50,7 @@ export class AccountIntegrationPage {
   }
 
   async expectTopicProgressSavedAndCourseContextSeparate(): Promise<void> {
-    await this.page.goto("/ege/16-rekursiya/praktika");
+    await this.page.goto("/ege/16-rekursiya/funktsiya-cherez-sebya");
     const panel = this.page.locator('[data-practice-task="task-16-1-01"]');
     const answer = panel.getByRole("textbox", { name: "Ответ" });
     await expect(answer).toBeEnabled();

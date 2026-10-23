@@ -4,7 +4,7 @@ export class PracticeCutoverPage {
   constructor(private readonly page: Page) {}
 
   async openTopic(): Promise<void> {
-    await this.page.goto("/ege/16-rekursiya/praktika");
+    await this.page.goto("/ege/16-rekursiya/funktsiya-cherez-sebya");
     const dismiss = this.page.getByRole("button", {
       name: "Не сейчас",
       exact: true,
@@ -73,7 +73,8 @@ export class PracticeCutoverPage {
         exact: false,
       }),
     ).toBeVisible();
-    await expect(this.page.locator("[data-practice-task]")).toHaveCount(55);
+    // T254: the tasks of subtopic 1 of topic 16; the final page keeps the mixed ones
+    await expect(this.page.locator("[data-practice-task]")).toHaveCount(12);
     await expect(
       this.page.getByRole("textbox", { name: "Ответ" }).first(),
     ).toBeDisabled();

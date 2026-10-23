@@ -29,7 +29,7 @@ const lesson = await wholeLesson(branchingAndEnumerationLesson);
 const lessonMedia = topicMedia("branching-and-enumeration");
 const authoredContent = [
   ...lesson.theory.map(({ explanation }) => explanation),
-  lesson.examFocus,
+  ...(lesson.finalSections ?? []).map(({ explanation }) => explanation),
   lesson.result,
 ];
 
@@ -119,7 +119,7 @@ describe("task 13 program counting lesson (Change 190)", () => {
     expect(subtopics.map(({ checkpoint }) => checkpoint?.length ?? 0)).toEqual([
       5, 5, 5, 5, 5, 4, 4,
     ]);
-    expect(lesson.examFocus).toBeDefined();
+    expect(lesson.finalLead).toBeTruthy();
     expect(lesson.result).toBeDefined();
   });
 
@@ -230,7 +230,7 @@ describe("task 13 program counting lesson (Change 190)", () => {
     expect(
       container.querySelectorAll("figure[data-lesson-diagram]"),
     ).toHaveLength(diagrams.length);
-    expect(media.filter((item) => item.kind === "stepper")).toHaveLength(1);
+    expect(media.filter((item) => item.kind === "stepper")).toHaveLength(2);
     expect(container.querySelectorAll("img, video")).toHaveLength(0);
     expect(container.querySelectorAll("[data-topic-cheat-sheet]")).toHaveLength(
       1,

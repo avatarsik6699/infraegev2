@@ -4,6 +4,7 @@ import { Typography } from "~/shared/components/typography";
 import {
   CodeRunner,
   LessonDiagram,
+  LessonStepper,
   LessonSummary,
   LessonTable,
   LessonTabs,
@@ -16,6 +17,7 @@ import { networksLessonPublication } from "~/shared/config/lesson-publication.mj
 import { defineLesson } from "../lib/define-lesson";
 import { lessonMedia } from "./networks.media";
 import { PythonTerm } from "./python-term";
+import { FinalMistake } from "./final-mistake";
 import { SubtopicLink } from "./subtopic-link";
 
 const THEME_TASK = (
@@ -27,6 +29,13 @@ const THEME_TASK = (
 );
 
 const R = "10-ip-adresa-i-maski";
+
+/** A subtopic of this topic, linked from the final page. */
+const Sub: React.FC<{ slug: string; children: React.ReactNode }> = (props) => (
+  <SubtopicLink routeSlug="10-ip-adresa-i-maski" subtopic={props.slug}>
+    {props.children}
+  </SubtopicLink>
+);
 
 export const networksLesson = defineLesson({
   ...networksLessonPublication,
@@ -2018,219 +2027,418 @@ export const networksLesson = defineLesson({
       ),
     },
   ],
-  examFocus: (
-    <>
-      <Typography.Text>
-        <strong>
-          Найденный ответ подставляют обратно: адрес сети должен получиться из
-          адреса узла и маски, узел — лежать между краями сети, маска — не иметь
-          единиц после нуля.
-        </strong>{" "}
-        Выбери ошибку, чтобы увидеть, как себя проверить:
-      </Typography.Text>
-      <VariantPicker
-        label={"Ошибка и как себя проверить"}
-        variants={[
-          {
-            label: "три октета",
-            value: <>считают, что сеть — всегда первые три октета</>,
-            note: <>число сетевых битов задаёт маска</>,
-          },
-          {
-            label: "/22",
-            value: <>в /22 свободны 22 бита</>,
-            note: <>свободны 32 − 22 = 10</>,
-          },
-          {
-            label: ".0 и .255",
-            value: <>любой адрес на .0 — адрес сети</>,
-            note: <>нулями должна быть вся часть узла</>,
-          },
-          {
-            label: "минус два",
-            value: <>после любого подсчёта вычли два</>,
-            note: <>проверь, подходят ли края сети под условие</>,
-          },
-          {
-            label: "совпавшие нули",
-            value: <>совпали биты — поставили в маске 1</>,
-            note: <>два нуля маску не определяют: L ≤ p ≤ C</>,
-          },
-          {
-            label: "первая маска",
-            value: <>ответили первой найденной маской</>,
-            note: <>вопрос решает: min, max или количество</>,
-          },
-          {
-            label: "узел — край сети",
-            value: <>взяли маску, при которой узел стал адресом сети</>,
-            note: <>проверь края сети при самой длинной маске</>,
-          },
-          {
-            label: "номер узла",
-            value: <>прибавили единицу к номеру</>,
-            note: <>номер — расстояние I − N, у адреса сети номер 0</>,
-          },
-          {
-            label: "bin",
-            value: <>считали нули по bin(x)</>,
-            note: (
+  finalLead:
+    "Вся тема на одной странице: как решилась задача темы, главное из подтем, порядок решения и частые ошибки.",
+  finalSections: [
+    {
+      id: "odna-zadacha",
+      navLabel: "Одна задача — вся тема",
+      explanation: (
+        <>
+          <Typography.Text>
+            <strong>
+              Задача темы — наибольший адрес компьютера в сети узла
+              172.20.77.140 с маской 255.255.252.0 — прошла через подтемы, и
+              каждая добавляла к ней новый вопрос.
+            </strong>{" "}
+            Пролистай черновик: точками отмечены строки, которых не было после
+            предыдущей подтемы.
+          </Typography.Text>
+          <LessonStepper
+            {...lessonMedia.finalTask}
+            label={"Задача темы от подтемы 1 до подтемы 5"}
+          />
+          <Typography.Text>
+            Сеть одна и та же — менялся вопрос: края, количество адресов, номер
+            узла, адреса с нужным числом единиц. Подтемы 4 и 6 решают обратную
+            задачу — ищут маску, когда её не дали.
+          </Typography.Text>
+        </>
+      ),
+    },
+    {
+      id: "karta-temy",
+      navLabel: "Карта темы",
+      explanation: (
+        <>
+          <Typography.Text>
+            <strong>
+              Каждая подтема дала несколько правил, и любое решение собирается
+              из них.
+            </strong>{" "}
+            Сверху — путь от условия к ответу, ниже — по блоку на подтему.
+            Заголовок блока ведёт на подтему.
+          </Typography.Text>
+          <TopicCheatSheet
+            label={"Задание 10 на одной схеме"}
+            flow={[
+              { name: "Граница", note: "длина маски p: дана или её ищут" },
+              { name: "Сеть", note: "адрес сети и широковещательный" },
+              { name: "Вопрос", note: "края, количество, маска или биты" },
+            ]}
+            groups={[
+              {
+                number: 1,
+                title: <Sub slug="adres-i-maska">IP-адрес и маска</Sub>,
+                rows: [
+                  { key: <>32 бита</>, note: <>4 октета по 8 битов</> },
+                  {
+                    key: <>/p</>,
+                    note: <>p единиц маски, узлу h = 32 − p битов</>,
+                  },
+                  {
+                    key: <>октеты маски</>,
+                    note: <>0, 128, 192, 224, 240, 248, 252, 254, 255</>,
+                  },
+                ],
+              },
+              {
+                number: 2,
+                title: <Sub slug="adres-seti">Адрес сети и границы сети</Sub>,
+                rows: [
+                  {
+                    key: <>адрес И маска</>,
+                    note: <>адрес сети: часть узла — нули</>,
+                  },
+                  { key: <>256 − m</>, note: <>размер блока в октете</> },
+                  {
+                    key: <Notation>{"broadcast_address - 1"}</Notation>,
+                    note: <>наибольший адрес компьютера</>,
+                  },
+                ],
+              },
+              {
+                number: 3,
+                title: (
+                  <Sub slug="kolichestvo-i-nomer-uzla">
+                    Количество адресов и номер узла
+                  </Sub>
+                ),
+                rows: [
+                  {
+                    key: <>2ʰ и 2ʰ − 2</>,
+                    note: <>все адреса и адреса компьютеров</>,
+                  },
+                  {
+                    key: <>I − N</>,
+                    note: <>номер узла; у адреса сети номер 0</>,
+                  },
+                ],
+              },
+              {
+                number: 4,
+                title: <Sub slug="maska-po-adresu-seti">Неизвестная маска</Sub>,
+                rows: [
+                  {
+                    key: <>L ≤ p ≤ C</>,
+                    note: <>все маски, дающие этот адрес сети</>,
+                  },
+                  {
+                    key: <>два узла</>,
+                    note: <>p не больше длины общего начала</>,
+                  },
+                  {
+                    key: <>края</>,
+                    note: <>узел не может быть адресом сети</>,
+                  },
+                ],
+              },
+              {
+                number: 5,
+                title: (
+                  <Sub slug="dvoichnaya-zapis-adresov">
+                    Адреса с условием на двоичную запись
+                  </Sub>
+                ),
+                rows: [
+                  {
+                    key: <>биты сети</>,
+                    note: <>одинаковы у всех адресов — посчитать раз</>,
+                  },
+                  {
+                    key: <Notation>{"f'{address:b}'"}</Notation>,
+                    note: <>все 32 бита адреса</>,
+                  },
+                  {
+                    key: <Notation>{"net.hosts()"}</Notation>,
+                    note: <>только адреса компьютеров</>,
+                  },
+                ],
+              },
+              {
+                number: 6,
+                title: (
+                  <Sub slug="maska-po-usloviyu">
+                    Маска по условию и сочетания
+                  </Sub>
+                ),
+                level: "дополнительный урок",
+                rows: [
+                  {
+                    key: <>C(h, k − c)</>,
+                    note: <>адресов с k единицами</>,
+                  },
+                  {
+                    key: <>33 длины</>,
+                    note: <>проверить условие на каждой маске</>,
+                  },
+                ],
+              },
+            ]}
+            caption={
               <>
-                нужны все 32 бита: <Notation>{"f'{address:b}'"}</Notation>
+                Карта темы: путь к ответу сверху и главное из каждой подтемы.
+                Номер блока — номер подтемы.
               </>
-            ),
-          },
-        ]}
-      />
-    </>
-  ),
+            }
+          />
+        </>
+      ),
+    },
+    {
+      id: "kak-reshat",
+      navLabel: "Как решать",
+      explanation: (
+        <>
+          <Typography.Text>
+            <strong>
+              Любое задание 10 решается одним порядком из пяти шагов.
+            </strong>{" "}
+            Каждому шагу ты уже учился — под ним номера подтем:
+          </Typography.Text>
+          <LessonDiagram
+            {...lessonMedia.finalCycle}
+            caption={
+              <>
+                Главный шаг — граница сети, длина маски p: её дают в условии или
+                ищут, а дальше сеть строится по битам. Если проверка не сошлась,
+                пересчитывают границу.
+              </>
+            }
+          />
+          <Typography.Text>
+            Проверка — подстановка обратно: адрес сети получается из адреса узла
+            и маски, узел лежит между краями сети, в маске нет единиц после
+            нуля.
+          </Typography.Text>
+        </>
+      ),
+    },
+    {
+      id: "chastye-oshibki",
+      navLabel: "Частые ошибки",
+      explanation: (
+        <>
+          <Typography.Text>
+            <strong>
+              Восемь ошибок встречаются чаще других, и каждую ловит один вопрос
+              к себе.
+            </strong>{" "}
+            Выбери ошибку — увидишь, как её исправить, и вопрос, который её
+            ловит:
+          </Typography.Text>
+          <VariantPicker
+            label={"Частые ошибки и вопросы, которые их ловят"}
+            variants={[
+              {
+                label: "три октета",
+                value: (
+                  <FinalMistake
+                    wrong="сеть — всегда первые три октета"
+                    right="число битов сети задаёт маска"
+                    question="сколько единиц в маске?"
+                  />
+                ),
+                note: <Sub slug="adres-i-maska">подтема 1</Sub>,
+              },
+              {
+                label: "/22",
+                value: (
+                  <FinalMistake
+                    wrong="в /22 свободны 22 бита"
+                    right="свободны 32 − 22 = 10"
+                    question="это биты сети или биты узла?"
+                  />
+                ),
+                note: <Sub slug="adres-i-maska">подтема 1</Sub>,
+              },
+              {
+                label: ".0 и .255",
+                value: (
+                  <FinalMistake
+                    wrong="любой адрес на .0 — адрес сети"
+                    right="нулями должна быть вся часть узла"
+                    question="сколько битов у узла в этой сети?"
+                  />
+                ),
+                note: <Sub slug="adres-seti">подтема 2</Sub>,
+              },
+              {
+                label: "минус два",
+                value: (
+                  <FinalMistake
+                    wrong="после любого подсчёта вычли 2"
+                    right="края вычитают, только если они не подходят"
+                    question="подходят ли края сети под условие?"
+                  />
+                ),
+                note: <Sub slug="kolichestvo-i-nomer-uzla">подтема 3</Sub>,
+              },
+              {
+                label: "номер узла",
+                value: (
+                  <FinalMistake
+                    wrong="номер узла — I − N + 1"
+                    right="номер — расстояние I − N"
+                    question="какой номер у самого адреса сети?"
+                  />
+                ),
+                note: <Sub slug="kolichestvo-i-nomer-uzla">подтема 3</Sub>,
+              },
+              {
+                label: "совпавшие нули",
+                value: (
+                  <FinalMistake
+                    wrong="бит совпал — в маске поставили 1"
+                    right="два нуля маску не определяют: L ≤ p ≤ C"
+                    question="какие длины маски ещё подходят?"
+                  />
+                ),
+                note: <Sub slug="maska-po-adresu-seti">подтема 4</Sub>,
+              },
+              {
+                label: "первая маска",
+                value: (
+                  <FinalMistake
+                    wrong="ответили первой найденной маской"
+                    right="вопрос решает: наименьшая, наибольшая или сколько"
+                    question="что спрашивают о масках?"
+                  />
+                ),
+                note: <Sub slug="maska-po-adresu-seti">подтема 4</Sub>,
+              },
+              {
+                label: "bin",
+                value: (
+                  <FinalMistake
+                    wrong={<Notation>{"bin(x)"}</Notation>}
+                    right={<Notation>{"f'{address:b}'"}</Notation>}
+                    question="все ли 32 бита в записи?"
+                  />
+                ),
+                note: <Sub slug="dvoichnaya-zapis-adresov">подтема 5</Sub>,
+              },
+            ]}
+          />
+        </>
+      ),
+    },
+  ],
+  checkpoint: [
+    {
+      id: "t1",
+      prompt: (
+        <>
+          <Typography.Text>
+            Маска 255.255.255.224. Сколько битов у части узла и сколько адресов
+            в сети?
+          </Typography.Text>
+        </>
+      ),
+      reveal: (
+        <>
+          <Typography.Text>
+            224 = 11100000: маска /27, узлу 5 битов, адресов 2⁵ = 32.
+          </Typography.Text>
+        </>
+      ),
+    },
+    {
+      id: "t2",
+      prompt: (
+        <>
+          <Typography.Text>
+            Узел 10.0.5.200, маска 255.255.255.192. Какой адрес сети?
+          </Typography.Text>
+        </>
+      ),
+      reveal: (
+        <>
+          <Typography.Text>
+            Блок 256 − 192 = 64: 200 лежит в блоке 192–255, адрес сети
+            10.0.5.192.
+          </Typography.Text>
+        </>
+      ),
+    },
+    {
+      id: "t3",
+      prompt: (
+        <>
+          <Typography.Text>
+            Почему наибольший адрес компьютера на единицу меньше
+            широковещательного?
+          </Typography.Text>
+        </>
+      ),
+      reveal: (
+        <>
+          <Typography.Text>
+            Широковещательный адрес — часть узла из одних единиц — компьютерам
+            не назначают, как и адрес сети.
+          </Typography.Text>
+        </>
+      ),
+    },
+    {
+      id: "t4",
+      prompt: (
+        <>
+          <Typography.Text>
+            Узлы 66.12.250.3 и 66.12.236.190 в одной сети. Чем ограничена длина
+            маски?
+          </Typography.Text>
+        </>
+      ),
+      reveal: (
+        <>
+          <Typography.Text>
+            Длиной общего начала адресов: 250 = 11111010, 236 = 11101100 —
+            совпадают три первых бита третьего октета, поэтому p ≤ 19.
+          </Typography.Text>
+        </>
+      ),
+    },
+  ],
   result: (
     <>
       <Typography.Text>
-        <strong>
-          Любая задача задания 10 сводится к одной границе — длине маски p: её
-          дают в условии или ищут, а дальше сеть строится вручную по нужному
-          октету или программой с модулем ipaddress.
-        </strong>
+        Тема пройдена: задача темы решена от битов маски до ответа 525. Вот что
+        взять с собой.
       </Typography.Text>
-      <Typography.Text>
-        Всё главное из подтем собрано на одной схеме. Номер раздела ведёт на его
-        подтему.
-      </Typography.Text>
-      <TopicCheatSheet
-        label={"Задание 10 на одной схеме"}
-        flow={[
-          { name: "Граница", note: "длина маски p: дана или её ищут" },
-          { name: "Сеть", note: "ip_network(f'{ip}/{p}', strict=False)" },
-          { name: "Вопрос", note: "края, количество, маска или биты адресов" },
-        ]}
-        groups={[
+      <LessonSummary
+        items={[
           {
-            number: 1,
-            title: (
-              <SubtopicLink
-                routeSlug="10-ip-adresa-i-maski"
-                subtopic="adres-i-maska"
-              >
-                IP-адрес и маска
-              </SubtopicLink>
-            ),
-            rows: [
-              { key: <>32 бита</>, note: <>4 октета по 8 битов</> },
-              { key: <>/p</>, note: <>p единиц маски, h = 32 − p</> },
-              {
-                key: <>октеты маски</>,
-                note: <>0, 128, 192, …, 252, 254, 255</>,
-              },
-              {
-                key: <Notation>{"f'{address:b}'"}</Notation>,
-                note: <>32 бита адреса</>,
-              },
-            ],
+            key: "Порядок",
+            note: <>Биты, граница, сеть, вопрос, проверка.</>,
           },
           {
-            number: 2,
-            title: (
-              <SubtopicLink
-                routeSlug="10-ip-adresa-i-maski"
-                subtopic="adres-seti"
-              >
-                Адрес сети и границы
-              </SubtopicLink>
-            ),
-            rows: [
-              { key: <>адрес И маска</>, note: <>адрес сети</> },
-              { key: <>256 − m</>, note: <>размер блока</> },
-              {
-                key: <Notation>{"broadcast_address - 1"}</Notation>,
-                note: <>наибольший адрес компьютера</>,
-              },
-              { key: <>форма</>, note: <>сумма октетов, без точек, буквы</> },
-            ],
+            key: "Граница",
+            note: <>p битов сети, h = 32 − p битов узла.</>,
           },
           {
-            number: 3,
-            title: (
-              <SubtopicLink
-                routeSlug="10-ip-adresa-i-maski"
-                subtopic="kolichestvo-i-nomer-uzla"
-              >
-                Количество и номер
-              </SubtopicLink>
-            ),
-            rows: [
-              { key: <>2ʰ и 2ʰ − 2</>, note: <>все адреса и компьютеры</> },
-              { key: <>I − N</>, note: <>номер узла</> },
-            ],
+            key: "Края",
+            note: <>Часть узла из нулей и из единиц — не компьютерам.</>,
           },
           {
-            number: 4,
-            title: (
-              <SubtopicLink
-                routeSlug="10-ip-adresa-i-maski"
-                subtopic="maska-po-adresu-seti"
-              >
-                Неизвестная маска
-              </SubtopicLink>
-            ),
-            rows: [
-              { key: <>L ≤ p ≤ C</>, note: <>маски по адресу сети</> },
-              { key: <>p ≤ C</>, note: <>два узла в одной сети</> },
-              { key: <>края</>, note: <>узел не адрес сети</> },
-            ],
+            key: "Маска по адресам",
+            note: <>L ≤ p ≤ C — вопрос решает, какую взять.</>,
           },
           {
-            number: 5,
-            title: (
-              <SubtopicLink
-                routeSlug="10-ip-adresa-i-maski"
-                subtopic="dvoichnaya-zapis-adresov"
-              >
-                Двоичная запись
-              </SubtopicLink>
-            ),
-            rows: [
-              { key: <>фиксированные</>, note: <>единицы сети — у всех</> },
-              {
-                key: <Notation>{"net.hosts()"}</Notation>,
-                note: <>только компьютеры</>,
-              },
-              { key: <>срезы</>, note: <>часть адреса</> },
-            ],
-          },
-          {
-            number: 6,
-            title: (
-              <SubtopicLink
-                routeSlug="10-ip-adresa-i-maski"
-                subtopic="maska-po-usloviyu"
-              >
-                Маска по условию
-              </SubtopicLink>
-            ),
-            level: "дополнительный урок",
-            rows: [
-              { key: <>C(h, k − c)</>, note: <>адреса с k единицами</> },
-              { key: <>33 длины</>, note: <>проверить условие на каждой</> },
-            ],
+            key: "Задача темы",
+            note: <>172.20.79.254: 172 + 20 + 79 + 254 = 525.</>,
           },
         ]}
-        sections={[
-          {
-            title: "Три вопроса к ответу",
-            steps: [
-              <>Что спрашивают: адрес, количество, маску или биты?</>,
-              <>Нужны все адреса сети или только адреса компьютеров?</>,
-              <>В какой форме записать ответ?</>,
-            ],
-          },
-        ]}
-        caption={
-          <>
-            Шпаргалка темы: порядок решения и главное из каждой подтемы. Номер
-            раздела ведёт на подтему.
-          </>
-        }
       />
     </>
   ),

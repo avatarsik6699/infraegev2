@@ -1,193 +1,406 @@
 // Paid content (Change 192): served only after an access check; never
 // import it statically.
+import { Notation } from "~/shared/components/notation";
 import { Typography } from "~/shared/components/typography";
 import {
+  LessonDiagram,
+  LessonStepper,
+  LessonSummary,
   TopicCheatSheet,
   VariantPicker,
 } from "~/shared/components/learning-content";
 import type { LessonContent } from "../lib/define-lesson.types";
-import { R } from "./array-processing.theme";
+import { FinalMistake } from "./final-mistake";
+import { lessonMedia } from "./array-processing.paid.praktika.media";
 import { SubtopicLink } from "./subtopic-link";
 
+/** A subtopic of this topic, linked from the final page. */
+const Sub: React.FC<{ slug: string; children: React.ReactNode }> = (props) => (
+  <SubtopicLink routeSlug="26-sortirovka-i-otbor" subtopic={props.slug}>
+    {props.children}
+  </SubtopicLink>
+);
+
 const content: LessonContent.PaidPracticeContent = {
-  examFocus: (
-    <>
-      <Typography.Text>
-        <strong>
-          Прежде чем запускать программу на файле, прогони её на пяти-шести
-          объектах, где ответ виден на бумаге: так мы проверили камеру хранения
-          на двух ячейках, прежде чем решать задачу темы.
-        </strong>{" "}
-        Выбери ошибку, чтобы увидеть, как её поймать:
-      </Typography.Text>
-      <VariantPicker
-        label={"Ошибка и как себя проверить"}
-        variants={[
-          {
-            label: "заголовок как данные",
-            value: <>Количество объектов прочитано как ещё один объект</>,
-            note: <>сравни длину списка с N из файла</>,
-          },
-          {
-            label: "поля по отдельности",
-            value: <>Начала и окончания отсортированы раздельно</>,
-            note: <>проверь, что каждая запись есть в исходных данных</>,
-          },
-          {
-            label: "break без сортировки",
-            value: <>Цикл остановлен на первом неподходящем объекте</>,
-            note: <>переставь маленький объект в конец списка</>,
-          },
-          {
-            label: "второй критерий сразу",
-            value: <>Наибольший объект выбран, не зафиксировав количество</>,
-            note: <>сравни количество с ответом без второго критерия</>,
-          },
-          {
-            label: "последняя серия",
-            value: <>Серия в конце ряда не учтена</>,
-            note: <>проверь ряд, который заканчивается серией</>,
-          },
-          {
-            label: "та же минута",
-            value: <>Ячейку заняли в минуту её освобождения</>,
-            note: (
-              <>в задаче темы это 877 7 вместо 859 11 — перечитай правило</>
-            ),
-          },
-        ]}
-      />
-      <Typography.Text>
-        Если ответ — два числа, проверь второе отдельно: оно часто считается
-        другим приёмом, чем первое, — как наибольший файл при наибольшем
-        количестве файлов.
-      </Typography.Text>
-    </>
-  ),
+  sections: [
+    {
+      id: "odna-zadacha",
+      navLabel: "Одна задача — вся тема",
+      explanation: (
+        <>
+          <Typography.Text>
+            <strong>
+              Задача темы — камера хранения: сколько пассажиров сдадут багаж и в
+              какую ячейку положит последний — читается как в подтеме 1, а
+              решается в подтеме 6 исполнением правил.
+            </strong>{" "}
+            Пролистай версии: точками отмечены строки, которых не было в
+            предыдущей.
+          </Typography.Text>
+          <LessonStepper
+            {...lessonMedia.finalTask}
+            label={"Задача темы: от файла до ответа"}
+          />
+          <Typography.Text>
+            Записи и сортировка нужны всем задачам темы. Где выбирают лучшее —
+            работает жадный выбор (подтема 2), цепочки и пары (3), серии в рядах
+            (4) и интервалы (5); где правила заданы — их исполняют дословно, как
+            здесь. Дополнительный урок добавляет окно, кучу и сложные цепочки.
+          </Typography.Text>
+        </>
+      ),
+    },
+    {
+      id: "karta-temy",
+      navLabel: "Карта темы",
+      explanation: (
+        <>
+          <Typography.Text>
+            <strong>
+              Каждая подтема дала свой приём для одного прохода по записям, и
+              любое решение собирается из них.
+            </strong>{" "}
+            Сверху — путь от файла к ответу, ниже — по блоку на подтему.
+            Заголовок блока ведёт на подтему.
+          </Typography.Text>
+          <TopicCheatSheet
+            label={"Задание 26 на одной схеме"}
+            flow={[
+              { name: "Файл", note: "по описанию формата" },
+              { name: "Записи", note: "сортировка по ключу" },
+              { name: "Проход", note: "выбрать лучшее или исполнить правила" },
+            ]}
+            groups={[
+              {
+                number: 1,
+                title: (
+                  <Sub slug="zapisi-i-rejting">
+                    Записи, сортировка и рейтинг
+                  </Sub>
+                ),
+                rows: [
+                  {
+                    key: <>запись</>,
+                    note: <>кортеж полей одного объекта</>,
+                  },
+                  {
+                    key: <Notation>{"key=lambda r: (-r[1], r[0])"}</Notation>,
+                    note: (
+                      <>минус — «больше выше», второе поле — при равенстве</>
+                    ),
+                  },
+                ],
+              },
+              {
+                number: 2,
+                title: <Sub slug="zhadnyj-vybor">Жадный выбор</Sub>,
+                rows: [
+                  {
+                    key: <>больше всего</>,
+                    note: <>брать от самых маленьких</>,
+                  },
+                  {
+                    key: <>второй критерий</>,
+                    note: <>закрепить количество, потом улучшать</>,
+                  },
+                ],
+              },
+              {
+                number: 3,
+                title: <Sub slug="cepochki-i-pary">Цепочки коробок и пары</Sub>,
+                rows: [
+                  {
+                    key: <>матрёшка</>,
+                    note: <>брать самую большую подходящую</>,
+                  },
+                  { key: <>пары</>, note: <>два указателя с концов</> },
+                ],
+              },
+              {
+                number: 4,
+                title: <Sub slug="ryady-i-serii">Ряды, серии и группы</Sub>,
+                rows: [
+                  {
+                    key: <>свободно между</>,
+                    note: <>b − a − 1 мест</>,
+                  },
+                  {
+                    key: <>последняя серия</>,
+                    note: <>учесть после цикла</>,
+                  },
+                ],
+              },
+              {
+                number: 5,
+                title: <Sub slug="intervaly">Интервалы и события</Sub>,
+                rows: [
+                  {
+                    key: <>мероприятия</>,
+                    note: <>брать по раннему окончанию</>,
+                  },
+                  {
+                    key: <>нагрузка</>,
+                    note: <>события +1 и −1 по времени</>,
+                  },
+                ],
+              },
+              {
+                number: 6,
+                title: <Sub slug="modelirovanie">Моделирование процесса</Sub>,
+                rows: [
+                  {
+                    key: <Notation>{"free_at"}</Notation>,
+                    note: <>когда освободится каждая ячейка</>,
+                  },
+                  {
+                    key: <>правило</>,
+                    note: <>дословно: «со следующей минуты» — строго {"<"}</>,
+                  },
+                ],
+              },
+              {
+                number: 7,
+                title: (
+                  <Sub slug="pary-okno-i-cepochki">
+                    Пары, окно и сложные цепочки
+                  </Sub>
+                ),
+                level: "дополнительный урок",
+                rows: [
+                  { key: <>окно</>, note: <>левая граница догоняет правую</> },
+                  { key: <>куча</>, note: <>быстро достаёт наименьшее</> },
+                ],
+              },
+            ]}
+            caption={
+              <>
+                Карта темы: путь к ответу сверху и главное из каждой подтемы.
+                Номер блока — номер подтемы.
+              </>
+            }
+          />
+        </>
+      ),
+    },
+    {
+      id: "kak-reshat",
+      navLabel: "Как решать",
+      explanation: (
+        <>
+          <Typography.Text>
+            <strong>
+              Любое задание 26 решается одним порядком из пяти шагов.
+            </strong>{" "}
+            Каждому шагу ты уже учился — под ним номера подтем:
+          </Typography.Text>
+          <LessonDiagram
+            {...lessonMedia.finalCycle}
+            caption={
+              <>
+                Главный шаг — понять, выбирать ли лучшее самому или исполнять
+                правила условия. Проверка — пять-шесть объектов на бумаге: так
+                камеру хранения проверили на двух ячейках.
+              </>
+            }
+          />
+          <Typography.Text>
+            Если ответ — два числа, проверь второе отдельно: оно часто считается
+            другим приёмом, чем первое.
+          </Typography.Text>
+        </>
+      ),
+    },
+    {
+      id: "chastye-oshibki",
+      navLabel: "Частые ошибки",
+      explanation: (
+        <>
+          <Typography.Text>
+            <strong>
+              Шесть ошибок встречаются чаще других, и каждую ловит один вопрос к
+              себе.
+            </strong>{" "}
+            Выбери ошибку — увидишь, как её исправить, и вопрос, который её
+            ловит:
+          </Typography.Text>
+          <VariantPicker
+            label={"Частые ошибки и вопросы, которые их ловят"}
+            variants={[
+              {
+                label: "заголовок как данные",
+                value: (
+                  <FinalMistake
+                    wrong="количество объектов прочитано как объект"
+                    right="первые строки — заголовок"
+                    question="совпадает ли длина списка с N из файла?"
+                  />
+                ),
+                note: <Sub slug="zapisi-i-rejting">подтема 1</Sub>,
+              },
+              {
+                label: "поля по отдельности",
+                value: (
+                  <FinalMistake
+                    wrong="начала и окончания отсортированы раздельно"
+                    right="сортируют записи целиком"
+                    question="есть ли каждая запись в исходных данных?"
+                  />
+                ),
+                note: <Sub slug="zapisi-i-rejting">подтема 1</Sub>,
+              },
+              {
+                label: "break без сортировки",
+                value: (
+                  <FinalMistake
+                    wrong="цикл остановлен на первом неподходящем"
+                    right="сначала сортировка, потом break"
+                    question="а если маленький объект стоит в конце?"
+                  />
+                ),
+                note: <Sub slug="zhadnyj-vybor">подтема 2</Sub>,
+              },
+              {
+                label: "второй критерий сразу",
+                value: (
+                  <FinalMistake
+                    wrong="сразу выбран наибольший объект"
+                    right="закрепить количество, потом улучшать"
+                    question="не стало ли объектов меньше?"
+                  />
+                ),
+                note: <Sub slug="zhadnyj-vybor">подтема 2</Sub>,
+              },
+              {
+                label: "последняя серия",
+                value: (
+                  <FinalMistake
+                    wrong="серия в конце ряда не учтена"
+                    right="проверка ещё раз после цикла"
+                    question="что, если ряд кончается серией?"
+                  />
+                ),
+                note: <Sub slug="ryady-i-serii">подтема 4</Sub>,
+              },
+              {
+                label: "та же минута",
+                value: (
+                  <FinalMistake
+                    wrong={<Notation>{"free_at[i] <= start"}</Notation>}
+                    right={<Notation>{"free_at[i] < start"}</Notation>}
+                    question="можно ли занять ячейку в минуту освобождения?"
+                  />
+                ),
+                note: <Sub slug="modelirovanie">подтема 6</Sub>,
+              },
+            ]}
+          />
+        </>
+      ),
+    },
+  ],
+  checkpoint: [
+    {
+      id: "t1",
+      prompt: (
+        <>
+          <Typography.Text>
+            Нужно сохранить на диск как можно больше файлов. В каком порядке их
+            брать?
+          </Typography.Text>
+        </>
+      ),
+      reveal: (
+        <>
+          <Typography.Text>
+            От самых маленьких: каждый маленький оставляет больше места
+            остальным.
+          </Typography.Text>
+        </>
+      ),
+    },
+    {
+      id: "t2",
+      prompt: (
+        <>
+          <Typography.Text>
+            Ячейка освободилась в минуту 404. Можно ли положить в неё багаж в
+            404? А в 405?
+          </Typography.Text>
+        </>
+      ),
+      reveal: (
+        <>
+          <Typography.Text>
+            В 404 нельзя — только со следующей минуты, поэтому в программе
+            free_at[i] {"<"} start. В 405 можно.
+          </Typography.Text>
+        </>
+      ),
+    },
+    {
+      id: "t3",
+      prompt: (
+        <>
+          <Typography.Text>
+            Почему заявки задачи темы сортируют перед проходом?
+          </Typography.Text>
+        </>
+      ),
+      reveal: (
+        <>
+          <Typography.Text>
+            Пассажиров обслуживают в порядке прихода, а в файле заявки
+            перемешаны: requests.sort() упорядочивает их по времени сдачи.
+          </Typography.Text>
+        </>
+      ),
+    },
+    {
+      id: "t4",
+      prompt: (
+        <>
+          <Typography.Text>
+            Места в ряду заняты под номерами 3 и 8. Сколько свободных мест между
+            ними?
+          </Typography.Text>
+        </>
+      ),
+      reveal: (
+        <>
+          <Typography.Text>8 − 3 − 1 = 4: места 4, 5, 6 и 7.</Typography.Text>
+        </>
+      ),
+    },
+  ],
   result: (
     <>
       <Typography.Text>
-        <strong>
-          Задание 26 решается сортировкой записей и одним проходом: либо ты сам
-          выбираешь лучшее — жадно, обосновав выбор, — либо в точности
-          исполняешь правила условия.
-        </strong>
+        Тема пройдена: задача темы решена от чтения файла до ответа 859 11. Вот
+        что взять с собой.
       </Typography.Text>
-      <Typography.Text>
-        Всё главное из подтем собрано на одной схеме. Номер раздела ведёт на его
-        подтему.
-      </Typography.Text>
-      <TopicCheatSheet
-        label={"Задание 26 на одной схеме"}
-        flow={[
-          { name: "Файл", note: "по описанию формата" },
-          { name: "Записи", note: "сортировка по ключу" },
-          { name: "Проход", note: "выбрать или исполнить" },
-        ]}
-        groups={[
+      <LessonSummary
+        items={[
           {
-            number: 1,
-            title: (
-              <SubtopicLink routeSlug={R} subtopic="zapisi-i-rejting">
-                Записи, сортировка и рейтинг
-              </SubtopicLink>
-            ),
-            rows: [
-              { key: <>ключ</>, note: <>минус у «больше — выше»</> },
-              { key: <>граница</>, note: <>доля — целая часть</> },
-            ],
+            key: "Порядок",
+            note: <>Записи, порядок, способ, проход, проверка.</>,
           },
           {
-            number: 2,
-            title: (
-              <SubtopicLink routeSlug={R} subtopic="zhadnyj-vybor">
-                Жадный выбор
-              </SubtopicLink>
-            ),
-            rows: [
-              { key: <>больше всего</>, note: <>от самых маленьких</> },
-              { key: <>наибольший</>, note: <>закрепить k − 1</> },
-            ],
+            key: "Записи",
+            note: <>Кортежи и сортировка по ключу.</>,
           },
           {
-            number: 3,
-            title: (
-              <SubtopicLink routeSlug={R} subtopic="cepochki-i-pary">
-                Цепочки коробок и пары
-              </SubtopicLink>
-            ),
-            rows: [
-              { key: <>матрёшка</>, note: <>самая большая подходящая</> },
-              { key: <>пары</>, note: <>два указателя</> },
-            ],
+            key: "Выбор",
+            note: <>Жадно: от маленьких, по раннему окончанию, указатели.</>,
           },
           {
-            number: 4,
-            title: (
-              <SubtopicLink routeSlug={R} subtopic="ryady-i-serii">
-                Ряды, серии и группы
-              </SubtopicLink>
-            ),
-            rows: [
-              { key: <>свободно</>, note: <>b − a − 1</> },
-              { key: <>серия</>, note: <>учесть после цикла</> },
-            ],
+            key: "Правила",
+            note: <>Исполняются дословно — «со следующей минуты» строго.</>,
           },
           {
-            number: 5,
-            title: (
-              <SubtopicLink routeSlug={R} subtopic="intervaly">
-                Интервалы и события
-              </SubtopicLink>
-            ),
-            rows: [
-              { key: <>мероприятия</>, note: <>по раннему окончанию</> },
-              { key: <>нагрузка</>, note: <>события +1 и −1</> },
-            ],
-          },
-          {
-            number: 6,
-            title: (
-              <SubtopicLink routeSlug={R} subtopic="modelirovanie">
-                Моделирование процесса
-              </SubtopicLink>
-            ),
-            rows: [
-              { key: <>free_at</>, note: <>когда освободится ячейка</> },
-              { key: <>859 11</>, note: <>ответ задачи темы</> },
-            ],
-          },
-          {
-            number: 7,
-            title: (
-              <SubtopicLink routeSlug={R} subtopic="pary-okno-i-cepochki">
-                Пары, окно и сложные цепочки
-              </SubtopicLink>
-            ),
-            level: "дополнительный урок",
-            rows: [
-              { key: <>окно</>, note: <>левая граница догоняет</> },
-              { key: <>куча</>, note: <>быстрый наименьший</> },
-            ],
+            key: "Задача темы",
+            note: <>859 пассажиров, последний — в ячейке 11.</>,
           },
         ]}
-        sections={[
-          {
-            title: "Порядок решения",
-            steps: [
-              <>Что выводим и что такое один объект?</>,
-              <>Выбираем лучшее или исполняем правила?</>,
-              <>Какой порядок и какое состояние нужны проходу?</>,
-              <>Сначала маленький пример вручную, потом файл.</>,
-            ],
-          },
-        ]}
-        caption={
-          <>
-            Шпаргалка темы: порядок решения и главное из каждой подтемы. Номер
-            раздела ведёт на подтему.
-          </>
-        }
       />
     </>
   ),

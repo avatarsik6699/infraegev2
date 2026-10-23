@@ -31,7 +31,7 @@ const lessonMedia = topicMedia("array-processing");
 const FILES = resolve(process.cwd(), "../..", "content/lesson-files/topic-26");
 const authoredContent = [
   ...lesson.theory.map(({ explanation }) => explanation),
-  lesson.examFocus,
+  ...(lesson.finalSections ?? []).map(({ explanation }) => explanation),
   lesson.result,
 ];
 
@@ -115,7 +115,7 @@ describe("task 26 data processing lesson (Change 184)", () => {
     expect(subtopics.map(({ checkpoint }) => checkpoint?.length ?? 0)).toEqual([
       5, 5, 5, 5, 5, 5, 4,
     ]);
-    expect(lesson.examFocus).toBeDefined();
+    expect(lesson.finalLead).toBeTruthy();
     expect(lesson.result).toBeDefined();
   });
 
@@ -216,7 +216,7 @@ describe("task 26 data processing lesson (Change 184)", () => {
     expect(
       container.querySelectorAll("figure[data-lesson-diagram]"),
     ).toHaveLength(diagrams.length);
-    expect(media.filter((item) => item.kind === "stepper")).toHaveLength(3);
+    expect(media.filter((item) => item.kind === "stepper")).toHaveLength(4);
     expect(media.filter((item) => item.kind === "run")).toHaveLength(3);
     expect(container.querySelectorAll("img, video")).toHaveLength(0);
     expect(container.querySelectorAll("[data-topic-cheat-sheet]")).toHaveLength(

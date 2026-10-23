@@ -5633,6 +5633,12 @@ from executor_figures import (  # noqa: E402
     EXECUTOR_STEPPERS,
     EXECUTOR_WIDGETS,
 )
+from final_figures import (  # noqa: E402
+    FINAL_FIGURES,
+    FINAL_SCRIPTS,
+    FINAL_STEPPERS,
+    FINAL_WIDGETS,
+)
 from game_figures import (  # noqa: E402
     GAME_FIGURES,
     GAME_SCRIPTS,
@@ -5753,6 +5759,7 @@ for _figures, _steppers, _widgets, _scripts in (
     (EXECUTOR_FIGURES, EXECUTOR_STEPPERS, EXECUTOR_WIDGETS, EXECUTOR_SCRIPTS),
     (PARAMETER_FIGURES, PARAMETER_STEPPERS, PARAMETER_WIDGETS, PARAMETER_SCRIPTS),
     (PROCESS_FIGURES, PROCESS_STEPPERS, PROCESS_WIDGETS, PROCESS_SCRIPTS),
+    (FINAL_FIGURES, FINAL_STEPPERS, FINAL_WIDGETS, FINAL_SCRIPTS),
 ):
     FIGURES.update(_figures)
     STEPPERS.update(_steppers)

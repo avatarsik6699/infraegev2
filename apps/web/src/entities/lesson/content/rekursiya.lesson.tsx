@@ -15,6 +15,7 @@ import { rekursiyaLessonPublication } from "~/shared/config/lesson-publication.m
 import { defineLesson } from "../lib/define-lesson";
 import { lessonMedia } from "./rekursiya.media";
 import { PythonTerm } from "./python-term";
+import { FinalMistake } from "./final-mistake";
 import { SubtopicLink } from "./subtopic-link";
 
 const THEME_TASK = (
@@ -26,6 +27,13 @@ const THEME_TASK = (
 );
 
 const R = "16-rekursiya";
+
+/** A subtopic of this topic, linked from the final page. */
+const Sub: React.FC<{ slug: string; children: React.ReactNode }> = (props) => (
+  <SubtopicLink routeSlug="16-rekursiya" subtopic={props.slug}>
+    {props.children}
+  </SubtopicLink>
+);
 
 export const rekursiyaLesson = defineLesson({
   ...rekursiyaLessonPublication,
@@ -2149,205 +2157,400 @@ export const rekursiyaLesson = defineLesson({
       ),
     },
   ],
-  examFocus: (
-    <>
-      <Typography.Text>
-        <strong>
-          Ответ проверяют вторым способом: программу — раскрытием на маленьких
-          n, раскрытие — программой.
-        </strong>{" "}
-        Выбери ошибку, чтобы увидеть, как себя проверить:
-      </Typography.Text>
-      <VariantPicker
-        label={"Ошибка и как себя проверить"}
-        variants={[
-          {
-            label: "F(n) − 1",
-            value: <>Вместо F(n − 1) посчитано F(n) − 1</>,
-            note: <>скобки после F — это аргумент</>,
-          },
-          {
-            label: "одна ветвь",
-            value: <>Формула выбрана один раз по первому аргументу</>,
-            note: <>ветвь выбирают в каждом вызове</>,
-          },
-          {
-            label: "n == 1 в базе",
-            value: <>В условии база n ≤ 1, а в программе n == 1</>,
-            note: <>цепочка проскочит базу — переписать условие точно</>,
-          },
-          {
-            label: "RecursionError",
-            value: <>Программа упала на F(2026)</>,
-            note: <>sys.setrecursionlimit или прогрев кеша</>,
-          },
-          {
-            label: "кеш и глубина",
-            value: <>Добавлен @cache, а RecursionError остался</>,
-            note: (
-              <>кеш не уменьшает глубину первого вызова — прогреть от базы</>
-            ),
-          },
-          {
-            label: "считает минуты",
-            value: <>Программа с двумя вызовами себя не заканчивается</>,
-            note: <>@cache над каждой функцией</>,
-          },
-          {
-            label: "4108725.0",
-            value: <>Ответ напечатан дробным числом</>,
-            note: <>деление нацело — //</>,
-          },
-          {
-            label: "// в базе",
-            value: <>В базе n / 2 заменено на n // 2</>,
-            note: <>дробные промежуточные значения — Fraction</>,
-          },
-          {
-            label: "IndexError",
-            value: <>Обращение к f[2026] в списке [0] * 2026</>,
-            note: <>для f[N] нужен список из N + 1 элемента</>,
-          },
-          {
-            label: "конец цепочки",
-            value: (
-              <>Считали, что цепочка с шагом 3 закончится на границе базы</>
-            ),
-            note: <>конец зависит от остатка — пройти цепочку</>,
-          },
-        ]}
-      />
-    </>
-  ),
+  finalLead:
+    "Вся тема на одной странице: как решилась задача темы, главное из подтем, порядок решения и частые ошибки.",
+  finalSections: [
+    {
+      id: "odna-zadacha",
+      navLabel: "Одна задача — вся тема",
+      explanation: (
+        <>
+          <Typography.Text>
+            <strong>
+              Задача темы — (F(2026) + 3 · F(2025)) / F(2024) для F(n) = n · F(n
+              − 1) — прошла через подтемы, и каждая решала её новым способом.
+            </strong>{" "}
+            Пролистай версии: точками отмечены строки, которых не было в
+            предыдущей.
+          </Typography.Text>
+          <LessonStepper
+            {...lessonMedia.finalTask}
+            label={"Задача темы от подтемы 1 до подтемы 4"}
+          />
+          <Typography.Text>
+            Три способа — рекурсия, таблица и сокращение — дали одно число и
+            проверяют друг друга. Подтема 5 добавляет цепочки с шагом больше
+            единицы и поиск n, а дополнительный урок — функции, которые что-то
+            считают, например сумму цифр.
+          </Typography.Text>
+        </>
+      ),
+    },
+    {
+      id: "karta-temy",
+      navLabel: "Карта темы",
+      explanation: (
+        <>
+          <Typography.Text>
+            <strong>
+              Каждая подтема дала один приём, и любое решение собирается из них.
+            </strong>{" "}
+            Сверху — путь от определения к ответу, ниже — по блоку на подтему.
+            Заголовок блока ведёт на подтему.
+          </Typography.Text>
+          <TopicCheatSheet
+            label={"Задание 16 на одной схеме"}
+            flow={[
+              { name: "Правила", note: "база, шаг, ветви" },
+              { name: "Способ", note: "программа или раскрыть и сократить" },
+              { name: "Ответ", note: "значение, выражение или n" },
+            ]}
+            groups={[
+              {
+                number: 1,
+                title: (
+                  <Sub slug="funktsiya-cherez-sebya">
+                    Функция, заданная через себя
+                  </Sub>
+                ),
+                rows: [
+                  { key: <>база</>, note: <>значение, известное сразу</> },
+                  {
+                    key: <>F(n − 1)</>,
+                    note: <>значение для аргумента n − 1, не F(n) − 1</>,
+                  },
+                  { key: <>ветви</>, note: <>выбирают в каждом вызове</> },
+                ],
+              },
+              {
+                number: 2,
+                title: (
+                  <Sub slug="rekursivnaya-funktsiya">
+                    Рекурсивная функция на Python
+                  </Sub>
+                ),
+                rows: [
+                  {
+                    key: <Notation>{"return n * F(n - 1)"}</Notation>,
+                    note: <>определение как есть</>,
+                  },
+                  {
+                    key: <Notation>{"sys.setrecursionlimit"}</Notation>,
+                    note: <>для аргументов в тысячи</>,
+                  },
+                  {
+                    key: <Notation>{"//"}</Notation>,
+                    note: <>деление нацело — ответ целым числом</>,
+                  },
+                ],
+              },
+              {
+                number: 3,
+                title: (
+                  <Sub slug="povtornye-vyzovy">Повторные вызовы и таблица</Sub>
+                ),
+                rows: [
+                  {
+                    key: <Notation>{"@cache"}</Notation>,
+                    note: <>каждое значение считается один раз</>,
+                  },
+                  {
+                    key: <>таблица</>,
+                    note: <>f[n] = F(n) циклом от базы</>,
+                  },
+                ],
+              },
+              {
+                number: 4,
+                title: <Sub slug="bolshie-argumenty">Раскрыть и сократить</Sub>,
+                rows: [
+                  {
+                    key: <>отношение</>,
+                    note: <>раскрыть до общего множителя</>,
+                  },
+                  { key: <>разность</>, note: <>остаются прибавки</> },
+                ],
+              },
+              {
+                number: 5,
+                title: (
+                  <Sub slug="cepochki-i-perebor">
+                    Цепочки до базы и перебор n
+                  </Sub>
+                ),
+                rows: [
+                  {
+                    key: <>шаг k</>,
+                    note: <>своя цепочка и свой конец по остатку</>,
+                  },
+                  {
+                    key: <>поиск n</>,
+                    note: <>перебор со счётчиком или while</>,
+                  },
+                ],
+              },
+              {
+                number: 6,
+                title: (
+                  <Sub slug="chto-schitaet-funktsiya">Что считает функция</Sub>
+                ),
+                level: "дополнительный урок",
+                rows: [
+                  {
+                    key: <Notation>{"F(n // b) + n % b"}</Notation>,
+                    note: <>сумма цифр в системе b</>,
+                  },
+                ],
+              },
+            ]}
+            caption={
+              <>
+                Карта темы: путь к ответу сверху и главное из каждой подтемы.
+                Номер блока — номер подтемы.
+              </>
+            }
+          />
+        </>
+      ),
+    },
+    {
+      id: "kak-reshat",
+      navLabel: "Как решать",
+      explanation: (
+        <>
+          <Typography.Text>
+            <strong>
+              Любое задание 16 решается одним порядком из пяти шагов.
+            </strong>{" "}
+            Каждому шагу ты уже учился — под ним номера подтем:
+          </Typography.Text>
+          <LessonDiagram
+            {...lessonMedia.finalCycle}
+            caption={
+              <>
+                Главный шаг — способ: аргументы в тысячи с отношением или
+                разностью удобнее раскрыть и сократить, остальное — программой
+                по определению. Проверка — вторым способом на маленьких n.
+              </>
+            }
+          />
+        </>
+      ),
+    },
+    {
+      id: "chastye-oshibki",
+      navLabel: "Частые ошибки",
+      explanation: (
+        <>
+          <Typography.Text>
+            <strong>
+              Восемь ошибок встречаются чаще других, и каждую ловит один вопрос
+              к себе.
+            </strong>{" "}
+            Выбери ошибку — увидишь, как её исправить, и вопрос, который её
+            ловит:
+          </Typography.Text>
+          <VariantPicker
+            label={"Частые ошибки и вопросы, которые их ловят"}
+            variants={[
+              {
+                label: "F(n) − 1",
+                value: (
+                  <FinalMistake
+                    wrong="вместо F(n − 1) посчитали F(n) − 1"
+                    right="скобки после F — аргумент"
+                    question="что стоит в скобках?"
+                  />
+                ),
+                note: <Sub slug="funktsiya-cherez-sebya">подтема 1</Sub>,
+              },
+              {
+                label: "одна ветвь",
+                value: (
+                  <FinalMistake
+                    wrong="ветвь выбрали один раз по первому аргументу"
+                    right="ветвь — в каждом вызове"
+                    question="какой аргумент у этого вызова?"
+                  />
+                ),
+                note: <Sub slug="funktsiya-cherez-sebya">подтема 1</Sub>,
+              },
+              {
+                label: "n == 1 в базе",
+                value: (
+                  <FinalMistake
+                    wrong={<Notation>{"if n == 1"}</Notation>}
+                    right={<Notation>{"if n <= 1"}</Notation>}
+                    question="база в условии — равенство или неравенство?"
+                  />
+                ),
+                note: <Sub slug="rekursivnaya-funktsiya">подтема 2</Sub>,
+              },
+              {
+                label: "RecursionError",
+                value: (
+                  <FinalMistake
+                    wrong="F(2026) без поднятого предела"
+                    right="sys.setrecursionlimit или прогрев кеша"
+                    question="сколько вызовов в цепочке до базы?"
+                  />
+                ),
+                note: <Sub slug="rekursivnaya-funktsiya">подтема 2</Sub>,
+              },
+              {
+                label: "4108725.0",
+                value: (
+                  <FinalMistake
+                    wrong={<Notation>{"… / F(2024)"}</Notation>}
+                    right={<Notation>{"… // F(2024)"}</Notation>}
+                    question="ответ должен быть целым?"
+                  />
+                ),
+                note: <Sub slug="rekursivnaya-funktsiya">подтема 2</Sub>,
+              },
+              {
+                label: "считает минуты",
+                value: (
+                  <FinalMistake
+                    wrong="функция с двумя вызовами себя без кеша"
+                    right="@cache над функцией"
+                    question="не считается ли одно значение много раз?"
+                  />
+                ),
+                note: <Sub slug="povtornye-vyzovy">подтема 3</Sub>,
+              },
+              {
+                label: "IndexError",
+                value: (
+                  <FinalMistake
+                    wrong={<Notation>{"f = [0] * 2026"}</Notation>}
+                    right={<Notation>{"f = [0] * 2027"}</Notation>}
+                    question="есть ли в списке элемент f[2026]?"
+                  />
+                ),
+                note: <Sub slug="povtornye-vyzovy">подтема 3</Sub>,
+              },
+              {
+                label: "конец цепочки",
+                value: (
+                  <FinalMistake
+                    wrong="цепочку с шагом 3 довели до той же базы"
+                    right="конец зависит от остатка — пройти цепочку"
+                    question="в какое число упрётся эта цепочка?"
+                  />
+                ),
+                note: <Sub slug="cepochki-i-perebor">подтема 5</Sub>,
+              },
+            ]}
+          />
+        </>
+      ),
+    },
+  ],
+  checkpoint: [
+    {
+      id: "t1",
+      prompt: (
+        <>
+          <Typography.Text>
+            Для функции задачи темы найди F(2026) / F(2024).
+          </Typography.Text>
+        </>
+      ),
+      reveal: (
+        <>
+          <Typography.Text>
+            2026 · 2025 = 4 102 650: F(2024) сокращается.
+          </Typography.Text>
+        </>
+      ),
+    },
+    {
+      id: "t2",
+      prompt: (
+        <>
+          <Typography.Text>
+            Почему программа с вызовами F(n − 1) и F(n − 2) считает F(40) долго?
+          </Typography.Text>
+        </>
+      ),
+      reveal: (
+        <>
+          <Typography.Text>
+            Одни и те же значения считаются снова и снова — вызовов
+            экспоненциально много. @cache считает каждое один раз.
+          </Typography.Text>
+        </>
+      ),
+    },
+    {
+      id: "t3",
+      prompt: (
+        <>
+          <Typography.Text>
+            Функцию с @cache сразу вызвали для n = 10 000 — и получили
+            RecursionError. Что сделать?
+          </Typography.Text>
+        </>
+      ),
+      reveal: (
+        <>
+          <Typography.Text>
+            Поднять предел глубины или прогреть кеш: вызвать F(n) по очереди от
+            маленьких n, тогда каждый вызов уходит вглубь на один шаг.
+          </Typography.Text>
+        </>
+      ),
+    },
+    {
+      id: "t4",
+      prompt: (
+        <>
+          <Typography.Text>
+            F(n) = F(n − 3) + 2 при n {">"} 3, F(n) = n при n ≤ 3. Чему равно
+            F(10)?
+          </Typography.Text>
+        </>
+      ),
+      reveal: (
+        <>
+          <Typography.Text>
+            Цепочка 10 → 7 → 4 → 1: F(1) = 1, плюс три прибавки по 2 — F(10) =
+            7.
+          </Typography.Text>
+        </>
+      ),
+    },
+  ],
   result: (
     <>
       <Typography.Text>
-        <strong>
-          Задание 16 — всегда функция, заданная через себя: её считают
-          программой по определению, а большие значения раскрывают и сокращают.
-        </strong>
+        Тема пройдена: задача темы решена тремя способами — ответ 4 108 725. Вот
+        что взять с собой.
       </Typography.Text>
-      <Typography.Text>
-        Всё главное из подтем собрано на одной схеме. Номер раздела ведёт на его
-        подтему.
-      </Typography.Text>
-      <TopicCheatSheet
-        label={"Задание 16 на одной схеме"}
-        flow={[
-          { name: "Правила", note: "база, шаг, ветви, куда идёт аргумент" },
-          { name: "Способ", note: "программа или раскрыть и сократить" },
-          { name: "Ответ", note: "значение, выражение или n" },
-        ]}
-        groups={[
+      <LessonSummary
+        items={[
           {
-            number: 1,
-            title: (
-              <SubtopicLink routeSlug={R} subtopic="funktsiya-cherez-sebya">
-                Функция через себя
-              </SubtopicLink>
-            ),
-            rows: [
-              { key: <>база</>, note: <>значение, известное сразу</> },
-              {
-                key: <>вниз и обратно</>,
-                note: <>запросы до базы, потом ответы</>,
-              },
-              { key: <>ветви</>, note: <>по каждому аргументу</> },
-            ],
+            key: "Порядок",
+            note: <>Правила, способ, программа или сокращение, проверка.</>,
           },
           {
-            number: 2,
-            title: (
-              <SubtopicLink routeSlug={R} subtopic="rekursivnaya-funktsiya">
-                Функция на Python
-              </SubtopicLink>
-            ),
-            rows: [
-              {
-                key: <Notation>{"return n * F(n - 1)"}</Notation>,
-                note: <>определение как есть</>,
-              },
-              {
-                key: <Notation>{"sys.setrecursionlimit"}</Notation>,
-                note: <>аргументы в тысячи</>,
-              },
-            ],
+            key: "Программа",
+            note: <>Определение как есть, // и предел глубины.</>,
           },
           {
-            number: 3,
-            title: (
-              <SubtopicLink routeSlug={R} subtopic="povtornye-vyzovy">
-                Повторы и таблица
-              </SubtopicLink>
-            ),
-            rows: [
-              {
-                key: <Notation>{"@cache"}</Notation>,
-                note: <>каждое значение — один раз</>,
-              },
-              { key: <>прогрев</>, note: <>F(n) по очереди от базы</> },
-              { key: <>таблица</>, note: <>f[n] = F(n), цикл от базы</> },
-            ],
+            key: "Скорость",
+            note: <>@cache, прогрев или таблица циклом от базы.</>,
           },
           {
-            number: 4,
-            title: (
-              <SubtopicLink routeSlug={R} subtopic="bolshie-argumenty">
-                Раскрыть и сократить
-              </SubtopicLink>
-            ),
-            rows: [
-              { key: <>отношение</>, note: <>до общего множителя</> },
-              { key: <>разность</>, note: <>остаются прибавки</> },
-              { key: <>задача темы</>, note: <>2029 · 2025 = 4 108 725</> },
-            ],
+            key: "Сокращение",
+            note: <>Раскрыть до общего множителя или прибавок.</>,
           },
           {
-            number: 5,
-            title: (
-              <SubtopicLink routeSlug={R} subtopic="cepochki-i-perebor">
-                Цепочки и перебор
-              </SubtopicLink>
-            ),
-            rows: [
-              { key: <>шаг k</>, note: <>своя цепочка и свой конец</> },
-              { key: <>разные цепочки</>, note: <>вычитать парами</> },
-              { key: <>n</>, note: <>счётчик или while</> },
-            ],
-          },
-          {
-            number: 6,
-            title: (
-              <SubtopicLink routeSlug={R} subtopic="chto-schitaet-funktsiya">
-                Что считает функция
-              </SubtopicLink>
-            ),
-            level: "дополнительный урок",
-            rows: [
-              {
-                key: <Notation>{"F(n // b) + n % b"}</Notation>,
-                note: <>сумма цифр в системе b</>,
-              },
-              { key: <>F(n) {">"} F(n + 1)</>, note: <>n оканчивается на 9</> },
-            ],
+            key: "Задача темы",
+            note: <>(2026 + 3) · 2025 = 4 108 725.</>,
           },
         ]}
-        sections={[
-          {
-            title: "Три вопроса к условию",
-            steps: [
-              <>Куда идёт аргумент и где база?</>,
-              <>Что спрашивают: значение, выражение или n?</>,
-              <>Сокращается ли выражение до общего значения?</>,
-            ],
-          },
-        ]}
-        caption={
-          <>
-            Шпаргалка темы: порядок решения и главное из каждой подтемы. Номер
-            раздела ведёт на подтему.
-          </>
-        }
       />
     </>
   ),

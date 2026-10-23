@@ -611,8 +611,10 @@ are shown by the shared `ObjectIllustration` (`course`), mascot scenes by `Masco
   «Скрыть ответ» (a native `details`, with or without scripting) and, under it, the answer captioned
   «Ответ» in the label face, in secondary ink — the same pattern as «Решение» in a task. On a
   subtopic page it comes before «Практика»: reasoning first, then the file.
-- **Topic final page:** the section of checks is titled «Проверка решения» (it was «На экзамене»,
-  which named none of its content); a practice list of one task shows no tab strip.
+- **Topic final page (T254):** reads like the course summary — one lead line under the title (no
+  outcomes row), sections «Одна задача — вся тема», «Карта темы», «Как решать», «Частые ошибки»,
+  then «Итог», «Проверьте себя» and the topic's mixed tasks; a practice list of one task shows no
+  tab strip.
 - **Topic cheat sheet:** one hairline sheet: a three-step solving order joined by small orange
   arrows (its only accent), a three-column grid of subtopic blocks (link title, code key, muted
   note), then optional topic-wide sections side by side (a two-column rows section is twice as

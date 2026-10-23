@@ -19,7 +19,7 @@ vi.mock("~/shared/components/action-link", () => ({
 const lesson = relationalDatabasesLesson;
 const authoredContent = [
   ...lesson.theory.map(({ explanation }) => explanation),
-  lesson.examFocus,
+  ...(lesson.finalSections ?? []).map(({ explanation }) => explanation),
   lesson.result,
 ];
 
@@ -43,7 +43,7 @@ describe("task 3 linked tables lesson (Change 184)", () => {
     expect(subtopics.map(({ checkpoint }) => checkpoint?.length ?? 0)).toEqual([
       5, 4, 5, 5,
     ]);
-    expect(lesson.examFocus).toBeDefined();
+    expect(lesson.finalLead).toBeTruthy();
     expect(lesson.result).toBeDefined();
   });
 
@@ -102,7 +102,7 @@ describe("task 3 linked tables lesson (Change 184)", () => {
     // the database schema and the three illustrative tables of subtopic 1, the
     // requirements of subtopic 3, the stock change and the sales by shop of
     // subtopic 4 (Change 197, T147)
-    expect(diagrams).toHaveLength(7);
+    expect(diagrams).toHaveLength(8);
     expect(
       container.querySelectorAll("figure[data-lesson-diagram]"),
     ).toHaveLength(diagrams.length);

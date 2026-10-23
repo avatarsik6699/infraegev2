@@ -17,6 +17,7 @@ const lesson: LessonContent.Definition = {
   title: "Пробный урок",
   summary: "Урок для проверки подтем.",
   learningOutcomes: ["Проверить подтемы"],
+  finalLead: "Вся тема на одной странице.",
   theory: ["a", "b", "c"].map((id) => ({
     id,
     navLabel: id,

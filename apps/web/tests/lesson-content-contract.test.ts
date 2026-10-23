@@ -8,6 +8,7 @@ const definition: LessonContent.Definition = {
   title: "Пробный урок",
   summary: "Минимальное определение для проверки авторского контракта.",
   learningOutcomes: ["Проверить форму урока"],
+  finalLead: "Вся тема на одной странице.",
   theory: [
     {
       id: "sample-concept",

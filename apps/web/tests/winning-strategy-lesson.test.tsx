@@ -29,7 +29,7 @@ const lesson = await wholeLesson(winningStrategyLesson);
 const lessonMedia = topicMedia("winning-strategy");
 const authoredContent = [
   ...lesson.theory.map(({ explanation }) => explanation),
-  lesson.examFocus,
+  ...(lesson.finalSections ?? []).map(({ explanation }) => explanation),
   lesson.result,
 ];
 
@@ -112,7 +112,7 @@ describe("tasks 19–21 winning strategy lesson (Change 184)", () => {
     expect(subtopics.map(({ checkpoint }) => checkpoint?.length ?? 0)).toEqual([
       5, 5, 5, 5, 5, 4,
     ]);
-    expect(lesson.examFocus).toBeDefined();
+    expect(lesson.finalLead).toBeTruthy();
     expect(lesson.result).toBeDefined();
   });
 
@@ -215,7 +215,7 @@ describe("tasks 19–21 winning strategy lesson (Change 184)", () => {
     expect(
       container.querySelectorAll("figure[data-lesson-diagram]"),
     ).toHaveLength(diagrams.length);
-    expect(media.filter((item) => item.kind === "stepper")).toHaveLength(2);
+    expect(media.filter((item) => item.kind === "stepper")).toHaveLength(3);
     expect(media.filter((item) => item.kind === "run")).toHaveLength(0);
     expect(container.querySelectorAll("img, video")).toHaveLength(0);
     expect(container.querySelectorAll("[data-topic-cheat-sheet]")).toHaveLength(

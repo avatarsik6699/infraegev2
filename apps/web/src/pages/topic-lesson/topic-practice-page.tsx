@@ -30,17 +30,28 @@ export const TopicPracticePage: React.FC<TopicLessonPageTypes.PracticeProps> = (
   const session = useAccountSession();
   const subtopics = lessonSubtopics(props.lesson);
   const last = subtopics.at(-1);
-  // F43: the summary opens the page; Change 184: the self-check, then the tasks.
-  // Change 192: a paid final page the visitor cannot open — outcomes, the paywall,
-  // then the open tasks and the locked ones.
+  // Change 192: a paid final page the visitor cannot open — the lead, the
+  // paywall, then the open tasks and the locked ones. T254: «Практика и итог»
+  // reads like the course summary — its sections, «Итог», the self-check and
+  // only the topic's mixed tasks (no subtopic section); a subtopic's tasks
+  // stay on its page.
   const locked =
     Boolean(props.lesson.paidPractice) && !accessState.opens(props.access);
   const lockedTasks = props.lockedTasks ?? [];
+  const finalSections =
+    props.lesson.finalSections ?? props.lesson.paidPractice?.sections ?? [];
+  const mixed = <Task extends { theoryLinks: readonly unknown[] }>(
+    tasks: readonly Task[],
+  ) => tasks.filter((task) => task.theoryLinks.length === 0);
+  const tasks = mixed(props.tasks);
+  const shownLockedTasks = mixed(lockedTasks);
   const outline = [
+    ...finalSections.map((section) => ({
+      id: section.id,
+      label: section.navLabel,
+      locked,
+    })),
     { id: "result", label: "Итог", locked },
-    ...(props.lesson.examFocus || props.lesson.paidPractice?.examFocus
-      ? [{ id: "exam-focus", label: "Проверка решения", locked }]
-      : []),
     ...(props.lesson.checkpoint || props.lesson.paidPractice?.checkpoint
       ? [{ id: "self-check", label: "Проверьте себя", locked }]
       : []),
@@ -62,19 +73,15 @@ export const TopicPracticePage: React.FC<TopicLessonPageTypes.PracticeProps> = (
         >
           Практика и итог
         </Typography.Title>
+        {/* T254: one line under the title, as in the course summary */}
+        <Typography.Text
+          variant="lead"
+          className={styles.subtopicLead}
+          data-final-lead
+        >
+          {props.lesson.finalLead}
+        </Typography.Text>
       </header>
-
-      {/* F35: what the topic teaches, in a row under rules of the EGE ink. */}
-      <ol className={styles.outcomes} aria-label="Чему научились в теме">
-        {props.lesson.learningOutcomes.map((outcome, index) => (
-          <li key={outcome} className={styles.outcome}>
-            <span className={styles.outcomeMark} aria-hidden="true">
-              {`${String(props.lesson.taskNumbers[0])}.${String(index + 1)}`}
-            </span>
-            {outcome}
-          </li>
-        ))}
-      </ol>
 
       <Suspense fallback={null}>
         <PracticeBody lesson={props.lesson} locked={locked} />
@@ -105,7 +112,7 @@ export const TopicPracticePage: React.FC<TopicLessonPageTypes.PracticeProps> = (
         <LessonPracticeFlow
           unavailable={props.practiceUnavailable}
           onRefresh={() => router.invalidate()}
-          tasks={withSubtopicTheoryLinks(props.lesson, props.tasks)}
+          tasks={withSubtopicTheoryLinks(props.lesson, tasks)}
           lessonId={props.lesson.id}
           contextKind="topic_lesson"
           checkAnswer={
@@ -120,8 +127,8 @@ export const TopicPracticePage: React.FC<TopicLessonPageTypes.PracticeProps> = (
         />
         {accessState.locks(props.access) ? (
           <LockedTasks
-            tasks={lockedTasks}
-            start={props.tasks.length + 1}
+            tasks={shownLockedTasks}
+            start={tasks.length + 1}
             from={`/ege/${props.lesson.routeSlug}/praktika`}
           />
         ) : null}

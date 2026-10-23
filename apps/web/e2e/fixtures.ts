@@ -56,36 +56,36 @@ const numberRecordLessonConfig = {
   route: "/ege/5-preobrazovanie-zapisey-chisel/chislo-i-zapis",
   title: "Формальное исполнение алгоритма",
   taskNumber: 5,
-  taskCount: 39,
+  taskCount: 5,
   masteryTaskCount: 39,
-  diagramCount: 12,
+  diagramCount: 13,
 };
 
 const numberSequencesLessonConfig = {
   route: "/ege/17-chislovye-posledovatelnosti/chisla-i-proverki",
   title: "Обработка числовой последовательности",
   taskNumber: 17,
-  taskCount: 44,
+  taskCount: 5,
   masteryTaskCount: 40,
-  diagramCount: 9,
-  downloadCount: 24,
+  diagramCount: 10,
+  downloadCount: 5,
 };
 
 const stringProcessingLessonConfig = {
   route: "/ege/24-obrabotka-simvolnyh-strok/stroka-i-cepochka",
   title: "Обработка символьной информации",
   taskNumber: 24,
-  taskCount: 66,
+  taskCount: 5,
   masteryTaskCount: 54,
-  diagramCount: 6,
-  downloadCount: 35,
+  diagramCount: 7,
+  downloadCount: 5,
 };
 
 const graphAnalysisLessonConfig = {
   route: "/ege/23-analiz-grafov/put-do-celi",
   title: "Анализ графов",
   taskNumber: 23,
-  taskCount: 37,
+  taskCount: 5,
   masteryTaskCount: 32,
 };
 
@@ -93,7 +93,7 @@ const divisorsAndMasksLessonConfig = {
   route: "/ege/25-deliteli-i-maski/deliteli-parami",
   title: "Обработка целочисленной информации",
   taskNumber: 25,
-  taskCount: 59,
+  taskCount: 5,
   masteryTaskCount: 53,
 };
 
@@ -101,20 +101,20 @@ const arrayProcessingLessonConfig = {
   route: "/ege/26-sortirovka-i-otbor/zapisi-i-rejting",
   title: "Обработка данных с сортировкой",
   taskNumber: 26,
-  taskCount: 72,
+  taskCount: 5,
   masteryTaskCount: 59,
-  diagramCount: 14,
-  downloadCount: 26,
+  diagramCount: 15,
+  downloadCount: 5,
 };
 
 const dataAnalysisLessonConfig = {
   route: "/ege/27-analiz-dannyh-i-klasterizatsiya/tochki-i-rasstoyaniya",
   title: "Анализ данных",
   taskNumber: 27,
-  taskCount: 42,
+  taskCount: 5,
   masteryTaskCount: 33,
-  diagramCount: 24,
-  downloadCount: 26,
+  diagramCount: 25,
+  downloadCount: 5,
 };
 
 async function useNoJavaScriptTopicLesson(

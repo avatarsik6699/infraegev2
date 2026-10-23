@@ -15,6 +15,7 @@ import { wordEnumerationLessonPublication } from "~/shared/config/lesson-publica
 import { defineLesson } from "../lib/define-lesson";
 import { lessonMedia } from "./word-enumeration.media";
 import { PythonTerm } from "./python-term";
+import { FinalMistake } from "./final-mistake";
 import { SubtopicLink } from "./subtopic-link";
 
 const THEME_TASK = (
@@ -27,6 +28,13 @@ const THEME_TASK = (
 );
 
 const R = "8-perebor-slov";
+
+/** A subtopic of this topic, linked from the final page. */
+const Sub: React.FC<{ slug: string; children: React.ReactNode }> = (props) => (
+  <SubtopicLink routeSlug="8-perebor-slov" subtopic={props.slug}>
+    {props.children}
+  </SubtopicLink>
+);
 
 export const wordEnumerationLesson = defineLesson({
   ...wordEnumerationLessonPublication,
@@ -1916,229 +1924,408 @@ export const wordEnumerationLesson = defineLesson({
       ),
     },
   ],
-  examFocus: (
-    <>
-      <Typography.Text>
-        <strong>
-          Каждую фразу условия переводят в отдельную проверку и сверяют её с
-          текстом.
-        </strong>{" "}
-        Выбери ошибку, чтобы увидеть, как себя проверить:
-      </Typography.Text>
-      <VariantPicker
-        label={"Ошибка и как себя проверить"}
-        variants={[
-          {
-            label: "алфавит не по порядку",
-            value: (
-              <>передали буквы в product так, как они перечислены в условии</>
-            ),
-            note: <>для номеров записать алфавит по порядку самому</>,
-          },
-          {
-            label: "номер с нуля",
-            value: <>забыли, что номер на единицу больше записи</>,
-            note: <>первое слово — номер 1</>,
-          },
-          {
-            label: "номер и счётчик",
-            value: <>ответили счётчиком, а спрашивали номер</>,
-            note: <>номер растёт на каждом слове полного списка</>,
-          },
-          {
-            label: "count('АО')",
-            value: <>посчитали гласные как фрагмент АО</>,
-            note: <>складывать count каждой буквы</>,
-          },
-          {
-            label: "in и соседство",
-            value: <>проверили «рядом» через наличие обеих букв</>,
-            note: <>«рядом» — фрагмент подряд, в обоих порядках</>,
-          },
-          {
-            label: "начальный ноль",
-            value: <>посчитали числа, начинающиеся с нуля</>,
-            note: <>первая цифра n-значного числа не ноль</>,
-          },
-          {
-            label: "чётность числа",
-            value: (
-              <>решили чётность по последней цифре при нечётном основании</>
-            ),
-            note: <>при нечётном основании решает сумма цифр</>,
-          },
-          {
-            label: "лишняя буква",
-            value: <>на остальных местах снова разрешили букву «ровно k»</>,
-            note: <>остальные места — из других букв</>,
-          },
-        ]}
-      />
-    </>
-  ),
+  finalLead:
+    "Вся тема на одной странице: как решилась задача темы, главное из подтем, порядок решения и частые ошибки.",
+  finalSections: [
+    {
+      id: "odna-zadacha",
+      navLabel: "Одна задача — вся тема",
+      explanation: (
+        <>
+          <Typography.Text>
+            <strong>
+              Задача темы — слова из Т, О, Р, К, А с нечётными номерами, ровно
+              двумя О не подряд и не на А, — прошла через подтемы, и каждая
+              добавляла к программе новое условие.
+            </strong>{" "}
+            Пролистай версии: точками отмечены строки, которых не было в
+            предыдущей.
+          </Typography.Text>
+          <LessonStepper
+            {...lessonMedia.finalTask}
+            label={"Задача темы от подтемы 1 до подтемы 5"}
+          />
+          <Typography.Text>
+            Каждое условие — отдельная проверка, и каждую можно сверить с
+            рассуждением: 544 и 336 в подтемах 2 и 3 получены и умножением.
+            Подтема 4 переносит те же приёмы на записи чисел, а дополнительный
+            урок — на слова, которые перебором не перебрать.
+          </Typography.Text>
+        </>
+      ),
+    },
+    {
+      id: "karta-temy",
+      navLabel: "Карта темы",
+      explanation: (
+        <>
+          <Typography.Text>
+            <strong>
+              Каждая подтема дала несколько приёмов, и любое решение собирается
+              из них.
+            </strong>{" "}
+            Сверху — путь от условия к ответу, ниже — по блоку на подтему.
+            Заголовок блока ведёт на подтему.
+          </Typography.Text>
+          <TopicCheatSheet
+            label={"Задание 8 на одной схеме"}
+            flow={[
+              { name: "Слова", note: "алфавит, длина, повторы" },
+              { name: "Условия", note: "каждая фраза — отдельная проверка" },
+              { name: "Подсчёт", note: "умножение или перебор product" },
+            ]}
+            groups={[
+              {
+                number: 1,
+                title: <Sub slug="slova-i-umnozhenie">Слова и перебор</Sub>,
+                rows: [
+                  { key: <>mⁿ</>, note: <>слов длины n из m букв</> },
+                  {
+                    key: <>без повторов</>,
+                    note: <>5 · 4 · 3…: каждый раз на букву меньше</>,
+                  },
+                  {
+                    key: <Notation>{"product(…, repeat=n)"}</Notation>,
+                    note: <>все слова по очереди</>,
+                  },
+                ],
+              },
+              {
+                number: 2,
+                title: (
+                  <Sub slug="skolko-raz-bukva">
+                    Сколько раз встречается буква
+                  </Sub>
+                ),
+                rows: [
+                  {
+                    key: <>ровно k</>,
+                    note: <>выбрать места, остальные — из других букв</>,
+                  },
+                  {
+                    key: <>хотя бы одна</>,
+                    note: <>все слова минус слова без неё</>,
+                  },
+                  {
+                    key: <Notation>{"word.count('О')"}</Notation>,
+                    note: <>по одной букве, не фрагментом</>,
+                  },
+                ],
+              },
+              {
+                number: 3,
+                title: <Sub slug="sosednie-bukvy">Соседние буквы</Sub>,
+                rows: [
+                  {
+                    key: <>не рядом</>,
+                    note: <>расставить по промежуткам</>,
+                  },
+                  { key: <>рядом</>, note: <>склеить в один блок</> },
+                  {
+                    key: <Notation>{"'ОО' not in word"}</Notation>,
+                    note: <>нет двух О подряд</>,
+                  },
+                ],
+              },
+              {
+                number: 4,
+                title: <Sub slug="zapis-chisla">Числа в системе счисления</Sub>,
+                rows: [
+                  { key: <>первая цифра</>, note: <>не ноль</> },
+                  {
+                    key: <Notation>{"range(q)"}</Notation>,
+                    note: <>цифры системы q числами</>,
+                  },
+                  {
+                    key: <>чётность числа</>,
+                    note: <>при нечётном основании — по сумме цифр</>,
+                  },
+                ],
+              },
+              {
+                number: 5,
+                title: <Sub slug="nomer-slova">Нумерованный список</Sub>,
+                rows: [
+                  {
+                    key: <>номер</>,
+                    note: <>значение записи + 1</>,
+                  },
+                  {
+                    key: <>алфавит</>,
+                    note: <>буквы по порядку, а не как в условии</>,
+                  },
+                  {
+                    key: <Notation>{"enumerate(…, start=1)"}</Notation>,
+                    note: <>номер отдельно от счётчика</>,
+                  },
+                ],
+              },
+              {
+                number: 6,
+                title: (
+                  <Sub slug="kogda-perebor-ne-uspevaet">
+                    Когда перебор не успевает
+                  </Sub>
+                ),
+                level: "дополнительный урок",
+                rows: [
+                  { key: <>оценка</>, note: <>mⁿ вариантов до запуска</> },
+                  {
+                    key: <>состояния</>,
+                    note: <>хранить количества, а не слова</>,
+                  },
+                ],
+              },
+            ]}
+            caption={
+              <>
+                Карта темы: путь к ответу сверху и главное из каждой подтемы.
+                Номер блока — номер подтемы.
+              </>
+            }
+          />
+        </>
+      ),
+    },
+    {
+      id: "kak-reshat",
+      navLabel: "Как решать",
+      explanation: (
+        <>
+          <Typography.Text>
+            <strong>
+              Любое задание 8 решается одним порядком из пяти шагов.
+            </strong>{" "}
+            Каждому шагу ты уже учился — под ним номера подтем:
+          </Typography.Text>
+          <LessonDiagram
+            {...lessonMedia.finalCycle}
+            caption={
+              <>
+                Главный шаг — условия: каждую фразу превращают в отдельную
+                проверку и сверяют с текстом. Если ответ не сошёлся с
+                рассуждением, перечитывают условие, а не правят числа.
+              </>
+            }
+          />
+        </>
+      ),
+    },
+    {
+      id: "chastye-oshibki",
+      navLabel: "Частые ошибки",
+      explanation: (
+        <>
+          <Typography.Text>
+            <strong>
+              Восемь ошибок встречаются чаще других, и каждую ловит один вопрос
+              к себе.
+            </strong>{" "}
+            Выбери ошибку — увидишь, как её исправить, и вопрос, который её
+            ловит:
+          </Typography.Text>
+          <VariantPicker
+            label={"Частые ошибки и вопросы, которые их ловят"}
+            variants={[
+              {
+                label: "лишняя буква",
+                value: (
+                  <FinalMistake
+                    wrong="«ровно две О»: остальные места — из всех пяти букв"
+                    right="остальные — из четырёх, без О"
+                    question="не появится ли на этих местах третья О?"
+                  />
+                ),
+                note: <Sub slug="skolko-raz-bukva">подтема 2</Sub>,
+              },
+              {
+                label: "count('АО')",
+                value: (
+                  <FinalMistake
+                    wrong={<Notation>{"word.count('АО')"}</Notation>}
+                    right={
+                      <Notation>{"word.count('А') + word.count('О')"}</Notation>
+                    }
+                    question="я считаю буквы или фрагмент подряд?"
+                  />
+                ),
+                note: <Sub slug="skolko-raz-bukva">подтема 2</Sub>,
+              },
+              {
+                label: "in и соседство",
+                value: (
+                  <FinalMistake
+                    wrong="«А и Б рядом» проверили через наличие обеих"
+                    right="'АБ' in word or 'БА' in word"
+                    question="стоят ли буквы подряд и в каком порядке?"
+                  />
+                ),
+                note: <Sub slug="sosednie-bukvy">подтема 3</Sub>,
+              },
+              {
+                label: "начальный ноль",
+                value: (
+                  <FinalMistake
+                    wrong="посчитали числа с нулём впереди"
+                    right="первая цифра — не ноль"
+                    question="будет ли это n-значное число?"
+                  />
+                ),
+                note: <Sub slug="zapis-chisla">подтема 4</Sub>,
+              },
+              {
+                label: "чётность числа",
+                value: (
+                  <FinalMistake
+                    wrong="чётность по последней цифре в системе 9"
+                    right="при нечётном основании — по сумме цифр"
+                    question="основание чётное или нечётное?"
+                  />
+                ),
+                note: <Sub slug="zapis-chisla">подтема 4</Sub>,
+              },
+              {
+                label: "алфавит не по порядку",
+                value: (
+                  <FinalMistake
+                    wrong={<Notation>{"product('ТОРКА', repeat=5)"}</Notation>}
+                    right={<Notation>{"product('АКОРТ', repeat=5)"}</Notation>}
+                    question="буквы стоят по алфавиту?"
+                  />
+                ),
+                note: <Sub slug="nomer-slova">подтема 5</Sub>,
+              },
+              {
+                label: "номер с нуля",
+                value: (
+                  <FinalMistake
+                    wrong={<Notation>{"enumerate(…)"}</Notation>}
+                    right={<Notation>{"enumerate(…, start=1)"}</Notation>}
+                    question="какой номер у первого слова?"
+                  />
+                ),
+                note: <Sub slug="nomer-slova">подтема 5</Sub>,
+              },
+              {
+                label: "номер и счётчик",
+                value: (
+                  <FinalMistake
+                    wrong="номером считали счётчик подходящих слов"
+                    right="номер растёт на каждом слове списка"
+                    question="это место в полном списке или число найденных?"
+                  />
+                ),
+                note: <Sub slug="nomer-slova">подтема 5</Sub>,
+              },
+            ]}
+          />
+        </>
+      ),
+    },
+  ],
+  checkpoint: [
+    {
+      id: "t1",
+      prompt: (
+        <>
+          <Typography.Text>
+            Сколько четырёхбуквенных слов из букв А, Б, В, если буквы могут
+            повторяться? А если не могут?
+          </Typography.Text>
+        </>
+      ),
+      reveal: (
+        <>
+          <Typography.Text>
+            3⁴ = 81. Без повторов четырёхбуквенных слов из трёх букв нет: на
+            четвёртое место буквы не останется.
+          </Typography.Text>
+        </>
+      ),
+    },
+    {
+      id: "t2",
+      prompt: (
+        <>
+          <Typography.Text>
+            Сколько пятибуквенных слов из Т, О, Р, К, А содержат хотя бы одну О?
+          </Typography.Text>
+        </>
+      ),
+      reveal: (
+        <>
+          <Typography.Text>
+            5⁵ − 4⁵ = 3125 − 1024 = 2101: все слова минус слова без О.
+          </Typography.Text>
+        </>
+      ),
+    },
+    {
+      id: "t3",
+      prompt: (
+        <>
+          <Typography.Text>
+            Слова из А, К, О, Р, Т по алфавиту. Какой номер у слова ААААК?
+          </Typography.Text>
+        </>
+      ),
+      reveal: (
+        <>
+          <Typography.Text>
+            2: это запись 00001 в пятеричной системе, значение 1, номер на
+            единицу больше.
+          </Typography.Text>
+        </>
+      ),
+    },
+    {
+      id: "t4",
+      prompt: (
+        <>
+          <Typography.Text>
+            Слова длины 20 из шести букв. Успеет ли перебор product?
+          </Typography.Text>
+        </>
+      ),
+      reveal: (
+        <>
+          <Typography.Text>
+            Нет: 6²⁰ ≈ 3,7 · 10¹⁵ слов. Нужно считать умножением или хранить
+            количества по состояниям.
+          </Typography.Text>
+        </>
+      ),
+    },
+  ],
   result: (
     <>
       <Typography.Text>
-        <strong>
-          Любая задача задания 8 решается одним порядком: какие буквы и какая
-          длина, какие ограничения, считать рассуждением или перебором — и, если
-          список нумерован, хранить номер отдельно от счётчика.
-        </strong>
+        Тема пройдена: задача темы решена от перебора всех слов до ответа 168.
+        Вот что взять с собой.
       </Typography.Text>
-      <Typography.Text>
-        Всё главное из подтем собрано на одной схеме. Номер раздела ведёт на его
-        подтему.
-      </Typography.Text>
-      <TopicCheatSheet
-        label={"Задание 8 на одной схеме"}
-        flow={[
-          { name: "Слова", note: "алфавит, длина, повторы" },
-          { name: "Ограничения", note: "каждая фраза — отдельная проверка" },
-          { name: "Подсчёт", note: "умножение или перебор product" },
-        ]}
-        groups={[
+      <LessonSummary
+        items={[
           {
-            number: 1,
-            title: (
-              <SubtopicLink
-                routeSlug="8-perebor-slov"
-                subtopic="slova-i-umnozhenie"
-              >
-                Слова и перебор
-              </SubtopicLink>
-            ),
-            rows: [
-              { key: <>mⁿ</>, note: <>слов длины n из m букв</> },
-              { key: <>без повторов</>, note: <>5 · 4 · 3, n!</> },
-              { key: <>или</>, note: <>сложить, общие вычесть</> },
-              {
-                key: (
-                  <>
-                    <Notation>{"product"}</Notation>
-                  </>
-                ),
-                note: <>перебор и счётчик</>,
-              },
-            ],
+            key: "Порядок",
+            note: <>Слова, условия, подсчёт, номер, проверка.</>,
           },
           {
-            number: 2,
-            title: (
-              <SubtopicLink
-                routeSlug="8-perebor-slov"
-                subtopic="skolko-raz-bukva"
-              >
-                Сколько раз буква
-              </SubtopicLink>
-            ),
-            rows: [
-              { key: <>ровно k</>, note: <>места, затем другие буквы</> },
-              { key: <>хотя бы одна</>, note: <>все минус без неё</> },
-              { key: <>случаи</>, note: <>по первой букве</> },
-              {
-                key: (
-                  <>
-                    <Notation>{"count"}</Notation>
-                  </>
-                ),
-                note: <>по одной букве, не фрагментом</>,
-              },
-            ],
+            key: "Условия",
+            note: <>Каждая фраза — отдельная проверка в программе.</>,
           },
           {
-            number: 3,
-            title: (
-              <SubtopicLink
-                routeSlug="8-perebor-slov"
-                subtopic="sosednie-bukvy"
-              >
-                Соседние буквы
-              </SubtopicLink>
-            ),
-            rows: [
-              { key: <>не рядом</>, note: <>промежутки</> },
-              { key: <>одинаковые соседи</>, note: <>m · (m − 1)ⁿ⁻¹</> },
-              { key: <>рядом</>, note: <>блок</> },
-              { key: <>проверка</>, note: <>фрагмент или пары с флагом</> },
-            ],
+            key: "Рассуждение",
+            note: <>Места и промежутки — сверка с программой.</>,
           },
           {
-            number: 4,
-            title: (
-              <SubtopicLink routeSlug="8-perebor-slov" subtopic="zapis-chisla">
-                Числа
-              </SubtopicLink>
-            ),
-            rows: [
-              { key: <>первая цифра</>, note: <>не ноль</> },
-              {
-                key: (
-                  <>
-                    <Notation>{"range(q)"}</Notation>
-                  </>
-                ),
-                note: <>цифры числами</>,
-              },
-              { key: <>строгий порядок</>, note: <>наборы цифр</> },
-              { key: <>чётность числа</>, note: <>основание чётное или нет</> },
-            ],
+            key: "Номер",
+            note: <>Алфавит по порядку, enumerate с единицы.</>,
           },
           {
-            number: 5,
-            title: (
-              <SubtopicLink routeSlug="8-perebor-slov" subtopic="nomer-slova">
-                Нумерованный список
-              </SubtopicLink>
-            ),
-            rows: [
-              { key: <>номер</>, note: <>запись + 1</> },
-              { key: <>алфавит</>, note: <>по порядку</> },
-              {
-                key: (
-                  <>
-                    <Notation>{"enumerate"}</Notation>
-                  </>
-                ),
-                note: <>номер отдельно от счётчика</>,
-              },
-              { key: <>последнее</>, note: <>перезаписывать</> },
-            ],
-          },
-          {
-            number: 6,
-            title: (
-              <SubtopicLink
-                routeSlug="8-perebor-slov"
-                subtopic="kogda-perebor-ne-uspevaet"
-              >
-                Когда перебор не успевает
-              </SubtopicLink>
-            ),
-            level: "дополнительный урок",
-            rows: [
-              { key: <>оценка</>, note: <>mⁿ вариантов</> },
-              { key: <>состояния</>, note: <>хранить количества</> },
-              { key: <>схемы типов</>, note: <>умножение по схеме</> },
-              { key: <>проверка</>, note: <>перебор на малых длинах</> },
-            ],
+            key: "Задача темы",
+            note: <>3125 → 544 → 336 → 168 с нечётными номерами.</>,
           },
         ]}
-        sections={[
-          {
-            title: "Три вопроса к ответу",
-            steps: [
-              <>Все ли фразы условия превратились в проверки?</>,
-              <>Записан ли алфавит по порядку, если важны номера?</>,
-              <>Спрашивают номер или количество?</>,
-            ],
-          },
-        ]}
-        caption={
-          <>
-            Шпаргалка темы: порядок решения и главное из каждой подтемы. Номер
-            раздела ведёт на подтему.
-          </>
-        }
       />
     </>
   ),

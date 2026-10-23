@@ -1,263 +1,431 @@
 // Paid content (Change 192): served only after an access check; never
 // import it statically.
-import { Notation } from "~/shared/components/notation";
 import { Typography } from "~/shared/components/typography";
 import {
+  LessonDiagram,
+  LessonStepper,
+  LessonSummary,
   TopicCheatSheet,
   VariantPicker,
 } from "~/shared/components/learning-content";
 import type { LessonContent } from "../lib/define-lesson.types";
+import { FinalMistake } from "./final-mistake";
+import { lessonMedia } from "./executors.paid.praktika.media";
 import { SubtopicLink } from "./subtopic-link";
 
+/** A subtopic of this topic, linked from the final page. */
+const Sub: React.FC<{ slug: string; children: React.ReactNode }> = (props) => (
+  <SubtopicLink
+    routeSlug="12-ispolnenie-algoritma-dlya-ispolnitelya"
+    subtopic={props.slug}
+  >
+    {props.children}
+  </SubtopicLink>
+);
+
 const content: LessonContent.PaidPracticeContent = {
-  examFocus: (
-    <>
-      <Typography.Text>
-        <strong>
-          Ответ проверяют тем же, чем решали: короткой трассой по таблице или
-          входом, на котором достигается граница.
-        </strong>{" "}
-        Выбери ошибку, чтобы увидеть, как себя проверить:
-      </Typography.Text>
-      <VariantPicker
-        label={"Ошибка и как себя проверить"}
-        variants={[
-          {
-            label: "запись при S",
-            value: (
+  sections: [
+    {
+      id: "odna-zadacha",
+      navLabel: "Одна задача — вся тема",
+      explanation: (
+        <>
+          <Typography.Text>
+            <strong>
+              Задача темы — наибольшее число нулей во входе из 12 цифр, если
+              после работы машины осталось ровно 5 нулей, — решается приёмами
+              подтем по очереди.
+            </strong>{" "}
+            Пролистай решение: в подписи каждого шага — подтема, откуда приём.
+          </Typography.Text>
+          <LessonStepper
+            {...lessonMedia.finalTask}
+            label={"Задача темы: от тактов до ответа"}
+          />
+          <Typography.Text>
+            Машину не прогоняли по всей ленте: хватило нескольких тактов, чтобы
+            понять смысл таблицы — «минус один», — а дальше ответ получился
+            рассуждением. Подтемы 5 и 6 разбирают таблицы с фазами и ограничения
+            на сумму цифр.
+          </Typography.Text>
+        </>
+      ),
+    },
+    {
+      id: "karta-temy",
+      navLabel: "Карта темы",
+      explanation: (
+        <>
+          <Typography.Text>
+            <strong>
+              Каждая подтема дала один способ понять таблицу, и любое решение
+              собирается из них.
+            </strong>{" "}
+            Сверху — путь от таблицы к ответу, ниже — по блоку на подтему.
+            Заголовок блока ведёт на подтему.
+          </Typography.Text>
+          <TopicCheatSheet
+            label={"Задание 12 на одной схеме"}
+            flow={[
+              { name: "Такты", note: "запись, сдвиг, новое состояние" },
+              { name: "Смысл", note: "что таблица делает с любой строкой" },
+              { name: "Ответ", note: "число, слово, количество или граница" },
+            ]}
+            groups={[
+              {
+                number: 1,
+                title: <Sub slug="lenta-i-komanda">Лента, команда и такт</Sub>,
+                rows: [
+                  {
+                    key: <>λ, L, q1</>,
+                    note: <>записать → сдвинуться → сменить состояние</>,
+                  },
+                  {
+                    key: <>S</>,
+                    note: <>запись и остановка; такт считается</>,
+                  },
+                  {
+                    key: <>λ</>,
+                    note: <>пустая ячейка — свой столбец, не ноль</>,
+                  },
+                ],
+              },
+              {
+                number: 2,
+                title: (
+                  <Sub slug="prohod-i-kolichestva">
+                    Однократный проход и количества
+                  </Sub>
+                ),
+                rows: [
+                  {
+                    key: <>замена</>,
+                    note: <>каждая ячейка меняется сама по себе</>,
+                  },
+                  {
+                    key: <>количества</>,
+                    note: <>из результата обратно во вход</>,
+                  },
+                  {
+                    key: <>два символа в один</>,
+                    note: <>выбор — для наименьшего и наибольшего</>,
+                  },
+                ],
+              },
+              {
+                number: 3,
+                title: <Sub slug="slovo-i-chislo">Двоичное число на ленте</Sub>,
+                rows: [
+                  {
+                    key: <>20 → 19</>,
+                    note: <>таблица задачи темы: минус один</>,
+                  },
+                  { key: <>N + 2ᵏ</>, note: <>единица дописана слева</> },
+                  { key: <>2N + 1</>, note: <>единица дописана справа</> },
+                  { key: <>2ᵏ − 1 − N</>, note: <>инверсия всех цифр</> },
+                ],
+              },
+              {
+                number: 4,
+                title: (
+                  <Sub slug="hvost-i-obratnaya-zadacha">
+                    Хвост и обратная задача
+                  </Sub>
+                ),
+                rows: [
+                  {
+                    key: <>P 1 0ᵗ → P 0 1ᵗ</>,
+                    note: <>меняется только хвост</>,
+                  },
+                  {
+                    key: <>обратный вопрос</>,
+                    note: <>от результата к входу, пример на границе</>,
+                  },
+                ],
+              },
+              {
+                number: 5,
+                title: <Sub slug="sostoyaniya-i-fazy">Состояния и фазы</Sub>,
+                rows: [
+                  {
+                    key: <>фаза</>,
+                    note: <>что делает и чем заканчивается</>,
+                  },
+                  {
+                    key: <>такты</>,
+                    note: <>сумма по фазам, например 2k + 4</>,
+                  },
+                ],
+              },
+              {
+                number: 6,
+                title: (
+                  <Sub slug="ogranicheniya-na-summu">
+                    Сумма, простота и ограничения
+                  </Sub>
+                ),
+                level: "дополнительный урок",
+                rows: [
+                  {
+                    key: <>S = 7a + 8b + 3c</>,
+                    note: <>сумма через количества цифр</>,
+                  },
+                  {
+                    key: <>простое</>,
+                    note: <>больше 1, делители до √x</>,
+                  },
+                ],
+              },
+            ]}
+            caption={
               <>
-                При <Notation>{"S"}</Notation> пропущена запись: остановочная
-                ячейка осталась старой
+                Карта темы: путь к ответу сверху и главное из каждой подтемы.
+                Номер блока — номер подтемы.
               </>
-            ),
-            note: <>выполнить запись команды перед остановкой</>,
-          },
-          {
-            label: "запись после сдвига",
-            value: (
-              <>Символ записан в новую ячейку: изменилась соседняя клетка</>
-            ),
-            note: <>запись — в старую текущую ячейку, потом сдвиг</>,
-          },
-          {
-            label: "начальная ячейка",
-            value: (
+            }
+          />
+        </>
+      ),
+    },
+    {
+      id: "kak-reshat",
+      navLabel: "Как решать",
+      explanation: (
+        <>
+          <Typography.Text>
+            <strong>
+              Любое задание 12 решается одним порядком из пяти шагов.
+            </strong>{" "}
+            Каждому шагу ты уже учился — под ним номера подтем:
+          </Typography.Text>
+          <LessonDiagram
+            {...lessonMedia.finalCycle}
+            caption={
               <>
-                Головка начала на последней цифре, а сказано «в пустой ячейке
-                справа»
+                Главный шаг — смысл таблицы: замена, арифметика, хвост или фазы.
+                Если короткая трасса не сошлась с ним, пересматривают смысл, а
+                не прогоняют машину по всей ленте.
               </>
-            ),
-            note: <>перечитать начальное положение дословно</>,
-          },
-          {
-            label: "перевёрнутая строка",
-            value: (
-              <>
-                Прочитанная справа налево строка записана в ответ перевёрнутой
-              </>
-            ),
-            note: <>итог читается по ленте слева направо</>,
-          },
-          {
-            label: "пустая клетка — стоп",
-            value: <>Пустая клетка таблицы принята за остановку</>,
-            note: (
-              <>
-                пустая клетка — невозможное сочетание; сверить предыдущие такты
-              </>
-            ),
-          },
-          {
-            label: "q0 — стоп",
-            value: <>Начальное состояние q0 принято за остановку</>,
-            note: <>остановку задаёт только S</>,
-          },
-          {
-            label: "λ — ноль",
-            value: <>Пустой символ λ принят за цифру 0</>,
-            note: <>λ — отдельный символ со своим столбцом таблицы</>,
-          },
-          {
-            label: "слово и число",
-            value: <>Длина взята по числу без ведущих нулей</>,
-            note: <>ведущие нули — тоже ячейки слова</>,
-          },
-          {
-            label: "выборка вместо границы",
-            value: <>Максимум взят из нескольких запусков</>,
-            note: (
-              <>вывести границу и привести вход, на котором она достигается</>
-            ),
-          },
-          {
-            label: "не та величина",
-            value: (
-              <>
-                Записан результат, а спрашивали параметр, такты или десятичное
-                значение
-              </>
-            ),
-            note: <>перечитать вопрос</>,
-          },
-        ]}
-      />
-    </>
-  ),
+            }
+          />
+          <Typography.Text>
+            Для обратного вопроса ответ подтверждают входом, на котором
+            достигается граница: в задаче темы это 0000 1 0000000.
+          </Typography.Text>
+        </>
+      ),
+    },
+    {
+      id: "chastye-oshibki",
+      navLabel: "Частые ошибки",
+      explanation: (
+        <>
+          <Typography.Text>
+            <strong>
+              Восемь ошибок встречаются чаще других, и каждую ловит один вопрос
+              к себе.
+            </strong>{" "}
+            Выбери ошибку — увидишь, как её исправить, и вопрос, который её
+            ловит:
+          </Typography.Text>
+          <VariantPicker
+            label={"Частые ошибки и вопросы, которые их ловят"}
+            variants={[
+              {
+                label: "запись при S",
+                value: (
+                  <FinalMistake
+                    wrong="при S запись пропустили"
+                    right="сначала запись, потом остановка"
+                    question="что команда пишет в ячейку при S?"
+                  />
+                ),
+                note: <Sub slug="lenta-i-komanda">подтема 1</Sub>,
+              },
+              {
+                label: "запись после сдвига",
+                value: (
+                  <FinalMistake
+                    wrong="символ записали в новую ячейку"
+                    right="запись — в текущую, потом сдвиг"
+                    question="где стояла головка, когда читали символ?"
+                  />
+                ),
+                note: <Sub slug="lenta-i-komanda">подтема 1</Sub>,
+              },
+              {
+                label: "начальная ячейка",
+                value: (
+                  <FinalMistake
+                    wrong="головка начала на последней цифре"
+                    right="в пустой ячейке справа"
+                    question="где головка по условию?"
+                  />
+                ),
+                note: <Sub slug="lenta-i-komanda">подтема 1</Sub>,
+              },
+              {
+                label: "λ — ноль",
+                value: (
+                  <FinalMistake
+                    wrong="пустой символ λ прочитали как 0"
+                    right="λ — свой столбец таблицы"
+                    question="какой столбец таблицы я читаю?"
+                  />
+                ),
+                note: <Sub slug="lenta-i-komanda">подтема 1</Sub>,
+              },
+              {
+                label: "q0 — стоп",
+                value: (
+                  <FinalMistake
+                    wrong="состояние q0 приняли за остановку"
+                    right="остановку задаёт только S"
+                    question="есть ли в команде S?"
+                  />
+                ),
+                note: <Sub slug="lenta-i-komanda">подтема 1</Sub>,
+              },
+              {
+                label: "слово и число",
+                value: (
+                  <FinalMistake
+                    wrong="длину взяли по числу без ведущих нулей"
+                    right="ведущие нули — тоже ячейки слова"
+                    question="сколько ячеек занимает слово?"
+                  />
+                ),
+                note: <Sub slug="slovo-i-chislo">подтема 3</Sub>,
+              },
+              {
+                label: "выборка вместо границы",
+                value: (
+                  <FinalMistake
+                    wrong="максимум взяли из нескольких запусков"
+                    right="граница рассуждением и пример на ней"
+                    question="почему больше быть не может?"
+                  />
+                ),
+                note: <Sub slug="hvost-i-obratnaya-zadacha">подтема 4</Sub>,
+              },
+              {
+                label: "не та величина",
+                value: (
+                  <FinalMistake
+                    wrong="записали результат, а спрашивали такты"
+                    right="ответ — то, что спрашивают"
+                    question="число, слово, такты или вход?"
+                  />
+                ),
+                note: <Sub slug="sostoyaniya-i-fazy">подтема 5</Sub>,
+              },
+            ]}
+          />
+        </>
+      ),
+    },
+  ],
+  checkpoint: [
+    {
+      id: "t1",
+      prompt: (
+        <>
+          <Typography.Text>
+            Что таблица задачи темы сделает со словом 10111000?
+          </Typography.Text>
+        </>
+      ),
+      reveal: (
+        <>
+          <Typography.Text>
+            10110111: хвост из трёх нулей станет единицами, единица перед ним —
+            нулём. Это 184 − 1 = 183.
+          </Typography.Text>
+        </>
+      ),
+    },
+    {
+      id: "t2",
+      prompt: (
+        <>
+          <Typography.Text>
+            Сколько тактов таблица задачи темы делает на слове с хвостом из t
+            нулей?
+          </Typography.Text>
+        </>
+      ),
+      reveal: (
+        <>
+          <Typography.Text>
+            t + 2: вход в строку, t нулей хвоста и остановочная замена единицы.
+          </Typography.Text>
+        </>
+      ),
+    },
+    {
+      id: "t3",
+      prompt: (
+        <>
+          <Typography.Text>
+            Почему в задаче темы во входе не может быть 12 нулей?
+          </Typography.Text>
+        </>
+      ),
+      reveal: (
+        <>
+          <Typography.Text>
+            Без единицы машине нечего вычесть: ей нужна остановочная единица.
+            Значит, нулей не больше 11.
+          </Typography.Text>
+        </>
+      ),
+    },
+    {
+      id: "t4",
+      prompt: (
+        <>
+          <Typography.Text>
+            Таблица дописывает единицу справа от двоичного числа N. Какое число
+            получится?
+          </Typography.Text>
+        </>
+      ),
+      reveal: (
+        <>
+          <Typography.Text>2N + 1: сдвиг на разряд и единица.</Typography.Text>
+        </>
+      ),
+    },
+  ],
   result: (
     <>
       <Typography.Text>
-        <strong>
-          Любая задача задания 12 решается в три шага: несколько тактов по
-          таблице вручную, смысл таблицы для любой строки — замена, арифметика,
-          хвост или фазы, — и ответ на вопрос, для обратного вопроса — с входом,
-          на котором он достигается.
-        </strong>
+        Тема пройдена: задача темы решена от первых тактов до ответа 11. Вот что
+        взять с собой.
       </Typography.Text>
-      <Typography.Text>
-        Всё главное из подтем собрано на одной схеме. Номер раздела ведёт на его
-        подтему.
-      </Typography.Text>
-      <TopicCheatSheet
-        label={"Задание 12 на одной схеме"}
-        flow={[
+      <LessonSummary
+        items={[
           {
-            name: "Такты",
-            note: "первые такты вручную: запись, сдвиг, состояние",
+            key: "Порядок",
+            note: <>Такты, смысл, вопрос, граница, проверка.</>,
           },
           {
-            name: "Смысл",
-            note: "замена, ±1 и цифры на краях, хвост или фазы",
+            key: "Такт",
+            note: <>Запись в текущую ячейку, сдвиг, новое состояние.</>,
           },
           {
-            name: "Ответ",
-            note: "число, слово, количество или граница с примером",
-          },
-        ]}
-        groups={[
-          {
-            number: 1,
-            title: (
-              <SubtopicLink
-                routeSlug="12-ispolnenie-algoritma-dlya-ispolnitelya"
-                subtopic="lenta-i-komanda"
-              >
-                Лента и такт
-              </SubtopicLink>
-            ),
-            rows: [
-              {
-                key: <>λ, L, q1</>,
-                note: <>записать → сдвинуться → состояние</>,
-              },
-              {
-                key: <>10100 → 10011</>,
-                note: <>4 такта, головка на ячейке 2</>,
-              },
-              { key: <>S</>, note: <>запись и остановка, такт считается</> },
-              {
-                key: <Notation>{"run_tm"}</Notation>,
-                note: <>таблица словарём</>,
-              },
-            ],
+            key: "Смысл",
+            note: <>Замена, ±1 и цифры на краях, хвост или фазы.</>,
           },
           {
-            number: 2,
-            title: (
-              <SubtopicLink
-                routeSlug="12-ispolnenie-algoritma-dlya-ispolnitelya"
-                subtopic="prohod-i-kolichestva"
-              >
-                Однократный проход
-              </SubtopicLink>
-            ),
-            rows: [
-              { key: <>замена</>, note: <>каждая ячейка сама по себе</> },
-              { key: <>количества</>, note: <>из результата во вход</> },
-              { key: <>два в один</>, note: <>выбор — для min и max</> },
-            ],
+            key: "Граница",
+            note: <>Рассуждение и вход, на котором она достигается.</>,
           },
           {
-            number: 3,
-            title: (
-              <SubtopicLink
-                routeSlug="12-ispolnenie-algoritma-dlya-ispolnitelya"
-                subtopic="slovo-i-chislo"
-              >
-                Двоичное число
-              </SubtopicLink>
-            ),
-            rows: [
-              { key: <>20 → 19</>, note: <>таблица задачи темы: минус один</> },
-              { key: <>N + 2ᵏ</>, note: <>единица слева</> },
-              { key: <>2N + 1</>, note: <>единица справа</> },
-              { key: <>2ᵏ − 1 − N</>, note: <>инверсия</> },
-            ],
-          },
-          {
-            number: 4,
-            title: (
-              <SubtopicLink
-                routeSlug="12-ispolnenie-algoritma-dlya-ispolnitelya"
-                subtopic="hvost-i-obratnaya-zadacha"
-              >
-                Хвост и обратная задача
-              </SubtopicLink>
-            ),
-            rows: [
-              { key: <>P 1 0ᵗ → P 0 1ᵗ</>, note: <>меняется только хвост</> },
-              { key: <>5 нулей</>, note: <>4 из P и 1 новый</> },
-              { key: <>11</>, note: <>ответ: 4 нуля, 1, 7 нулей</> },
-            ],
-          },
-          {
-            number: 5,
-            title: (
-              <SubtopicLink
-                routeSlug="12-ispolnenie-algoritma-dlya-ispolnitelya"
-                subtopic="sostoyaniya-i-fazy"
-              >
-                Состояния и фазы
-              </SubtopicLink>
-            ),
-            rows: [
-              { key: <>фаза</>, note: <>что делает и чем заканчивается</> },
-              { key: <>10, k единиц, 0</>, note: <>важна только длина</> },
-              { key: <>2k + 4</>, note: <>такты — сумма по фазам</> },
-            ],
-          },
-          {
-            number: 6,
-            title: (
-              <SubtopicLink
-                routeSlug="12-ispolnenie-algoritma-dlya-ispolnitelya"
-                subtopic="ogranicheniya-na-summu"
-              >
-                Сумма и простота
-              </SubtopicLink>
-            ),
-            level: "дополнительный урок",
-            rows: [
-              { key: <>S = 7a + 8b + 3c</>, note: <>сумма через количества</> },
-              { key: <>простое</>, note: <>больше 1, делители до √x</> },
-            ],
+            key: "Задача темы",
+            note: <>0000 1 0000000: 4 + 7 = 11 нулей.</>,
           },
         ]}
-        sections={[
-          {
-            title: "Три вопроса к условию",
-            steps: [
-              <>Где головка в начале и в каком состоянии?</>,
-              <>Что таблица делает с любой строкой — какая модель подходит?</>,
-              <>Что спрашивают: слово, число, такты, количество или границу?</>,
-            ],
-          },
-        ]}
-        caption={
-          <>
-            Шпаргалка темы: порядок решения и главное из каждой подтемы. Номер
-            раздела ведёт на подтему.
-          </>
-        }
       />
     </>
   ),

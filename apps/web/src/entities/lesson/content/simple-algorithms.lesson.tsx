@@ -14,6 +14,7 @@ import { simpleAlgorithmsLessonPublication } from "~/shared/config/lesson-public
 import { defineLesson } from "../lib/define-lesson";
 import { lessonMedia } from "./simple-algorithms.media";
 import { PythonTerm } from "./python-term";
+import { FinalMistake } from "./final-mistake";
 import { SubtopicLink } from "./subtopic-link";
 
 const THEME_ALGORITHM =
@@ -23,6 +24,16 @@ const THEME_PROGRAM =
   'import turtle as t\n\nk = 30\nt.tracer(0)\nt.setheading(90)\n\nfor _ in range(2):\n    t.forward(6 * k)\n    t.right(90)\n    t.forward(8 * k)\n    t.right(90)\n\nt.penup()\nt.forward(2 * k)\nt.right(90)\nt.forward(3 * k)\nt.left(90)\nt.pendown()\n\nfor _ in range(2):\n    t.forward(5 * k)\n    t.right(90)\n    t.forward(7 * k)\n    t.right(90)\n\nt.penup()\nfor x in range(-2, 13):\n    for y in range(-2, 10):\n        t.goto(x * k, y * k)\n        t.dot(4, "red")\n\nt.update()\nt.done()';
 
 const R = "6-prostejshie-algoritmy-dlya-ispolnitelej";
+
+/** A subtopic of this topic, linked from the final page. */
+const Sub: React.FC<{ slug: string; children: React.ReactNode }> = (props) => (
+  <SubtopicLink
+    routeSlug="6-prostejshie-algoritmy-dlya-ispolnitelej"
+    subtopic={props.slug}
+  >
+    {props.children}
+  </SubtopicLink>
+);
 
 export const simpleAlgorithmsLesson = defineLesson({
   ...simpleAlgorithmsLessonPublication,
@@ -1933,306 +1944,415 @@ export const simpleAlgorithmsLesson = defineLesson({
       ),
     },
   ],
-  examFocus: (
-    <>
-      <Typography.Text>
-        <strong>
-          Перед подсчётом проверь, что фигура — та, которую задают команды.
-        </strong>{" "}
-        Скажи основные движения словами: «вверх, вправо, вниз, влево — должен
-        получиться прямоугольник». Если рисунок показывает другое, ошибку ищут в
-        командах, а не в подсчёте.
-      </Typography.Text>
-      <Typography.Text>
-        <strong>Частые ошибки связаны с конкретной проверкой.</strong> Выбери
-        ошибку, чтобы увидеть, как себя проверить:
-      </Typography.Text>
-      <VariantPicker
-        label={"Ошибка и что проверить"}
-        variants={[
-          {
-            label: "начальное направление",
-            value: <>Черепаху начали вправо, хотя в условии — вверх</>,
-            note: (
+  finalLead:
+    "Вся тема на одной странице: как решилась задача темы, главное из подтем, порядок решения и частые ошибки.",
+  finalSections: [
+    {
+      id: "odna-zadacha",
+      navLabel: "Одна задача — вся тема",
+      explanation: (
+        <>
+          <Typography.Text>
+            <strong>
+              Задача темы — точки пересечения двух прямоугольников вместе с
+              границей — решается приёмами первых трёх подтем по очереди.
+            </strong>{" "}
+            Пролистай решение: в подписи каждого шага — подтема, откуда приём.
+          </Typography.Text>
+          <LessonStepper
+            {...lessonMedia.finalTask}
+            label={"Задача темы: от команд до ответа"}
+          />
+          <Typography.Text>
+            Остальные подтемы — для фигур, которые на черновике не нарисовать:
+            рисунок программой на turtle (подтема 4), наклонные стороны (подтема
+            5) и подсчёт точек программой (дополнительный урок). Для задачи темы
+            они дают тот же ответ — 30.
+          </Typography.Text>
+        </>
+      ),
+    },
+    {
+      id: "karta-temy",
+      navLabel: "Карта темы",
+      explanation: (
+        <>
+          <Typography.Text>
+            <strong>
+              Каждая подтема дала несколько правил, и любое решение собирается
+              из них.
+            </strong>{" "}
+            Сверху — путь от команд к ответу, ниже — по блоку на подтему.
+            Заголовок блока ведёт на подтему.
+          </Typography.Text>
+          <TopicCheatSheet
+            label={"Задание 6 на одной схеме"}
+            flow={[
+              { name: "Команды", note: "начало, голова, повторы" },
+              { name: "Фигуры", note: "на черновике или программой" },
+              { name: "Подсчёт", note: "нужная область и граница" },
+            ]}
+            groups={[
+              {
+                number: 1,
+                title: <Sub slug="sostoyanie-i-komandy">Команды и след</Sub>,
+                rows: [
+                  {
+                    key: <>состояние</>,
+                    note: <>положение, направление головы, хвост</>,
+                  },
+                  {
+                    key: <>Назад</>,
+                    note: <>движение спиной, голова не поворачивается</>,
+                  },
+                  { key: <>Повтори k</>, note: <>выполнить все k раз</> },
+                  { key: <>хвост поднят</>, note: <>движение без линии</> },
+                ],
+              },
+              {
+                number: 2,
+                title: (
+                  <Sub slug="granica-i-velichiny">
+                    Точки внутри и на границе
+                  </Sub>
+                ),
+                rows: [
+                  {
+                    key: <>(a − 1)(b − 1)</>,
+                    note: <>точек строго внутри прямоугольника a × b</>,
+                  },
+                  {
+                    key: <>(a + 1)(b + 1)</>,
+                    note: <>точек вместе с границей</>,
+                  },
+                  {
+                    key: <>площадь, периметр</>,
+                    note: <>другие величины, не число точек</>,
+                  },
+                ],
+              },
+              {
+                number: 3,
+                title: <Sub slug="neskolko-figur">Две фигуры</Sub>,
+                rows: [
+                  {
+                    key: <>пересечение</>,
+                    note: <>бо́льшая из левых границ, меньшая из правых</>,
+                  },
+                  {
+                    key: <>объединение</>,
+                    note: <>точки A + точки B − общие</>,
+                  },
+                  {
+                    key: <>касание</>,
+                    note: <>площадь 0, а точки есть</>,
+                  },
+                ],
+              },
+              {
+                number: 4,
+                title: (
+                  <Sub slug="postroenie-i-reshetka">Рисунок программой</Sub>
+                ),
+                rows: [
+                  {
+                    key: <Notation>{"setheading(90)"}</Notation>,
+                    note: <>голова вверх, как в условии</>,
+                  },
+                  {
+                    key: <>масштаб k</>,
+                    note: <>умножать расстояния, а не углы</>,
+                  },
+                  {
+                    key: <Notation>{"goto(x * k, y * k)"}</Notation>,
+                    note: <>сетка тем же масштабом</>,
+                  },
+                ],
+              },
+              {
+                number: 5,
+                title: (
+                  <Sub slug="naklonnaya-geometriya">Наклонные стороны</Sub>
+                ),
+                rows: [
+                  {
+                    key: <>поворот</>,
+                    note: <>180° минус угол фигуры</>,
+                  },
+                  {
+                    key: <>по столбцам</>,
+                    note: <>целые y между сторонами в каждом x</>,
+                  },
+                  {
+                    key: <>спорная точка</>,
+                    note: <>проверить по уравнению стороны</>,
+                  },
+                ],
+              },
+              {
+                number: 6,
+                title: <Sub slug="podschet-programmoj">Подсчёт программой</Sub>,
+                level: "дополнительный урок",
+                rows: [
+                  {
+                    key: <Notation>{"in_a and in_b"}</Notation>,
+                    note: <>пересечение; or — объединение</>,
+                  },
+                  {
+                    key: <>≥ и {">"}</>,
+                    note: <>с границей и без — ответы разные</>,
+                  },
+                ],
+              },
+            ]}
+            caption={
               <>
-                сверить условие и <Notation>{"setheading"}</Notation>
+                Карта темы: путь к ответу сверху и главное из каждой подтемы.
+                Номер блока — номер подтемы.
               </>
-            ),
-          },
-          {
-            label: "Назад",
-            value: <>после «Назад» Черепаху развернули</>,
-            note: <>«Назад» не меняет направление головы</>,
-          },
-          {
-            label: "right и left",
-            value: (
+            }
+          />
+        </>
+      ),
+    },
+    {
+      id: "kak-reshat",
+      navLabel: "Как решать",
+      explanation: (
+        <>
+          <Typography.Text>
+            <strong>
+              Любое задание 6 решается одним порядком из пяти шагов.
+            </strong>{" "}
+            Каждому шагу ты уже учился — под ним номера подтем:
+          </Typography.Text>
+          <LessonDiagram
+            {...lessonMedia.finalCycle}
+            caption={
               <>
-                Перепутаны <Notation>{"right"}</Notation> и{" "}
-                <Notation>{"left"}</Notation>: поворот в другую сторону
+                Главный шаг — фигуры: ошибки почти всегда случаются до подсчёта.
+                Скажи движения словами — «вверх, вправо, вниз, влево» — и сверь
+                с рисунком; если фигура не та, ищи ошибку в командах.
               </>
-            ),
-            note: <>проверить каждую команду</>,
-          },
-          {
-            label: "сокращённый повтор",
-            value: (
-              <>
-                Повторений сделали меньше, «потому что фигура та же»: следующий
-                блок начался не оттуда
-              </>
-            ),
-            note: <>выполнить столько повторений, сколько в условии</>,
-          },
-          {
-            label: "угол × масштаб",
-            value: <>Угол умножен на масштаб: фигура другая</>,
-            note: (
-              <>
-                на <Notation>{"k"}</Notation> умножать только расстояния
-              </>
-            ),
-          },
-          {
-            label: "сетка без масштаба",
-            value: <>Сетка нанесена без масштаба: точки не на своих местах</>,
-            note: (
-              <>
-                проверить <Notation>{"goto(x * k, y * k)"}</Notation>
-              </>
-            ),
-          },
-          {
-            label: "граница",
-            value: <>Посчитали с границей, а спрашивали строго внутри</>,
-            note: <>перечитать фразу о точках на линии</>,
-          },
-          {
-            label: "объединение сложением",
-            value: <>Объединение посчитано сложением: общие точки дважды</>,
-            note: <>вычесть пересечение</>,
-          },
-          {
-            label: "дорисованная линия",
-            value: <>Незамкнутую линию дорисовали и посчитали «область»</>,
-            note: <>проверить, вернулась ли Черепаха в начало контура</>,
-          },
-        ]}
-      />
-    </>
-  ),
+            }
+          />
+        </>
+      ),
+    },
+    {
+      id: "chastye-oshibki",
+      navLabel: "Частые ошибки",
+      explanation: (
+        <>
+          <Typography.Text>
+            <strong>
+              Восемь ошибок встречаются чаще других, и каждую ловит один вопрос
+              к себе.
+            </strong>{" "}
+            Выбери ошибку — увидишь, как её исправить, и вопрос, который её
+            ловит:
+          </Typography.Text>
+          <VariantPicker
+            label={"Частые ошибки и вопросы, которые их ловят"}
+            variants={[
+              {
+                label: "начальное направление",
+                value: (
+                  <FinalMistake
+                    wrong="Черепаха начала вправо"
+                    right="голова вдоль оси ординат — вверх"
+                    question="куда смотрит голова по условию?"
+                  />
+                ),
+                note: <Sub slug="sostoyanie-i-komandy">подтема 1</Sub>,
+              },
+              {
+                label: "Назад",
+                value: (
+                  <FinalMistake
+                    wrong="после «Назад» Черепаху развернули"
+                    right="голова смотрит туда же"
+                    question="была ли команда поворота?"
+                  />
+                ),
+                note: <Sub slug="sostoyanie-i-komandy">подтема 1</Sub>,
+              },
+              {
+                label: "сокращённый повтор",
+                value: (
+                  <FinalMistake
+                    wrong="повторений меньше: «фигура та же»"
+                    right="выполнить все k повторений"
+                    question="откуда начнётся следующий блок?"
+                  />
+                ),
+                note: <Sub slug="sostoyanie-i-komandy">подтема 1</Sub>,
+              },
+              {
+                label: "граница",
+                value: (
+                  <FinalMistake
+                    wrong="посчитали с границей, а спрашивали строго внутри"
+                    right="(a − 1)(b − 1) вместо (a + 1)(b + 1)"
+                    question="что сказано о точках на линиях?"
+                  />
+                ),
+                note: <Sub slug="granica-i-velichiny">подтема 2</Sub>,
+              },
+              {
+                label: "объединение сложением",
+                value: (
+                  <FinalMistake
+                    wrong="точки A + точки B"
+                    right="точки A + точки B − общие"
+                    question="не посчитаны ли общие точки дважды?"
+                  />
+                ),
+                note: <Sub slug="neskolko-figur">подтема 3</Sub>,
+              },
+              {
+                label: "угол × масштаб",
+                value: (
+                  <FinalMistake
+                    wrong={<Notation>{"t.right(90 * k)"}</Notation>}
+                    right={<Notation>{"t.right(90)"}</Notation>}
+                    question="на k умножены только расстояния?"
+                  />
+                ),
+                note: <Sub slug="postroenie-i-reshetka">подтема 4</Sub>,
+              },
+              {
+                label: "сетка без масштаба",
+                value: (
+                  <FinalMistake
+                    wrong={<Notation>{"t.goto(x, y)"}</Notation>}
+                    right={<Notation>{"t.goto(x * k, y * k)"}</Notation>}
+                    question="стоят ли точки на узлах рисунка?"
+                  />
+                ),
+                note: <Sub slug="postroenie-i-reshetka">подтема 4</Sub>,
+              },
+              {
+                label: "дорисованная линия",
+                value: (
+                  <FinalMistake
+                    wrong="незамкнутую линию замкнули и посчитали область"
+                    right="считают только замкнутую фигуру"
+                    question="вернулась ли Черепаха в начало контура?"
+                  />
+                ),
+                note: <Sub slug="granica-i-velichiny">подтема 2</Sub>,
+              },
+            ]}
+          />
+        </>
+      ),
+    },
+  ],
+  checkpoint: [
+    {
+      id: "t1",
+      prompt: (
+        <>
+          <Typography.Text>
+            Сколько точек с целыми координатами строго внутри прямоугольника 8 ×
+            6? А вместе с границей?
+          </Typography.Text>
+        </>
+      ),
+      reveal: (
+        <>
+          <Typography.Text>
+            Внутри (8 − 1) · (6 − 1) = 35, с границей (8 + 1) · (6 + 1) = 63.
+          </Typography.Text>
+        </>
+      ),
+    },
+    {
+      id: "t2",
+      prompt: (
+        <>
+          <Typography.Text>
+            Фигуры 0 ≤ x ≤ 8 и 3 ≤ x ≤ 10. Какие x у их пересечения?
+          </Typography.Text>
+        </>
+      ),
+      reveal: (
+        <>
+          <Typography.Text>
+            3 ≤ x ≤ 8: левая граница — бо́льшая из левых, правая — меньшая из
+            правых.
+          </Typography.Text>
+        </>
+      ),
+    },
+    {
+      id: "t3",
+      prompt: (
+        <>
+          <Typography.Text>
+            В фигуре A 63 точки, в B — 48, общих 30. Сколько точек в
+            объединении?
+          </Typography.Text>
+        </>
+      ),
+      reveal: (
+        <>
+          <Typography.Text>
+            63 + 48 − 30 = 81: общие точки иначе посчитаны дважды.
+          </Typography.Text>
+        </>
+      ),
+    },
+    {
+      id: "t4",
+      prompt: (
+        <>
+          <Typography.Text>
+            У фигуры наклонные стороны. Как считать её точки?
+          </Typography.Text>
+        </>
+      ),
+      reveal: (
+        <>
+          <Typography.Text>
+            По столбцам: для каждого целого x — целые y между сторонами; спорные
+            точки проверяют по уравнению стороны. Или программой.
+          </Typography.Text>
+        </>
+      ),
+    },
+  ],
   result: (
     <>
       <Typography.Text>
-        <strong>
-          В любой задаче задания 6 сначала точно восстанавливают фигуры по
-          командам, затем называют область, о которой спрашивают, и только потом
-          считают — точки, площадь или периметр.
-        </strong>{" "}
-        Ошибки обычно возникают раньше подсчёта: не то начальное направление,
-        сокращённый повтор, не та область или не то правило о границе.
+        Тема пройдена: задача темы решена от команд до ответа 30. Вот что взять
+        с собой.
       </Typography.Text>
-      <Typography.Text>
-        Всё главное из подтем собрано на одной схеме. Номер раздела ведёт на его
-        подтему.
-      </Typography.Text>
-      <TopicCheatSheet
-        label={"Задание 6 на одной схеме"}
-        flow={[
+      <LessonSummary
+        items={[
           {
-            name: "Вопрос и начало",
-            note: "что считать, граница, положение и направление",
-          },
-          { name: "Фигуры", note: "по командам или рисунком программой" },
-          {
-            name: "Область и подсчёт",
-            note: "одна фигура, пересечение, объединение; по рядам",
-          },
-        ]}
-        groups={[
-          {
-            number: 1,
-            title: (
-              <SubtopicLink
-                routeSlug="6-prostejshie-algoritmy-dlya-ispolnitelej"
-                subtopic="sostoyanie-i-komandy"
-              >
-                Команды и след
-              </SubtopicLink>
-            ),
-            rows: [
-              { key: <>состояние</>, note: <>положение, направление, хвост</> },
-              { key: <>Назад</>, note: <>голова не поворачивается</> },
-              { key: <>Повтори k</>, note: <>выполнить все k раз</> },
-              { key: <>хвост поднят</>, note: <>движение без линии</> },
-            ],
+            key: "Порядок",
+            note: <>Начало, фигуры, область, граница, подсчёт.</>,
           },
           {
-            number: 2,
-            title: (
-              <SubtopicLink
-                routeSlug="6-prostejshie-algoritmy-dlya-ispolnitelej"
-                subtopic="granica-i-velichiny"
-              >
-                Точки внутри и на границе
-              </SubtopicLink>
-            ),
-            rows: [
-              { key: <>(a − 1)(b − 1)</>, note: <>строго внутри a × b</> },
-              { key: <>(a + 1)(b + 1)</>, note: <>вместе с границей</> },
-              { key: <>площадь, периметр</>, note: <>не число точек</> },
-              { key: <>открытая линия</>, note: <>не дорисовывать</> },
-            ],
+            key: "Команды",
+            note: <>Голова по условию, «Назад» без поворота, все повторы.</>,
           },
           {
-            number: 3,
-            title: (
-              <SubtopicLink
-                routeSlug="6-prostejshie-algoritmy-dlya-ispolnitelej"
-                subtopic="neskolko-figur"
-              >
-                Две фигуры
-              </SubtopicLink>
-            ),
-            rows: [
-              {
-                key: <>пересечение</>,
-                note: <>max левых, min правых границ</>,
-              },
-              { key: <>объединение</>, note: <>точки A + точки B − общие</> },
-              { key: <>касание</>, note: <>площадь 0, точки есть</> },
-              { key: <>разрез</>, note: <>его точки внутри фигуры</> },
-            ],
+            key: "Две фигуры",
+            note: <>Пересечение — общие границы, объединение — минус общие.</>,
           },
           {
-            number: 4,
-            title: (
-              <SubtopicLink
-                routeSlug="6-prostejshie-algoritmy-dlya-ispolnitelej"
-                subtopic="postroenie-i-reshetka"
-              >
-                Рисунок программой
-              </SubtopicLink>
-            ),
-            rows: [
-              {
-                key: (
-                  <>
-                    <Notation>{"setheading(90)"}</Notation>
-                  </>
-                ),
-                note: <>голова вверх, как в условии</>,
-              },
-              { key: <>масштаб k</>, note: <>умножать расстояния, не углы</> },
-              {
-                key: (
-                  <>
-                    <Notation>{"penup()"}</Notation>
-                  </>
-                ),
-                note: <>перед сеткой</>,
-              },
-              {
-                key: (
-                  <>
-                    <Notation>{"goto(x * k, y * k)"}</Notation>
-                  </>
-                ),
-                note: <>сетка тем же масштабом</>,
-              },
-            ],
+            key: "Программой",
+            note: <>Масштаб — только расстояниям, сетка — тем же масштабом.</>,
           },
           {
-            number: 5,
-            title: (
-              <SubtopicLink
-                routeSlug="6-prostejshie-algoritmy-dlya-ispolnitelej"
-                subtopic="naklonnaya-geometriya"
-              >
-                Наклонные стороны
-              </SubtopicLink>
-            ),
-            rows: [
-              { key: <>поворот</>, note: <>180° минус угол фигуры</> },
-              { key: <>вершины</>, note: <>могут быть нецелыми</> },
-              {
-                key: <>по столбцам</>,
-                note: <>целые y между сторонами</>,
-              },
-              { key: <>спорная точка</>, note: <>по уравнению стороны</> },
-            ],
-          },
-          {
-            number: 6,
-            title: (
-              <SubtopicLink
-                routeSlug="6-prostejshie-algoritmy-dlya-ispolnitelej"
-                subtopic="podschet-programmoj"
-              >
-                Подсчёт программой
-              </SubtopicLink>
-            ),
-            level: "дополнительный урок",
-            rows: [
-              { key: <>условие</>, note: <>в координатах задачи, без k</> },
-              {
-                key: (
-                  <>
-                    <Notation>{"in_a and in_b"}</Notation>
-                  </>
-                ),
-                note: <>пересечение</>,
-              },
-              { key: <>параметр</>, note: <>перебор по возрастанию</> },
-              { key: <>≥ и {">"}</>, note: <>ответы отличаются на 1</> },
-            ],
+            key: "Задача темы",
+            note: <>3 ≤ x ≤ 8, 2 ≤ y ≤ 6: 6 · 5 = 30.</>,
           },
         ]}
-        sections={[
-          {
-            title: "Четыре проверки готового ответа",
-            steps: [
-              <>Совпадает ли начальное направление с условием?</>,
-              <>Выполнены ли все повторения и где Черепаха после них?</>,
-              <>Та ли область: одна фигура, пересечение, объединение?</>,
-              <>Учтена ли граница так, как сказано в вопросе?</>,
-            ],
-          },
-        ]}
-        caption={
-          <>
-            Шпаргалка темы: порядок решения и главное из каждой подтемы. Номер
-            раздела ведёт на подтему.
-          </>
-        }
       />
-      <Typography.Text>
-        <strong>Порядок решения можно сделать постоянным.</strong> Для каждой
-        новой задачи:
-      </Typography.Text>
-      <ol>
-        <li>
-          <strong>Прочитай, что требуется найти:</strong> точки, площадь или
-          периметр, какой области, учитывается ли граница.
-        </li>
-        <li>
-          <strong>Выпиши начальное состояние:</strong> координаты, направление,
-          хвост.
-        </li>
-        <li>
-          <strong>Восстанови фигуры.</strong> Стороны вдоль осей — по командам
-          на черновике; наклонные стороны или длинный алгоритм — рисунком
-          программой.
-        </li>
-        <li>
-          <strong>Выдели нужную область:</strong> одну фигуру, пересечение,
-          объединение или часть.
-        </li>
-        <li>
-          <strong>Посчитай точки по рядам или столбцам</strong> и проверь
-          спорные точки по уравнению стороны.
-        </li>
-      </ol>
     </>
   ),
   status: "published",

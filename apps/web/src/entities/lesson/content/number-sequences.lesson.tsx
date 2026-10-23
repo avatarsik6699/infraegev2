@@ -1073,9 +1073,16 @@ export const numberSequencesLesson = defineLesson({
       ),
     },
   ],
+  finalLead:
+    "Вся тема на одной странице: как решилась задача темы, главное из подтем, порядок решения и частые ошибки.",
   paidPractice: {
-    examFocus: true,
-    checkpoint: 0,
+    sections: [
+      { id: "odna-zadacha", navLabel: "Одна задача — вся тема" },
+      { id: "karta-temy", navLabel: "Карта темы" },
+      { id: "kak-reshat", navLabel: "Как решать" },
+      { id: "chastye-oshibki", navLabel: "Частые ошибки" },
+    ],
+    checkpoint: 4,
     load: () => import("./number-sequences.paid.praktika"),
   },
   status: "published",

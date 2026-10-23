@@ -7,6 +7,7 @@ import {
 } from "~/entities/lesson";
 import { accessState } from "~/entities/access";
 import { topicCatalog } from "~/entities/topic-catalog";
+import { masteryTasks } from "~/entities/practice-task";
 import { ReadingPositionIndicator } from "~/features/reading-position";
 import { Breadcrumbs } from "~/shared/components/breadcrumbs";
 import { ScrollToTop } from "~/shared/components/scroll-to-top";
@@ -74,6 +75,11 @@ export const TopicLessonFrame: React.FC<TopicLessonPageTypes.FrameProps> = (
               current={props.current}
               tasks={props.tasks}
               practiceUnavailable={props.practiceUnavailable}
+              practiceCount={
+                masteryTasks(
+                  props.tasks.filter((task) => task.theoryLinks.length === 0),
+                ).length
+              }
               progress={narrow ? progress : null}
               locks={accessState.locks(props.access)}
             />

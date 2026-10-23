@@ -72,7 +72,13 @@ export async function wholeLesson(
     ...lesson,
     theory: subtopics.flatMap((item) => item.theory),
     subtopics: subtopics.map((item) => item.subtopic),
-    ...(practice ?? {}),
+    ...(practice
+      ? {
+          finalSections: practice.sections,
+          checkpoint: practice.checkpoint,
+          result: practice.result,
+        }
+      : {}),
     paidPractice: undefined,
   };
 }

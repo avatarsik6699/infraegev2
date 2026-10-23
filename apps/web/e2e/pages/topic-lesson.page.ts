@@ -12,12 +12,13 @@ type TopicLessonPageConfig = {
   route: string;
   title: string;
   taskNumber: number;
+  /** Tasks of «Практика и итог»: the topic's mixed tasks only (T254). */
   taskCount?: number;
   /** Tasks counted by mastery when advanced subtopics add more (Change 171). */
   masteryTaskCount?: number;
   /** Generated diagrams of a lesson exported from its stand (Change 184). */
   diagramCount?: number;
-  /** Files attached to the lesson's bank tasks. */
+  /** Files attached to the mixed tasks of «Практика и итог». */
   downloadCount?: number;
 };
 
@@ -25,9 +26,9 @@ const recursionLessonConfig: TopicLessonPageConfig = {
   route: "/ege/16-rekursiya/funktsiya-cherez-sebya",
   title: "Рекуррентные выражения",
   taskNumber: 16,
-  taskCount: 55,
+  taskCount: 5,
   masteryTaskCount: 43,
-  diagramCount: 8,
+  diagramCount: 9,
 };
 
 export class TopicLessonPage {
@@ -257,7 +258,7 @@ export class TopicLessonPage {
 
   /** A lesson exported from its approved stand (Change 184): every subtopic owns its
    * sections, the diagrams and step-through figures render, and «Практика и итог»
-   * lists the lesson's bank tasks with their files. */
+   * lists the topic's mixed tasks with their files (T254). */
   async expectPipelineLessonContent(noJavaScript = false): Promise<void> {
     if (!noJavaScript)
       await this.page.emulateMedia({ reducedMotion: "reduce" });
@@ -993,7 +994,7 @@ export class TopicLessonPage {
 
     await this.openTopicPractice(noJavaScript);
     const sheet = this.page.locator("[data-topic-cheat-sheet]");
-    await expect(sheet.locator("section")).toHaveCount(7);
+    await expect(sheet.locator("section")).toHaveCount(6);
     await expect(
       sheet.getByRole("link", { name: "Делители парами" }),
     ).toHaveAttribute("href", `${topic}/deliteli-parami`);
@@ -1102,7 +1103,7 @@ export class TopicLessonPage {
     ).toHaveAttribute("href", `${topic}/programma`);
     await this.expectTaskPractice(noJavaScript);
     if (noJavaScript) {
-      await expect(this.page.locator("#practice a[download]")).toHaveCount(23);
+      await expect(this.page.locator("#practice a[download]")).toHaveCount(5);
     } else {
       await expect(this.page.locator("[data-result-progress]")).toContainText(
         `0 / ${String(this.config.masteryTaskCount)}`,

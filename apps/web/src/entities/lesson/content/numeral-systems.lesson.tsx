@@ -17,6 +17,7 @@ import { numeralSystemsLessonPublication } from "~/shared/config/lesson-publicat
 import { defineLesson } from "../lib/define-lesson";
 import { lessonMedia } from "./numeral-systems.media";
 import { PythonTerm } from "./python-term";
+import { FinalMistake } from "./final-mistake";
 import { SubtopicLink } from "./subtopic-link";
 
 const THEME_TASK = (
@@ -27,6 +28,13 @@ const THEME_TASK = (
 );
 
 const R = "14-sistemy-schisleniya";
+
+/** A subtopic of this topic, linked from the final page. */
+const Sub: React.FC<{ slug: string; children: React.ReactNode }> = (props) => (
+  <SubtopicLink routeSlug="14-sistemy-schisleniya" subtopic={props.slug}>
+    {props.children}
+  </SubtopicLink>
+);
 
 export const numeralSystemsLesson = defineLesson({
   ...numeralSystemsLessonPublication,
@@ -1968,192 +1976,395 @@ export const numeralSystemsLesson = defineLesson({
       ),
     },
   ],
-  examFocus: (
-    <>
-      <Typography.Text>
-        <strong>
-          Ответ проверяют вторым способом: подсчёт цифр — блоками, перебор —
-          рассуждением о записи на маленьком примере.
-        </strong>{" "}
-        Выбери ошибку, чтобы увидеть, как себя проверить:
-      </Typography.Text>
-      <VariantPicker
-        label={"Ошибка и как себя проверить"}
-        variants={[
-          {
-            label: "посчитаны десятичные цифры",
-            value: <>Посчитаны цифры str(n) — десятичной записи</>,
-            note: <>цифры нужной системы дают только n % q и n // q</>,
-          },
-          {
-            label: "5 ^ 23",
-            value: <>Степень записана через ^ — число получилось маленьким</>,
-            note: <>степень — **; проверь длину записи</>,
-          },
-          {
-            label: "деление через /",
-            value: (
-              <>Вместо n // q написано int(n / q) — ответ немного не тот</>
-            ),
-            note: <>только целое деление //</>,
-          },
-          {
-            label: "x как цифра",
-            value: <>Параметр x перебран от 0 до q − 1</>,
-            note: <>x в выражении — число, перебирают весь диапазон условия</>,
-          },
-          {
-            label: "диапазон цифры",
-            value: <>Цифра x перебрана до 9 при основании 18</>,
-            note: <>x — от 0 до q − 1, если не сказано «десятичная цифра»</>,
-          },
-          {
-            label: "str вместо символа",
-            value: <>В строку подставлено str(10) — запись стала длиннее</>,
-            note: <>символ алфавита или список значений цифр</>,
-          },
-          {
-            label: "первая пара",
-            value: <>При двух цифрах взята первая подходящая пара</>,
-            note: <>сравнить все пары и выбрать лучшую</>,
-          },
-          {
-            label: "x вместо частного",
-            value: <>В ответ записана цифра x, а спросили частное</>,
-            note: <>перечитать последнюю фразу условия</>,
-          },
-        ]}
-      />
-    </>
-  ),
+  finalLead:
+    "Вся тема на одной странице: как решилась задача темы, главное из подтем, порядок решения и частые ошибки.",
+  finalSections: [
+    {
+      id: "odna-zadacha",
+      navLabel: "Одна задача — вся тема",
+      explanation: (
+        <>
+          <Typography.Text>
+            <strong>
+              Задача темы — сколько четвёрок в пятеричной записи 5²³ + 25¹² − 10
+              — прошла через подтемы, и каждая добавляла к решению новый способ.
+            </strong>{" "}
+            Пролистай черновик: точками отмечены строки, которых не было после
+            предыдущей подтемы.
+          </Typography.Text>
+          <LessonStepper
+            {...lessonMedia.finalTask}
+            label={"Задача темы от подтемы 1 до подтемы 4"}
+          />
+          <Typography.Text>
+            Ответ 21 получен дважды — блоками и циклом, — и каждый способ
+            проверяет другой. Подтема 5 ставит неизвестную цифру в саму запись,
+            а дополнительный урок ищет неизвестное основание.
+          </Typography.Text>
+        </>
+      ),
+    },
+    {
+      id: "karta-temy",
+      navLabel: "Карта темы",
+      explanation: (
+        <>
+          <Typography.Text>
+            <strong>
+              Каждая подтема дала один приём, и любое решение собирается из них.
+            </strong>{" "}
+            Сверху — путь от выражения к ответу, ниже — по блоку на подтему.
+            Заголовок блока ведёт на подтему.
+          </Typography.Text>
+          <TopicCheatSheet
+            label={"Задание 14 на одной схеме"}
+            flow={[
+              { name: "Буква", note: "x — число в выражении или цифра?" },
+              { name: "Значение", note: "степени, int(s, q) или value" },
+              { name: "Цифры", note: "% q и // q — ответ" },
+            ]}
+            groups={[
+              {
+                number: 1,
+                title: (
+                  <Sub slug="zapis-i-znachenie">Запись числа и её значение</Sub>
+                ),
+                rows: [
+                  {
+                    key: <>2304₅</>,
+                    note: <>2 · 125 + 3 · 25 + 0 · 5 + 4 = 329</>,
+                  },
+                  { key: <>A, B, …</>, note: <>одна цифра: 10, 11, …</> },
+                  {
+                    key: <Notation>{"n % q"}</Notation>,
+                    note: <>последняя цифра записи</>,
+                  },
+                ],
+              },
+              {
+                number: 2,
+                title: (
+                  <Sub slug="stepeni-blokami">
+                    Запись суммы и разности степеней
+                  </Sub>
+                ),
+                rows: [
+                  { key: <>qᵏ</>, note: <>единица и k нулей</> },
+                  { key: <>qᵏ − 1</>, note: <>k цифр q − 1</> },
+                  {
+                    key: <>qᵐ − qⁿ</>,
+                    note: <>m − n цифр q − 1 и n нулей</>,
+                  },
+                ],
+              },
+              {
+                number: 3,
+                title: (
+                  <Sub slug="cifry-programmoj">
+                    Цифры значения выражения программой
+                  </Sub>
+                ),
+                rows: [
+                  {
+                    key: <Notation>{"while n > 0"}</Notation>,
+                    note: <>цифра n % q, затем n = n // q</>,
+                  },
+                  {
+                    key: <Notation>{"**"}</Notation>,
+                    note: <>степень; ^ в Python — не степень</>,
+                  },
+                ],
+              },
+              {
+                number: 4,
+                title: <Sub slug="parametr-x">Выражение с параметром x</Sub>,
+                rows: [
+                  {
+                    key: <>x — число</>,
+                    note: <>весь диапазон условия, цифры заново</>,
+                  },
+                  {
+                    key: <>наибольшее x</>,
+                    note: <>последнее подходящее при переборе вверх</>,
+                  },
+                ],
+              },
+              {
+                number: 5,
+                title: <Sub slug="neizvestnaya-cifra">Неизвестные цифры</Sub>,
+                rows: [
+                  {
+                    key: <>x — цифра</>,
+                    note: <>от 0 до q − 1</>,
+                  },
+                  {
+                    key: <Notation>{"int(s, q)"}</Notation>,
+                    note: <>значение записи с подставленной цифрой</>,
+                  },
+                  { key: <>две цифры</>, note: <>сравнить все пары</> },
+                ],
+              },
+              {
+                number: 6,
+                title: (
+                  <Sub slug="neizvestnoe-osnovanie">
+                    Неизвестное основание и признаки делимости
+                  </Sub>
+                ),
+                level: "дополнительный урок",
+                rows: [
+                  {
+                    key: <>основание</>,
+                    note: <>перебор от наибольшей цифры + 1</>,
+                  },
+                  {
+                    key: <>q − 1</>,
+                    note: <>делимость по сумме цифр</>,
+                  },
+                ],
+              },
+            ]}
+            caption={
+              <>
+                Карта темы: путь к ответу сверху и главное из каждой подтемы.
+                Номер блока — номер подтемы.
+              </>
+            }
+          />
+        </>
+      ),
+    },
+    {
+      id: "kak-reshat",
+      navLabel: "Как решать",
+      explanation: (
+        <>
+          <Typography.Text>
+            <strong>
+              Любое задание 14 решается одним порядком из пяти шагов.
+            </strong>{" "}
+            Каждому шагу ты уже учился — под ним номера подтем:
+          </Typography.Text>
+          <LessonDiagram
+            {...lessonMedia.finalCycle}
+            caption={
+              <>
+                Главный шаг — цифры записи: их дают только n % q и n // q, а не
+                str(n). Если ответ программы не сошёлся с блоками на маленьком
+                примере, ищи ошибку в выражении.
+              </>
+            }
+          />
+        </>
+      ),
+    },
+    {
+      id: "chastye-oshibki",
+      navLabel: "Частые ошибки",
+      explanation: (
+        <>
+          <Typography.Text>
+            <strong>
+              Восемь ошибок встречаются чаще других, и каждую ловит один вопрос
+              к себе.
+            </strong>{" "}
+            Выбери ошибку — увидишь, как её исправить, и вопрос, который её
+            ловит:
+          </Typography.Text>
+          <VariantPicker
+            label={"Частые ошибки и вопросы, которые их ловят"}
+            variants={[
+              {
+                label: "десятичные цифры",
+                value: (
+                  <FinalMistake
+                    wrong={<Notation>{"str(n).count('4')"}</Notation>}
+                    right="цифры системы q — через n % q"
+                    question="в какой системе я считаю цифры?"
+                  />
+                ),
+                note: <Sub slug="zapis-i-znachenie">подтема 1</Sub>,
+              },
+              {
+                label: "5 ^ 23",
+                value: (
+                  <FinalMistake
+                    wrong={<Notation>{"5 ^ 23"}</Notation>}
+                    right={<Notation>{"5 ** 23"}</Notation>}
+                    question="сколько цифр у получившегося числа?"
+                  />
+                ),
+                note: <Sub slug="cifry-programmoj">подтема 3</Sub>,
+              },
+              {
+                label: "деление через /",
+                value: (
+                  <FinalMistake
+                    wrong={<Notation>{"n = n / 5"}</Notation>}
+                    right={<Notation>{"n = n // 5"}</Notation>}
+                    question="не стало ли число дробным?"
+                  />
+                ),
+                note: <Sub slug="cifry-programmoj">подтема 3</Sub>,
+              },
+              {
+                label: "блоки налезают",
+                value: (
+                  <FinalMistake
+                    wrong="сложили блоки, которые делят разряды"
+                    right="разложить на части в разных разрядах"
+                    question="нет ли переносов между частями?"
+                  />
+                ),
+                note: <Sub slug="stepeni-blokami">подтема 2</Sub>,
+              },
+              {
+                label: "x как цифра",
+                value: (
+                  <FinalMistake
+                    wrong="параметр x перебрали от 0 до q − 1"
+                    right="x в выражении — весь диапазон условия"
+                    question="x — это число или цифра записи?"
+                  />
+                ),
+                note: <Sub slug="parametr-x">подтема 4</Sub>,
+              },
+              {
+                label: "диапазон цифры",
+                value: (
+                  <FinalMistake
+                    wrong="цифру x перебрали до 9 при основании 18"
+                    right="от 0 до q − 1"
+                    question="какие цифры есть в системе q?"
+                  />
+                ),
+                note: <Sub slug="neizvestnaya-cifra">подтема 5</Sub>,
+              },
+              {
+                label: "первая пара",
+                value: (
+                  <FinalMistake
+                    wrong="при двух цифрах взяли первую пару"
+                    right="сравнить все пары"
+                    question="точно ли эта пара лучшая?"
+                  />
+                ),
+                note: <Sub slug="neizvestnaya-cifra">подтема 5</Sub>,
+              },
+              {
+                label: "x вместо частного",
+                value: (
+                  <FinalMistake
+                    wrong="в ответ записана цифра x"
+                    right="ответ — то, что спрашивают"
+                    question="что просит последняя фраза?"
+                  />
+                ),
+                note: <Sub slug="neizvestnaya-cifra">подтема 5</Sub>,
+              },
+            ]}
+          />
+        </>
+      ),
+    },
+  ],
+  checkpoint: [
+    {
+      id: "t1",
+      prompt: (
+        <>
+          <Typography.Text>
+            Как выглядит 7⁵ − 1 в семеричной записи?
+          </Typography.Text>
+        </>
+      ),
+      reveal: (
+        <>
+          <Typography.Text>66666₇ — пять цифр 6.</Typography.Text>
+        </>
+      ),
+    },
+    {
+      id: "t2",
+      prompt: (
+        <>
+          <Typography.Text>
+            Как выглядит 3⁸ − 3³ в троичной записи?
+          </Typography.Text>
+        </>
+      ),
+      reveal: (
+        <>
+          <Typography.Text>22222000₃: пять двоек и три нуля.</Typography.Text>
+        </>
+      ),
+    },
+    {
+      id: "t3",
+      prompt: (
+        <>
+          <Typography.Text>
+            Почему цифры записи в системе q считают через n % q, а не через
+            str(n)?
+          </Typography.Text>
+        </>
+      ),
+      reveal: (
+        <>
+          <Typography.Text>
+            str(n) даёт десятичную запись. Остаток n % q — последняя цифра в
+            системе q, а n // q отрезает её.
+          </Typography.Text>
+        </>
+      ),
+    },
+    {
+      id: "t4",
+      prompt: (
+        <>
+          <Typography.Text>
+            В записи 3x5₁₂ неизвестна цифра x. Какие значения перебирать?
+          </Typography.Text>
+        </>
+      ),
+      reveal: (
+        <>
+          <Typography.Text>
+            От 0 до 11: в двенадцатеричной системе 12 цифр, A и B — это 10 и 11.
+          </Typography.Text>
+        </>
+      ),
+    },
+  ],
   result: (
     <>
       <Typography.Text>
-        <strong>
-          Задание 14 — всегда запись числа в системе q: её цифры считают
-          программой через % и //, а неизвестное — число x или цифру — находят
-          перебором.
-        </strong>
+        Тема пройдена: задача темы решена и блоками, и программой — ответ 21.
+        Вот что взять с собой.
       </Typography.Text>
-      <Typography.Text>
-        Всё главное из подтем собрано на одной схеме. Номер раздела ведёт на его
-        подтему.
-      </Typography.Text>
-      <TopicCheatSheet
-        label={"Задание 14 на одной схеме"}
-        flow={[
-          { name: "Буква", note: "x — число в выражении или цифра записи?" },
-          { name: "Значение", note: "степени, int(s, q), value, digits" },
-          { name: "Ответ", note: "количество, x, значение или частное" },
-        ]}
-        groups={[
+      <LessonSummary
+        items={[
           {
-            number: 1,
-            title: (
-              <SubtopicLink routeSlug={R} subtopic="zapis-i-znachenie">
-                Запись и значение
-              </SubtopicLink>
-            ),
-            rows: [
-              {
-                key: <>2304₅</>,
-                note: <>2 · 125 + 3 · 25 + 0 · 5 + 4 = 329</>,
-              },
-              { key: <>A, B, …</>, note: <>одна цифра: 10, 11, …</> },
-              {
-                key: <Notation>{"n % q"}</Notation>,
-                note: <>последняя цифра</>,
-              },
-            ],
+            key: "Порядок",
+            note: <>Буква, значение, цифры, перебор, ответ.</>,
           },
           {
-            number: 2,
-            title: (
-              <SubtopicLink routeSlug={R} subtopic="stepeni-blokami">
-                Степени блоками
-              </SubtopicLink>
-            ),
-            rows: [
-              { key: <>qᵏ − 1</>, note: <>k цифр q − 1</> },
-              { key: <>qᵐ − qⁿ</>, note: <>m − n цифр q − 1 и n нулей</> },
-              { key: <>задача темы</>, note: <>21 четвёрка</> },
-            ],
+            key: "Цифры",
+            note: <>n % q — последняя, n // q — остальные.</>,
           },
           {
-            number: 3,
-            title: (
-              <SubtopicLink routeSlug={R} subtopic="cifry-programmoj">
-                Цифры программой
-              </SubtopicLink>
-            ),
-            rows: [
-              {
-                key: <Notation>{"while n > 0"}</Notation>,
-                note: <>цифра % q, остальное // q</>,
-              },
-              {
-                key: <Notation>{"digits(n, q)"}</Notation>,
-                note: <>список для любых вопросов</>,
-              },
-            ],
+            key: "Блоки",
+            note: <>qᵐ − qⁿ: m − n цифр q − 1 и n нулей.</>,
           },
           {
-            number: 4,
-            title: (
-              <SubtopicLink routeSlug={R} subtopic="parametr-x">
-                Параметр x
-              </SubtopicLink>
-            ),
-            rows: [
-              { key: <>перебор x</>, note: <>весь диапазон, цифры заново</> },
-              { key: <>наибольшее</>, note: <>последнее подходящее</> },
-            ],
+            key: "Буква x",
+            note: <>Число — весь диапазон, цифра — от 0 до q − 1.</>,
           },
           {
-            number: 5,
-            title: (
-              <SubtopicLink routeSlug={R} subtopic="neizvestnaya-cifra">
-                Неизвестные цифры
-              </SubtopicLink>
-            ),
-            rows: [
-              { key: <>x в записи</>, note: <>от 0 до q − 1</> },
-              { key: <>две цифры</>, note: <>сравнить все пары</> },
-            ],
-          },
-          {
-            number: 6,
-            title: (
-              <SubtopicLink routeSlug={R} subtopic="neizvestnoe-osnovanie">
-                Основание
-              </SubtopicLink>
-            ),
-            level: "дополнительный урок",
-            rows: [
-              {
-                key: <>основание</>,
-                note: <>перебор с обоснованной границей</>,
-              },
-              { key: <>q − 1</>, note: <>делимость по сумме цифр</> },
-            ],
+            key: "Задача темы",
+            note: <>1 0 44…44 30 — 21 четвёрка.</>,
           },
         ]}
-        sections={[
-          {
-            title: "Три вопроса к условию",
-            steps: [
-              <>Что обозначает буква: число в выражении или цифру записи?</>,
-              <>Какие значения она принимает?</>,
-              <>Что записать в ответ: количество, x, значение или частное?</>,
-            ],
-          },
-        ]}
-        caption={
-          <>
-            Шпаргалка темы: порядок решения и главное из каждой подтемы. Номер
-            раздела ведёт на подтему.
-          </>
-        }
       />
     </>
   ),

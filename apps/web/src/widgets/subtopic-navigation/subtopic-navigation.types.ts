@@ -32,6 +32,9 @@ export namespace SubtopicNavigationTypes {
       countsTowardMastery?: boolean;
     }[];
     practiceUnavailable?: boolean;
+    /** T254: tasks of «Практика и итог» when it shows only the topic's mixed
+     *  ones; defaults to every mastery task of the topic. */
+    practiceCount?: number;
     /** Lesson progress shown under the tree on narrow screens (F38). */
     progress?: React.ReactNode;
     /** Change 192: lock the paid files (the paywall is on, access is not granted). */

@@ -15,9 +15,20 @@ import { preobrazovanieZapiseyChiselLessonPublication } from "~/shared/config/le
 import { defineLesson } from "../lib/define-lesson";
 import { lessonMedia } from "./preobrazovanie-zapisey-chisel.media";
 import { PythonTerm } from "./python-term";
+import { FinalMistake } from "./final-mistake";
 import { SubtopicLink } from "./subtopic-link";
 
 const R = "5-preobrazovanie-zapisey-chisel";
+
+/** A subtopic of this topic, linked from the final page. */
+const Sub: React.FC<{ slug: string; children: React.ReactNode }> = (props) => (
+  <SubtopicLink
+    routeSlug="5-preobrazovanie-zapisey-chisel"
+    subtopic={props.slug}
+  >
+    {props.children}
+  </SubtopicLink>
+);
 
 export const preobrazovanieZapiseyChiselLesson = defineLesson({
   ...preobrazovanieZapiseyChiselLessonPublication,
@@ -2745,287 +2756,410 @@ export const preobrazovanieZapiseyChiselLesson = defineLesson({
       ),
     },
   ],
-  examFocus: (
-    <>
-      <Typography.Text>
-        <strong>
-          Большинство ошибок возникает в нескольких конкретных местах.
-        </strong>{" "}
-        Выбери ошибку, чтобы увидеть, как себя проверить:
-      </Typography.Text>
-      <VariantPicker
-        label={"Ошибка и как себя проверить"}
-        variants={[
-          {
-            label: "чётность не того",
-            value: <>проверили чётность N вместо чётности суммы цифр</>,
-            note: <>назвать словами величину, которую проверяет условие</>,
-          },
-          {
-            label: "старая сумма",
-            value: <>при повторном шаге использовали старую сумму</>,
-            note: <>уточнить, к какой версии записи относится шаг</>,
-          },
-          {
-            label: "str вместо перевода",
-            value: (
+  finalLead:
+    "Вся тема на одной странице: как решилась задача темы, главное из подтем, порядок решения и частые ошибки.",
+  finalSections: [
+    {
+      id: "odna-zadacha",
+      navLabel: "Одна задача — вся тема",
+      explanation: (
+        <>
+          <Typography.Text>
+            <strong>
+              Задача темы — наименьшее N, для которого R больше 150, — прошла
+              через подтемы, и каждая добавляла к решению новый шаг.
+            </strong>{" "}
+            Пролистай черновик: точками отмечены строки, которых не было после
+            предыдущей подтемы.
+          </Typography.Text>
+          <LessonStepper
+            {...lessonMedia.finalTask}
+            label={"Задача темы от подтемы 1 до подтемы 5"}
+          />
+          <Typography.Text>
+            Задача не менялась — менялся способ: запись числа, дописывание,
+            программа перебором и решение без программы, от результата. Срезы и
+            замены из подтемы 3 в задаче темы не понадобились — они нужны, когда
+            алгоритм переставляет или заменяет цифры.
+          </Typography.Text>
+        </>
+      ),
+    },
+    {
+      id: "karta-temy",
+      navLabel: "Карта темы",
+      explanation: (
+        <>
+          <Typography.Text>
+            <strong>
+              Каждая подтема дала несколько приёмов, и любое решение собирается
+              из них.
+            </strong>{" "}
+            Сверху — путь от числа к ответу, ниже — по блоку на подтему.
+            Заголовок блока ведёт на подтему.
+          </Typography.Text>
+          <TopicCheatSheet
+            label={"Задание 5 на одной схеме"}
+            flow={[
+              { name: "Запись", note: "N → строка цифр в нужной системе" },
+              { name: "Действия", note: "каждая команда — одна строка кода" },
+              { name: "Ответ", note: "перебором или от результата" },
+            ]}
+            groups={[
+              {
+                number: 1,
+                title: <Sub slug="chislo-i-zapis">Число и его запись</Sub>,
+                rows: [
+                  {
+                    key: <Notation>{"bin(n)[2:]"}</Notation>,
+                    note: <>двоичная запись без приставки 0b</>,
+                  },
+                  {
+                    key: <Notation>{"int(s, q)"}</Notation>,
+                    note: <>запись в системе q → число</>,
+                  },
+                  {
+                    key: <Notation>{"to_base(n, q)"}</Notation>,
+                    note: <>запись в троичной и других системах</>,
+                  },
+                ],
+              },
+              {
+                number: 2,
+                title: <Sub slug="dopisyvanie">Дописывание цифр</Sub>,
+                rows: [
+                  {
+                    key: <Notation>{"s + '01'"}</Notation>,
+                    note: <>дописать справа: в двоичной R = 4N + 1</>,
+                  },
+                  {
+                    key: <Notation>{"'10' + s"}</Notation>,
+                    note: <>дописать слева: старшие разряды</>,
+                  },
+                  {
+                    key: <>блок 01</>,
+                    note: <>две цифры, а не одна</>,
+                  },
+                ],
+              },
+              {
+                number: 3,
+                title: (
+                  <Sub slug="chasti-zapisi">Срезы, замены и сумма цифр</Sub>
+                ),
+                rows: [
+                  {
+                    key: <Notation>{"s[-2:]"}</Notation>,
+                    note: <>две последние цифры</>,
+                  },
+                  {
+                    key: <Notation>{"s[::-1]"}</Notation>,
+                    note: <>переворот</>,
+                  },
+                  {
+                    key: <Notation>{"s.count('1')"}</Notation>,
+                    note: <>сумма двоичных цифр</>,
+                  },
+                  {
+                    key: <>обмен 0 и 1</>,
+                    note: <>через третий символ, не двумя replace</>,
+                  },
+                ],
+              },
+              {
+                number: 4,
+                title: <Sub slug="poisk-otveta">Решение перебором</Sub>,
+                rows: [
+                  {
+                    key: <>наименьшее N</>,
+                    note: <>первое подходящее, затем break</>,
+                  },
+                  {
+                    key: <>наименьшее R</>,
+                    note: <>перебрать всё, хранить лучшие R и N</>,
+                  },
+                  {
+                    key: <>граница</>,
+                    note: <>R ≥ N, если цифры только дописывают</>,
+                  },
+                ],
+              },
+              {
+                number: 5,
+                title: <Sub slug="ot-rezultata">Решение от результата</Sub>,
+                rows: [
+                  {
+                    key: <>хвост R</>,
+                    note: <>совпадает с дописанным блоком</>,
+                  },
+                  {
+                    key: <>остаток слева</>,
+                    note: <>это запись N — проверь её свойство</>,
+                  },
+                ],
+              },
+            ]}
+            caption={
               <>
-                вместо перевода в систему применили <Notation>{"str"}</Notation>
+                Карта темы: путь к ответу сверху и главное из каждой подтемы.
+                Номер блока — номер подтемы.
               </>
-            ),
-            note: <>проверить, в какой системе должен быть дописываемый блок</>,
-          },
-          {
-            label: "блок 01",
-            value: (
+            }
+          />
+        </>
+      ),
+    },
+    {
+      id: "kak-reshat",
+      navLabel: "Как решать",
+      explanation: (
+        <>
+          <Typography.Text>
+            <strong>
+              Любое задание 5 решается одним порядком из пяти шагов.
+            </strong>{" "}
+            Каждому шагу ты уже учился — под ним номера подтем:
+          </Typography.Text>
+          <LessonDiagram
+            {...lessonMedia.finalCycle}
+            caption={
               <>
-                считали <Notation>{"01"}</Notation> блоком длины 1
+                Главный шаг — пример из условия: программа должна дать на нём
+                тот же результат. Если не сошлось, исправляют действие, а не
+                подбирают диапазон перебора.
               </>
-            ),
-            note: <>отдельно определить длину блока и его значение</>,
-          },
-          {
-            label: "замена без удаления",
-            value: <>при замене забыли удалить старые цифры</>,
-            note: <>разделить операцию на удаление и вставку</>,
-          },
-          {
-            label: "два replace",
-            value: (
-              <>
-                поменяли <Notation>{"0"}</Notation> и <Notation>{"1"}</Notation>{" "}
-                двумя последовательными <Notation>{"replace"}</Notation>
-              </>
-            ),
-            note: <>убедиться, что новые символы не заменяются повторно</>,
-          },
-          {
-            label: "ведущие нули",
-            value: <>убрали ведущие нули слишком рано</>,
-            note: <>проверить, будут ли ещё действия со строкой</>,
-          },
-          {
-            label: "первый R",
-            value: <>выбрали первый подходящий R без доказательства</>,
-            note: <>установить, растёт ли результат вместе с входом</>,
-          },
-          {
-            label: "маленький диапазон",
-            value: <>взяли необоснованно маленький диапазон</>,
-            note: <>вывести границу из свойств преобразования</>,
-          },
-          {
-            label: "> и >=",
-            value: (
-              <>
-                перепутали <Notation>{">"}</Notation> и{" "}
-                <Notation>{">="}</Notation>
-              </>
-            ),
-            note: <>перевести формулировку буквально</>,
-          },
-          {
-            label: "r вместо n",
-            value: (
-              <>
-                вывели <Notation>{"r"}</Notation>, хотя спрашивали{" "}
-                <Notation>{"n"}</Notation>
-              </>
-            ),
-            note: <>ещё раз прочитать последнюю строку условия</>,
-          },
-        ]}
-      />
-      <Typography.Text>
-        Формулировки порога переводятся буквально:
-      </Typography.Text>
-      <VariantPicker
-        label={"Формулировка в условии и проверка в Python"}
-        variants={[
-          {
-            label: "больше T",
-            value: (
-              <>
-                <Notation>{"r > T"}</Notation>
-              </>
-            ),
-          },
-          {
-            label: "не меньше T",
-            value: (
-              <>
-                <Notation>{"r >= T"}</Notation>
-              </>
-            ),
-          },
-          {
-            label: "меньше T",
-            value: (
-              <>
-                <Notation>{"r < T"}</Notation>
-              </>
-            ),
-          },
-          {
-            label: "не превышает T",
-            value: (
-              <>
-                <Notation>{"r <= T"}</Notation>
-              </>
-            ),
-          },
-          {
-            label: "равно T",
-            value: (
-              <>
-                <Notation>{"r == T"}</Notation>
-              </>
-            ),
-          },
-        ]}
-      />
-    </>
-  ),
+            }
+          />
+          <Typography.Text>
+            Порог из условия переводят буквально: «больше T» — это{" "}
+            <Notation>{"r > T"}</Notation>, «не меньше T» —{" "}
+            <Notation>{"r >= T"}</Notation>, «не превышает T» —{" "}
+            <Notation>{"r <= T"}</Notation>.
+          </Typography.Text>
+        </>
+      ),
+    },
+    {
+      id: "chastye-oshibki",
+      navLabel: "Частые ошибки",
+      explanation: (
+        <>
+          <Typography.Text>
+            <strong>
+              Восемь ошибок встречаются чаще других, и каждую ловит один вопрос
+              к себе.
+            </strong>{" "}
+            Выбери ошибку — увидишь, как её исправить, и вопрос, который её
+            ловит:
+          </Typography.Text>
+          <VariantPicker
+            label={"Частые ошибки и вопросы, которые их ловят"}
+            variants={[
+              {
+                label: "str вместо перевода",
+                value: (
+                  <FinalMistake
+                    wrong={<Notation>{"str(n)"}</Notation>}
+                    right={<Notation>{"bin(n)[2:]"}</Notation>}
+                    question="в какой системе нужна запись?"
+                  />
+                ),
+                note: <Sub slug="chislo-i-zapis">подтема 1</Sub>,
+              },
+              {
+                label: "чётность не того",
+                value: (
+                  <FinalMistake
+                    wrong="проверили чётность N"
+                    right="проверяют то, что названо: например, сумму цифр"
+                    question="какую величину проверяет условие?"
+                  />
+                ),
+                note: <Sub slug="dopisyvanie">подтема 2</Sub>,
+              },
+              {
+                label: "старая сумма",
+                value: (
+                  <FinalMistake
+                    wrong="второй шаг считает по старой записи"
+                    right="каждый шаг — по текущей записи"
+                    question="к какой версии записи относится шаг?"
+                  />
+                ),
+                note: <Sub slug="dopisyvanie">подтема 2</Sub>,
+              },
+              {
+                label: "два replace",
+                value: (
+                  <FinalMistake
+                    wrong={
+                      <Notation>
+                        {"s.replace('0','1').replace('1','0')"}
+                      </Notation>
+                    }
+                    right="обмен через третий символ"
+                    question="не заменились ли новые символы повторно?"
+                  />
+                ),
+                note: <Sub slug="chasti-zapisi">подтема 3</Sub>,
+              },
+              {
+                label: "маленький диапазон",
+                value: (
+                  <FinalMistake
+                    wrong="range(1, 100) без обоснования"
+                    right="граница из свойств алгоритма"
+                    question="почему ответ точно не больше границы?"
+                  />
+                ),
+                note: <Sub slug="poisk-otveta">подтема 4</Sub>,
+              },
+              {
+                label: "первый R",
+                value: (
+                  <FinalMistake
+                    wrong="наименьшее R — первое найденное"
+                    right="перебрать всё и хранить лучшее"
+                    question="растёт ли R вместе с N?"
+                  />
+                ),
+                note: <Sub slug="poisk-otveta">подтема 4</Sub>,
+              },
+              {
+                label: "> и >=",
+                value: (
+                  <FinalMistake
+                    wrong={<Notation>{"r >= 150"}</Notation>}
+                    right={<Notation>{"r > 150"}</Notation>}
+                    question="«больше» или «не меньше»?"
+                  />
+                ),
+                note: <Sub slug="poisk-otveta">подтема 4</Sub>,
+              },
+              {
+                label: "r вместо n",
+                value: (
+                  <FinalMistake
+                    wrong={<Notation>{"print(r)"}</Notation>}
+                    right={<Notation>{"print(n)"}</Notation>}
+                    question="что спрашивает последняя строка условия?"
+                  />
+                ),
+                note: <Sub slug="ot-rezultata">подтема 5</Sub>,
+              },
+            ]}
+          />
+        </>
+      ),
+    },
+  ],
+  checkpoint: [
+    {
+      id: "t1",
+      prompt: (
+        <>
+          <Typography.Text>
+            К двоичной записи N справа дописали <Notation>{"01"}</Notation>. Как
+            R выражается через N?
+          </Typography.Text>
+        </>
+      ),
+      reveal: (
+        <>
+          <Typography.Text>
+            R = 4N + 1: две цифры справа сдвигают запись на два разряда, а{" "}
+            <Notation>{"01"}</Notation> добавляет 1.
+          </Typography.Text>
+        </>
+      ),
+    },
+    {
+      id: "t2",
+      prompt: (
+        <>
+          <Typography.Text>
+            Почему в задаче темы перебор можно остановить на первом N с R больше
+            150?
+          </Typography.Text>
+        </>
+      ),
+      reveal: (
+        <>
+          <Typography.Text>
+            Цифры только дописываются, поэтому больший N даёт больший R: первое
+            подходящее N и есть наименьшее.
+          </Typography.Text>
+        </>
+      ),
+    },
+    {
+      id: "t3",
+      prompt: (
+        <>
+          <Typography.Text>
+            R = 153, запись <Notation>{"10011001"}</Notation>. Мог ли алгоритм
+            задачи темы его выдать?
+          </Typography.Text>
+        </>
+      ),
+      reveal: (
+        <>
+          <Typography.Text>
+            Нет: хвост <Notation>{"01"}</Notation> дописывают к нечётным, а
+            слева остаётся <Notation>{"100110"}</Notation> = 38 — чётное.
+          </Typography.Text>
+        </>
+      ),
+    },
+    {
+      id: "t4",
+      prompt: (
+        <>
+          <Typography.Text>
+            Спрашивают наименьшее R, а алгоритм иногда уменьшает число. Можно ли
+            остановиться на первом найденном?
+          </Typography.Text>
+        </>
+      ),
+      reveal: (
+        <>
+          <Typography.Text>
+            Нет: R не растёт вместе с N. Нужно перебрать весь диапазон и хранить
+            наименьшее R.
+          </Typography.Text>
+        </>
+      ),
+    },
+  ],
   result: (
     <>
       <Typography.Text>
-        <strong>
-          Задание 5 решается в три шага: построить запись числа, буквально
-          выполнить каждое действие алгоритма и найти ответ перебором или от
-          результата.
-        </strong>{" "}
-        Ошибки удобнее ловить на маленьких числах: сверь программу с примером из
-        условия, прежде чем доверять ответу.
+        Тема пройдена: задача темы решена и программой, и от результата — ответ
+        38. Вот что взять с собой.
       </Typography.Text>
-      <TopicCheatSheet
-        label={"Задание 5 на одной схеме"}
-        flow={[
-          { name: "Запись", note: "N → строка цифр в нужной системе" },
+      <LessonSummary
+        items={[
           {
-            name: "Действия",
-            note: "каждая команда условия — одна строка кода",
+            key: "Порядок",
+            note: <>Запись, действия, пример, поиск, ответ.</>,
           },
           {
-            name: "Ответ",
-            note: "перебор с проверкой на примере или от результата",
-          },
-        ]}
-        groups={[
-          {
-            number: 1,
-            title: (
-              <SubtopicLink
-                routeSlug="5-preobrazovanie-zapisey-chisel"
-                subtopic="chislo-i-zapis"
-              >
-                Число и его запись
-              </SubtopicLink>
-            ),
-            rows: [
-              {
-                key: <Notation>{"bin(n)[2:]"}</Notation>,
-                note: <>двоичная запись</>,
-              },
-              {
-                key: <Notation>{"int(s, q)"}</Notation>,
-                note: <>запись → число</>,
-              },
-              {
-                key: <Notation>{"to_base(n, q)"}</Notation>,
-                note: <>троичная и другие системы</>,
-              },
-            ],
+            key: "Запись",
+            note: <>Алгоритм работает с цифрами, спрашивают о числах.</>,
           },
           {
-            number: 2,
-            title: (
-              <SubtopicLink
-                routeSlug="5-preobrazovanie-zapisey-chisel"
-                subtopic="dopisyvanie"
-              >
-                Дописывание цифр
-              </SubtopicLink>
-            ),
-            rows: [
-              {
-                key: <Notation>{"s + '01'"}</Notation>,
-                note: <>дописать справа</>,
-              },
-              {
-                key: <Notation>{"'10' + s"}</Notation>,
-                note: <>дописать слева</>,
-              },
-            ],
+            key: "Действия",
+            note: <>Каждая команда — строка кода по текущей записи.</>,
           },
           {
-            number: 3,
-            title: (
-              <SubtopicLink
-                routeSlug="5-preobrazovanie-zapisey-chisel"
-                subtopic="chasti-zapisi"
-              >
-                Срезы, замены и сумма цифр
-              </SubtopicLink>
-            ),
-            rows: [
-              {
-                key: <Notation>{"s[-2:]"}</Notation>,
-                note: <>две последние цифры</>,
-              },
-              { key: <Notation>{"s[::-1]"}</Notation>, note: <>переворот</> },
-              {
-                key: <Notation>{"s.count('1')"}</Notation>,
-                note: <>сумма двоичных цифр</>,
-              },
-            ],
+            key: "Поиск",
+            note: <>Перебор с обоснованной границей или от результата.</>,
           },
           {
-            number: 4,
-            title: (
-              <SubtopicLink
-                routeSlug="5-preobrazovanie-zapisey-chisel"
-                subtopic="poisk-otveta"
-              >
-                Решение перебором
-              </SubtopicLink>
-            ),
-            rows: [
-              { key: <>наименьшее N</>, note: <>первое подходящее</> },
-              {
-                key: <>наименьшее R</>,
-                note: <>перебрать всё, хранить R и N</>,
-              },
-              {
-                key: <>граница</>,
-                note: <>R ≥ N, если цифры только дописывают</>,
-              },
-            ],
-          },
-          {
-            number: 5,
-            title: (
-              <SubtopicLink
-                routeSlug="5-preobrazovanie-zapisey-chisel"
-                subtopic="ot-rezultata"
-              >
-                Решение от результата
-              </SubtopicLink>
-            ),
-            rows: [
-              { key: <>хвост R</>, note: <>совпадает с дописанным блоком</> },
-              {
-                key: <>остаток слева</>,
-                note: <>это N, его свойство проверяют</>,
-              },
-            ],
+            key: "Задача темы",
+            note: <>N = 38: 100110 + 10 = 10011010, R = 154.</>,
           },
         ]}
-        caption={
-          <>
-            Шпаргалка темы: порядок решения и главное из каждой подтемы. Номер
-            раздела ведёт на подтему.
-          </>
-        }
       />
     </>
   ),

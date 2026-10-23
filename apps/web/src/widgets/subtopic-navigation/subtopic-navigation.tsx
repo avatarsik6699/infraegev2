@@ -19,6 +19,7 @@ export const SubtopicNavigation: React.FC<SubtopicNavigationTypes.Props> = (
 ) => {
   const progress = useLessonProgress(props.lessonId, props.tasks);
   const solved = new Set(progress.solvedTaskIds);
+  const practiceCount = props.practiceCount ?? masteryTasks(props.tasks).length;
   const topic = props.topics.find((item) => item.id === props.lessonId);
   const subtopics = topic?.subtopics ?? [];
   const currentIndex = subtopics.findIndex(
@@ -86,10 +87,8 @@ export const SubtopicNavigation: React.FC<SubtopicNavigationTypes.Props> = (
               marker: <PenLine size={13} strokeWidth={2} />,
               label: "Практика и итог",
               count:
-                isCurrent &&
-                !props.practiceUnavailable &&
-                masteryTasks(props.tasks).length > 0
-                  ? ` · ${String(masteryTasks(props.tasks).length)}`
+                isCurrent && !props.practiceUnavailable && practiceCount > 0
+                  ? ` · ${String(practiceCount)}`
                   : undefined,
               to: "/ege/$slug/praktika",
               params: { slug: item.routeSlug },

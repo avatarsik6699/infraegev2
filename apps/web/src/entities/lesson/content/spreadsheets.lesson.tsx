@@ -5,6 +5,7 @@ import {
   CodeRunner,
   FormulaBlock,
   LessonDiagram,
+  LessonStepper,
   LessonSummary,
   LessonTable,
   LessonTabs,
@@ -17,6 +18,7 @@ import { spreadsheetsLessonPublication } from "~/shared/config/lesson-publicatio
 import { defineLesson } from "../lib/define-lesson";
 import { lessonMedia } from "./spreadsheets.media";
 import { PythonTerm } from "./python-term";
+import { FinalMistake } from "./final-mistake";
 import { SubtopicLink } from "./subtopic-link";
 
 const THEME_TASK = (
@@ -29,6 +31,13 @@ const THEME_TASK = (
 );
 
 const R = "9-obrabotka-tablicy-chisel";
+
+/** A subtopic of this topic, linked from the final page. */
+const Sub: React.FC<{ slug: string; children: React.ReactNode }> = (props) => (
+  <SubtopicLink routeSlug="9-obrabotka-tablicy-chisel" subtopic={props.slug}>
+    {props.children}
+  </SubtopicLink>
+);
 
 export const spreadsheetsLesson = defineLesson({
   ...spreadsheetsLessonPublication,
@@ -2781,303 +2790,438 @@ export const spreadsheetsLesson = defineLesson({
       ),
     },
   ],
-  examFocus: (
-    <>
-      <Typography.Text>
-        <strong>
-          Готовое решение проверяют вручную на одной подходящей и одной
-          неподходящей строке, а потом ищут типичные ошибки.
-        </strong>{" "}
-        Выбери ошибку, чтобы увидеть, как себя проверить:
-      </Typography.Text>
-      <VariantPicker
-        label={"Ошибка и как себя проверить"}
-        variants={[
-          {
-            label: "строгость",
-            value: <>посчитали «больше» как «не меньше»</>,
-            note: <>проверь строку, где выполняется равенство</>,
-          },
-          {
-            label: "лишняя пара",
-            value: <>проверили только две двойки в полосе частот</>,
-            note: <>считать и единицы: четыре одиночных числа</>,
-          },
-          {
-            label: "пустая группа",
-            value: <>взяли среднее или максимум несуществующей группы</>,
-            note: <>сначала структура, потом группы</>,
-          },
-          {
-            label: "S − m − M",
-            value: <>убрали все числа, равные наименьшему и наибольшему</>,
-            note: <>вычитается по одному экземпляру</>,
-          },
-          {
-            label: "сортировка",
-            value: <>отсортировали строку и проверили порядок или половины</>,
-            note: <>порядок — на исходной строке</>,
-          },
-          {
-            label: "формулы не до конца",
-            value: <>протянули формулы не до последней строки данных</>,
-            note: <>сравни число признаков с числом строк файла</>,
-          },
-          {
-            label: "номер с заголовком",
-            value: <>ответили номером строки листа</>,
-            note: <>вычесть строку заголовков</>,
-          },
-          {
-            label: "счётчик не там",
-            value: (
+  finalLead:
+    "Вся тема на одной странице: как решилась задача темы, главное из подтем, порядок решения и частые ошибки.",
+  finalSections: [
+    {
+      id: "odna-zadacha",
+      navLabel: "Одна задача — вся тема",
+      explanation: (
+        <>
+          <Typography.Text>
+            <strong>
+              Задача темы — строки с одной парой и средним одиночных больше
+              суммы пары — прошла через подтемы, и каждая добавляла к программе
+              новую проверку.
+            </strong>{" "}
+            Пролистай версии: точками отмечены строки, которых не было в
+            предыдущей.
+          </Typography.Text>
+          <LessonStepper
+            {...lessonMedia.finalTask}
+            label={"Задача темы от подтемы 1 до подтемы 5"}
+          />
+          <Typography.Text>
+            В электронной таблице те же проверки делают вспомогательные столбцы:
+            полоса частот СЧЁТЕСЛИ, суммы групп СУММЕСЛИ и признак строки
+            ЕСЛИ(И(…);1;0), а ответ — сумма признаков.
+          </Typography.Text>
+        </>
+      ),
+    },
+    {
+      id: "karta-temy",
+      navLabel: "Карта темы",
+      explanation: (
+        <>
+          <Typography.Text>
+            <strong>
+              Каждая подтема дала несколько проверок строки, и любое решение
+              собирается из них.
+            </strong>{" "}
+            Сверху — путь от условия к ответу, ниже — по блоку на подтему.
+            Заголовок блока ведёт на подтему.
+          </Typography.Text>
+          <TopicCheatSheet
+            label={"Задание 9 на одной схеме"}
+            flow={[
+              { name: "Условие", note: "отдельные проверки строки" },
+              {
+                name: "Проверка",
+                note: "признак в таблице или if в программе",
+              },
+              { name: "Ответ", note: "количество, номер или число из строки" },
+            ]}
+            groups={[
+              {
+                number: 1,
+                title: <Sub slug="stroka-i-uslovie">Строка и условие</Sub>,
+                rows: [
+                  { key: <>«не меньше»</>, note: <>≥: равенство подходит</> },
+                  {
+                    key: <Notation>{"=ЕСЛИ(И(…);1;0)"}</Notation>,
+                    note: <>признак строки; ответ — сумма признаков</>,
+                  },
+                  {
+                    key: <Notation>{"line.split()"}</Notation>,
+                    note: <>числа строки текстового файла</>,
+                  },
+                ],
+              },
+              {
+                number: 2,
+                title: (
+                  <Sub slug="summa-krajnie-srednie">
+                    Сумма, наибольшее и наименьшее
+                  </Sub>
+                ),
+                rows: [
+                  {
+                    key: <Notation>{"sorted(a)[-2]"}</Notation>,
+                    note: <>второе по величине, с повторами</>,
+                  },
+                  {
+                    key: <>S − m − M</>,
+                    note: <>без одного наименьшего и одного наибольшего</>,
+                  },
+                  {
+                    key: <>S₁ · k₂ {">"} S₂ · k₁</>,
+                    note: <>сравнение средних без деления</>,
+                  },
+                ],
+              },
+              {
+                number: 3,
+                title: <Sub slug="povtory-v-stroke">Повторы в строке</Sub>,
+                rows: [
+                  {
+                    key: <Notation>{"=СЧЁТЕСЛИ($A1:$F1;A1)"}</Notation>,
+                    note: <>полоса частот в таблице</>,
+                  },
+                  {
+                    key: <Notation>{"[a.count(x) for x in a]"}</Notation>,
+                    note: <>та же полоса в Python</>,
+                  },
+                  {
+                    key: <Notation>{"len(set(a)) == len(a)"}</Notation>,
+                    note: <>все числа различны</>,
+                  },
+                ],
+              },
+              {
+                number: 4,
+                title: (
+                  <Sub slug="povtoryayushchiesya-i-odinochnye">
+                    Две группы чисел
+                  </Sub>
+                ),
+                rows: [
+                  {
+                    key: <>одиночные и повторы</>,
+                    note: <>частота 1 и частота больше 1</>,
+                  },
+                  {
+                    key: <Notation>{"=СУММЕСЛИ(G1:L1;1;A1:F1)"}</Notation>,
+                    note: <>сумма одиночных в таблице</>,
+                  },
+                  {
+                    key: <>сначала структура</>,
+                    note: <>потом суммы и средние групп</>,
+                  },
+                ],
+              },
+              {
+                number: 5,
+                title: (
+                  <Sub slug="poryadok-i-nomer-stroki">
+                    Порядок и номер строки
+                  </Sub>
+                ),
+                rows: [
+                  {
+                    key: <Notation>{"enumerate(f, start=1)"}</Notation>,
+                    note: <>номер строки с единицы</>,
+                  },
+                  {
+                    key: <Notation>{"last = number"}</Notation>,
+                    note: <>последняя; первая — с break</>,
+                  },
+                  {
+                    key: <Notation>{"a == sorted(a)"}</Notation>,
+                    note: <>числа по неубыванию — на исходной строке</>,
+                  },
+                ],
+              },
+              {
+                number: 6,
+                title: (
+                  <Sub slug="yachejka-stolbec-sosedi">
+                    Вся таблица и соседние ячейки
+                  </Sub>
+                ),
+                level: "дополнительный урок",
+                rows: [
+                  {
+                    key: <>другие строки</>,
+                    note: <>частота в таблице минус частота в своей</>,
+                  },
+                  {
+                    key: <>сдвиги −1, 0, 1</>,
+                    note: <>соседи без самой ячейки и за краем</>,
+                  },
+                ],
+              },
+            ]}
+            caption={
               <>
-                <Notation>{"answer = 0"}</Notation> внутри цикла или{" "}
-                <Notation>{"+= 1"}</Notation> в цикле по числам
+                Карта темы: путь к ответу сверху и главное из каждой подтемы.
+                Номер блока — номер подтемы.
               </>
-            ),
-            note: <>обнулить до файла, увеличить один раз на строку</>,
-          },
-        ]}
-      />
-      <Typography.Text>
-        Распознаны ли числа таблицы как числа, проверяет{" "}
-        <Notation>{"=СЧЁТ(A1:F1)"}</Notation>: для шести чисел в строке должно
-        получиться 6.{" "}
-        <PythonTerm term="xl-format">Текстовые записи чисел</PythonTerm>{" "}
-        <Notation>{"СЧЁТ"}</Notation> не учитывает.
-      </Typography.Text>
-    </>
-  ),
+            }
+          />
+        </>
+      ),
+    },
+    {
+      id: "kak-reshat",
+      navLabel: "Как решать",
+      explanation: (
+        <>
+          <Typography.Text>
+            <strong>
+              Любое задание 9 решается одним порядком из пяти шагов.
+            </strong>{" "}
+            Каждому шагу ты уже учился — под ним номера подтем:
+          </Typography.Text>
+          <LessonDiagram
+            {...lessonMedia.finalCycle}
+            caption={
+              <>
+                Главный шаг — одна строка вручную: проверь подходящую и
+                неподходящую строку до того, как протягивать формулы или
+                запускать цикл. Если ответ не сошёлся, вернись к ней.
+              </>
+            }
+          />
+          <Typography.Text>
+            Числа таблицы должны быть числами:{" "}
+            <Notation>{"=СЧЁТ(A1:F1)"}</Notation> для шести чисел строки даёт 6,
+            а текстовые записи чисел СЧЁТ не учитывает.
+          </Typography.Text>
+        </>
+      ),
+    },
+    {
+      id: "chastye-oshibki",
+      navLabel: "Частые ошибки",
+      explanation: (
+        <>
+          <Typography.Text>
+            <strong>
+              Восемь ошибок встречаются чаще других, и каждую ловит один вопрос
+              к себе.
+            </strong>{" "}
+            Выбери ошибку — увидишь, как её исправить, и вопрос, который её
+            ловит:
+          </Typography.Text>
+          <VariantPicker
+            label={"Частые ошибки и вопросы, которые их ловят"}
+            variants={[
+              {
+                label: "строгость",
+                value: (
+                  <FinalMistake
+                    wrong="«больше» записали как ≥"
+                    right="«больше» — строго, >"
+                    question="подходит ли строка с равенством?"
+                  />
+                ),
+                note: <Sub slug="stroka-i-uslovie">подтема 1</Sub>,
+              },
+              {
+                label: "S − m − M",
+                value: (
+                  <FinalMistake
+                    wrong="убрали все числа, равные крайним"
+                    right="вычитают по одному экземпляру"
+                    question="сколько чисел осталось в сумме?"
+                  />
+                ),
+                note: <Sub slug="summa-krajnie-srednie">подтема 2</Sub>,
+              },
+              {
+                label: "лишняя пара",
+                value: (
+                  <FinalMistake
+                    wrong="проверили только две двойки в частотах"
+                    right="и четыре единицы: 2, 2, 1, 1, 1, 1"
+                    question="нет ли второй пары или тройки?"
+                  />
+                ),
+                note: <Sub slug="povtory-v-stroke">подтема 3</Sub>,
+              },
+              {
+                label: "пустая группа",
+                value: (
+                  <FinalMistake
+                    wrong="взяли среднее несуществующей группы"
+                    right="сначала структура, потом группы"
+                    question="есть ли в строке такие числа?"
+                  />
+                ),
+                note: (
+                  <Sub slug="povtoryayushchiesya-i-odinochnye">подтема 4</Sub>
+                ),
+              },
+              {
+                label: "сортировка",
+                value: (
+                  <FinalMistake
+                    wrong="порядок проверили на отсортированной строке"
+                    right="порядок — на исходной"
+                    question="не переставил ли я числа до проверки?"
+                  />
+                ),
+                note: <Sub slug="poryadok-i-nomer-stroki">подтема 5</Sub>,
+              },
+              {
+                label: "номер с заголовком",
+                value: (
+                  <FinalMistake
+                    wrong="ответили номером строки листа"
+                    right="вычитают строку заголовков"
+                    question="с какой строки листа начинаются данные?"
+                  />
+                ),
+                note: <Sub slug="poryadok-i-nomer-stroki">подтема 5</Sub>,
+              },
+              {
+                label: "формулы не до конца",
+                value: (
+                  <FinalMistake
+                    wrong="формулы протянули не до последней строки"
+                    right="признаков столько же, сколько строк"
+                    question="совпадает ли число признаков с числом строк?"
+                  />
+                ),
+                note: <Sub slug="stroka-i-uslovie">подтема 1</Sub>,
+              },
+              {
+                label: "счётчик не там",
+                value: (
+                  <FinalMistake
+                    wrong={<Notation>{"answer = 0"}</Notation>}
+                    right="обнуляют до файла, +1 — один раз на строку"
+                    question="не обнуляется ли счётчик в цикле?"
+                  />
+                ),
+                note: <Sub slug="stroka-i-uslovie">подтема 1</Sub>,
+              },
+            ]}
+          />
+        </>
+      ),
+    },
+  ],
+  checkpoint: [
+    {
+      id: "t1",
+      prompt: (
+        <>
+          <Typography.Text>
+            Подходит ли строка 6, 6, 1, 2, 3, 4 под задачу темы?
+          </Typography.Text>
+        </>
+      ),
+      reveal: (
+        <>
+          <Typography.Text>
+            Нет: структура подходит, но 1 + 2 + 3 + 4 = 10, а 4 · (6 + 6) = 48 —
+            среднее одиночных не больше суммы пары.
+          </Typography.Text>
+        </>
+      ),
+    },
+    {
+      id: "t2",
+      prompt: (
+        <>
+          <Typography.Text>
+            Какая полоса частот у строки 2, 2, 2, 7, 9, 11? Подходит ли она под
+            «одна пара, остальные различны»?
+          </Typography.Text>
+        </>
+      ),
+      reveal: (
+        <>
+          <Typography.Text>
+            3, 3, 3, 1, 1, 1 — двойка встречается трижды, пары нет. Не подходит.
+          </Typography.Text>
+        </>
+      ),
+    },
+    {
+      id: "t3",
+      prompt: (
+        <>
+          <Typography.Text>
+            Как сравнить среднее трёх чисел с суммой 20 и среднее двух чисел с
+            суммой 14 без деления?
+          </Typography.Text>
+        </>
+      ),
+      reveal: (
+        <>
+          <Typography.Text>
+            20 · 2 = 40 и 14 · 3 = 42: второе среднее больше.
+          </Typography.Text>
+        </>
+      ),
+    },
+    {
+      id: "t4",
+      prompt: (
+        <>
+          <Typography.Text>
+            Спрашивают номер первой подходящей строки. Что изменить в программе,
+            которая считает количество?
+          </Typography.Text>
+        </>
+      ),
+      reveal: (
+        <>
+          <Typography.Text>
+            Нумеровать строки enumerate с единицы, на первой подходящей
+            напечатать номер и выйти из цикла break.
+          </Typography.Text>
+        </>
+      ),
+    },
+  ],
   result: (
     <>
       <Typography.Text>
-        <strong>
-          Любая задача задания 9 решается одним порядком: разложить условие на
-          отдельные проверки строки, проверить их на одной строке вручную,
-          применить ко всем строкам и вывести то, что спросили.
-        </strong>
+        Тема пройдена: задача темы решена от цикла по строкам до ответа 2 на
+        учебной таблице. Вот что взять с собой.
       </Typography.Text>
-      <Typography.Text>
-        Всё главное из подтем собрано на одной схеме. Номер раздела ведёт на его
-        подтему.
-      </Typography.Text>
-      <TopicCheatSheet
-        label={"Задание 9 на одной схеме"}
-        flow={[
-          { name: "Условие", note: "отдельные проверки строки" },
-          { name: "Проверка", note: "признак в таблице или if в программе" },
-          { name: "Ответ", note: "количество, номер или число из строки" },
-        ]}
-        groups={[
+      <LessonSummary
+        items={[
           {
-            number: 1,
-            title: (
-              <SubtopicLink
-                routeSlug="9-obrabotka-tablicy-chisel"
-                subtopic="stroka-i-uslovie"
-              >
-                Строка и условие
-              </SubtopicLink>
+            key: "Порядок",
+            note: (
+              <>Условие, одна строка вручную, признак, все строки, ответ.</>
             ),
-            rows: [
-              { key: <>«не меньше»</>, note: <>≥: равенство подходит</> },
-              {
-                key: <Notation>{"=ЕСЛИ(И(…);1;0)"}</Notation>,
-                note: <>признак строки, ответ — сумма</>,
-              },
-              {
-                key: <Notation>{"p != q"}</Notation>,
-                note: <>ровно одно из двух условий</>,
-              },
-              {
-                key: <Notation>{"line.split()"}</Notation>,
-                note: <>файл сохранён текстом</>,
-              },
-            ],
           },
           {
-            number: 2,
-            title: (
-              <SubtopicLink
-                routeSlug="9-obrabotka-tablicy-chisel"
-                subtopic="summa-krajnie-srednie"
-              >
-                Сумма, наибольшее, наименьшее
-              </SubtopicLink>
-            ),
-            rows: [
-              {
-                key: <Notation>{"sorted(a)[-2]"}</Notation>,
-                note: <>второе по величине с повторами</>,
-              },
-              { key: <>S − m − M</>, note: <>по одному экземпляру крайних</> },
-              {
-                key: <>a + d = b + c</>,
-                note: <>две пары с равными суммами</>,
-              },
-              {
-                key: <>S₁ · k₂ {">"} S₂ · k₁</>,
-                note: <>средние без деления</>,
-              },
-            ],
+            key: "Повторы",
+            note: <>Полоса частот: СЧЁТЕСЛИ или a.count(x).</>,
           },
           {
-            number: 3,
-            title: (
-              <SubtopicLink
-                routeSlug="9-obrabotka-tablicy-chisel"
-                subtopic="povtory-v-stroke"
-              >
-                Повторы
-              </SubtopicLink>
-            ),
-            rows: [
-              {
-                key: <Notation>{"=СЧЁТЕСЛИ($A1:$F1;A1)"}</Notation>,
-                note: <>полоса частот</>,
-              },
-              {
-                key: <Notation>{"[a.count(x) for x in a]"}</Notation>,
-                note: <>та же полоса в Python</>,
-              },
-              {
-                key: <>2 + 1 + 1 + 1 + 1</>,
-                note: <>две двойки, четыре единицы</>,
-              },
-              {
-                key: <Notation>{"len(set(a)) == len(a)"}</Notation>,
-                note: <>все числа различны</>,
-              },
-            ],
+            key: "Группы",
+            note: <>Одиночные — частота 1, повторы — больше 1.</>,
           },
           {
-            number: 4,
-            title: (
-              <SubtopicLink
-                routeSlug="9-obrabotka-tablicy-chisel"
-                subtopic="povtoryayushchiesya-i-odinochnye"
-              >
-                Две группы
-              </SubtopicLink>
-            ),
-            rows: [
-              {
-                key: <Notation>{"=СУММЕСЛИ(G1:L1;1;A1:F1)"}</Notation>,
-                note: <>сумма неповторяющихся</>,
-              },
-              {
-                key: <Notation>{"single, repeated"}</Notation>,
-                note: <>два списка включением</>,
-              },
-              { key: <>сначала структура</>, note: <>потом средние групп</> },
-              {
-                key: <Notation>{"x % 2 == 0"}</Notation>,
-                note: <>чётные и нечётные — тоже группы</>,
-              },
-            ],
+            key: "Средние",
+            note: <>Сравнивают без деления: S₁ · k₂ и S₂ · k₁.</>,
           },
           {
-            number: 5,
-            title: (
-              <SubtopicLink
-                routeSlug="9-obrabotka-tablicy-chisel"
-                subtopic="poryadok-i-nomer-stroki"
-              >
-                Порядок и номер
-              </SubtopicLink>
-            ),
-            rows: [
-              {
-                key: <Notation>{"enumerate(f, start=1)"}</Notation>,
-                note: <>номер строки с единицы</>,
-              },
-              { key: <>фильтр</>, note: <>номер листа минус заголовок</> },
-              {
-                key: <Notation>{"last = number"}</Notation>,
-                note: <>последняя; первая — с break</>,
-              },
-              {
-                key: <Notation>{"a == sorted(a)"}</Notation>,
-                note: <>неубывающий порядок</>,
-              },
-            ],
-          },
-          {
-            number: 6,
-            title: (
-              <SubtopicLink
-                routeSlug="9-obrabotka-tablicy-chisel"
-                subtopic="yachejka-stolbec-sosedi"
-              >
-                Вся таблица и соседи
-              </SubtopicLink>
-            ),
-            level: "дополнительный урок",
-            rows: [
-              {
-                key: <>другие строки</>,
-                note: <>минус частота своей строки</>,
-              },
-              { key: <>отметки ячеек → строки</>, note: <>два прохода</> },
-              {
-                key: <>сдвиги −1, 0, 1</>,
-                note: <>без (0, 0), с проверкой границ</>,
-              },
-            ],
-          },
-        ]}
-        sections={[
-          {
-            title: "Три вопроса к готовому решению",
-            steps: [
-              <>Что учитывается: числа, ячейки или строки?</>,
+            key: "Задача темы",
+            note: (
               <>
-                Совпадает ли результат с ручным разбором одной подходящей и
-                одной неподходящей строки?
-              </>,
-              <>Выведено ли то, что спросили: количество, номер или число?</>,
-            ],
+                Строки 1 и 6: 32 {">"} 16 и 92 {">"} 56 — ответ 2.
+              </>
+            ),
           },
-        ]}
-        caption={
-          <>
-            Шпаргалка темы: порядок решения и главное из каждой подтемы. Номер
-            раздела ведёт на подтему.
-          </>
-        }
-      />
-      <Typography.Text>
-        Перед формулами или программой полезно расписать условие так:
-      </Typography.Text>
-      <LessonTable
-        label={"Условие словами и точная проверка"}
-        columns={[
-          { label: "Условие словами" },
-          { label: "Что нужно" },
-          { label: "Точная проверка" },
-        ]}
-        rows={[
-          [
-            "Одно число дважды, остальные четыре различны",
-            "Полоса частот",
-            "Две двойки и четыре единицы",
-          ],
-          [
-            "Среднее неповторяющихся больше суммы повторяющихся",
-            "Суммы двух групп",
-            "O > 4P",
-          ],
-          [
-            "Наибольшее число встречается один раз",
-            "Наибольшее и его частота",
-            "Частота наибольшего = 1",
-          ],
-          [
-            "Номер последней такой строки",
-            "Номер строки",
-            "Перезаписывать номер в каждой подходящей",
-          ],
         ]}
       />
     </>

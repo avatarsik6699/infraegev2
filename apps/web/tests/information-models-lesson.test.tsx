@@ -35,7 +35,7 @@ const checkpoints = subtopics.flatMap(
 );
 const authoredContent = [
   ...lesson.theory.map(({ explanation }) => explanation),
-  lesson.examFocus,
+  ...(lesson.finalSections ?? []).map(({ explanation }) => explanation),
   lesson.result,
 ];
 
@@ -110,7 +110,7 @@ describe("task 1 information models lesson (Change 197)", () => {
     for (const key of Object.keys(lessonMedia))
       expect(sources, key).toContain(`lessonMedia.${key}}`);
     const media = Object.values(lessonMedia);
-    expect(media.filter((item) => item.kind === "stepper")).toHaveLength(3);
+    expect(media.filter((item) => item.kind === "stepper")).toHaveLength(4);
   });
 
   it("keeps spaces around inline code, links and emphasis", () => {

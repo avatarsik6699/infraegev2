@@ -39,15 +39,16 @@ export namespace LessonContent {
 
   /** The default export of `<lesson>.paid.praktika.tsx`. */
   export type PaidPracticeContent = {
-    examFocus?: React.ReactNode;
+    /** T254: the course-like sections of «Практика и итог». */
+    sections: readonly ConceptBlock[];
     checkpoint?: readonly CheckpointItem[];
     result: React.ReactNode;
   };
 
   /** «Практика и итог» of a topic whose final page is paid. */
   export type PaidPractice = {
-    /** Which optional sections the paid module has, for the page outline. */
-    examFocus: boolean;
+    /** T254: headings of the paid `sections`, for the page outline. */
+    sections: readonly ConceptOutline[];
     /** Self-check questions of the paid module; 0 when it has none. */
     checkpoint: number;
     load: PaidLoader<PaidPracticeContent>;
@@ -104,7 +105,12 @@ export namespace LessonContent {
     theory: readonly ConceptBlock[];
     /** Splits the theory into subtopic pages without changing its order; required once published. */
     subtopics?: readonly Subtopic[];
-    examFocus?: React.ReactNode;
+    /** T254: «Практика и итог» like the course summary — one line under the
+     *  title in place of the outcomes row, then `finalSections` (or the paid
+     *  module's `sections`), «Итог» (`result`), the self-check and the topic's
+     *  mixed tasks. */
+    finalLead: string;
+    finalSections?: readonly ConceptBlock[];
     /** The lesson's single formative, think-then-reveal self-check, rendered inside `result`
      *  («Итоги»), after the result copy — not counted toward masteryThreshold. */
     checkpoint?: readonly CheckpointItem[];
