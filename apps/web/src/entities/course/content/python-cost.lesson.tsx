@@ -50,15 +50,18 @@ export const pythonCostLesson = defineCourseLesson({
             <strong>
               Временная сложность описывает, как растёт работа с размером входа.
             </strong>{" "}
-            Размер входа обозначают <Notation>{"n"}</Notation> — например,
-            число строк файла. Один проход по файлу делает около{" "}
+            Размер входа обозначают <Notation>{"n"}</Notation> — например, число
+            строк файла. Один проход по файлу делает около{" "}
             <Notation>{"n"}</Notation> действий, и это записывают{" "}
             <Notation>{"O(n)"}</Notation> — «порядка n». Все пары — около{" "}
             <Notation>{"n²"}</Notation> действий, <Notation>{"O(n²)"}</Notation>
             . Это не секунды, а то, во сколько раз вырастет работа, если данных
             станет больше.
           </Typography.Text>
-          <ProofDisclosure summary="Тонкости: что строго значит O(n)" kind="nuance">
+          <ProofDisclosure
+            summary="Тонкости: что строго значит O(n)"
+            kind="nuance"
+          >
             <Typography.Text>
               <Notation>{"O(n)"}</Notation> — верхняя оценка: при достаточно
               большом <Notation>{"n"}</Notation> число действий не больше{" "}
@@ -85,8 +88,8 @@ export const pythonCostLesson = defineCourseLesson({
             }
           />
           <Typography.Text>
-            Такой разрыв важнее любых сокращений записи: никакая короткая
-            запись не превратит 10 миллиардов действий в 100 тысяч.
+            Такой разрыв важнее любых сокращений записи: никакая короткая запись
+            не превратит 10 миллиардов действий в 100 тысяч.
           </Typography.Text>
         </>
       ),
@@ -100,8 +103,8 @@ export const pythonCostLesson = defineCourseLesson({
             <strong>Число шагов считают по реальным границам циклов.</strong>{" "}
             Два вложенных цикла не всегда дают <Notation>{"n²"}</Notation>. Если
             внутренний всегда делает 10 шагов, всего их{" "}
-            <Notation>{"10n"}</Notation>, то есть <Notation>{"O(n)"}</Notation>
-            . Если внутренний цикл идёт только по номерам после{" "}
+            <Notation>{"10n"}</Notation>, то есть <Notation>{"O(n)"}</Notation>.
+            Если внутренний цикл идёт только по номерам после{" "}
             <Notation>{"i"}</Notation>, каждая пара проверяется один раз:
           </Typography.Text>
           <CodeBlock
@@ -147,8 +150,8 @@ export const pythonCostLesson = defineCourseLesson({
           />
           <Typography.Text>
             Миллион делится пополам до единицы всего 19 раз: 2¹⁹ ≈ 524 тысячи,
-            2²⁰ ≈ 1,05 миллиона. Запись <Notation>{"1_000_000"}</Notation> —
-            то же число 1000000, подчёркивания только облегчают чтение.
+            2²⁰ ≈ 1,05 миллиона. Запись <Notation>{"1_000_000"}</Notation> — то
+            же число 1000000, подчёркивания только облегчают чтение.
           </Typography.Text>
         </>
       ),
@@ -238,10 +241,7 @@ export const pythonCostLesson = defineCourseLesson({
             Множество для проверок <Notation>{"in"}</Notation> строят один раз
             до цикла, а не внутри каждого запроса.
           </Typography.Text>
-          <ProofDisclosure
-            summary="Тонкости: когда оценки хуже"
-            kind="nuance"
-          >
+          <ProofDisclosure summary="Тонкости: когда оценки хуже" kind="nuance">
             <Typography.Text>
               Оценки предполагают, что сравнить или захешировать один элемент
               недорого. Для длинных строк и огромных целых это отдельная работа.
@@ -310,9 +310,9 @@ export const pythonCostLesson = defineCourseLesson({
             </strong>{" "}
             <Notation>{"perf_counter()"}</Notation> из модуля{" "}
             <Notation>{"time"}</Notation> возвращает показание часов в секундах.
-            Само показание ничего не значит, важна разность до и после.
-            Проверим таблицу на опыте: ищем отсутствующее число тысячу раз в
-            списке из ста тысяч чисел и в множестве из тех же чисел.
+            Само показание ничего не значит, важна разность до и после. Проверим
+            таблицу на опыте: ищем отсутствующее число тысячу раз в списке из
+            ста тысяч чисел и в множестве из тех же чисел.
           </Typography.Text>
           <CodeBlock
             code={

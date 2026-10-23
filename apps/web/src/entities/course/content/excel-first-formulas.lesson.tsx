@@ -39,9 +39,9 @@ export const excelFirstFormulasLesson = defineCourseLesson({
             .
           </Typography.Text>
           <Typography.Text>
-            Запишем формулы для стоимости каждой покупки и общей суммы,
-            разберём знаки действий, порядок вычислений и ошибки, которые
-            показывает Excel.
+            Запишем формулы для стоимости каждой покупки и общей суммы, разберём
+            знаки действий, порядок вычислений и ошибки, которые показывает
+            Excel.
           </Typography.Text>
         </>
       ),
@@ -56,14 +56,13 @@ export const excelFirstFormulasLesson = defineCourseLesson({
               Формула начинается со знака =; ячейка показывает результат, а
               строка формул — саму формулу.
             </strong>{" "}
-            Введи в пустую ячейку <Notation>{"=2+3"}</Notation> и нажми Enter:
-            в ячейке появится 5. Выбери её снова — в строке формул видно{" "}
+            Введи в пустую ячейку <Notation>{"=2+3"}</Notation> и нажми Enter: в
+            ячейке появится 5. Выбери её снова — в строке формул видно{" "}
             <Notation>{"=2+3"}</Notation>.
           </Typography.Text>
           <Typography.Text>
-            Вместо чисел в формулу пишут адреса.{" "}
-            <Notation>{"=B2*C2"}</Notation> значит «значение{" "}
-            <Notation>{"B2"}</Notation> умножить на значение{" "}
+            Вместо чисел в формулу пишут адреса. <Notation>{"=B2*C2"}</Notation>{" "}
+            значит «значение <Notation>{"B2"}</Notation> умножить на значение{" "}
             <Notation>{"C2"}</Notation>»: при цене 40 и количестве 5 получится
             200.
           </Typography.Text>
@@ -106,8 +105,8 @@ export const excelFirstFormulasLesson = defineCourseLesson({
         <>
           <Typography.Text>
             <strong>
-              Умножение в формуле — звёздочка <Notation>{"*"}</Notation>, деление
-              — косая черта <Notation>{"/"}</Notation>, степень — знак{" "}
+              Умножение в формуле — звёздочка <Notation>{"*"}</Notation>,
+              деление — косая черта <Notation>{"/"}</Notation>, степень — знак{" "}
               <Notation>{"^"}</Notation>.
             </strong>{" "}
             Сложение, вычитание и скобки — как в математике:
@@ -172,11 +171,11 @@ export const excelFirstFormulasLesson = defineCourseLesson({
           >
             <Typography.Text>
               В математике −2² означает −(2²) = −4. В Excel минус перед числом
-              выполняется раньше степени, поэтому{" "}
-              <Notation>{"=-2^2"}</Notation> даёт 4, а{" "}
-              <Notation>{"=-A2^2"}</Notation> при <Notation>{"A2"}</Notation> = 3
-              — 9, а не −9. Чтобы смысл не зависел от этого правила, ставь
-              скобки: <Notation>{"=-(A2^2)"}</Notation> даёт −9,{" "}
+              выполняется раньше степени, поэтому <Notation>{"=-2^2"}</Notation>{" "}
+              даёт 4, а <Notation>{"=-A2^2"}</Notation> при{" "}
+              <Notation>{"A2"}</Notation> = 3 — 9, а не −9. Чтобы смысл не
+              зависел от этого правила, ставь скобки:{" "}
+              <Notation>{"=-(A2^2)"}</Notation> даёт −9,{" "}
               <Notation>{"=(-A2)^2"}</Notation> — 9.
             </Typography.Text>
           </ProofDisclosure>
@@ -386,8 +385,8 @@ export const excelFirstFormulasLesson = defineCourseLesson({
   result: (
     <>
       <Typography.Text>
-        Формула хранит способ вычисления, а ячейка показывает результат. Вот
-        что понадобится дальше.
+        Формула хранит способ вычисления, а ячейка показывает результат. Вот что
+        понадобится дальше.
       </Typography.Text>
       <LessonSummary
         items={[

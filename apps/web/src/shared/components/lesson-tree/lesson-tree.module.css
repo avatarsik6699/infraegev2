@@ -130,7 +130,7 @@ a.file:hover {
   left: calc(-1 * var(--space-1) - 2px);
   width: 3px;
   border-radius: var(--radius-pill);
-  background: var(--color-current-location);
+  background: var(--lesson-here, var(--color-current-location));
   content: "";
 }
 

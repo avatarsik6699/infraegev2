@@ -28,7 +28,7 @@ const firstTopicSubtopicByRouteSlug: Readonly<Record<string, string>> = {
   "17-chislovye-posledovatelnosti": "chisla-i-proverki",
   "18-robot-sborshchik-monet": "luchshaya-summa-do-kletki",
   "19-21-vyigryshnaya-strategiya": "igra-i-strategiya",
-  "22-mnogoprocessornye-sistemy": "process-i-zavisimost",
+  "22-mnogoprocessornye-sistemy": "processy-i-raspisanie",
   "23-analiz-grafov": "graf-i-put",
   "24-obrabotka-simvolnyh-strok": "stroka-i-cepochka",
   "25-deliteli-i-maski": "perebor-i-proverki",

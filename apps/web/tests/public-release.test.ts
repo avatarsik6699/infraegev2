@@ -306,7 +306,7 @@ describe("public release metadata", () => {
         status: "published",
       }),
     ]);
-    expect(courseLessonPublications).toHaveLength(45);
+    expect(courseLessonPublications).toHaveLength(46);
     expect(
       courseLessonPublications.every((lesson) =>
         ["draft", "published"].includes(lesson.status),
@@ -316,7 +316,7 @@ describe("public release metadata", () => {
       courseLessonPublications
         .filter((lesson) => lesson.status === "published")
         .map((lesson) => lesson.routeSlug),
-    ).toHaveLength(45);
+    ).toHaveLength(46);
   });
 
   it("projects truthful course availability into the catalog", () => {
@@ -347,7 +347,7 @@ describe("public release metadata", () => {
     expect(courseCatalog.entries.find((e) => e.id === "excel")).toMatchObject({
       status: "published",
       routeSlug: "excel",
-      lessonCount: 15,
+      lessonCount: 16,
       advancedLessonIds: ["excel-tables-pivots"],
     });
     expect(

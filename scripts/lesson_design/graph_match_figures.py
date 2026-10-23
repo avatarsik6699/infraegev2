@@ -431,7 +431,9 @@ def gm_profile(edges, pos, focus: str) -> str:
     nbrs = sorted(adj[focus])
     degs = [len(adj[n]) for n in nbrs]
     height = 300
-    out = [f'<svg viewBox="0 0 {W} {height}" role="img" aria-label="Профиль соседей пункта {focus}">']
+    out = [
+        f'<svg viewBox="0 0 {W} {height}" role="img" aria-label="Профиль соседей пункта {focus}">'
+    ]
     out += _scheme(
         edges,
         pos,
@@ -474,7 +476,9 @@ def assume_frames(gedges, gpos, tedges, known, letter: str, wrong: str, right: s
             under=under,
         )
         x0 = W - tw - 16
-        out += _matrix(tedges, tnames, x0, 16, cell, hot_cells=hot_cells, hot_rows=set(known.values()))
+        out += _matrix(
+            tedges, tnames, x0, 16, cell, hot_cells=hot_cells, hot_rows=set(known.values())
+        )
         out.append(_text(30, height - 14, note, 14, INK, weight=600))
         out.append("</svg>")
         return "".join(out), label

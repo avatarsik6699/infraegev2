@@ -1314,15 +1314,44 @@ def pairs_arcs(values: list[int] | tuple = (4, 5, 9, 7, 8, 12), k: int = 3) -> s
             f'<path d="M {x0:.1f} {base - 4} C {x0:.1f} {top}, {x1:.1f} {top}, {x1:.1f} {base - 4}" '
             f'fill="none" stroke="{colour}" stroke-width="{2.5 if hit else 1.5}"/>'
         )
-        out.append(_t((x0 + x1) / 2, top + 4, f"B{i + 2}", 13.5, INK if hit else MUTED, "middle", 600 if hit else 400, mono=True))
+        out.append(
+            _t(
+                (x0 + x1) / 2,
+                top + 4,
+                f"B{i + 2}",
+                13.5,
+                INK if hit else MUTED,
+                "middle",
+                600 if hit else 400,
+                mono=True,
+            )
+        )
     for i, v in enumerate(vals):
         x = L + i * (cw + gap)
-        out.append(_box(x, base, cw, 34, str(v), size=16, rx=6, stroke=MUTED, weight=700 if v % k == 0 else 400))
+        out.append(
+            _box(
+                x,
+                base,
+                cw,
+                34,
+                str(v),
+                size=16,
+                rx=6,
+                stroke=MUTED,
+                weight=700 if v % k == 0 else 400,
+            )
+        )
         out.append(_t(x + cw / 2, base + 54, f"A{i + 2}", 13, MUTED, "middle", mono=True))
     out.append(_t(24, 26, f"{n} чисел → {n - 1} пар: формулы в B2:B{n}", 15, INK, weight=600))
     hits = sum(vals[i] % k == 0 or vals[i + 1] % k == 0 for i in range(n - 1))
     out.append(
-        _t(24, 214, f"пар с числом, кратным {k}: {hits}; у A{n + 1} пары нет — формула в B{n + 1} лишняя", 14, MUTED)
+        _t(
+            24,
+            214,
+            f"пар с числом, кратным {k}: {hits}; у A{n + 1} пары нет — формула в B{n + 1} лишняя",
+            14,
+            MUTED,
+        )
     )
     out.append("</svg>")
     return "".join(out)
@@ -1343,14 +1372,47 @@ def grid_paths_frames(rows: int = 4, cols: int = 4) -> list[tuple[str, str]]:
     def frame(done, at, note):
         out = [_svg(h, "Число путей вправо и вниз, клетка за клеткой")]
         for c in range(cols):
-            out.append(_box(L + c * cw, T - 24, cw, 24, letters[c], fill=WASH, color=MUTED, size=13, weight=500))
+            out.append(
+                _box(
+                    L + c * cw,
+                    T - 24,
+                    cw,
+                    24,
+                    letters[c],
+                    fill=WASH,
+                    color=MUTED,
+                    size=13,
+                    weight=500,
+                )
+            )
         for r in range(rows):
-            out.append(_box(L - 34, T + r * rh, 34, rh, str(r + 1), fill=WASH, color=MUTED, size=13, weight=500))
+            out.append(
+                _box(
+                    L - 34,
+                    T + r * rh,
+                    34,
+                    rh,
+                    str(r + 1),
+                    fill=WASH,
+                    color=MUTED,
+                    size=13,
+                    weight=500,
+                )
+            )
             for c in range(cols):
                 shown = str(ways[r][c]) if (r, c) in done else ""
                 edge = r == 0 or c == 0
                 out.append(
-                    _box(L + c * cw, T + r * rh, cw, rh, shown, fill=WASH if edge and shown else "#fff", size=17, weight=700 if (r, c) == at else 400)
+                    _box(
+                        L + c * cw,
+                        T + r * rh,
+                        cw,
+                        rh,
+                        shown,
+                        fill=WASH if edge and shown else "#fff",
+                        size=17,
+                        weight=700 if (r, c) == at else 400,
+                    )
                 )
         if at is not None:
             r, c = at
@@ -1362,9 +1424,27 @@ def grid_paths_frames(rows: int = 4, cols: int = 4) -> list[tuple[str, str]]:
                     )
                 out.append(_arrow_head(x + 10, y + rh / 2, 1, 0, REF_COLORS[0]))
                 out.append(_arrow_head(x + cw / 2, y + 10, 0, 1, REF_COLORS[1]))
-                out.append(_t(px, T + 20, f"{letters[c]}{r + 1} = {letters[c - 1]}{r + 1} + {letters[c]}{r}", 16, INK, weight=600, mono=True))
                 out.append(
-                    _t(px, T + 46, f"{ways[r][c - 1]} + {ways[r - 1][c]} = {ways[r][c]}", 16, INK, weight=600, mono=True)
+                    _t(
+                        px,
+                        T + 20,
+                        f"{letters[c]}{r + 1} = {letters[c - 1]}{r + 1} + {letters[c]}{r}",
+                        16,
+                        INK,
+                        weight=600,
+                        mono=True,
+                    )
+                )
+                out.append(
+                    _t(
+                        px,
+                        T + 46,
+                        f"{ways[r][c - 1]} + {ways[r - 1][c]} = {ways[r][c]}",
+                        16,
+                        INK,
+                        weight=600,
+                        mono=True,
+                    )
                 )
                 out.append(_t(px, T + 74, "слева", 13.5, REF_COLORS[0], weight=600))
                 out.append(_t(px + 52, T + 74, "сверху", 13.5, REF_COLORS[1], weight=600))
@@ -1903,7 +1983,9 @@ def course_table_frames() -> list[tuple[str, str]]:
                 f'<circle cx="{cx:.1f}" cy="14" r="{6 if on else 4}" fill="{ACCENT if on else "#fff"}" '
                 f'stroke="{ACCENT if done else FAINT}" stroke-width="1.5"/>'
             )
-            out.append(_t(cx, 38, stop, 12, INK if on else MUTED, "middle", 600 if on else 500, True))
+            out.append(
+                _t(cx, 38, stop, 12, INK if on else MUTED, "middle", 600 if on else 500, True)
+            )
         # the formula bar across the width of the sheet
         out.append(_box(6, 56, 64, 30, at, size=14, mono=True, color=INK))
         out.append(_t(84, 76, "fx", 14, MUTED))
@@ -1941,7 +2023,14 @@ def course_table_frames() -> list[tuple[str, str]]:
                 if v:
                     right = typed(v) is not None and not isinstance(typed(v), str)
                     out.append(
-                        _t(cx + w - 9 if right else cx + 9, y + rh / 2 + 5, v, 14.5, INK, "end" if right else "start")
+                        _t(
+                            cx + w - 9 if right else cx + 9,
+                            y + rh / 2 + 5,
+                            v,
+                            14.5,
+                            INK,
+                            "end" if right else "start",
+                        )
                     )
                 if addr == at:
                     out.append(
@@ -2000,7 +2089,16 @@ def exam_order() -> str:
         f'fill="none" stroke="{MUTED}" stroke-width="1.5"/>'
     )
     out.append(_arrow_head(left, y + h + 2, 0, -1))
-    out.append(_t(330, bottom + 24, "не сошлось — назад к столбцам на маленьком наборе", 13, MUTED, "middle"))
+    out.append(
+        _t(
+            330,
+            bottom + 24,
+            "не сошлось — назад к столбцам на маленьком наборе",
+            13,
+            MUTED,
+            "middle",
+        )
+    )
     out.append("</svg>")
     return "".join(out)
 
@@ -2022,21 +2120,44 @@ def cf_rule_frames(limit: int = 50) -> list[tuple[str, str]]:
     def sheet(painted=(), frame=None, row_mark=None):
         out = []
         for i, col in enumerate(cols):
-            out.append(_box(L + i * cw, T - 24, cw, 24, col, fill=WASH, color=MUTED, size=13, weight=500))
+            out.append(
+                _box(L + i * cw, T - 24, cw, 24, col, fill=WASH, color=MUTED, size=13, weight=500)
+            )
         for r in range(1, 5):
             y = T + (r - 1) * rh
             mark = r == row_mark
             out.append(
-                _box(L - 34, y, 34, rh, str(r), fill=WASH, color=ACCENT if mark else MUTED, size=13, weight=700 if mark else 500)
+                _box(
+                    L - 34,
+                    y,
+                    34,
+                    rh,
+                    str(r),
+                    fill=WASH,
+                    color=ACCENT if mark else MUTED,
+                    size=13,
+                    weight=700 if mark else 500,
+                )
             )
             for i in range(6):
                 x = L + i * cw
                 out.append(_box(x, y, cw, rh))
                 if r in painted:
-                    out.append(f'<rect x="{x}" y="{y}" width="{cw}" height="{rh}" fill="{ACCENT}" fill-opacity="0.16"/>')
+                    out.append(
+                        f'<rect x="{x}" y="{y}" width="{cw}" height="{rh}" fill="{ACCENT}" fill-opacity="0.16"/>'
+                    )
                 v = f"{i + 1}-е" if r == 1 else str(CF_ROWS[r][i])
                 right = r > 1
-                out.append(_t(x + cw - 9 if right else x + 9, y + rh / 2 + 5, v, 14.5, INK, "end" if right else "start"))
+                out.append(
+                    _t(
+                        x + cw - 9 if right else x + 9,
+                        y + rh / 2 + 5,
+                        v,
+                        14.5,
+                        INK,
+                        "end" if right else "start",
+                    )
+                )
         if frame:
             (c1, r1), (c2, r2) = frame
             x1, y1 = L + cols.index(c1) * cw, T + (r1 - 1) * rh
@@ -2054,7 +2175,16 @@ def cf_rule_frames(limit: int = 50) -> list[tuple[str, str]]:
             if kind == "rule":
                 out.append(_ref_text(px, y, text, 15))
             else:
-                out.append(_t(px, y, text, 14, INK if kind == "ink" else MUTED, weight=600 if kind == "ink" else 400))
+                out.append(
+                    _t(
+                        px,
+                        y,
+                        text,
+                        14,
+                        INK if kind == "ink" else MUTED,
+                        weight=600 if kind == "ink" else 400,
+                    )
+                )
         return "".join(out)
 
     def bar(rule):
@@ -2072,26 +2202,37 @@ def cf_rule_frames(limit: int = 50) -> list[tuple[str, str]]:
         frames.append((_svg(h, label) + body + "</svg>", caption))
 
     frame(
-        bar(rule) + sheet(frame=(("A", 2), ("F", 4))) + panel([("правило пишут", "muted"), ("для верхней левой", "muted"), ("ячейки A2", "ink")]),
+        bar(rule)
+        + sheet(frame=(("A", 2), ("F", 4)))
+        + panel([("правило пишут", "muted"), ("для верхней левой", "muted"), ("ячейки A2", "ink")]),
         f"Выдели A2:F4 и задай правило формулой. Её пишут так, будто она стоит в верхней левой ячейке A2: {rule}.",
         "Правило условного форматирования для A2:F4",
     )
     frame(
-        bar(rule) + sheet(frame=(("B", 2), ("B", 2)), row_mark=2)
+        bar(rule)
+        + sheet(frame=(("B", 2), ("B", 2)), row_mark=2)
         + panel([("ячейка B2 читает", "muted"), (rule, "rule"), ("столбцы закреплены $", "muted")]),
         "Каждая ячейка получает правило как копию формулы. В B2 оно то же самое: столбцы закреплены знаком $, поэтому вся строка проверяет одну сумму.",
         "Правило в ячейке B2",
     )
     rule3 = f"=СУММ($A3:$F3)>{limit}"
     frame(
-        bar(rule) + sheet(painted=(2,) if s[2] > limit else (), frame=(("A", 3), ("F", 3)), row_mark=3)
-        + panel([("строка 3 читает", "muted"), (rule3, "rule"), (f"сумма {s[3]} — {'ИСТИНА' if s[3] > limit else 'ЛОЖЬ'}", "ink")]),
+        bar(rule)
+        + sheet(painted=(2,) if s[2] > limit else (), frame=(("A", 3), ("F", 3)), row_mark=3)
+        + panel(
+            [
+                ("строка 3 читает", "muted"),
+                (rule3, "rule"),
+                (f"сумма {s[3]} — {'ИСТИНА' if s[3] > limit else 'ЛОЖЬ'}", "ink"),
+            ]
+        ),
         f"Номер строки без $ сдвигается: строка 3 проверяет свою сумму {s[3]}. Строка 2 с суммой {s[2]} уже закрашена.",
         "Правило в строке 3",
     )
     painted = tuple(r for r in (2, 3, 4) if s[r] > limit)
     frame(
-        bar(rule) + sheet(painted=painted)
+        bar(rule)
+        + sheet(painted=painted)
         + panel([(f"строка {r}: {s[r]}", "ink" if s[r] > limit else "muted") for r in (2, 3, 4)]),
         f"Закрашены строки, где сумма больше {limit}: "
         + ", ".join(f"{r} ({s[r]})" for r in painted)
@@ -2109,7 +2250,11 @@ def cf_rule(limit: int = 50) -> str:
 
 CHARTS = {
     "bar": ("Выручка по городам, ₽", ["Москва", "Казань", "Омск"], [700, 650, 120]),
-    "line": ("Выручка по дням, ₽", ["1", "2", "3", "4", "5", "6", "7"], [120, 180, 150, 210, 260, 230, 300]),
+    "line": (
+        "Выручка по дням, ₽",
+        ["1", "2", "3", "4", "5", "6", "7"],
+        [120, 180, 150, 210, 260, 230, 300],
+    ),
     "scatter": ("Цена и продано штук", [20, 40, 80, 120], [30, 22, 12, 5]),
 }
 

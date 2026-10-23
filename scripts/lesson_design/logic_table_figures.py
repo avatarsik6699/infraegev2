@@ -346,7 +346,16 @@ def fill_frames(formula: str, names: str, order: str, rows, steps, wanted: int =
     scw = 34
     height = max(ty + rh * len(rows), ty + 30 * len(allowed)) + 62
 
-    def frame(assigned, hot_col=None, hot_rows=(), hot_sets=(), hot_name=None, note="", fill=False, bad=False):
+    def frame(
+        assigned,
+        hot_col=None,
+        hot_rows=(),
+        hot_sets=(),
+        hot_name=None,
+        note="",
+        fill=False,
+        bad=False,
+    ):
         out = [f'<svg viewBox="0 0 {W} {height}" role="img" aria-hidden="true">']
         out.append(_text(tx, 22, f"F = {text_of(tree)}", 15, INK, weight=600))
         # the fragment
@@ -360,9 +369,7 @@ def fill_frames(formula: str, names: str, order: str, rows, steps, wanted: int =
                 )
             out.append(_text(x + cw / 2, ty - 10, label, 13, MUTED, "middle", 600))
             if c in assigned:
-                out.append(
-                    _text(x + cw / 2, ty - 36, assigned[c], 16, ACCENT, "middle", 700)
-                )
+                out.append(_text(x + cw / 2, ty - 36, assigned[c], 16, ACCENT, "middle", 700))
         out.append(
             f'<line x1="{tx + cw * n}" y1="{ty - 26}" x2="{tx + cw * n}" y2="{ty + rh * len(rows)}" '
             f'stroke="{FAINT}" stroke-width="1"/>'
@@ -409,7 +416,9 @@ def fill_frames(formula: str, names: str, order: str, rows, steps, wanted: int =
             for j, ch in enumerate(s):
                 out.append(_text(sx + scw * (j + 0.5), y + 21, ch, 15, INK, "middle", 500))
             if fill and s in restored:
-                out.append(_text(sx + scw * n + 10, y + 21, f"строка {restored.index(s) + 1}", 13, ACCENT))
+                out.append(
+                    _text(sx + scw * n + 10, y + 21, f"строка {restored.index(s) + 1}", 13, ACCENT)
+                )
         out.append(_text(tx, height - 16, note, 14, ACCENT if bad else INK, weight=600))
         out.append("</svg>")
         return "".join(out)
@@ -423,14 +432,24 @@ def fill_frames(formula: str, names: str, order: str, rows, steps, wanted: int =
             if order[c - 1] != name:
                 raise ValueError(f"C{c} is {order[c - 1]}, not {name}")
             assigned[c - 1] = name
-            frames.append((frame(dict(assigned), hot_col=c - 1, hot_name=name, note=f"C{c} = {name}"), text))
+            frames.append(
+                (frame(dict(assigned), hot_col=c - 1, hot_name=name, note=f"C{c} = {name}"), text)
+            )
         elif kind == "row":
             _, r, s, text = step
             got = _row_sets(tree, names, assigned, rows[r - 1], wanted)
             if got != {s}:
                 raise ValueError(f"row {r} may still be {sorted(got)}")
             frames.append(
-                (frame(dict(assigned), hot_rows=(r - 1,), hot_sets=(s,), note=f"строка {r} — набор {s}"), text)
+                (
+                    frame(
+                        dict(assigned),
+                        hot_rows=(r - 1,),
+                        hot_sets=(s,),
+                        note=f"строка {r} — набор {s}",
+                    ),
+                    text,
+                )
             )
         elif kind == "try":
             _, c, name, text = step
@@ -455,7 +474,11 @@ def fill_frames(formula: str, names: str, order: str, rows, steps, wanted: int =
                 if pattern[c - 1] != "*"
                 and len({s for s in allowed if s[names.index(name)] == pattern[c - 1]}) == 1
             ]
-            only = {s for s in allowed if s[names.index(name)] == rows[twins[0]][c - 1]} if twins else set()
+            only = (
+                {s for s in allowed if s[names.index(name)] == rows[twins[0]][c - 1]}
+                if twins
+                else set()
+            )
             frames.append(
                 (
                     frame(
@@ -474,7 +497,10 @@ def fill_frames(formula: str, names: str, order: str, rows, steps, wanted: int =
             if len(assigned) != n:
                 raise ValueError("done before every column is found")
             frames.append((frame(dict(assigned), fill=True, note=f"ответ: {order}"), text))
-    frames[0] = (frames[0][0], f"Формула и фрагмент. Справа все наборы, где F = {wanted}, в порядке {names}.")
+    frames[0] = (
+        frames[0][0],
+        f"Формула и фрагмент. Справа все наборы, где F = {wanted}, в порядке {names}.",
+    )
     return frames
 
 

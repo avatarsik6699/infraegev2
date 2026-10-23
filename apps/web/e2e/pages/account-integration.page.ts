@@ -73,7 +73,7 @@ export class AccountIntegrationPage {
             .filter({ hasText: /^задач решено$/u }),
         })
         .getByRole("definition"),
-    ).toHaveText("0 из 146");
+    ).toHaveText("0 из 151");
   }
 
   async logout(): Promise<void> {

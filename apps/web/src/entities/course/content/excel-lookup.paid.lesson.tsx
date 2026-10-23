@@ -115,9 +115,9 @@ const content: CourseTypes.PaidLessonContent = {
             «Напитки».
           </Typography.Text>
           <Typography.Text>
-            Диапазон справочника удобнее выделить мышью на другом листе —
-            Excel сам впишет ссылку с именем листа. Четвёртый аргумент 0 не
-            пропускай: без него поиск приближённый.
+            Диапазон справочника удобнее выделить мышью на другом листе — Excel
+            сам впишет ссылку с именем листа. Четвёртый аргумент 0 не пропускай:
+            без него поиск приближённый.
           </Typography.Text>
           <ProofDisclosure
             summary="Тонкости: имя листа с пробелом и приближённый поиск"
@@ -184,14 +184,14 @@ const content: CourseTypes.PaidLessonContent = {
             умеет.
           </Typography.Text>
           <Typography.Text>
-            <Notation>{"ВПР"}</Notation> требует, чтобы ключ был первым
-            столбцом диапазона, а пара <Notation>{"ИНДЕКС"}</Notation> и{" "}
+            <Notation>{"ВПР"}</Notation> требует, чтобы ключ был первым столбцом
+            диапазона, а пара <Notation>{"ИНДЕКС"}</Notation> и{" "}
             <Notation>{"ПОИСКПОЗ"}</Notation> ищет в любую сторону.
           </Typography.Text>
           <ProofDisclosure summary="Тонкости: ПРОСМОТРX" kind="nuance">
             <Typography.Text>
-              В новых версиях Excel есть <Notation>{"ПРОСМОТРX"}</Notation>{" "}
-              — она тоже ищет в любую сторону. Курс без неё обходится: в старых
+              В новых версиях Excel есть <Notation>{"ПРОСМОТРX"}</Notation> —
+              она тоже ищет в любую сторону. Курс без неё обходится: в старых
               версиях и на экзамене её может не быть.
             </Typography.Text>
           </ProofDisclosure>

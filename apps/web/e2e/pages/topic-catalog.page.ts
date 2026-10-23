@@ -159,7 +159,7 @@ export class TopicCatalogPage {
       "/ege/17-chislovye-posledovatelnosti/chisla-i-proverki",
     );
     await expect(this.page.locator("[data-subtopic-head]")).toContainText(
-      "Числа файла и проверки условия",
+      "Файл и условие",
     );
     await this.page.goto("/ege");
     await expect(

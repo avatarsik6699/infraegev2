@@ -17,7 +17,7 @@ describe("lesson route data", () => {
     );
     // Change 184: the lesson rebuilt from the stand; its final page tasks
     // (task-16-8-…) have no theory link, as on every pipeline lesson.
-    expect(tasks).toHaveLength(57);
+    expect(tasks).toHaveLength(55);
     expect(tasks.slice(0, 4).map((task) => task.difficultyLabel)).toEqual([
       "Лёгкая",
       "Лёгкая",
@@ -36,12 +36,12 @@ describe("lesson route data", () => {
     }
   });
 
-  it("loads the task-5 lesson's 40 tasks in order (Change 184)", async () => {
+  it("loads the task-5 lesson's 39 tasks in order (Change 197)", async () => {
     const ids = migrationTaskIds(preobrazovanieZapiseyChiselLesson.id);
     const tasks = await loadPracticeTasks(ids);
 
     expect(tasks.map((task) => task.id)).toEqual(ids);
-    expect(tasks).toHaveLength(40);
+    expect(tasks).toHaveLength(39);
     for (const task of tasks) {
       expect(task.theoryLinks.length > 0).toBe(
         !task.id.startsWith("task-5-7-"),

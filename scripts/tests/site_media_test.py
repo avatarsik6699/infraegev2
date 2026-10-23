@@ -52,7 +52,8 @@ class SiteMediaTest(unittest.TestCase):
         text = FIGURE.read_text().replace("} as const", call + "} as const")
         out = self.rebuilt(self.copy(FIGURE, text))
         self.assertIn(call + "  refs_", out)
-        self.assertEqual(out.count('kind: "diagram"'), 2)
+        # one figure more than the manifest had
+        self.assertEqual(out.count('kind: "diagram"'), text.count('kind: "diagram"') + 1)
 
     def test_a_changed_call_keeps_the_key_the_lesson_uses(self) -> None:
         text = FIGURE.read_text().replace('["10", "20"], old=', '["10", "30"], old=')

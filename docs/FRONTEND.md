@@ -157,7 +157,7 @@ Lesson media:
   `run`), never code executed in the browser. «Запуск» (a quiet pill) after the copy button; back / count / forward / close
   and ←/→/Esc while running; the executed line is highlighted; variables sit beside the code when
   the widest line leaves room, under it otherwise (values in small boxes; call frames nested, the
-  active one and a changed value outlined in `--color-current-location`, the course blue in a
+  active one and a changed value outlined in `--lesson-here` (falls back to `--color-current-location`), the course blue in a
   Python lesson; lists/dicts/sets as
   objects with arrows); every step is laid out in one grid cell so the block keeps its tallest step's height.
   Without scripting and on SSR it is the ordinary code block with output.

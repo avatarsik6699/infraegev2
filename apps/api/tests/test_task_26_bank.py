@@ -695,7 +695,7 @@ def _yandex_like() -> dict[str, str]:
     totals = Counter(w for _, w in solved)
     top = max(totals.values())
     finish = {w: max(t for t, v in solved if v == w) for w in totals if totals[w] == top}
-    a["task-26-10-06"] = _pair(top, min(finish, key=finish.get))
+    a["task-26-10-06"] = _pair(top, min(finish, key=lambda w: finish[w]))
     return a
 
 

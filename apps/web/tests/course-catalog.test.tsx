@@ -127,16 +127,16 @@ describe("mini-course catalog", () => {
         solution_revision: 2,
       }));
       const view = render(catalog());
-      // the header totals both published courses: 27 + 14 core lessons
+      // the header totals both published courses: 27 + 15 core lessons
       await waitFor(() =>
         expect(
           screen.getAllByText(`Освоено ${String(count)} из 27 уроков`),
         ).toHaveLength(1),
       );
       expect(
-        screen.getAllByText(`Освоено ${String(count)} из 41 урока`),
+        screen.getAllByText(`Освоено ${String(count)} из 42 уроков`),
       ).toHaveLength(1);
-      expect(screen.getAllByText("Освоено 0 из 14 уроков")).toHaveLength(1);
+      expect(screen.getAllByText("Освоено 0 из 15 уроков")).toHaveLength(1);
       expect(
         view.container.querySelectorAll("[data-course-card]"),
       ).toHaveLength(4);
@@ -172,7 +172,7 @@ describe("mini-course catalog", () => {
       ]);
       expect(
         view.container.querySelector("[data-course-summary]")?.textContent,
-      ).toContain("Всего направлений: 4 · Доступно: 2 · Уроков: 41");
+      ).toContain("Всего направлений: 4 · Доступно: 2 · Уроков: 42");
     },
   );
 

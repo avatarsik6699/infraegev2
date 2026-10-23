@@ -80,8 +80,9 @@ export const pythonExceptionsLesson = defineCourseLesson({
           <Typography.Text>
             Блок <Notation>{"try"}</Notation> выполняется как обычно. Если в нём
             возникла ошибка <Notation>{"ValueError"}</Notation>, остаток блока
-            пропускается и выполняется <Notation>{"except ValueError"}</Notation>
-            . <Notation>{"else"}</Notation> выполняется, только если ошибки не
+            пропускается и выполняется{" "}
+            <Notation>{"except ValueError"}</Notation>.{" "}
+            <Notation>{"else"}</Notation> выполняется, только если ошибки не
             было. Схема показывает, какие строки выполнились для двух значений:
           </Typography.Text>
           <LessonDiagram
@@ -219,8 +220,8 @@ export const pythonExceptionsLesson = defineCourseLesson({
             }
           />
           <Typography.Text>
-            Такая печать показывает то же, что запуск по шагам в уроках: значения
-            после каждой итерации. Ищи шаг, на котором значение впервые
+            Такая печать показывает то же, что запуск по шагам в уроках:
+            значения после каждой итерации. Ищи шаг, на котором значение впервые
             разошлось с ожидаемым, — ошибка в строках перед ним.
           </Typography.Text>
           <Typography.Text>
@@ -454,8 +455,8 @@ export const pythonExceptionsLesson = defineCourseLesson({
               <>
                 <Notation>{"while True"}</Notation> +{" "}
                 <Notation>{"try"}</Notation>, <Notation>{"break"}</Notation> в{" "}
-                <Notation>{"else"}</Notation>; <Notation>{"except: pass"}</Notation>{" "}
-                не пишут.
+                <Notation>{"else"}</Notation>;{" "}
+                <Notation>{"except: pass"}</Notation> не пишут.
               </>
             ),
           },

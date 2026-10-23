@@ -181,7 +181,7 @@
 }
 
 .frame[data-active] {
-  border-color: var(--color-current-location);
+  border-color: var(--lesson-here, var(--color-current-location));
 }
 
 .frameTitle {
@@ -229,7 +229,7 @@
 }
 
 .name[data-changed] .value {
-  border-color: var(--color-current-location);
+  border-color: var(--lesson-here, var(--color-current-location));
   color: var(--color-text);
 }
 
@@ -282,7 +282,7 @@
 }
 
 .object[data-changed] {
-  border-color: var(--color-current-location);
+  border-color: var(--lesson-here, var(--color-current-location));
 }
 
 .object code {
@@ -323,11 +323,11 @@
 }
 
 [data-hot] > .link {
-  stroke: var(--color-current-location);
+  stroke: var(--lesson-here, var(--color-current-location));
 }
 
 [data-hot] > .linkHead {
-  fill: var(--color-current-location);
+  fill: var(--lesson-here, var(--color-current-location));
 }
 
 @media (prefers-reduced-motion: reduce) {

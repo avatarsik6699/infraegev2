@@ -31,8 +31,7 @@ const content: CourseTypes.PaidLessonContent = {
             .
           </Typography.Text>
           <Typography.Text>
-            Разберём сортировку, фильтр и то, как сложить только видимые
-            строки.
+            Разберём сортировку, фильтр и то, как сложить только видимые строки.
           </Typography.Text>
         </>
       ),
@@ -147,8 +146,8 @@ const content: CourseTypes.PaidLessonContent = {
             label="Формула"
           />
           <Typography.Text>
-            Первый аргумент выбирает операцию: 109 — сумма без скрытых строк.
-            На листе ниже включён фильтр «город — Москва»: строки 3 и 5 скрыты,
+            Первый аргумент выбирает операцию: 109 — сумма без скрытых строк. На
+            листе ниже включён фильтр «город — Москва»: строки 3 и 5 скрыты,
             номера строк идут с пропусками, как в Excel.
           </Typography.Text>
           <SheetBlock {...lessonMedia.sheet3} label={"Лист «Фильтр»"} />
@@ -160,8 +159,8 @@ const content: CourseTypes.PaidLessonContent = {
             <Notation>{"D10"}</Notation> останется 300.
           </Typography.Text>
           <Typography.Text>
-            Строка состояния внизу окна Excel тоже считает только видимые
-            ячейки выделения: сумму, среднее и количество.
+            Строка состояния внизу окна Excel тоже считает только видимые ячейки
+            выделения: сумму, среднее и количество.
           </Typography.Text>
           <LessonImage
             src="/images/lessons/excel-sheet/excel-filter-status.webp"

@@ -12,7 +12,7 @@ export class PracticeCutoverPage {
     if (await dismiss.isVisible()) await dismiss.click();
     await expect(
       this.page.getByRole("heading", {
-        name: "Значение по одному предыдущему",
+        name: "Прибавка 2n",
         exact: true,
       }),
     ).toBeVisible();
@@ -73,7 +73,7 @@ export class PracticeCutoverPage {
         exact: false,
       }),
     ).toBeVisible();
-    await expect(this.page.locator("[data-practice-task]")).toHaveCount(57);
+    await expect(this.page.locator("[data-practice-task]")).toHaveCount(55);
     await expect(
       this.page.getByRole("textbox", { name: "Ответ" }).first(),
     ).toBeDisabled();
@@ -132,7 +132,7 @@ export class PracticeCutoverPage {
     ).toBeEnabled({ timeout: 15000 });
     await this.page.goto("/courses/python");
     const size = this.page.getByRole("region", { name: "Объём курса" });
-    await expect(size).toContainText("146");
+    await expect(size).toContainText("151");
     await expect(
       size.getByRole("link", { name: "Войдите, чтобы сохранять прогресс" }),
     ).toBeVisible();

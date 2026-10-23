@@ -26,7 +26,7 @@
 }
 
 .tab[data-active] {
-  border-bottom-color: var(--color-current-location);
+  border-bottom-color: var(--lesson-here, var(--color-current-location));
   color: var(--color-text);
 }
 

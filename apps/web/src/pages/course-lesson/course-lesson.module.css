@@ -34,7 +34,7 @@
    (Python blue, Excel sage). The site header keeps its orange; code blocks
    keep their own look. */
 .page:is([data-course-tone="python"], [data-course-tone="excel"]) .lesson {
-  --color-current-location: var(--course-action);
+  --lesson-here: var(--course-action);
   /* the interactive figures (RemainderExplorer, FillSandbox…) take the tone
      the code-built figures get from `tone="python"` / `tone="excel"` */
   --lesson-figure-accent: var(--course-action);

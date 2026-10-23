@@ -50,7 +50,7 @@ Python (30 уроков), курс Excel (15 уроков) и 25 тем ЕГЭ (
    всех уроков (`T1`), затем итоговая сверка (`T10`).
 
 ### Other
-- [ ] `T1` Полный прогон и ретест после всех правок: проверки сайта из T11 по всем 27 единицам (тесты уроков и банка, `site_media.py --check`, `pnpm validate:content`, реестр практики, `paid-leak`), Critical Gate, Playwriter на 1280 и 375 px по исправленным страницам; сводная таблица PASS/FAIL; падения исправляются и проверяются заново — _Depends on:_ T2–T9, T12–T21
+- [x] `T1` Полный прогон и ретест после всех правок: проверки сайта из T11 по всем 27 единицам (тесты уроков и банка, `site_media.py --check`, `pnpm validate:content`, реестр практики, `paid-leak`), Critical Gate, Playwriter на 1280 и 375 px по исправленным страницам; сводная таблица PASS/FAIL; падения исправляются и проверяются заново — итог 2026-10-23: всё PASS после правок (таблица — «Gate evidence», разбор — Implementation Notes) — _Depends on:_ T2–T9, T12–T21
 - [x] `T2` Курс Python, уроки 01–30: ручной проход архитектора, замечания → правки — _Depends on:_ T11
 - [x] `T3` Курс Excel, уроки 01–15 и задачник: ручной проход архитектора, замечания → правки — _Depends on:_ T2
 - [x] `T4` Темы 1–5: ручной проход архитектора, замечания → правки — _Depends on:_ T3
@@ -441,6 +441,10 @@ Do not hand-copy the schema, endpoints, types, or env vars into this file — th
 |------|-------------------------|--------|---------|
 | 40a1c72+wt | format, python-format, tooling-lint, web-lint, web-typecheck, api-lint, api-typecheck, host-ruff, host-python, docs-links, content-static, lesson-media, paid-leak | PASS | ~150 |
 | 40a1c72+wt | vitest: 25 lesson tests, course-foundation, sheet-eval (27 files, 143 tests); pytest: course/topic bank tests 1, 3, 17, 18, 24, 26, 27, bank files (145); unittest: site_media_test, gate_test; `practice-registry.mjs --check` | PASS | ~180 |
+| 0bcb1fdd+wt | T1, все 14 групп `affected`: format, python-format, tooling-lint, web-lint, web-typecheck, api-lint, api-typecheck, host-ruff, host-python, docs-links, content-static, lesson-media, api-contract, paid-leak | первый прогон FAIL (format, python-format, web-lint, api-typecheck, host-python) → PASS | ~230 |
+| 0bcb1fdd+wt | T1: vitest — весь набор web (79 файлов, 541 тест; первый прогон 11 FAIL в 6 файлах → PASS); pytest — банки тем, курсов, файлов, minimal/repair/health (383 + повтор 160 после правки банка); `scripts/tests` (131); `site_media.py --check` (119 манифестов, stale 0); `practice-registry.mjs --check`; `pnpm validate:content` (8183 задачи, 25 тем, 2 курса, 46 уроков) | PASS | ~1000 |
+| 0bcb1fdd+wt | T1: e2e полный набор (`run-isolated-browser-audit.sh full`, изолированная база): первый прогон 240/267, после правок 267/267 | PASS | ~600 |
+| 0bcb1fdd+wt | T1: Playwriter, все 217 страниц уроков из `sitemap-static.xml` (171 тем, 46 курсов) на 1280 и 375 px: 434 загрузки, статус 200, без горизонтальной прокрутки, ошибок консоли и пустых схем, у каждой страницы есть разделы | PASS | ~3600 |
 
 ---
 
@@ -467,6 +471,25 @@ Do not hand-copy the schema, endpoints, types, or env vars into this file — th
   шаги по средам ушли из «Первой программы». Кадры PyCharm из статьи Практикума сняты в Linux
   (интерфейс тот же); Windows-кадров PyCharm, IDLE и VS Code в источниках нет.
 - T19: согласовано на `main.py` (все файлы урока так названы, имя помещается в схему traceback).
+- T1 (2026-10-23), что исправлено по прогону:
+  - гейт: Prettier для 23 файлов уроков и `practice-catalog-topics.json`, ruff format трёх
+    построителей; типы в `executor_figures.py` (`_done` — команда, заведомо допустимая, `Sequence`
+    у значений по умолчанию), `greedy_figures.py`, `test_task_26_bank.py`; таймер конфетти без
+    `window.`; синий цвет курса — ручка `--lesson-here` у потребителей (страница не может
+    переопределять `--color-*`, правило `verify-design-system.mjs`);
+  - устаревшие ожидания тестов после переработки (web, e2e, `site_media_test`): 46 уроков курсов
+    (Excel 15 + 1), 42 основных урока, Python — 151 задача, «Тонкости:» с двоеточием, вывод
+    построчно, тема 1 — счётчики самопроверок и вторая пошаговая схема, тема 5 — 39 задач, тема 16 —
+    55, тема 17 — «Файл и условие», тема 22 — первая подтема `processy-i-raspisanie`, тема 23 —
+    шесть подтем, граф 1–100 и 23 файла практики, тема 25 — другой блок кода; сворачивание кода
+    проверяется на теме 5 (в теме 16 ключевые программы развёрнуты);
+  - банк: из 16 инструкций ответа убрано «например» (адреса Excel, маски и IP темы 10);
+  - e2e на холодном dev-сервере: страница тянет около 700 модулей, гидратация `/courses` и
+    `/verify-email` занимает 5–6 с — у двух проверок, ждущих гидратации, таймаут 15 с; 13 падений
+    первого прогона были нестабильными и прошли повтором.
+- T1, наблюдения для архитектора (не исправлялись): самопроверки «5 в основной, 4 в
+  дополнительной» не выдержаны в ранних темах 1, 2, 3, 4, 5, 10 (по 4 в части основных подтем, в теме 1
+  дополнительная — 5) — архитектор 2026-10-23: оставить как есть; локальный `playwriter` 0.7.0 старше расширения (0.8.0).
 
 ---
 

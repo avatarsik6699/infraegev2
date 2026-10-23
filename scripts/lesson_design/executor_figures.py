@@ -19,6 +19,7 @@ number as the sum over the arrows that enter it.
 from __future__ import annotations
 
 import re
+from collections.abc import Sequence
 
 from figures import ACCENT, FAINT, INK, MUTED, WASH, _stepper, _text
 
@@ -73,6 +74,13 @@ def apply(op: str, x: int) -> int | None:
         return 10 * x + int(op[1:])
     k = int(op[1:])
     return {"+": x + k, "-": x - k, "*": x * k}[op[0]]
+
+
+def _done(op: str, x: int) -> int:
+    """Result of a command already known to be allowed for x."""
+    y = apply(op, x)
+    assert y is not None, (op, x)
+    return y
 
 
 def _order(start: int, target: int) -> list[int]:
@@ -231,8 +239,8 @@ def _strip(
     cw: float,
     cmds,
     k: dict[int, int],
-    arcs: list[tuple[int, str, bool]] = (),
-    hops: list[int] = (),
+    arcs: Sequence[tuple[int, str, bool]] = (),
+    hops: Sequence[int] = (),
     must=(),
     forbid=(),
     hot=None,
@@ -279,7 +287,7 @@ def _strip(
             f'<rect x="{x:.1f}" y="{top}" width="{cw:.1f}" height="{2 * CELL_H}" fill="none" '
             f'stroke="{ACCENT}" stroke-width="2.4" rx="2"/>'
         )
-    pairs = [(x, apply(op, x)) for x, op, _ in arcs]
+    pairs = [(x, _done(op, x)) for x, op, _ in arcs]
     sides = _sides(pairs, pos)
     # a step to the neighbour enters the left part of a cell, an arc above its right part
     hopped = {nums[pos[x] + 1] for x in hops if pos[x] + 1 < len(nums)}
@@ -303,7 +311,7 @@ def _strip(
 def _reach(arcs, nums, cw, cmds) -> tuple[float, float]:
     """Room the arcs need above and below the table."""
     pos = {n: i for i, n in enumerate(nums)}
-    pairs = [(x, apply(op, x)) for x, op, _ in arcs]
+    pairs = [(x, _done(op, x)) for x, op, _ in arcs]
     up = dn = 0.0
     for (x, y), side in zip(pairs, _sides(pairs, pos), strict=True):
         h = _arc_h(abs(pos[y] - pos[x]) * cw) + 12
@@ -475,7 +483,7 @@ def ex_run(start: int, programs, cmds) -> str:
         out.append(_text(8, y + 5, prog, 16, ACCENT, "start", 700))
         xs, vals = [x0], [start]
         for ch in prog:
-            vals.append(apply(cmds[int(ch) - 1], vals[-1]))
+            vals.append(_done(cmds[int(ch) - 1], vals[-1]))
             xs.append(xs[-1] + gap)
         for i, ch in enumerate(prog):
             a, b = xs[i] + r, xs[i + 1] - r

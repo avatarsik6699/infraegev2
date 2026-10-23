@@ -143,8 +143,11 @@ export class AccountPage {
     await this.page.goto(
       "/verify-email?token=abcdefghijklmnopqrstuvwxyz012345",
     );
+    // the link is consumed after hydration; a cold dev server serves the
+    // page's ~700 modules one by one, so the first visit takes longer
     await expect(this.page.locator("main").getByRole("status")).toContainText(
       "Почта подтверждена",
+      { timeout: 15000 },
     );
     expect(submittedToken).toBe("abcdefghijklmnopqrstuvwxyz012345");
     const success = this.page

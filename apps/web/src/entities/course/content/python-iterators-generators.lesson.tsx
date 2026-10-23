@@ -43,9 +43,9 @@ export const pythonIteratorsGeneratorsLesson = defineCourseLesson({
             Сумма верная, а <Notation>{"max"}</Notation> жалуется, что чисел
             нет.{" "}
             <strong>
-              <Notation>{"map"}</Notation> выдаёт значения по одному и не
-              хранит их: <Notation>{"sum"}</Notation> забрал все, и второму
-              проходу ничего не осталось
+              <Notation>{"map"}</Notation> выдаёт значения по одному и не хранит
+              их: <Notation>{"sum"}</Notation> забрал все, и второму проходу
+              ничего не осталось
             </strong>
             . В этом уроке разберём, как <Notation>{"for"}</Notation> получает
             элементы, почему одни источники одноразовые, а другие нет, и как
@@ -151,10 +151,10 @@ export const pythonIteratorsGeneratorsLesson = defineCourseLesson({
             Когда элементы кончились, <Notation>{"next"}</Notation> вызывает
             ошибку <Notation>{"StopIteration"}</Notation>, а{" "}
             <Notation>{"for"}</Notation> принимает её за обычный конец цикла.
-            Сам список при этом не меняется: новый{" "}
-            <Notation>{"for"}</Notation> по нему создаст новый итератор.
-            Открытый файл и <Notation>{"map"}</Notation> — сами себе итераторы,
-            поэтому второй проход по ним пуст.
+            Сам список при этом не меняется: новый <Notation>{"for"}</Notation>{" "}
+            по нему создаст новый итератор. Открытый файл и{" "}
+            <Notation>{"map"}</Notation> — сами себе итераторы, поэтому второй
+            проход по ним пуст.
           </Typography.Text>
           <ProofDisclosure
             summary="Тонкости: next с запасным значением"
@@ -181,8 +181,8 @@ export const pythonIteratorsGeneratorsLesson = defineCourseLesson({
               <Notation>{"filter"}</Notation> оставляет подходящие — оба выдают
               результаты по одному.
             </strong>{" "}
-            <Notation>{"map(функция, источник)"}</Notation> — результаты
-            функции для каждого элемента.{" "}
+            <Notation>{"map(функция, источник)"}</Notation> — результаты функции
+            для каждого элемента.{" "}
             <Notation>{"filter(функция, источник)"}</Notation> — только те
             элементы, для которых функция вернула истину. Чтобы пройти по
             результатам дважды, их один раз собирают в список:
@@ -203,10 +203,10 @@ export const pythonIteratorsGeneratorsLesson = defineCourseLesson({
             из урока об аргументах.
           </Typography.Text>
           <Typography.Text>
-            Частая запись <Notation>{"a, b = map(int, input().split())"}</Notation>{" "}
-            означает: прочитать строку, разбить её, перевести части в числа и
-            распаковать в два имени. Если частей не две, распаковка завершится
-            ошибкой.
+            Частая запись{" "}
+            <Notation>{"a, b = map(int, input().split())"}</Notation> означает:
+            прочитать строку, разбить её, перевести части в числа и распаковать
+            в два имени. Если частей не две, распаковка завершится ошибкой.
           </Typography.Text>
           <CodeBlock
             code={"a, b = map(int, input().split())\nprint(a + b)"}
@@ -278,10 +278,10 @@ export const pythonIteratorsGeneratorsLesson = defineCourseLesson({
             отличие от него, завершает вызов окончательно.
           </Typography.Text>
           <Typography.Text>
-            Запусти программу по шагам: на каждом{" "}
-            <Notation>{"yield"}</Notation> переменные функции остаются на месте
-            с пометкой «на паузе», а <Notation>{"n"}</Notation> при продолжении
-            сохраняет прежнее значение.
+            Запусти программу по шагам: на каждом <Notation>{"yield"}</Notation>{" "}
+            переменные функции остаются на месте с пометкой «на паузе», а{" "}
+            <Notation>{"n"}</Notation> при продолжении сохраняет прежнее
+            значение.
           </Typography.Text>
           <CodeRunner
             {...lessonMedia.runSquaresUpTo}
@@ -311,7 +311,9 @@ export const pythonIteratorsGeneratorsLesson = defineCourseLesson({
         <>
           <Typography.Text>
             Один раз собрать значения в список:{" "}
-            <Notation>{'numbers = list(map(int, "5 -2 10 7".split()))'}</Notation>
+            <Notation>
+              {'numbers = list(map(int, "5 -2 10 7".split()))'}
+            </Notation>
             . По списку можно пройти дважды.
           </Typography.Text>
         </>

@@ -112,8 +112,8 @@ export const pythonStandardLibraryLesson = defineCourseLesson({
               [
                 "Пути, CSV, JSON",
                 <>
-                  <Notation>{"pathlib"}</Notation>,{" "}
-                  <Notation>{"csv"}</Notation>, <Notation>{"json"}</Notation>
+                  <Notation>{"pathlib"}</Notation>, <Notation>{"csv"}</Notation>
+                  , <Notation>{"json"}</Notation>
                 </>,
                 "урок о файлах",
               ],
@@ -173,8 +173,8 @@ export const pythonStandardLibraryLesson = defineCourseLesson({
               <Notation>{"deque"}</Notation> — очередь: добавляют в конец,
               быстро забирают из начала.
             </strong>{" "}
-            <strong>Очередь</strong> работает по правилу «первым пришёл —
-            первым вышел», так обслуживают заявки по порядку поступления.
+            <strong>Очередь</strong> работает по правилу «первым пришёл — первым
+            вышел», так обслуживают заявки по порядку поступления.
           </Typography.Text>
           <CodeBlock
             code={
@@ -242,13 +242,13 @@ export const pythonStandardLibraryLesson = defineCourseLesson({
             kind="nuance"
           >
             <Typography.Text>
-              У <Notation>{"Decimal"}</Notation> настраиваемая точность:
-              деление 1 на 3 не станет конечной десятичной дробью. У{" "}
+              У <Notation>{"Decimal"}</Notation> настраиваемая точность: деление
+              1 на 3 не станет конечной десятичной дробью. У{" "}
               <Notation>{"isclose"}</Notation> допуск по умолчанию
               относительный, и около нуля он не срабатывает — нужен явный{" "}
               <Notation>{"abs_tol"}</Notation>:{" "}
-              <Notation>{"isclose(value, 0.0, abs_tol=1e-9)"}</Notation>.
-              Запись <Notation>{"1e-9"}</Notation> — это 10 в степени −9.
+              <Notation>{"isclose(value, 0.0, abs_tol=1e-9)"}</Notation>. Запись{" "}
+              <Notation>{"1e-9"}</Notation> — это 10 в степени −9.
             </Typography.Text>
           </ProofDisclosure>
         </>
@@ -277,7 +277,7 @@ export const pythonStandardLibraryLesson = defineCourseLesson({
           </Typography.Text>
           <LessonStepper
             {...lessonMedia.productABC}
-            label={"product(\"ABC\", repeat=2) по шагам"}
+            label={'product("ABC", repeat=2) по шагам'}
           />
           <Typography.Text>
             Посчитаем слова длины 3 из букв A, B, C, в которых ровно одна A:
@@ -348,10 +348,10 @@ export const pythonStandardLibraryLesson = defineCourseLesson({
           <Typography.Text>
             Функции различают элементы по позиции в источнике. Если в слове есть
             одинаковые буквы, перестановки дадут одинаковые слова, и их убирают
-            через <Notation>{"set(...)"}</Notation>. Если вариант — запись числа,
-            первая цифра обычно не может быть нулём: это условие добавляют
-            отдельно. И не собирай все варианты в список, если их можно
-            проверять по одному.
+            через <Notation>{"set(...)"}</Notation>. Если вариант — запись
+            числа, первая цифра обычно не может быть нулём: это условие
+            добавляют отдельно. И не собирай все варианты в список, если их
+            можно проверять по одному.
           </Typography.Text>
         </>
       ),
@@ -478,8 +478,7 @@ export const pythonStandardLibraryLesson = defineCourseLesson({
             note: (
               <>
                 <Notation>{"append"}</Notation> в конец,{" "}
-                <Notation>{"popleft"}</Notation> из начала без сдвига
-                остальных.
+                <Notation>{"popleft"}</Notation> из начала без сдвига остальных.
               </>
             ),
           },

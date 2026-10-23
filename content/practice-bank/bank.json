@@ -131458,7 +131458,7 @@
         "explanation_kind": "unclassified",
         "difficulty": 1,
         "estimated_minutes": null,
-        "answer_instruction": "Введите диапазон через двоеточие, например A1:B2.",
+        "answer_instruction": "Введите диапазон: два адреса латинскими буквами через двоеточие.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
@@ -131608,7 +131608,7 @@
         "explanation_kind": "unclassified",
         "difficulty": 1,
         "estimated_minutes": null,
-        "answer_instruction": "Введите адрес ячейки латинскими буквами, например A1.",
+        "answer_instruction": "Введите адрес ячейки латинскими буквами.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
@@ -131983,7 +131983,7 @@
         "explanation_kind": "unclassified",
         "difficulty": 1,
         "estimated_minutes": null,
-        "answer_instruction": "Введите значение так, как его покажет ячейка, например 12%.",
+        "answer_instruction": "Введите значение так, как его покажет ячейка, со знаком %.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
@@ -183671,7 +183671,7 @@
         "explanation_kind": "worked_solution",
         "difficulty": 1,
         "estimated_minutes": 2,
-        "answer_instruction": "Введите маску с точками, например 255.255.0.0.",
+        "answer_instruction": "Введите маску: четыре числа через точку.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
@@ -184205,7 +184205,7 @@
         "explanation_kind": "worked_solution",
         "difficulty": 1,
         "estimated_minutes": 2,
-        "answer_instruction": "Введите IP-адрес с точками, например 10.0.0.1.",
+        "answer_instruction": "Введите IP-адрес: четыре числа через точку.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
@@ -184294,7 +184294,7 @@
         "explanation_kind": "worked_solution",
         "difficulty": 1,
         "estimated_minutes": 2,
-        "answer_instruction": "Введите IP-адрес с точками, например 10.0.0.1.",
+        "answer_instruction": "Введите IP-адрес: четыре числа через точку.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
@@ -184472,7 +184472,7 @@
         "explanation_kind": "worked_solution",
         "difficulty": 1,
         "estimated_minutes": 2,
-        "answer_instruction": "Введите IP-адрес с точками, например 10.0.0.1.",
+        "answer_instruction": "Введите IP-адрес: четыре числа через точку.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
@@ -184561,7 +184561,7 @@
         "explanation_kind": "worked_solution",
         "difficulty": 1,
         "estimated_minutes": 2,
-        "answer_instruction": "Введите IP-адрес с точками, например 10.0.0.1.",
+        "answer_instruction": "Введите IP-адрес: четыре числа через точку.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
@@ -185184,7 +185184,7 @@
         "explanation_kind": "worked_solution",
         "difficulty": 1,
         "estimated_minutes": 3,
-        "answer_instruction": "Введите маску с точками, например 255.255.0.0.",
+        "answer_instruction": "Введите маску: четыре числа через точку.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
@@ -185362,7 +185362,7 @@
         "explanation_kind": "worked_solution",
         "difficulty": 1,
         "estimated_minutes": 2,
-        "answer_instruction": "Введите IP-адрес с точками, например 10.0.0.1.",
+        "answer_instruction": "Введите IP-адрес: четыре числа через точку.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
@@ -814129,7 +814129,7 @@
         "explanation_kind": "unclassified",
         "difficulty": 1,
         "estimated_minutes": null,
-        "answer_instruction": "Введите адрес ячейки латинскими буквами, например A1.",
+        "answer_instruction": "Введите адрес ячейки латинскими буквами.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
@@ -814429,7 +814429,7 @@
         "explanation_kind": "unclassified",
         "difficulty": 1,
         "estimated_minutes": null,
-        "answer_instruction": "Введите адрес ячейки латинскими буквами, например A1.",
+        "answer_instruction": "Введите адрес ячейки латинскими буквами.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
@@ -814504,7 +814504,7 @@
         "explanation_kind": "unclassified",
         "difficulty": 1,
         "estimated_minutes": null,
-        "answer_instruction": "Введите адрес ячейки латинскими буквами, например A1.",
+        "answer_instruction": "Введите адрес ячейки латинскими буквами.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
@@ -814729,7 +814729,7 @@
         "explanation_kind": "unclassified",
         "difficulty": 1,
         "estimated_minutes": null,
-        "answer_instruction": "Введите значение так, как его покажет ячейка, например 12%.",
+        "answer_instruction": "Введите значение так, как его покажет ячейка, со знаком %.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
@@ -814804,7 +814804,7 @@
         "explanation_kind": "unclassified",
         "difficulty": 1,
         "estimated_minutes": null,
-        "answer_instruction": "Введите значение так, как его покажет ячейка, например 12%.",
+        "answer_instruction": "Введите значение так, как его покажет ячейка, со знаком %.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
@@ -819454,7 +819454,7 @@
         "explanation_kind": "unclassified",
         "difficulty": 1,
         "estimated_minutes": null,
-        "answer_instruction": "Введите адрес ячейки латинскими буквами, например A1.",
+        "answer_instruction": "Введите адрес ячейки латинскими буквами.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [

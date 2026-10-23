@@ -159,7 +159,9 @@ describe("subtopic levels and self-checks (Change 171)", () => {
         name: "Проверьте себя",
       }),
     ).toBeTruthy();
-    expect(selfCheck.textContent).toContain("делителей 49 должен проверить d = 7");
+    expect(selfCheck.textContent).toContain(
+      "делителей 49 должен проверить d = 7",
+    );
     expect(
       screen.getByRole("navigation", { name: "На этой странице" }).textContent,
     ).toContain("Проверьте себя | Практика");

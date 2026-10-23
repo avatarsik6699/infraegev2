@@ -32,8 +32,9 @@ const content: LessonContent.PaidSubtopicContent = {
           </Typography.Text>
           <Typography.Text>
             Пример: при каком наименьшем x {">"} 1 истинно ДЕЛ(x, 30) ∨ ДЕЛ(15,
-            x)? Первая часть требует кратного 30 — это 30, 60, … Вторая — делителя
-            15 — это 1, 3, 5, 15. Хватит одной истинной части, поэтому ответ — 3.
+            x)? Первая часть требует кратного 30 — это 30, 60, … Вторая —
+            делителя 15 — это 1, 3, 5, 15. Хватит одной истинной части, поэтому
+            ответ — 3.
           </Typography.Text>
           <Typography.Text>
             На Python ДЕЛ(n, m) записывают остатком:{" "}
@@ -96,8 +97,8 @@ const content: LessonContent.PaidSubtopicContent = {
             </strong>
           </Typography.Text>
           <Typography.Text>
-            Всё решает A при кратных 15 на отрезке: 60, 75 и 90. A должно
-            делить каждое из них.
+            Всё решает A при кратных 15 на отрезке: 60, 75 и 90. A должно делить
+            каждое из них.
           </Typography.Text>
           <LessonDiagram
             {...lessonMedia.pfSet45_105_50x100andDELx15_0863fa}
@@ -184,9 +185,9 @@ const content: LessonContent.PaidSubtopicContent = {
             </strong>
           </Typography.Text>
           <Typography.Text>
-            Всего на отрезке [10; 40] 40 − 10 + 1 = 31 число. Кратных 5 среди них 7:
-            10, 15, 20, 25, 30, 35, 40. Остальные 31 − 7 = 24 числа и есть
-            наименьшее A. Ответ — 24.
+            Всего на отрезке [10; 40] 40 − 10 + 1 = 31 число. Кратных 5 среди
+            них 7: 10, 15, 20, 25, 30, 35, 40. Остальные 31 − 7 = 24 числа и
+            есть наименьшее A. Ответ — 24.
           </Typography.Text>
           <ProofDisclosure
             kind="nuance"
@@ -206,9 +207,7 @@ const content: LessonContent.PaidSubtopicContent = {
       navLabel: "Программой",
       explanation: (
         <>
-          <Typography.Text>
-            Как проверить ответ 105 программой?
-          </Typography.Text>
+          <Typography.Text>Как проверить ответ 105 программой?</Typography.Text>
           <Typography.Text>
             <strong>
               Шаблон тот же, что для задачи темы: ДЕЛ записывают через{" "}
@@ -296,8 +295,8 @@ const content: LessonContent.PaidSubtopicContent = {
       id: "zadacha-4",
       prompt: (
         <>
-          Какое наименьшее A, при котором (x ∈ [15; 44]) → (ДЕЛ(x, 4) ∨ (x{" "}
-          {"<"} A)) тождественно истинна?
+          Какое наименьшее A, при котором (x ∈ [15; 44]) → (ДЕЛ(x, 4) ∨ (x {"<"}{" "}
+          A)) тождественно истинна?
         </>
       ),
       reveal: (

@@ -248,6 +248,6 @@ describe("Course lesson text blocks (Change 175 review)", () => {
       </ProofDisclosure>,
     );
     expect(html).toContain('data-kind="nuance"');
-    expect(html).toMatch(/>Тонкости<\/span><span[^>]*>округление дробных</u);
+    expect(html).toMatch(/>Тонкости:<\/span><span[^>]*>округление дробных</u);
   });
 });

@@ -330,9 +330,7 @@ def greedy_trips_frames(weights: list[int], cap: int) -> list[tuple[str, str]]:
         out.append(
             _text(40, 30, f"вместимость {cap}; поездок: {len(trips)}", 15, INK, "start", 600)
         )
-        rides = [
-            " + ".join(str(a[i]) for i in t) if len(t) > 1 else f"{a[t[0]]} один" for t in trips
-        ]
+        rides = [" + ".join(str(a[i]) for i in t) + ("" if len(t) > 1 else " один") for t in trips]
         if rides:
             out.append(_text(40, 176, "поездки: " + "; ".join(rides), 13, MUTED))
         out.append("</svg>")

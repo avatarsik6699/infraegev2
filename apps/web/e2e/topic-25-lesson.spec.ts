@@ -8,7 +8,7 @@ test("topic 25 «Делители и маски» is readable with its new lesso
   await divisorsAndMasksLessonPage.expectPublishedDivisorsAndMasksContent();
   await divisorsAndMasksLessonPage.expectStudyNavigationAndAccessibility();
   await divisorsAndMasksLessonPage.expectCodeKeyboardFocus(
-    "Код на Python: def has_k_divisors(n, k):",
+    "Первые три числа больше 1000",
   );
   browserSession.expectCleanConsole();
 });

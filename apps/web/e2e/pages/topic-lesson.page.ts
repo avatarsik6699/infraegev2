@@ -562,9 +562,18 @@ export class TopicLessonPage {
     let code: Locator | undefined;
     for (const route of await this.topicRoutes()) {
       await this.openTopicDocument(route);
-      const long = this.page.locator("#theory [data-code-block-long]").first();
-      if (await long.count()) {
-        code = long;
+      // key programs stay unfolded (Change 197); take one that folds, by
+      // position, so the locator still holds once it is expanded
+      const blocks = this.page.locator("#theory [data-code-block-long]");
+      const index = await blocks.evaluateAll((nodes) =>
+        nodes.findIndex((node) =>
+          [...node.querySelectorAll("button")].some(
+            (button) => button.textContent?.trim() === "Показать весь код",
+          ),
+        ),
+      );
+      if (index >= 0) {
+        code = blocks.nth(index);
         break;
       }
     }
@@ -1017,13 +1026,12 @@ export class TopicLessonPage {
     const topic = "/ege/23-analiz-grafov";
     await this.expectPublishedTopicIdentity();
     await this.expectSectionsAcrossSubtopics([
-      "kratchajshij",
+      "rebro-i-ves",
+      "pravilo",
       "funkciya-f",
-      "spisok-smezhnosti",
-      "programma",
-      "obyazatelnaya",
-      "relaksaciya",
-      "topologicheskij",
+      "cherez-vershinu",
+      "dlinnyj-put",
+      "chislo-putej-k",
     ]);
 
     // Subtopic 1: the path sandbox is an enhancement of a static graph.
@@ -1034,16 +1042,15 @@ export class TopicLessonPage {
       await expect(sandbox.getByRole("img")).toHaveCount(1);
     } else {
       const status = sandbox.locator("p[aria-live]");
-      await sandbox.getByRole("button", { name: "Вершина 7" }).click();
-      await sandbox.getByRole("button", { name: "Вершина 40" }).click();
-      await expect(status).toContainText("стрелка идёт только 40 → 7");
+      await sandbox.getByRole("button", { name: "Вершина 6" }).click();
+      await expect(status).toContainText("стрелка идёт только 6 → 1");
       await sandbox.getByRole("button", { name: "Сначала" }).click();
-      for (const vertex of ["40", "7", "100"])
+      for (const vertex of ["7", "100"])
         await sandbox
           .getByRole("button", { name: `Вершина ${vertex}` })
           .click();
       await expect(status).toHaveText(
-        "Путь: 1 → 40 → 7 → 100 · длина 2 + 1 + 3 = 6. Дошли до цели. Это кратчайший путь",
+        "Путь: 1 → 7 → 100 · длина 5.5 + 2.0 = 7.5. Дошли до цели. Это кратчайший путь",
       );
     }
     await this.expectNoHorizontalOverflow();
@@ -1054,31 +1061,33 @@ export class TopicLessonPage {
       name: "Значения f от цели назад по шагам",
     });
     if (noJavaScript) {
-      await expect(stepper.locator("[data-stepper-steps] li")).toHaveCount(6);
+      await expect(stepper.locator("[data-stepper-steps] li")).toHaveCount(8);
       await expect(stepper.getByRole("button")).toHaveCount(0);
     } else {
       const caption = stepper.locator("[data-stepper-caption]");
       await stepper.getByRole("button", { name: "Следующий шаг" }).click();
-      await expect(caption).toHaveText(/^f\(100\) = 0/u);
-      await expect(stepper.locator("[data-stepper-count]")).toHaveText("2 / 6");
+      await expect(caption).toHaveText(/^Из 12 рёбер нет/u);
+      await expect(stepper.locator("[data-stepper-count]")).toHaveText("2 / 8");
     }
     await expect(
       this.page.getByRole("region", { name: "Проверьте себя" }),
     ).toHaveCount(1);
 
-    // The advanced subtopics follow the core ones; one keeps a closed proof.
+    // The advanced subtopic follows the core ones; the program keeps its
+    // fine points closed.
     const navigation = this.page.getByRole("navigation", {
       name: "Подтемы урока",
     });
     await expect(
       navigation.getByRole("link", {
-        name: /Повторные проходы по рёбрам\s*, дополнительный урок/u,
+        name: /Условие на число рёбер\s*, дополнительный урок/u,
       }),
     ).toHaveCount(1);
-    await this.openTopicDocument(`${topic}/povtornye-prohody`);
+    await this.openTopicDocument(`${topic}/k-reber`);
     await expect(this.page.locator("[data-subtopic-head]")).toContainText(
-      "Подтема 6 из 7 · дополнительный урок",
+      "Подтема 6 из 6 · дополнительный урок",
     );
+    await this.openTopicDocument(`${topic}/programma`);
     const proof = this.page.locator("details[data-proof-disclosure]").first();
     await expect(proof).not.toHaveAttribute("open");
     await proof.locator("summary").click();
@@ -1089,11 +1098,11 @@ export class TopicLessonPage {
     await this.openTopicPractice(noJavaScript);
     const sheet = this.page.locator("[data-topic-cheat-sheet]");
     await expect(
-      sheet.getByRole("link", { name: "Рекурсия с запоминанием" }),
-    ).toHaveAttribute("href", `${topic}/rekursiya-s-zapominaniem`);
+      sheet.getByRole("link", { name: "Программа с @cache" }),
+    ).toHaveAttribute("href", `${topic}/programma`);
     await this.expectTaskPractice(noJavaScript);
     if (noJavaScript) {
-      await expect(this.page.locator("#practice a[download]")).toHaveCount(14);
+      await expect(this.page.locator("#practice a[download]")).toHaveCount(23);
     } else {
       await expect(this.page.locator("[data-result-progress]")).toContainText(
         `0 / ${String(this.config.masteryTaskCount)}`,

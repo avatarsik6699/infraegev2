@@ -60,8 +60,8 @@ const content: CourseTypes.PaidLessonContent = {
           <Typography.Text>
             Первая формула считает пятёрки, вторая — числа больше пяти, третья —
             текст «Москва». Сравнение в критерии пишут в кавычках, как текст:{" "}
-            <Notation>{'">5"'}</Notation> — особый вид аргумента этой функции.
-            В обычной проверке из урока 3.1 кавычек нет:{" "}
+            <Notation>{'">5"'}</Notation> — особый вид аргумента этой функции. В
+            обычной проверке из урока 3.1 кавычек нет:{" "}
             <Notation>{"=A2>5"}</Notation>.
           </Typography.Text>
           <SheetBlock {...lessonMedia.sheet1} label={"Лист «Список»"} />
@@ -70,8 +70,7 @@ const content: CourseTypes.PaidLessonContent = {
             <Notation>{"B6"}</Notation> засчитана как «Москва». Если искомое
             значение лежит в ячейке, критерий — её адрес без кавычек:{" "}
             <Notation>{"=СЧЁТЕСЛИ(A2:A7;E9)"}</Notation> (строка 6 листа).
-            Запись <Notation>{'"E9"'}</Notation> искала бы буквально текст
-            «E9».
+            Запись <Notation>{'"E9"'}</Notation> искала бы буквально текст «E9».
           </Typography.Text>
           <ProofDisclosure summary="Тонкости: шаблоны * и ?" kind="nuance">
             <Typography.Text>
@@ -147,9 +146,7 @@ const content: CourseTypes.PaidLessonContent = {
           <Typography.Text>
             Один диапазон указан дважды — к нему два условия. Для разных
             столбцов:{" "}
-            <Notation>
-              {'=СЧЁТЕСЛИМН(A2:A7;"Москва";B2:B7;">=60")'}
-            </Notation>{" "}
+            <Notation>{'=СЧЁТЕСЛИМН(A2:A7;"Москва";B2:B7;">=60")'}</Notation>{" "}
             считает строки, где и город Москва, и балл не меньше 60.
           </Typography.Text>
           <SheetBlock {...lessonMedia.sheet2} label={"Лист «Город»"} />
@@ -282,8 +279,8 @@ const content: CourseTypes.PaidLessonContent = {
             и копируем вправо до <Notation>{"L2"}</Notation>. Диапазон{" "}
             <Notation>{"$A2:$F2"}</Notation> закреплён по столбцам и остаётся
             всей строкой, а критерий <Notation>{"A2"}</Notation> сдвигается:{" "}
-            <Notation>{"B2"}</Notation>, <Notation>{"C2"}</Notation>… Пройди
-            по шагам:
+            <Notation>{"B2"}</Notation>, <Notation>{"C2"}</Notation>… Пройди по
+            шагам:
           </Typography.Text>
           <LessonStepper
             {...lessonMedia.freqSteps_dae026}
@@ -451,8 +448,8 @@ const content: CourseTypes.PaidLessonContent = {
   result: (
     <>
       <Typography.Text>
-        Условие можно не выносить в столбец признаков: функции «…ЕСЛИ»
-        проверяют его сами. Вот что понадобится дальше.
+        Условие можно не выносить в столбец признаков: функции «…ЕСЛИ» проверяют
+        его сами. Вот что понадобится дальше.
       </Typography.Text>
       <LessonSummary
         items={[
@@ -478,9 +475,7 @@ const content: CourseTypes.PaidLessonContent = {
           {
             key: "СУММЕСЛИ",
             note: (
-              <>
-                Проверяет один диапазон, складывает из другого той же строки.
-              </>
+              <>Проверяет один диапазон, складывает из другого той же строки.</>
             ),
           },
           {

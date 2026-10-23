@@ -56,8 +56,8 @@ const numberRecordLessonConfig = {
   route: "/ege/5-preobrazovanie-zapisey-chisel/chislo-i-zapis",
   title: "Формальное исполнение алгоритма",
   taskNumber: 5,
-  taskCount: 40,
-  masteryTaskCount: 37,
+  taskCount: 39,
+  masteryTaskCount: 39,
   diagramCount: 12,
 };
 

@@ -91,14 +91,14 @@ export const excelRangeFunctionsLesson = defineCourseLesson({
             kind="nuance"
           >
             <Typography.Text>
-              В курсе — русские имена функций, точка с запятой между
-              аргументами и запятая в десятичных дробях: так настроен
-              русскоязычный Excel. Адреса A, B, C набирают латиницей. При других
-              языковых настройках (локали) разделитель аргументов — запятая,
-              десятичный — точка, а имена английские:{" "}
-              <Notation>{"SUM"}</Notation> вместо <Notation>{"СУММ"}</Notation>.
-              Таблица соответствий — в уроке 5.2. В LibreOffice Calc идеи те же,
-              но отдельные названия и клавиши могут отличаться.
+              В курсе — русские имена функций, точка с запятой между аргументами
+              и запятая в десятичных дробях: так настроен русскоязычный Excel.
+              Адреса A, B, C набирают латиницей. При других языковых настройках
+              (локали) разделитель аргументов — запятая, десятичный — точка, а
+              имена английские: <Notation>{"SUM"}</Notation> вместо{" "}
+              <Notation>{"СУММ"}</Notation>. Таблица соответствий — в уроке 5.2.
+              В LibreOffice Calc идеи те же, но отдельные названия и клавиши
+              могут отличаться.
             </Typography.Text>
           </ProofDisclosure>
         </>
@@ -116,8 +116,8 @@ export const excelRangeFunctionsLesson = defineCourseLesson({
               <Notation>{"СЧЁТЗ"}</Notation> — непустые,{" "}
               <Notation>{"СЧИТАТЬПУСТОТЫ"}</Notation> — пустые.
             </strong>{" "}
-            В <Notation>{"A2:A5"}</Notation> лежат 10, 20, текст «нет» и
-            пустая ячейка — каждая функция берёт из них свои:
+            В <Notation>{"A2:A5"}</Notation> лежат 10, 20, текст «нет» и пустая
+            ячейка — каждая функция берёт из них свои:
           </Typography.Text>
           <LessonTabs
             label="Что берёт функция"
@@ -244,9 +244,8 @@ export const excelRangeFunctionsLesson = defineCourseLesson({
           <Typography.Text>
             <strong>
               <Notation>{"МАКС"}</Notation> и <Notation>{"МИН"}</Notation> дают
-              наибольшее и наименьшее число,{" "}
-              <Notation>{"НАИБОЛЬШИЙ"}</Notation> и{" "}
-              <Notation>{"НАИМЕНЬШИЙ"}</Notation> — k-е по порядку с учётом
+              наибольшее и наименьшее число, <Notation>{"НАИБОЛЬШИЙ"}</Notation>{" "}
+              и <Notation>{"НАИМЕНЬШИЙ"}</Notation> — k-е по порядку с учётом
               повторений.
             </strong>{" "}
             Для 3, 8, 8, 2 максимум 8; сколько раз он встречается,{" "}
@@ -329,10 +328,9 @@ export const excelRangeFunctionsLesson = defineCourseLesson({
       reveal: (
         <>
           <Typography.Text>
-            Двоеточие соединяет границы диапазона{" "}
-            <Notation>{"A2:A5"}</Notation>, точка с запятой отделяет второй
-            аргумент <Notation>{"C2"}</Notation>: складываются четыре ячейки и
-            ещё одна.
+            Двоеточие соединяет границы диапазона <Notation>{"A2:A5"}</Notation>
+            , точка с запятой отделяет второй аргумент{" "}
+            <Notation>{"C2"}</Notation>: складываются четыре ячейки и ещё одна.
           </Typography.Text>
         </>
       ),

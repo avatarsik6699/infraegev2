@@ -17,7 +17,7 @@ export class CourseCatalogPage {
     // Change 177: the Excel course is the second published card
     const excel = this.page.locator('[data-course-card="excel"]');
     await expect(excel).toHaveAttribute("data-course-status", "published");
-    await expect(excel).toContainText("14 уроков + 1 дополнительный");
+    await expect(excel).toContainText("15 уроков + 1 дополнительный");
     await expect(
       excel.getByRole("link", { name: "Открыть курс" }),
     ).toHaveAttribute("href", "/courses/excel");
@@ -34,7 +34,7 @@ export class CourseCatalogPage {
       this.page.locator('[data-course-status="planned"] :is(a, button)'),
     ).toHaveCount(0);
     await expect(this.page.locator("[data-course-summary]")).toContainText(
-      "Всего направлений: 4 · Доступно: 2 · Уроков: 41",
+      "Всего направлений: 4 · Доступно: 2 · Уроков: 42",
     );
     await expect(this.page.getByRole("searchbox")).toHaveCount(0);
     const planned = this.page.locator('[data-course-status="planned"]');
@@ -46,7 +46,9 @@ export class CourseCatalogPage {
       await expect(card).toHaveCSS("box-shadow", "none");
     }
     if (!noScripts) {
-      await this.expectGuestProgress(published);
+      // the progress appears after hydration; a cold dev server serves the
+      // page's ~700 modules one by one, so the first visit takes longer
+      await this.expectGuestProgress(published, 15000);
     }
     await this.expectCardGrid();
     await expectNoHorizontalOverflow(this.page);

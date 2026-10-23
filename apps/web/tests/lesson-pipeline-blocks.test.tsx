@@ -243,7 +243,7 @@ describe("MaskSandbox", () => {
 });
 
 describe("CodeBlock output", () => {
-  it("shows what the program prints under the code, lines joined in one row", () => {
+  it("shows what the program prints under the code, line by line as on screen", () => {
     const { container } = render(
       <CodeBlock
         code={"for n in range(10, 13):\n    print(n)"}
@@ -253,8 +253,8 @@ describe("CodeBlock output", () => {
       />,
     );
     const output = container.querySelector("[data-code-output]")!;
-    expect(output.textContent).toBe("Вывод10, 11, 12");
-    expect(output.querySelector("samp")?.textContent).toBe("10, 11, 12");
+    expect(output.textContent).toBe("Вывод:10\n11\n12");
+    expect(output.querySelector("samp")?.textContent).toBe("10\n11\n12");
   });
 });
 

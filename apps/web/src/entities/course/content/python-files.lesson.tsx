@@ -339,10 +339,9 @@ export const pythonFilesLesson = defineCourseLesson({
           <ProofDisclosure summary="Тонкости: режимы x и b" kind="nuance">
             <Typography.Text>
               <Notation>{'"x"'}</Notation> создаёт новый файл и останавливается
-              с ошибкой, если такой уже есть. Буква{" "}
-              <Notation>{"b"}</Notation> добавляется для работы с байтами, а не
-              с текстом: <Notation>{'"rb"'}</Notation>,{" "}
-              <Notation>{'"wb"'}</Notation>.
+              с ошибкой, если такой уже есть. Буква <Notation>{"b"}</Notation>{" "}
+              добавляется для работы с байтами, а не с текстом:{" "}
+              <Notation>{'"rb"'}</Notation>, <Notation>{'"wb"'}</Notation>.
             </Typography.Text>
           </ProofDisclosure>
         </>
@@ -369,8 +368,8 @@ export const pythonFilesLesson = defineCourseLesson({
             fileName="main.py"
           />
           <Typography.Text>
-            Знак <Notation>{"/"}</Notation> между <Notation>{"Path"}</Notation> и
-            строкой соединяет части пути, а не делит.{" "}
+            Знак <Notation>{"/"}</Notation> между <Notation>{"Path"}</Notation>{" "}
+            и строкой соединяет части пути, а не делит.{" "}
             <Notation>{"resolve()"}</Notation> показывает абсолютный путь — у
             каждого компьютера он свой, поэтому вывод здесь не показан. Это
             удобно, когда файл не находится: видно, где Python его искал.
@@ -384,8 +383,8 @@ export const pythonFilesLesson = defineCourseLesson({
               <Notation>
                 {'Path(__file__).resolve().parent / "numbers.txt"'}
               </Notation>
-              . Специальное имя <Notation>{"__file__"}</Notation> — путь к
-              файлу модуля; в интерактивной оболочке его нет.
+              . Специальное имя <Notation>{"__file__"}</Notation> — путь к файлу
+              модуля; в интерактивной оболочке его нет.
             </Typography.Text>
           </ProofDisclosure>
         </>
@@ -402,8 +401,8 @@ export const pythonFilesLesson = defineCourseLesson({
             </strong>{" "}
             <strong>CSV</strong> — таблица в текстовом файле: запись на строке,
             поля разделены заданным знаком. Поле может содержать в кавычках сам
-            разделитель, поэтому простое <Notation>{'split(",")'}</Notation>{" "}
-            CSV надёжно не разберёт. В стандартной библиотеке есть модуль{" "}
+            разделитель, поэтому простое <Notation>{'split(",")'}</Notation> CSV
+            надёжно не разберёт. В стандартной библиотеке есть модуль{" "}
             <Notation>{"csv"}</Notation>:
           </Typography.Text>
           <CodeBlock
@@ -422,8 +421,7 @@ export const pythonFilesLesson = defineCourseLesson({
             output={"Анна 91\nИлья 84\nМарк 88"}
           />
           <Typography.Text>
-            Первая строка файла — заголовок{" "}
-            <Notation>{"name;score"}</Notation>.{" "}
+            Первая строка файла — заголовок <Notation>{"name;score"}</Notation>.{" "}
             <Notation>{"DictReader"}</Notation> превращает каждую следующую
             строку в словарь: ключи — имена столбцов, значения — строки, поэтому
             балл переводим через <Notation>{"int"}</Notation>.{" "}
@@ -484,8 +482,8 @@ export const pythonFilesLesson = defineCourseLesson({
             <Notation>{"or"}</Notation> не даёт сравнить число с{" "}
             <Notation>{"None"}</Notation>: при{" "}
             <Notation>{"best is None"}</Notation> правая часть не вычисляется.
-            Для файла без отрицательных чисел или пустого файла программа
-            честно напишет «Отрицательных чисел нет».
+            Для файла без отрицательных чисел или пустого файла программа честно
+            напишет «Отрицательных чисел нет».
           </Typography.Text>
         </>
       ),

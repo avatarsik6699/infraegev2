@@ -48,8 +48,8 @@ const content: CourseTypes.PaidLessonContent = {
               Одинаковые на вид значения могут различаться пробелами, типом или
               записью даты.
             </strong>{" "}
-            Перед поиском проверь несколько ячеек в строке формул: тип и
-            пробелы видны там, а не в ячейке.
+            Перед поиском проверь несколько ячеек в строке формул: тип и пробелы
+            видны там, а не в ячейке.
           </Typography.Text>
           <Typography.Text>
             Тип проверяют функции: <Notation>{"ЕЧИСЛО(A2)"}</Notation> — число
@@ -109,8 +109,9 @@ const content: CourseTypes.PaidLessonContent = {
             <Typography.Text>
               В тексте, скопированном с сайта, бывает неразрывный пробел —{" "}
               <Notation>{"СЖПРОБЕЛЫ"}</Notation> его не трогает. Сначала замени
-              его обычным: <Notation>{'ПОДСТАВИТЬ(A2;СИМВОЛ(160);" ")'}</Notation>,
-              потом применяй <Notation>{"СЖПРОБЕЛЫ"}</Notation>.
+              его обычным:{" "}
+              <Notation>{'ПОДСТАВИТЬ(A2;СИМВОЛ(160);" ")'}</Notation>, потом
+              применяй <Notation>{"СЖПРОБЕЛЫ"}</Notation>.
             </Typography.Text>
           </ProofDisclosure>
         </>
@@ -127,11 +128,11 @@ const content: CourseTypes.PaidLessonContent = {
               если в нём цифры.
             </strong>{" "}
             <Notation>{'=A2&" "&B2'}</Notation> соединяет имя и фамилию через
-            пробел; без <Notation>{'" "'}</Notation> части склеятся вплотную.
-            В строке 4 <Notation>{"ПРАВСИМВ"}</Notation> вернула «34» — текст,
+            пробел; без <Notation>{'" "'}</Notation> части склеятся вплотную. В
+            строке 4 <Notation>{"ПРАВСИМВ"}</Notation> вернула «34» — текст,
             поэтому <Notation>{"ЕЧИСЛО"}</Notation> даёт{" "}
-            <Notation>{"ЛОЖЬ"}</Notation>; для арифметики его превращают в число:{" "}
-            <Notation>{"=ЗНАЧЕН(C4)+1"}</Notation>.
+            <Notation>{"ЛОЖЬ"}</Notation>; для арифметики его превращают в
+            число: <Notation>{"=ЗНАЧЕН(C4)+1"}</Notation>.
           </Typography.Text>
           <SheetBlock {...lessonMedia.sheet3} label={"Лист «Склейка»"} />
         </>

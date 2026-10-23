@@ -67,12 +67,13 @@ test("study scrollbars use square geometry and preserve forced colors", async ({
   browserSession.expectCleanConsole();
 });
 
+// Change 197: topic 16 keeps its key programs unfolded; topic 5 still folds one.
 test("lesson code disclosure stays transparent and return to top preserves focus", async ({
-  topicLessonPage,
+  numberRecordLessonPage,
   browserSession,
 }) => {
-  await topicLessonPage.open();
-  await topicLessonPage.expectCodeDisclosureAndReturnToTop();
+  await numberRecordLessonPage.open();
+  await numberRecordLessonPage.expectCodeDisclosureAndReturnToTop();
   browserSession.expectCleanConsole();
 });
 

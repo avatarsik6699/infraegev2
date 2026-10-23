@@ -41,8 +41,8 @@ export const ConfettiBurst: React.FC<ConfettiBurstTypes.Props> = (props) => {
   }
   useEffect(() => {
     if (!playing) return;
-    const timer = window.setTimeout(() => setPlaying(false), BURST_MS);
-    return () => window.clearTimeout(timer);
+    const timer = setTimeout(() => setPlaying(false), BURST_MS);
+    return () => clearTimeout(timer);
   }, [playing]);
   return (
     <span

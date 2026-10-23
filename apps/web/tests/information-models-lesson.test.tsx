@@ -53,7 +53,7 @@ describe("task 1 information models lesson (Change 190)", () => {
       ["dopolnitelnye-usloviya-i-marshruty", "advanced"],
     ]);
     expect(subtopics.map(({ checkpoint }) => checkpoint?.length ?? 0)).toEqual([
-      4, 3, 3, 4, 1, 4,
+      5, 5, 5, 4, 4, 5,
     ]);
   });
 
@@ -94,12 +94,12 @@ describe("task 1 information models lesson (Change 190)", () => {
     expect(container.textContent).not.toContain("%%");
   });
 
-  it("uses every generated figure, with the matching stepper", () => {
+  it("uses every generated figure, with the matching and assumption steppers", () => {
     const source = readFileSync(LESSON_FILE, "utf8");
     for (const key of Object.keys(lessonMedia))
       expect(source, key).toContain(`lessonMedia.${key}}`);
     const media = Object.values(lessonMedia);
-    expect(media.filter((item) => item.kind === "stepper")).toHaveLength(1);
+    expect(media.filter((item) => item.kind === "stepper")).toHaveLength(2);
   });
 
   it("keeps spaces around inline code, links and emphasis", () => {

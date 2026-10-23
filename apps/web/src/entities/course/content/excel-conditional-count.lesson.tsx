@@ -30,8 +30,8 @@ export const excelConditionalCountLesson = defineCourseLesson({
           Столбец признаков из урока 3.1 ответит, но короче так:{" "}
           <strong>
             <Notation>{"СЧЁТЕСЛИ"}</Notation> и{" "}
-            <Notation>{"СУММЕСЛИ"}</Notation> проверяют условие по каждой
-            ячейке диапазона сами — без столбца признаков
+            <Notation>{"СУММЕСЛИ"}</Notation> проверяют условие по каждой ячейке
+            диапазона сами — без столбца признаков
           </strong>
           .
         </Typography.Text>
