@@ -102,7 +102,7 @@ describe("task 25 divisors and masks lesson", () => {
       ["vid-chisla", "advanced"],
     ]);
     expect(subtopics.map(({ checkpoint }) => checkpoint?.length ?? 0)).toEqual([
-      1, 4, 1, 1, 1, 0,
+      5, 5, 5, 5, 5, 4,
     ]);
     expect(lesson.examFocus).toBeDefined();
     expect(lesson.result).toBeDefined();
@@ -147,15 +147,17 @@ describe("task 25 divisors and masks lesson", () => {
         expect(result.stdout.trim(), piece.code).toBe(piece.output.trim());
         ran += 1;
       }
-      if (
-        /^def /mu.test(piece.code) &&
-        !piece.code.includes("print") &&
-        compiles(piece.code)
-      )
-        prelude += piece.code + "\n";
+      // A function shown with a demo call: keep the definition, drop the
+      // top-level prints.
+      const definition = piece.code
+        .split("\n")
+        .filter((line) => !line.startsWith("print("))
+        .join("\n");
+      if (/^def /mu.test(definition) && compiles(definition))
+        prelude += definition + "\n";
     }
-    expect(ran).toBeGreaterThanOrEqual(35);
-    // About forty Python processes, one of them a 10⁷ search over multiples.
+    expect(ran).toBe(28);
+    // Two of the runs step through multiples up to 10¹⁰: a few seconds each.
   }, 60_000);
 
   it("keeps spaces around inline code, links and emphasis", () => {
@@ -197,9 +199,7 @@ describe("task 25 divisors and masks lesson", () => {
     expect(container.querySelectorAll("[data-topic-cheat-sheet]")).toHaveLength(
       1,
     );
-    expect(
-      container.querySelectorAll("[data-variant-picker]").length,
-    ).toBeGreaterThanOrEqual(12);
+    expect(container.querySelectorAll("[data-variant-picker]")).toHaveLength(8);
     expect(
       container.querySelectorAll("[data-python-term]").length,
     ).toBeGreaterThanOrEqual(15);

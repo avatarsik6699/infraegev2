@@ -159,7 +159,7 @@ describe("subtopic levels and self-checks (Change 171)", () => {
         name: "Проверьте себя",
       }),
     ).toBeTruthy();
-    expect(selfCheck.textContent).toContain("числа 49 должна включать 7");
+    expect(selfCheck.textContent).toContain("делителей 49 должен проверить d = 7");
     expect(
       screen.getByRole("navigation", { name: "На этой странице" }).textContent,
     ).toContain("Проверьте себя | Практика");
@@ -229,7 +229,7 @@ describe("lesson tree levels", () => {
     });
     expect(advanced.textContent).toContain(", дополнительный урок");
     expect(
-      screen.getByRole("link", { name: /Маски чисел/u }).textContent,
+      screen.getByRole("link", { name: /^Маски/u }).textContent,
     ).not.toContain("дополнительный");
   });
 });

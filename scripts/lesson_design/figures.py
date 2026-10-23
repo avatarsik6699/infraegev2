@@ -88,23 +88,32 @@ def rectangles_svg(n: int = 36, cell: int = 10) -> str:
 
 
 def _line_frame(n, upto, found, miss) -> str:
+    """Candidates 1..⌊√n⌋ evenly on the left, the paired large divisors evenly
+    on the right: small numbers no longer crowd, the root line sits on ⌊√n⌋."""
     w, left, right, base = 660, 28, 28, 150
-    x = lambda v: left + (v - 1) / (n - 1) * (w - left - right)  # noqa: E731
-    root = n**0.5
+    r = int(n**0.5)
+    big = sorted(n // d for d in range(1, r + 1) if n % d == 0 and n // d > r)
+    split = left + 0.42 * (w - left - right)
+    small_step = (split - left) / max(r - 1, 1)
+    big_step = (w - right - split) / max(len(big), 1)
+
+    def x(v):
+        return left + (v - 1) * small_step if v <= r else split + (big.index(v) + 1) * big_step
+
+    exact = r * r == n
+    widest = (x(n) - x(1)) / 2
     g = [f'<svg viewBox="0 0 {w} 196" aria-hidden="true">']
     g.append(
         f'<line x1="{left}" y1="{base}" x2="{w - right}" y2="{base}" '
         f'stroke="{INK}" stroke-width="1.5"/>'
     )
-    for v in range(1, n + 1):
-        g.append(
-            f'<line x1="{x(v):.1f}" y1="{base - 3}" x2="{x(v):.1f}" y2="{base + 3}" stroke="{FAINT}"/>'
-        )
+    root_x = x(r) if exact else x(r) + small_step / 2
     g.append(
-        f'<line x1="{x(root):.1f}" y1="30" x2="{x(root):.1f}" y2="{base + 6}" '
+        f'<line x1="{root_x:.1f}" y1="30" x2="{root_x:.1f}" y2="{base + 6}" '
         f'stroke="{MUTED}" stroke-dasharray="4 4"/>'
     )
-    g.append(_text(x(root) + 8, 44, f"√{n} = {int(root)}", 15, MUTED))
+    lab = f"√{n} = {r}" if exact else f"√{n} ≈ {n**0.5:.2f}".replace(".", ",")
+    g.append(_text(root_x + 8, 44, lab, 15, MUTED))
     for a, b in found:
         if a == b:
             g.append(
@@ -112,22 +121,36 @@ def _line_frame(n, upto, found, miss) -> str:
             )
             continue
         rx = (x(b) - x(a)) / 2
-        ry = min(96, 16 + rx * 0.4)
+        ry = 20 + 72 * rx / widest  # nested arcs never meet at the top
         g.append(
             f'<path d="M {x(a):.1f} {base} A {rx:.1f} {ry:.1f} 0 0 1 {x(b):.1f} {base}" '
             f'fill="none" stroke="{INK}" stroke-width="1.5"/>'
         )
     for v in miss:
-        g.append(_text(x(v), base + 28, "×", 15, MUTED, "middle"))
+        g.append(f'<circle cx="{x(v):.1f}" cy="{base}" r="3.5" fill="#fff" stroke="{MUTED}"/>')
+        g.append(_text(x(v), base + 28, str(v), 14, MUTED, "middle"))
+        g.append(_text(x(v), base - 12, "×", 14, MUTED, "middle"))
     for v in sorted({v for p in found for v in p}):
         g.append(f'<circle cx="{x(v):.1f}" cy="{base}" r="3.5" fill="{INK}"/>')
         g.append(_text(x(v), base + 28, str(v), 14, INK, "middle"))
-    if upto is not None:
-        cx = x(min(upto, n))
+    if upto is not None and upto <= r:
+        cx = x(upto)
         g.append(
             f'<circle cx="{cx:.1f}" cy="{base}" r="13" fill="none" stroke="{ACCENT}" stroke-width="2"/>'
         )
         g.append(_text(cx, 18, f"d = {upto}", 15, ACCENT, "middle", 600))
+    elif upto is not None:
+        g.append(
+            _text(
+                left,
+                18,
+                f"d = {upto}: {upto} · {upto} = {upto * upto} > {n} — стоп",
+                15,
+                ACCENT,
+                "start",
+                600,
+            )
+        )
     g.append("</svg>")
     return "".join(g)
 
@@ -156,7 +179,7 @@ def search_frames(n: int = 36) -> list[tuple[str, str]]:
     divisors = ", ".join(map(str, sorted({v for p in found for v in p})))
     frames.append(
         (
-            _line_frame(n, None, found, miss),
+            _line_frame(n, d, found, miss),
             f"d = {d}: {d} · {d} = {d * d} больше {n} — стоп. Делители: {divisors}.",
         )
     )
@@ -453,7 +476,7 @@ def overlap_svg(s: str = "7777", sub: str = "77", cell: int = 34) -> str:
             f'stroke="{INK if mine else MUTED}" stroke-width="{4 if mine else 2}"'
             f"{'' if mine else ' stroke-dasharray="5 4"'}/>"
         )
-        note = "count находит" if mine else "count пропускает: перекрывается с найденным"
+        note = "count находит" if mine else "count пропускает — перекрывается с первым"
         out.append(
             f'<text x="{left + len(s) * cell + 18}" y="{y + 13}" font-family="{SANS}" '
             f'font-size="13" fill="{INK if mine else MUTED}">с позиции {st}: {note}</text>'
@@ -602,7 +625,7 @@ def ladder_svg(n: int = 360) -> str:
     return "".join(out)
 
 
-def _factor_frame(m0, m, d, factors, note_cond) -> str:
+def _factor_frame(m0, m, d, factors, note_cond, done=False) -> str:
     out = ['<svg viewBox="0 0 660 170" role="img" aria-hidden="true">']
     box = lambda x, label, val, stroke: (  # noqa: E731
         f'<rect x="{x}" y="14" width="190" height="64" rx="10" fill="#ffffff" '
@@ -613,19 +636,19 @@ def _factor_frame(m0, m, d, factors, note_cond) -> str:
         f'fill="{INK}">{val}</text>'
     )
     out.append(box(16, "m — что осталось", m, INK))
-    out.append(box(226, "d — кандидат", d if d else "—", ACCENT))
+    out.append(box(226, "d — кандидат", "—" if done else d, FAINT if done else ACCENT))
     out.append(
         f'<text x="436" y="40" font-family="{SANS}" font-size="14" '
         f'fill="{INK}">{note_cond[0]}</text>'
         f'<text x="436" y="64" font-family="{SANS}" font-size="14" '
         f'fill="{MUTED}">{note_cond[1]}</text>'
     )
-    chips = " · ".join(map(str, factors)) if factors else "пока пусто"
+    chips = " · ".join(map(str, factors)) if factors else "…"
     out.append(
         f'<text x="16" y="116" font-family="{SANS}" font-size="13" '
         f'fill="{MUTED}">множители</text>'
         f'<text x="16" y="146" font-family="{SANS}" font-size="20" '
-        f'fill="{INK}">{m0} = {chips}{"" if m == 1 or not factors else " · …"}</text>'
+        f'fill="{INK}">{m0} = {chips}{"" if done or not factors else " · …"}</text>'
     )
     out.append("</svg>")
     return "".join(out)
@@ -684,12 +707,14 @@ def factor_frames(n: int = 1050) -> list[tuple[str, str]]:
     )
     if m > 1:
         factors.append(m)
-        last = m
-        m = 1
-        frame(
-            ("m > 1", f"{last} — последний множитель"),
-            f"После цикла осталось {last}. Делителей у него нет, значит, {last} "
-            f"простое — дописываем его. Итог: {n} = {' · '.join(map(str, factors))}.",
+        frames.append(
+            (
+                _factor_frame(
+                    n, m, d, list(factors), (f"m = {m} > 1", f"{m} — последний множитель"), True
+                ),
+                f"После цикла осталось m = {m}. Делителей у него нет, значит, {m} "
+                f"простое — дописываем его. Итог: {n} = {' · '.join(map(str, factors))}.",
+            )
         )
     return frames
 
@@ -783,7 +808,7 @@ def mask_align_svg(mask: str, samples: list[str]) -> str:
     out = [
         f'<svg viewBox="0 0 660 {h}" role="img" aria-label="Разбор чисел по маске {mask}">',
         f'<text x="{left}" y="20" font-family="{SANS}" font-size="14" fill="{MUTED}">'
-        f"маска {mask}: белые — обязательные цифры, серые — ?, оранжевая рамка — *</text>",
+        f"маска {mask}: белые — цифры маски, серые — ?, в рамке — *, черта — пустая *</text>",
     ]
     for r, s in enumerate(samples):
         y = top + r * (cell + gap)
@@ -792,8 +817,8 @@ def mask_align_svg(mask: str, samples: list[str]) -> str:
         if seg is None:
             for ch in s:
                 out.append(
-                    f'<rect x="{x}" y="{y}" width="{cell}" height="{cell}" fill="{WASH}" '
-                    f'stroke="{FAINT}"/><text x="{x + cell / 2}" y="{y + 18}" '
+                    f'<rect x="{x}" y="{y}" width="{cell}" height="{cell}" fill="#ffffff" '
+                    f'stroke="{MUTED}" stroke-dasharray="3 3"/><text x="{x + cell / 2}" y="{y + 18}" '
                     f'text-anchor="middle" font-family="{SANS}" font-size="15" '
                     f'fill="{MUTED}">{ch}</text>'
                 )

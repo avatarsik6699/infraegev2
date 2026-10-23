@@ -887,7 +887,7 @@ export class TopicLessonPage {
       "rovno-k-delitelej",
       "razlozhenie",
       "znaki-maski",
-      "generaciya-po-maske",
+      "voprosy-po-maske",
       "forma-chisla",
     ]);
     // Compact form (Change 171): live remainder figure, variant pickers and
@@ -898,7 +898,7 @@ export class TopicLessonPage {
     const term = this.page.locator('[data-python-term="andor"]');
     if (noJavaScript) {
       await expect(remainder.getByRole("button")).toHaveCount(0);
-      await expect(picker.locator("dt")).toHaveCount(9);
+      await expect(picker.locator("dt")).toHaveCount(7);
       await expect(term.locator("details")).toHaveCount(0);
       await term.getByRole("button").click();
       await expect(
@@ -984,7 +984,7 @@ export class TopicLessonPage {
 
     await this.openTopicPractice(noJavaScript);
     const sheet = this.page.locator("[data-topic-cheat-sheet]");
-    await expect(sheet.locator("section")).toHaveCount(8);
+    await expect(sheet.locator("section")).toHaveCount(7);
     await expect(
       sheet.getByRole("link", { name: "Делители парами" }),
     ).toHaveAttribute("href", `${topic}/deliteli-parami`);

@@ -287,6 +287,134 @@ def _independent_answers() -> dict[str, str]:
     w = _divisor_window(200000, 200100)
     best = max(range(200000, 200101), key=lambda n: (len(w[n]), -n))
     a["task-25-7-05"] = _rows([len(w[best]), best])
+    a.update(_yandex_like_answers())
+    return a
+
+
+def _starting_with(digit: int, lengths: range, step: int) -> Iterator[int]:
+    """Multiples of step whose record starts with digit, by the ranges of each length."""
+    for length in lengths:
+        low, high = digit * 10 ** (length - 1), (digit + 1) * 10 ** (length - 1)
+        yield from range((low + step - 1) // step * step, high, step)
+
+
+def _yandex_like_answers() -> dict[str, str]:
+    """Tasks after the Yandex collections, recomputed by other means than the bank's."""
+    a: dict[str, str] = {}
+    first = (1000001 + 16) // 17 * 17
+    a["task-25-8-01"] = _rows(
+        [n for n in range(first, first + 17 * 5000, 17) if sum(ch == "7" for ch in str(n)) == 2][:5]
+    )
+    # Six-digit strings with leading zeros: inclusion–exclusion over «no 1» and «no 6».
+    a["task-25-8-02"] = str(10**6 - 2 * 9**6 + 8**6)
+    a["task-25-8-03"] = str((_valuation(10**6, 2) + 1) * (_valuation(10**6, 5) + 1))
+    a["task-25-8-04"] = str(next(d for d in range(10**6) if (d + 1) ** 2 > 10**10))
+    w = _divisor_window(512340, 512360)
+    a["task-25-8-05"] = _rows(
+        [
+            [n, max(d for d in w[n] if d % 2 == 0 and d != n)]
+            for n in range(512340, 512361)
+            if sum(1 for d in w[n] if d % 2 == 0) >= 16
+        ]
+    )
+    w = _divisor_window(235400, 235420)
+    a["task-25-8-06"] = _rows(
+        [_proper(w[n], n) for n in range(235400, 235421) if len(_proper(w[n], n)) == 2]
+    )
+    a["task-25-8-07"] = _rows(
+        _pick(
+            (
+                [n, ends[0]]
+                for n, ds in _first(600001, 200, _divisor_window)
+                if (ends := [d for d in ds if str(d).endswith("14") and d not in (14, n)])
+            ),
+            5,
+        )
+    )
+    w = _divisor_window(221000, 221040)
+    sums = {n: sum(d for d in w[n] if str(d)[-1] == "8" and d != n) for n in w}
+    a["task-25-8-08"] = _rows([[n, r] for n, r in sums.items() if str(r)[-1] == "6"])
+    a["task-25-8-09"] = _rows(
+        _pick(
+            (
+                [n, ds[2] - ds[1]]
+                for n, ds in _first(800001, 80000, _divisor_window)
+                if len(ds) == 4 and ds[2] - ds[1] <= 15
+            ),
+            6,
+        )
+    )
+    a["task-25-8-10"] = _rows(
+        _pick(
+            (
+                [n, max(fs)]
+                for n, fs in _first(7000001, 4000, _factor_window)
+                if len(fs) == 2 and all({"1", "6"} <= set(str(p)) for p in fs)
+            ),
+            5,
+        )
+    )
+    primes = set(_small_primes(5_000_000))
+    a["task-25-8-11"] = _rows(
+        [
+            [n, s]
+            for n in range(251000, 251101)
+            if n in primes and (s := sum(map(int, str(n)))) in primes
+        ]
+    )
+    a["task-25-8-12"] = _rows(
+        _pick(
+            (
+                [n, sum(_proper(ds, n))]
+                for n, ds in _first(2000001, 200, _divisor_window)
+                if sum(_proper(ds, n)) in primes
+            ),
+            5,
+        )
+    )
+    f = _factor_window(400000, 700000)
+    a["task-25-8-13"] = _rows(
+        [
+            [n, fs[2] - fs[0]]
+            for n, fs in f.items()
+            if len(set(fs)) == len(fs) == 3 and fs[2] - fs[0] <= 12
+        ]
+    )
+    mask = _mask("54321?7?9")
+    a["task-25-8-14"] = _rows(
+        [[n, n // 37] for n in range(543210709 // 37 * 37, 543219800, 37) if mask.fullmatch(str(n))]
+    )
+    mask = _mask("?2*34*91")
+    a["task-25-8-15"] = _rows(
+        [[n, n // 6131] for n in range(6131, 10**9, 6131) if mask.fullmatch(str(n))]
+    )
+    mask = _mask("2?3157*6")
+    a["task-25-8-16"] = _rows(
+        [[n, n // 3039] for n in _starting_with(2, range(8, 11), 3039) if mask.fullmatch(str(n))]
+    )
+    good, bad = _mask("?3*5*0"), _mask("2*8*")
+    top = [
+        n
+        for n in range(3 * 10**8 // 46 * 46, 0, -46)
+        if good.fullmatch(str(n)) and not bad.fullmatch(str(n))
+    ][:5]
+    a["task-25-8-17"] = _rows([[n, n // 46] for n in sorted(top)])
+    built = {
+        int("19" + str(value).zfill(length) * (length > 0) + "024" + str(q) + "7")
+        for length in range(4)
+        for value in range(10**length)
+        for q in range(10)
+    }
+    fit = sorted(n for n in built if n <= 10**10 and sum(map(int, str(n))) % 13 == 0)
+    a["task-25-8-18"] = _rows([[n, sum(map(int, str(n))) // 13] for n in fit[-5:]])
+    inside = re.compile("13[0-9]*57[0-9]*2")
+    a["task-25-8-19"] = _rows(
+        [[n, n // 2971] for n in range(2971, 10**8, 2971) if inside.search(str(n))]
+    )
+    odd = re.compile("5[13579]13[13579]72[0-9]*4")
+    a["task-25-8-20"] = _rows(
+        [[n, n // 2028] for n in _starting_with(5, range(8, 11), 2028) if odd.fullmatch(str(n))]
+    )
     return a
 
 
@@ -329,8 +457,8 @@ def test_material_replaces_the_retired_lesson() -> None:
 def test_every_answer_matches_independent_recomputation(answers: dict[str, str]) -> None:
     tasks = _entries()
     assert sorted(task.id for task in tasks) == sorted(answers)
-    assert len(tasks) == 39
-    assert sorted(task.lessons[0].position for task in tasks) == list(range(39))
+    assert len(tasks) == 59
+    assert sorted(task.lessons[0].position for task in tasks) == list(range(59))
     sections = next(m for m in _bank().materials if m.id == MATERIAL).sections
     for task in tasks:
         expected = answers[task.id]

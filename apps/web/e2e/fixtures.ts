@@ -93,8 +93,8 @@ const divisorsAndMasksLessonConfig = {
   route: "/ege/25-deliteli-i-maski/deliteli-parami",
   title: "Обработка целочисленной информации",
   taskNumber: 25,
-  taskCount: 39,
-  masteryTaskCount: 33,
+  taskCount: 59,
+  masteryTaskCount: 53,
 };
 
 const arrayProcessingLessonConfig = {

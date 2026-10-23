@@ -111828,7 +111828,7 @@
     {
       "task": {
         "id": "task-25-1-01",
-        "title": "Найдите частное и остаток",
+        "title": "Найди частное и остаток",
         "short_description": null,
         "explanation_kind": "worked_solution",
         "difficulty": 1,
@@ -111865,6 +111865,12 @@
               "language": "python",
               "code": "print(145 // 12, 145 % 12)",
               "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `12 1`"
             }
           }
         ],
@@ -111911,7 +111917,7 @@
     {
       "task": {
         "id": "task-25-1-02",
-        "title": "Посчитайте кратные 7, но не 5",
+        "title": "Посчитай кратные 7, но не 5",
         "short_description": null,
         "explanation_kind": "worked_solution",
         "difficulty": 1,
@@ -111948,6 +111954,12 @@
               "language": "python",
               "code": "count = 0\nfor n in range(1000, 2001):\n    if n % 7 == 0 and n % 5 != 0:\n        count += 1\nprint(count)",
               "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `114`"
             }
           }
         ],
@@ -111994,7 +112006,7 @@
     {
       "task": {
         "id": "task-25-1-04",
-        "title": "Посчитайте числа, оканчивающиеся на 37",
+        "title": "Посчитай числа, оканчивающиеся на 37",
         "short_description": null,
         "explanation_kind": "worked_solution",
         "difficulty": 1,
@@ -112032,6 +112044,12 @@
               "code": "count = 0\nfor n in range(10000, 20001):\n    if n % 100 == 37 and n % 3 == 0:\n        count += 1\nprint(count)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `33`"
+            }
           }
         ],
         "skills": [],
@@ -112046,7 +112064,7 @@
         "theory_links": [
           {
             "label": "Теория",
-            "section": "operacii-s-ciframi",
+            "section": "chislo-i-stroka",
             "material_id": "divisors-and-masks"
           }
         ],
@@ -112077,7 +112095,7 @@
     {
       "task": {
         "id": "task-25-1-05",
-        "title": "Посчитайте числа с суммой цифр 10",
+        "title": "Посчитай числа с суммой цифр 10",
         "short_description": null,
         "explanation_kind": "worked_solution",
         "difficulty": 1,
@@ -112115,6 +112133,12 @@
               "code": "count = 0\nfor n in range(1, 1001):\n    digit_sum = 0\n    for ch in str(n):\n        digit_sum += int(ch)\n    if digit_sum == 10:\n        count += 1\nprint(count)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `63`"
+            }
           }
         ],
         "skills": [],
@@ -112129,7 +112153,7 @@
         "theory_links": [
           {
             "label": "Теория",
-            "section": "operacii-s-ciframi",
+            "section": "chislo-i-stroka",
             "material_id": "divisors-and-masks"
           }
         ],
@@ -112160,7 +112184,7 @@
     {
       "task": {
         "id": "task-25-1-06",
-        "title": "Сравните count и вхождения с перекрытием",
+        "title": "Сравни count и вхождения с перекрытием",
         "short_description": null,
         "explanation_kind": "worked_solution",
         "difficulty": 1,
@@ -112197,6 +112221,12 @@
               "language": "python",
               "code": "s = \"7777\"\noverlap = 0\nfor i in range(len(s) - 1):\n    if s[i:i + 2] == \"77\":\n        overlap += 1\nprint(s.count(\"77\"), overlap)",
               "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `2 3`"
             }
           }
         ],
@@ -112243,7 +112273,7 @@
     {
       "task": {
         "id": "task-25-1-07",
-        "title": "Найдите три наибольших подходящих числа",
+        "title": "Найди три наибольших подходящих числа",
         "short_description": null,
         "explanation_kind": "worked_solution",
         "difficulty": 2,
@@ -112263,7 +112293,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Нужны наибольшие числа — перебирайте вниз от 499 999 и остановитесь, как только найдутся три."
+              "markdown": "Нужны наибольшие числа — перебирай вниз от 499 999 и остановись, как только найдутся три."
             }
           }
         ],
@@ -112281,6 +112311,12 @@
               "code": "found = []\nfor n in range(499999, 0, -1):\n    if n % 13 == 0 and n % 10 == 9 and \"0\" in str(n):\n        found.append(n)\n        if len(found) == 3:\n            break\nprint(*found)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `499109 498069 497809`"
+            }
           }
         ],
         "skills": [],
@@ -112288,14 +112324,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 5,
+            "position": 6,
             "material_id": "divisors-and-masks"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "perebor-po-ubyvaniyu",
+            "section": "pervye-najdennye",
             "material_id": "divisors-and-masks"
           }
         ],
@@ -112326,7 +112362,7 @@
     {
       "task": {
         "id": "task-25-2-03",
-        "title": "Посчитайте делители 360",
+        "title": "Посчитай делители 360",
         "short_description": null,
         "explanation_kind": "worked_solution",
         "difficulty": 1,
@@ -112346,7 +112382,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Ищите делители парами до isqrt(n): обычная пара добавляет 2, пара вида d · d = n — 1."
+              "markdown": "Ищи делители парами до isqrt(n): обычная пара добавляет 2, пара вида d · d = n — 1."
             }
           }
         ],
@@ -112364,6 +112400,12 @@
               "code": "from math import isqrt\n\n\ndef count_divisors(n):\n    count = 0\n    for d in range(1, isqrt(n) + 1):\n        if n % d == 0:\n            if d * d == n:\n                count += 1\n            else:\n                count += 2\n    return count\n\n\nprint(count_divisors(360))",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `24`"
+            }
           }
         ],
         "skills": [],
@@ -112371,7 +112413,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 6,
+            "position": 13,
             "material_id": "divisors-and-masks"
           }
         ],
@@ -112409,7 +112451,7 @@
     {
       "task": {
         "id": "task-25-2-04",
-        "title": "Выпишите чётные делители 90",
+        "title": "Выпиши чётные делители 90",
         "short_description": null,
         "explanation_kind": "worked_solution",
         "difficulty": 1,
@@ -112429,7 +112471,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Сначала найдите все делители, затем оставьте те, что делятся на 2."
+              "markdown": "Сначала найди все делители, затем оставь те, что делятся на 2."
             }
           }
         ],
@@ -112447,6 +112489,12 @@
               "code": "from math import isqrt\n\n\ndef get_divisors(n):\n    divisors = []\n    for d in range(1, isqrt(n) + 1):\n        if n % d == 0:\n            divisors.append(d)\n            q = n // d\n            if q != d:\n                divisors.append(q)\n    return sorted(divisors)\n\n\nD = [d for d in get_divisors(90) if d % 2 == 0]\nprint(*D)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `2 6 10 18 30 90`"
+            }
           }
         ],
         "skills": [],
@@ -112454,7 +112502,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 7,
+            "position": 10,
             "material_id": "divisors-and-masks"
           }
         ],
@@ -112492,7 +112540,7 @@
     {
       "task": {
         "id": "task-25-2-07",
-        "title": "Найдите числа с четырьмя делителями без 1 и n",
+        "title": "Найди числа с четырьмя делителями без 1 и n",
         "short_description": null,
         "explanation_kind": "worked_solution",
         "difficulty": 3,
@@ -112504,7 +112552,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Найдите все числа на отрезке [312 400; 312 450], у которых ровно четыре различных натуральных делителя, не считая единицы и самого числа. Для каждого числа выведите эти делители в порядке возрастания."
+              "markdown": "Найди все числа на отрезке [312 400; 312 450], у которых ровно четыре различных натуральных делителя, не считая единицы и самого числа. Для каждого числа выведи эти делители в порядке возрастания."
             }
           }
         ],
@@ -112512,7 +112560,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Для каждого числа отрезка найдите делители, оставьте 1 < d < n и проверьте, что их ровно четыре. Обе границы отрезка входят в перебор."
+              "markdown": "Для каждого числа отрезка найди делители, оставь 1 < d < n и проверь, что их ровно четыре. Обе границы отрезка входят в перебор."
             }
           }
         ],
@@ -112538,6 +112586,12 @@
               "code": "312404 2 4 78101 156202\n312425 5 25 12497 62485",
               "caption": "Программа выведет"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `312404 2 4 78101 156202 312425 5 25 12497 62485`"
+            }
           }
         ],
         "skills": [],
@@ -112545,7 +112599,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 8,
+            "position": 11,
             "material_id": "divisors-and-masks"
           }
         ],
@@ -112585,7 +112639,7 @@
     {
       "task": {
         "id": "task-25-3-01",
-        "title": "Найдите числа с четырьмя делителями от 20 до 40",
+        "title": "Найди числа с четырьмя делителями от 20 до 40",
         "short_description": null,
         "explanation_kind": "worked_solution",
         "difficulty": 2,
@@ -112605,7 +112659,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Для каждого числа отрезка оставьте делители 1 < d < n и проверьте, что их ровно четыре."
+              "markdown": "Для каждого числа отрезка оставь делители 1 < d < n и проверь, что их ровно четыре."
             }
           }
         ],
@@ -112631,6 +112685,12 @@
               "code": "20 2 4 5 10\n28 2 4 7 14\n32 2 4 8 16",
               "caption": "Программа выведет"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `20 2 4 5 10 28 2 4 7 14 32 2 4 8 16`"
+            }
           }
         ],
         "skills": [],
@@ -112638,7 +112698,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 9,
+            "position": 14,
             "material_id": "divisors-and-masks"
           }
         ],
@@ -112676,7 +112736,7 @@
     {
       "task": {
         "id": "task-25-3-02",
-        "title": "Вычислите M для числа 48",
+        "title": "Вычисли M для числа 48",
         "short_description": null,
         "explanation_kind": "worked_solution",
         "difficulty": 1,
@@ -112696,7 +112756,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Выпишите делители 48 без 1 и 48 по возрастанию; два наибольших стоят в конце."
+              "markdown": "Выпиши делители 48 без 1 и 48 по возрастанию; два наибольших стоят в конце."
             }
           }
         ],
@@ -112714,6 +112774,12 @@
               "code": "from math import isqrt\n\n\ndef get_divisors(n):\n    divisors = []\n    for d in range(1, isqrt(n) + 1):\n        if n % d == 0:\n            divisors.append(d)\n            q = n // d\n            if q != d:\n                divisors.append(q)\n    return sorted(divisors)\n\n\nD = [d for d in get_divisors(48) if 1 < d < 48]\nprint(D[-1] + D[-2])",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `40`"
+            }
           }
         ],
         "skills": [],
@@ -112721,7 +112787,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 10,
+            "position": 17,
             "material_id": "divisors-and-masks"
           }
         ],
@@ -112759,7 +112825,7 @@
     {
       "task": {
         "id": "task-25-3-03",
-        "title": "Вычислите calc_m для трёх чисел",
+        "title": "Вычисли calc_m для трёх чисел",
         "short_description": null,
         "explanation_kind": "worked_solution",
         "difficulty": 1,
@@ -112797,6 +112863,12 @@
               "code": "from math import isqrt\n\n\ndef calc_m(n):\n    for d in range(2, isqrt(n) + 1):\n        if n % d == 0:\n            return d + n // d\n    return 0\n\n\nprint(calc_m(91), calc_m(97), calc_m(121))",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `20 0 22`"
+            }
           }
         ],
         "skills": [],
@@ -112804,7 +112876,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 11,
+            "position": 19,
             "material_id": "divisors-and-masks"
           }
         ],
@@ -112842,7 +112914,7 @@
     {
       "task": {
         "id": "task-25-3-04",
-        "title": "Найдите число с наибольшим количеством делителей",
+        "title": "Найди число с наибольшим количеством делителей",
         "short_description": null,
         "explanation_kind": "worked_solution",
         "difficulty": 2,
@@ -112862,7 +112934,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Храните лучший результат и заменяйте его только при строго большем количестве — так при равенстве останется наименьшее число."
+              "markdown": "Храни лучший результат и заменяй его только при строго большем количестве — так при равенстве останется наименьшее число."
             }
           }
         ],
@@ -112880,6 +112952,12 @@
               "code": "from math import isqrt\n\n\ndef count_divisors(n):\n    count = 0\n    for d in range(1, isqrt(n) + 1):\n        if n % d == 0:\n            if d * d == n:\n                count += 1\n            else:\n                count += 2\n    return count\n\n\nbest_count = 0\nbest_n = 0\nfor n in range(1000, 1101):\n    count = count_divisors(n)\n    if count > best_count:\n        best_count = count\n        best_n = n\nprint(best_count, best_n)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `32 1080`"
+            }
           }
         ],
         "skills": [],
@@ -112887,7 +112965,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 12,
+            "position": 16,
             "material_id": "divisors-and-masks"
           }
         ],
@@ -112925,7 +113003,7 @@
     {
       "task": {
         "id": "task-25-3-06",
-        "title": "Найдите пять чисел с M, оканчивающимся на 6",
+        "title": "Найди пять чисел с M, оканчивающимся на 6",
         "short_description": null,
         "explanation_kind": "worked_solution",
         "difficulty": 3,
@@ -112937,7 +113015,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Пусть M — сумма наименьшего и наибольшего натуральных делителей числа, не считая единицы и самого числа. Если таких делителей нет, M = 0. Найдите пять наименьших чисел, больших 600 000, для которых M больше нуля и оканчивается цифрой 6. Для каждого выведите число и M."
+              "markdown": "Пусть M — сумма наименьшего и наибольшего натуральных делителей числа, не считая единицы и самого числа. Если таких делителей нет, M = 0. Найди пять наименьших чисел, больших 600 000, для которых M больше нуля и оканчивается цифрой 6. Для каждого выведи число и M."
             }
           }
         ],
@@ -112945,7 +113023,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "M — это наименьший делитель больше 1 и его пара. Перебирайте числа после 600 000 по возрастанию, пока не найдутся пять, — верхняя граница не нужна."
+              "markdown": "M — это наименьший делитель больше 1 и его пара. Перебирай числа после 600 000 по возрастанию, пока не найдутся пять, — верхняя граница не нужна."
             }
           }
         ],
@@ -112971,6 +113049,12 @@
               "code": "600005 120006\n600008 300006\n600009 200006\n600023 4176\n600028 300016",
               "caption": "Программа выведет"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `600005 120006 600008 300006 600009 200006 600023 4176 600028 300016`"
+            }
           }
         ],
         "skills": [],
@@ -112978,7 +113062,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 13,
+            "position": 21,
             "material_id": "divisors-and-masks"
           }
         ],
@@ -112986,11 +113070,6 @@
           {
             "label": "Теория",
             "section": "pervye-posle-granicy",
-            "material_id": "divisors-and-masks"
-          },
-          {
-            "label": "Теория",
-            "section": "naimenshij-i-naibolshij",
             "material_id": "divisors-and-masks"
           }
         ],
@@ -113023,7 +113102,7 @@
     {
       "task": {
         "id": "task-25-3-07",
-        "title": "Найдите пять чисел с M(N), кратным 101",
+        "title": "Найди пять чисел с M(N), кратным 101",
         "short_description": null,
         "explanation_kind": "worked_solution",
         "difficulty": 3,
@@ -113035,7 +113114,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Пусть M(N) — сумма двух наибольших различных натуральных делителей числа N, не считая единицы и самого N. Если таких делителей меньше двух, M(N) = 0. Найдите пять наименьших чисел, больших 2 000 000, для которых M(N) больше нуля и делится на 101. Для каждого выведите N и M(N)."
+              "markdown": "Пусть M(N) — сумма двух наибольших различных натуральных делителей числа N, не считая единицы и самого N. Если таких делителей меньше двух, M(N) = 0. Найди пять наименьших чисел, больших 2 000 000, для которых M(N) больше нуля и делится на 101. Для каждого выведи N и M(N)."
             }
           }
         ],
@@ -113069,6 +113148,12 @@
               "code": "2000103 952430\n2000204 1500153\n2000305 517726\n2000406 1667005\n2000589 671852",
               "caption": "Программа выведет"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `2000103 952430 2000204 1500153 2000305 517726 2000406 1667005 2000589 671852`"
+            }
           }
         ],
         "skills": [],
@@ -113076,7 +113161,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 14,
+            "position": 22,
             "material_id": "divisors-and-masks"
           }
         ],
@@ -113084,11 +113169,6 @@
           {
             "label": "Теория",
             "section": "pervye-posle-granicy",
-            "material_id": "divisors-and-masks"
-          },
-          {
-            "label": "Теория",
-            "section": "velichina-m",
             "material_id": "divisors-and-masks"
           }
         ],
@@ -113121,7 +113201,7 @@
     {
       "task": {
         "id": "task-25-4-02",
-        "title": "Разложите 1960 на простые множители",
+        "title": "Разложи 1960 на простые множители",
         "short_description": null,
         "explanation_kind": "worked_solution",
         "difficulty": 1,
@@ -113141,7 +113221,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Делите на 2, пока делится, затем на 3, 5, 7 и так далее."
+              "markdown": "Дели на 2, пока делится, затем на 3, 5, 7 и так далее."
             }
           }
         ],
@@ -113159,6 +113239,12 @@
               "code": "def prime_factors(n):\n    factors = []\n    m = n\n    d = 2\n    while d * d <= m:\n        while m % d == 0:\n            factors.append(d)\n            m //= d\n        d += 1\n    if m > 1:\n        factors.append(m)\n    return factors\n\n\ndef prime_divisors(n):\n    P = sorted(set(prime_factors(n)))\n    return [p for p in P if p != n]\n\n\nprint(*prime_factors(1960))",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `2 2 2 5 7 7`"
+            }
           }
         ],
         "skills": [],
@@ -113166,7 +113252,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 15,
+            "position": 26,
             "material_id": "divisors-and-masks"
           }
         ],
@@ -113204,7 +113290,7 @@
     {
       "task": {
         "id": "task-25-4-03",
-        "title": "Сравните простые делители и множители 72",
+        "title": "Сравни простые делители и множители 72",
         "short_description": null,
         "explanation_kind": "worked_solution",
         "difficulty": 1,
@@ -113224,7 +113310,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Разложите 72 и посчитайте множители дважды: без повторов и с повторами."
+              "markdown": "Разложи 72 и посчитай множители дважды: без повторов и с повторами."
             }
           }
         ],
@@ -113242,6 +113328,12 @@
               "code": "def prime_factors(n):\n    factors = []\n    m = n\n    d = 2\n    while d * d <= m:\n        while m % d == 0:\n            factors.append(d)\n            m //= d\n        d += 1\n    if m > 1:\n        factors.append(m)\n    return factors\n\n\ndef prime_divisors(n):\n    P = sorted(set(prime_factors(n)))\n    return [p for p in P if p != n]\n\n\nf = prime_factors(72)\nprint(len(set(f)), len(f))",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `2 5`"
+            }
           }
         ],
         "skills": [],
@@ -113249,16 +113341,11 @@
         "files": [],
         "lessons": [
           {
-            "position": 16,
+            "position": 31,
             "material_id": "divisors-and-masks"
           }
         ],
         "theory_links": [
-          {
-            "label": "Теория",
-            "section": "prostye-deliteli",
-            "material_id": "divisors-and-masks"
-          },
           {
             "label": "Теория",
             "section": "mnozhiteli-i-deliteli",
@@ -113292,7 +113379,7 @@
     {
       "task": {
         "id": "task-25-4-04",
-        "title": "Найдите наибольший простой делитель 999 999",
+        "title": "Найди наибольший простой делитель 999 999",
         "short_description": null,
         "explanation_kind": "worked_solution",
         "difficulty": 1,
@@ -113330,6 +113417,12 @@
               "code": "def prime_factors(n):\n    factors = []\n    m = n\n    d = 2\n    while d * d <= m:\n        while m % d == 0:\n            factors.append(d)\n            m //= d\n        d += 1\n    if m > 1:\n        factors.append(m)\n    return factors\n\n\ndef prime_divisors(n):\n    P = sorted(set(prime_factors(n)))\n    return [p for p in P if p != n]\n\n\nprint(max(prime_factors(999999)))",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `37`"
+            }
           }
         ],
         "skills": [],
@@ -113337,7 +113430,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 17,
+            "position": 27,
             "material_id": "divisors-and-masks"
           }
         ],
@@ -113375,7 +113468,7 @@
     {
       "task": {
         "id": "task-25-4-05",
-        "title": "Выпишите простые делители 990",
+        "title": "Выпиши простые делители 990",
         "short_description": null,
         "explanation_kind": "worked_solution",
         "difficulty": 1,
@@ -113413,6 +113506,12 @@
               "code": "def prime_factors(n):\n    factors = []\n    m = n\n    d = 2\n    while d * d <= m:\n        while m % d == 0:\n            factors.append(d)\n            m //= d\n        d += 1\n    if m > 1:\n        factors.append(m)\n    return factors\n\n\ndef prime_divisors(n):\n    P = sorted(set(prime_factors(n)))\n    return [p for p in P if p != n]\n\n\nprint(*prime_divisors(990))",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `2 3 5 11`"
+            }
           }
         ],
         "skills": [],
@@ -113420,7 +113519,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 18,
+            "position": 28,
             "material_id": "divisors-and-masks"
           }
         ],
@@ -113458,7 +113557,7 @@
     {
       "task": {
         "id": "task-25-4-06",
-        "title": "Найдите произведения двух простых с цифрой 7",
+        "title": "Найди произведения двух простых с цифрой 7",
         "short_description": null,
         "explanation_kind": "worked_solution",
         "difficulty": 3,
@@ -113470,7 +113569,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Найдите пять наименьших чисел, больших 3 000 000, которые представимы в виде произведения ровно двух простых множителей, не обязательно различных, причём каждый множитель содержит в записи цифру 7. Для каждого числа выведите его и наибольший из множителей."
+              "markdown": "Найди пять наименьших чисел, больших 3 000 000, которые представимы в виде произведения ровно двух простых множителей, не обязательно различных, причём каждый множитель содержит в записи цифру 7. Для каждого числа выведи его и наибольший из множителей."
             }
           }
         ],
@@ -113478,7 +113577,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Разложение должно состоять ровно из двух множителей с повторениями, и цифра 7 должна быть в записи каждого — проверьте это через all."
+              "markdown": "Разложение должно состоять ровно из двух множителей с повторениями, и цифра 7 должна быть в записи каждого — проверь это через all."
             }
           }
         ],
@@ -113504,6 +113603,12 @@
               "code": "3000053 428579\n3000059 44777\n3000139 4637\n3000241 11071\n3000247 42257",
               "caption": "Программа выведет"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `3000053 428579 3000059 44777 3000139 4637 3000241 11071 3000247 42257`"
+            }
           }
         ],
         "skills": [],
@@ -113511,19 +113616,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 19,
+            "position": 33,
             "material_id": "divisors-and-masks"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "cifry-mnozhitelej",
-            "material_id": "divisors-and-masks"
-          },
-          {
-            "label": "Теория",
-            "section": "mnozhiteli-i-deliteli",
+            "section": "zadacha-temy",
             "material_id": "divisors-and-masks"
           }
         ],
@@ -113556,7 +113656,7 @@
     {
       "task": {
         "id": "task-25-4-07",
-        "title": "Найдите пять чисел с суммой простых делителей на 7",
+        "title": "Найди пять чисел с суммой простых делителей на 7",
         "short_description": null,
         "explanation_kind": "worked_solution",
         "difficulty": 3,
@@ -113568,7 +113668,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Пусть S — сумма всех различных простых делителей числа, не считая самого числа. Если таких делителей нет, S = 0. Найдите пять наименьших чисел, больших 2 500 000, для которых S не равно нулю, не больше 5000 и оканчивается цифрой 7. Для каждого выведите число и S."
+              "markdown": "Пусть S — сумма всех различных простых делителей числа, не считая самого числа. Если таких делителей нет, S = 0. Найди пять наименьших чисел, больших 2 500 000, для которых S не равно нулю, не больше 5000 и оканчивается цифрой 7. Для каждого выведи число и S."
             }
           }
         ],
@@ -113602,6 +113702,12 @@
               "code": "2500017 4947\n2500100 1117\n2500113 237\n2500148 3117\n2500153 927",
               "caption": "Программа выведет"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `2500017 4947 2500100 1117 2500113 237 2500148 3117 2500153 927`"
+            }
           }
         ],
         "skills": [],
@@ -113609,7 +113715,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 20,
+            "position": 29,
             "material_id": "divisors-and-masks"
           }
         ],
@@ -113649,7 +113755,7 @@
     {
       "task": {
         "id": "task-25-4-08",
-        "title": "Найдите пять чисел с простым M больше 1000",
+        "title": "Найди пять чисел с простым M больше 1000",
         "short_description": null,
         "explanation_kind": "worked_solution",
         "difficulty": 3,
@@ -113661,7 +113767,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Пусть M — сумма наименьшего и наибольшего простых делителей числа, не считая самого числа. Найдите пять наименьших чисел, больших 5 000 000, для которых M больше 1000 и является простым числом. Для каждого выведите число и M."
+              "markdown": "Пусть M — сумма наименьшего и наибольшего простых делителей числа, не считая самого числа. Найди пять наименьших чисел, больших 5 000 000, для которых M больше 1000 и является простым числом. Для каждого выведи число и M."
             }
           }
         ],
@@ -113669,7 +113775,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Простые делители уже отсортированы: наименьший — первый, наибольший — последний. Простоту M проверьте отдельной функцией."
+              "markdown": "Простые делители уже отсортированы: наименьший — первый, наибольший — последний. Простоту M проверь отдельной функцией."
             }
           }
         ],
@@ -113695,6 +113801,12 @@
               "code": "5000010 166669\n5000026 1789\n5000034 4933\n5000038 3253\n5000066 4261",
               "caption": "Программа выведет"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `5000010 166669 5000026 1789 5000034 4933 5000038 3253 5000066 4261`"
+            }
           }
         ],
         "skills": [],
@@ -113702,7 +113814,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 21,
+            "position": 30,
             "material_id": "divisors-and-masks"
           }
         ],
@@ -113742,7 +113854,7 @@
     {
       "task": {
         "id": "task-25-5-01",
-        "title": "Отберите числа по маске 12*3?",
+        "title": "Отбери числа по маске 12*3?",
         "short_description": null,
         "explanation_kind": "worked_solution",
         "difficulty": 1,
@@ -113796,6 +113908,12 @@
               "code": "1234\n120034\n12934",
               "caption": "Программа выведет"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `1234 120034 12934`"
+            }
           }
         ],
         "skills": [],
@@ -113803,7 +113921,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 22,
+            "position": 35,
             "material_id": "divisors-and-masks"
           }
         ],
@@ -113841,7 +113959,7 @@
     {
       "task": {
         "id": "task-25-5-02",
-        "title": "Посчитайте числа по маске 4?*7",
+        "title": "Посчитай числа по маске 4?*7",
         "short_description": null,
         "explanation_kind": "worked_solution",
         "difficulty": 1,
@@ -113861,7 +113979,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Сначала определите, сколько цифр может занять звёздочка, если в числе не больше пяти цифр."
+              "markdown": "Сначала определи, сколько цифр может занять звёздочка, если в числе не больше пяти цифр."
             }
           }
         ],
@@ -113879,6 +113997,12 @@
               "code": "from fnmatch import fnmatch\n\ncount = 0\nfor n in range(1, 100000):\n    if fnmatch(str(n), \"4?*7\"):\n        count += 1\nprint(count)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `1110`"
+            }
           }
         ],
         "skills": [],
@@ -113886,14 +114010,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 23,
+            "position": 42,
             "material_id": "divisors-and-masks"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "dlina-zvezdochki",
+            "section": "zvezdochka-po-maske",
             "material_id": "divisors-and-masks"
           }
         ],
@@ -113924,7 +114048,7 @@
     {
       "task": {
         "id": "task-25-5-03",
-        "title": "Найдите кратные 7 по маске 1?2",
+        "title": "Найди кратные 7 по маске 1?2",
         "short_description": null,
         "explanation_kind": "worked_solution",
         "difficulty": 1,
@@ -113944,7 +114068,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Перебирайте только кратные 7 и проверяйте маску у их записи."
+              "markdown": "Перебирай только кратные 7 и проверяй маску у их записи."
             }
           }
         ],
@@ -113970,6 +114094,12 @@
               "code": "112 16\n182 26",
               "caption": "Программа выведет"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `112 16 182 26`"
+            }
           }
         ],
         "skills": [],
@@ -113977,7 +114107,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 24,
+            "position": 36,
             "material_id": "divisors-and-masks"
           }
         ],
@@ -114015,7 +114145,7 @@
     {
       "task": {
         "id": "task-25-5-05",
-        "title": "Посчитайте числа по маске 1?2*",
+        "title": "Посчитай числа по маске 1?2*",
         "short_description": null,
         "explanation_kind": "worked_solution",
         "difficulty": 1,
@@ -114053,6 +114183,12 @@
               "code": "from fnmatch import fnmatch\n\ncount = 0\nfor n in range(1, 100000):\n    if fnmatch(str(n), \"1?2*\"):\n        count += 1\nprint(count)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `1110`"
+            }
           }
         ],
         "skills": [],
@@ -114060,19 +114196,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 25,
+            "position": 43,
             "material_id": "divisors-and-masks"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "dlina-zvezdochki",
-            "material_id": "divisors-and-masks"
-          },
-          {
-            "label": "Теория",
-            "section": "ocenka-kandidatov",
+            "section": "zvezdochka-po-maske",
             "material_id": "divisors-and-masks"
           }
         ],
@@ -114103,7 +114234,7 @@
     {
       "task": {
         "id": "task-25-5-06",
-        "title": "Постройте числа по маске 3?8?405",
+        "title": "Построй числа по маске 3?8?405",
         "short_description": null,
         "explanation_kind": "worked_solution",
         "difficulty": 2,
@@ -114115,7 +114246,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Среди натуральных чисел, не превышающих 10⁷, найдите все числа, соответствующие маске `3?8?405` и делящиеся на 53. Выведите числа и частные от деления на 53."
+              "markdown": "Среди натуральных чисел, не превышающих 10⁷, найди все числа, соответствующие маске `3?8?405` и делящиеся на 53. Выведи числа и частные от деления на 53."
             }
           }
         ],
@@ -114123,7 +114254,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "В маске нет звёздочки — переменных мест всего два, это 100 записей. Постройте их и проверьте делимость."
+              "markdown": "В маске нет звёздочки — переменных мест всего два, это 100 записей. Построй их и проверь делимость."
             }
           }
         ],
@@ -114149,6 +114280,12 @@
               "code": "3783405 71385\n3889405 73385",
               "caption": "Программа выведет"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `3783405 71385 3889405 73385`"
+            }
           }
         ],
         "skills": [],
@@ -114156,14 +114293,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 26,
+            "position": 40,
             "material_id": "divisors-and-masks"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "generaciya-po-maske",
+            "section": "voprosy-po-maske",
             "material_id": "divisors-and-masks"
           }
         ],
@@ -114194,7 +114331,7 @@
     {
       "task": {
         "id": "task-25-5-07",
-        "title": "Найдите кратные 2027 по маске 12?4*76",
+        "title": "Найди кратные 2027 по маске 12?4*76",
         "short_description": null,
         "explanation_kind": "worked_solution",
         "difficulty": 3,
@@ -114206,7 +114343,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Среди натуральных чисел, не превышающих 10⁸, найдите все числа, соответствующие маске `12?4*76` и делящиеся на 2027. Выведите числа в порядке возрастания и частные от деления на 2027."
+              "markdown": "Среди натуральных чисел, не превышающих 10⁸, найди все числа, соответствующие маске `12?4*76` и делящиеся на 2027. Выведи числа в порядке возрастания и частные от деления на 2027."
             }
           }
         ],
@@ -114214,7 +114351,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Кратных 2027 до 10⁸ меньше 50 000 — их можно перебрать все и проверить маску через fnmatch."
+              "markdown": "Кратных 2027 до 10⁸ меньше 50 000 — перебери их все и проверь маску через fnmatch."
             }
           }
         ],
@@ -114240,6 +114377,12 @@
               "code": "12340376 6088\n12543076 6188\n12745776 6288\n12948476 6388",
               "caption": "Программа выведет"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `12340376 6088 12543076 6188 12745776 6288 12948476 6388`"
+            }
           }
         ],
         "skills": [],
@@ -114247,7 +114390,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 27,
+            "position": 37,
             "material_id": "divisors-and-masks"
           }
         ],
@@ -114287,7 +114430,7 @@
     {
       "task": {
         "id": "task-25-6-01",
-        "title": "Найдите числа с пятью делителями до 100",
+        "title": "Найди числа с пятью делителями до 100",
         "short_description": null,
         "explanation_kind": "worked_solution",
         "difficulty": 2,
@@ -114325,6 +114468,12 @@
               "code": "from math import isqrt\n\n\ndef count_divisors(n):\n    count = 0\n    for d in range(1, isqrt(n) + 1):\n        if n % d == 0:\n            if d * d == n:\n                count += 1\n            else:\n                count += 2\n    return count\n\n\nprint(*[n for n in range(1, 101) if count_divisors(n) == 5])",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `16 81`"
+            }
           }
         ],
         "skills": [],
@@ -114332,7 +114481,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 28,
+            "position": 50,
             "material_id": "divisors-and-masks",
             "counts_toward_mastery": false
           }
@@ -114371,7 +114520,7 @@
     {
       "task": {
         "id": "task-25-6-02",
-        "title": "Найдите числа с тремя делителями после 50",
+        "title": "Найди числа с тремя делителями после 50",
         "short_description": null,
         "explanation_kind": "worked_solution",
         "difficulty": 2,
@@ -114409,6 +114558,12 @@
               "code": "from math import isqrt\n\n\ndef count_divisors(n):\n    count = 0\n    for d in range(1, isqrt(n) + 1):\n        if n % d == 0:\n            if d * d == n:\n                count += 1\n            else:\n                count += 2\n    return count\n\n\nfound = []\nn = 51\nwhile len(found) < 3:\n    if count_divisors(n) == 3:\n        found.append(n)\n    n += 1\nprint(*found)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `121 169 289`"
+            }
           }
         ],
         "skills": [],
@@ -114416,7 +114571,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 29,
+            "position": 51,
             "material_id": "divisors-and-masks",
             "counts_toward_mastery": false
           }
@@ -114455,7 +114610,7 @@
     {
       "task": {
         "id": "task-25-6-03",
-        "title": "Посчитайте делители 72 по разложению",
+        "title": "Посчитай делители 72 по разложению",
         "short_description": null,
         "explanation_kind": "worked_solution",
         "difficulty": 2,
@@ -114493,6 +114648,12 @@
               "code": "from math import isqrt\n\n\ndef get_divisors(n):\n    divisors = []\n    for d in range(1, isqrt(n) + 1):\n        if n % d == 0:\n            divisors.append(d)\n            q = n // d\n            if q != d:\n                divisors.append(q)\n    return sorted(divisors)\n\n\nD = get_divisors(72)\neven = [d for d in D if d % 2 == 0]\nprint(len(D), len(even), len(D) - len(even))",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `12 9 3`"
+            }
           }
         ],
         "skills": [],
@@ -114500,7 +114661,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 30,
+            "position": 48,
             "material_id": "divisors-and-masks",
             "counts_toward_mastery": false
           }
@@ -114539,7 +114700,7 @@
     {
       "task": {
         "id": "task-25-6-04",
-        "title": "Посчитайте делители 1960 по разложению",
+        "title": "Посчитай делители 1960 по разложению",
         "short_description": null,
         "explanation_kind": "worked_solution",
         "difficulty": 2,
@@ -114577,6 +114738,12 @@
               "code": "from math import isqrt\n\n\ndef count_divisors(n):\n    count = 0\n    for d in range(1, isqrt(n) + 1):\n        if n % d == 0:\n            if d * d == n:\n                count += 1\n            else:\n                count += 2\n    return count\n\n\nprint(count_divisors(1960))",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `24`"
+            }
           }
         ],
         "skills": [],
@@ -114584,7 +114751,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 31,
+            "position": 49,
             "material_id": "divisors-and-masks",
             "counts_toward_mastery": false
           }
@@ -114623,7 +114790,7 @@
     {
       "task": {
         "id": "task-25-6-05",
-        "title": "Посчитайте числа с нечётным числом делителей",
+        "title": "Посчитай числа с нечётным числом делителей",
         "short_description": null,
         "explanation_kind": "worked_solution",
         "difficulty": 2,
@@ -114661,6 +114828,12 @@
               "code": "from math import isqrt\n\n\ndef count_divisors(n):\n    count = 0\n    for d in range(1, isqrt(n) + 1):\n        if n % d == 0:\n            if d * d == n:\n                count += 1\n            else:\n                count += 2\n    return count\n\n\ncount = 0\nfor n in range(1, 10001):\n    if count_divisors(n) % 2 == 1:\n        count += 1\nprint(count)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `100`"
+            }
           }
         ],
         "skills": [],
@@ -114668,7 +114841,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 32,
+            "position": 52,
             "material_id": "divisors-and-masks",
             "counts_toward_mastery": false
           }
@@ -114707,7 +114880,7 @@
     {
       "task": {
         "id": "task-25-6-06",
-        "title": "Найдите числа вида 2ᵐ · 3ⁿ на огромном отрезке",
+        "title": "Найди числа вида 2ᵐ · 3ⁿ на огромном отрезке",
         "short_description": null,
         "explanation_kind": "worked_solution",
         "difficulty": 3,
@@ -114719,7 +114892,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Найдите все числа N на отрезке [2·10⁸; 6·10⁸], которые можно представить в виде N = 2ᵐ · 3ⁿ, где m — чётное неотрицательное число, а n — нечётное. Выведите их в порядке возрастания."
+              "markdown": "Найди все числа N на отрезке [2·10⁸; 6·10⁸], которые можно представить в виде N = 2ᵐ · 3ⁿ, где m — чётное неотрицательное число, а n — нечётное. Выведи их в порядке возрастания."
             }
           }
         ],
@@ -114727,7 +114900,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Перебирайте показатели m и n, а не числа отрезка: степеней двойки и тройки до 6·10⁸ всего несколько десятков."
+              "markdown": "Перебирай показатели m и n, а не числа отрезка: степеней двойки и тройки до 6·10⁸ всего несколько десятков."
             }
           }
         ],
@@ -114745,6 +114918,12 @@
               "code": "found = []\nfor m in range(0, 40, 2):\n    for k in range(1, 40, 2):\n        N = 2**m * 3**k\n        if 2 * 10**8 <= N <= 6 * 10**8:\n            found.append(N)\nprint(*sorted(found))",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `201326592 229582512 254803968 322486272 408146688 452984832 516560652 573308928`"
+            }
           }
         ],
         "skills": [],
@@ -114752,7 +114931,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 33,
+            "position": 53,
             "material_id": "divisors-and-masks",
             "counts_toward_mastery": false
           }
@@ -114793,7 +114972,7 @@
     {
       "task": {
         "id": "task-25-7-01",
-        "title": "Найдите числа с двумя делителями без 1 и n",
+        "title": "Найди числа с двумя делителями без 1 и n",
         "short_description": null,
         "explanation_kind": "worked_solution",
         "difficulty": 3,
@@ -114805,7 +114984,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Найдите все числа на отрезке [500 035; 500 055], у которых ровно два различных натуральных делителя, не считая единицы и самого числа. Для каждого числа выведите эти делители в порядке возрастания."
+              "markdown": "Найди все числа на отрезке [500 035; 500 055], у которых ровно два различных натуральных делителя, не считая единицы и самого числа. Для каждого числа выведи эти делители в порядке возрастания."
             }
           }
         ],
@@ -114813,7 +114992,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Подтемы 2 и 3: делители парами и отбор «без 1 и самого числа»."
+              "markdown": "Отбери делители 1 < d < n и проверь, что их ровно два; выводить нужно и число, и делители."
             }
           }
         ],
@@ -114839,6 +115018,12 @@
               "code": "500037 3 166679\n500039 673 743\n500051 101 4951\n500053 71 7043\n500054 2 250027",
               "caption": "Программа выведет"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `500037 3 166679 500039 673 743 500051 101 4951 500053 71 7043 500054 2 250027`"
+            }
           }
         ],
         "skills": [],
@@ -114846,7 +115031,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 34,
+            "position": 54,
             "material_id": "divisors-and-masks"
           }
         ],
@@ -114880,7 +115065,7 @@
     {
       "task": {
         "id": "task-25-7-02",
-        "title": "Найдите пять чисел с наибольшим простым делителем на 7",
+        "title": "Найди пять чисел с наибольшим простым делителем на 7",
         "short_description": null,
         "explanation_kind": "worked_solution",
         "difficulty": 3,
@@ -114892,7 +115077,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Пусть M — наибольший простой делитель числа, не считая самого числа. Если таких делителей нет, M = 0. Найдите пять наименьших чисел, больших 1 200 000, для которых M больше нуля, не превышает 1000 и оканчивается цифрой 7. Для каждого выведите число и M."
+              "markdown": "Пусть M — наибольший простой делитель числа, не считая самого числа. Если таких делителей нет, M = 0. Найди пять наименьших чисел, больших 1 200 000, для которых M больше нуля, не превышает 1000 и оканчивается цифрой 7. Для каждого выведи число и M."
             }
           }
         ],
@@ -114900,7 +115085,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Подтема 4: простые делители через разложение."
+              "markdown": "Наибольший простой делитель — последний множитель разложения, если он не равен самому числу. Перебирай числа после 1 200 000, пока не найдёшь пять."
             }
           }
         ],
@@ -114926,6 +115111,12 @@
               "code": "1200047 967\n1200065 617\n1200082 457\n1200090 367\n1200108 157",
               "caption": "Программа выведет"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `1200047 967 1200065 617 1200082 457 1200090 367 1200108 157`"
+            }
           }
         ],
         "skills": [],
@@ -114933,7 +115124,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 35,
+            "position": 55,
             "material_id": "divisors-and-masks"
           }
         ],
@@ -114967,7 +115158,7 @@
     {
       "task": {
         "id": "task-25-7-03",
-        "title": "Найдите кратные 1301 по маске 8?4*21",
+        "title": "Найди кратные 1301 по маске 8?4*21",
         "short_description": null,
         "explanation_kind": "worked_solution",
         "difficulty": 3,
@@ -114979,7 +115170,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Среди натуральных чисел, не превышающих 10⁸, найдите все числа, соответствующие маске `8?4*21` и делящиеся на 1301. Выведите числа в порядке возрастания и частные от деления на 1301."
+              "markdown": "Среди натуральных чисел, не превышающих 10⁸, найди все числа, соответствующие маске `8?4*21` и делящиеся на 1301. Выведи числа в порядке возрастания и частные от деления на 1301."
             }
           }
         ],
@@ -114987,7 +115178,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Подтема 5: перебор кратных 1301 и проверка маски."
+              "markdown": "Перебери только кратные 1301 до 10⁸ и проверь маску через fnmatch."
             }
           }
         ],
@@ -115013,6 +115204,12 @@
               "code": "8744021 6721\n80429121 61821\n81469921 62621\n83421421 64121\n84462221 64921\n86413721 66421\n87454521 67221\n88495321 68021\n89406021 68721",
               "caption": "Программа выведет"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `8744021 6721 80429121 61821 81469921 62621 83421421 64121 84462221 64921 86413721 66421 87454521 67221 88495321 68021 89406021 68721`"
+            }
           }
         ],
         "skills": [],
@@ -115020,7 +115217,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 36,
+            "position": 56,
             "material_id": "divisors-and-masks"
           }
         ],
@@ -115054,7 +115251,7 @@
     {
       "task": {
         "id": "task-25-7-04",
-        "title": "Найдите произведения трёх простых с цифрой 3",
+        "title": "Найди произведения трёх простых с цифрой 3",
         "short_description": null,
         "explanation_kind": "worked_solution",
         "difficulty": 3,
@@ -115066,7 +115263,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Найдите пять наименьших чисел, больших 1 000 000, которые представимы в виде произведения ровно трёх простых множителей, не обязательно различных, и каждый множитель содержит в записи цифру 3. Для каждого выведите число и его множители."
+              "markdown": "Найди пять наименьших чисел, больших 1 000 000, которые представимы в виде произведения ровно трёх простых множителей, не обязательно различных, и каждый множитель содержит в записи цифру 3. Для каждого выведи число и его множители."
             }
           }
         ],
@@ -115074,7 +115271,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Подтема 4: длина разложения с повторениями и all для цифр."
+              "markdown": "Разложение должно состоять ровно из трёх множителей с повторами, и цифра 3 — в записи каждого."
             }
           }
         ],
@@ -115100,6 +115297,12 @@
               "code": "1000029 3 31 10753\n1000077 3 13 25643\n1000137 3 43 7753\n1000287 3 3 111143\n1000383 3 139 2399",
               "caption": "Программа выведет"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `1000029 3 31 10753 1000077 3 13 25643 1000137 3 43 7753 1000287 3 3 111143 1000383 3 139 2399`"
+            }
           }
         ],
         "skills": [],
@@ -115107,7 +115310,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 37,
+            "position": 57,
             "material_id": "divisors-and-masks"
           }
         ],
@@ -115141,7 +115344,7 @@
     {
       "task": {
         "id": "task-25-7-05",
-        "title": "Найдите число с наибольшим количеством делителей",
+        "title": "Найди число с наибольшим количеством делителей",
         "short_description": null,
         "explanation_kind": "worked_solution",
         "difficulty": 2,
@@ -115153,7 +115356,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Среди чисел отрезка [200 000; 200 100] найдите число с наибольшим количеством натуральных делителей; если таких несколько, выберите наименьшее. Выведите количество делителей и само число."
+              "markdown": "Среди чисел отрезка [200 000; 200 100] найди число с наибольшим количеством натуральных делителей; если таких несколько, выбери наименьшее. Выведи количество делителей и само число."
             }
           }
         ],
@@ -115161,7 +115364,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Подтема 3: хранение лучшего результата."
+              "markdown": "Храни лучшее количество делителей и заменяй его только при строго большем — при равенстве останется наименьшее число."
             }
           }
         ],
@@ -115179,6 +115382,12 @@
               "code": "from math import isqrt\n\n\ndef count_divisors(n):\n    count = 0\n    for d in range(1, isqrt(n) + 1):\n        if n % d == 0:\n            if d * d == n:\n                count += 1\n            else:\n                count += 2\n    return count\n\n\nbest_count = 0\nbest_n = 0\nfor n in range(200000, 200101):\n    count = count_divisors(n)\n    if count > best_count:\n        best_count = count\n        best_n = n\nprint(best_count, best_n)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `80 200070`"
+            }
           }
         ],
         "skills": [],
@@ -115186,7 +115395,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 38,
+            "position": 58,
             "material_id": "divisors-and-masks"
           }
         ],
@@ -823547,6 +823756,1950 @@
         }
       },
       "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "task-25-8-01",
+        "title": "Найди первые числа с двумя семёрками",
+        "short_description": null,
+        "explanation_kind": "worked_solution",
+        "difficulty": 1,
+        "estimated_minutes": 5,
+        "answer_instruction": "Введите пять чисел через пробел в порядке возрастания.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Найди пять наименьших чисел, больших 1 000 000, которые делятся на 17 и содержат в записи ровно две цифры 7."
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Иди вверх от 1 000 001 циклом while, пока не найдёшь пять; цифры 7 считает str(n).count('7')."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Перебор идёт по возрастанию без пропусков, поэтому первые пять успешных проверок — пять наименьших чисел. Например, 1 000 773 = 17 · 58 869, в записи две семёрки."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "n = 1000001\nfound = 0\nwhile found < 5:\n    if n % 17 == 0 and str(n).count('7') == 2:\n        print(n)\n        found += 1\n    n += 1",
+              "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "text",
+              "code": "1000773\n1000977\n1001776\n1002677\n1002779",
+              "caption": "Программа выведет"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `1000773 1000977 1001776 1002677 1002779`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [25],
+        "files": [],
+        "lessons": [
+          {
+            "position": 7,
+            "material_id": "divisors-and-masks"
+          }
+        ],
+        "theory_links": [
+          {
+            "label": "Теория",
+            "section": "pervye-najdennye",
+            "material_id": "divisors-and-masks"
+          }
+        ],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["1000773 1000977 1001776 1002677 1002779"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "task-25-8-02",
+        "title": "Посчитай числа с цифрами 1 и 6",
+        "short_description": null,
+        "explanation_kind": "worked_solution",
+        "difficulty": 1,
+        "estimated_minutes": 4,
+        "answer_instruction": "Введите число.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Сколько чисел от 1 до 1 000 000 содержат в записи хотя бы одну цифру 1 и хотя бы одну цифру 6?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Это проверка записи: '1' in s and '6' in s, где s = str(n)."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Для каждого числа проверяем две цифры в его записи — так же, как множители в задаче темы."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "count = 0\nfor n in range(1, 1000001):\n    s = str(n)\n    if '1' in s and '6' in s:\n        count += 1\nprint(count)",
+              "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `199262`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [25],
+        "files": [],
+        "lessons": [
+          {
+            "position": 5,
+            "material_id": "divisors-and-masks"
+          }
+        ],
+        "theory_links": [
+          {
+            "label": "Теория",
+            "section": "proverka-in",
+            "material_id": "divisors-and-masks"
+          }
+        ],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["199262"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "task-25-8-03",
+        "title": "Посчитай делители миллиона",
+        "short_description": null,
+        "explanation_kind": "worked_solution",
+        "difficulty": 1,
+        "estimated_minutes": 4,
+        "answer_instruction": "Введите число.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Сколько натуральных делителей у числа 1 000 000?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "get_divisors найдёт их парами до isqrt(1 000 000) = 1000; осталось взять длину списка."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Функция проверяет d от 1 до 1000 и к каждому найденному делителю добавляет пару 1 000 000 // d; корень 1000 добавляется один раз."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "from math import isqrt\n\n\ndef get_divisors(n):\n    divisors = []\n    for d in range(1, isqrt(n) + 1):\n        if n % d == 0:\n            divisors.append(d)\n            if n // d != d:\n                divisors.append(n // d)\n    return sorted(divisors)\n\n\nprint(len(get_divisors(1000000)))",
+              "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `49`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [25],
+        "files": [],
+        "lessons": [
+          {
+            "position": 9,
+            "material_id": "divisors-and-masks"
+          }
+        ],
+        "theory_links": [
+          {
+            "label": "Теория",
+            "section": "funkciya-delitelej",
+            "material_id": "divisors-and-masks"
+          }
+        ],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["49"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "task-25-8-04",
+        "title": "Сосчитай кандидатов до корня",
+        "short_description": null,
+        "explanation_kind": "worked_solution",
+        "difficulty": 1,
+        "estimated_minutes": 3,
+        "answer_instruction": "Введите число.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Сколько кандидатов d проверяет поиск делителей до корня для числа n = 10¹⁰?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Кандидаты — все d от 1 до isqrt(n) включительно."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "√(10¹⁰) = 10⁵, и поиск проверяет d = 1, 2, …, 100 000 — вместо десяти миллиардов при переборе до n."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "from math import isqrt\n\nprint(isqrt(10**10))",
+              "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `100000`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [25],
+        "files": [],
+        "lessons": [
+          {
+            "position": 8,
+            "material_id": "divisors-and-masks"
+          }
+        ],
+        "theory_links": [
+          {
+            "label": "Теория",
+            "section": "pochemu-do-kornya",
+            "material_id": "divisors-and-masks"
+          }
+        ],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["100000"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "task-25-8-05",
+        "title": "Найди числа с 16 чётными делителями",
+        "short_description": null,
+        "explanation_kind": "worked_solution",
+        "difficulty": 2,
+        "estimated_minutes": 8,
+        "answer_instruction": "Запишите все строки ответа подряд в одну строку через пробел: в каждой строке число и его наибольший чётный делитель.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Найди все числа отрезка [512 340; 512 360], у которых не менее 16 различных чётных делителей. Для каждого выведи само число и его наибольший чётный делитель, не равный самому числу."
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Отбери чётные делители условием d % 2 == 0 и посчитай их. Наибольший, не равный n, ищи среди d != n."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "У нечётного числа чётных делителей нет вовсе. Наибольший чётный делитель меньше n — это n / 2, если оно чётное; иначе ищем дальше: у 512 358 это 170 786 = 512 358 / 3."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "from math import isqrt\n\n\ndef get_divisors(n):\n    divisors = []\n    for d in range(1, isqrt(n) + 1):\n        if n % d == 0:\n            divisors.append(d)\n            if n // d != d:\n                divisors.append(n // d)\n    return sorted(divisors)\n\n\nfor n in range(512340, 512361):\n    E = [d for d in get_divisors(n) if d % 2 == 0]\n    if len(E) >= 16:\n        print(n, max(d for d in E if d != n))",
+              "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "text",
+              "code": "512340 256170\n512344 256172\n512352 256176\n512356 256178\n512358 170786",
+              "caption": "Программа выведет"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `512340 256170 512344 256172 512352 256176 512356 256178 512358 170786`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [25],
+        "files": [],
+        "lessons": [
+          {
+            "position": 12,
+            "material_id": "divisors-and-masks"
+          }
+        ],
+        "theory_links": [
+          {
+            "label": "Теория",
+            "section": "otbor-delitelej",
+            "material_id": "divisors-and-masks"
+          }
+        ],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": [
+            "512340 256170 512344 256172 512352 256176 512356 256178 512358 170786"
+          ],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "task-25-8-06",
+        "title": "Выпиши пары делителей на отрезке",
+        "short_description": null,
+        "explanation_kind": "worked_solution",
+        "difficulty": 2,
+        "estimated_minutes": 8,
+        "answer_instruction": "Запишите все строки ответа подряд в одну строку через пробел: в каждой строке два делителя по возрастанию.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Найди среди чисел отрезка [235 400; 235 420] числа, у которых ровно два различных натуральных делителя, не считая единицы и самого числа. Для каждого найденного числа выведи эти два делителя в порядке возрастания; строки — в порядке возрастания чисел."
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Отбери делители 1 < d < n и проверь, что их ровно два. Само число выводить не нужно."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Подходят произведения двух разных простых и кубы простых. Например, 235 401 = 3 · 78 467."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "from math import isqrt\n\n\ndef get_divisors(n):\n    divisors = []\n    for d in range(1, isqrt(n) + 1):\n        if n % d == 0:\n            divisors.append(d)\n            if n // d != d:\n                divisors.append(n // d)\n    return sorted(divisors)\n\n\nfor n in range(235400, 235421):\n    D = [d for d in get_divisors(n) if 1 < d < n]\n    if len(D) == 2:\n        print(*D)",
+              "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "text",
+              "code": "3 78467\n2 117701\n7 33629\n2 117703\n151 1559\n11 21401\n2 117709",
+              "caption": "Программа выведет"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `3 78467 2 117701 7 33629 2 117703 151 1559 11 21401 2 117709`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [25],
+        "files": [],
+        "lessons": [
+          {
+            "position": 15,
+            "material_id": "divisors-and-masks"
+          }
+        ],
+        "theory_links": [
+          {
+            "label": "Теория",
+            "section": "rovno-k-delitelej",
+            "material_id": "divisors-and-masks"
+          }
+        ],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": [
+            "3 78467 2 117701 7 33629 2 117703 151 1559 11 21401 2 117709"
+          ],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "task-25-8-07",
+        "title": "Найди делители, оканчивающиеся на 14",
+        "short_description": null,
+        "explanation_kind": "worked_solution",
+        "difficulty": 3,
+        "estimated_minutes": 10,
+        "answer_instruction": "Запишите все строки ответа подряд в одну строку через пробел: в каждой строке число и наименьший подходящий делитель.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Найди пять наименьших чисел, больших 600 000, у которых есть натуральный делитель, оканчивающийся на 14 и не равный ни самому числу, ни числу 14. Для каждого выведи число и наименьший такой делитель."
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Окончание на 14 — это d % 100 == 14; исключи d == 14 и d == n. Делители отсортированы, поэтому наименьший — первый подходящий."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Например, у 600 028 делитель 300 014 = 600 028 / 2 оканчивается на 14, а меньших таких делителей нет."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "from math import isqrt\n\n\ndef get_divisors(n):\n    divisors = []\n    for d in range(1, isqrt(n) + 1):\n        if n % d == 0:\n            divisors.append(d)\n            if n // d != d:\n                divisors.append(n // d)\n    return sorted(divisors)\n\n\nn = 600001\nfound = 0\nwhile found < 5:\n    D = [d for d in get_divisors(n)\n         if d % 100 == 14 and d != 14 and d != n]\n    if D:\n        print(n, D[0])\n        found += 1\n    n += 1",
+              "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "text",
+              "code": "600028 300014\n600042 200014\n600054 314\n600056 214\n600070 120014",
+              "caption": "Программа выведет"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `600028 300014 600042 200014 600054 314 600056 214 600070 120014`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [25],
+        "files": [],
+        "lessons": [
+          {
+            "position": 23,
+            "material_id": "divisors-and-masks"
+          }
+        ],
+        "theory_links": [
+          {
+            "label": "Теория",
+            "section": "pervye-posle-granicy",
+            "material_id": "divisors-and-masks"
+          }
+        ],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": [
+            "600028 300014 600042 200014 600054 314 600056 214 600070 120014"
+          ],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "task-25-8-08",
+        "title": "Вычисли R по делителям на 8",
+        "short_description": null,
+        "explanation_kind": "worked_solution",
+        "difficulty": 2,
+        "estimated_minutes": 8,
+        "answer_instruction": "Запишите все строки ответа подряд в одну строку через пробел: в каждой строке число и R.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Пусть R — сумма всех делителей числа, оканчивающихся на 8, не считая самого числа; если таких делителей нет, R = 0. Найди все числа отрезка [221 000; 221 040], для которых R оканчивается на 6. Для каждого выведи число и R."
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Окончание на 8 — d % 10 == 8. R = 0 оканчивается на 0, так что числа без таких делителей отпадут сами."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Для каждого числа отрезка складываем делители, оканчивающиеся на 8 и не равные n, и проверяем последнюю цифру суммы."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "from math import isqrt\n\n\ndef get_divisors(n):\n    divisors = []\n    for d in range(1, isqrt(n) + 1):\n        if n % d == 0:\n            divisors.append(d)\n            if n // d != d:\n                divisors.append(n // d)\n    return sorted(divisors)\n\n\nfor n in range(221000, 221041):\n    D = get_divisors(n)\n    R = sum(d for d in D if d % 10 == 8 and d != n)\n    if R % 10 == 6:\n        print(n, R)",
+              "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "text",
+              "code": "221010 596\n221022 24576\n221024 27636\n221034 80376",
+              "caption": "Программа выведет"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `221010 596 221022 24576 221024 27636 221034 80376`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [25],
+        "files": [],
+        "lessons": [
+          {
+            "position": 18,
+            "material_id": "divisors-and-masks"
+          }
+        ],
+        "theory_links": [
+          {
+            "label": "Теория",
+            "section": "velichina-m",
+            "material_id": "divisors-and-masks"
+          }
+        ],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": [
+            "221010 596 221022 24576 221024 27636 221034 80376"
+          ],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "task-25-8-09",
+        "title": "Найди близкие делители у чисел с четырьмя делителями",
+        "short_description": null,
+        "explanation_kind": "worked_solution",
+        "difficulty": 3,
+        "estimated_minutes": 10,
+        "answer_instruction": "Запишите все строки ответа подряд в одну строку через пробел: в каждой строке число и разность делителей.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Рассматриваются числа, большие 800 000, у которых ровно четыре натуральных делителя. Найди шесть первых таких чисел, у которых наименьший и наибольший делители, не считая единицы и самого числа, отличаются не более чем на 15. Для каждого выведи число и эту разность."
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ровно четыре делителя: 1, a, b, n — между единицей и числом стоят ровно два, и нужна их разность b − a."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Например, 826 277 = 907 · 911: делители 1, 907, 911, 826 277, разность 911 − 907 = 4."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "from math import isqrt\n\n\ndef get_divisors(n):\n    divisors = []\n    for d in range(1, isqrt(n) + 1):\n        if n % d == 0:\n            divisors.append(d)\n            if n // d != d:\n                divisors.append(n // d)\n    return sorted(divisors)\n\n\nn = 800001\nfound = 0\nwhile found < 6:\n    D = get_divisors(n)\n    if len(D) == 4 and D[2] - D[1] <= 15:\n        print(n, D[2] - D[1])\n        found += 1\n    n += 1",
+              "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "text",
+              "code": "826277 4\n833533 12\n837209 8\n853751 10\n870473 8\n874189 12",
+              "caption": "Программа выведет"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `826277 4 833533 12 837209 8 853751 10 870473 8 874189 12`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [25],
+        "files": [],
+        "lessons": [
+          {
+            "position": 20,
+            "material_id": "divisors-and-masks"
+          }
+        ],
+        "theory_links": [
+          {
+            "label": "Теория",
+            "section": "naimenshij-i-naibolshij",
+            "material_id": "divisors-and-masks"
+          }
+        ],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": [
+            "826277 4 833533 12 837209 8 853751 10 870473 8 874189 12"
+          ],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "task-25-8-10",
+        "title": "Задача темы: два простых множителя с цифрами 1 и 6",
+        "short_description": null,
+        "explanation_kind": "worked_solution",
+        "difficulty": 3,
+        "estimated_minutes": 12,
+        "answer_instruction": "Запишите все строки ответа подряд в одну строку через пробел: в каждой строке число и наибольший множитель.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Задача темы. Перебирай целые числа, большие 7 000 000, в порядке возрастания и найди среди них числа, представленные в виде произведения ровно двух простых множителей, не обязательно различных, каждый из которых содержит в своей записи хотя бы одну цифру 1 и хотя бы одну цифру 6. Для первых пяти найденных чисел выведи само число и наибольший из его простых множителей."
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Разложи число на простые множители: подходит, если их ровно два и в записи каждого есть 1 и 6. Проверь программу на границе 3000 — первым должно найтись 3721 = 61 · 61."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Перебор вверх от 7 000 001 до пяти найденных, разложение каждого числа и проверка цифр у обоих множителей. Например, 7 000 421 = 61 · 114 761: в 61 и в 114 761 есть и 1, и 6."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "def prime_factors(n):\n    factors = []\n    m = n\n    d = 2\n    while d * d <= m:\n        while m % d == 0:\n            factors.append(d)\n            m //= d\n        d += 1\n    if m > 1:\n        factors.append(m)\n    return factors\n\n\ndef has_1_and_6(p):\n    s = str(p)\n    return '1' in s and '6' in s\n\n\nn = 7000001\nfound = 0\nwhile found < 5:\n    f = prime_factors(n)\n    if len(f) == 2 and has_1_and_6(f[0]) and has_1_and_6(f[1]):\n        print(n, max(f))\n        found += 1\n    n += 1",
+              "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "text",
+              "code": "7000421 114761\n7000691 2671\n7000909 114769\n7002643 42961\n7003019 6551",
+              "caption": "Программа выведет"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `7000421 114761 7000691 2671 7000909 114769 7002643 42961 7003019 6551`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [25],
+        "files": [],
+        "lessons": [
+          {
+            "position": 34,
+            "material_id": "divisors-and-masks"
+          }
+        ],
+        "theory_links": [
+          {
+            "label": "Теория",
+            "section": "zadacha-temy",
+            "material_id": "divisors-and-masks"
+          }
+        ],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": [
+            "7000421 114761 7000691 2671 7000909 114769 7002643 42961 7003019 6551"
+          ],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "task-25-8-11",
+        "title": "Найди простые с простой суммой цифр",
+        "short_description": null,
+        "explanation_kind": "worked_solution",
+        "difficulty": 2,
+        "estimated_minutes": 8,
+        "answer_instruction": "Запишите все строки ответа подряд в одну строку через пробел: в каждой строке число и сумма его цифр.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Найди на отрезке [251 000; 251 100] все простые числа, сумма цифр которых — тоже простое число. Для каждого выведи число и сумму его цифр."
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "is_prime ищет делитель от 2 до √n; ту же функцию примени к сумме цифр."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Например, 251 003 — простое, сумма цифр 2 + 5 + 1 + 0 + 0 + 3 = 11 — тоже простое."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "from math import isqrt\n\n\ndef is_prime(n):\n    if n < 2:\n        return False\n    for d in range(2, isqrt(n) + 1):\n        if n % d == 0:\n            return False\n    return True\n\n\nfor n in range(251000, 251101):\n    s = sum(int(ch) for ch in str(n))\n    if is_prime(n) and is_prime(s):\n        print(n, s)",
+              "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "text",
+              "code": "251003 11\n251063 17\n251081 17\n251087 23",
+              "caption": "Программа выведет"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `251003 11 251063 17 251081 17 251087 23`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [25],
+        "files": [],
+        "lessons": [
+          {
+            "position": 24,
+            "material_id": "divisors-and-masks"
+          }
+        ],
+        "theory_links": [
+          {
+            "label": "Теория",
+            "section": "prostye-chisla",
+            "material_id": "divisors-and-masks"
+          }
+        ],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["251003 11 251063 17 251081 17 251087 23"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "task-25-8-12",
+        "title": "Найди числа с простой суммой делителей",
+        "short_description": null,
+        "explanation_kind": "worked_solution",
+        "difficulty": 3,
+        "estimated_minutes": 10,
+        "answer_instruction": "Запишите все строки ответа подряд в одну строку через пробел: в каждой строке число и R.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Пусть R — сумма всех натуральных делителей числа, не считая единицы и самого числа; если таких делителей нет, R = 0. Найди пять наименьших чисел, больших 2 000 000, для которых R — простое число. Для каждого выведи число и R."
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "У простого числа R = 0 — оно не простое и не пройдёт. Делители даёт get_divisors, простоту R проверяет is_prime."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Перебираем числа после 2 000 000, для каждого складываем делители 1 < d < n и проверяем сумму на простоту."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "from math import isqrt\n\n\ndef is_prime(n):\n    if n < 2:\n        return False\n    for d in range(2, isqrt(n) + 1):\n        if n % d == 0:\n            return False\n    return True\n\n\ndef get_divisors(n):\n    divisors = []\n    for d in range(1, isqrt(n) + 1):\n        if n % d == 0:\n            divisors.append(d)\n            if n // d != d:\n                divisors.append(n // d)\n    return sorted(divisors)\n\n\nn = 2000001\nfound = 0\nwhile found < 5:\n    R = sum(d for d in get_divisors(n) if 1 < d < n)\n    if is_prime(R):\n        print(n, R)\n        found += 1\n    n += 1",
+              "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "text",
+              "code": "2000016 4383503\n2000034 2522717\n2000070 3290201\n2000074 1000039\n2000076 3026147",
+              "caption": "Программа выведет"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `2000016 4383503 2000034 2522717 2000070 3290201 2000074 1000039 2000076 3026147`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [25],
+        "files": [],
+        "lessons": [
+          {
+            "position": 25,
+            "material_id": "divisors-and-masks"
+          }
+        ],
+        "theory_links": [
+          {
+            "label": "Теория",
+            "section": "prostye-chisla",
+            "material_id": "divisors-and-masks"
+          }
+        ],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": [
+            "2000016 4383503 2000034 2522717 2000070 3290201 2000074 1000039 2000076 3026147"
+          ],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "task-25-8-13",
+        "title": "Найди произведения трёх близких простых",
+        "short_description": null,
+        "explanation_kind": "worked_solution",
+        "difficulty": 3,
+        "estimated_minutes": 10,
+        "answer_instruction": "Запишите все строки ответа подряд в одну строку через пробел: в каждой строке число и разность множителей.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Найди на отрезке [400 000; 700 000] все числа, которые являются произведением трёх различных простых множителей, причём наибольший и наименьший множители отличаются не больше чем на 12. Для каждого выведи число и эту разность."
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Три различных множителя — len(f) == 3 и len(set(f)) == 3. Разложение отсортировано, разность — f[2] − f[0]."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Например, 409 457 = 71 · 73 · 79, разность 79 − 71 = 8."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "def prime_factors(n):\n    factors = []\n    m = n\n    d = 2\n    while d * d <= m:\n        while m % d == 0:\n            factors.append(d)\n            m //= d\n        d += 1\n    if m > 1:\n        factors.append(m)\n    return factors\n\n\nfor n in range(400000, 700001):\n    f = prime_factors(n)\n    if len(f) == 3 and len(set(f)) == 3:\n        if f[2] - f[0] <= 12:\n            print(n, f[2] - f[0])",
+              "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "text",
+              "code": "409457 8\n430189 12\n465547 12\n478661 10\n583573 10",
+              "caption": "Программа выведет"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `409457 8 430189 12 465547 12 478661 10 583573 10`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [25],
+        "files": [],
+        "lessons": [
+          {
+            "position": 32,
+            "material_id": "divisors-and-masks"
+          }
+        ],
+        "theory_links": [
+          {
+            "label": "Теория",
+            "section": "mnozhiteli-i-deliteli",
+            "material_id": "divisors-and-masks"
+          }
+        ],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": [
+            "409457 8 430189 12 465547 12 478661 10 583573 10"
+          ],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "task-25-8-14",
+        "title": "Построй числа по маске 54321?7?9",
+        "short_description": null,
+        "explanation_kind": "worked_solution",
+        "difficulty": 2,
+        "estimated_minutes": 8,
+        "answer_instruction": "Запишите все строки ответа подряд в одну строку через пробел: в каждой строке число и частное от деления на 37.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Среди натуральных чисел, не превышающих 10⁹, найди все числа, соответствующие маске `54321?7?9` и делящиеся на 37. Выведи числа в порядке возрастания и частные от деления на 37."
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Два знака ? — всего 100 чисел: построй их через product и проверь делимость."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Все числа маски девятизначные и меньше 10⁹. Наборы цифр product выдаёт по возрастанию, поэтому и числа идут по возрастанию."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "from itertools import product\n\nfor a, b in product('0123456789', repeat=2):\n    n = int(f'54321{a}7{b}9')\n    if n % 37 == 0:\n        print(n, n // 37)",
+              "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "text",
+              "code": "543212799 14681427\n543215759 14681507\n543218719 14681587",
+              "caption": "Программа выведет"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `543212799 14681427 543215759 14681507 543218719 14681587`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [25],
+        "files": [],
+        "lessons": [
+          {
+            "position": 41,
+            "material_id": "divisors-and-masks"
+          }
+        ],
+        "theory_links": [
+          {
+            "label": "Теория",
+            "section": "voprosy-po-maske",
+            "material_id": "divisors-and-masks"
+          }
+        ],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": [
+            "543212799 14681427 543215759 14681507 543218719 14681587"
+          ],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "task-25-8-15",
+        "title": "Найди кратные 6131 по маске ?2*34*91",
+        "short_description": null,
+        "explanation_kind": "worked_solution",
+        "difficulty": 2,
+        "estimated_minutes": 8,
+        "answer_instruction": "Запишите все строки ответа подряд в одну строку через пробел: в каждой строке число и частное от деления на 6131.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Найди все натуральные числа, меньшие 10⁹, которые делятся на 6131 и соответствуют маске `?2*34*91`. Выведи числа в порядке возрастания и частные от деления на 6131."
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Перебирай только кратные: range(0, 10**9, 6131) — и проверяй маску через fnmatch."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Кратных 6131 меньше 10⁹ около 163 тысяч — перебор с шагом проходит их мгновенно."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "from fnmatch import fnmatch\n\nfor n in range(0, 10**9, 6131):\n    if fnmatch(str(n), '?2*34*91'):\n        print(n, n // 6131)",
+              "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "text",
+              "code": "227834091 37161\n323477691 52761\n420347491 68561\n423412991 69061\n523348291 85361\n626349091 102161\n729349891 118961\n824993491 134561",
+              "caption": "Программа выведет"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `227834091 37161 323477691 52761 420347491 68561 423412991 69061 523348291 85361 626349091 102161 729349891 118961 824993491 134561`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [25],
+        "files": [],
+        "lessons": [
+          {
+            "position": 38,
+            "material_id": "divisors-and-masks"
+          }
+        ],
+        "theory_links": [
+          {
+            "label": "Теория",
+            "section": "perebor-kratnyh",
+            "material_id": "divisors-and-masks"
+          }
+        ],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": [
+            "227834091 37161 323477691 52761 420347491 68561 423412991 69061 523348291 85361 626349091 102161 729349891 118961 824993491 134561"
+          ],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "task-25-8-16",
+        "title": "Найди кратные 3039 по маске 2?3157*6",
+        "short_description": null,
+        "explanation_kind": "worked_solution",
+        "difficulty": 3,
+        "estimated_minutes": 10,
+        "answer_instruction": "Запишите все строки ответа подряд в одну строку через пробел: в каждой строке число и частное от деления на 3039.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Среди натуральных чисел, не превышающих 10¹⁰, найди все числа, соответствующие маске `2?3157*6` и делящиеся на 3039. Выведи числа в порядке возрастания и частные от деления на 3039."
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Кратных 3039 до 10¹⁰ около трёх миллионов — перебери их с шагом и проверь маску."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Шаг 3039 сразу даёт только кратные, проверять делимость не нужно; осталось сравнить запись с маской."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "from fnmatch import fnmatch\n\nfor n in range(0, 10**10 + 1, 3039):\n    if fnmatch(str(n), '2?3157*6'):\n        print(n, n // 3039)",
+              "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "text",
+              "code": "273157476 89884\n2431576836 800124\n2631573426 865934\n2831570016 931744",
+              "caption": "Программа выведет"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `273157476 89884 2431576836 800124 2631573426 865934 2831570016 931744`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [25],
+        "files": [],
+        "lessons": [
+          {
+            "position": 39,
+            "material_id": "divisors-and-masks"
+          }
+        ],
+        "theory_links": [
+          {
+            "label": "Теория",
+            "section": "perebor-kratnyh",
+            "material_id": "divisors-and-masks"
+          }
+        ],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": [
+            "273157476 89884 2431576836 800124 2631573426 865934 2831570016 931744"
+          ],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "task-25-8-17",
+        "title": "Найди наибольшие числа по двум маскам",
+        "short_description": null,
+        "explanation_kind": "worked_solution",
+        "difficulty": 3,
+        "estimated_minutes": 10,
+        "answer_instruction": "Запишите все строки ответа подряд в одну строку через пробел: в каждой строке число и частное от деления на 46.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Среди натуральных чисел, не превышающих 3 · 10⁸, найди пять наибольших чисел, которые соответствуют маске `?3*5*0`, не соответствуют маске `2*8*` и делятся на 46. Выведи их в порядке возрастания и частные от деления на 46."
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Иди вниз по кратным 46 от наибольшего не больше 3 · 10⁸ и остановись на пятом; вторая маска — через not fnmatch."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Перебор по убыванию сразу даёт наибольшие числа. Найденные пять выводим по возрастанию, как просит условие."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "from fnmatch import fnmatch\n\nfound = []\nfor n in range(3 * 10**8 // 46 * 46, 0, -46):\n    s = str(n)\n    if fnmatch(s, '?3*5*0') and not fnmatch(s, '2*8*'):\n        found.append(n)\n        if len(found) == 5:\n            break\nfor n in sorted(found):\n    print(n, n // 46)",
+              "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "text",
+              "code": "239995110 5217285\n239995340 5217290\n239995570 5217295\n239996950 5217325\n239999250 5217375",
+              "caption": "Программа выведет"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `239995110 5217285 239995340 5217290 239995570 5217295 239996950 5217325 239999250 5217375`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [25],
+        "files": [],
+        "lessons": [
+          {
+            "position": 45,
+            "material_id": "divisors-and-masks"
+          }
+        ],
+        "theory_links": [
+          {
+            "label": "Теория",
+            "section": "drugie-maski",
+            "material_id": "divisors-and-masks"
+          }
+        ],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": [
+            "239995110 5217285 239995340 5217290 239995570 5217295 239996950 5217325 239999250 5217375"
+          ],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "task-25-8-18",
+        "title": "Построй числа по маске 19*024?7",
+        "short_description": null,
+        "explanation_kind": "worked_solution",
+        "difficulty": 3,
+        "estimated_minutes": 12,
+        "answer_instruction": "Запишите все строки ответа подряд в одну строку через пробел: в каждой строке число и частное от деления суммы цифр на 13.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Среди натуральных чисел, не превышающих 10¹⁰, найди пять наибольших, соответствующих маске `19*024?7`, у которых сумма цифр делится на 13. Выведи их в порядке возрастания и частные от деления суммы цифр на 13."
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Обязательных цифр семь, значит, звёздочка — от 0 до 3 цифр. Построй числа через product, отсортируй и возьми пять последних."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Кандидатов 10 · (1 + 10 + 100 + 1000) = 11 110. У всех пяти наибольших сумма цифр 52 = 13 · 4."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "from itertools import product\n\nfound = []\nfor k in range(4):\n    for x in product('0123456789', repeat=k):\n        for q in '0123456789':\n            n = int('19' + ''.join(x) + '024' + q + '7')\n            s = sum(int(ch) for ch in str(n))\n            if s % 13 == 0:\n                found.append((n, s // 13))\nfor n, r in sorted(found)[-5:]:\n    print(n, r)",
+              "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "text",
+              "code": "1999502467 4\n1999602457 4\n1999702447 4\n1999802437 4\n1999902427 4",
+              "caption": "Программа выведет"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `1999502467 4 1999602457 4 1999702447 4 1999802437 4 1999902427 4`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [25],
+        "files": [],
+        "lessons": [
+          {
+            "position": 44,
+            "material_id": "divisors-and-masks"
+          }
+        ],
+        "theory_links": [
+          {
+            "label": "Теория",
+            "section": "zvezdochka-po-maske",
+            "material_id": "divisors-and-masks"
+          }
+        ],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": [
+            "1999502467 4 1999602457 4 1999702447 4 1999802437 4 1999902427 4"
+          ],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "task-25-8-19",
+        "title": "Найди маску 13*57*2 внутри записи",
+        "short_description": null,
+        "explanation_kind": "worked_solution",
+        "difficulty": 3,
+        "estimated_minutes": 10,
+        "answer_instruction": "Запишите все строки ответа подряд в одну строку через пробел: в каждой строке число и частное от деления на 2971.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Найди все числа, меньшие 10⁸, которые делятся на 2971 и в записи которых можно найти маску `13*57*2`. Выведи числа в порядке возрастания и частные от деления на 2971."
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "«Можно найти в записи» — до маски и после неё могут стоять любые цифры: fnmatch(s, '*13*57*2*')."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Например, в 13 571 528 есть 13, потом 57, потом 2 — маска найдена, хотя число кончается на 8."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "from fnmatch import fnmatch\n\nfor n in range(0, 10**8, 2971):\n    if fnmatch(str(n), '*13*57*2*'):\n        print(n, n // 2971)",
+              "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "text",
+              "code": "13345732 4492\n13464572 4532\n13571528 4568\n61357092 20652\n69913572 23532",
+              "caption": "Программа выведет"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `13345732 4492 13464572 4532 13571528 4568 61357092 20652 69913572 23532`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [25],
+        "files": [],
+        "lessons": [
+          {
+            "position": 46,
+            "material_id": "divisors-and-masks"
+          }
+        ],
+        "theory_links": [
+          {
+            "label": "Теория",
+            "section": "drugie-maski",
+            "material_id": "divisors-and-masks"
+          }
+        ],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": [
+            "13345732 4492 13464572 4532 13571528 4568 61357092 20652 69913572 23532"
+          ],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "task-25-8-20",
+        "title": "Найди числа по маске с нечётными цифрами",
+        "short_description": null,
+        "explanation_kind": "worked_solution",
+        "difficulty": 3,
+        "estimated_minutes": 10,
+        "answer_instruction": "Запишите все строки ответа подряд в одну строку через пробел: в каждой строке число и частное от деления на 2028.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "В маске числа знак ? означает одну нечётную цифру, а * — любую последовательность цифр, в том числе пустую. Среди натуральных чисел, не превышающих 10¹⁰, найди все числа, соответствующие маске `5?13?72*4` и делящиеся на 2028. Выведи числа в порядке возрастания и частные от деления на 2028."
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Одна нечётная цифра в fnmatch записывается как [13579]."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Маска для fnmatch — 5[13579]13[13579]72*4; кратные 2028 перебираем с шагом."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "from fnmatch import fnmatch\n\nmask = '5[13579]13[13579]72*4'\nfor n in range(0, 10**10 + 1, 2028):\n    if fnmatch(str(n), mask):\n        print(n, n // 2028)",
+              "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "text",
+              "code": "5113172064 2521288\n5913572964 2915963",
+              "caption": "Программа выведет"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `5113172064 2521288 5913572964 2915963`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [25],
+        "files": [],
+        "lessons": [
+          {
+            "position": 47,
+            "material_id": "divisors-and-masks"
+          }
+        ],
+        "theory_links": [
+          {
+            "label": "Теория",
+            "section": "drugie-maski",
+            "material_id": "divisors-and-masks"
+          }
+        ],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["5113172064 2521288 5913572964 2915963"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
     }
   ],
   "files": [
@@ -837741,66 +839894,46 @@
       "id": "divisors-and-masks",
       "sections": [
         "kak-ustroena-tema",
-        "chetyre-dejstviya",
         "delenie-s-ostatkom",
         "uslovie-v-kod",
         "perebor-diapazona",
         "chislo-i-stroka",
-        "operacii-s-ciframi",
         "proverka-in",
-        "perebor-po-ubyvaniyu",
-        "perebor-korotko",
-        "pary-ideya",
+        "pervye-najdennye",
+        "perebor-itogo",
         "delitel",
-        "perebor-do-n",
         "pary-delitelej",
-        "kvadrat-granica",
         "pochemu-do-kornya",
         "poisk-po-shagam",
-        "celaya-chast-kornya",
-        "koren-odin-raz",
         "funkciya-delitelej",
         "otbor-delitelej",
-        "harakteristiki-spiska",
-        "chetnye-deliteli",
         "schetchik-delitelej",
-        "pary-korotko",
-        "chisla-ideya",
+        "pary-itogo",
         "rovno-k-delitelej",
         "maksimum-delitelej",
         "velichina-m",
         "naimenshij-i-naibolshij",
         "pervye-posle-granicy",
-        "chisla-korotko",
-        "prostye-ideya",
+        "chisla-itogo",
         "prostye-chisla",
         "razlozhenie",
         "prostye-deliteli",
         "mnozhiteli-i-deliteli",
-        "cifry-mnozhitelej",
-        "skorost-razlozheniya",
-        "prostye-korotko",
-        "maski-ideya",
+        "zadacha-temy",
+        "prostye-itogo",
         "znaki-maski",
-        "dlina-zvezdochki",
         "fnmatch",
         "perebor-kratnyh",
-        "pervoe-kratnoe",
-        "generaciya-po-maske",
-        "ocenka-kandidatov",
-        "nuli-v-zvezdochke",
-        "neskolko-zvezdochek",
-        "maska-i-deliteli",
-        "opredelenie-znakov",
-        "maski-korotko",
-        "vid-zachem",
+        "voprosy-po-maske",
+        "zvezdochka-po-maske",
+        "drugie-maski",
+        "maski-itogo",
         "formula-kolichestva",
         "forma-chisla",
         "nechetnoe-kolichestvo",
-        "summa-delitelej",
         "vid-vmesto-perebora",
         "vid-i-maska",
-        "vid-korotko"
+        "vid-itogo"
       ],
       "kind": "topic",
       "status": "published",
@@ -837811,96 +839944,76 @@
           "access": "free",
           "sections": [
             "kak-ustroena-tema",
-            "chetyre-dejstviya",
             "delenie-s-ostatkom",
             "uslovie-v-kod",
             "perebor-diapazona",
             "chislo-i-stroka",
-            "operacii-s-ciframi",
             "proverka-in",
-            "perebor-po-ubyvaniyu",
-            "perebor-korotko"
+            "pervye-najdennye",
+            "perebor-itogo"
           ]
         },
         {
           "slug": "deliteli-parami",
           "access": "free",
           "sections": [
-            "pary-ideya",
             "delitel",
-            "perebor-do-n",
             "pary-delitelej",
-            "kvadrat-granica",
             "pochemu-do-kornya",
             "poisk-po-shagam",
-            "celaya-chast-kornya",
-            "koren-odin-raz",
             "funkciya-delitelej",
             "otbor-delitelej",
-            "harakteristiki-spiska",
-            "chetnye-deliteli",
             "schetchik-delitelej",
-            "pary-korotko"
+            "pary-itogo"
           ]
         },
         {
           "slug": "chisla-po-delitelyam",
           "access": "paid",
           "sections": [
-            "chisla-ideya",
             "rovno-k-delitelej",
             "maksimum-delitelej",
             "velichina-m",
             "naimenshij-i-naibolshij",
             "pervye-posle-granicy",
-            "chisla-korotko"
+            "chisla-itogo"
           ]
         },
         {
           "slug": "prostye-i-razlozhenie",
           "access": "paid",
           "sections": [
-            "prostye-ideya",
             "prostye-chisla",
             "razlozhenie",
             "prostye-deliteli",
             "mnozhiteli-i-deliteli",
-            "cifry-mnozhitelej",
-            "skorost-razlozheniya",
-            "prostye-korotko"
+            "zadacha-temy",
+            "prostye-itogo"
           ]
         },
         {
           "slug": "maski",
           "access": "paid",
           "sections": [
-            "maski-ideya",
             "znaki-maski",
-            "dlina-zvezdochki",
             "fnmatch",
             "perebor-kratnyh",
-            "pervoe-kratnoe",
-            "generaciya-po-maske",
-            "ocenka-kandidatov",
-            "nuli-v-zvezdochke",
-            "neskolko-zvezdochek",
-            "maska-i-deliteli",
-            "opredelenie-znakov",
-            "maski-korotko"
+            "voprosy-po-maske",
+            "zvezdochka-po-maske",
+            "drugie-maski",
+            "maski-itogo"
           ]
         },
         {
           "slug": "vid-chisla",
           "access": "paid",
           "sections": [
-            "vid-zachem",
             "formula-kolichestva",
             "forma-chisla",
             "nechetnoe-kolichestvo",
-            "summa-delitelej",
             "vid-vmesto-perebora",
             "vid-i-maska",
-            "vid-korotko"
+            "vid-itogo"
           ]
         }
       ],
