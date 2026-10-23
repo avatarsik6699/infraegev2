@@ -150,11 +150,11 @@ def cl_plane(points=((2, 5, "A"), (-3, 4, "B")), segment=None) -> str:
         out.append(_text(pl.px(x) + 8, pl.py(y) - 8, f"{name} ({ru(x)}; {ru(y)})", 14, INK))
     tx = pl.left + pl.w + 24
     if not segment:
+        out.append(_text(tx, pl.top + 26, "От начала координат:", 14, MUTED))
         for i, (x, y, name) in enumerate(points):
             hor = f"{ru(abs(x))} {'вправо' if x >= 0 else 'влево'}"
             ver = f"{ru(abs(y))} {'вверх' if y >= 0 else 'вниз'}"
-            out.append(_text(tx, pl.top + 30 + 26 * i, f"{name}: {hor}, {ver}", 14))
-        out.append(_text(tx, pl.top + 40 + 26 * len(points), "от начала координат", 13, MUTED))
+            out.append(_text(tx, pl.top + 52 + 26 * i, f"{name}: {hor}, {ver}", 14))
     if segment:
         (x1, y1), (x2, y2) = segment
         a, b, c = (pl.px(x1), pl.py(y1)), (pl.px(x2), pl.py(y1)), (pl.px(x2), pl.py(y2))
@@ -252,6 +252,7 @@ def cl_scatter(
     width=560,
     mark=None,
     circle=None,
+    chains=None,
 ) -> str:
     """A scatter plot of a data file at equal scale. ``rule`` — the bounds of the
     lesson (marker shape per cluster, anomalies as accent crosses); ``lines``
@@ -262,16 +263,29 @@ def cl_scatter(
     circle of radius r (clipped to the plot) and counts points inside, on it and
     outside."""
     pts, _ = _read(file)
+    if chains is not None:
+        rule = rule or "chains"  # groups of neighbours get a legend like bounds do
     xs, ys = [p[0] for p in pts], [p[1] for p in pts]
     pad = step
     x0, x1 = math.floor(min(xs) / step) * step - pad, math.ceil(max(xs) / step) * step + pad
     y0, y1 = math.floor(min(ys) / step) * step - pad, math.ceil(max(ys) / step) * step + pad
     pl = Plane(x0, x1, y0, y1, width, 46, 14, 400)
     extra = 22 if (rule and not pairs) or circle is not None else 0
-    out = [_svg(pl.h + 40 + extra, f"Точечная диаграмма файла {file}"), pl.frame(step, axes=True)]
+    # a label on every other grid line when the grid is dense
+    every = 2 * step if (x1 - x0) / step > 14 else step
+    out = [
+        _svg(pl.h + 40 + extra, f"Точечная диаграмма файла {file}"),
+        pl.frame(step, every, axes=True),
+    ]
     groups: dict[int, list] = {}
-    for p in pts:
-        groups.setdefault(_rule(rule, p) if rule else 0, []).append(p)
+    if chains is not None:
+        # groups of neighbours at the threshold ``chains``, left to right
+        comps = sorted(_components(pts, chains), key=lambda g: min(pts[i][0] for i in g))
+        for k, g in enumerate(comps):
+            groups[k] = [pts[i] for i in g]
+    else:
+        for p in pts:
+            groups.setdefault(_rule(rule, p) if rule else 0, []).append(p)
     if rule and lines:
         for kind, v, label in RULE_LINES.get(rule, []):
             if kind == "v":
@@ -475,13 +489,15 @@ def cl_projection(w=4.0, h=2.0, angle=30) -> str:
 
 def cl_sector(start=350, width=20, angles=(5, 355, 15)) -> str:
     """A sector [start; start + width] that may cross 0°; directions ``angles``
-    with their angle relative to the start: (a − start) % 360."""
-    cx, cy, r = 190, 160, 130
+    with their angle relative to the start: (a − start) % 360. Angles near 0°
+    are only 5° apart, so their labels stand in a column right of the circle,
+    each with a short leader to its point on the circle."""
+    cx, cy, r = 170, 160, 130
     out = [_svg(300, "Сектор и угол направления")]
     out.append(f'<circle cx="{cx}" cy="{cy}" r="{r}" fill="none" stroke="{FAINT}"/>')
-    out.append(_line(cx - r - 10, cy, cx + r + 10, cy, FAINT))
+    out.append(_line(cx - r - 10, cy, cx + r, cy, FAINT))
     out.append(_line(cx, cy - r - 10, cx, cy + r + 10, FAINT))
-    for deg, label in ((0, "0°"), (90, "90°"), (180, "180°"), (270, "270°")):
+    for deg, label in ((90, "90°"), (180, "180°"), (270, "270°")):
         t = math.radians(deg)
         out.append(
             _text(
@@ -502,8 +518,12 @@ def cl_sector(start=350, width=20, angles=(5, 355, 15)) -> str:
     )
     out.append(_dot(cx, cy, 4, INK, INK))
     out.append(_text(cx - 8, cy + 18, "C", 13, INK, "end", 600))
-    out.append(_text(p0[0] + 8, p0[1] + 12, f"{start}°", 12, INK))
-    out.append(_text(p1[0] + 8, p1[1] - 2, f"{(start + width) % 360}°", 12, INK))
+    # (angle, label, colour, weight) of everything that needs a label near 0°
+    labels = [
+        (start, f"{start}°", INK, 600),
+        ((start + width) % 360, f"{(start + width) % 360}°", INK, 600),
+        (0, "0°", MUTED, 400),
+    ]
     tx, ty = 370, 40
     out.append(_text(tx, ty, f"Сектор: начало {start}°, ширина {width}°.", 14, INK, weight=600))
     out.append(_text(tx, ty + 22, "Проверка: (angle − start) % 360 ≤ width", 13, MUTED))
@@ -512,26 +532,9 @@ def cl_sector(start=350, width=20, angles=(5, 355, 15)) -> str:
         inside = (ang - start) % 360 <= width
         color = ACCENT if inside else MUTED
         out.append(
-            _line(
-                cx,
-                cy,
-                cx + (r - 18) * math.cos(t),
-                cy - (r - 18) * math.sin(t),
-                color,
-                1.75,
-                not inside,
-            )
+            _line(cx, cy, cx + r * math.cos(t), cy - r * math.sin(t), color, 1.75, not inside)
         )
-        out.append(
-            _text(
-                cx + (r - 6) * math.cos(t),
-                cy - (r - 6) * math.sin(t) + 4,
-                f"{ang}°",
-                11,
-                color,
-                "middle",
-            )
-        )
+        labels.append((ang, f"{ang}°", color, 600 if inside else 400))
         rel = (ang - start) % 360
         out.append(
             _text(
@@ -543,6 +546,17 @@ def cl_sector(start=350, width=20, angles=(5, 355, 15)) -> str:
                 weight=600 if inside else 400,
             )
         )
+    ys = []
+    order = sorted(labels, key=lambda lab: -math.sin(math.radians(lab[0])))
+    for ang, _, _, _ in order:
+        want = cy - r * math.sin(math.radians(ang)) + 4
+        ys.append(max(want, ys[-1] + 13) if ys else want)
+    shift = (sum(ys) - sum(cy - r * math.sin(math.radians(a)) + 4 for a, *_ in order)) / len(ys)
+    for (ang, label, color, weight), y in zip(order, ys, strict=True):
+        t = math.radians(ang)
+        px, py = cx + r * math.cos(t), cy - r * math.sin(t)
+        out.append(_line(px, py, cx + r + 14, y - shift - 4, color, 0.75))
+        out.append(_text(cx + r + 17, y - shift, label, 11, color, "start", weight))
     out.append(
         _text(tx, ty + 56 + 26 * len(angles) + 14, "Без % 360 разность для 5° была бы", 13, MUTED)
     )
@@ -633,26 +647,34 @@ def _line_positions(xs, left=40, right=620, gap_after=None):
 
 def _center_frame(xs, cand, best, sums, gap_after):
     pos, brk = _line_positions(xs, gap_after=gap_after)
-    y = 120
-    out = [_svg(210, "Кандидаты в центры на прямой")]
+    y = 140
+    out = [_svg(230, "Кандидаты в центры на прямой")]
     out.append(_line(30, y, 630, y, MUTED))
     if brk:
         out.append(_text(brk, y + 5, "≈", 18, MUTED, "middle"))
         out.append(f'<rect x="{brk - 7:.1f}" y="{y - 4}" width="14" height="8" fill="#fff"/>')
         out.append(_text(brk, y + 6, "//", 13, MUTED, "middle"))
     if cand is not None:
-        for x in xs:
-            if x == cand:
-                continue
-            a, b = sorted((pos[cand], pos[x]))
-            h = 16 + 14 * (abs(x - cand) if abs(x - cand) < 5 else 5)
-            out.append(
-                f'<path d="M {a:.1f} {y - 6} C {a:.1f} {y - 6 - h} {b:.1f} {y - 6 - h} {b:.1f} {y - 6}" '
-                f'fill="none" stroke="{ACCENT}" stroke-width="1.5"/>'
+        # arcs leave the candidate at different points and nest: a farther target
+        # gets a taller arc that starts nearer the candidate, so no two arcs meet
+        for side in (-1, 1):
+            targets = sorted(
+                (x for x in xs if x != cand and (pos[x] - pos[cand]) * side > 0),
+                key=lambda x: abs(pos[x] - pos[cand]),
             )
-            out.append(
-                _text((a + b) / 2, y - 10 - 0.75 * h, ru(abs(x - cand)), 12, ACCENT, "middle", 600)
-            )
+            for rank, x in enumerate(targets):
+                start = pos[cand] + side * (2 + 3 * (len(targets) - 1 - rank))
+                a, b = sorted((start, pos[x]))
+                h = 14 + 0.2 * (b - a)
+                out.append(
+                    f'<path d="M {a:.1f} {y - 6} C {a:.1f} {y - 6 - h} {b:.1f} {y - 6 - h} '
+                    f'{b:.1f} {y - 6}" fill="none" stroke="{ACCENT}" stroke-width="1.5"/>'
+                )
+                out.append(
+                    _text(
+                        (a + b) / 2, y - 10 - 0.75 * h, ru(abs(x - cand)), 12, ACCENT, "middle", 600
+                    )
+                )
     for x in xs:
         hot = x == cand
         out.append(
@@ -792,6 +814,7 @@ def _split_frame(points, names, remaining, clusters, cluster, pos, note_pts, eps
     out = [_svg(pl.h + 120, "Работа split_clusters")]
     out.append(_line(pl.left, pl.py(0), pl.left + pl.w, pl.py(0), FAINT))
     done = {i for c in clusters for i in c}
+    under = len(out)  # the neighbour circle goes here, under points and letters
     for i, p in enumerate(points):
         if i in (cluster or []):
             k, color = cluster.index(i), ACCENT
@@ -801,13 +824,18 @@ def _split_frame(points, names, remaining, clusters, cluster, pos, note_pts, eps
         else:
             color, fill = MUTED, "#fff"
         out.append(_dot(pl.px(p[0]), pl.py(p[1]), 6, color, fill, 2))
-        out.append(_text(pl.px(p[0]), pl.py(p[1]) - 12, names[i], 13, INK, "middle", 600))
+        out.append(
+            _text(pl.px(p[0]), pl.py(p[1]) - 12, names[i], 13, INK, "middle", 600).replace(
+                "<text ", '<text stroke="#fff" stroke-width="3" paint-order="stroke" ', 1
+            )
+        )
     if pos is not None and cluster and pos < len(cluster):
         p = points[cluster[pos]]
         r = eps * pl.k
-        out.append(
+        out.insert(
+            under,
             f'<circle cx="{pl.px(p[0]):.1f}" cy="{pl.py(p[1]):.1f}" r="{r:.1f}" fill="none" '
-            f'stroke="{ACCENT}" stroke-dasharray="5 4"/>'
+            f'stroke="{ACCENT}" stroke-dasharray="5 4"/>',
         )
     y = pl.top + pl.h + 22
     rows = [
@@ -922,7 +950,7 @@ def cl_parabola(xs=(0, 1, 2, 3, 100)) -> str:
                 px(x), py(t(x)), 5, ACCENT if x == best else INK, ACCENT if x == best else "#fff", 2
             )
         )
-    out.append(_text(px(100), py(t(100)) + 22, f"T(100) = {t(100):.0f}", 12, INK, "end"))
+    out.append(_text(px(100) - 12, py(t(100)) - 10, f"T(100) = {t(100):.0f}", 12, INK, "end"))
     out.append(_text(px(0), bottom + 18, "0  1  2  3", 11, MUTED, "start"))
     out.append(_text(px(100), bottom + 18, "100", 11, MUTED, "middle"))
     rows = [f"T({ru(x)}) = {t(x):.0f}" for x in xs[:4]]
@@ -1001,7 +1029,7 @@ def cl_columns(
     out = [_svg(170, "Части строки файла и их номера")]
     shown = line.replace("\t", " ⇥ ")
     out.append(_text(20, 26, "строка файла:", 13, MUTED))
-    out.append(_text(120, 26, shown, 14, INK, weight=600))
+    out.append(_text(126, 26, shown, 14, INK, weight=600))
     cw, gap, x0, y0 = 92, 8, 20, 50
     for i, part in enumerate(parts):
         x = x0 + i * (cw + gap)
@@ -1096,7 +1124,7 @@ def cl_trunc_line(values=(2.9, -2.9)) -> str:
         for j, (name, w) in enumerate(res):
             hot = name == "int"
             color = ACCENT if hot else MUTED
-            yy = y - 12 - 9 * j
+            yy = y - 30 + 9 * j  # int on top, as in the labels
             out.append(_line(px(v), yy, px(w), yy, color, 1.75 if hot else 1.25))
             out.append(_dot(px(w), yy, 2.5, color, color))
             out.append(
@@ -1122,6 +1150,284 @@ def cl_trunc_line(values=(2.9, -2.9)) -> str:
     return "".join(out)
 
 
+# --- polar coordinates ----------------------------------------------------------------------
+
+
+def cl_polar(points=((60, 4), (210, 2))) -> str:
+    """Points given by a polar angle φ (degrees) and a radius r: the ray from the
+    origin, the arc of φ from the polar axis and the dashed projections
+    x = r·cos φ, y = r·sin φ."""
+    pl = Plane(-3, 5, -2, 5, 300, 40, 14)
+    out = [_svg(pl.h + 40, "Полярные координаты точки"), pl.frame(1, 1, axes=True)]
+    out.append(_text(pl.left + pl.w - 4, pl.py(0) - 6, "x", 12, MUTED, "end"))
+    out.append(_text(pl.px(0) + 6, pl.top + 12, "y", 12, MUTED))
+    tx, ty = pl.left + pl.w + 24, pl.top + 22
+    for i, (phi, r) in enumerate(points):
+        t = math.radians(phi)
+        x, y = r * math.cos(t), r * math.sin(t)
+        hot = i == 0
+        color = ACCENT if hot else INK
+        out.append(_line(pl.px(0), pl.py(0), pl.px(x), pl.py(y), color, 2 if hot else 1.5))
+        out.append(_line(pl.px(x), pl.py(y), pl.px(x), pl.py(0), MUTED, 1, True))
+        out.append(_line(pl.px(x), pl.py(y), pl.px(0), pl.py(y), MUTED, 1, True))
+        ar = (0.9 if hot else 0.6) * pl.k
+        large = 1 if phi > 180 else 0
+        ex, ey = pl.px(0) + ar * math.cos(t), pl.py(0) - ar * math.sin(t)
+        out.append(
+            f'<path d="M {pl.px(0) + ar:.1f} {pl.py(0):.1f} A {ar:.1f} {ar:.1f} 0 {large} 0 '
+            f'{ex:.1f} {ey:.1f}" fill="none" stroke="{color}" stroke-width="1.25"/>'
+        )
+        mid = t / 2 if phi <= 180 else math.radians(150)  # off the y axis
+        out.append(
+            _text(
+                pl.px(0) + (ar + 12) * math.cos(mid),
+                pl.py(0) - (ar + 12) * math.sin(mid) + 4,
+                f"{phi}°",
+                12,
+                color,
+                "middle",
+                600 if hot else 400,
+            )
+        )
+        out.append(_dot(pl.px(x), pl.py(y), 4.5, color, color))
+        dy = -10 if y >= 0 else 20
+        out.append(_text(pl.px(x) + 8, pl.py(y) + dy, f"({ru(x)}; {ru(y)})", 13, color, weight=600))
+        out.append(_text(tx, ty, f"φ = {phi}°, r = {ru(r)}:", 14, color, weight=600))
+        out.append(_text(tx, ty + 22, f"x = {ru(r)} · cos {phi}° = {ru(x)}", 14))
+        out.append(_text(tx, ty + 44, f"y = {ru(r)} · sin {phi}° = {ru(y)}", 14))
+        ty += 82
+    out.append(_text(tx, ty, "Дуга — угол от оси x", 13, MUTED))
+    out.append(_text(tx, ty + 18, "против часовой стрелки.", 13, MUTED))
+    out.append("</svg>")
+    return "".join(out)
+
+
+# --- clusters between two lines ---------------------------------------------------------------
+
+
+def _between_lines(p):
+    """The two triangles between y = x, y = 10 − x and the axes; −1 — outside."""
+    x, y = p
+    if x > 0 and y > 0 and y < 10 - x:
+        return 0 if y < x else 1
+    return -1
+
+
+def cl_lines(file="27-8.txt") -> str:
+    """A scatter plot of the points between the lines y = x, y = 10 − x and the
+    axes: two triangles are the clusters, everything outside is an anomaly."""
+    pts, _ = _read(file)
+    pl = Plane(-2, 10, -2, 10, 400, 46, 14)
+    out = [_svg(pl.h + 60, f"Точки файла {file} между прямыми"), pl.frame(1, 2, axes=True)]
+    cid = f"cll{zlib.crc32(file.encode()):08x}"
+    out.append(
+        f'<clipPath id="{cid}"><rect x="{pl.left}" y="{pl.top}" width="{pl.w:.1f}" '
+        f'height="{pl.h:.1f}"/></clipPath>'
+    )
+    for (xa, ya), (xb, yb), label, lx, ly in (
+        ((-2, -2), (10, 10), "y = x", 7.6, 9.4),
+        ((-2, 12), (10, 0), "y = 10 − x", 1.0, 9.6),
+    ):
+        out.append(
+            f'<line x1="{pl.px(xa):.1f}" y1="{pl.py(ya):.1f}" x2="{pl.px(xb):.1f}" '
+            f'y2="{pl.py(yb):.1f}" stroke="{ACCENT}" stroke-width="1.75" '
+            f'stroke-dasharray="6 4" clip-path="url(#{cid})"/>'
+        )
+        out.append(_text(pl.px(lx), pl.py(ly), label, 13, ACCENT, weight=600))
+    groups: dict[int, list] = {}
+    for p in pts:
+        groups.setdefault(_between_lines(p), []).append(p)
+    for k, group in sorted(groups.items()):
+        for p in group:
+            if k < 0:
+                out.append(_cross(pl.px(p[0]), pl.py(p[1])))
+            else:
+                out.append(_marker(k, pl.px(p[0]), pl.py(p[1]), 2.6))
+    tx = pl.left + pl.w + 22
+    out.append(_text(tx, pl.top + 24, "Нижний треугольник:", 14, INK, weight=600))
+    out.append(_text(tx, pl.top + 46, "y > 0, y < x, y < 10 − x", 13))
+    out.append(_text(tx, pl.top + 64, f"кружки, {len(groups.get(0, []))} точек", 13, MUTED))
+    out.append(_text(tx, pl.top + 98, "Левый треугольник:", 14, INK, weight=600))
+    out.append(_text(tx, pl.top + 120, "x > 0, y > x, y < 10 − x", 13))
+    out.append(_text(tx, pl.top + 138, f"квадраты, {len(groups.get(1, []))} точек", 13, MUTED))
+    out.append(_text(tx, pl.top + 172, "Вне треугольников:", 14, ACCENT, weight=600))
+    out.append(
+        _text(tx, pl.top + 194, f"аномалии, {len(groups.get(-1, []))} (крестики)", 13, ACCENT)
+    )
+    out.append("</svg>")
+    return "".join(out)
+
+
+# --- the aim point of a telescope ---------------------------------------------------------------
+
+
+def cl_aim(points=((1, 1), (2, 1), (2, 2), (5, 4), (6.2, 4.4), (5.6, 5.6)), r=1.5) -> str:
+    """For every star — how many other stars are closer than r; the most such
+    neighbours wins, a tie goes to the star nearer to the origin."""
+    pl = Plane(0, 7, 0, 6, 330, 40, 14)
+    out = [_svg(pl.h + 40, "Точка наведения телескопа"), pl.frame(1, 1, axes=True)]
+    counts = [sum(0 < dist(p, q) < r for q in points) for p in points]
+    top = max(counts)
+    tied = [p for p, c in zip(points, counts, strict=True) if c == top]
+    aim = min(tied, key=lambda p: dist(p, (0, 0)))
+    cid = f"cla{zlib.crc32(repr((points, r)).encode()):08x}"
+    out.append(
+        f'<clipPath id="{cid}"><rect x="{pl.left}" y="{pl.top}" width="{pl.w:.1f}" '
+        f'height="{pl.h:.1f}"/></clipPath>'
+    )
+    for p in tied:
+        hot = p == aim
+        out.append(
+            f'<circle clip-path="url(#{cid})" cx="{pl.px(p[0]):.1f}" cy="{pl.py(p[1]):.1f}" r="{r * pl.k:.1f}" '
+            f'fill="none" stroke="{ACCENT if hot else MUTED}" stroke-width="{1.75 if hot else 1}" '
+            f'stroke-dasharray="{"6 4" if hot else "3 4"}"/>'
+        )
+    for p, c in zip(points, counts, strict=True):
+        hot = p == aim
+        out.append(
+            _dot(pl.px(p[0]), pl.py(p[1]), 4.5, ACCENT if hot else INK, ACCENT if hot else "#fff")
+        )
+        out.append(
+            _text(pl.px(p[0]) + 8, pl.py(p[1]) - 7, str(c), 13, ACCENT if hot else INK, weight=600)
+        )
+    tx = pl.left + pl.w + 24
+    out.append(_text(tx, pl.top + 24, "Число — сколько других звёзд", 14))
+    out.append(_text(tx, pl.top + 44, f"ближе {ru(r)} к этой звезде.", 14))
+    out.append(
+        _text(tx, pl.top + 78, f"Больше всего — {top}: у {len(tied)} звёзд.", 14, INK, weight=600)
+    )
+    out.append(_text(tx, pl.top + 100, "Из них ближе к началу координат", 14))
+    out.append(
+        _text(
+            tx,
+            pl.top + 122,
+            f"({ru(aim[0])}; {ru(aim[1])}) — точка наведения.",
+            14,
+            ACCENT,
+            weight=600,
+        )
+    )
+    out.append(_text(tx, pl.top + 156, "Пунктир — круг радиуса " + ru(r) + ".", 13, MUTED))
+    out.append("</svg>")
+    return "".join(out)
+
+
+# --- correlation of the experiments -------------------------------------------------------------
+
+
+def _pearson(g):
+    n = len(g)
+    mx, my = sum(p[0] for p in g) / n, sum(p[1] for p in g) / n
+    sxy = sum((p[0] - mx) * (p[1] - my) for p in g)
+    sxx = sum((p[0] - mx) ** 2 for p in g)
+    syy = sum((p[1] - my) ** 2 for p in g)
+    return sxy / math.sqrt(sxx * syy)
+
+
+def cl_corr(file="27-9.txt", bounds=(15, 35)) -> str:
+    """Experiments split by x bounds; the Pearson coefficient r of each."""
+    pts, _ = _read(file)
+    ys = [p[1] for p in pts]
+    pl = Plane(-2, 52, math.floor(min(ys) / 5) * 5 - 2, math.ceil(max(ys) / 5) * 5 + 2, 560, 46, 30)
+    out = [_svg(pl.h + 70, f"Эксперименты файла {file} и их корреляция"), pl.frame(5, 10)]
+    edges = [-math.inf, *bounds, math.inf]
+    for k in range(len(edges) - 1):
+        g = [p for p in pts if edges[k] <= p[0] < edges[k + 1]]
+        for p in g:
+            out.append(_marker(k, pl.px(p[0]), pl.py(p[1]), 2.6))
+        r = _pearson(g)
+        strong = abs(r) >= 0.9
+        cx = sum(p[0] for p in g) / len(g)
+        out.append(
+            _text(
+                pl.px(cx),
+                pl.top - 10,
+                f"r = {ru(r)}",
+                14,
+                ACCENT if strong else MUTED,
+                "middle",
+                600 if strong else 400,
+            )
+        )
+    for b in bounds:
+        out.append(_line(pl.px(b), pl.top, pl.px(b), pl.top + pl.h, MUTED, 1.25, True))
+    out.append(
+        _text(
+            pl.left,
+            pl.top + pl.h + 38,
+            "|r| ≥ 0,9 — сильная связь: точки вытянуты вдоль прямой; r около 0 — облако без наклона",
+            12,
+            MUTED,
+        )
+    )
+    out.append("</svg>")
+    return "".join(out)
+
+
+# --- quartiles and outliers ----------------------------------------------------------------------
+
+
+def _median(v):
+    n = len(v)
+    return v[n // 2] if n % 2 else (v[n // 2 - 1] + v[n // 2]) / 2
+
+
+def cl_iqr(values=(3, 9, 10, 10, 11, 12, 12, 13, 14, 29)) -> str:
+    """Quartiles by halves (the median of the lower and of the upper half), the
+    box Q1–Q3, the fences Q1 − 1,5·IQR and Q3 + 1,5·IQR and the outliers."""
+    v = sorted(values)
+    n = len(v)
+    lower, upper = v[: n // 2], v[(n + 1) // 2 :]
+    q1, q3 = _median(lower), _median(upper)
+    iqr = q3 - q1
+    lo, hi = q1 - 1.5 * iqr, q3 + 1.5 * iqr
+    a, b = min(v[0], lo) - 1, max(v[-1], hi) + 1
+    left, right, y = 30, 630, 96
+    k = (right - left) / (b - a)
+
+    def px(t):
+        return left + (t - a) * k
+
+    out = [_svg(190, "Квартили и выбросы")]
+    out.append(_line(left, y, right, y, MUTED))
+    step = 5
+    t = math.ceil(a / step) * step
+    while t <= b:
+        out.append(_line(px(t), y - 4, px(t), y + 4, MUTED))
+        out.append(_text(px(t), y + 20, ru(t), 11, MUTED, "middle"))
+        t += step
+    out.append(
+        f'<rect x="{px(q1):.1f}" y="{y - 46}" width="{(q3 - q1) * k:.1f}" height="22" '
+        f'fill="{WASH}" stroke="{INK}" stroke-width="1.25"/>'
+    )
+    for val, label in ((q1, f"Q1 = {ru(q1)}"), (q3, f"Q3 = {ru(q3)}")):
+        out.append(_text(px(val), y - 54, label, 12, INK, "middle", 600))
+    for val, label in ((lo, ru(lo)), (hi, ru(hi))):
+        out.append(_line(px(val), y - 60, px(val), y + 6, ACCENT, 1.5, True))
+        out.append(_text(px(val), y + 38, label, 12, ACCENT, "middle", 600))
+    seen: dict[float, int] = {}
+    for val in v:
+        j = seen.get(val, 0)
+        seen[val] = j + 1
+        yy = y - 8 - 9 * j
+        if val < lo or val > hi:
+            out.append(_cross(px(val), yy, 4))
+        else:
+            out.append(_dot(px(val), yy, 3.2, INK, INK))
+    out.append(
+        _text(
+            left,
+            168,
+            f"IQR = {ru(q3)} − {ru(q1)} = {ru(iqr)}; границы {ru(q1)} − 1,5 · {ru(iqr)} = {ru(lo)} "
+            f"и {ru(q3)} + 1,5 · {ru(iqr)} = {ru(hi)}; крестики — выбросы",
+            12,
+            MUTED,
+        )
+    )
+    out.append("</svg>")
+    return "".join(out)
+
+
 CLUSTER_FIGURES: dict = {
     "cl_plane": cl_plane,
     "cl_scatter": cl_scatter,
@@ -1137,6 +1443,11 @@ CLUSTER_FIGURES: dict = {
     "cl_columns": cl_columns,
     "cl_code_parts": cl_code_parts,
     "cl_trunc_line": cl_trunc_line,
+    "cl_polar": cl_polar,
+    "cl_lines": cl_lines,
+    "cl_aim": cl_aim,
+    "cl_corr": cl_corr,
+    "cl_iqr": cl_iqr,
 }
 CLUSTER_STEPPERS: dict = {
     "cl_center_stepper": cl_center_frames,

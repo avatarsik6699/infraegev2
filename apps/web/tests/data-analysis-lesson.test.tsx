@@ -92,8 +92,8 @@ function compiles(code: string): boolean {
   return check.status === 0;
 }
 
-describe("task 27 clustering lesson (Change 184)", () => {
-  it("has six core subtopics, two advanced and their self-checks", () => {
+describe("task 27 clustering lesson (Change 197)", () => {
+  it("has five core subtopics, one advanced and their self-checks", () => {
     expect(lesson).toMatchObject({
       id: "data-analysis",
       routeSlug: "27-analiz-dannyh-i-klasterizatsiya",
@@ -105,16 +105,14 @@ describe("task 27 clustering lesson (Change 184)", () => {
     const subtopics = lessonSubtopics(lesson);
     expect(subtopics.map(({ slug, level }) => [slug, level])).toEqual([
       ["tochki-i-rasstoyaniya", "core"],
-      ["fajl-s-tochkami", "core"],
       ["razdelenie-na-klastery", "core"],
       ["centr-klastera", "core"],
       ["otvet-po-centram", "core"],
       ["rasstoyaniya-i-pary", "core"],
-      ["cepochki-sosedej", "advanced"],
-      ["drugie-centry-i-uskoreniya", "advanced"],
+      ["sosedi-centry-statistika", "advanced"],
     ]);
     expect(subtopics.map(({ checkpoint }) => checkpoint?.length ?? 0)).toEqual([
-      4, 4, 5, 7, 2, 4, 6, 5,
+      5, 5, 5, 5, 5, 4,
     ]);
     expect(lesson.examFocus).toBeDefined();
     expect(lesson.result).toBeDefined();
@@ -187,6 +185,17 @@ describe("task 27 clustering lesson (Change 184)", () => {
           expect(result.stdout.trim(), piece.code).toBe(piece.output.trim());
           earlier += piece.code + "\n";
           ran += 1;
+          // a function defined next to its first call joins the prelude too;
+          // a later complete program's own copy does not replace it
+          for (const part of piece.code.split("\n\n\n")) {
+            const name = /^def (\w+)/u.exec(part)?.[1];
+            const fresh = name && !prelude.includes(`def ${name}(`);
+            if (
+              (fresh && !part.includes("print")) ||
+              /^(?:from|import) \S+(?: import [\w, ]+)?$/u.test(part)
+            )
+              prelude += part + "\n";
+          }
         }
         if (
           /^def /mu.test(piece.code) &&
@@ -196,7 +205,7 @@ describe("task 27 clustering lesson (Change 184)", () => {
           prelude += piece.code + "\n";
       }
     }
-    expect(ran).toBe(44);
+    expect(ran).toBe(50);
   }, 60_000);
 
   it("keeps spaces around inline code, links and emphasis", () => {

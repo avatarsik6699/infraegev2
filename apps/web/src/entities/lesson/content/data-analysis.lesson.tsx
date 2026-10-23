@@ -5,74 +5,48 @@ import {
   CodeRunner,
   LessonDiagram,
   LessonSummary,
+  LessonTable,
+  ProofDisclosure,
   VariantPicker,
 } from "~/shared/components/learning-content";
 import { dataAnalysisLessonPublication } from "~/shared/config/lesson-publication.mjs";
 import { defineLesson } from "../lib/define-lesson";
 import { lessonMedia } from "./data-analysis.media";
+import { R, THEME_TASK } from "./data-analysis.theme";
 import { PythonTerm } from "./python-term";
+import { SubtopicLink } from "./subtopic-link";
 
 export const dataAnalysisLesson = defineLesson({
   ...dataAnalysisLessonPublication,
   masteryThreshold: 0.8,
   learningOutcomes: [
-    "Хранить точки кортежами и считать расстояние формулой или math.dist",
-    "Читать файл с точками по его формату: запятые, заголовок, дополнительные столбцы",
-    "Делить точки на кластеры по границам или вычисленному признаку",
-    "Находить центр кластера перебором кандидатов по определению из условия",
-    "Собирать ответ по центрам и расстояниям и получать целую часть произведения",
-    "Для редких задач — цепочки соседей, другие центры и точные ускорения (дополнительные уроки)",
+    "Хранить точки кортежами, считать расстояние и читать файл с характеристиками и полярными координатами",
+    "Делить точки на кластеры границами, наклонными прямыми, углом и вычисленной величиной, откладывая аномалии",
+    "Находить центр кластера перебором кандидатов по определению и формуле расстояния из условия",
+    "Собирать ответ по центрам: средние, наибольший и наименьший кластер, целая часть произведения",
+    "Считать радиус, диаметр и расстояния между объектами нужного вида и решать задачу темы",
+    "Для редких задач — цепочки соседей, другие центры, точка наведения, корреляция и выбросы (дополнительный урок)",
   ],
   accessTier: "paid",
   subtopics: [
     {
       slug: "tochki-i-rasstoyaniya",
-      title: "Точки и расстояния",
-      lead: "Точка — пара чисел, кластер — список точек; евклидово расстояние по теореме Пифагора и функция dist.",
+      title: "Точки, расстояния и файл",
+      lead: "Что спрашивают в задании 27, точка и кластер в Python, расстояние, чтение файла с характеристиками, строка частицы и полярные координаты.",
       conceptIds: [
         "kak-ustroena-tema-27",
         "chto-v-fayle",
-        "tochka-kortezh",
-        "klaster-spisok",
         "teorema-pifagora",
-        "math-dist",
         "kvadrat-rasstoyaniya",
-        "celaya-chast-otveta",
+        "chtenie-fayla",
+        "kod-zvezdy",
+        "stroka-chasticy",
+        "polyarnye-koordinaty",
         "tochki-itogo",
       ],
       checkpoint: [
         {
-          id: "zadacha-2",
-          prompt: (
-            <>
-              Точка P = (−4; 1). На сколько единиц и в какую сторону она смещена
-              от начала координат по горизонтали и по вертикали? Чему равны её
-              абсцисса и ордината?
-            </>
-          ),
-          reveal: (
-            <>На 4 единицы влево и на 1 вверх; абсцисса −4, ордината 1.</>
-          ),
-        },
-        {
-          id: "zadacha-5",
-          prompt: (
-            <>
-              Точка <Notation>{"(4, 7)"}</Notation> и точка{" "}
-              <Notation>{"(1, 3)"}</Notation>. Верно ли, что расстояние между
-              ними не больше 5? А что оно меньше 5? Проверь без извлечения
-              корня.
-            </>
-          ),
-          reveal: (
-            <>
-              Не больше 5 — да: 3² + 4² = 25 ≤ 25. Меньше 5 — нет: 25 {"<"} 25
-              неверно.
-            </>
-          ),
-        },
-        {
-          id: "zadacha-6",
+          id: "zadacha-1",
           prompt: (
             <>
               Какая из точек <Notation>{"(3, 4)"}</Notation>,{" "}
@@ -88,71 +62,19 @@ export const dataAnalysisLesson = defineLesson({
           ),
         },
         {
-          id: "zadacha-7",
-          prompt: (
-            <>
-              Объясни на числах, почему суммы расстояний нельзя сравнивать по
-              суммам квадратов: найди две пары расстояний, у которых суммы
-              сравниваются в одну сторону, а суммы квадратов — в другую.
-            </>
-          ),
-          reveal: (
-            <>
-              Например, 1 + 5 = 6 меньше 3 + 4 = 7, но 1 + 25 = 26 больше 9 + 16
-              = 25.
-            </>
-          ),
-        },
-      ],
-    },
-    {
-      slug: "fajl-s-tochkami",
-      title: "Файл с точками",
-      lead: "Заголовок, десятичная запятая и лишние столбцы: как прочитать координаты и характеристики и проверить прочитанное.",
-      conceptIds: [
-        "chtenie-bez-poter",
-        "pervye-stroki",
-        "razbor-stroki",
-        "funkciya-chteniya",
-        "zagolovok",
-        "dopolnitelnye-stolbcy",
-        "kod-zvezdy",
-        "stroka-chasticy",
-        "fayl-itogo",
-      ],
-      checkpoint: [
-        {
-          id: "zadacha-1",
-          prompt: (
-            <>
-              Какие части и какие числа получатся из строки{" "}
-              <Notation>{'"-2,5   4,75"'}</Notation> после{" "}
-              <Notation>{'replace(",", ".")'}</Notation>,{" "}
-              <Notation>{"split()"}</Notation> и <Notation>{"float"}</Notation>?
-            </>
-          ),
-          reveal: (
-            <>
-              <Notation>{"['-2.5', '4.75']"}</Notation>, числа −2,5 и 4,75:
-              несколько пробелов подряд <Notation>{"split()"}</Notation> считает
-              одним разделителем.
-            </>
-          ),
-        },
-        {
           id: "zadacha-2",
           prompt: (
             <>
-              Почему для строки из задачи 1 нельзя писать{" "}
-              <Notation>{'line.split(" ")'}</Notation>? Что получится?
+              Точки <Notation>{"(4, 7)"}</Notation> и{" "}
+              <Notation>{"(1, 3)"}</Notation>. Верно ли, что расстояние между
+              ними не больше 5? А что оно меньше 5? Проверь без извлечения
+              корня.
             </>
           ),
           reveal: (
             <>
-              <Notation>{'split(" ")'}</Notation> делит по каждому пробелу и
-              возвращает пустые строки между соседними пробелами:{" "}
-              <Notation>{"['-2.5', '', '', '4.75']"}</Notation>;{" "}
-              <Notation>{"parts[1]"}</Notation> окажется пустой строкой.
+              Не больше 5 — да: 3² + 4² = 25 ≤ 25. Меньше 5 — нет: 25 {"<"} 25
+              неверно.
             </>
           ),
         },
@@ -160,17 +82,17 @@ export const dataAnalysisLesson = defineLesson({
           id: "zadacha-3",
           prompt: (
             <>
-              Файл с заголовком прочитали без пропуска первой строки, а файл без
-              заголовка — с пропуском. В каком случае программа сообщит об
-              ошибке, а в каком молча даст неверный ответ?
+              Что вернут <Notation>{'"-2,5\\t4,75".split(" ")'}</Notation> и{" "}
+              <Notation>{'"-2,5   4,75".replace(",", ".").split()'}</Notation>?
             </>
           ),
           reveal: (
             <>
-              Заголовок без пропуска даёт ошибку{" "}
-              <Notation>{"ValueError"}</Notation> на первой строке. Пропуск
-              строки без заголовка ошибки не даёт — просто теряется первая
-              точка.
+              Первое — <Notation>{"['-2,5\\t4,75']"}</Notation>: по пробелу
+              строку с табуляцией не разделить. Второе —{" "}
+              <Notation>{"['-2.5', '4.75']"}</Notation>:{" "}
+              <Notation>{"split()"}</Notation> делит по любым пробельным
+              символам, сколько бы их ни было подряд.
             </>
           ),
         },
@@ -192,19 +114,36 @@ export const dataAnalysisLesson = defineLesson({
             </>
           ),
         },
+        {
+          id: "zadacha-5",
+          prompt: (
+            <>
+              В файле записаны полярные координаты <Notation>{"90 5"}</Notation>{" "}
+              и <Notation>{"180 2"}</Notation>. Какие это точки на обычной
+              плоскости?
+            </>
+          ),
+          reveal: (
+            <>
+              (0; 5) и (−2; 0): x = r · cos φ, y = r · sin φ, cos 90° = 0, sin
+              90° = 1, cos 180° = −1, sin 180° = 0. В Python угол сначала
+              переводят в радианы — <Notation>{"radians(phi)"}</Notation>.
+            </>
+          ),
+        },
       ],
     },
     {
       slug: "razdelenie-na-klastery",
       title: "Разделение на кластеры",
-      lead: "Точечная диаграмма, координатные границы, аномалии и разделение по вычисленной величине: углу, расстоянию, энергии.",
+      lead: "Диаграмма рассеяния, координатные границы, аномалии, наклонные прямые и треугольники между ними, кольца и секторы, деление частиц по энергии.",
       conceptIds: [
-        "pravilo-razdeleniya",
         "diagramma-rasseyaniya",
         "koordinatnye-granicy",
         "tri-gruppy",
         "anomalii",
         "naklonnaya-granica",
+        "oblasti-mezhdu-pryamymi",
         "razdelyayushchiy-priznak",
         "vychislyaemyy-priznak",
         "razdelenie-itogo",
@@ -253,16 +192,19 @@ export const dataAnalysisLesson = defineLesson({
           id: "zadacha-3",
           prompt: (
             <>
-              Какие из точек <Notation>{"(1, 4)"}</Notation>,{" "}
-              <Notation>{"(2, 4)"}</Notation>, <Notation>{"(0, 0.5)"}</Notation>{" "}
-              лежат выше прямой y = 2x + 1, какие ниже, какие на ней?
+              Кластеры лежат в треугольниках между прямыми y = x, y = 10 − x и
+              осями, как в файле 27-8.txt. Куда попадут точки{" "}
+              <Notation>{"(6, 2)"}</Notation>, <Notation>{"(2, 6)"}</Notation>,{" "}
+              <Notation>{"(7, 5)"}</Notation> и <Notation>{"(-1, 3)"}</Notation>
+              ?
             </>
           ),
           reveal: (
             <>
-              <Notation>{"(1, 4)"}</Notation> выше: 4 {">"} 3;{" "}
-              <Notation>{"(2, 4)"}</Notation> ниже: 4 {"<"} 5;{" "}
-              <Notation>{"(0, 0.5)"}</Notation> ниже: 0,5 {"<"} 1.
+              <Notation>{"(6, 2)"}</Notation> — нижний треугольник: 2 {"<"} 4 и
+              2 {"<"} 6; <Notation>{"(2, 6)"}</Notation> — левый: 6 {"<"} 8, но
+              6 {">"} 2; <Notation>{"(7, 5)"}</Notation> — аномалия: 5 {">"} 3;{" "}
+              <Notation>{"(-1, 3)"}</Notation> — аномалия: x {"<"} 0.
             </>
           ),
         },
@@ -282,18 +224,18 @@ export const dataAnalysisLesson = defineLesson({
           ),
         },
         {
-          id: "zadacha-6",
+          id: "zadacha-5",
           prompt: (
             <>
-              Квадрат со стороной 3 повернули на 45°. Чему равен разброс абсцисс
-              его вершин? Почему для такого кластера нельзя проверять x_max −
-              x_min ≤ 3?
+              Энергии частиц: 1,1; 1,8; 2,6; 5,2; 5,9; 6,4; 9,7. Сколько
+              кластеров дают большие промежутки и выполняется ли в каждом
+              условие «разность энергий не больше 2»?
             </>
           ),
           reveal: (
             <>
-              3√2 ≈ 4,243 — это диагональ квадрата. Проверка с шириной 3
-              отвергла бы правильный кластер.
+              Три: 1,1–2,6, 5,2–6,4 и 9,7 — промежутки 2,6 и 3,3 больше
+              остальных. Ширина групп 1,5, 1,2 и 0 — условие выполняется.
             </>
           ),
         },
@@ -302,233 +244,185 @@ export const dataAnalysisLesson = defineLesson({
     {
       slug: "centr-klastera",
       title: "Центр кластера",
-      lead: "Центр по сумме расстояний: перебор кандидатов, почему средняя точка не подходит и сколько работы требует двойной цикл.",
+      lead: "Центр — точка кластера с наименьшей суммой расстояний: перебор кандидатов, почему средняя точка не подходит, своя формула расстояния и взвешенная сумма.",
       access: "paid",
       conceptIds: [
         "centr-tochka-klastera",
-        "summa-rasstoyaniy",
-        "perebor-kandidatov",
         "programma-centra",
-        "rasstoyanie-do-sebya",
         "srednee-ne-centr",
         "tri-vyrazheniya",
-        "srednee-rasstoyanie",
         "formula-rasstoyaniya",
-        "vremya-poiska",
+        "vzveshennaya-summa",
         "centr-itogo",
       ],
       paid: {
         outline: [
           { id: "centr-tochka-klastera", navLabel: "Центр — точка кластера" },
-          { id: "summa-rasstoyaniy", navLabel: "Сумма расстояний" },
-          { id: "perebor-kandidatov", navLabel: "Перебор кандидатов" },
           { id: "programma-centra", navLabel: "Программа" },
-          { id: "rasstoyanie-do-sebya", navLabel: "Расстояние до себя" },
           { id: "srednee-ne-centr", navLabel: "Среднее — не центр" },
-          { id: "tri-vyrazheniya", navLabel: "Три разных выражения" },
-          { id: "srednee-rasstoyanie", navLabel: "Среднее расстояние" },
-          { id: "formula-rasstoyaniya", navLabel: "Формула расстояния" },
-          { id: "vremya-poiska", navLabel: "Время поиска" },
+          { id: "tri-vyrazheniya", navLabel: "Сумма квадратов" },
+          { id: "formula-rasstoyaniya", navLabel: "Своя формула расстояния" },
+          { id: "vzveshennaya-summa", navLabel: "Взвешенная сумма" },
           { id: "centr-itogo", navLabel: "Итого" },
         ],
         preview: (
           <>
             <Typography.Text>
+              Какую точку кластера считать его центром?
+            </Typography.Text>
+            <Typography.Text>
               <strong>
-                Центр кластера в задании 27 — одна из точек самого кластера, и
-                выбирают её по величине, которую задаёт условие.
+                Ту, у которой сумма расстояний до остальных точек кластера
+                наименьшая. Найти её помогает перебор: каждую точку проверяют
+                как кандидата.
               </strong>{" "}
-              Чаще всего это сумма расстояний до остальных точек: так определён
-              центр в 40 задачах из 50, во всех задачах экзаменов и демоверсий.
-              Демоверсия 2027 года меняет только «расстояние»: вместо длины
-              отрезка — разность энергий.
+              В задаче темы «расстояние» между частицами — разность энергий, а
+              перебор тот же.
             </Typography.Text>
           </>
         ),
-        selfCheck: 7,
+        selfCheck: 5,
         load: () => import("./data-analysis.paid.centr-klastera"),
       },
     },
     {
       slug: "otvet-po-centram",
       title: "Ответ по центрам",
-      lead: "Средние и минимумы координат центров, наименьший и наибольший кластер, исключение кластера и целая часть произведения.",
+      lead: "Средние и минимумы координат центров, наименьший и наибольший кластер, объекты нужного вида, исключение кластера и целая часть произведения.",
       access: "paid",
       conceptIds: [
-        "vychislenie-otveta",
-        "korotkaya-zapis",
         "srednee-centrov",
         "minimalnye-koordinaty",
         "malenkiy-i-bolshoy",
         "obekty-nuzhnogo-vida",
         "isklyuchenie-klasterov",
         "masshtabirovanie",
-        "float",
         "polnyy-primer",
         "otvet-itogo",
       ],
       paid: {
         outline: [
-          { id: "vychislenie-otveta", navLabel: "Вычисление ответа" },
-          { id: "korotkaya-zapis", navLabel: "Короткая запись перебора" },
           { id: "srednee-centrov", navLabel: "Среднее центров" },
           { id: "minimalnye-koordinaty", navLabel: "Минимальные координаты" },
           { id: "malenkiy-i-bolshoy", navLabel: "Маленький и большой кластер" },
           { id: "obekty-nuzhnogo-vida", navLabel: "Объекты нужного вида" },
           { id: "isklyuchenie-klasterov", navLabel: "Исключение кластеров" },
-          { id: "masshtabirovanie", navLabel: "Масштабирование" },
-          { id: "float", navLabel: "Дробные числа" },
+          { id: "masshtabirovanie", navLabel: "Целая часть" },
           { id: "polnyy-primer", navLabel: "Полный пример" },
           { id: "otvet-itogo", navLabel: "Итого" },
         ],
         preview: (
           <>
+            <Typography.Text>Центры найдены — что дальше?</Typography.Text>
             <Typography.Text>
               <strong>
-                После нахождения центров начинается отдельная часть задачи:
-                вычисление ответа.
+                Ответ собирают из центров так, как сказано в условии: среднее
+                координат, минимум, центр самого большого кластера. Каждое слово
+                условия — отдельное действие.
               </strong>{" "}
-              Её легко недооценить. Даже идеально найденные центры не помогут,
-              если затем усреднить не те координаты или посчитать расстояние
-              между не теми объектами. Средние и минимумы координат центров
-              нужны в 36 задачах подборок, выбор наименьшего или наибольшего
-              кластера и исключение кластера — в 20.
+              Даже верные центры не спасут, если усреднить не те координаты или
+              взять модуль не на том шаге.
             </Typography.Text>
           </>
         ),
-        selfCheck: 2,
+        selfCheck: 5,
         load: () => import("./data-analysis.paid.otvet-po-centram"),
       },
     },
     {
       slug: "rasstoyaniya-i-pary",
       title: "Расстояния и пары точек",
-      lead: "Радиус, расстояния до точек своего и чужого кластера, диаметр, межкластерный диаметр и подсчёт точек в радиусе.",
+      lead: "Радиус, расстояния до точек своего и чужого кластера, диаметр, межкластерный диаметр, точки около центра, объекты нужного вида и задача темы.",
       access: "paid",
       conceptIds: [
-        "iz-rasstoyaniy",
         "svoy-i-chuzhoy",
         "diametr",
         "mezhklasternyy-diametr",
         "tochki-okolo-centra",
         "blizhayshiy-obekt",
+        "zadacha-temy",
         "rasstoyaniya-itogo",
       ],
       paid: {
         outline: [
-          { id: "iz-rasstoyaniy", navLabel: "Ответ из расстояний" },
-          { id: "svoy-i-chuzhoy", navLabel: "Свой и чужой кластер" },
+          { id: "svoy-i-chuzhoy", navLabel: "Радиус" },
           { id: "diametr", navLabel: "Диаметр кластера" },
           { id: "mezhklasternyy-diametr", navLabel: "Межкластерный диаметр" },
           { id: "tochki-okolo-centra", navLabel: "Точки около центра" },
-          { id: "blizhayshiy-obekt", navLabel: "Ближайший объект" },
+          { id: "blizhayshiy-obekt", navLabel: "Объекты нужного вида" },
+          { id: "zadacha-temy", navLabel: "Задача темы" },
           { id: "rasstoyaniya-itogo", navLabel: "Итого" },
         ],
         preview: (
           <>
+            <Typography.Text>Что спрашивают после центров?</Typography.Text>
             <Typography.Text>
               <strong>
-                После центров ответ чаще всего собирают из расстояний: между
-                центрами, от центра до точек и между самими точками.
+                Чаще всего — расстояния: от центра до точек, между центрами,
+                между самыми далёкими точками. Сначала реши, от чего до чего
+                считать и среди каких точек выбирать.
               </strong>{" "}
-              С демоверсии 2026 года это главный тип вопроса: расстояния после
-              центров нужны в 17 задачах подборок, диаметры и пары точек — ещё в
-              9, все 2025–2026 годов. Каждый раз важно ответить на два вопроса:
-              от чего до чего считаем расстояние и среди каких точек выбираем.
+              Здесь же решим задачу темы: наибольшее расстояние между частицами
+              с признаком II и энергия центров.
             </Typography.Text>
           </>
         ),
-        selfCheck: 4,
+        selfCheck: 5,
         load: () => import("./data-analysis.paid.rasstoyaniya-i-pary"),
       },
     },
     {
-      slug: "cepochki-sosedej",
-      title: "Цепочки соседей",
-      lead: "Автоматическое разделение по порогу соседства: связные группы, обоснование порога и аномалии как маленькие группы.",
+      slug: "sosedi-centry-statistika",
+      title: "Соседи, другие центры и статистика",
+      lead: "Цепочки соседей вместо границ, минимакс, антицентр и сумма квадратов, точка наведения, корреляция Пирсона и выбросы по квартилям.",
       level: "advanced",
       access: "paid",
       conceptIds: [
-        "dopolnitelnyy-urok-sosedi",
         "porog-sosedstva",
         "postroenie-gruppy",
-        "pochemu-vsya-gruppa",
-        "porog-v-primere",
         "obosnovanie-poroga",
-        "malenkie-gruppy",
-        "dve-operacii",
+        "samaya-dalyokaya-tochka",
+        "antipod",
+        "summa-kvadratov",
+        "tochka-navedeniya",
+        "korrelyaciya",
+        "vybrosy",
+        "uskoreniya",
         "sosedi-itogo",
       ],
       paid: {
         outline: [
-          { id: "dopolnitelnyy-urok-sosedi", navLabel: "Дополнительный урок" },
           { id: "porog-sosedstva", navLabel: "Порог соседства" },
           { id: "postroenie-gruppy", navLabel: "Построение группы" },
-          { id: "pochemu-vsya-gruppa", navLabel: "Почему вся группа" },
-          { id: "porog-v-primere", navLabel: "Порог в примере" },
-          { id: "obosnovanie-poroga", navLabel: "Обоснование порога" },
-          { id: "malenkie-gruppy", navLabel: "Маленькие группы" },
-          { id: "dve-operacii", navLabel: "Две операции" },
+          { id: "obosnovanie-poroga", navLabel: "Выбор порога" },
+          { id: "samaya-dalyokaya-tochka", navLabel: "Минимакс" },
+          { id: "antipod", navLabel: "Антицентр" },
+          { id: "summa-kvadratov", navLabel: "Сумма квадратов" },
+          { id: "tochka-navedeniya", navLabel: "Точка наведения" },
+          { id: "korrelyaciya", navLabel: "Корреляция" },
+          { id: "vybrosy", navLabel: "Выбросы по квартилям" },
+          { id: "uskoreniya", navLabel: "Ускорения перебора" },
           { id: "sosedi-itogo", navLabel: "Итого" },
         ],
         preview: (
           <>
             <Typography.Text>
-              <strong>Дополнительный урок — для продвинутых.</strong> Он для
-              тех, кто хочет второй, автоматический способ разделения на
-              кластеры. Ни одна задача подборок его не требует: во всех файлах
-              кластеры отделяются координатными границами или углом. Но цепочки
-              соседей разделяют группы без подбора границ по рисунку и помогают
-              проверить границы. Задачи основных подтем решаются без него.
+              Что делать, если границы по рисунку не провести, центр определён
+              иначе или в условии статистика?
             </Typography.Text>
-          </>
-        ),
-        selfCheck: 6,
-        load: () => import("./data-analysis.paid.cepochki-sosedej"),
-      },
-    },
-    {
-      slug: "drugie-centry-i-uskoreniya",
-      title: "Другие центры и ускорения",
-      lead: "Минимакс, антицентр и сумма квадратов, а также точные ускорения поиска центра без потери правильности.",
-      level: "advanced",
-      access: "paid",
-      conceptIds: [
-        "dopolnitelnyy-urok-centry",
-        "samaya-dalyokaya-tochka",
-        "antipod",
-        "summa-kvadratov",
-        "simmetriya",
-        "dosrochnaya-ostanovka",
-        "bez-garantii",
-        "centry-itogo",
-      ],
-      paid: {
-        outline: [
-          { id: "dopolnitelnyy-urok-centry", navLabel: "Дополнительный урок" },
-          { id: "samaya-dalyokaya-tochka", navLabel: "Самая далёкая точка" },
-          { id: "antipod", navLabel: "Антицентр и антипод" },
-          { id: "summa-kvadratov", navLabel: "Сумма квадратов" },
-          { id: "simmetriya", navLabel: "Симметрия расстояния" },
-          { id: "dosrochnaya-ostanovka", navLabel: "Досрочная остановка" },
-          { id: "bez-garantii", navLabel: "Сокращения без гарантии" },
-          { id: "centry-itogo", navLabel: "Итого" },
-        ],
-        preview: (
-          <>
             <Typography.Text>
-              <strong>Дополнительный урок — для продвинутых.</strong> Он для
-              тех, кто хочет закрыть все возможные случаи задания 27: 6 задач
-              подборок 2024–2025 годов определяют центр иначе — минимаксом,
-              наибольшей суммой или суммой квадратов, — а на экзаменах и в
-              демоверсиях таких задач не было. Здесь же точные ускорения поиска
-              центра; ни одна задача подборок их не требует. Задачи основных
+              <strong>
+                Это дополнительный урок для редких задач: цепочки соседей вместо
+                границ, минимакс и антицентр, точка наведения, корреляция
+                Пирсона и выбросы по квартилям.
+              </strong>{" "}
+              На экзаменах и в демоверсиях таких задач не было; задачи основных
               подтем решаются без него.
             </Typography.Text>
           </>
         ),
-        selfCheck: 5,
-        load: () => import("./data-analysis.paid.drugie-centry-i-uskoreniya"),
+        selfCheck: 4,
+        load: () => import("./data-analysis.paid.sosedi-centry-statistika"),
       },
     },
   ],
@@ -539,45 +433,111 @@ export const dataAnalysisLesson = defineLesson({
       explanation: (
         <>
           <Typography.Text>
+            В задании 27 дают файл с сотнями точек — звёзд, частиц, измерений —
+            и просят разбить их на группы, найти в каждой группе центр и собрать
+            из центров и расстояний ответ. Вот задача, которую мы решим в этой
+            теме:
+          </Typography.Text>
+          <Typography.Text>{THEME_TASK}</Typography.Text>
+          <Typography.Text>
             <strong>
-              Задание 27 на кластеризацию удобнее понимать как несколько
-              отдельных задач:
+              Любое задание 27 решается в четыре шага: прочитать записи файла,
+              разделить их на кластеры, найти центры по определению из условия и
+              собрать ответ.
             </strong>{" "}
-            прочитать точки, правильно распределить их по группам, вычислить
-            характеристики этих групп и собрать ответ по условию. Если
-            разобраться в каждом шаге, решение можно будет строить
-            самостоятельно.
+            Каждому шагу посвящена своя подтема. Разберём, что значат слова
+            условия:
           </Typography.Text>
+          <LessonTable
+            label={"Слова условия задания 27"}
+            columns={[{ label: "В условии" }, { label: "Что это значит" }]}
+            rows={[
+              [
+                "точка, звезда, частица",
+                "одна строка файла: координаты x и y и, может быть, характеристики",
+              ],
+              [
+                "расстояние d(A, B) = √((x₂ − x₁)² + (y₂ − y₁)²)",
+                "обычная длина отрезка: в Python — dist(a, b)",
+              ],
+              [
+                "кластер, точки лежат внутри квадратов",
+                "группы видны на рисунке, их разделяют границами",
+              ],
+              [
+                "модуль разности энергий не превышает 2",
+                "группы делят по вычисленной величине, а не по координатам",
+              ],
+              ["аномалии", "точки вне всех кластеров: их откладывают отдельно"],
+              [
+                "центр — точка, сумма расстояний от которой до остальных минимальна",
+                "одна из точек кластера: проверяют каждую как кандидата",
+              ],
+              [
+                "целая часть произведения на 10 000",
+                "int(value * 10000) — дробную часть отбрасывают",
+              ],
+            ]}
+          />
           <Typography.Text>
-            В задачах подборок встречаются разные определения центра: через
-            сумму расстояний, через сумму квадратов расстояний, через расстояние
-            до самой далёкой точки. Есть задания с исключением отдельных
-            кластеров, точками-аномалиями и дополнительными вычислениями после
-            кластеризации. Поэтому одного неизменного шаблона для всей подборки
-            недостаточно.
+            Начнём с точек, расстояния и чтения файла — без них не обходится ни
+            одна задача. Тема состоит из пяти подтем и дополнительного урока — у
+            каждой своя страница:
           </Typography.Text>
-          <Typography.Text>
-            Но <strong>все 50 задач начинаются одинаково</strong>: точка — это
-            пара чисел, а расстояние между точками считается по формуле. С этого
-            и начнём.
-          </Typography.Text>
-          <Typography.Text>
-            Ниже будем писать на <strong>Python</strong>. Все небольшие числовые
-            примеры — учебные: их координаты подобраны так, чтобы вычисления
-            можно было проверить вручную. Первые примеры — точки A (2; 5) и B
-            (−3; 4).
-          </Typography.Text>
+          <ol>
+            <li>
+              <strong>Точки, расстояния и файл</strong> — ты сейчас здесь:
+              точка, расстояние, чтение строк с характеристиками.
+            </li>
+            <li>
+              <SubtopicLink routeSlug={R} subtopic="razdelenie-na-klastery">
+                Разделение на кластеры
+              </SubtopicLink>{" "}
+              — рисунок, границы, аномалии, деление по энергии.
+            </li>
+            <li>
+              <SubtopicLink routeSlug={R} subtopic="centr-klastera">
+                Центр кластера
+              </SubtopicLink>{" "}
+              — перебор кандидатов и своя формула расстояния.
+            </li>
+            <li>
+              <SubtopicLink routeSlug={R} subtopic="otvet-po-centram">
+                Ответ по центрам
+              </SubtopicLink>{" "}
+              — средние, наибольший и наименьший кластер, целая часть.
+            </li>
+            <li>
+              <SubtopicLink routeSlug={R} subtopic="rasstoyaniya-i-pary">
+                Расстояния и пары точек
+              </SubtopicLink>{" "}
+              — радиус, диаметр, пары одного вида; решим задачу темы.
+            </li>
+            <li>
+              <SubtopicLink routeSlug={R} subtopic="sosedi-centry-statistika">
+                Соседи, другие центры и статистика
+              </SubtopicLink>{" "}
+              — дополнительный урок для редких задач.
+            </li>
+          </ol>
         </>
       ),
     },
     {
       id: "chto-v-fayle",
-      navLabel: "Что в файле",
+      navLabel: "Точка и кластер",
       explanation: (
         <>
           <Typography.Text>
-            <strong>Начнём с того, что именно находится в файле.</strong> Обычно
-            каждая строка описывает одну точку на плоскости:
+            Что записано в строке файла и как хранить это в программе?
+          </Typography.Text>
+          <Typography.Text>
+            <strong>
+              Строка файла — одна точка: пара чисел x и y. В Python точку хранят
+              кортежем, кластер — списком точек, все кластеры — списком списков.
+            </strong>{" "}
+            Сюжет бывает любой — звёзды, частицы, деревья, — а программа видит
+            пары чисел:
           </Typography.Text>
           <CodeBlock
             code={"1.5 3.2\n2.1 4.8\n7.3 1.4"}
@@ -586,12 +546,12 @@ export const dataAnalysisLesson = defineLesson({
             fileName="file.txt"
           />
           <Typography.Text>
-            У точки есть две координаты: <Notation>{"x"}</Notation> — положение
-            по горизонтали, <Notation>{"y"}</Notation> — положение по вертикали.
-            Например, запись A = (2; 5) означает: точка расположена на 2 единицы
-            правее начала координат и на 5 единиц выше него. Отрицательная
-            координата задаёт <strong>противоположное направление</strong>: B =
-            (−3; 4) — это 3 единицы влево и 4 единицы вверх.
+            Координата <Notation>{"x"}</Notation> — положение по горизонтали,{" "}
+            <Notation>{"y"}</Notation> — по вертикали. A = (2; 5) — на 2 единицы
+            правее начала координат и на 5 выше. Отрицательная координата задаёт{" "}
+            <strong>противоположное направление</strong>: B = (−3; 4) — на 3
+            левее и на 4 выше. В условиях x называют <strong>абсциссой</strong>,
+            y — <strong>ординатой</strong>.
           </Typography.Text>
           <LessonDiagram
             {...lessonMedia.clPlane}
@@ -603,115 +563,47 @@ export const dataAnalysisLesson = defineLesson({
             }
           />
           <Typography.Text>
-            В условиях часто используют слова <strong>абсцисса</strong> и{" "}
-            <strong>ордината</strong>. За ними не скрывается ничего
-            дополнительного: абсцисса — это координата{" "}
-            <Notation>{"x"}</Notation>, ордината — координата{" "}
-            <Notation>{"y"}</Notation>.
-          </Typography.Text>
-          <Typography.Text>
-            Звёзды, результаты эксперимента, населённые пункты — это сюжет. Для
-            программы во всех этих случаях важны прежде всего пары чисел.
-          </Typography.Text>
-        </>
-      ),
-    },
-    {
-      id: "tochka-kortezh",
-      navLabel: "Точка — кортеж",
-      explanation: (
-        <>
-          <Typography.Text>
-            <strong>
-              В Python одну точку удобно хранить кортежем, а несколько точек —
-              списком.
-            </strong>{" "}
-            Упорядоченная группа значений <Notation>{"(2.0, 5.0)"}</Notation>{" "}
-            называется <PythonTerm term="tuple">кортежем</PythonTerm>; здесь в
-            нём два элемента. Нумерация элементов в Python начинается с нуля:{" "}
-            <Notation>{"point[0]"}</Notation> — координата{" "}
-            <Notation>{"x"}</Notation>, <Notation>{"point[1]"}</Notation> —
-            координата <Notation>{"y"}</Notation>. Можно сразу разложить пару по
-            двум переменным: <Notation>{"x, y = point"}</Notation>.
-          </Typography.Text>
-          <Typography.Text>
-            Несколько точек будем хранить в{" "}
-            <PythonTerm term="list">списке</PythonTerm>. Список отличается от
-            кортежа, в частности, тем, что его удобно изменять: добавлять и
-            удалять элементы.
-          </Typography.Text>
-          <Typography.Text>
-            Метод <Notation>{"append"}</Notation> добавляет один элемент в конец
-            списка,{" "}
-            <PythonTerm term="len">
-              <Notation>{"len"}</Notation>
-            </PythonTerm>{" "}
-            даёт количество элементов, а цикл{" "}
-            <PythonTerm term="for">
-              <Notation>{"for"}</Notation>
-            </PythonTerm>{" "}
-            перебирает точки — сразу с координатами:
+            Упорядоченная пара <Notation>{"(2.0, 5.0)"}</Notation> в Python —{" "}
+            <PythonTerm term="tuple">кортеж</PythonTerm>: элемент{" "}
+            <Notation>{"point[0]"}</Notation> — координата x,{" "}
+            <Notation>{"point[1]"}</Notation> — координата y. Точки собирают в{" "}
+            <PythonTerm term="list">список</PythonTerm>, а кластеры — в список
+            списков:
           </Typography.Text>
           <CodeBlock
             code={
-              "point = (2.0, 5.0)\nx, y = point\nprint(point[0], point[1], x, y)\n\npoints = [\n    (2.0, 5.0),\n    (-3.0, 4.0),\n    (7.0, 1.0)\n]\npoints.append((8.0, 2.0))\nprint(len(points))\n\nfor x, y in points:\n    print(x, y)"
+              "point = (2.0, 5.0)\nx, y = point\nprint(point[0], y)\n\nclusters = [\n    [(0, 0), (1, 1), (2, 0)],\n    [(10, 8), (11, 9)]\n]\nclusters[1].append((12, 8))\n\nprint(len(clusters))      # сколько кластеров\nprint(len(clusters[1]))   # сколько точек во втором\nfor x, y in clusters[1]:\n    print(x, y)"
             }
-            label={"Код на Python: point = (2.0, 5.0)"}
+            label={"Точка, кластер и список кластеров"}
             language="python"
-            output={"2.0 5.0 2.0 5.0\n4\n2.0 5.0\n-3.0 4.0\n7.0 1.0\n8.0 2.0"}
+            output={"2.0 5.0\n2\n3\n10 8\n11 9\n12 8"}
           />
           <Typography.Text>
-            Переменные <Notation>{"x"}</Notation> и <Notation>{"y"}</Notation> в
-            заголовке цикла последовательно принимают координаты каждой точки.
-            Запись <Notation>{"for point in points:"}</Notation> перебрала бы те
-            же точки целиком.
-          </Typography.Text>
-        </>
-      ),
-    },
-    {
-      id: "klaster-spisok",
-      navLabel: "Кластер — список",
-      explanation: (
-        <>
-          <Typography.Text>
-            <strong>Кластер в программе — это тоже список точек.</strong> А все
-            кластеры вместе — список таких списков:
-          </Typography.Text>
-          <CodeBlock
-            code={
-              "clusters = [\n    [(0, 0), (1, 1), (2, 0)],\n    [(10, 8), (11, 9), (12, 8)]\n]\n\nprint(len(clusters))      # количество кластеров\nprint(len(clusters[0]))   # количество точек первого кластера\nprint(clusters[1])        # второй кластер"
-            }
-            label={
-              "Кластер в программе — это тоже список точек. А все кластеры вместе — список таких списков"
-            }
-            language="python"
-            output={"2\n3\n[(10, 8), (11, 9), (12, 8)]"}
-          />
-          <Typography.Text>
-            <Notation>{"clusters[0]"}</Notation> — первый кластер,{" "}
-            <Notation>{"clusters[1]"}</Notation> — второй. Важно различать два
-            количества: <strong>сколько групп</strong> —{" "}
-            <Notation>{"len(clusters)"}</Notation> — и{" "}
-            <strong>сколько точек внутри группы</strong> —{" "}
-            <Notation>{"len(clusters[0])"}</Notation>.
+            <Notation>{"x, y = point"}</Notation> раскладывает пару по двум
+            переменным, <Notation>{"append"}</Notation> добавляет точку в конец
+            списка, а цикл <Notation>{"for x, y in …"}</Notation> перебирает
+            точки сразу с координатами. Не путай два количества:{" "}
+            <Notation>{"len(clusters)"}</Notation> — сколько групп,{" "}
+            <Notation>{"len(clusters[1])"}</Notation> — сколько точек в группе.
           </Typography.Text>
         </>
       ),
     },
     {
       id: "teorema-pifagora",
-      navLabel: "Расстояние по Пифагору",
+      navLabel: "Расстояние",
       explanation: (
         <>
           <Typography.Text>
+            Как найти расстояние между двумя точками, зная их координаты?
+          </Typography.Text>
+          <Typography.Text>
             <strong>
-              Расстояние между точками получается из теоремы Пифагора.
+              Разности координат — катеты прямоугольного треугольника, а
+              расстояние — его гипотенуза: d(A, B) = √((x₂ − x₁)² + (y₂ − y₁)²).
             </strong>{" "}
-            Возьмём A = (1; 2) и B = (4; 6). По горизонтали точки отличаются на
-            4 − 1 = 3, по вертикали — на 6 − 2 = 4. Эти два перемещения образуют
-            катеты прямоугольного треугольника, а отрезок между точками — его
-            гипотенузу.
+            Для A = (1; 2) и B = (4; 6) по горизонтали точки отличаются на 4 − 1
+            = 3, по вертикали — на 6 − 2 = 4:
           </Typography.Text>
           <LessonDiagram
             {...lessonMedia.clPlane_f9adec}
@@ -723,76 +615,57 @@ export const dataAnalysisLesson = defineLesson({
             }
           />
           <Typography.Text>
-            Поэтому для точек A = (x₁; y₁) и B = (x₂; y₂) длина отрезка:
-          </Typography.Text>
-          <Typography.Text>
-            d(A, B) = √((x₂ − x₁)² + (y₂ − y₁)²).
-          </Typography.Text>
-          <Typography.Text>
-            Буквой d здесь обозначено расстояние. Для нашего примера d(A, B) =
-            √(3² + 4²) = √25 = 5. Такое расстояние называется{" "}
-            <strong>евклидовым</strong>: это обычная длина прямого отрезка.
-          </Typography.Text>
-        </>
-      ),
-    },
-    {
-      id: "math-dist",
-      navLabel: "Функция math.dist",
-      explanation: (
-        <>
-          <Typography.Text>
-            <strong>
-              В Python формулу можно записать самостоятельно, но в модуле{" "}
-              <Notation>{"math"}</Notation> уже есть нужная функция.
-            </strong>{" "}
-            Своя функция (
-            <PythonTerm term="def">
-              <Notation>{"def"}</Notation>
-            </PythonTerm>{" "}
-            создаёт функцию, <Notation>{"return"}</Notation> возвращает
-            результат) повторяет формулу: <Notation>{"** 2"}</Notation> —
-            возведение в квадрат, <Notation>{"** 0.5"}</Notation> — извлечение
-            квадратного корня.
+            Такое расстояние называют <strong>евклидовым</strong> — это обычная
+            длина отрезка. Формулу можно записать самому:{" "}
+            <Notation>{"** 2"}</Notation> — квадрат,{" "}
+            <Notation>{"** 0.5"}</Notation> — корень. Но в модуле{" "}
+            <Notation>{"math"}</Notation> уже есть функция{" "}
+            <Notation>{"dist"}</Notation>, ею и будем пользоваться:
           </Typography.Text>
           <CodeBlock
             code={
-              "from math import dist\n\n\ndef distance(a, b):\n    dx = a[0] - b[0]\n    dy = a[1] - b[1]\n\n    return (dx ** 2 + dy ** 2) ** 0.5\n\n\nprint(distance((1, 2), (4, 6)))\nprint(dist((1, 2), (4, 6)))"
+              "from math import dist\n\na, b = (1, 2), (4, 6)\ndx, dy = b[0] - a[0], b[1] - a[1]\nprint((dx ** 2 + dy ** 2) ** 0.5)\nprint(dist(a, b))\nprint(int(dist((0, 0), (1, 1)) * 10000))"
             }
-            label={"Код на Python: from math import dist"}
+            label={"Формула и функция dist"}
             language="python"
-            output={"5.0\n5.0"}
+            output={"5.0\n5.0\n14142"}
           />
           <Typography.Text>
-            <PythonTerm term="import">
-              <Notation>{"from math import dist"}</Notation>
-            </PythonTerm>{" "}
-            означает: взять функцию <Notation>{"dist"}</Notation> из
-            математического модуля. Она вычисляет евклидово расстояние между
-            точками. Дальше будем в основном использовать её.
+            Последняя строка — формат ответа задания 27: значение умножают на 10
+            000 и <strong>отбрасывают дробную часть</strong>. √2 ≈ 1,41421356, а
+            ответ — 14142. Это делает{" "}
+            <PythonTerm term="num">
+              <Notation>{"int"}</Notation>
+            </PythonTerm>
+            , а не <Notation>{"round"}</Notation>: подробнее — в подтеме 4.
           </Typography.Text>
           <Typography.Text>
-            Заметь несколько свойств: d(A, B) = d(B, A); d(A, A) = 0; d(A, B) ≥
-            0. Они пригодятся при объяснении алгоритмов и ускорений.
+            Пригодятся три свойства: d(A, B) = d(B, A), d(A, A) = 0 и d(A, B) ≥
+            0.
           </Typography.Text>
         </>
       ),
     },
     {
       id: "kvadrat-rasstoyaniya",
-      navLabel: "Квадрат расстояния",
+      navLabel: "Сравнение с порогом",
       explanation: (
         <>
           <Typography.Text>
-            <strong>Иногда достаточно квадрата расстояния.</strong> Если нужно
-            лишь проверить d(A, B) ≤ r, где r ≥ 0, можно проверить равносильное
-            условие (x₂ − x₁)² + (y₂ − y₁)² ≤ r². Корень не понадобится:
+            Нужно ли извлекать корень, чтобы проверить, что точки ближе
+            заданного расстояния?
+          </Typography.Text>
+          <Typography.Text>
+            <strong>
+              Нет: при r ≥ 0 условие d(A, B) ≤ r равносильно (x₂ − x₁)² + (y₂ −
+              y₁)² ≤ r², и корень не нужен.
+            </strong>
           </Typography.Text>
           <CodeBlock
             code={
               'a, b, r = (1, 2), (4, 6), 5\n\ndx = a[0] - b[0]\ndy = a[1] - b[1]\n\nif dx * dx + dy * dy <= r * r:\n    print("Точки достаточно близки")'
             }
-            label={"Корень не понадобится"}
+            label={"Проверка без корня"}
             language="python"
             output={"Точки достаточно близки"}
           />
@@ -812,351 +685,134 @@ export const dataAnalysisLesson = defineLesson({
       ),
     },
     {
-      id: "celaya-chast-otveta",
-      navLabel: "Целая часть ответа",
+      id: "chtenie-fayla",
+      navLabel: "Чтение файла",
       explanation: (
         <>
           <Typography.Text>
-            <strong>
-              Ответ задания 27 обычно просят как целую часть произведения на 10
-              000.
-            </strong>{" "}
-            Значение 2,718281 умножают на 10 000 и{" "}
-            <strong>отбрасывают дробную часть</strong>: 27182,81 → 27182. В
-            Python это одна строка — <Notation>{"int(value * 10000)"}</Notation>
-            :{" "}
-            <PythonTerm term="num">
-              <Notation>{"int"}</Notation>
-            </PythonTerm>{" "}
-            отбрасывает дробную часть. Чем <Notation>{"int"}</Notation>{" "}
-            отличается от <Notation>{"round"}</Notation> и где брать модуль,
-            разберём в подтеме 5; до неё все значения в задачах положительные.
+            Как прочитать точки из файла и ни одной не потерять?
           </Typography.Text>
-        </>
-      ),
-    },
-    {
-      id: "tochki-itogo",
-      navLabel: "Итого",
-      explanation: (
-        <>
-          <LessonSummary
-            items={[
+          <Typography.Text>
+            <strong>
+              Сначала посмотри на первые строки файла, потом разбирай каждую
+              строку в три действия: заменить запятые точками, разделить,
+              превратить части в числа.
+            </strong>{" "}
+            Форматы бывают разные — выбери, чтобы увидеть, что с ним делать:
+          </Typography.Text>
+          <VariantPicker
+            label={"Первые строки файла и что с ними делать"}
+            variants={[
               {
-                note: (
-                  <>
-                    Точка — пара чисел; в Python — кортеж{" "}
-                    <Notation>{"(x, y)"}</Notation>, кластер — список точек, все
-                    кластеры — список списков.
-                  </>
-                ),
+                label: "числа через пробел",
+                value: <Notation>{"1.25 3.70"}</Notation>,
+                note: <>читаем как есть</>,
               },
               {
-                note: (
-                  <>
-                    <Notation>{"len(clusters)"}</Notation> — сколько групп,{" "}
-                    <Notation>{"len(clusters[0])"}</Notation> — сколько точек в
-                    первой группе.
-                  </>
-                ),
+                label: "запятая в дробях",
+                value: <Notation>{"1,25 3,70"}</Notation>,
+                note: <>заменить запятые точками</>,
               },
               {
-                note: (
-                  <>
-                    Евклидово расстояние — гипотенуза треугольника с катетами
-                    |x₂ − x₁| и |y₂ − y₁|; в Python —{" "}
-                    <Notation>{"dist(a, b)"}</Notation>.
-                  </>
-                ),
+                label: "заголовок",
+                value: <Notation>{"X Y"}</Notation>,
+                note: <>пропустить первую строку</>,
               },
               {
-                note: (
-                  <>
-                    Сравнить одно расстояние с порогом можно по квадратам, а
-                    суммы расстояний — нельзя.
-                  </>
-                ),
-              },
-              {
-                note: (
-                  <>
-                    Ответ — <Notation>{"int(value * 10000)"}</Notation>: целая
-                    часть, а не округление.
-                  </>
-                ),
+                label: "табуляция",
+                value: <Notation>{"1,25→3,70→K3V"}</Notation>,
+                note: <>split() делит и по табуляции</>,
               },
             ]}
           />
-        </>
-      ),
-    },
-    {
-      id: "chtenie-bez-poter",
-      navLabel: "Чтение без потерь",
-      explanation: (
-        <>
           <Typography.Text>
-            <strong>
-              Перед тем как делить точки на группы, их нужно без потерь
-              прочитать из файла.
-            </strong>{" "}
-            Чтение нужно во всех 50 задачах подборок, а в семи из них — в том
-            числе в обеих задачах основной волны ЕГЭ-2026 и в демоверсии 2027
-            года — в строке кроме координат есть характеристика объекта. Ошибка
-            при чтении (пропущенная точка, запятая вместо точки, лишний столбец)
-            портит ответ так же, как ошибка в алгоритме.
-          </Typography.Text>
-          <Typography.Text>
-            Будем читать файл <Notation>{"example27.txt"}</Notation> — восемь
-            точек с заголовком <Notation>{"X Y"}</Notation>; к нему мы вернёмся,
-            когда соберём решение целиком. Точки и расстояния — из подтемы 1.
-          </Typography.Text>
-        </>
-      ),
-    },
-    {
-      id: "pervye-stroki",
-      navLabel: "Первые строки файла",
-      explanation: (
-        <>
-          <Typography.Text>
-            <strong>
-              Перед написанием алгоритма нужно посмотреть первые строки файла.
-            </strong>{" "}
-            В разных заданиях формат немного различается. Возможен файл без
-            заголовка:
-          </Typography.Text>
-          <CodeBlock
-            code={"1.25 3.70\n2.80 4.10"}
-            label={"Строки файла file.txt"}
-            language="text"
-            fileName="file.txt"
-          />
-          <Typography.Text>Возможен файл с заголовком:</Typography.Text>
-          <CodeBlock
-            code={"X Y\n1.25 3.70\n2.80 4.10"}
-            label={"Строки файла file.txt"}
-            language="text"
-            fileName="file.txt"
-          />
-          <Typography.Text>
-            Дробная часть может отделяться запятой:
-          </Typography.Text>
-          <CodeBlock
-            code={"1,25 3,70\n2,80 4,10"}
-            label={"Строки файла file.txt"}
-            language="text"
-            fileName="file.txt"
-          />
-          <Typography.Text>
-            Для Python запись <Notation>{'"1,25"'}</Notation> не является
-            стандартной записью дробного числа. Перед преобразованием запятую
-            заменяют точкой.
-          </Typography.Text>
-        </>
-      ),
-    },
-    {
-      id: "razbor-stroki",
-      navLabel: "Разбор строки",
-      explanation: (
-        <>
-          <Typography.Text>
-            <strong>
-              Одна строка разбирается в три действия: заменить запятые,
-              разделить, превратить части в числа.
-            </strong>{" "}
             Метод{" "}
             <PythonTerm term="strmeth">
               <Notation>{"replace"}</Notation>
             </PythonTerm>{" "}
-            заменяет запятые точками,{" "}
+            меняет запятые на точки,{" "}
             <PythonTerm term="split">
               <Notation>{"split()"}</Notation>
             </PythonTerm>{" "}
-            делит строку на части, а{" "}
+            без аргументов делит строку по пробелам и табуляциям, сколько бы их
+            ни было подряд, а{" "}
             <PythonTerm term="num">
               <Notation>{"float"}</Notation>
             </PythonTerm>{" "}
-            превращает часть в дробное число:
+            превращает текст в дробное число:
           </Typography.Text>
           <CodeBlock
             code={
-              'line = "1,25 3,70"\nline = line.replace(",", ".")\nparts = line.split()\nprint(line)\nprint(parts)\n\nx = float(parts[0])\ny = float(parts[1])\nprint(x, y)'
+              'line = "1,25   3,70"\nparts = line.replace(",", ".").split()\nprint(parts)\nprint(float(parts[0]) + float(parts[1]))'
             }
-            label={'Код на Python: line = "1,25 3,70"'}
+            label={"Разбор одной строки"}
             language="python"
-            output={"1.25 3.70\n['1.25', '3.70']\n1.25 3.7"}
+            output={"['1.25', '3.70']\n4.95"}
           />
           <Typography.Text>
-            <Notation>{"split()"}</Notation> без аргументов разделяет строку по
-            пробельным символам. Поэтому ему подходят и несколько пробелов
-            подряд, и табуляция. Пока элементы списка{" "}
-            <Notation>{"parts"}</Notation> — <strong>строки</strong>, то есть
-            текст. Числами они становятся только после{" "}
-            <Notation>{"float"}</Notation>.
-          </Typography.Text>
-        </>
-      ),
-    },
-    {
-      id: "funkciya-chteniya",
-      navLabel: "Функция чтения",
-      explanation: (
-        <>
-          <Typography.Text>
-            <strong>
-              Полная функция чтения собирает точки файла в список.
-            </strong>{" "}
-            Координаты берём из первых двух частей строки — так функция подойдёт
-            и для файлов, где после координат записано что-то ещё:
+            Функция чтения делает это для каждой строки. Координаты берём из
+            первых двух частей — так она подойдёт и для файлов, где после
+            координат записано что-то ещё:
           </Typography.Text>
           <CodeBlock
+            collapsible={false}
             code={
-              'def read_points(filename, has_header=False):\n    points = []\n\n    with open(filename, encoding="utf-8-sig") as f:\n        if has_header:\n            f.readline()\n\n        for line in f:\n            if not line.strip():\n                continue\n\n            parts = line.replace(",", ".").split()\n\n            x = float(parts[0])\n            y = float(parts[1])\n\n            points.append((x, y))\n\n    return points'
+              'def read_points(filename, has_header=False):\n    points = []\n    with open(filename, encoding="utf-8-sig") as f:\n        if has_header:\n            f.readline()\n        for line in f:\n            if not line.strip():\n                continue\n            parts = line.replace(",", ".").split()\n            points.append((float(parts[0]), float(parts[1])))\n    return points\n\n\npoints = read_points("example27.txt", has_header=True)\nprint(len(points), points[:3])'
             }
-            label={
-              "Код на Python: def read_points(filename, has_header=False):"
-            }
+            label={"Функция read_points"}
             language="python"
+            output={"8 [(0.0, 0.0), (0.0, 2.0), (1.0, 1.0)]"}
           />
-          <Typography.Text>Что здесь происходит:</Typography.Text>
           <ul>
-            <li>
-              <Notation>{"has_header"}</Notation> сообщает, есть ли в начале
-              строка с названиями столбцов; <Notation>{"False"}</Notation> —{" "}
-              <PythonTerm term="defarg">значение по умолчанию</PythonTerm>,
-              «нет».
-            </li>
             <li>
               <PythonTerm term="file">
                 <Notation>{"with open(...) as f"}</Notation>
               </PythonTerm>{" "}
-              открывает файл, а после окончания блока автоматически его
-              закрывает; <Notation>{"for line in f"}</Notation> перебирает
-              оставшиеся строки.
+              открывает файл и сам закрывает его после блока;{" "}
+              <Notation>{"for line in f"}</Notation> перебирает строки.
             </li>
             <li>
-              <Notation>{"f.readline()"}</Notation> читает одну строку. В данном
-              случае мы её намеренно пропускаем.
+              <Notation>{"f.readline()"}</Notation> читает одну строку — так
+              пропускаем заголовок, если <Notation>{"has_header"}</Notation>{" "}
+              истинно. По умолчанию заголовка нет.
             </li>
             <li>
-              <PythonTerm term="strip">
-                <Notation>{"line.strip()"}</Notation>
-              </PythonTerm>{" "}
-              убирает пробелы и перевод строки по краям, поэтому{" "}
-              <Notation>{"if not line.strip()"}</Notation> проверяет, не
-              является ли строка пустой;{" "}
-              <PythonTerm term="continue">
-                <Notation>{"continue"}</Notation>
-              </PythonTerm>{" "}
-              пропускает оставшуюся часть текущего прохода цикла.
+              <Notation>{"if not line.strip(): continue"}</Notation> пропускает
+              пустые строки — обычно пустую последнюю.
             </li>
             <li>
-              <Notation>{'encoding="utf-8-sig"'}</Notation> подходит для UTF-8 и
-              корректно обрабатывает возможную служебную метку в начале такого
-              файла.
+              <Notation>{"points[:3]"}</Notation> —{" "}
+              <PythonTerm term="slice">срез</PythonTerm>, первые три точки.
+              После чтения всегда выводи количество и первые точки.
             </li>
           </ul>
-          <Typography.Text>
-            После чтения полезно проверить, что программа действительно
-            прочитала ожидаемые данные. Запись{" "}
-            <Notation>{"points[:5]"}</Notation> —{" "}
-            <PythonTerm term="slice">срез</PythonTerm>: первые пять элементов
-            списка.
-          </Typography.Text>
-          <CodeBlock
-            code={
-              'points = read_points("example27.txt", has_header=True)\n\nprint("Количество точек:", len(points))\nprint("Первые точки:", points[:5])'
-            }
-            label={
-              "Запись points[:5] — {{slice|срез}}: первые пять элементов списка"
-            }
-            language="python"
-            output={
-              "Количество точек: 8\nПервые точки: [(0.0, 0.0), (0.0, 2.0), (1.0, 1.0), (2.0, 0.0), (2.0, 2.0)]"
-            }
-          />
-        </>
-      ),
-    },
-    {
-      id: "zagolovok",
-      navLabel: "Заголовок",
-      explanation: (
-        <>
-          <Typography.Text>
-            <strong>
-              Не пропускай первую строку автоматически в любом файле.
-            </strong>{" "}
-            Если в файле есть заголовок, а мы его не пропустили, программа
-            остановится на первой же строке — это хотя бы заметно:
-          </Typography.Text>
-          <CodeBlock
-            code={'points = read_points("example27.txt")'}
-            label={'Код на Python: points = read_points("example27.txt")'}
-            language="python"
-          />
-          <CodeBlock
-            code={"ValueError: could not convert string to float: 'X'"}
-            label={"Результат"}
-            language="text"
-          />
-          <Typography.Text>
-            Опаснее обратная ошибка. В файле <Notation>{"27-1.txt"}</Notation>{" "}
-            заголовка нет, но если пропустить первую строку «на всякий случай»,
-            программа молча потеряет первую точку:
-          </Typography.Text>
-          <CodeBlock
-            code={
-              'print(len(read_points("27-1.txt")))\nprint(len(read_points("27-1.txt", has_header=True)))'
-            }
-            label={'Код на Python: print(len(read_points("27-1.txt")))'}
-            language="python"
-            output={"205\n204"}
-          />
-          <Typography.Text>
-            Если в начале указано количество точек, эту строку тоже нужно
-            обрабатывать отдельно, но уже в соответствии с таким форматом. И ещё
-            одна мелочь: латинская <Notation>{"A"}</Notation> и кириллическая{" "}
-            <Notation>{"А"}</Notation> в имени файла выглядят почти одинаково,
-            но для компьютера это разные символы.
-          </Typography.Text>
-        </>
-      ),
-    },
-    {
-      id: "dopolnitelnye-stolbcy",
-      navLabel: "Дополнительные столбцы",
-      explanation: (
-        <>
-          <Typography.Text>
-            <strong>
-              Дополнительные столбцы не нужно смешивать с координатами.
-            </strong>{" "}
-            В некоторых вариантах у объекта кроме положения есть тип, категория
-            или другой признак:
-          </Typography.Text>
-          <CodeBlock
-            code={"1.25 3.70 red\n2.80 4.10 blue"}
-            label={"Строки файла file.txt"}
-            language="text"
-            fileName="file.txt"
-          />
-          <Typography.Text>
-            Третий столбец здесь — текстовая характеристика, а не третья
-            пространственная координата. Её сохраняют вместе с координатами в
-            одной записи, а для расстояния используют только координаты — срез{" "}
-            <Notation>{"[:2]"}</Notation> берёт первые два элемента:
-          </Typography.Text>
-          <CodeBlock
-            code={
-              'from math import dist\n\nrecord1 = (1.25, 3.70, "red")\nrecord2 = (2.80, 4.10, "blue")\n\nprint(record1[2], record2[2])\nprint(dist(record1[:2], record2[:2]))'
-            }
-            label={"Код на Python: from math import dist"}
-            language="python"
-            output={"red blue\n1.600781059358212"}
-          />
+          <ProofDisclosure
+            kind="nuance"
+            summary="Заголовок: пропустить лишнее опаснее, чем забыть"
+          >
+            <Typography.Text>
+              Если заголовок не пропустить, программа сразу остановится:{" "}
+              <Notation>
+                {"ValueError: could not convert string to float: 'X'"}
+              </Notation>
+              . Это хотя бы заметно. Обратная ошибка тише: в файле{" "}
+              <Notation>{"27-1.txt"}</Notation> заголовка нет, и пропуск первой
+              строки «на всякий случай» молча теряет точку:
+            </Typography.Text>
+            <CodeBlock
+              code={
+                'print(len(read_points("27-1.txt")))\nprint(len(read_points("27-1.txt", has_header=True)))'
+              }
+              label={"Пропуск строки без заголовка"}
+              language="python"
+              output={"205\n204"}
+            />
+            <Typography.Text>
+              И ещё: латинская <Notation>{"A"}</Notation> и кириллическая{" "}
+              <Notation>{"А"}</Notation> в имени файла выглядят одинаково, но
+              для компьютера это разные символы.
+            </Typography.Text>
+          </ProofDisclosure>
         </>
       ),
     },
@@ -1166,8 +822,12 @@ export const dataAnalysisLesson = defineLesson({
       explanation: (
         <>
           <Typography.Text>
+            Как прочитать строку, где после координат записан код звезды?
+          </Typography.Text>
+          <Typography.Text>
             <strong>
-              Характеристику звезды разбирают по позициям символов.
+              Код хранят в той же записи, что и координаты, а разбирают по
+              позициям символов.
             </strong>{" "}
             В задачах ЕГЭ-2026 у каждой звезды записан код вроде{" "}
             <Notation>{"K3V"}</Notation> слитно: латинская буква — спектральный
@@ -1241,9 +901,7 @@ export const dataAnalysisLesson = defineLesson({
           </Typography.Text>
           <CodeRunner
             {...lessonMedia.runParseKind}
-            label={
-              "Запусти функцию по шагам и посмотри, какую ветвь проходит каждый код"
-            }
+            label={"Разбор кода звезды по шагам"}
           />
           <Typography.Text>
             Для <Notation>{"M4III"}</Notation> выполняется строка 3: буква,
@@ -1253,26 +911,29 @@ export const dataAnalysisLesson = defineLesson({
             только сохраняем ещё и код:
           </Typography.Text>
           <CodeBlock
+            collapsible={false}
             code={
               'def read_stars(filename):\n    stars = []\n\n    with open(filename, encoding="utf-8-sig") as f:\n        for line in f:\n            parts = line.replace(",", ".").split()\n            x, y = float(parts[0]), float(parts[1])\n            stars.append((x, y, parts[2]))\n\n    return stars'
             }
-            label={
-              "Записи файла читаем так же, как точки, только сохраняем ещё и код"
-            }
+            label={"Функция read_stars"}
             language="python"
           />
           <CodeBlock
             code={
               'stars = read_stars("27-3.txt")\nprint(len(stars))\nprint(stars[:2])'
             }
-            label={
-              "Записи файла читаем так же, как точки, только сохраняем ещё и код"
-            }
+            label={"Первые звёзды файла 27-3.txt"}
             language="python"
             output={
               "601\n[(4.387365, 8.408613, 'A0III'), (1.932849, 1.048969, 'K3V')]"
             }
           />
+          <Typography.Text>
+            Для расстояния берут только координаты — срез{" "}
+            <Notation>{"s[:2]"}</Notation>, первые два элемента записи:{" "}
+            <Notation>{"dist(s[:2], t[:2])"}</Notation>. Код в расчёт не идёт,
+            по нему только отбирают звёзды нужного вида.
+          </Typography.Text>
         </>
       ),
     },
@@ -1282,25 +943,27 @@ export const dataAnalysisLesson = defineLesson({
       explanation: (
         <>
           <Typography.Text>
+            Как прочитать строку частицы из задачи темы?
+          </Typography.Text>
+          <Typography.Text>
             <strong>
-              Строка частицы содержит шесть значений, и кластер определяется
-              величиной, вычисленной по ним.
+              Строка частицы — шесть частей: пять чисел и признак. Кластер здесь
+              определяют не координаты, а энергия, вычисленная по скорости и
+              массе.
             </strong>{" "}
-            В демоверсии 2027 года каждая строка — частица: координаты{" "}
+            В файле <Notation>{"27-4.txt"}</Notation> записаны координаты{" "}
             <Notation>{"x"}</Notation> и <Notation>{"y"}</Notation>, проекции
             скорости <Notation>{"vx"}</Notation> и <Notation>{"vy"}</Notation>,
             масса <Notation>{"m"}</Notation> и признак — римское число. Значения
-            разделены табуляцией, дробная часть — запятой. Так устроен файл{" "}
-            <Notation>{"27-4.txt"}</Notation>. <Notation>{"split()"}</Notation>{" "}
-            справляется и с табуляцией, поэтому чтение не меняется:
+            разделены табуляцией, дробная часть — запятой.{" "}
+            <Notation>{"split()"}</Notation> справляется и с табуляцией:
           </Typography.Text>
           <CodeBlock
+            collapsible={false}
             code={
               'def read_particles(filename):\n    particles = []\n\n    with open(filename, encoding="utf-8-sig") as f:\n        for line in f:\n            parts = line.replace(",", ".").split()\n            x, y, vx, vy, m = [float(v) for v in parts[:5]]\n            particles.append((x, y, vx, vy, m, parts[5]))\n\n    return particles'
             }
-            label={
-              "split() справляется и с табуляцией, поэтому чтение не меняется"
-            }
+            label={"Функция read_particles"}
             language="python"
           />
           <Typography.Text>
@@ -1328,116 +991,134 @@ export const dataAnalysisLesson = defineLesson({
             code={
               "def energy(p):\n    vx, vy, m = p[2], p[3], p[4]\n    return m * (vx ** 2 + vy ** 2) / 2"
             }
-            label={
-              "Запишем формулу функцией и проверим её на этом примере и на первой частице файла"
-            }
+            label={"Функция energy"}
             language="python"
           />
           <CodeBlock
             code={
               'print(energy((1.25, -3.4, 2.0, -1.5, 0.8, "III")))\n\nparticles = read_particles("27-4.txt")\nprint(len(particles))\nprint(particles[0], energy(particles[0]))'
             }
-            label={
-              "Запишем формулу функцией и проверим её на этом примере и на первой частице файла"
-            }
+            label={"Энергия на примере и в файле"}
             language="python"
             output={
               "2.5\n402\n(-12.554, 9.248, 1.957, 1.743, 1.768, 'VII') 6.071221832"
             }
           />
           <Typography.Text>
-            У первой частицы файла энергия около 6,07.
+            У первой частицы файла энергия около 6,07. По энергиям частицы и
+            разделим на кластеры в подтеме 2.
           </Typography.Text>
         </>
       ),
     },
     {
-      id: "fayl-itogo",
+      id: "polyarnye-koordinaty",
+      navLabel: "Полярные координаты",
+      explanation: (
+        <>
+          <Typography.Text>
+            Что делать, если в строке файла записаны не x и y, а угол и
+            расстояние до начала координат?
+          </Typography.Text>
+          <Typography.Text>
+            <strong>
+              Это полярные координаты: угол φ и радиус r. До всех расчётов их
+              переводят в обычные: x = r · cos φ, y = r · sin φ.
+            </strong>{" "}
+            Угол отсчитывают от положительного направления оси x против часовой
+            стрелки, радиус — расстояние от начала координат до точки:
+          </Typography.Text>
+          <LessonDiagram
+            {...lessonMedia.clPolar}
+            caption={
+              <>
+                Точка с углом 60° и радиусом 4 — это (2; 3,464), точка с углом
+                210° и радиусом 2 — (−1,732; −1). Пунктир — её координаты x и y.
+              </>
+            }
+          />
+          <Typography.Text>
+            Функции <Notation>{"cos"}</Notation> и <Notation>{"sin"}</Notation>{" "}
+            из модуля <Notation>{"math"}</Notation> ждут угол в радианах, а в
+            файле он в градусах. Переводит <Notation>{"radians"}</Notation>; без
+            неё <Notation>{"cos(60)"}</Notation> считает косинус 60 радиан:
+          </Typography.Text>
+          <CodeBlock
+            collapsible={false}
+            code={
+              'from math import cos, sin, radians\n\n\ndef polar_to_xy(phi, r):\n    a = radians(phi)\n    return r * cos(a), r * sin(a)\n\n\nx, y = polar_to_xy(60, 4)\nprint(round(x, 3), round(y, 3))\nprint(round(cos(60), 3), round(cos(radians(60)), 3))\n\n\ndef read_polar(filename):\n    points = []\n    with open(filename, encoding="utf-8-sig") as f:\n        for line in f:\n            parts = line.replace(",", ".").split()\n            phi, r = float(parts[0]), float(parts[1])\n            points.append(polar_to_xy(phi, r))\n    return points\n\n\npoints = read_polar("27-7.txt")\nprint(len(points), [round(v, 3) for v in points[0]])'
+            }
+            label={"Перевод из полярных координат"}
+            language="python"
+            output={"2.0 3.464\n-0.952 0.5\n250 [5.76, 2.757]"}
+          />
+          <Typography.Text>
+            В файле <Notation>{"27-7.txt"}</Notation> первая строка —{" "}
+            <Notation>{"25,581 6,386"}</Notation>: угол 25,581°, радиус 6,386.
+            После перевода это точка (5,76; 2,757), и дальше с ней работают как
+            с любой другой: расстояния считают по x и y.
+          </Typography.Text>
+        </>
+      ),
+    },
+    {
+      id: "tochki-itogo",
       navLabel: "Итого",
       explanation: (
         <>
           <LessonSummary
             items={[
               {
+                key: "Точка и кластер",
                 note: (
                   <>
-                    Сначала посмотри на первые строки файла: заголовок,
-                    количество записей, запятая в дробях, лишние столбцы.
+                    кортеж <Notation>{"(x, y)"}</Notation>, список точек, список
+                    списков
                   </>
                 ),
               },
               {
+                key: "Расстояние",
                 note: (
                   <>
-                    Строка разбирается так:{" "}
+                    <Notation>{"dist(a, b)"}</Notation>; с порогом сравнивают
+                    квадраты
+                  </>
+                ),
+              },
+              {
+                key: "Ответ",
+                note: (
+                  <>
+                    <Notation>{"int(value * 10000)"}</Notation> — целая часть
+                  </>
+                ),
+              },
+              {
+                key: "Чтение",
+                note: (
+                  <>
                     <Notation>{'replace(",", ".")'}</Notation>,{" "}
                     <Notation>{"split()"}</Notation>,{" "}
-                    <Notation>{"float"}</Notation> для чисел.
+                    <Notation>{"float"}</Notation>; заголовок — только если он
+                    есть
                   </>
                 ),
               },
               {
+                key: "Характеристики",
                 note: (
-                  <>
-                    Первую строку пропускают, только если это заголовок; иначе
-                    потеряется точка.
-                  </>
+                  <>рядом с координатами; код звезды — сначала проверь букву</>
                 ),
               },
               {
+                key: "Частица и полярные",
                 note: (
-                  <>
-                    Характеристику хранят рядом с координатами, а расстояние
-                    считают по <Notation>{"[:2]"}</Notation>.
-                  </>
-                ),
-              },
-              {
-                note: (
-                  <>
-                    Код звезды разбирают по позициям, но сначала проверяют, есть
-                    ли в нём буква класса.
-                  </>
-                ),
-              },
-              {
-                note: (
-                  <>
-                    Строка частицы — шесть частей: числа{" "}
-                    <Notation>{"p[0]"}</Notation> …{" "}
-                    <Notation>{"p[4]"}</Notation> и признак{" "}
-                    <Notation>{"p[5]"}</Notation>; энергия E = m · (vx² + vy²) /
-                    2.
-                  </>
+                  <>E = m · (vx² + vy²) / 2; x = r · cos φ, y = r · sin φ</>
                 ),
               },
             ]}
           />
-        </>
-      ),
-    },
-    {
-      id: "pravilo-razdeleniya",
-      navLabel: "Правило разделения",
-      explanation: (
-        <>
-          <Typography.Text>
-            <strong>
-              Чтобы разделить точки на кластеры, сначала смотрят на их
-              расположение, а потом записывают правило, которое однозначно
-              относит каждую точку к одной группе.
-            </strong>{" "}
-            В 47 задачах из 50 таким правилом служат координатные границы,
-            найденные по рисунку; в семи, в том числе в демоверсии 2026 года,
-            часть точек — аномалии, которые не входят ни в один кластер; в трёх,
-            в том числе в демоверсии 2027 года, группы разделяет не координата,
-            а вычисленная величина.
-          </Typography.Text>
-          <Typography.Text>
-            Точки файла <Notation>{"example27.txt"}</Notation> и функция{" "}
-            <Notation>{"read_points"}</Notation> из подтемы 2 — наш первый
-            пример; функцию считаем определённой выше в программе.
-          </Typography.Text>
         </>
       ),
     },
@@ -1447,21 +1128,21 @@ export const dataAnalysisLesson = defineLesson({
       explanation: (
         <>
           <Typography.Text>
-            <strong>
-              Чтобы понять, как разделять точки, полезно сначала увидеть их
-              расположение.
-            </strong>{" "}
-            Такой рисунок называется <strong>диаграммой рассеяния</strong>:
-            каждой записи файла соответствует отдельная точка.
+            Как понять, на какие группы делятся точки и где проходят границы?
           </Typography.Text>
           <Typography.Text>
-            В табличном редакторе для этого выбирают два столбца координат и
-            строят <strong>точечную диаграмму XY</strong>. Нужна именно
-            диаграмма по координатам, а не обычный линейный график, который
-            может располагать записи по их порядковым номерам. Для построения
-            такого рисунка не нужно соединять точки линиями в порядке их
-            появления в файле: порядок строк обычно ничего не говорит о
-            соседстве точек.
+            <strong>
+              Построй диаграмму рассеяния — каждая запись файла становится
+              точкой на плоскости — и посмотри на неё.
+            </strong>{" "}
+            Функцию <Notation>{"read_points"}</Notation> из подтемы 1 считаем
+            определённой выше в программе.
+          </Typography.Text>
+          <Typography.Text>
+            В табличном редакторе выдели два столбца координат и построй{" "}
+            <strong>точечную диаграмму</strong>. Не линейный график: он соединит
+            точки в порядке строк файла, а порядок строк ничего не говорит о
+            том, какие точки рядом.
           </Typography.Text>
           <LessonDiagram
             {...lessonMedia.clScatterexample27txt_5d0645}
@@ -1481,9 +1162,7 @@ export const dataAnalysisLesson = defineLesson({
             code={
               'import matplotlib.pyplot as plt\n\nxs = []\nys = []\n\nfor x, y in points:\n    xs.append(x)\n    ys.append(y)\n\nplt.scatter(xs, ys, s=3)\nplt.axis("equal")\nplt.grid()\nplt.show()'
             }
-            label={
-              "В Python можно использовать matplotlib, если эта библиотека доступна в твоей среде"
-            }
+            label={"Диаграмма рассеяния в matplotlib"}
             language="python"
           />
           <Typography.Text>
@@ -1515,7 +1194,8 @@ export const dataAnalysisLesson = defineLesson({
             </li>
           </ul>
           <Typography.Text>
-            Ответы определят способ кластеризации.
+            От ответов зависит, чем делить: границами по координатам, углом,
+            вычисленной величиной или цепочками соседей.
           </Typography.Text>
         </>
       ),
@@ -1526,18 +1206,22 @@ export const dataAnalysisLesson = defineLesson({
       explanation: (
         <>
           <Typography.Text>
+            Как записать правило, если на рисунке группы разделяет пустая
+            полоса?
+          </Typography.Text>
+          <Typography.Text>
             <strong>
-              Самый простой способ разделения — использовать координатные
-              границы.
+              Провести по полосе границу и сравнивать с ней координату точки.
             </strong>{" "}
-            На рисунке все точки одной группы находятся левее{" "}
-            <Notation>{"x = 5"}</Notation>, а все точки другой — правее. Тогда:
+            В файле <Notation>{"example27.txt"}</Notation> все точки одной
+            группы левее <Notation>{"x = 5"}</Notation>, а другой — правее:
           </Typography.Text>
           <CodeBlock
+            collapsible={false}
             code={
               'points = read_points("example27.txt", has_header=True)\n\nclusters = [[], []]\n\nfor point in points:\n    x, y = point\n\n    if x < 5:\n        clusters[0].append(point)\n    else:\n        clusters[1].append(point)\n\nprint(len(clusters[0]), len(clusters[1]))\nprint(clusters[1])'
             }
-            label={"Тогда"}
+            label={"Граница x = 5"}
             language="python"
             output={"5 3\n[(10.0, 0.0), (12.0, 0.0), (11.0, 1.0)]"}
           />
@@ -1574,10 +1258,13 @@ export const dataAnalysisLesson = defineLesson({
       explanation: (
         <>
           <Typography.Text>
+            Как разделить три группы, если одной границы мало?
+          </Typography.Text>
+          <Typography.Text>
             <strong>
-              Если групп три, условия комбинируют цепочкой{" "}
-              <Notation>{"if / elif / else"}</Notation>, и порядок проверок
-              существенен.
+              Условия комбинируют цепочкой{" "}
+              <Notation>{"if / elif / else"}</Notation>: выполняется первая
+              истинная проверка, поэтому порядок проверок важен.
             </strong>{" "}
             <PythonTerm term="if">
               <Notation>{"elif"}</Notation>
@@ -1610,14 +1297,12 @@ export const dataAnalysisLesson = defineLesson({
           </Typography.Text>
           <CodeRunner
             {...lessonMedia.runRegions}
-            label={
-              "Запусти цепочку по шагам на трёх точках и посмотри, какую ветвь проходит каждая"
-            }
+            label={"Цепочка проверок по шагам"}
           />
           <Typography.Text>
             Для <Notation>{"(2, 1)"}</Notation> проверка в строке 4 истинна, и
-            до строки 6 дело не доходит. Такой код допустим только тогда, когда
-            рисунок и данные действительно соответствуют этим условиям.
+            до строки 6 дело не доходит. Числа 3 и 5 — границы для этих точек: в
+            другом файле их снова находят по рисунку.
           </Typography.Text>
           <Typography.Text>
             <strong>
@@ -1631,17 +1316,15 @@ export const dataAnalysisLesson = defineLesson({
             code={
               "if x < 5:\n    clusters[0].append(point)\n\nif y < 3:\n    clusters[1].append(point)"
             }
-            label={
-              "При независимых проверках точка может удовлетворить сразу двум условиям"
-            }
+            label={"Две независимые проверки"}
             language="python"
           />
           <Typography.Text>
             Если у точки одновременно <Notation>{"x < 5"}</Notation> и{" "}
             <Notation>{"y < 3"}</Notation>, она попадёт в оба списка. Цепочка{" "}
             <Notation>{"if / elif / else"}</Notation> выполняет только одну
-            ветвь. Но и она не исправляет неправильно выбранные границы: она
-            лишь предотвращает многократное добавление в рамках этой цепочки.
+            ветвь. Правильные границы она за тебя не выберет, но гарантирует,
+            что каждая точка попадёт ровно в одну группу.
           </Typography.Text>
         </>
       ),
@@ -1652,30 +1335,28 @@ export const dataAnalysisLesson = defineLesson({
       explanation: (
         <>
           <Typography.Text>
+            Что делать с точками, которые не входят ни в один кластер?
+          </Typography.Text>
+          <Typography.Text>
             <strong>
-              Точки-аномалии обрабатывают только по правилам конкретной задачи.
+              Задать области кластеров явно, а всё, что в них не попало,
+              отложить в отдельный список аномалий.
             </strong>{" "}
-            Аномалия здесь означает запись, которая не относится ни к одному из
-            требуемых кластеров. Например, в демоверсии 2026 года сказано, что в
-            файле Б есть три лишние точки, которые нужно исключить.
+            Аномалия — запись, которая не относится ни к одному из кластеров.
+            Например, в демоверсии 2026 года сказано, что в файле Б три лишние
+            точки и их нужно исключить.
           </Typography.Text>
           <Typography.Text>
-            При наличии аномалий{" "}
-            <strong>
-              последнее <Notation>{"else"}</Notation> может быть опасным
-            </strong>
-            . Оно отправит в последний кластер вообще всё, что не подошло
-            раньше, включая лишние точки.
-          </Typography.Text>
-          <Typography.Text>
-            В таком случае лучше{" "}
-            <strong>выделять допустимые области явно</strong>, а остальные точки
-            сохранять отдельно —{" "}
+            Привычное последнее <Notation>{"else"}</Notation> здесь опасно: оно
+            отправит в последний кластер всё, что не подошло раньше, — и
+            аномалии тоже. Поэтому каждую область задают прямоугольником из двух
+            условий через{" "}
             <PythonTerm term="andor">
               <Notation>{"and"}</Notation>
-            </PythonTerm>{" "}
-            требует, чтобы одновременно выполнялись оба условия. Так устроен наш
-            файл <Notation>{"27-2.txt"}</Notation>: три кластера и три аномалии.
+            </PythonTerm>
+            , а в <Notation>{"else"}</Notation> остаются только аномалии. Так
+            устроен наш файл <Notation>{"27-2.txt"}</Notation>: три кластера и
+            три аномалии.
           </Typography.Text>
           <LessonDiagram
             {...lessonMedia.clScatter272txt_boxes2_611cef}
@@ -1688,10 +1369,11 @@ export const dataAnalysisLesson = defineLesson({
             }
           />
           <CodeBlock
+            collapsible={false}
             code={
               'points = read_points("27-2.txt")\n\nclusters = [[], [], []]\nnoise = []\n\nfor point in points:\n    x, y = point\n\n    if -8 < x < 0 and 2 < y < 10:\n        clusters[0].append(point)\n    elif 1 < x < 10 and 2 < y < 10:\n        clusters[1].append(point)\n    elif -2 < x < 5 and -7 < y < 1:\n        clusters[2].append(point)\n    else:\n        noise.append(point)\n\nfor cluster in clusters:\n    print("Размер:", len(cluster))\n\nprint("Аномалий:", len(noise))\nprint(sum(len(c) for c in clusters) + len(noise), len(points))'
             }
-            label={"Так устроен наш файл 27-2.txt: три кластера и три аномалии"}
+            label={"Файл 27-2.txt: три кластера и аномалии"}
             language="python"
             output={
               "Размер: 251\nРазмер: 193\nРазмер: 156\nАномалий: 3\n603 603"
@@ -1719,19 +1401,21 @@ export const dataAnalysisLesson = defineLesson({
       explanation: (
         <>
           <Typography.Text>
+            Как разделить группы, если пустая полоса между ними идёт наискосок?
+          </Typography.Text>
+          <Typography.Text>
             <strong>
-              Разделяющая граница не обязана быть вертикальной или
-              горизонтальной.
+              Провести наклонную прямую и сравнить y точки с высотой прямой при
+              том же x.
             </strong>{" "}
-            Иногда две группы удобно разделить наклонной прямой y = 2x + 1.
-            Точки выше неё удовлетворяют условию y {">"} 2x + 1, а ниже — y{" "}
-            {"<"} 2x + 1. В коде:
+            Пусть группы разделяет прямая y = 2x + 1. Точки выше неё
+            удовлетворяют условию y {">"} 2x + 1, а ниже — y {"<"} 2x + 1:
           </Typography.Text>
           <CodeBlock
             code={
               "if y < 2 * x + 1:\n    clusters[0].append(point)\nelse:\n    clusters[1].append(point)"
             }
-            label={"В коде"}
+            label={"Наклонная граница"}
             language="python"
           />
           <Typography.Text>
@@ -1740,61 +1424,118 @@ export const dataAnalysisLesson = defineLesson({
             при этом <Notation>{"x"}</Notation>. Затем программа сравнивает с
             ней высоту точки.
           </Typography.Text>
+          <ProofDisclosure
+            kind="nuance"
+            summary="Квадраты из условия — не способ разделения"
+          >
+            <Typography.Text>
+              В некоторых задачах сказано, что кластеры помещаются в
+              прямоугольники или квадраты заданных размеров. Это{" "}
+              <strong>ограничение на расположение точек</strong>, а не готовая
+              инструкция, как их разделить. Из него нельзя автоматически
+              заключить:
+            </Typography.Text>
+            <ul>
+              <li>что границы проходят через начало координат;</li>
+              <li>
+                что точки нужно группировать по <Notation>{"x // W"}</Notation>;
+              </li>
+              <li>что стороны прямоугольников параллельны осям;</li>
+              <li>
+                что ширину прямоугольника можно использовать как порог
+                соседства.
+              </li>
+            </ul>
+            <Typography.Text>
+              В подборке есть условия, прямо разрешающие поворот квадратов
+              относительно осей. Если прямоугольник заведомо расположен
+              параллельно осям, для его точек необходимо x_max − x_min ≤ W и
+              y_max − y_min ≤ H.
+            </Typography.Text>
+            <Typography.Text>
+              Но для повёрнутого прямоугольника{" "}
+              <strong>
+                его проекции на оси могут быть шире соответствующих сторон
+              </strong>
+              . Поэтому такая проверка уже не является универсальной.
+            </Typography.Text>
+            <LessonDiagram
+              {...lessonMedia.clProjection}
+              caption={
+                <>
+                  Прямоугольник 4 × 2, повёрнутый на 30°. Разброс абсцисс его
+                  точек — 4,46, больше стороны 4: проверка x_max − x_min ≤ W
+                  отвергла бы правильный кластер.
+                </>
+              }
+            />
+          </ProofDisclosure>
+        </>
+      ),
+    },
+    {
+      id: "oblasti-mezhdu-pryamymi",
+      navLabel: "Между прямыми",
+      explanation: (
+        <>
           <Typography.Text>
-            В некоторых задачах сказано, что кластеры помещаются в
-            прямоугольники или квадраты заданных размеров. Это{" "}
-            <strong>ограничение на расположение точек</strong>, а не готовая
-            инструкция, как их разделить. Из него нельзя автоматически
-            заключить:
+            Как разделить точки, если кластеры лежат в треугольниках, которые
+            образуют две наклонные прямые и оси координат?
           </Typography.Text>
-          <ul>
-            <li>что границы проходят через начало координат;</li>
-            <li>
-              что точки нужно группировать по <Notation>{"x // W"}</Notation>;
-            </li>
-            <li>что стороны прямоугольников параллельны осям;</li>
-            <li>
-              что ширину прямоугольника можно использовать как порог соседства.
-            </li>
-          </ul>
           <Typography.Text>
-            В подборке есть условия, прямо разрешающие поворот квадратов
-            относительно осей. Если прямоугольник заведомо расположен
-            параллельно осям, для его точек необходимо x_max − x_min ≤ W и y_max
-            − y_min ≤ H.
-          </Typography.Text>
-          <Typography.Text>
-            Но для повёрнутого прямоугольника{" "}
             <strong>
-              его проекции на оси могут быть шире соответствующих сторон
-            </strong>
-            . Поэтому такая проверка уже не является универсальной.
+              Треугольник между прямыми — это несколько условий «по какую
+              сторону прямой лежит точка», соединённых через and.
+            </strong>{" "}
+            В файле <Notation>{"27-8.txt"}</Notation> прямые y = x и y = 10 − x
+            вместе с осями ограничивают два треугольника — это кластеры. Точки
+            вне треугольников — аномалии:
           </Typography.Text>
           <LessonDiagram
-            {...lessonMedia.clProjection}
+            {...lessonMedia.clLines}
             caption={
               <>
-                Прямоугольник 4 × 2, повёрнутый на 30°. Разброс абсцисс его
-                точек — 4,46, больше стороны 4: проверка x_max − x_min ≤ W
-                отвергла бы правильный кластер.
+                Нижний треугольник лежит под обеими прямыми, левый — над y = x и
+                под y = 10 − x. Четыре крестика вне треугольников — аномалии.
               </>
             }
           />
+          <Typography.Text>
+            Обе области лежат правее оси y, выше оси x и ниже прямой y = 10 − x.
+            Внутри этого большого треугольника их делит прямая y = x:
+          </Typography.Text>
+          <CodeBlock
+            collapsible={false}
+            code={
+              'points = read_points("27-8.txt")\nclusters = [[], []]\nnoise = []\n\nfor x, y in points:\n    if x > 0 and y > 0 and y < 10 - x:\n        if y < x:\n            clusters[0].append((x, y))\n        else:\n            clusters[1].append((x, y))\n    else:\n        noise.append((x, y))\n\nprint(len(clusters[0]), len(clusters[1]), len(noise))'
+            }
+            label={"Два треугольника и аномалии"}
+            language="python"
+            output={"170 130 4"}
+          />
+          <Typography.Text>
+            Проверим на точке (6; 2): 6 {">"} 0, 2 {">"} 0 и 2 {"<"} 10 − 6 = 4
+            — она внутри большого треугольника, а 2 {"<"} 6 — значит, в нижнем.
+            Точка (7; 5) не проходит третью проверку: 5 {"<"} 3 — ложь, это
+            аномалия.
+          </Typography.Text>
         </>
       ),
     },
     {
       id: "razdelyayushchiy-priznak",
-      navLabel: "Разделяющий признак",
+      navLabel: "Расстояние и угол",
       explanation: (
         <>
           <Typography.Text>
+            Как разделить группы, которые не отделить прямой: кольца вокруг
+            точки или узкие секторы?
+          </Typography.Text>
+          <Typography.Text>
             <strong>
-              Если форма кластеров необычная, полезно искать признак, который их
-              разделяет.
-            </strong>{" "}
-            Это может быть не сама координата <Notation>{"x"}</Notation> или{" "}
-            <Notation>{"y"}</Notation>, а вычисленная по ним величина.
+              Вычислить по координатам другую величину — расстояние до точки или
+              угол направления — и делить по ней.
+            </strong>
           </Typography.Text>
           <Typography.Text>
             Например, группы могут располагаться в разных кольцевых областях
@@ -1806,7 +1547,7 @@ export const dataAnalysisLesson = defineLesson({
             code={
               "r = dist(point, (x0, y0))\n\nif r < 3:\n    ...\nelif r < 7:\n    ...\nelse:\n    ..."
             }
-            label={"Код на Python: r = dist(point, (x0, y0))"}
+            label={"Кольца по расстоянию до C"}
             language="python"
           />
           <Typography.Text>
@@ -1826,9 +1567,7 @@ export const dataAnalysisLesson = defineLesson({
             code={
               "from math import atan2, degrees\n\nangle = degrees(atan2(y - y0, x - x0))\nangle = angle % 360"
             }
-            label={
-              "Для точки, не совпадающей с C, угол направления вычисляется так"
-            }
+            label={"Угол направления"}
             language="python"
           />
           <Typography.Text>
@@ -1840,8 +1579,10 @@ export const dataAnalysisLesson = defineLesson({
           </Typography.Text>
           <Typography.Text>
             Почему лучше не использовать обычное деление{" "}
-            <Notation>{"(y-y0)/(x-x0)"}</Notation>? Потому что оно не различает
-            все направления и приводит к делению на ноль на вертикальном луче.
+            <Notation>{"(y-y0)/(x-x0)"}</Notation>? У противоположных
+            направлений оно одинаковое: точки (1; 1) и (−1; −1) от начала
+            координат дают одно и то же отношение 1. А на вертикальном луче
+            получается деление на ноль.
           </Typography.Text>
           <Typography.Text>
             Есть тонкость: направления 359° и 1° очень близки. Их нельзя считать
@@ -1854,9 +1595,7 @@ export const dataAnalysisLesson = defineLesson({
             code={
               "relative_angle = (angle - start) % 360\n\nif relative_angle <= width:\n    ..."
             }
-            label={
-              "Чтобы проверить сектор, начинающийся с угла start и имеющий ширину width, удобно написать"
-            }
+            label={"Проверка сектора"}
             language="python"
           />
           <Typography.Text>
@@ -1894,12 +1633,11 @@ export const dataAnalysisLesson = defineLesson({
             230°:
           </Typography.Text>
           <CodeBlock
+            collapsible={false}
             code={
               'from math import atan2, degrees\n\npoints = read_points("27-5.txt")\nx0, y0 = 2, -1\nstarts = [350, 110, 230]\nclusters = [[], [], []]\n\nfor x, y in points:\n    angle = degrees(atan2(y - y0, x - x0)) % 360\n\n    for k in range(3):\n        if (angle - starts[k]) % 360 <= 20:\n            clusters[k].append((x, y))\n\nprint([len(c) for c in clusters], len(points))'
             }
-            label={
-              "По рисунку и углам крайних точек начала секторов — 350°, 110° и 230°"
-            }
+            label={"Три сектора файла 27-5.txt"}
             language="python"
             output={"[83, 76, 69] 228"}
           />
@@ -1912,20 +1650,23 @@ export const dataAnalysisLesson = defineLesson({
     },
     {
       id: "vychislyaemyy-priznak",
-      navLabel: "Вычисляемый признак",
+      navLabel: "Энергия частиц",
       explanation: (
         <>
           <Typography.Text>
+            Как разделить частицы из задачи темы, если их координаты тут ни при
+            чём?
+          </Typography.Text>
+          <Typography.Text>
             <strong>
-              Признаком может быть величина, вычисленная по нескольким столбцам
-              строки.
+              Делить по величине, вычисленной по нескольким столбцам строки, —
+              по кинетической энергии.
             </strong>{" "}
-            В демоверсии 2027 года частицы делят на кластеры по кинетической
-            энергии: модуль разности энергий любых двух частиц одного кластера
-            не больше R = 2. Координаты здесь вообще ни при чём. Посчитаем
-            энергию каждой частицы файла <Notation>{"27-4.txt"}</Notation>{" "}
-            функцией <Notation>{"energy"}</Notation> из подтемы 2 и посмотрим на
-            неё так же, как на точки, — только на одной оси:
+            По условию модуль разности энергий любых двух частиц одного кластера
+            не больше R = 2. Посчитаем энергию каждой частицы файла{" "}
+            <Notation>{"27-4.txt"}</Notation> функцией{" "}
+            <Notation>{"energy"}</Notation> из подтемы 1 и посмотрим на неё так
+            же, как на точки, — только на одной оси:
           </Typography.Text>
           <LessonDiagram
             {...lessonMedia.clEnergy274txt}
@@ -1944,12 +1685,11 @@ export const dataAnalysisLesson = defineLesson({
             сколько границ её энергия уже превысила:
           </Typography.Text>
           <CodeBlock
+            collapsible={false}
             code={
               "def energy_groups(particles, bounds):\n    groups = [[] for _ in range(len(bounds) + 1)]\n\n    for p in particles:\n        k = 0\n        while k < len(bounds) and energy(p) > bounds[k]:\n            k += 1\n        groups[k].append(p)\n\n    return groups"
             }
-            label={
-              "Номер группы частицы — сколько границ её энергия уже превысила"
-            }
+            label={"Функция energy_groups"}
             language="python"
           />
           <Typography.Text>
@@ -1957,10 +1697,11 @@ export const dataAnalysisLesson = defineLesson({
             энергии должны отличаться не больше чем на 2.
           </Typography.Text>
           <CodeBlock
+            collapsible={false}
             code={
               'particles = read_particles("27-4.txt")\nes = sorted(energy(p) for p in particles)\n\nfor a, b in zip(es, es[1:]):\n    if b - a > 0.5:\n        print(round(a, 3), round(b, 3))\n\ngroups = energy_groups(particles, [3.5, 7, 10.5])\n\nfor g in groups:\n    e = [energy(p) for p in g]\n    print(len(g), round(max(e) - min(e), 3))'
             }
-            label={'Код на Python: particles = read_particles("27-4.txt")'}
+            label={"Промежутки и группы файла 27-4.txt"}
             language="python"
             output={
               "2.857 4.424\n6.174 8.127\n9.879 11.745\n125 1.736\n103 1.751\n93 1.752\n81 1.596"
@@ -1986,47 +1727,44 @@ export const dataAnalysisLesson = defineLesson({
           <LessonSummary
             items={[
               {
+                key: "Рисунок",
+                note: <>по самому файлу, одинаковый масштаб по осям</>,
+              },
+              {
+                key: "Границы",
                 note: (
                   <>
-                    Сначала рисунок по самому файлу, в одинаковом масштабе по
-                    осям; потом правило.
+                    цепочка <Notation>{"if / elif / else"}</Notation>: каждая
+                    точка — ровно в одну группу
                   </>
                 ),
               },
               {
+                key: "Аномалии",
                 note: (
                   <>
-                    Границы записывают цепочкой{" "}
-                    <Notation>{"if / elif / else"}</Notation>: каждая точка
-                    попадает ровно в одну группу, порядок проверок важен.
+                    явные области, остальное — в <Notation>{"noise"}</Notation>;
+                    сверь количество с условием
                   </>
                 ),
               },
               {
+                key: "Наклонная прямая",
+                note: <>подставь x в уравнение и сравни с y</>,
+              },
+              {
+                key: "Угол и расстояние",
                 note: (
                   <>
-                    При аномалиях кластеры задают явными областями, а всё
-                    остальное откладывают в <Notation>{"noise"}</Notation>;
-                    проверяют, что аномалий столько, сколько сказано в условии.
+                    <Notation>{"atan2"}</Notation> и{" "}
+                    <Notation>{"(angle − start) % 360"}</Notation>;{" "}
+                    <Notation>{"dist"}</Notation> до точки
                   </>
                 ),
               },
               {
-                note: (
-                  <>
-                    Размеры прямоугольников из условия — ограничение, а не
-                    способ разделения; повёрнутый прямоугольник шире своей
-                    стороны на оси.
-                  </>
-                ),
-              },
-              {
-                note: (
-                  <>
-                    Признаком может быть вычисленная величина: расстояние до
-                    точки, угол направления, энергия частицы.
-                  </>
-                ),
+                key: "Энергия",
+                note: <>сортировка и большие промежутки; ширина группы ≤ R</>,
               },
             ]}
           />

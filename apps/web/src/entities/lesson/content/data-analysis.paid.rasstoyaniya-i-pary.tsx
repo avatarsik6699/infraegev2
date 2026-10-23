@@ -12,86 +12,53 @@ import {
 } from "~/shared/components/learning-content";
 import type { LessonContent } from "../lib/define-lesson.types";
 import { lessonMedia } from "./data-analysis.paid.rasstoyaniya-i-pary.media";
+import { THEME_TASK } from "./data-analysis.theme";
 import { PythonTerm } from "./python-term";
 
 const content: LessonContent.PaidSubtopicContent = {
   theory: [
     {
-      id: "iz-rasstoyaniy",
-      navLabel: "Ответ из расстояний",
-      explanation: (
-        <>
-          <Typography.Text>
-            <strong>
-              После центров ответ чаще всего собирают из расстояний: между
-              центрами, от центра до точек и между самими точками.
-            </strong>{" "}
-            С демоверсии 2026 года это главный тип вопроса: расстояния после
-            центров нужны в 17 задачах подборок, диаметры и пары точек — ещё в
-            9, все 2025–2026 годов. Каждый раз важно ответить на два вопроса: от
-            чего до чего считаем расстояние и среди каких точек выбираем.
-          </Typography.Text>
-          <Typography.Text>
-            Будем считать расстояния в двух кластерах файла{" "}
-            <Notation>{"example27.txt"}</Notation>: левый — пять точек с центром
-            (1; 1), правый — три точки с центром (11; 1). Функции{" "}
-            <Notation>{"center_sum"}</Notation> (подтема 4),{" "}
-            <Notation>{"read_stars"}</Notation>,{" "}
-            <Notation>{"parse_kind"}</Notation> (подтема 2) и{" "}
-            <Notation>{"split_stars"}</Notation> (подтема 5) считаем
-            определёнными выше в программе.
-          </Typography.Text>
-        </>
-      ),
-    },
-    {
       id: "svoy-i-chuzhoy",
-      navLabel: "Свой и чужой кластер",
+      navLabel: "Радиус",
       explanation: (
         <>
           <Typography.Text>
+            Как найти, насколько далеко от центра разбросаны точки кластера?
+          </Typography.Text>
+          <Typography.Text>
             <strong>
-              Расстояние от центра до точки своего кластера и расстояние до
-              точки другого кластера — разные вычисления.
+              Радиус кластера — расстояние от центра до самой далёкой точки
+              своего кластера.
             </strong>{" "}
-            Возьмём кластеры по размеру: <Notation>{"small"}</Notation> — правый
-            из трёх точек, <Notation>{"big"}</Notation> — левый из пяти, центры
-            уже найдены. Максимальное расстояние от центра малого кластера до
-            точки большого и максимальное расстояние от любого центра до точки{" "}
-            <strong>его собственного</strong> кластера:
+            Возьмём кластеры файла <Notation>{"example27.txt"}</Notation>:{" "}
+            <Notation>{"small"}</Notation> — правый из трёх точек,{" "}
+            <Notation>{"big"}</Notation> — левый из пяти. Функция{" "}
+            <Notation>{"center_sum"}</Notation> — из подтемы 3:
           </Typography.Text>
           <CodeBlock
+            collapsible={false}
             code={
-              "small = [(10, 0), (12, 0), (11, 1)]\nbig = [(0, 0), (0, 2), (1, 1), (2, 0), (2, 2)]\nclusters = [small, big]\ncenters = [center_sum(c) for c in clusters]\n\nsmall_center = centers[0]\nanswer = max(\n    dist(small_center, point)\n    for point in big\n)\nprint(answer)\n\nanswer = 0.0\n\nfor i in range(len(clusters)):\n    center = centers[i]\n\n    for point in clusters[i]:\n        answer = max(answer, dist(center, point))\n\nprint(answer)"
+              "small = [(10, 0), (12, 0), (11, 1)]\nbig = [(0, 0), (0, 2), (1, 1), (2, 0), (2, 2)]\nc_small, c_big = center_sum(small), center_sum(big)\n\nr_small = max(dist(c_small, p) for p in small)\nr_big = max(dist(c_big, p) for p in big)\nprint(r_small, r_big)\n\nfar = max(dist(c_small, p) for p in big)\nprint(far)"
             }
-            label={"Код на Python: small = [(10, 0), (12, 0), (11, 1)]"}
+            label={"Радиус и расстояние до чужого кластера"}
             language="python"
-            output={"11.045361017187261\n1.4142135623730951"}
+            output={"1.4142135623730951 1.4142135623730951\n11.045361017187261"}
           />
           <Typography.Text>
-            Функция <Notation>{"max(a, b)"}</Notation> возвращает большее из
-            двух чисел. Первое число — расстояние от (11; 1) до самой далёкой
-            точки чужого кластера, (0; 0) или (0; 2). Второе — наибольший{" "}
-            <strong>радиус</strong>: расстояние от центра до самой далёкой точки
-            своего кластера; у обоих кластеров оно равно √2.
+            Радиусы обоих кластеров — √2 ≈ 1,414: от центров (11; 1) и (1; 1) до
+            самых далёких точек — по диагонали клетки. Последнее число — уже не
+            радиус: это расстояние от центра малого кластера до самой далёкой
+            точки <strong>чужого</strong>, большого кластера — до (0; 0) или (0;
+            2). Перед каждым расчётом реши два вопроса: от чего до чего считаем
+            и среди каких точек выбираем.
           </Typography.Text>
           <Typography.Text>
-            Центры уже вычислены. Внутри этого цикла{" "}
-            <strong>их не нужно искать повторно</strong>.
-          </Typography.Text>
-          <Typography.Text>
-            Особенно опасна конструкция вида{" "}
+            Центр ищут один раз, до цикла. В записи{" "}
             <Notation>
-              {"max(dist(center_sum(cluster), point) for point in cluster)"}
-            </Notation>
-            : она снова вызывает поиск центра для каждой точки. То, что можно
-            было сделать один раз, повторяется много раз. Сначала{" "}
-            <Notation>{"center = center_sum(cluster)"}</Notation>, и только
-            затем{" "}
-            <Notation>
-              {"radius = max(dist(center, point) for point in cluster)"}
-            </Notation>
-            .
+              {"max(dist(center_sum(cluster), p) for p in cluster)"}
+            </Notation>{" "}
+            поиск центра повторится для каждой точки, и программа, которая
+            работала секунду, будет работать часами.
           </Typography.Text>
         </>
       ),
@@ -102,24 +69,27 @@ const content: LessonContent.PaidSubtopicContent = {
       explanation: (
         <>
           <Typography.Text>
+            Как найти наибольшее расстояние между двумя точками кластера?
+          </Typography.Text>
+          <Typography.Text>
             <strong>
-              Диаметр кластера — обычно максимальное расстояние между двумя его
-              точками.
+              Перебрать все пары точек кластера — каждую один раз — и запомнить
+              наибольшее расстояние. Это диаметр кластера.
             </strong>{" "}
-            Но окончательное определение, как всегда, берём из условия: D = max
-            d(A, B), где A и B принадлежат кластеру C. Для перебора пар одного
-            кластера:
+            Определение, как всегда, сверяй с условием: D = max d(A, B), где A и
+            B — точки одного кластера.
           </Typography.Text>
           <CodeBlock
+            collapsible={false}
             code={
-              "def diameter_of(cluster):\n    diameter = 0.0\n\n    for i in range(len(cluster)):\n        for j in range(i + 1, len(cluster)):\n            diameter = max(\n                diameter,\n                dist(cluster[i], cluster[j])\n            )\n\n    return diameter"
+              "def diameter_of(cluster):\n    diameter = 0.0\n    for i in range(len(cluster)):\n        for j in range(i + 1, len(cluster)):\n            diameter = max(\n                diameter,\n                dist(cluster[i], cluster[j])\n            )\n    return diameter"
             }
-            label={"Для перебора пар одного кластера"}
+            label={"Функция diameter_of"}
             language="python"
           />
           <CodeBlock
             code={"print(diameter_of(small), diameter_of(big))"}
-            label={"Для перебора пар одного кластера"}
+            label={"Диаметры двух кластеров"}
             language="python"
             output={"2.0 2.8284271247461903"}
           />
@@ -164,19 +134,20 @@ const content: LessonContent.PaidSubtopicContent = {
       explanation: (
         <>
           <Typography.Text>
+            Как найти самые далёкие друг от друга точки двух разных кластеров?
+          </Typography.Text>
+          <Typography.Text>
             <strong>
-              Для межкластерного диаметра берут по одной точке из двух разных
-              кластеров.
+              Брать по одной точке из каждого кластера и запоминать не только
+              наибольшее расстояние, но и саму пару.
             </strong>{" "}
-            В подборке он определяется как наибольшее расстояние между такими
-            точками, причём дальнейшие вычисления зависят и от самих концов
-            этого отрезка. Запусти функцию по шагам на двух маленьких кластерах
-            и посмотри, как обновляется лучшая пара: сначала 12 для (0; 0),
-            затем ≈ 12,166 для (0; 2).
+            Это межкластерный диаметр; в задачах часто что-то считают и по его
+            концам. Запусти функцию по шагам: сначала лучшая пара даёт 12, затем
+            ≈ 12,166.
           </Typography.Text>
           <CodeRunner
             {...lessonMedia.runFarthestPair}
-            label={"Программа на Python"}
+            label={"Межкластерный диаметр по шагам"}
           />
           <Typography.Text>
             <PythonTerm term="none">
@@ -193,7 +164,7 @@ const content: LessonContent.PaidSubtopicContent = {
             code={
               "diameter, pair = farthest_pair(small, big)\npoint1, point2 = pair\n\nx_difference = abs(point1[0] - point2[0])\ny_sum = point1[1] + point2[1]\nprint(diameter, pair, x_difference, y_sum)"
             }
-            label={"Код на Python: diameter, pair = farthest_pair(small, big)"}
+            label={"Концы межкластерного диаметра"}
             language="python"
             output={"12.165525060596439 ((12, 0), (0, 2)) 12 2"}
           />
@@ -204,9 +175,9 @@ const content: LessonContent.PaidSubtopicContent = {
           </Typography.Text>
           <CodeBlock
             code={
-              "total = 0.0\n\nfor i in range(len(clusters)):\n    for j in range(i + 1, len(clusters)):\n        d, pair = farthest_pair(clusters[i], clusters[j])\n        total += d\n\nprint(total)"
+              "clusters = [small, big]\ntotal = 0.0\nfor i in range(len(clusters)):\n    for j in range(i + 1, len(clusters)):\n        d, pair = farthest_pair(clusters[i], clusters[j])\n        total += d\n\nprint(total)"
             }
-            label={"Пары номеров перебирают так же, как пары точек, — с i + 1"}
+            label={"Сумма межкластерных диаметров"}
             language="python"
             output={"12.165525060596439"}
           />
@@ -243,21 +214,20 @@ const content: LessonContent.PaidSubtopicContent = {
       explanation: (
         <>
           <Typography.Text>
+            Как посчитать точки на расстоянии не больше r от центра?
+          </Typography.Text>
+          <Typography.Text>
             <strong>
-              При подсчёте точек около центра нужно точно определить, какие
-              точки разрешено учитывать.
+              Сначала точно определить, среди каких точек считаем и строгое ли
+              неравенство, — и только потом писать цикл.
             </strong>{" "}
-            Например, число точек на расстоянии не больше{" "}
-            <Notation>{"r"}</Notation> от центра <Notation>{"center"}</Notation>
-            :
+            Подсчёт выглядит так:
           </Typography.Text>
           <CodeBlock
             code={
               "count = 0\n\nfor point in points:\n    if dist(center, point) <= r:\n        count += 1"
             }
-            label={
-              "Например, число точек на расстоянии не больше r от центра center"
-            }
+            label={"Подсчёт точек в радиусе"}
             language="python"
           />
           <Typography.Text>
@@ -318,7 +288,7 @@ const content: LessonContent.PaidSubtopicContent = {
             code={
               "points = small + big\ncenter = (1, 1)\n\nprint(sum(1 for p in points if dist(center, p) <= 10))\nprint(sum(1 for p in points if dist(center, p) < 10))\nprint(sum(1 for p in big if dist(center, p) <= 10))"
             }
-            label={"Посчитаем для центра (1; 1) и r = 10 все три варианта"}
+            label={"Три варианта подсчёта"}
             language="python"
             output={"7\n6\n5"}
           />
@@ -345,27 +315,31 @@ const content: LessonContent.PaidSubtopicContent = {
     },
     {
       id: "blizhayshiy-obekt",
-      navLabel: "Ближайший объект",
+      navLabel: "Объекты нужного вида",
       explanation: (
         <>
           <Typography.Text>
+            Как найти ближайшую к центру звезду нужного вида или пару таких
+            звёзд?
+          </Typography.Text>
+          <Typography.Text>
             <strong>
-              Ближайший объект нужного вида ищут среди отобранных точек, а
-              расстояние считают от центра.
+              Сначала отобрать объекты нужного вида, потом искать среди них —
+              внутри одного кластера; центр при этом ищут по всем точкам
+              кластера.
             </strong>{" "}
             В задачах ЕГЭ-2026 спрашивают, например, координаты ближайшего к
             центру красного гиганта или расстояние между двумя жёлтыми карликами
-            одного кластера. Решение — те же циклы, только перебор идёт по
-            объектам нужного вида. Найдём белый карлик, ближайший к центру
-            самого большого кластера файла <Notation>{"27-3.txt"}</Notation>:
+            одного кластера. Найдём белый карлик, ближайший к центру самого
+            большого кластера файла <Notation>{"27-3.txt"}</Notation>. Функция{" "}
+            <Notation>{"read_stars"}</Notation> — из подтемы 1,{" "}
+            <Notation>{"split_stars"}</Notation> — из подтемы 4:
           </Typography.Text>
           <CodeBlock
             code={
               'clusters = split_stars(read_stars("27-3.txt"))\nbig = max(clusters, key=len)\ncenter = center_sum([s[:2] for s in big])\n\ndwarfs = [s for s in big if s[2] == "VII"]\nnearest = min(dwarfs, key=lambda s: dist(center, s[:2]))\n\nprint(center, len(dwarfs))\nprint(nearest, dist(center, nearest[:2]))'
             }
-            label={
-              "Найдём белый карлик, ближайший к центру самого большого кластера файла 27-3.txt"
-            }
+            label={"Ближайший белый карлик"}
             language="python"
             output={
               "(3.943346, 1.288606) 20\n(3.107868, 1.047377, 'VII') 0.8696061861124266"
@@ -394,15 +368,61 @@ const content: LessonContent.PaidSubtopicContent = {
             code={
               'best = float("inf")\n\nfor cluster in clusters:\n    dw = [s[:2] for s in cluster if s[2] == "VII"]\n\n    for i in range(len(dw)):\n        for j in range(i + 1, len(dw)):\n            best = min(best, dist(dw[i], dw[j]))\n\nprint(best)'
             }
-            label={
-              "Наименьшее расстояние между двумя разными белыми карликами одного кластера"
-            }
+            label={"Пара белых карликов"}
             language="python"
             output={"0.014400764736637813"}
           />
           <Typography.Text>
             Пары из разных кластеров сюда не попадают: список{" "}
             <Notation>{"dw"}</Notation> собирается заново для каждого кластера.
+          </Typography.Text>
+        </>
+      ),
+    },
+    {
+      id: "zadacha-temy",
+      navLabel: "Задача темы",
+      explanation: (
+        <>
+          <Typography.Text>Вернёмся к задаче темы:</Typography.Text>
+          <Typography.Text>{THEME_TASK}</Typography.Text>
+          <Typography.Text>
+            <strong>
+              Все шаги уже разобраны: прочитать частицы (подтема 1), разделить
+              по энергии (подтема 2), найти центры по разности энергий (подтема
+              3) и посчитать два ответа на одних и тех же кластерах.
+            </strong>{" "}
+            Q₁ — наибольшее расстояние между частицами с признаком II внутри
+            одного кластера — это пары, как у диаметра, только среди отобранных
+            частиц. Q₂ — наибольшая энергия центра.
+          </Typography.Text>
+          <CodeBlock
+            collapsible={false}
+            code={
+              'from math import dist\n\n\ndef read_particles(filename):\n    particles = []\n    with open(filename, encoding="utf-8-sig") as f:\n        for line in f:\n            parts = line.replace(",", ".").split()\n            x, y, vx, vy, m = [float(v) for v in parts[:5]]\n            particles.append((x, y, vx, vy, m, parts[5]))\n    return particles\n\n\ndef energy(p):\n    return p[4] * (p[2] ** 2 + p[3] ** 2) / 2\n\n\ndef energy_gap(a, b):\n    return abs(energy(a) - energy(b))\n\n\ndef center_sum(cluster, d=dist):\n    best_point = cluster[0]\n    best_sum = float("inf")\n    for candidate in cluster:\n        total = 0.0\n        for point in cluster:\n            total += d(candidate, point)\n        if total < best_sum:\n            best_sum = total\n            best_point = candidate\n    return best_point\n\n\nparticles = read_particles("27-4.txt")\nbounds = [3.5, 7, 10.5]\ngroups = [[] for _ in range(len(bounds) + 1)]\nfor p in particles:\n    groups[sum(energy(p) > b for b in bounds)].append(p)\n\nq1 = 0.0\nfor g in groups:\n    tagged = [p[:2] for p in g if p[5] == "II"]\n    for i in range(len(tagged)):\n        for j in range(i + 1, len(tagged)):\n            q1 = max(q1, dist(tagged[i], tagged[j]))\n\nq2 = max(energy(center_sum(g, energy_gap)) for g in groups)\nprint(int(q1 * 10000), int(q2 * 10000))'
+            }
+            label={"Задача темы"}
+            language="python"
+            output={"772010 125026"}
+          />
+          <Typography.Text>
+            Ответ: <strong>772010 125026</strong>. Новое в программе только одно
+            место — номер группы: это число границ, которые энергия частицы
+            превысила, а <Notation>{"sum"}</Notation> считает истинные сравнения
+            как единицы. Файл задачи —{" "}
+            <DownloadLink
+              presentation="inline"
+              href="/api/tasks/task-27-9-04/files/statement-1"
+            >
+              27-4.txt
+            </DownloadLink>
+            .
+          </Typography.Text>
+          <Typography.Text>
+            Q₁ считают по координатам — <Notation>{"p[:2]"}</Notation>, хотя
+            кластеры и центры выбирали по энергии. А список частиц с признаком
+            II собирают заново в каждом кластере: пары из разных кластеров в Q₁
+            не входят.
           </Typography.Text>
         </>
       ),
@@ -415,45 +435,33 @@ const content: LessonContent.PaidSubtopicContent = {
           <LessonSummary
             items={[
               {
+                key: "Радиус",
+                note: <>от центра до самой далёкой точки своего кластера</>,
+              },
+              {
+                key: "Центр",
+                note: <>ищут один раз, до цикла по точкам</>,
+              },
+              {
+                key: "Диаметр",
                 note: (
                   <>
-                    Радиус — от центра до самой далёкой точки своего кластера;
-                    центр ищут один раз, до цикла.
+                    пары с <Notation>{"j"}</Notation> от{" "}
+                    <Notation>{"i + 1"}</Notation>; не обязан быть 2R
                   </>
                 ),
               },
               {
-                note: (
-                  <>
-                    Диаметр — наибольшее расстояние между двумя точками
-                    кластера; пары перебирают с <Notation>{"j"}</Notation> от{" "}
-                    <Notation>{"i + 1"}</Notation>; диаметр не обязан быть 2R.
-                  </>
-                ),
+                key: "Межкластерный",
+                note: <>по точке из двух кластеров; запоминай и пару</>,
               },
               {
-                note: (
-                  <>
-                    Межкластерный диаметр — по одной точке из двух кластеров;
-                    концы пары запоминают вместе с расстоянием.
-                  </>
-                ),
+                key: "В радиусе",
+                note: <>среди каких точек и строгое ли неравенство</>,
               },
               {
-                note: (
-                  <>
-                    Подсчёт в радиусе: сначала определи, среди каких точек
-                    считаем и строгое ли неравенство.
-                  </>
-                ),
-              },
-              {
-                note: (
-                  <>
-                    Объекты нужного вида сначала отбирают, потом ищут ближайший
-                    или пару — внутри одного кластера.
-                  </>
-                ),
+                key: "Нужный вид",
+                note: <>сначала отбор, потом поиск — внутри кластера</>,
               },
             ]}
           />
@@ -462,6 +470,22 @@ const content: LessonContent.PaidSubtopicContent = {
     },
   ],
   checkpoint: [
+    {
+      id: "zadacha-1",
+      prompt: (
+        <>
+          Для Q₁ задачи темы список частиц с признаком II собирают заново в
+          каждом кластере. Что получится, если собрать его один раз по всему
+          файлу?
+        </>
+      ),
+      reveal: (
+        <>
+          В пары попадут частицы разных кластеров, и выйдет ≈ 79,087 вместо
+          77,201: самая далёкая пара признака II лежит в разных кластерах.
+        </>
+      ),
+    },
     {
       id: "zadacha-2",
       prompt: (
@@ -473,7 +497,7 @@ const content: LessonContent.PaidSubtopicContent = {
             code={
               "for point in cluster:\n    d = dist(center_sum(cluster), point)"
             }
-            label={"Почему следующий код может быть очень медленным?"}
+            label={"Медленный радиус"}
             language="python"
           />
         </>

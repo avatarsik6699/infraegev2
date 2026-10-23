@@ -14,6 +14,7 @@ import cmath
 import math
 import re
 import shutil
+import statistics
 import subprocess
 import sys
 import tempfile
@@ -33,6 +34,19 @@ ROOT = Path(__file__).resolve().parents[3]
 BANK_DIR = ROOT / "content/practice-bank"
 FILES = ROOT / "content/lesson-files/topic-27"
 MATERIAL = "data-analysis"
+ADVANCED = {
+    "porog-sosedstva",
+    "postroenie-gruppy",
+    "obosnovanie-poroga",
+    "samaya-dalyokaya-tochka",
+    "antipod",
+    "summa-kvadratov",
+    "tochka-navedeniya",
+    "korrelyaciya",
+    "vybrosy",
+    "uskoreniya",
+}
+THEME = "task-27-9-04"
 RETIRED = [f"task-27-{number:02d}" for number in range(1, 8)]
 
 
@@ -251,6 +265,69 @@ def answers() -> dict[str, str]:
     a["task-27-9-05"] = (
         f"{_i4(abs(fsum(c[0] for c in c5) / 3))} {_i4(abs(fsum(c[1] for c in c5) / 3))}"
     )
+    # Change 197: polar points as complex numbers, sectors by the phase
+    polar = [cmath.rect(float(r[1]), math.radians(float(r[0]))) for r in _rows("27-7.txt")]
+    a["task-27-10-01"] = f"{_i4(max(z.real for z in polar))} {_i4(max(z.imag for z in polar))}"
+    by_phase = [
+        [(z.real, z.imag) for z in polar if (math.degrees(cmath.phase(z)) < 60) == low]
+        for low in (True, False)
+    ]
+    c7 = [_center(g) for g in by_phase]
+    a["task-27-9-06"] = f"{_i4(fsum(c[0] for c in c7) / 2)} {_i4(fsum(c[1] for c in c7) / 2)}"
+    # triangles between y = x, y = 10 − x and the axes in rotated coordinates u = x + y, v = y − x
+    p8 = _points("27-8.txt")
+    inside = [p for p in p8 if p[0] > 0 and p[1] > 0 and p[0] + p[1] < 10]
+    sides = Counter(p[1] - p[0] > 0 for p in inside)
+    a["task-27-10-02"] = f"{len(p8) - len(inside)} {max(sides.values())}"
+    trees = [(2, 3, 1), (5, 1, 1), (4, 6, 1), (8, 2, 1), (6, 5, 1), (3, 8, 3), (9, 7, 1)]
+    best = min(trees, key=lambda c: fsum(_d(c, t) * t[2] for t in trees))
+    a["task-27-10-03"] = f"{best[0]} {best[1]}"
+    stars10 = [
+        (1, 2),
+        (2, 2),
+        (2, 3),
+        (6, 1),
+        (7, 1),
+        (7, 2),
+        (8, 2),
+        (3, 7),
+        (4, 7),
+        (3, 8),
+        (4, 8),
+    ]
+    # integer squares: d < 1.5 exactly when 4 · d² < 9
+    near = {
+        s: sum(4 * ((s[0] - t[0]) ** 2 + (s[1] - t[1]) ** 2) < 9 for t in stars10 if t != s)
+        for s in stars10
+    }
+    aim = min(stars10, key=lambda s: (-near[s], s[0] ** 2 + s[1] ** 2))
+    a["task-27-10-04"] = f"{aim[0]} {aim[1]}"
+    two = big3[1:]
+    anti2 = []
+    for g in two:
+        totals = [fsum(_d(p, q) for q in g) for p in g]
+        anti2.append(g[totals.index(max(totals))])
+    a["task-27-10-05"] = (
+        f"{_i4(abs(fsum(p[0] for p in anti2) / 2))} {_i4(abs(fsum(p[1] for p in anti2) / 2))}"
+    )
+    p9 = sorted(_points("27-9.txt"))
+    cuts = sorted(range(len(p9) - 1), key=lambda i: p9[i + 1][0] - p9[i][0])[-2:]
+    exps, start = [], 0
+    for i in sorted(cuts):
+        exps.append(p9[start : i + 1])
+        start = i + 1
+    exps.append(p9[start:])
+    rs = [statistics.correlation([p[0] for p in g], [p[1] for p in g]) for g in exps]
+    strong = [(g, r) for g, r in zip(exps, rs, strict=True) if abs(r) >= 0.9]
+    mean_r = fsum(r for _, r in strong) / len(strong)
+    a["task-27-10-06"] = f"{sum(len(g) for g, _ in strong)} {math.trunc(mean_r * 100000)}"
+    data = sorted([47, 52, 49, 55, 61, 50, 48, 95, 53, 51, 12, 56, 54])
+    half = len(data) // 2
+    q1 = Fraction(statistics.median(data[:half]))
+    q3 = Fraction(statistics.median(data[-half:]))
+    lo, hi = q1 - Fraction(3, 2) * (q3 - q1), q3 + Fraction(3, 2) * (q3 - q1)
+    kept = [v for v in data if lo <= v <= hi]
+    a["task-27-10-07"] = f"{len(data) - len(kept)} {max(kept)}"
     return a
 
 
@@ -266,13 +343,13 @@ def _solution(task: TaskData) -> str:
 def test_every_answer_matches_independent_recomputation(answers: dict[str, str]) -> None:
     tasks = _entries()
     assert sorted(tasks) == sorted(answers)
-    assert sorted(t.lessons[0].position for t in tasks.values()) == list(range(34))
+    assert sorted(t.lessons[0].position for t in tasks.values()) == list(range(42))
     for task_id, task in tasks.items():
         assert task.checker.answer_variants[0] == answers[task_id], task_id
         assert task.exam_numbers == [27] and not task.catalog_visible and not task.archived
-        on_final_page = task_id.startswith("task-27-9-")
+        on_final_page = task_id.startswith("task-27-9-") and task_id != THEME
         assert bool(task.theory_links) != on_final_page, task_id
-        advanced = task_id.startswith(("task-27-7-", "task-27-8-"))
+        advanced = bool(task.theory_links) and task.theory_links[0].section in ADVANCED
         assert task.lessons[0].counts_toward_mastery == (not advanced), task_id
 
 

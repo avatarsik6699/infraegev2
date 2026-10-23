@@ -111,10 +111,10 @@ const dataAnalysisLessonConfig = {
   route: "/ege/27-analiz-dannyh-i-klasterizatsiya/tochki-i-rasstoyaniya",
   title: "Анализ данных",
   taskNumber: 27,
-  taskCount: 34,
-  masteryTaskCount: 29,
-  diagramCount: 19,
-  downloadCount: 21,
+  taskCount: 42,
+  masteryTaskCount: 33,
+  diagramCount: 24,
+  downloadCount: 26,
 };
 
 async function useNoJavaScriptTopicLesson(

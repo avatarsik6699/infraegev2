@@ -162511,6 +162511,12 @@
               "code": "from math import dist\n\nprint(f'{dist((2, 1), (5, 5)):g}')",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `5`"
+            }
           }
         ],
         "skills": [],
@@ -162518,7 +162524,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 0,
+            "position": 1,
             "material_id": "data-analysis"
           }
         ],
@@ -162594,6 +162600,12 @@
               "code": "from math import dist\n\nprint(f'{dist((-1, -2), (5, 6)):g}')",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `10`"
+            }
           }
         ],
         "skills": [],
@@ -162601,7 +162613,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 1,
+            "position": 2,
             "material_id": "data-analysis"
           }
         ],
@@ -162677,6 +162689,12 @@
               "code": "clusters = [[(0, 0), (1, 1)], [(5, 5), (6, 5), (7, 6)],\n            [(10, 0)]]\nprint(len(clusters), len(clusters[1]), clusters[1][2][0])",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `3 3 7`"
+            }
           }
         ],
         "skills": [],
@@ -162684,14 +162702,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 2,
+            "position": 0,
             "material_id": "data-analysis"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "klaster-spisok",
+            "section": "chto-v-fayle",
             "material_id": "data-analysis"
           }
         ],
@@ -162734,7 +162752,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Найдите расстояние между точками A (−1,5; 2,25) и B (3,1; −0,4). В ответе запишите целую часть произведения найденного расстояния на 10 000."
+              "markdown": "Найди расстояние между точками A (−1,5; 2,25) и B (3,1; −0,4). В ответе запиши целую часть произведения найденного расстояния на 10 000."
             }
           }
         ],
@@ -162742,7 +162760,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Умножьте расстояние на 10 000 и отбросьте дробную часть."
+              "markdown": "Умножь расстояние на 10 000 и отбрось дробную часть."
             }
           }
         ],
@@ -162760,6 +162778,12 @@
               "code": "from math import dist\n\nprint(int(dist((-1.5, 2.25), (3.1, -0.4)) * 10000))",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `53087`"
+            }
           }
         ],
         "skills": [],
@@ -162774,7 +162798,7 @@
         "theory_links": [
           {
             "label": "Теория",
-            "section": "celaya-chast-otveta",
+            "section": "teorema-pifagora",
             "material_id": "data-analysis"
           }
         ],
@@ -162848,6 +162872,12 @@
               "language": "python",
               "code": "codes = []\nwith open('27-3.txt', encoding='utf-8-sig') as f:\n    for line in f:\n        codes.append(line.split()[2])\nprint(len(codes), codes.count('VII'))",
               "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `601 70`"
             }
           }
         ],
@@ -162947,6 +162977,12 @@
               "code": "count = 0\nwith open('27-3.txt', encoding='utf-8-sig') as f:\n    for line in f:\n        code = line.split()[2]\n        if code[0] == 'M' and code[2:] == 'III':\n            count += 1\nprint(count)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `37`"
+            }
           }
         ],
         "skills": [],
@@ -163039,6 +163075,12 @@
               "code": "m, vx, vy = 2, -1, 3\nprint(f'{m * (vx ** 2 + vy ** 2) / 2:g}')",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `10`"
+            }
           }
         ],
         "skills": [],
@@ -163096,7 +163138,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "В файле 27-4.txt записаны частицы: координаты `x` и `y`, проекции скорости `vx` и `vy`, масса `m` и признак. Найдите наибольшую кинетическую энергию частицы файла. В ответе запишите целую часть произведения найденной энергии на 10 000."
+              "markdown": "В файле 27-4.txt записаны частицы: координаты `x` и `y`, проекции скорости `vx` и `vy`, масса `m` и признак. Найди наибольшую кинетическую энергию частицы файла. В ответе запиши целую часть произведения найденной энергии на 10 000."
             }
           },
           {
@@ -163127,6 +163169,12 @@
               "language": "python",
               "code": "best = 0\nwith open('27-4.txt', encoding='utf-8-sig') as f:\n    for line in f:\n        p = line.replace(',', '.').split()\n        vx, vy, m = float(p[2]), float(p[3]), float(p[4])\n        best = max(best, m * (vx ** 2 + vy ** 2) / 2)\nprint(int(best * 10000))",
               "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `133402`"
             }
           }
         ],
@@ -163220,6 +163268,12 @@
               "code": "from math import atan2, degrees\n\nprint(f'{degrees(atan2(3, -3)) % 360:g}')",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `135`"
+            }
           }
         ],
         "skills": [],
@@ -163227,7 +163281,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 8,
+            "position": 12,
             "material_id": "data-analysis"
           }
         ],
@@ -163309,6 +163363,12 @@
               "code": "from math import dist\n\n\ndef read_points(filename):\n    points = []\n    with open(filename, encoding='utf-8-sig') as f:\n        for line in f:\n            parts = line.replace(',', '.').split()\n            points.append((float(parts[0]), float(parts[1])))\n    return points\n\n\ndef center_sum(cluster):\n    best_point = cluster[0]\n    best_sum = float('inf')\n    for candidate in cluster:\n        total = 0.0\n        for point in cluster:\n            total += dist(candidate, point)\n        if total < best_sum:\n            best_sum = total\n            best_point = candidate\n    return best_point\n\n\nleft, right = [], []\nfor p in read_points('27-1.txt'):\n    if p[0] < 6:\n        left.append(p)\n    else:\n        right.append(p)\n\nprint(len(left), len(right))",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `118 87`"
+            }
           }
         ],
         "skills": [],
@@ -163375,7 +163435,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "В файле 27-3.txt записаны звёзды трёх кластеров: координаты и характеристика. Найдите границы кластеров по диаграмме рассеяния и определите количество звёзд в каждом кластере. В ответе запишите три числа в порядке возрастания."
+              "markdown": "В файле 27-3.txt записаны звёзды трёх кластеров: координаты и характеристика. Найди границы кластеров по диаграмме рассеяния и определи количество звёзд в каждом кластере. В ответе запиши три числа в порядке возрастания."
             }
           },
           {
@@ -163406,6 +163466,12 @@
               "language": "python",
               "code": "from math import dist\n\n\ndef center_sum(cluster):\n    best_point = cluster[0]\n    best_sum = float('inf')\n    for candidate in cluster:\n        total = 0.0\n        for point in cluster:\n            total += dist(candidate, point)\n        if total < best_sum:\n            best_sum = total\n            best_point = candidate\n    return best_point\n\n\nstars = []\nwith open('27-3.txt', encoding='utf-8-sig') as f:\n    for line in f:\n        sx, sy, code = line.replace(',', '.').split()\n        stars.append((float(sx), float(sy), code))\n\nclusters = [[], [], []]\nfor s in stars:\n    if s[1] < 5:\n        clusters[0].append(s)\n    elif s[0] < 10:\n        clusters[1].append(s)\n    else:\n        clusters[2].append(s)\n\n\ndef is_kind(code, cls, lum):\n    return code[0] == cls and code[2:] == lum\n\n\nprint(*sorted(len(c) for c in clusters))",
               "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `172 198 231`"
             }
           }
         ],
@@ -163473,7 +163539,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "В файле 27-1.txt записаны точки двух кластеров (граница — из задачи 7 подтемы 3). Центр кластера — его точка с наименьшей суммой расстояний до остальных точек кластера. Найдите центр кластера, расположенного левее. В ответе запишите целые части произведений его абсциссы и ординаты на 10 000."
+              "markdown": "В файле 27-1.txt записаны точки двух кластеров (граница — из задачи 7 подтемы 3). Центр кластера — его точка с наименьшей суммой расстояний до остальных точек кластера. Найди центр кластера, расположенного левее. В ответе запиши целые части произведений его абсциссы и ординаты на 10 000."
             }
           },
           {
@@ -163487,7 +163553,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Каждую точку кластера проверьте как кандидата в центр."
+              "markdown": "Каждую точку кластера проверь как кандидата в центр."
             }
           }
         ],
@@ -163505,6 +163571,12 @@
               "code": "from math import dist\n\n\ndef read_points(filename):\n    points = []\n    with open(filename, encoding='utf-8-sig') as f:\n        for line in f:\n            parts = line.replace(',', '.').split()\n            points.append((float(parts[0]), float(parts[1])))\n    return points\n\n\ndef center_sum(cluster):\n    best_point = cluster[0]\n    best_sum = float('inf')\n    for candidate in cluster:\n        total = 0.0\n        for point in cluster:\n            total += dist(candidate, point)\n        if total < best_sum:\n            best_sum = total\n            best_point = candidate\n    return best_point\n\n\nleft, right = [], []\nfor p in read_points('27-1.txt'):\n    if p[0] < 6:\n        left.append(p)\n    else:\n        right.append(p)\n\nc = center_sum(left)\nprint(int(c[0] * 10000), int(c[1] * 10000))",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `33054 41399`"
+            }
           }
         ],
         "skills": [],
@@ -163521,7 +163593,7 @@
         ],
         "lessons": [
           {
-            "position": 11,
+            "position": 13,
             "material_id": "data-analysis"
           }
         ],
@@ -163571,7 +163643,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "В файле 27-4.txt записаны частицы; они делятся на 4 кластера по кинетической энергии (R = 2). Центр кластера — частица с наименьшей суммой модулей разностей энергий с остальными частицами кластера. Найдите энергию центра кластера с наименьшими энергиями. В ответе запишите целую часть произведения этой энергии на 10 000."
+              "markdown": "В файле 27-4.txt записаны частицы; они делятся на 4 кластера по кинетической энергии (R = 2). Центр кластера — частица с наименьшей суммой модулей разностей энергий с остальными частицами кластера. Найди энергию центра кластера с наименьшими энергиями. В ответе запиши целую часть произведения этой энергии на 10 000."
             }
           },
           {
@@ -163603,6 +163675,12 @@
               "code": "parts = []\nwith open('27-4.txt', encoding='utf-8-sig') as f:\n    for line in f:\n        p = line.replace(',', '.').split()\n        parts.append([float(v) for v in p[:5]] + [p[5]])\n\n\ndef energy(p):\n    return p[4] * (p[2] ** 2 + p[3] ** 2) / 2\n\n\nclusters = [[], [], [], []]\nfor p in parts:\n    k = 0\n    for bound in [3.5, 7, 10.5]:\n        if energy(p) > bound:\n            k += 1\n    clusters[k].append(p)\n\n\ndef center_energy(cluster):\n    best, best_sum = cluster[0], float('inf')\n    for c in cluster:\n        total = 0.0\n        for p in cluster:\n            total += abs(energy(c) - energy(p))\n        if total < best_sum:\n            best, best_sum = c, total\n    return best\n\n\nprint(int(energy(center_energy(clusters[0])) * 10000))",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `20278`"
+            }
           }
         ],
         "skills": [],
@@ -163619,7 +163697,7 @@
         ],
         "lessons": [
           {
-            "position": 12,
+            "position": 14,
             "material_id": "data-analysis"
           }
         ],
@@ -163695,6 +163773,12 @@
               "code": "centers = [(-2, 4), (6, 10)]\npx = sum(c[0] for c in centers) / len(centers)\npy = sum(c[1] for c in centers) / len(centers)\nprint(f'{px:g} {py:g}')",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `2 7`"
+            }
           }
         ],
         "skills": [],
@@ -163702,7 +163786,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 13,
+            "position": 16,
             "material_id": "data-analysis"
           }
         ],
@@ -163778,6 +163862,12 @@
               "code": "centers = [(-5, 3), (2, -7), (4, 1)]\nprint(abs(min(c[0] for c in centers)),\n      abs(min(c[1] for c in centers)))",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `5 7`"
+            }
           }
         ],
         "skills": [],
@@ -163785,7 +163875,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 14,
+            "position": 18,
             "material_id": "data-analysis"
           }
         ],
@@ -163861,6 +163951,12 @@
               "code": "radii = [2, 3, 7]\nprint(len(radii), f'{sum(radii) / len(radii):g}')",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `3 4`"
+            }
           }
         ],
         "skills": [],
@@ -163868,7 +163964,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 15,
+            "position": 19,
             "material_id": "data-analysis"
           }
         ],
@@ -163944,6 +164040,12 @@
               "code": "xs = [-6, 2, 1]\nmean_abs = sum(abs(x) for x in xs) / len(xs)\nprint(f'{abs(sum(xs) / len(xs)):g} {mean_abs:g}')",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `1 3`"
+            }
           }
         ],
         "skills": [],
@@ -163951,7 +164053,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 16,
+            "position": 17,
             "material_id": "data-analysis"
           }
         ],
@@ -164001,7 +164103,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "В файле 27-1.txt записаны точки двух кластеров. Центр кластера — его точка с наименьшей суммой расстояний до остальных точек кластера. Найдите Pₓ — среднее арифметическое абсцисс центров и P_y — среднее арифметическое ординат центров. В ответе запишите целые части произведений Pₓ · 10 000 и P_y · 10 000."
+              "markdown": "В файле 27-1.txt записаны точки двух кластеров. Центр кластера — его точка с наименьшей суммой расстояний до остальных точек кластера. Найди Pₓ — среднее арифметическое абсцисс центров и P_y — среднее арифметическое ординат центров. В ответе запиши целые части произведений Pₓ · 10 000 и P_y · 10 000."
             }
           },
           {
@@ -164033,6 +164135,12 @@
               "code": "from math import dist\n\n\ndef read_points(filename):\n    points = []\n    with open(filename, encoding='utf-8-sig') as f:\n        for line in f:\n            parts = line.replace(',', '.').split()\n            points.append((float(parts[0]), float(parts[1])))\n    return points\n\n\ndef center_sum(cluster):\n    best_point = cluster[0]\n    best_sum = float('inf')\n    for candidate in cluster:\n        total = 0.0\n        for point in cluster:\n            total += dist(candidate, point)\n        if total < best_sum:\n            best_sum = total\n            best_point = candidate\n    return best_point\n\n\nleft, right = [], []\nfor p in read_points('27-1.txt'):\n    if p[0] < 6:\n        left.append(p)\n    else:\n        right.append(p)\n\nc1, c2 = center_sum(left), center_sum(right)\npx = (c1[0] + c2[0]) / 2\npy = (c1[1] + c2[1]) / 2\nprint(int(px * 10000), int(py * 10000))",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `63837 29978`"
+            }
           }
         ],
         "skills": [],
@@ -164049,7 +164157,7 @@
         ],
         "lessons": [
           {
-            "position": 17,
+            "position": 21,
             "material_id": "data-analysis"
           }
         ],
@@ -164099,7 +164207,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "В файле 27-2.txt записаны точки трёх кластеров и три аномалии. Для этого файла найдите: а) модуль минимальной абсциссы и модуль минимальной ординаты центров кластеров; б) среднюю точку центров всех кластеров, кроме кластера с наименьшим числом точек. В ответе для каждого пункта запишите целые части произведений двух найденных чисел на 10 000."
+              "markdown": "В файле 27-2.txt записаны точки трёх кластеров и три аномалии. Для этого файла найди: а) модуль минимальной абсциссы и модуль минимальной ординаты центров кластеров; б) среднюю точку центров всех кластеров, кроме кластера с наименьшим числом точек. В ответе для каждого пункта запиши целые части произведений двух найденных чисел на 10 000."
             }
           },
           {
@@ -164131,6 +164239,12 @@
               "code": "from math import dist\n\n\ndef read_points(filename):\n    points = []\n    with open(filename, encoding='utf-8-sig') as f:\n        for line in f:\n            parts = line.replace(',', '.').split()\n            points.append((float(parts[0]), float(parts[1])))\n    return points\n\n\ndef center_sum(cluster):\n    best_point = cluster[0]\n    best_sum = float('inf')\n    for candidate in cluster:\n        total = 0.0\n        for point in cluster:\n            total += dist(candidate, point)\n        if total < best_sum:\n            best_sum = total\n            best_point = candidate\n    return best_point\n\n\nclusters = [[], [], []]\nfor x, y in read_points('27-2.txt'):\n    if -8 < x < 0 and 2 < y < 10:\n        clusters[0].append((x, y))\n    elif 1 < x < 10 and 2 < y < 10:\n        clusters[1].append((x, y))\n    elif -2 < x < 5 and -7 < y < 1:\n        clusters[2].append((x, y))\nclusters.sort(key=len)\ncenters = [center_sum(c) for c in clusters]\n\nmin_x = abs(min(c[0] for c in centers))\nmin_y = abs(min(c[1] for c in centers))\nmx = (centers[1][0] + centers[2][0]) / 2\nmy = (centers[1][1] + centers[2][1]) / 2\nprint(int(min_x * 10000), int(min_y * 10000),\n      int(mx * 10000), int(my * 10000))",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `41224 27626 5585 60949`"
+            }
           }
         ],
         "skills": [],
@@ -164147,7 +164261,7 @@
         ],
         "lessons": [
           {
-            "position": 18,
+            "position": 20,
             "material_id": "data-analysis"
           }
         ],
@@ -164205,7 +164319,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Берите по одной точке из каждого кластера."
+              "markdown": "Бери по одной точке из каждого кластера."
             }
           }
         ],
@@ -164223,6 +164337,12 @@
               "code": "from math import dist\n\nfirst = [(0, 0), (1, 0)]\nsecond = [(4, 0), (6, 0)]\nd = [dist(a, b) for a in first for b in second]\nprint(f'{min(d):g} {max(d):g}')",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `3 6`"
+            }
           }
         ],
         "skills": [],
@@ -164230,7 +164350,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 19,
+            "position": 24,
             "material_id": "data-analysis"
           }
         ],
@@ -164306,6 +164426,12 @@
               "code": "from math import dist\n\npoints = [(0, 0), (1, 0), (3, 0), (4, 0), (10, 0)]\nc = (1, 0)\nnear = [p for p in points if dist(c, p) <= 3]\nprint(len(near), sum(dist(c, p) < 3 for p in points),\n      len([p for p in near if p != c]))",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `4 3 3`"
+            }
           }
         ],
         "skills": [],
@@ -164313,7 +164439,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 20,
+            "position": 25,
             "material_id": "data-analysis"
           }
         ],
@@ -164363,7 +164489,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "В файле 27-3.txt записаны звёзды трёх кластеров: координаты и характеристика (спектральный класс, подкласс, класс светимости). Центр кластера — его звезда с наименьшей суммой расстояний до остальных звёзд кластера. Найдите A₁ и A₂ — абсциссу и ординату красного гиганта (класс `M`, светимость `III`), ближайшего к центру кластера с наименьшим количеством звёзд. В ответе запишите целые части произведений A₁ · 10 000 и A₂ · 10 000."
+              "markdown": "В файле 27-3.txt записаны звёзды трёх кластеров: координаты и характеристика (спектральный класс, подкласс, класс светимости). Центр кластера — его звезда с наименьшей суммой расстояний до остальных звёзд кластера. Найди A₁ и A₂ — абсциссу и ординату красного гиганта (класс `M`, светимость `III`), ближайшего к центру кластера с наименьшим количеством звёзд. В ответе запиши целые части произведений A₁ · 10 000 и A₂ · 10 000."
             }
           },
           {
@@ -164395,6 +164521,12 @@
               "code": "from math import dist\n\n\ndef center_sum(cluster):\n    best_point = cluster[0]\n    best_sum = float('inf')\n    for candidate in cluster:\n        total = 0.0\n        for point in cluster:\n            total += dist(candidate, point)\n        if total < best_sum:\n            best_sum = total\n            best_point = candidate\n    return best_point\n\n\nstars = []\nwith open('27-3.txt', encoding='utf-8-sig') as f:\n    for line in f:\n        sx, sy, code = line.replace(',', '.').split()\n        stars.append((float(sx), float(sy), code))\n\nclusters = [[], [], []]\nfor s in stars:\n    if s[1] < 5:\n        clusters[0].append(s)\n    elif s[0] < 10:\n        clusters[1].append(s)\n    else:\n        clusters[2].append(s)\n\n\ndef is_kind(code, cls, lum):\n    return code[0] == cls and code[2:] == lum\n\n\nsmall = min(clusters, key=len)\nc = center_sum([(s[0], s[1]) for s in small])\ngiants = [s for s in small if is_kind(s[2], 'M', 'III')]\nnear = min(giants, key=lambda s: dist(c, (s[0], s[1])))\nprint(int(near[0] * 10000), int(near[1] * 10000))",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `150226 81623`"
+            }
           }
         ],
         "skills": [],
@@ -164411,7 +164543,7 @@
         ],
         "lessons": [
           {
-            "position": 21,
+            "position": 26,
             "material_id": "data-analysis"
           }
         ],
@@ -164461,7 +164593,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Для того же файла найдите B₁ — расстояние между центрами кластеров с наименьшим и наибольшим количеством красных гигантов и B₂ — наибольшее расстояние между двумя жёлтыми карликами (класс `G`, светимость `V`) одного кластера. В ответе запишите целые части произведений B₁ · 10 000 и B₂ · 10 000."
+              "markdown": "Для того же файла найди B₁ — расстояние между центрами кластеров с наименьшим и наибольшим количеством красных гигантов и B₂ — наибольшее расстояние между двумя жёлтыми карликами (класс `G`, светимость `V`) одного кластера. В ответе запиши целые части произведений B₁ · 10 000 и B₂ · 10 000."
             }
           },
           {
@@ -164493,6 +164625,12 @@
               "code": "from math import dist\n\n\ndef center_sum(cluster):\n    best_point = cluster[0]\n    best_sum = float('inf')\n    for candidate in cluster:\n        total = 0.0\n        for point in cluster:\n            total += dist(candidate, point)\n        if total < best_sum:\n            best_sum = total\n            best_point = candidate\n    return best_point\n\n\nstars = []\nwith open('27-3.txt', encoding='utf-8-sig') as f:\n    for line in f:\n        sx, sy, code = line.replace(',', '.').split()\n        stars.append((float(sx), float(sy), code))\n\nclusters = [[], [], []]\nfor s in stars:\n    if s[1] < 5:\n        clusters[0].append(s)\n    elif s[0] < 10:\n        clusters[1].append(s)\n    else:\n        clusters[2].append(s)\n\n\ndef is_kind(code, cls, lum):\n    return code[0] == cls and code[2:] == lum\n\n\ngiants = [sum(is_kind(s[2], 'M', 'III') for s in c)\n          for c in clusters]\ncenters = [center_sum([(s[0], s[1]) for s in c])\n           for c in clusters]\nlo = giants.index(min(giants))\nhi = giants.index(max(giants))\nb1 = dist(centers[lo], centers[hi])\nb2 = 0\nfor c in clusters:\n    g = [(s[0], s[1]) for s in c if is_kind(s[2], 'G', 'V')]\n    for i in range(len(g)):\n        for j in range(i + 1, len(g)):\n            b2 = max(b2, dist(g[i], g[j]))\nprint(int(b1 * 10000), int(b2 * 10000))",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `107579 49310`"
+            }
           }
         ],
         "skills": [],
@@ -164509,7 +164647,7 @@
         ],
         "lessons": [
           {
-            "position": 22,
+            "position": 23,
             "material_id": "data-analysis"
           }
         ],
@@ -164559,7 +164697,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "В файле 27-2.txt записаны точки трёх кластеров и ровно три аномалии, которые не относятся ни к одному кластеру. Найдите Q₁ — расстояние между центрами кластеров с наименьшим и наибольшим количеством точек и Q₂ — наибольшее расстояние от центра кластера до точки этого же кластера среди всех кластеров. В ответе запишите целые части произведений Q₁ · 10 000 и Q₂ · 10 000."
+              "markdown": "В файле 27-2.txt записаны точки трёх кластеров и ровно три аномалии, которые не относятся ни к одному кластеру. Найди Q₁ — расстояние между центрами кластеров с наименьшим и наибольшим количеством точек и Q₂ — наибольшее расстояние от центра кластера до точки этого же кластера среди всех кластеров. В ответе запиши целые части произведений Q₁ · 10 000 и Q₂ · 10 000."
             }
           },
           {
@@ -164591,6 +164729,12 @@
               "code": "from math import dist\n\n\ndef read_points(filename):\n    points = []\n    with open(filename, encoding='utf-8-sig') as f:\n        for line in f:\n            parts = line.replace(',', '.').split()\n            points.append((float(parts[0]), float(parts[1])))\n    return points\n\n\ndef center_sum(cluster):\n    best_point = cluster[0]\n    best_sum = float('inf')\n    for candidate in cluster:\n        total = 0.0\n        for point in cluster:\n            total += dist(candidate, point)\n        if total < best_sum:\n            best_sum = total\n            best_point = candidate\n    return best_point\n\n\nclusters = [[], [], []]\nfor x, y in read_points('27-2.txt'):\n    if -8 < x < 0 and 2 < y < 10:\n        clusters[0].append((x, y))\n    elif 1 < x < 10 and 2 < y < 10:\n        clusters[1].append((x, y))\n    elif -2 < x < 5 and -7 < y < 1:\n        clusters[2].append((x, y))\nclusters.sort(key=len)\ncenters = [center_sum(c) for c in clusters]\n\nq1 = dist(centers[0], centers[-1])\nq2 = 0\nfor c, cluster in zip(centers, clusters):\n    for p in cluster:\n        q2 = max(q2, dist(c, p))\nprint(int(q1 * 10000), int(q2 * 10000))",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `105036 28355`"
+            }
           }
         ],
         "skills": [],
@@ -164607,7 +164751,7 @@
         ],
         "lessons": [
           {
-            "position": 23,
+            "position": 22,
             "material_id": "data-analysis"
           }
         ],
@@ -164689,6 +164833,12 @@
               "code": "from math import dist\n\n\ndef read_points(filename):\n    points = []\n    with open(filename, encoding='utf-8-sig') as f:\n        for line in f:\n            parts = line.replace(',', '.').split()\n            points.append((float(parts[0]), float(parts[1])))\n    return points\n\n\ndef center_sum(cluster):\n    best_point = cluster[0]\n    best_sum = float('inf')\n    for candidate in cluster:\n        total = 0.0\n        for point in cluster:\n            total += dist(candidate, point)\n        if total < best_sum:\n            best_sum = total\n            best_point = candidate\n    return best_point\n\n\ndef split_clusters(points, eps):\n    remaining = points.copy()\n    clusters = []\n    while remaining:\n        cluster = [remaining.pop()]\n        pos = 0\n        while pos < len(cluster):\n            point = cluster[pos]\n            rest = []\n            for other in remaining:\n                if dist(point, other) <= eps:\n                    cluster.append(other)\n                else:\n                    rest.append(other)\n            remaining = rest\n            pos += 1\n        clusters.append(cluster)\n    return clusters\n\n\npoints = read_points('27-5.txt')\nbest = 0\nfor eps in range(1, 8):\n    sizes = sorted(len(c) for c in split_clusters(points, eps))\n    if sizes == [69, 76, 83]:\n        best = eps\nprint(best)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `4`"
+            }
           }
         ],
         "skills": [],
@@ -164705,7 +164855,7 @@
         ],
         "lessons": [
           {
-            "position": 24,
+            "position": 28,
             "material_id": "data-analysis",
             "counts_toward_mastery": false
           }
@@ -164756,7 +164906,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "В файле 27-6.txt записаны точки двух кластеров, разделённых промежутком. Центр кластера — его точка с наименьшей суммой расстояний до остальных точек кластера. Найдите Pₓ и P_y — средние арифметические абсцисс и ординат центров кластеров. В ответе запишите целые части произведений Pₓ · 10 000 и P_y · 10 000."
+              "markdown": "В файле 27-6.txt записаны точки двух кластеров, разделённых промежутком. Центр кластера — его точка с наименьшей суммой расстояний до остальных точек кластера. Найди Pₓ и P_y — средние арифметические абсцисс и ординат центров кластеров. В ответе запиши целые части произведений Pₓ · 10 000 и P_y · 10 000."
             }
           },
           {
@@ -164788,6 +164938,12 @@
               "code": "from math import dist\n\n\ndef read_points(filename):\n    points = []\n    with open(filename, encoding='utf-8-sig') as f:\n        for line in f:\n            parts = line.replace(',', '.').split()\n            points.append((float(parts[0]), float(parts[1])))\n    return points\n\n\ndef center_sum(cluster):\n    best_point = cluster[0]\n    best_sum = float('inf')\n    for candidate in cluster:\n        total = 0.0\n        for point in cluster:\n            total += dist(candidate, point)\n        if total < best_sum:\n            best_sum = total\n            best_point = candidate\n    return best_point\n\n\ndef split_clusters(points, eps):\n    remaining = points.copy()\n    clusters = []\n    while remaining:\n        cluster = [remaining.pop()]\n        pos = 0\n        while pos < len(cluster):\n            point = cluster[pos]\n            rest = []\n            for other in remaining:\n                if dist(point, other) <= eps:\n                    cluster.append(other)\n                else:\n                    rest.append(other)\n            remaining = rest\n            pos += 1\n        clusters.append(cluster)\n    return clusters\n\n\nclusters = split_clusters(read_points('27-6.txt'), 0.5)\ncenters = [center_sum(c) for c in clusters]\npx = sum(c[0] for c in centers) / len(centers)\npy = sum(c[1] for c in centers) / len(centers)\nprint(int(px * 10000), int(py * 10000))",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `20509 7624`"
+            }
           }
         ],
         "skills": [],
@@ -164804,7 +164960,7 @@
         ],
         "lessons": [
           {
-            "position": 25,
+            "position": 29,
             "material_id": "data-analysis",
             "counts_toward_mastery": false
           }
@@ -164812,7 +164968,7 @@
         "theory_links": [
           {
             "label": "Теория",
-            "section": "porog-v-primere",
+            "section": "obosnovanie-poroga",
             "material_id": "data-analysis"
           }
         ],
@@ -164881,6 +165037,12 @@
               "code": "from math import dist\n\na, b = (0, 0), (6, 8)\nprint(f'{dist(a, b):g} {dist(a, b) / 2:g}')",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `10 5`"
+            }
           }
         ],
         "skills": [],
@@ -164888,7 +165050,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 26,
+            "position": 30,
             "material_id": "data-analysis",
             "counts_toward_mastery": false
           }
@@ -164939,7 +165101,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "В файле 27-1.txt записаны точки двух кластеров. Центр кластера — его точка, для которой минимально максимальное из расстояний до остальных точек кластера; радиус кластера — это максимальное расстояние. Найдите средний радиус двух кластеров. В ответе запишите целую часть произведения среднего радиуса на 10 000."
+              "markdown": "В файле 27-1.txt записаны точки двух кластеров. Центр кластера — его точка, для которой минимально максимальное из расстояний до остальных точек кластера; радиус кластера — это максимальное расстояние. Найди средний радиус двух кластеров. В ответе запиши целую часть произведения среднего радиуса на 10 000."
             }
           },
           {
@@ -164971,6 +165133,12 @@
               "code": "from math import dist\n\n\ndef read_points(filename):\n    points = []\n    with open(filename, encoding='utf-8-sig') as f:\n        for line in f:\n            parts = line.replace(',', '.').split()\n            points.append((float(parts[0]), float(parts[1])))\n    return points\n\n\ndef center_sum(cluster):\n    best_point = cluster[0]\n    best_sum = float('inf')\n    for candidate in cluster:\n        total = 0.0\n        for point in cluster:\n            total += dist(candidate, point)\n        if total < best_sum:\n            best_sum = total\n            best_point = candidate\n    return best_point\n\n\nleft, right = [], []\nfor p in read_points('27-1.txt'):\n    if p[0] < 6:\n        left.append(p)\n    else:\n        right.append(p)\n\nradii = []\nfor cluster in (left, right):\n    radius = min(max(dist(c, p) for p in cluster)\n                 for c in cluster)\n    radii.append(radius)\nprint(int(sum(radii) / 2 * 10000))",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `19919`"
+            }
           }
         ],
         "skills": [],
@@ -164987,7 +165155,7 @@
         ],
         "lessons": [
           {
-            "position": 27,
+            "position": 31,
             "material_id": "data-analysis",
             "counts_toward_mastery": false
           }
@@ -165038,7 +165206,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "В файле 27-2.txt записаны точки трёх кластеров и три аномалии. Антицентр кластера — его точка с наибольшей суммой расстояний до остальных точек кластера. Найдите сумму абсциссы и ординаты антицентра кластера с наименьшим количеством точек. В ответе запишите целую часть абсолютной величины произведения этой суммы на 10 000."
+              "markdown": "В файле 27-2.txt записаны точки трёх кластеров и три аномалии. Антицентр кластера — его точка с наибольшей суммой расстояний до остальных точек кластера. Найди сумму абсциссы и ординаты антицентра кластера с наименьшим количеством точек. В ответе запиши целую часть абсолютной величины произведения этой суммы на 10 000."
             }
           },
           {
@@ -165070,6 +165238,12 @@
               "code": "from math import dist\n\n\ndef read_points(filename):\n    points = []\n    with open(filename, encoding='utf-8-sig') as f:\n        for line in f:\n            parts = line.replace(',', '.').split()\n            points.append((float(parts[0]), float(parts[1])))\n    return points\n\n\ndef center_sum(cluster):\n    best_point = cluster[0]\n    best_sum = float('inf')\n    for candidate in cluster:\n        total = 0.0\n        for point in cluster:\n            total += dist(candidate, point)\n        if total < best_sum:\n            best_sum = total\n            best_point = candidate\n    return best_point\n\n\nclusters = [[], [], []]\nfor x, y in read_points('27-2.txt'):\n    if -8 < x < 0 and 2 < y < 10:\n        clusters[0].append((x, y))\n    elif 1 < x < 10 and 2 < y < 10:\n        clusters[1].append((x, y))\n    elif -2 < x < 5 and -7 < y < 1:\n        clusters[2].append((x, y))\nclusters.sort(key=len)\ncenters = [center_sum(c) for c in clusters]\n\nsmall = clusters[0]\nanti = max(small, key=lambda c: sum(dist(c, p) for p in small))\nprint(int(abs(anti[0] + anti[1]) * 10000))",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `52747`"
+            }
           }
         ],
         "skills": [],
@@ -165086,7 +165260,7 @@
         ],
         "lessons": [
           {
-            "position": 28,
+            "position": 33,
             "material_id": "data-analysis",
             "counts_toward_mastery": false
           }
@@ -165137,7 +165311,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "В файле 27-1.txt записаны точки двух кластеров. Найдите расстояние между центрами кластеров. В ответе запишите целую часть произведения найденного расстояния на 10 000. (Подтемы 3, 4 и 6.)"
+              "markdown": "В файле 27-1.txt записаны точки двух кластеров. Найди расстояние между центрами кластеров. В ответе запиши целую часть произведения найденного расстояния на 10 000."
             }
           },
           {
@@ -165169,6 +165343,12 @@
               "code": "from math import dist\n\n\ndef read_points(filename):\n    points = []\n    with open(filename, encoding='utf-8-sig') as f:\n        for line in f:\n            parts = line.replace(',', '.').split()\n            points.append((float(parts[0]), float(parts[1])))\n    return points\n\n\ndef center_sum(cluster):\n    best_point = cluster[0]\n    best_sum = float('inf')\n    for candidate in cluster:\n        total = 0.0\n        for point in cluster:\n            total += dist(candidate, point)\n        if total < best_sum:\n            best_sum = total\n            best_point = candidate\n    return best_point\n\n\nleft, right = [], []\nfor p in read_points('27-1.txt'):\n    if p[0] < 6:\n        left.append(p)\n    else:\n        right.append(p)\n\nd = dist(center_sum(left), center_sum(right))\nprint(int(d * 10000))",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `65667`"
+            }
           }
         ],
         "skills": [],
@@ -165185,7 +165365,7 @@
         ],
         "lessons": [
           {
-            "position": 29,
+            "position": 37,
             "material_id": "data-analysis"
           }
         ],
@@ -165229,7 +165409,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "В файле 27-2.txt записаны точки трёх кластеров и ровно три аномалии. Найдите наибольшее расстояние от центра кластера с наименьшим количеством точек до точки кластера с наибольшим количеством точек. В ответе запишите целую часть произведения найденного расстояния на 10 000. (Подтемы 3, 5 и 6: точки чужого кластера.)"
+              "markdown": "В файле 27-2.txt записаны точки трёх кластеров и ровно три аномалии. Найди наибольшее расстояние от центра кластера с наименьшим количеством точек до точки кластера с наибольшим количеством точек. В ответе запиши целую часть произведения найденного расстояния на 10 000."
             }
           },
           {
@@ -165261,6 +165441,12 @@
               "code": "from math import dist\n\n\ndef read_points(filename):\n    points = []\n    with open(filename, encoding='utf-8-sig') as f:\n        for line in f:\n            parts = line.replace(',', '.').split()\n            points.append((float(parts[0]), float(parts[1])))\n    return points\n\n\ndef center_sum(cluster):\n    best_point = cluster[0]\n    best_sum = float('inf')\n    for candidate in cluster:\n        total = 0.0\n        for point in cluster:\n            total += dist(candidate, point)\n        if total < best_sum:\n            best_sum = total\n            best_point = candidate\n    return best_point\n\n\nclusters = [[], [], []]\nfor x, y in read_points('27-2.txt'):\n    if -8 < x < 0 and 2 < y < 10:\n        clusters[0].append((x, y))\n    elif 1 < x < 10 and 2 < y < 10:\n        clusters[1].append((x, y))\n    elif -2 < x < 5 and -7 < y < 1:\n        clusters[2].append((x, y))\nclusters.sort(key=len)\ncenters = [center_sum(c) for c in clusters]\n\nfar = max(dist(centers[0], p) for p in clusters[-1])\nprint(int(far * 10000))",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `126711`"
+            }
           }
         ],
         "skills": [],
@@ -165277,7 +165463,7 @@
         ],
         "lessons": [
           {
-            "position": 30,
+            "position": 38,
             "material_id": "data-analysis"
           }
         ],
@@ -165321,7 +165507,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "В файле 27-3.txt записаны звёзды трёх кластеров. Определите количество белых карликов (класс светимости `VII`) в кластере с наибольшим количеством звёзд. (Подтемы 2, 3 и 5.)"
+              "markdown": "В файле 27-3.txt записаны звёзды трёх кластеров. Определи количество белых карликов (класс светимости `VII`) в кластере с наибольшим количеством звёзд."
             }
           },
           {
@@ -165353,6 +165539,12 @@
               "code": "from math import dist\n\n\ndef center_sum(cluster):\n    best_point = cluster[0]\n    best_sum = float('inf')\n    for candidate in cluster:\n        total = 0.0\n        for point in cluster:\n            total += dist(candidate, point)\n        if total < best_sum:\n            best_sum = total\n            best_point = candidate\n    return best_point\n\n\nstars = []\nwith open('27-3.txt', encoding='utf-8-sig') as f:\n    for line in f:\n        sx, sy, code = line.replace(',', '.').split()\n        stars.append((float(sx), float(sy), code))\n\nclusters = [[], [], []]\nfor s in stars:\n    if s[1] < 5:\n        clusters[0].append(s)\n    elif s[0] < 10:\n        clusters[1].append(s)\n    else:\n        clusters[2].append(s)\n\n\ndef is_kind(code, cls, lum):\n    return code[0] == cls and code[2:] == lum\n\n\nbig = max(clusters, key=len)\nprint(sum(s[2] == 'VII' for s in big))",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `20`"
+            }
           }
         ],
         "skills": [],
@@ -165369,7 +165561,7 @@
         ],
         "lessons": [
           {
-            "position": 31,
+            "position": 39,
             "material_id": "data-analysis"
           }
         ],
@@ -165401,19 +165593,19 @@
     {
       "task": {
         "id": "task-27-9-04",
-        "title": "Частицы признака II",
+        "title": "Задача темы: частицы",
         "short_description": null,
         "explanation_kind": "worked_solution",
         "difficulty": 3,
         "estimated_minutes": 8,
-        "answer_instruction": "Введите два целых числа через пробел.",
+        "answer_instruction": "Введите два числа через пробел в том порядке, в каком их спрашивают.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "В файле 27-4.txt записаны частицы: координаты, проекции скорости, масса и признак. Частицы делятся на 4 кластера по кинетической энергии: модуль разности энергий любых двух частиц кластера не больше 2. Центр кластера — частица с наименьшей суммой модулей разностей энергий с остальными частицами кластера. Найдите Q₁ — наибольшее евклидово расстояние между частицами одного кластера с признаком `II` и Q₂ — наибольшую кинетическую энергию центра кластера. В ответе запишите целые части произведений Q₁ · 10 000 и Q₂ · 10 000. (Подтемы 2–4 и 6.)"
+              "markdown": "Задача темы. Входной файл 27-4.txt содержит сведения о частицах, зарегистрированных детектором. В каждой строке записаны координаты частицы x и y, проекции её скорости vx и vy, масса m и признак частицы — римское число от I до VII; значения разделены табуляцией. Кинетическая энергия частицы E = m · (vx² + vy²) / 2. Частицы образуют четыре кластера: модуль разности энергий любых двух частиц одного кластера не превышает 2. Центром кластера назовём частицу, для которой сумма модулей разностей её энергии и энергий остальных частиц кластера минимальна. Найди Q₁ — наибольшее расстояние между двумя частицами одного кластера с признаком II и Q₂ — наибольшую кинетическую энергию центра кластера. В ответе запиши целые части произведений Q₁ · 10 000 и Q₂ · 10 000."
             }
           },
           {
@@ -165427,7 +165619,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Q₁ — евклидово расстояние по координатам, Q₂ — энергия центра по энергиям."
+              "markdown": "Q₁ — расстояние по координатам между частицами с признаком II внутри одного кластера; Q₂ — энергия центра, найденного по разностям энергий."
             }
           }
         ],
@@ -165445,6 +165637,12 @@
               "code": "from math import dist\n\nparts = []\nwith open('27-4.txt', encoding='utf-8-sig') as f:\n    for line in f:\n        p = line.replace(',', '.').split()\n        parts.append([float(v) for v in p[:5]] + [p[5]])\n\n\ndef energy(p):\n    return p[4] * (p[2] ** 2 + p[3] ** 2) / 2\n\n\nclusters = [[], [], [], []]\nfor p in parts:\n    k = 0\n    for bound in [3.5, 7, 10.5]:\n        if energy(p) > bound:\n            k += 1\n    clusters[k].append(p)\n\n\ndef center_energy(cluster):\n    best, best_sum = cluster[0], float('inf')\n    for c in cluster:\n        total = 0.0\n        for p in cluster:\n            total += abs(energy(c) - energy(p))\n        if total < best_sum:\n            best, best_sum = c, total\n    return best\n\n\nq1 = 0\nfor c in clusters:\n    two = [p for p in c if p[5] == 'II']\n    for i in range(len(two)):\n        for j in range(i + 1, len(two)):\n            d = dist(two[i][:2], two[j][:2])\n            q1 = max(q1, d)\nq2 = max(energy(center_energy(c)) for c in clusters)\nprint(int(q1 * 10000), int(q2 * 10000))",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `772010 125026`"
+            }
           }
         ],
         "skills": [],
@@ -165461,11 +165659,17 @@
         ],
         "lessons": [
           {
-            "position": 32,
+            "position": 27,
             "material_id": "data-analysis"
           }
         ],
-        "theory_links": [],
+        "theory_links": [
+          {
+            "label": "Теория",
+            "section": "zadacha-temy",
+            "material_id": "data-analysis"
+          }
+        ],
         "catalog_visible": false,
         "archived": false,
         "sources": [
@@ -165505,7 +165709,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "В файле 27-5.txt записаны точки трёх кластеров; каждый лежит внутри сектора радиуса 15 с центральным углом 20° и вершиной в точке C (2; −1). Найдите Pₓ и P_y — средние арифметические абсцисс и ординат центров кластеров. В ответе запишите целые части произведений |Pₓ| · 10 000 и |P_y| · 10 000. (Подтемы 3–5: угол направления и модуль.)"
+              "markdown": "В файле 27-5.txt записаны точки трёх кластеров; каждый лежит внутри сектора радиуса 15 с центральным углом 20° и вершиной в точке C (2; −1). Найди Pₓ и P_y — средние арифметические абсцисс и ординат центров кластеров. В ответе запиши целые части произведений |Pₓ| · 10 000 и |P_y| · 10 000."
             }
           },
           {
@@ -165537,6 +165741,12 @@
               "code": "from math import dist\n\n\ndef read_points(filename):\n    points = []\n    with open(filename, encoding='utf-8-sig') as f:\n        for line in f:\n            parts = line.replace(',', '.').split()\n            points.append((float(parts[0]), float(parts[1])))\n    return points\n\n\ndef center_sum(cluster):\n    best_point = cluster[0]\n    best_sum = float('inf')\n    for candidate in cluster:\n        total = 0.0\n        for point in cluster:\n            total += dist(candidate, point)\n        if total < best_sum:\n            best_sum = total\n            best_point = candidate\n    return best_point\n\n\nfrom math import atan2, degrees\n\nclusters = [[], [], []]\nfor p in read_points('27-5.txt'):\n    a = degrees(atan2(p[1] + 1, p[0] - 2)) % 360\n    for k, start in enumerate([350, 110, 230]):\n        if (a - start) % 360 <= 20:\n            clusters[k].append(p)\ncenters = [center_sum(c) for c in clusters]\npx = abs(sum(c[0] for c in centers) / 3)\npy = abs(sum(c[1] for c in centers) / 3)\nprint(int(px * 10000), int(py * 10000))",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `22208 11252`"
+            }
           }
         ],
         "skills": [],
@@ -165553,7 +165763,7 @@
         ],
         "lessons": [
           {
-            "position": 33,
+            "position": 40,
             "material_id": "data-analysis"
           }
         ],
@@ -826618,6 +826828,791 @@
         }
       },
       "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "task-27-10-01",
+        "title": "Полярные координаты звёзд",
+        "short_description": null,
+        "explanation_kind": "worked_solution",
+        "difficulty": 2,
+        "estimated_minutes": 6,
+        "answer_instruction": "Введите два числа через пробел в том порядке, в каком их спрашивают.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "В файле 27-7.txt записаны звёзды в полярных координатах: в каждой строке — полярный угол φ в градусах и полярный радиус r. Переведи все точки в обычные координаты x = r · cos φ, y = r · sin φ и найди наибольшую абсциссу и наибольшую ординату. В ответе запиши целые части произведений этих чисел на 10 000."
+            }
+          },
+          {
+            "type": "attachment",
+            "data": {
+              "usage_id": "statement-1"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Функции cos и sin ждут радианы: сначала radians(phi)."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Перевод каждой строки — x = r · cos φ, y = r · sin φ после radians."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "from math import cos, sin, radians\n\nxs, ys = [], []\nwith open('27-7.txt') as f:\n    for line in f:\n        phi, r = map(float, line.replace(',', '.').split())\n        xs.append(r * cos(radians(phi)))\n        ys.append(r * sin(radians(phi)))\nprint(int(max(xs) * 10000), int(max(ys) * 10000))",
+              "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `85940 57203`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [27],
+        "files": [
+          {
+            "id": "statement-1",
+            "purpose": "attachment",
+            "checksum": "f2521156f8f8ad5272b9843df0891783aae4a988d85795e92d9e5b6dbd1997dd",
+            "filename": "27-7.txt",
+            "attribution": null,
+            "description": "Звёзды в полярных координатах: угол и радиус"
+          }
+        ],
+        "lessons": [
+          {
+            "position": 8,
+            "material_id": "data-analysis"
+          }
+        ],
+        "theory_links": [
+          {
+            "label": "Теория",
+            "section": "polyarnye-koordinaty",
+            "material_id": "data-analysis"
+          }
+        ],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["85940 57203"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "task-27-10-02",
+        "title": "Кластеры между прямыми",
+        "short_description": null,
+        "explanation_kind": "worked_solution",
+        "difficulty": 2,
+        "estimated_minutes": 5,
+        "answer_instruction": "Введите два числа через пробел в том порядке, в каком их спрашивают.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "В файле 27-8.txt записаны точки двух кластеров и аномалии. Кластеры лежат в двух треугольниках, которые образуют прямые y = x, y = 10 − x и оси координат: нижний — под обеими прямыми, левый — над y = x и под y = 10 − x. Точки вне треугольников — аномалии. Сколько в файле аномалий и сколько точек в большем кластере?"
+            }
+          },
+          {
+            "type": "attachment",
+            "data": {
+              "usage_id": "statement-1"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Внутри большого треугольника x > 0, y > 0 и y < 10 − x; кластеры делит прямая y = x."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Проверка сторон прямых: x > 0, y > 0, y < 10 − x, затем y < x или y > x."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "def read_points(filename):\n    points = []\n    with open(filename, encoding='utf-8-sig') as f:\n        for line in f:\n            parts = line.replace(',', '.').split()\n            points.append((float(parts[0]), float(parts[1])))\n    return points\n\n\ncounts = [0, 0]\nnoise = 0\nfor x, y in read_points('27-8.txt'):\n    if x > 0 and y > 0 and y < 10 - x:\n        counts[0 if y < x else 1] += 1\n    else:\n        noise += 1\nprint(noise, max(counts))",
+              "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `4 170`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [27],
+        "files": [
+          {
+            "id": "statement-1",
+            "purpose": "attachment",
+            "checksum": "a4ee1417ac178219c6a198ca8b0c7bf288133f7deafebfb616ed0e0052a2126b",
+            "filename": "27-8.txt",
+            "attribution": null,
+            "description": "Точки двух треугольных кластеров и аномалии"
+          }
+        ],
+        "lessons": [
+          {
+            "position": 11,
+            "material_id": "data-analysis"
+          }
+        ],
+        "theory_links": [
+          {
+            "label": "Теория",
+            "section": "oblasti-mezhdu-pryamymi",
+            "material_id": "data-analysis"
+          }
+        ],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["4 170"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "task-27-10-03",
+        "title": "Точка сбора деревьев",
+        "short_description": null,
+        "explanation_kind": "worked_solution",
+        "difficulty": 2,
+        "estimated_minutes": 5,
+        "answer_instruction": "Введите два числа через пробел: сначала x, затем y.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "На участке растут семь деревьев (x, y, высота): (2, 3, 1), (5, 1, 1), (4, 6, 1), (8, 2, 1), (6, 5, 1), (3, 8, 3), (9, 7, 1). Сложность доставки дерева — расстояние от него до точки сбора, умноженное на его высоту. Точка сбора — одно из деревьев, для которого суммарная сложность доставки остальных деревьев наименьшая. Найди координаты точки сбора."
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Множитель — высота того дерева, которое везут, а не кандидата."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Без высот центр был бы (6; 5); дерево высотой 3 в (3; 8) сдвигает точку сбора к (4; 6)."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "from math import dist\n\ntrees = [(2, 3, 1), (5, 1, 1), (4, 6, 1), (8, 2, 1),\n         (6, 5, 1), (3, 8, 3), (9, 7, 1)]\n\n\ndef cost(c):\n    return sum(dist(c[:2], t[:2]) * t[2] for t in trees)\n\n\nbest = min(trees, key=cost)\nprint(best[0], best[1])",
+              "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `4 6`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [27],
+        "files": [],
+        "lessons": [
+          {
+            "position": 15,
+            "material_id": "data-analysis"
+          }
+        ],
+        "theory_links": [
+          {
+            "label": "Теория",
+            "section": "vzveshennaya-summa",
+            "material_id": "data-analysis"
+          }
+        ],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["4 6"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "task-27-10-04",
+        "title": "Точка наведения телескопа",
+        "short_description": null,
+        "explanation_kind": "worked_solution",
+        "difficulty": 3,
+        "estimated_minutes": 6,
+        "answer_instruction": "Введите два числа через пробел: сначала x, затем y.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Звёзды: (1; 2), (2; 2), (2; 3), (6; 1), (7; 1), (7; 2), (8; 2), (3; 7), (4; 7), (3; 8), (4; 8). Телескоп наводят на одну из звёзд; в поле зрения попадают звёзды, которые ближе 1,5 к ней (на границе не видны). Выбери звезду, при наведении на которую видно больше всего других звёзд; если таких несколько — ближайшую к началу координат. Найди её координаты."
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Посчитай для каждой звезды, сколько других ближе 1,5; при равенстве сравни расстояния до (0; 0)."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "По 3 соседа у шести звёзд: (7; 1), (7; 2) и четырёх звёзд верхней группы. Ближе всех к началу координат (7; 1): √50 ≈ 7,07."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "from math import dist\n\nstars = [(1, 2), (2, 2), (2, 3), (6, 1), (7, 1), (7, 2),\n         (8, 2), (3, 7), (4, 7), (3, 8), (4, 8)]\nR = 1.5\n\n\ndef visible(c):\n    return sum(dist(c, s) < R for s in stars) - 1\n\n\naim = min(stars, key=lambda c: (-visible(c), dist(c, (0, 0))))\nprint(*aim)",
+              "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `7 1`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [27],
+        "files": [],
+        "lessons": [
+          {
+            "position": 34,
+            "material_id": "data-analysis",
+            "counts_toward_mastery": false
+          }
+        ],
+        "theory_links": [
+          {
+            "label": "Теория",
+            "section": "tochka-navedeniya",
+            "material_id": "data-analysis"
+          }
+        ],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["7 1"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "task-27-10-05",
+        "title": "Антицентры крупнейших кластеров",
+        "short_description": null,
+        "explanation_kind": "worked_solution",
+        "difficulty": 3,
+        "estimated_minutes": 8,
+        "answer_instruction": "Введите два числа через пробел в том порядке, в каком их спрашивают.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "В файле 27-2.txt записаны точки трёх кластеров и три аномалии. Антицентр кластера — его точка с наибольшей суммой расстояний до остальных точек кластера. Найди Pₓ и P_y — средние арифметические абсцисс и ординат антицентров двух самых больших по числу точек кластеров. В ответе запиши целые части произведений |Pₓ| · 10 000 и |P_y| · 10 000."
+            }
+          },
+          {
+            "type": "attachment",
+            "data": {
+              "usage_id": "statement-1"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Кластеры и аномалии — по явным областям; антицентр — наибольшая сумма, а не наименьшая."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Два самых больших кластера — из 251 и 193 точек; модуль берут у средних."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "from math import dist\n\ndef read_points(filename):\n    points = []\n    with open(filename, encoding='utf-8-sig') as f:\n        for line in f:\n            parts = line.replace(',', '.').split()\n            points.append((float(parts[0]), float(parts[1])))\n    return points\n\n\nclusters = [[], [], []]\nfor x, y in read_points('27-2.txt'):\n    if -8 < x < 0 and 2 < y < 10:\n        clusters[0].append((x, y))\n    elif 1 < x < 10 and 2 < y < 10:\n        clusters[1].append((x, y))\n    elif -2 < x < 5 and -7 < y < 1:\n        clusters[2].append((x, y))\n\nbig = sorted(clusters, key=len)[1:]\nanti = [max(c, key=lambda a: sum(dist(a, p) for p in c))\n        for c in big]\npx = sum(a[0] for a in anti) / 2\npy = sum(a[1] for a in anti) / 2\nprint(int(abs(px) * 10000), int(abs(py) * 10000))",
+              "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `18845 55994`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [27],
+        "files": [
+          {
+            "id": "statement-1",
+            "purpose": "attachment",
+            "checksum": "1603aad9f54d684d8da5fbb3eae711237d35d7d117e08e9c9202008b81a387fc",
+            "filename": "27-2.txt",
+            "attribution": null,
+            "description": "Точки трёх кластеров и три аномалии"
+          }
+        ],
+        "lessons": [
+          {
+            "position": 32,
+            "material_id": "data-analysis",
+            "counts_toward_mastery": false
+          }
+        ],
+        "theory_links": [
+          {
+            "label": "Теория",
+            "section": "antipod",
+            "material_id": "data-analysis"
+          }
+        ],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["18845 55994"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "task-27-10-06",
+        "title": "Сильно коррелирующие эксперименты",
+        "short_description": null,
+        "explanation_kind": "worked_solution",
+        "difficulty": 3,
+        "estimated_minutes": 8,
+        "answer_instruction": "Введите два числа через пробел в том порядке, в каком их спрашивают.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "В файле 27-9.txt записаны результаты трёх экспериментов вперемешку: в каждой строке — два числа одного измерения. На диаграмме рассеяния эксперименты разделены пустыми полосами. Связь в эксперименте сильная, если модуль коэффициента корреляции Пирсона его измерений не меньше 0,9. Найди количество измерений в экспериментах с сильной связью и среднее арифметическое их коэффициентов корреляции; в ответе для второго числа запиши целую часть произведения на 100 000."
+            }
+          },
+          {
+            "type": "attachment",
+            "data": {
+              "usage_id": "statement-1"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Границы экспериментов — по x; r считай для каждого отдельно."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Сильная связь у первого (r ≈ 0,941) и третьего (r ≈ 0,918) экспериментов: 60 + 70 измерений."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "def read_points(filename):\n    points = []\n    with open(filename, encoding='utf-8-sig') as f:\n        for line in f:\n            parts = line.replace(',', '.').split()\n            points.append((float(parts[0]), float(parts[1])))\n    return points\n\n\ndef pearson(g):\n    n = len(g)\n    mx = sum(p[0] for p in g) / n\n    my = sum(p[1] for p in g) / n\n    sxy = sum((p[0] - mx) * (p[1] - my) for p in g)\n    sxx = sum((p[0] - mx) ** 2 for p in g)\n    syy = sum((p[1] - my) ** 2 for p in g)\n    return sxy / (sxx * syy) ** 0.5\n\n\ngroups = [[], [], []]\nfor x, y in read_points('27-9.txt'):\n    groups[0 if x < 15 else 1 if x < 35 else 2].append((x, y))\nstrong = [g for g in groups if abs(pearson(g)) >= 0.9]\nmean_r = sum(pearson(g) for g in strong) / len(strong)\nprint(sum(len(g) for g in strong), int(mean_r * 100000))",
+              "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `130 92941`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [27],
+        "files": [
+          {
+            "id": "statement-1",
+            "purpose": "attachment",
+            "checksum": "dcf9260fc689d359efe6fb1a1a438d0a5c860a61920d74e7dc000f6252796d13",
+            "filename": "27-9.txt",
+            "attribution": null,
+            "description": "Измерения трёх экспериментов"
+          }
+        ],
+        "lessons": [
+          {
+            "position": 35,
+            "material_id": "data-analysis",
+            "counts_toward_mastery": false
+          }
+        ],
+        "theory_links": [
+          {
+            "label": "Теория",
+            "section": "korrelyaciya",
+            "material_id": "data-analysis"
+          }
+        ],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["130 92941"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "task-27-10-07",
+        "title": "Выбросы по квартилям",
+        "short_description": null,
+        "explanation_kind": "worked_solution",
+        "difficulty": 2,
+        "estimated_minutes": 6,
+        "answer_instruction": "Введите два числа через пробел в том порядке, в каком их спрашивают.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Результаты измерений: 47, 52, 49, 55, 61, 50, 48, 95, 53, 51, 12, 56, 54. Q1 — медиана нижней половины упорядоченных значений, Q3 — медиана верхней; при нечётном количестве срединное значение не входит ни в одну половину. Выброс — значение вне отрезка [Q1 − 1,5 · IQR; Q3 + 1,5 · IQR], где IQR = Q3 − Q1. Сколько выбросов и чему равно наибольшее значение, которое выбросом не считается?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Сначала упорядочи значения; в каждой половине по 6 чисел."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Q1 = 48,5, Q3 = 55,5, IQR = 7, границы 38 и 66: выбросы 12 и 95."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "def median(v):\n    n = len(v)\n    if n % 2:\n        return v[n // 2]\n    return (v[n // 2 - 1] + v[n // 2]) / 2\n\n\ndata = [47, 52, 49, 55, 61, 50, 48, 95, 53, 51, 12, 56, 54]\nv = sorted(data)\nn = len(v)\nq1, q3 = median(v[:n // 2]), median(v[(n + 1) // 2:])\nlo = q1 - 1.5 * (q3 - q1)\nhi = q3 + 1.5 * (q3 - q1)\nout = [x for x in v if x < lo or x > hi]\nprint(len(out), max(x for x in v if lo <= x <= hi))",
+              "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `2 61`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [27],
+        "files": [],
+        "lessons": [
+          {
+            "position": 36,
+            "material_id": "data-analysis",
+            "counts_toward_mastery": false
+          }
+        ],
+        "theory_links": [
+          {
+            "label": "Теория",
+            "section": "vybrosy",
+            "material_id": "data-analysis"
+          }
+        ],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["2 61"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "task-27-9-06",
+        "title": "Центры звёзд в полярных координатах",
+        "short_description": null,
+        "explanation_kind": "worked_solution",
+        "difficulty": 3,
+        "estimated_minutes": 8,
+        "answer_instruction": "Введите два числа через пробел в том порядке, в каком их спрашивают.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "В файле 27-7.txt записаны звёзды двух кластеров в полярных координатах: в каждой строке — полярный угол φ в градусах и полярный радиус r. Кластеры лежат в разных секторах круга с центром в начале координат. Центр кластера — его звезда с наименьшей суммой расстояний до остальных звёзд кластера; расстояния считай на обычной плоскости. Найди Pₓ и P_y — средние арифметические абсцисс и ординат центров кластеров. В ответе запиши целые части произведений Pₓ · 10 000 и P_y · 10 000."
+            }
+          },
+          {
+            "type": "attachment",
+            "data": {
+              "usage_id": "statement-1"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Переведи точки в x и y; кластеры удобно разделить по углу φ ещё до перевода."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Секторы — около 15–35° и 100–125°: граница φ = 60 проходит по пустому месту."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "from math import cos, sin, radians, dist\n\nclusters = [[], []]\nwith open('27-7.txt') as f:\n    for line in f:\n        phi, r = map(float, line.replace(',', '.').split())\n        a = radians(phi)\n        k = 0 if phi < 60 else 1\n        clusters[k].append((r * cos(a), r * sin(a)))\n\n\ndef center(cl):\n    return min(cl, key=lambda c: sum(dist(c, p) for p in cl))\n\n\ncs = [center(c) for c in clusters]\npx = sum(c[0] for c in cs) / 2\npy = sum(c[1] for c in cs) / 2\nprint(int(px * 10000), int(py * 10000))",
+              "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `25246 35917`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [27],
+        "files": [
+          {
+            "id": "statement-1",
+            "purpose": "attachment",
+            "checksum": "f2521156f8f8ad5272b9843df0891783aae4a988d85795e92d9e5b6dbd1997dd",
+            "filename": "27-7.txt",
+            "attribution": null,
+            "description": "Звёзды в полярных координатах: угол и радиус"
+          }
+        ],
+        "lessons": [
+          {
+            "position": 41,
+            "material_id": "data-analysis"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["25246 35917"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
     }
   ],
   "files": [
@@ -840179,6 +841174,27 @@
       "mime_type": "text/plain",
       "size_bytes": 63720,
       "storage_key": "24aefa979defdd581e6bb6c34ea12612b3bbdbe580f6a07978e29b5c7c2b65e4"
+    },
+    {
+      "format": "txt",
+      "checksum": "f2521156f8f8ad5272b9843df0891783aae4a988d85795e92d9e5b6dbd1997dd",
+      "mime_type": "text/plain",
+      "size_bytes": 3360,
+      "storage_key": "f2521156f8f8ad5272b9843df0891783aae4a988d85795e92d9e5b6dbd1997dd"
+    },
+    {
+      "format": "txt",
+      "checksum": "a4ee1417ac178219c6a198ca8b0c7bf288133f7deafebfb616ed0e0052a2126b",
+      "mime_type": "text/plain",
+      "size_bytes": 5474,
+      "storage_key": "a4ee1417ac178219c6a198ca8b0c7bf288133f7deafebfb616ed0e0052a2126b"
+    },
+    {
+      "format": "txt",
+      "checksum": "dcf9260fc689d359efe6fb1a1a438d0a5c860a61920d74e7dc000f6252796d13",
+      "mime_type": "text/plain",
+      "size_bytes": 2082,
+      "storage_key": "dcf9260fc689d359efe6fb1a1a438d0a5c860a61920d74e7dc000f6252796d13"
     }
   ],
   "materials": [
@@ -840584,77 +841600,55 @@
       "sections": [
         "kak-ustroena-tema-27",
         "chto-v-fayle",
-        "tochka-kortezh",
-        "klaster-spisok",
         "teorema-pifagora",
-        "math-dist",
         "kvadrat-rasstoyaniya",
-        "celaya-chast-otveta",
-        "tochki-itogo",
-        "chtenie-bez-poter",
-        "pervye-stroki",
-        "razbor-stroki",
-        "funkciya-chteniya",
-        "zagolovok",
-        "dopolnitelnye-stolbcy",
+        "chtenie-fayla",
         "kod-zvezdy",
         "stroka-chasticy",
-        "fayl-itogo",
-        "pravilo-razdeleniya",
+        "polyarnye-koordinaty",
+        "tochki-itogo",
         "diagramma-rasseyaniya",
         "koordinatnye-granicy",
         "tri-gruppy",
         "anomalii",
         "naklonnaya-granica",
+        "oblasti-mezhdu-pryamymi",
         "razdelyayushchiy-priznak",
         "vychislyaemyy-priznak",
         "razdelenie-itogo",
         "centr-tochka-klastera",
-        "summa-rasstoyaniy",
-        "perebor-kandidatov",
         "programma-centra",
-        "rasstoyanie-do-sebya",
         "srednee-ne-centr",
         "tri-vyrazheniya",
-        "srednee-rasstoyanie",
         "formula-rasstoyaniya",
-        "vremya-poiska",
+        "vzveshennaya-summa",
         "centr-itogo",
-        "vychislenie-otveta",
-        "korotkaya-zapis",
         "srednee-centrov",
         "minimalnye-koordinaty",
         "malenkiy-i-bolshoy",
         "obekty-nuzhnogo-vida",
         "isklyuchenie-klasterov",
         "masshtabirovanie",
-        "float",
         "polnyy-primer",
         "otvet-itogo",
-        "iz-rasstoyaniy",
         "svoy-i-chuzhoy",
         "diametr",
         "mezhklasternyy-diametr",
         "tochki-okolo-centra",
         "blizhayshiy-obekt",
+        "zadacha-temy",
         "rasstoyaniya-itogo",
-        "dopolnitelnyy-urok-sosedi",
         "porog-sosedstva",
         "postroenie-gruppy",
-        "pochemu-vsya-gruppa",
-        "porog-v-primere",
         "obosnovanie-poroga",
-        "malenkie-gruppy",
-        "dve-operacii",
-        "sosedi-itogo",
-        "dopolnitelnyy-urok-centry",
         "samaya-dalyokaya-tochka",
         "antipod",
         "summa-kvadratov",
-        "simmetriya",
-        "dosrochnaya-ostanovka",
-        "bez-garantii",
-        "centry-itogo"
+        "tochka-navedeniya",
+        "korrelyaciya",
+        "vybrosy",
+        "uskoreniya",
+        "sosedi-itogo"
       ],
       "kind": "topic",
       "status": "published",
@@ -840666,40 +841660,25 @@
           "sections": [
             "kak-ustroena-tema-27",
             "chto-v-fayle",
-            "tochka-kortezh",
-            "klaster-spisok",
             "teorema-pifagora",
-            "math-dist",
             "kvadrat-rasstoyaniya",
-            "celaya-chast-otveta",
-            "tochki-itogo"
-          ]
-        },
-        {
-          "slug": "fajl-s-tochkami",
-          "access": "free",
-          "sections": [
-            "chtenie-bez-poter",
-            "pervye-stroki",
-            "razbor-stroki",
-            "funkciya-chteniya",
-            "zagolovok",
-            "dopolnitelnye-stolbcy",
+            "chtenie-fayla",
             "kod-zvezdy",
             "stroka-chasticy",
-            "fayl-itogo"
+            "polyarnye-koordinaty",
+            "tochki-itogo"
           ]
         },
         {
           "slug": "razdelenie-na-klastery",
           "access": "free",
           "sections": [
-            "pravilo-razdeleniya",
             "diagramma-rasseyaniya",
             "koordinatnye-granicy",
             "tri-gruppy",
             "anomalii",
             "naklonnaya-granica",
+            "oblasti-mezhdu-pryamymi",
             "razdelyayushchiy-priznak",
             "vychislyaemyy-priznak",
             "razdelenie-itogo"
@@ -840710,15 +841689,11 @@
           "access": "paid",
           "sections": [
             "centr-tochka-klastera",
-            "summa-rasstoyaniy",
-            "perebor-kandidatov",
             "programma-centra",
-            "rasstoyanie-do-sebya",
             "srednee-ne-centr",
             "tri-vyrazheniya",
-            "srednee-rasstoyanie",
             "formula-rasstoyaniya",
-            "vremya-poiska",
+            "vzveshennaya-summa",
             "centr-itogo"
           ]
         },
@@ -840726,15 +841701,12 @@
           "slug": "otvet-po-centram",
           "access": "paid",
           "sections": [
-            "vychislenie-otveta",
-            "korotkaya-zapis",
             "srednee-centrov",
             "minimalnye-koordinaty",
             "malenkiy-i-bolshoy",
             "obekty-nuzhnogo-vida",
             "isklyuchenie-klasterov",
             "masshtabirovanie",
-            "float",
             "polnyy-primer",
             "otvet-itogo"
           ]
@@ -840743,42 +841715,30 @@
           "slug": "rasstoyaniya-i-pary",
           "access": "paid",
           "sections": [
-            "iz-rasstoyaniy",
             "svoy-i-chuzhoy",
             "diametr",
             "mezhklasternyy-diametr",
             "tochki-okolo-centra",
             "blizhayshiy-obekt",
+            "zadacha-temy",
             "rasstoyaniya-itogo"
           ]
         },
         {
-          "slug": "cepochki-sosedej",
+          "slug": "sosedi-centry-statistika",
           "access": "paid",
           "sections": [
-            "dopolnitelnyy-urok-sosedi",
             "porog-sosedstva",
             "postroenie-gruppy",
-            "pochemu-vsya-gruppa",
-            "porog-v-primere",
             "obosnovanie-poroga",
-            "malenkie-gruppy",
-            "dve-operacii",
-            "sosedi-itogo"
-          ]
-        },
-        {
-          "slug": "drugie-centry-i-uskoreniya",
-          "access": "paid",
-          "sections": [
-            "dopolnitelnyy-urok-centry",
             "samaya-dalyokaya-tochka",
             "antipod",
             "summa-kvadratov",
-            "simmetriya",
-            "dosrochnaya-ostanovka",
-            "bez-garantii",
-            "centry-itogo"
+            "tochka-navedeniya",
+            "korrelyaciya",
+            "vybrosy",
+            "uskoreniya",
+            "sosedi-itogo"
           ]
         }
       ],
