@@ -9,7 +9,7 @@
 | Change | `197` |
 | Slug | `content-audit` |
 | Title | Аудит учебных материалов перед запуском |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/197-content-audit` |
 
 ---
@@ -431,7 +431,7 @@ docs/changes/197-content-audit.md
 ## Contracts
 
 See `docs/SPEC.md` §3–§5 and the Files list above; правила содержания —
-[lesson-pipeline](../runbooks/lesson-pipeline.md) и [lesson-patterns](../runbooks/lesson-patterns.md).
+[lesson-pipeline](../../runbooks/lesson-pipeline.md) и [lesson-patterns](../../runbooks/lesson-patterns.md).
 Do not hand-copy the schema, endpoints, types, or env vars into this file — the codebase and
 `SPEC.md` are the source of truth; this file only tracks what to build and what's left.
 
@@ -440,7 +440,7 @@ Do not hand-copy the schema, endpoints, types, or env vars into this file — th
 ## Gate Checks
 
 > Critical Gate runs once per `/work` target set; default `/ship` reruns only invalidated checks;
-> Full Gate only with explicit `--full`. Commands: [docs/STACK.md](../STACK.md); selection:
+> Full Gate only with explicit `--full`. Commands: [docs/STACK.md](../../STACK.md); selection:
 > `python3 scripts/gate.py affected`. Record change-specific overrides here, or `None`.
 
 Решение архитектора 2026-10-19: во время ручного прохода и правок (T2–T9) проверки не
