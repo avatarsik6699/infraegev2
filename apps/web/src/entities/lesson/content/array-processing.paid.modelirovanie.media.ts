@@ -3,10 +3,10 @@
 import type { LessonMediaTypes } from "~/shared/components/learning-content";
 
 export const lessonMedia = {
-  // %%greedy_cells(2, [[1, 5], [2, 4], [3, 7], [4, 8], [5, 6]])%%
+  // %%greedy_cells(2, [[1, 5], [2, 4], [3, 7], [4, 8], [5, 6], [6, 9]], strict=True)%%
   greedyCells2: {
     kind: "diagram",
-    svg: '<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" viewBox="0 0 660 188"><text x="100.0" y="41.0" font-family="inherit" font-size="14" font-weight="600" fill="#17191e" text-anchor="end" style="font-variant-numeric:tabular-nums">ячейка 1</text><line x1="110.0" y1="50.0" x2="610.0" y2="50.0" stroke="#d9d9d4" stroke-width="1"/><text x="100.0" y="85.0" font-family="inherit" font-size="14" font-weight="600" fill="#17191e" text-anchor="end" style="font-variant-numeric:tabular-nums">ячейка 2</text><line x1="110.0" y1="94.0" x2="610.0" y2="94.0" stroke="#d9d9d4" stroke-width="1"/><rect x="165.6" y="24.0" width="222.2" height="24.0" rx="4" fill="#fff" stroke="#17191e" stroke-width="1.25"/><text x="276.7" y="41.0" font-family="inherit" font-size="13" font-weight="600" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">1–5</text><rect x="221.1" y="68.0" width="111.1" height="24.0" rx="4" fill="#fff" stroke="#17191e" stroke-width="1.25"/><text x="276.7" y="85.0" font-family="inherit" font-size="13" font-weight="600" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">2–4</text><rect x="332.2" y="68.0" width="222.2" height="24.0" rx="4" fill="#fff" stroke="#17191e" stroke-width="1.25"/><text x="443.3" y="85.0" font-family="inherit" font-size="13" font-weight="600" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">4–8</text><rect x="387.8" y="24.0" width="55.6" height="24.0" rx="4" fill="#f3f3f1" stroke="#ff6a00" stroke-width="2"/><text x="415.6" y="41.0" font-family="inherit" font-size="13" font-weight="600" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">5–6</text><line x1="110.0" y1="108.0" x2="610.0" y2="108.0" stroke="#17191e" stroke-width="1"/><text x="110.0" y="126.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">0</text><text x="165.6" y="126.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">1</text><text x="221.1" y="126.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">2</text><text x="276.7" y="126.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">3</text><text x="332.2" y="126.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">4</text><text x="387.8" y="126.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">5</text><text x="443.3" y="126.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">6</text><text x="498.9" y="126.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">7</text><text x="554.4" y="126.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">8</text><text x="110.0" y="152.0" font-family="inherit" font-size="14" font-weight="600" fill="#ff6a00" text-anchor="start" style="font-variant-numeric:tabular-nums">отказ: (3, 7)</text></svg>',
+    svg: '<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" viewBox="0 0 660 188"><text x="100.0" y="41.0" font-family="inherit" font-size="14" font-weight="600" fill="#17191e" text-anchor="end" style="font-variant-numeric:tabular-nums">ячейка 1</text><line x1="110.0" y1="50.0" x2="610.0" y2="50.0" stroke="#d9d9d4" stroke-width="1"/><text x="100.0" y="85.0" font-family="inherit" font-size="14" font-weight="600" fill="#17191e" text-anchor="end" style="font-variant-numeric:tabular-nums">ячейка 2</text><line x1="110.0" y1="94.0" x2="610.0" y2="94.0" stroke="#d9d9d4" stroke-width="1"/><rect x="160.0" y="24.0" width="200.0" height="24.0" rx="4" fill="#fff" stroke="#17191e" stroke-width="1.25"/><text x="260.0" y="41.0" font-family="inherit" font-size="13" font-weight="600" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">1–5</text><rect x="210.0" y="68.0" width="100.0" height="24.0" rx="4" fill="#fff" stroke="#17191e" stroke-width="1.25"/><text x="260.0" y="85.0" font-family="inherit" font-size="13" font-weight="600" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">2–4</text><rect x="360.0" y="68.0" width="50.0" height="24.0" rx="4" fill="#fff" stroke="#17191e" stroke-width="1.25"/><text x="385.0" y="85.0" font-family="inherit" font-size="13" font-weight="600" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">5–6</text><rect x="410.0" y="24.0" width="150.0" height="24.0" rx="4" fill="#f3f3f1" stroke="#ff6a00" stroke-width="2"/><text x="485.0" y="41.0" font-family="inherit" font-size="13" font-weight="600" fill="#17191e" text-anchor="middle" style="font-variant-numeric:tabular-nums">6–9</text><line x1="110.0" y1="108.0" x2="610.0" y2="108.0" stroke="#17191e" stroke-width="1"/><text x="110.0" y="126.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">0</text><text x="160.0" y="126.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">1</text><text x="210.0" y="126.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">2</text><text x="260.0" y="126.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">3</text><text x="310.0" y="126.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">4</text><text x="360.0" y="126.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">5</text><text x="410.0" y="126.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">6</text><text x="460.0" y="126.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">7</text><text x="510.0" y="126.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">8</text><text x="560.0" y="126.0" font-family="inherit" font-size="13" font-weight="400" fill="#4d535e" text-anchor="middle" style="font-variant-numeric:tabular-nums">9</text><text x="110.0" y="152.0" font-family="inherit" font-size="14" font-weight="600" fill="#ff6a00" text-anchor="start" style="font-variant-numeric:tabular-nums">отказ: (3, 7), (4, 8)</text></svg>',
     width: 660,
     height: 188,
     alt: "2 ячейки во времени",
@@ -19,6 +19,7 @@ export const lessonMedia = {
     height: 230,
     alt: "Очередь к одному окну",
   },
+  // run notes: "1: Клиенты: (время прихода, длительность обслуживания).\n2: Клиент согласен ждать не больше `3` минут.\n3: `free_at` — когда окно освободится; сейчас оно свободно.\n4: Пока никого не обслужили и никому не отказали.\n5.1: Клиент приходит в `0`, обслуживание — `5` минут.\n6.1: Окно свободно — он начинает сразу, в `0`.\n7.1: Ждал `0` минут — согласен.\n8.1: Окно занято до `5`.\n5.2: Клиент приходит в `2`, нужно `3` минуты.\n6.2: Окно освободится в `5` — начало в `5`.\n7.2: Ждать `3` минуты — ещё согласен.\n8.2: Окно занято до `8`.\n5.3: Клиент приходит в `4`.\n6.3: Начать он мог бы только в `8`.\n7.3: Ждать `4` минуты — больше `3`, он уходит.\n11.1: Отказ. `free_at` не меняется: этот клиент окно не занимал.\n5.4: Клиент приходит в `12`.\n6.4: Окно свободно с `8` — он начинает сразу, в `12`.\n7.4: Ждал `0` минут — согласен.\n8.3: Окно занято до `14`.\n12: Обслужены `3` клиента, отказ — `1`."
   runQueue: {
     kind: "run",
     code: "clients = [(0, 5), (2, 3), (4, 4), (12, 2)]\nmax_wait = 3\nfree_at = 0\nserved = rejected = 0\nfor arrival, duration in clients:\n    start = max(arrival, free_at)\n    if start - arrival <= max_wait:\n        free_at = start + duration\n        served += 1\n    else:\n        rejected += 1\nprint(served, rejected)",
@@ -35,7 +36,7 @@ export const lessonMedia = {
       },
       {
         line: 1,
-        text: "`clients` получает значение `[(0, 5), (2, 3), (4, 4), (12, 2)]`.",
+        text: "Клиенты: (время прихода, длительность обслуживания).",
         kind: "line",
         frames: [
           {
@@ -55,7 +56,7 @@ export const lessonMedia = {
       },
       {
         line: 2,
-        text: "`max_wait` получает значение `3`.",
+        text: "Клиент согласен ждать не больше `3` минут.",
         kind: "line",
         frames: [
           {
@@ -76,7 +77,7 @@ export const lessonMedia = {
       },
       {
         line: 3,
-        text: "`free_at` получает значение `0`.",
+        text: "`free_at` — когда окно освободится; сейчас оно свободно.",
         kind: "line",
         frames: [
           {
@@ -98,7 +99,7 @@ export const lessonMedia = {
       },
       {
         line: 4,
-        text: "`served` = `0`; `rejected` = `0`.",
+        text: "Пока никого не обслужили и никому не отказали.",
         kind: "line",
         frames: [
           {
@@ -122,7 +123,7 @@ export const lessonMedia = {
       },
       {
         line: 5,
-        text: "`for` берёт первое значение: `(arrival, duration)` = `(0, 5)`.",
+        text: "Клиент приходит в `0`, обслуживание — `5` минут.",
         kind: "line",
         frames: [
           {
@@ -148,7 +149,7 @@ export const lessonMedia = {
       },
       {
         line: 6,
-        text: "Python вычисляет `max(arrival, free_at)` → `0`, и `start` получает это значение.",
+        text: "Окно свободно — он начинает сразу, в `0`.",
         kind: "line",
         frames: [
           {
@@ -175,7 +176,7 @@ export const lessonMedia = {
       },
       {
         line: 7,
-        text: "Проверка `start - arrival <= max_wait` даёт `True` — выполняется блок под этим условием.",
+        text: "Ждал `0` минут — согласен.",
         kind: "line",
         frames: [
           {
@@ -202,7 +203,7 @@ export const lessonMedia = {
       },
       {
         line: 8,
-        text: "Python вычисляет `start + duration` → `5`, и `free_at` получает это значение. Прежнее значение `0` больше не связано с `free_at`.",
+        text: "Окно занято до `5`.",
         kind: "line",
         frames: [
           {
@@ -256,7 +257,7 @@ export const lessonMedia = {
       },
       {
         line: 5,
-        text: "`for` берёт следующее значение: `(arrival, duration)` = `(2, 3)`.",
+        text: "Клиент приходит в `2`, нужно `3` минуты.",
         kind: "line",
         frames: [
           {
@@ -283,7 +284,7 @@ export const lessonMedia = {
       },
       {
         line: 6,
-        text: "Python вычисляет `max(arrival, free_at)` → `5`, и `start` получает это значение. Прежнее значение `0` больше не связано с `start`.",
+        text: "Окно освободится в `5` — начало в `5`.",
         kind: "line",
         frames: [
           {
@@ -310,7 +311,7 @@ export const lessonMedia = {
       },
       {
         line: 7,
-        text: "Проверка `start - arrival <= max_wait` даёт `True` — выполняется блок под этим условием.",
+        text: "Ждать `3` минуты — ещё согласен.",
         kind: "line",
         frames: [
           {
@@ -337,7 +338,7 @@ export const lessonMedia = {
       },
       {
         line: 8,
-        text: "Python вычисляет `start + duration` → `8`, и `free_at` получает это значение. Прежнее значение `5` больше не связано с `free_at`.",
+        text: "Окно занято до `8`.",
         kind: "line",
         frames: [
           {
@@ -391,7 +392,7 @@ export const lessonMedia = {
       },
       {
         line: 5,
-        text: "`for` берёт следующее значение: `(arrival, duration)` = `(4, 4)`.",
+        text: "Клиент приходит в `4`.",
         kind: "line",
         frames: [
           {
@@ -418,7 +419,7 @@ export const lessonMedia = {
       },
       {
         line: 6,
-        text: "Python вычисляет `max(arrival, free_at)` → `8`, и `start` получает это значение. Прежнее значение `5` больше не связано с `start`.",
+        text: "Начать он мог бы только в `8`.",
         kind: "line",
         frames: [
           {
@@ -445,7 +446,7 @@ export const lessonMedia = {
       },
       {
         line: 7,
-        text: "Проверка `start - arrival <= max_wait` даёт `False` — блок пропускается, дальше следующая проверка.",
+        text: "Ждать `4` минуты — больше `3`, он уходит.",
         kind: "line",
         frames: [
           {
@@ -472,7 +473,7 @@ export const lessonMedia = {
       },
       {
         line: 11,
-        text: "`rejected += 1`: значение `rejected` увеличилось — было `0`, стало `1`.",
+        text: "Отказ. `free_at` не меняется: этот клиент окно не занимал.",
         kind: "line",
         frames: [
           {
@@ -499,7 +500,7 @@ export const lessonMedia = {
       },
       {
         line: 5,
-        text: "`for` берёт следующее значение: `(arrival, duration)` = `(12, 2)`.",
+        text: "Клиент приходит в `12`.",
         kind: "line",
         frames: [
           {
@@ -526,7 +527,7 @@ export const lessonMedia = {
       },
       {
         line: 6,
-        text: "Python вычисляет `max(arrival, free_at)` → `12`, и `start` получает это значение. Прежнее значение `8` больше не связано с `start`.",
+        text: "Окно свободно с `8` — он начинает сразу, в `12`.",
         kind: "line",
         frames: [
           {
@@ -553,7 +554,7 @@ export const lessonMedia = {
       },
       {
         line: 7,
-        text: "Проверка `start - arrival <= max_wait` даёт `True` — выполняется блок под этим условием.",
+        text: "Ждал `0` минут — согласен.",
         kind: "line",
         frames: [
           {
@@ -580,7 +581,7 @@ export const lessonMedia = {
       },
       {
         line: 8,
-        text: "Python вычисляет `start + duration` → `14`, и `free_at` получает это значение. Прежнее значение `8` больше не связано с `free_at`.",
+        text: "Окно занято до `14`.",
         kind: "line",
         frames: [
           {
@@ -661,7 +662,7 @@ export const lessonMedia = {
       },
       {
         line: 12,
-        text: "На экран выводится «3 1».",
+        text: "Обслужены `3` клиента, отказ — `1`.",
         kind: "line",
         frames: [
           {

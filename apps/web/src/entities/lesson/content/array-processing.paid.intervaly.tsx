@@ -15,37 +15,19 @@ import { PythonTerm } from "./python-term";
 const content: LessonContent.PaidSubtopicContent = {
   theory: [
     {
-      id: "tri-zadachi-intervalov",
-      navLabel: "Три задачи",
-      explanation: (
-        <>
-          <Typography.Text>
-            <strong>
-              Интервалы времени решают три разные задачи: выбрать больше всего
-              непересекающихся мероприятий, измерить общее занятое время и найти
-              наибольшую одновременную нагрузку.
-            </strong>{" "}
-            Это задачи о мероприятиях в конференц-зале, о периодах работы и
-            простоя, о процессах и запросах, о людях в офисе; мероприятия были и
-            на основной волне экзамена.
-          </Typography.Text>
-          <Typography.Text>
-            Весь урок идёт на пяти интервалах: (1, 3), (3, 5), (5, 8), (9, 15),
-            (12, 16). Обоснование жадного выбора обменом и словарь с{" "}
-            <Notation>{"get"}</Notation> знакомы по прошлым подтемам.
-          </Typography.Text>
-        </>
-      ),
-    },
-    {
       id: "rannee-okonchanie",
       navLabel: "Раннее окончание",
       explanation: (
         <>
           <Typography.Text>
+            В зал подали заявки на мероприятия (1, 3), (3, 5), (5, 8), (9, 15),
+            (12, 16). Как провести как можно больше мероприятий, чтобы они не
+            пересекались?
+          </Typography.Text>
+          <Typography.Text>
             <strong>
-              Максимальное количество непересекающихся мероприятий выбирается по
-              времени окончания.
+              Каждый раз брать то мероприятие, которое раньше заканчивается: оно
+              раньше освобождает зал.
             </strong>
           </Typography.Text>
           <Typography.Text>
@@ -57,9 +39,8 @@ const content: LessonContent.PaidSubtopicContent = {
             + P.
           </Typography.Text>
           <Typography.Text>
-            Как выбирать? Среди доступных мероприятий берём то, которое{" "}
-            <strong>раньше заканчивается</strong>: оно раньше освобождает зал и
-            оставляет не меньше возможностей для следующих.
+            На рисунке видно, как зал освобождается раньше всего и для следующих
+            мероприятий остаётся больше времени:
           </Typography.Text>
           <LessonDiagram
             {...lessonMedia.greedyTimeline_1df0d4}
@@ -71,12 +52,11 @@ const content: LessonContent.PaidSubtopicContent = {
             }
           />
           <CodeBlock
+            collapsible={false}
             code={
               "meetings = [(9, 15), (1, 3), (12, 16), (5, 8), (3, 5)]\npause = 0\nmeetings.sort(key=lambda x: (x[1], x[0]))\nselected = []\nlast_finish = None\nfor start, finish in meetings:\n    if last_finish is None or start >= last_finish + pause:\n        selected.append((start, finish))\n        last_finish = finish\nprint(len(selected), *selected)"
             }
-            label={
-              "Код на Python: meetings = [(9, 15), (1, 3), (12, 16), (5, 8), (3, 5)]"
-            }
+            label={"Больше всего мероприятий"}
             language="python"
             output={"4 (1, 3) (3, 5) (5, 8) (9, 15)"}
           />
@@ -105,13 +85,16 @@ const content: LessonContent.PaidSubtopicContent = {
     },
     {
       id: "kontrprimery",
-      navLabel: "Контрпримеры",
+      navLabel: "Почему не по началу",
       explanation: (
         <>
           <Typography.Text>
+            А почему не брать мероприятие, которое раньше начинается, или самое
+            короткое?
+          </Typography.Text>
+          <Typography.Text>
             <strong>
-              Выбор по раннему началу или по короткой длительности не работает —
-              это видно на контрпримерах.
+              Оба правила ошибаются — это видно на маленьких примерах.
             </strong>
           </Typography.Text>
           <Typography.Text>
@@ -153,9 +136,14 @@ const content: LessonContent.PaidSubtopicContent = {
       explanation: (
         <>
           <Typography.Text>
+            «Найди наибольшее количество мероприятий и наибольший перерыв между
+            двумя последними». Как учесть второе требование?
+          </Typography.Text>
+          <Typography.Text>
             <strong>
-              Второй критерий последнего мероприятия находят после максимизации
-              количества.
+              Сначала найти наибольшее количество k, оставить первые k − 1
+              мероприятий жадного расписания и подобрать последнее, которое
+              начинается как можно позже.
             </strong>
           </Typography.Text>
           <Typography.Text>
@@ -188,9 +176,7 @@ const content: LessonContent.PaidSubtopicContent = {
             code={
               "penultimate_finish = selected[-2][1]\nlatest_start = None\nfor start, finish in meetings:\n    if start >= penultimate_finish + pause:\n        if latest_start is None or start > latest_start:\n            latest_start = start\nprint(len(selected), latest_start - penultimate_finish)"
             }
-            label={
-              "Если гарантировано хотя бы два мероприятия, продолжение программы выше"
-            }
+            label={"Наибольший перерыв перед последним"}
             language="python"
             output={"4 4"}
           />
@@ -225,28 +211,39 @@ const content: LessonContent.PaidSubtopicContent = {
       explanation: (
         <>
           <Typography.Text>
+            Сервер работал в те же пять интервалов. Сколько времени он работал
+            всего и сколько простаивал?
+          </Typography.Text>
+          <Typography.Text>
             <strong>
-              Объединение интервалов применяется, когда нужно измерить общее
-              занятое время.
+              Объединить пересекающиеся и касающиеся интервалы в непрерывные
+              периоды и сложить их длины; простои — промежутки между периодами.
             </strong>
           </Typography.Text>
           <Typography.Text>
-            Это другой вопрос, чем выбор непересекающихся мероприятий. Пусть
-            система работала в те же пять интервалов. Первые три образуют один
-            непрерывный период (1, 8), последние два — (9, 16). Общая
-            длительность работы (8 − 1) + (16 − 9) = 14.
+            Это другой вопрос, чем выбор непересекающихся мероприятий. Первые
+            три образуют один непрерывный период (1, 8), последние два — (9,
+            16). Общая длительность работы (8 − 1) + (16 − 9) = 14.
           </Typography.Text>
+          <LessonDiagram
+            {...lessonMedia.greedyTimelineMerged}
+            caption={
+              <>
+                Пять интервалов и их объединение — периоды 1–8 и 9–16. Простои —
+                0–1, 8–9 и 16–18.
+              </>
+            }
+          />
           <Typography.Text>
             Сначала сортируем интервалы по началу, затем храним последний уже
             объединённый интервал:
           </Typography.Text>
           <CodeBlock
+            collapsible={false}
             code={
               "intervals = [(9, 15), (1, 3), (12, 16), (5, 8), (3, 5)]\nintervals.sort()\nmerged = []\nfor start, finish in intervals:\n    if not merged or start > merged[-1][1]:\n        merged.append([start, finish])\n    else:\n        merged[-1][1] = max(merged[-1][1], finish)\nprint(*merged)"
             }
-            label={
-              "Сначала сортируем интервалы по началу, затем храним последний уже объединённый интервал"
-            }
+            label={"Объединение интервалов"}
             language="python"
             output={"[1, 8] [9, 16]"}
           />
@@ -267,10 +264,11 @@ const content: LessonContent.PaidSubtopicContent = {
             объединёнными интервалами — продолжение программы:
           </Typography.Text>
           <CodeBlock
+            collapsible={false}
             code={
               "day_end = 18\ncursor = 0\nidle_count = idle_duration = 0\nfor start, finish in merged:\n    if start > cursor:\n        idle_count += 1\n        idle_duration += start - cursor\n    cursor = finish\nif cursor < day_end:\n    idle_count += 1\n    idle_duration += day_end - cursor\nprint(idle_count, idle_duration)"
             }
-            label={"Код на Python: day_end = 18"}
+            label={"Простои за период"}
             language="python"
             output={"3 4"}
           />
@@ -279,16 +277,6 @@ const content: LessonContent.PaidSubtopicContent = {
             и простой после последней работы (16–18). Здесь предполагается, что
             все интервалы лежат внутри рассматриваемого периода.
           </Typography.Text>
-          <LessonDiagram
-            {...lessonMedia.greedyTimeline_56ea61}
-            caption={
-              <>
-                Пять интервалов, их объединение — периоды 1–8 и 9–16, и число
-                работающих между соседними событиями: больше всего, 2, — с 12 до
-                15.
-              </>
-            }
-          />
           <Typography.Text>
             <strong>b − a — длительность</strong> непрерывного промежутка
             времени от a до b, а{" "}
@@ -307,18 +295,29 @@ const content: LessonContent.PaidSubtopicContent = {
       explanation: (
         <>
           <Typography.Text>
+            Сколько процессов работало одновременно больше всего и как долго
+            держалась такая нагрузка?
+          </Typography.Text>
+          <Typography.Text>
             <strong>
-              Для количества одновременно работающих объектов удобно
-              рассматривать события.
+              Нагрузка меняется только в моменты начала и окончания — события.
+              Отсортировать события и идти по ним, меняя счётчик.
             </strong>
           </Typography.Text>
           <Typography.Text>
-            Пусть нужно узнать максимальную одновременную нагрузку и сколько
-            времени она держалась. В каждый момент времени проверять все
-            интервалы дорого. Но количество активных интервалов меняется только
-            при начале и при окончании интервала. Такое изменение будем называть{" "}
-            <strong>событием</strong>.
+            Проверять каждый момент времени дорого, а событий всего вдвое
+            больше, чем интервалов. Под интервалами — сколько их работает между
+            соседними событиями:
           </Typography.Text>
+          <LessonDiagram
+            {...lessonMedia.greedyTimelineLoad}
+            caption={
+              <>
+                Между соседними событиями число работающих постоянно. Больше
+                всего — два, с 12 до 15: нагрузка 2 держалась 3 минуты.
+              </>
+            }
+          />
           <Typography.Text>
             Для модели, в которой объект активен при start ≤ t {"<"} finish,
             записываем в <Notation>{"start"}</Notation> изменение{" "}
@@ -332,12 +331,11 @@ const content: LessonContent.PaidSubtopicContent = {
             — в один момент может быть несколько событий:
           </Typography.Text>
           <CodeBlock
+            collapsible={false}
             code={
               "intervals = [(1, 3), (3, 5), (5, 8), (9, 15), (12, 16)]\nday_end = 18\nchanges = {0: 0, day_end: 0}\nfor start, finish in intervals:\n    changes[start] = changes.get(start, 0) + 1\n    changes[finish] = changes.get(finish, 0) - 1\n\ntimes = sorted(changes)\ncurrent = maximum = total_duration = 0\nfor i in range(len(times) - 1):\n    current += changes[times[i]]\n    duration = times[i + 1] - times[i]\n    if current > maximum:\n        maximum = current\n        total_duration = duration\n    elif current == maximum:\n        total_duration += duration\nprint(maximum, total_duration)"
             }
-            label={
-              "Код на Python: intervals = [(1, 3), (3, 5), (5, 8), (9, 15), (12, 16)]"
-            }
+            label={"Наибольшая нагрузка по событиям"}
             language="python"
             output={"2 3"}
           />
@@ -368,15 +366,19 @@ const content: LessonContent.PaidSubtopicContent = {
       explanation: (
         <>
           <Typography.Text>
+            А если нагрузку считают только с 8:00 до 14:00 или оба конца
+            интервала включены?
+          </Typography.Text>
+          <Typography.Text>
             <strong>
-              Окно наблюдения и включённые границы меняют события, а не сам
-              алгоритм.
+              Алгоритм тот же — меняются события: интервалы обрезают краями
+              окна, а при включённом конце событие окончания ставят на минуту
+              позже.
             </strong>
           </Typography.Text>
           <Typography.Text>
-            Иногда нагрузку нужно найти только за часть суток — например, с 8:00
-            до 14:00, — причём интервалы, попавшие в окно частично, учитываются.
-            Тогда каждый интервал <strong>обрезают краями окна</strong>:{" "}
+            Интервалы, попавшие в окно частично, учитываются, поэтому каждый
+            интервал <strong>обрезают краями окна</strong>:{" "}
             <Notation>{"start = max(start, low)"}</Notation>,{" "}
             <Notation>{"finish = min(finish, high)"}</Notation>, а если после
             этого <Notation>{"start >= finish"}</Notation>, интервал в окно не
@@ -400,7 +402,7 @@ const content: LessonContent.PaidSubtopicContent = {
             code={
               "times = [t for t in sorted(changes) if changes[t] != 0]\npoints = [0] + times + [day_end]\nlengths = [b - a for a, b in zip(points, points[1:])]\nprint(len(lengths), max(lengths), *times)"
             }
-            label={"Для наших интервалов за период от 0 до 18"}
+            label={"Отрезки постоянного количества"}
             language="python"
             output={"7 7 1 8 9 12 15 16"}
           />
@@ -420,46 +422,28 @@ const content: LessonContent.PaidSubtopicContent = {
           <LessonSummary
             items={[
               {
-                note: (
-                  <>
-                    Больше всего непересекающихся мероприятий — по раннему
-                    окончанию; по началу и по длительности есть контрпримеры.
-                  </>
-                ),
+                key: "Больше всего мероприятий",
+                note: <>по раннему окончанию</>,
               },
               {
-                note: (
-                  <>
-                    Второй критерий последнего мероприятия — после первых k − 1
-                    жадных: позднее начало (перерыв) или позднее окончание.
-                  </>
-                ),
+                key: "Второй критерий",
+                note: <>первые k − 1 жадные, последнее — подобрать</>,
               },
               {
-                note: (
-                  <>
-                    Занятое время и простои — объединение интервалов,
-                    отсортированных по началу; края периода считаются отдельно.
-                  </>
-                ),
+                key: "Занятое время",
+                note: <>объединить интервалы, отсортированные по началу</>,
               },
               {
-                note: (
-                  <>
-                    Одновременная нагрузка — события <Notation>{"+1"}</Notation>
-                    /<Notation>{"−1"}</Notation> в словаре и проход по
-                    отсортированным моментам.
-                  </>
-                ),
+                key: "Нагрузка",
+                note: <>события +1 и −1, отсортированные по времени</>,
               },
               {
-                note: (
-                  <>
-                    Окно наблюдения обрезает интервалы, включённые границы
-                    сдвигают окончание на <Notation>{"finish + 1"}</Notation>;
-                    момент с нулевым изменением границей отрезка не считается.
-                  </>
-                ),
+                key: "Включённый конец",
+                note: <>событие окончания в finish + 1</>,
+              },
+              {
+                key: "Окно наблюдения",
+                note: <>обрезать интервалы краями окна</>,
               },
             ]}
           />
@@ -469,7 +453,7 @@ const content: LessonContent.PaidSubtopicContent = {
   ],
   checkpoint: [
     {
-      id: "zadacha-7",
+      id: "zadacha-1",
       prompt: (
         <>
           Объекты активны на отрезках целых моментов [1, 3] и [3, 5], оба конца
@@ -484,6 +468,56 @@ const content: LessonContent.PaidSubtopicContent = {
           и в 6.
         </>
       ),
+    },
+    {
+      id: "zadacha-2",
+      prompt: (
+        <>
+          Мероприятия (1, 4), (2, 3), (3, 6), (5, 7). Сколько можно провести без
+          пересечений?
+        </>
+      ),
+      reveal: (
+        <>
+          Два: например, (2, 3) и (3, 6). Жадный выбор берёт (2, 3) — оно раньше
+          всех заканчивается, — затем (3, 6).
+        </>
+      ),
+    },
+    {
+      id: "zadacha-3",
+      prompt: (
+        <>
+          Мероприятия (0, 4), (4, 8), (3, 5). Почему нельзя первым брать самое
+          короткое?
+        </>
+      ),
+      reveal: (
+        <>
+          Самое короткое (3, 5) пересекается с обоими длинными: выбрав его,
+          проведём одно мероприятие, а можно два — (0, 4) и (4, 8).
+        </>
+      ),
+    },
+    {
+      id: "zadacha-4",
+      prompt: (
+        <>
+          Сервер работал в интервалы (1, 4), (2, 6), (8, 10). Сколько он работал
+          и сколько простаивал за период от 0 до 12?
+        </>
+      ),
+      reveal: <>Работал 7: периоды 1–6 и 8–10. Простаивал 12 − 7 = 5.</>,
+    },
+    {
+      id: "zadacha-5",
+      prompt: (
+        <>
+          Процессы работают в полуинтервалы [0, 5), [2, 4), [3, 8). Какая
+          наибольшая нагрузка и когда?
+        </>
+      ),
+      reveal: <>3 — с момента 3 до момента 4: в это время работают все три.</>,
     },
   ],
 };

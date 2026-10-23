@@ -31,7 +31,7 @@ ROOT = Path(__file__).resolve().parents[3]
 BANK_DIR = ROOT / "content/practice-bank"
 FILES = ROOT / "content/lesson-files/topic-26"
 MATERIAL = "array-processing"
-RETIRED = [f"task-26-{number:02d}" for number in range(1, 8)]
+RETIRED = [f"task-26-{number:02d}" for number in range(1, 8)] + ["task-26-8-05"]
 
 
 def _bank() -> Bank:
@@ -565,8 +565,6 @@ def answers() -> dict[str, str]:
     a["task-26-8-02"] = _pair(*_alt_brute(mat, lambda k: 1 + k, False))
     plain = [(x, 0) for x in (3, 5, 6, 9, 11, 12, 13, 17)]
     a["task-26-8-03"] = str(_min_blocks(plain, lambda u, v: v[0] - u[0] >= 4))
-    colored = [(5, 0), (6, 1), (10, 0), (12, 0), (13, 1), (17, 1), (18, 0)]
-    a["task-26-8-05"] = str(_min_blocks(colored, lambda u, v: u[1] != v[1] and v[0] - u[0] >= 4))
     sizes = [5, 7, 8, 9, 12, 16]
     for r in range(len(sizes), 0, -1):
         fits = [sorted(c, reverse=True) for c in combinations(sizes, r) if sum(c) <= 33]
@@ -623,6 +621,81 @@ def answers() -> dict[str, str]:
         containers.append(load_now)
         weights = rest
     a["task-26-9-05"] = _pair(len(containers), containers[-2])
+    a.update(_yandex_like())
+    return a
+
+
+def _yandex_like() -> dict[str, str]:
+    """Hand tasks after the Yandex collections, by brute force over arrangements."""
+    a: dict[str, str] = {}
+    prices = [120, 46, 300, 80, 16, 60, 210, 96, 40, 180, 70, 24]
+    half = len(prices) // 4
+
+    def pay(order: list[int]) -> int:
+        return sum(p // 2 if i % 4 == 3 else p for i, p in enumerate(order))
+
+    cheap, dear = sorted(prices), sorted(prices, reverse=True)
+    # discounted places 4, 8, 12 take the dearest (buyer) or the cheapest (shop)
+    buyer = dear[half:][:3] + [dear[0]] + dear[half:][3:6] + [dear[1]] + dear[half:][6:] + [dear[2]]
+    shop = (
+        cheap[half:][:3]
+        + [cheap[0]]
+        + cheap[half:][3:6]
+        + [cheap[1]]
+        + cheap[half:][6:]
+        + [cheap[2]]
+    )
+    assert sorted(buyer) == sorted(shop) == cheap
+    a["task-26-10-01"] = _pair(pay(buyer), pay(shop))
+    must = [30, 25]
+    rest = [18, 7, 12, 40, 9, 22]
+    best = max(
+        (len(c), -sum(c))
+        for r in range(len(rest) + 1)
+        for c in combinations(rest, r)
+        if sum(must) + sum(c) <= 100
+    )
+    a["task-26-10-02"] = _pair(len(must) + best[0], 100 - sum(must) + best[1])
+    sizes = sorted(set([3, 5, 6, 7, 7, 9, 10, 11, 12, 15]))
+    runs = [
+        (j - i + 1, sizes[i])
+        for i in range(len(sizes))
+        for j in range(i, len(sizes))
+        if sizes[j] - sizes[i] == j - i
+    ]
+    a["task-26-10-03"] = _pair(*max(runs))
+    taken = [(3, 4), (3, 8), (3, 15), (7, 2), (7, 9), (7, 13), (7, 20), (7, 24), (5, 1), (5, 5)]
+    occupied = set(taken)
+    spots = [
+        (r, s)
+        for r, _ in taken
+        for s in range(1, 30)
+        if all((r, s + d) not in occupied for d in range(3))
+        and (r, s - 1) in occupied
+        and (r, s + 3) in occupied
+    ]
+    row = max(r for r, _ in spots)
+    a["task-26-10-04"] = _pair(row, min(s for r, s in spots if r == row))
+    reqs = [(2, 9), (1, 4), (5, 8), (3, 6), (7, 12), (6, 10), (9, 14), (10, 11)]
+    a["task-26-10-05"] = _pair(*_lockers_heap(3, reqs, True))
+    solved = [
+        (14, 7),
+        (3, 2),
+        (25, 7),
+        (9, 5),
+        (31, 2),
+        (12, 2),
+        (40, 5),
+        (18, 5),
+        (44, 7),
+        (52, 2),
+        (36, 5),
+        (61, 9),
+    ]
+    totals = Counter(w for _, w in solved)
+    top = max(totals.values())
+    finish = {w: max(t for t, v in solved if v == w) for w in totals if totals[w] == top}
+    a["task-26-10-06"] = _pair(top, min(finish, key=finish.get))
     return a
 
 
@@ -638,7 +711,7 @@ def _solution(task: TaskData) -> str:
 def test_every_answer_matches_independent_recomputation(answers: dict[str, str]) -> None:
     tasks = _entries()
     assert sorted(tasks) == sorted(answers)
-    assert sorted(t.lessons[0].position for t in tasks.values()) == list(range(67))
+    assert sorted(t.lessons[0].position for t in tasks.values()) == list(range(72))
     for task_id, task in tasks.items():
         assert task.checker.answer_variants[0] == answers[task_id], task_id
         assert task.exam_numbers == [26] and not task.catalog_visible and not task.archived

@@ -10,42 +10,26 @@ import {
 } from "~/shared/components/learning-content";
 import type { LessonContent } from "../lib/define-lesson.types";
 import { lessonMedia } from "./array-processing.paid.modelirovanie.media";
+import { THEME_TASK } from "./array-processing.theme";
 import { PythonTerm } from "./python-term";
 
 const content: LessonContent.PaidSubtopicContent = {
   theory: [
-    {
-      id: "ispolnit-pravila",
-      navLabel: "Исполнить правила",
-      explanation: (
-        <>
-          <Typography.Text>
-            <strong>
-              В задачах на моделирование ничего не выбирают: программа исполняет
-              правила из условия и хранит состояние системы.
-            </strong>{" "}
-            Так решаются задачи о камере хранения и окнах приёма, о парковке, об
-            очередях, о заданных процедурах упаковки и размещения, о журнале
-            сервера. К этой модели относятся и самые свежие экзаменационные
-            задачи.
-          </Typography.Text>
-          <Typography.Text>
-            Главный пример урока — камера хранения из двух ячеек и пять заявок:
-            (1, 5), (2, 4), (3, 7), (4, 8), (5, 6), где первое число — время
-            сдачи багажа, второе — время освобождения ячейки.
-          </Typography.Text>
-        </>
-      ),
-    },
     {
       id: "vybrat-ili-ispolnit",
       navLabel: "Выбрать или исполнить",
       explanation: (
         <>
           <Typography.Text>
+            «Пассажир кладёт багаж в свободную ячейку с наименьшим номером, а
+            если свободных нет — уходит». Можно ли отказать раннему пассажиру,
+            чтобы потом принять больше?
+          </Typography.Text>
+          <Typography.Text>
             <strong>
-              Некоторые задачи требуют выбрать лучший вариант, а другие —
-              исполнить заданные правила.
+              Нет: здесь ничего не выбирают, а в точности исполняют правила
+              условия. Программа хранит состояние — когда освободится каждая
+              ячейка — и обрабатывает заявки по порядку.
             </strong>
           </Typography.Text>
           <Typography.Text>
@@ -54,7 +38,7 @@ const content: LessonContent.PaidSubtopicContent = {
           </Typography.Text>
           <blockquote>
             <Typography.Text>
-              Найдите максимальное количество непересекающихся мероприятий.
+              Найди максимальное количество непересекающихся мероприятий.
             </Typography.Text>
           </blockquote>
           <Typography.Text>
@@ -68,10 +52,8 @@ const content: LessonContent.PaidSubtopicContent = {
             </Typography.Text>
           </blockquote>
           <Typography.Text>
-            Здесь нельзя отказаться от раннего клиента, чтобы потом обслужить
-            больше людей. Нужно выполнить описанные правила. Воспроизведение
-            такого процесса в программе называют <strong>моделированием</strong>{" "}
-            или <strong>симуляцией</strong>.
+            Воспроизведение такого процесса в программе называют{" "}
+            <strong>моделированием</strong> или <strong>симуляцией</strong>.
           </Typography.Text>
           <Typography.Text>
             При моделировании нужно хранить <strong>состояние системы</strong> —
@@ -96,29 +78,34 @@ const content: LessonContent.PaidSubtopicContent = {
       explanation: (
         <>
           <Typography.Text>
+            Две ячейки, заявки (1, 5), (2, 4), (3, 7), (4, 8), (5, 6), (6, 9):
+            время сдачи и время освобождения. Багаж кладут в свободную ячейку с
+            наименьшим номером, освободившуюся ячейку можно занять со следующей
+            минуты. Как это смоделировать?
+          </Typography.Text>
+          <Typography.Text>
             <strong>
-              В камере хранения нужно хранить время освобождения каждой ячейки.
+              Хранить для каждой ячейки момент, когда она освободится, и
+              обрабатывать заявки по времени сдачи: первая ячейка,
+              освободившаяся строго раньше прихода, получает багаж.
             </strong>
           </Typography.Text>
           <Typography.Text>
-            Пусть есть <Notation>{"k"}</Notation> ячеек; заявка содержит начало
-            и окончание хранения; выбирается свободная ячейка с минимальным
-            номером; после освобождения ячейку можно занять сразу; если
-            свободных нет, заявку отклоняют. Состояние —{" "}
+            Состояние —{" "}
             <PythonTerm term="listmul">
               <Notation>{"free_at = [0] * k"}</Notation>
             </PythonTerm>
-            : <Notation>{"free_at[i]"}</Notation> означает, в какой момент
-            ячейка с индексом <Notation>{"i"}</Notation> станет свободной. При
-            приходе в момент <Notation>{"start"}</Notation> ячейка свободна,
-            если <Notation>{"free_at[i] <= start"}</Notation>. Заявки
-            обрабатываем в порядке прихода:
+            : <Notation>{"free_at[i]"}</Notation> — минута, в которую
+            освободится ячейка с индексом <Notation>{"i"}</Notation>. «Со
+            следующей минуты» — значит, ячейка свободна, если{" "}
+            <Notation>{"free_at[i] < start"}</Notation>:
           </Typography.Text>
           <CodeBlock
+            collapsible={false}
             code={
-              "k = 2\nrequests = [(4, 8), (1, 5), (5, 6), (2, 4), (3, 7)]\nrequests.sort(key=lambda x: x[0])\nfree_at = [0] * k\naccepted = 0\nlast_cell = None\nfor start, finish in requests:\n    for i in range(k):\n        if free_at[i] <= start:\n            free_at[i] = finish\n            accepted += 1\n            last_cell = i + 1\n            break\nprint(accepted, last_cell)"
+              "k = 2\nrequests = [(4, 8), (1, 5), (6, 9), (5, 6), (2, 4), (3, 7)]\nrequests.sort()\nfree_at = [0] * k\naccepted = 0\nlast_cell = 0\nfor start, finish in requests:\n    for i in range(k):\n        if free_at[i] < start:\n            free_at[i] = finish\n            accepted += 1\n            last_cell = i + 1\n            break\nprint(accepted, last_cell)"
             }
-            label={"Заявки обрабатываем в порядке прихода"}
+            label={"Камера хранения из двух ячеек"}
             language="python"
             output={"4 1"}
           />
@@ -127,38 +114,65 @@ const content: LessonContent.PaidSubtopicContent = {
             {...lessonMedia.greedyCells2}
             caption={
               <>
-                Заявки (1, 5) и (2, 4) занимают ячейки 1 и 2; в момент 3 обе
-                заняты — отказ; в момент 4 освобождается ячейка 2, в момент 5 —
-                ячейка 1. Приняты четыре заявки, последняя — в ячейке 1.
+                (1, 5) и (2, 4) занимают ячейки 1 и 2. В минуту 3 обе заняты —
+                отказ. В минуту 4 ячейка 2 только освобождается, занять её можно
+                с 5-й — снова отказ. (5, 6) получает ячейку 2, (6, 9) — ячейку
+                1: она свободна с 6-й минуты.
               </>
             }
           />
           <Typography.Text>
-            Почему <Notation>{"i + 1"}</Notation>? Индекс начинается с нуля,
-            номер ячейки — с единицы. Почему нужен{" "}
+            <Notation>{"i + 1"}</Notation> — потому что индексы начинаются с
+            нуля, а номера ячеек с единицы. Ячейки проверяются по возрастанию
+            номеров, поэтому первая подходящая — с наименьшим номером, а{" "}
             <PythonTerm term="break">
               <Notation>{"break"}</Notation>
-            </PythonTerm>
-            ? Одна заявка должна занять ровно одну ячейку; после размещения
-            внутренний цикл завершает работу. Почему получаем минимальный номер?
-            Индексы проверяются по возрастанию.
+            </PythonTerm>{" "}
+            не даёт одной заявке занять две ячейки.
           </Typography.Text>
           <Typography.Text>
-            Если новая загрузка возможна только <strong>после</strong>{" "}
-            указанного момента выдачи — «ячейка доступна со следующей минуты», —
-            условие будет строгим: <Notation>{"free_at[i] < start"}</Notation>.
-            Тогда в нашем примере заявка (4, 8) тоже получит отказ: ячейка 2
-            освобождается ровно в момент 4. Это определяется формулировкой.
+            Одно слово условия меняет ответ. Если ячейку можно занять в ту же
+            минуту, проверка — <Notation>{"free_at[i] <= start"}</Notation>, и
+            заявка (4, 8) уже получит ячейку 2: принятых станет пять. А если в
+            файле дана длительность, а не время освобождения, считаем{" "}
+            <Notation>{"finish = start + duration"}</Notation>.
+          </Typography.Text>
+        </>
+      ),
+    },
+    {
+      id: "zadacha-temy",
+      navLabel: "Задача темы",
+      explanation: (
+        <>
+          <Typography.Text>Вернёмся к задаче темы:</Typography.Text>
+          <Typography.Text>{THEME_TASK}</Typography.Text>
+          <Typography.Text>
+            <strong>
+              Это та же камера хранения: прочитать файл, как в подтеме 1,
+              отсортировать заявки по времени сдачи и исполнить правила.
+            </strong>{" "}
+            Меняются только число ячеек и количество заявок.
+          </Typography.Text>
+          <CodeBlock
+            collapsible={false}
+            code={
+              "with open('26-12.txt') as f:\n    k = int(f.readline())\n    n = int(f.readline())\n    requests = [tuple(map(int, f.readline().split()))\n                for i in range(n)]\n\nrequests.sort()\nfree_at = [0] * k\naccepted = 0\nlast_cell = 0\nfor start, finish in requests:\n    for i in range(k):\n        if free_at[i] < start:\n            free_at[i] = finish\n            accepted += 1\n            last_cell = i + 1\n            break\nprint(accepted, last_cell)"
+            }
+            label={"Задача темы"}
+            language="python"
+            output={"859 11"}
+          />
+          <Typography.Text>
+            Ответ: <strong>859 11</strong>. 141 пассажир не нашёл свободной
+            ячейки, а последний принятый положил багаж в ячейку 11.
           </Typography.Text>
           <Typography.Text>
-            Также нужно различать время окончания хранения и длительность: если
-            дано начало и длительность,{" "}
-            <Notation>{"finish = start + duration"}</Notation>. И ещё одна
-            тонкость: при одинаковом времени прихода должен быть понятен порядок
-            обработки заявок. Нельзя произвольно добавлять сортировку по
-            окончанию, если по условию должен сохраняться порядок поступления —
-            поэтому ключ здесь только <Notation>{"x[0]"}</Notation>, а{" "}
-            <PythonTerm term="listsort">сортировка устойчива</PythonTerm>.
+            Проверь себя на одном слове условия: с проверкой{" "}
+            <Notation>{"free_at[i] <= start"}</Notation> — «можно в ту же
+            минуту» — программа выведет 877 7. Ячейки освобождаются на минуту
+            раньше, и мест хватает большему числу пассажиров. Поэтому правило
+            освобождения всегда переводят в код дословно.
           </Typography.Text>
         </>
       ),
@@ -169,23 +183,27 @@ const content: LessonContent.PaidSubtopicContent = {
       explanation: (
         <>
           <Typography.Text>
+            А если ячейки стоят по-разному и пассажир выбирает самую дешёвую
+            свободную?
+          </Typography.Text>
+          <Typography.Text>
             <strong>
-              Если ячейки различаются ценой, свободную ячейку ищут в порядке
-              «цена, номер».
+              Просматривать ячейки не по номеру, а в порядке «цена, номер»; этот
+              порядок вычисляют один раз сортировкой.
             </strong>
           </Typography.Text>
           <Typography.Text>
-            Пусть пассажир выбирает самую дешёвую свободную ячейку, а среди
-            равных по цене — с наименьшим номером. Порядок просмотра ячеек от
-            этого не меняется со временем, поэтому его вычисляют один раз —
-            сортировкой номеров ячеек по ключу{" "}
+            Среди равных по цене выбирают ячейку с наименьшим номером. Порядок
+            просмотра ячеек от этого не меняется со временем, поэтому его
+            вычисляют один раз — сортировкой номеров ячеек по ключу{" "}
             <Notation>{"(цена, номер)"}</Notation>:
           </Typography.Text>
           <CodeBlock
+            collapsible={false}
             code={
               "cost = [50, 30, 30]\nrequests = [(1, 5), (2, 3), (3, 4), (5, 2), (6, 4)]\norder = sorted(range(len(cost)), key=lambda i: (cost[i], i))\nfree_at = [0] * len(cost)\ntotal = 0\nlast_cell = None\nfor start, duration in requests:\n    for i in order:\n        if free_at[i] <= start:\n            free_at[i] = start + duration\n            total += cost[i]\n            last_cell = i + 1\n            break\nprint(total, last_cell)"
             }
-            label={"Код на Python: cost = [50, 30, 30]"}
+            label={"Самая дешёвая свободная ячейка"}
             language="python"
             output={"170 2"}
           />
@@ -194,7 +212,7 @@ const content: LessonContent.PaidSubtopicContent = {
             занята до 6, поэтому заявка (5, 2) получает ячейку 3, а в момент 6
             ячейка 2 уже свободна. Если ячеек и заявок десятки тысяч, просмотр
             всех ячеек для каждой заявки становится долгим — тогда помогает куча
-            из дополнительной подтемы 7. В задачах подборки ячеек около сотни, и
+            из дополнительного урока. В задачах подборки ячеек около сотни, и
             простого просмотра хватает.
           </Typography.Text>
         </>
@@ -206,22 +224,25 @@ const content: LessonContent.PaidSubtopicContent = {
       explanation: (
         <>
           <Typography.Text>
+            На парковке места двух видов, и легковая машина может встать на
+            место микроавтобуса, а наоборот — нет. Как это учесть?
+          </Typography.Text>
+          <Typography.Text>
             <strong>
-              Если мест два вида, состояние хранят для каждого вида отдельно.
+              Хранить состояние каждого вида отдельно и проверять виды в том
+              порядке, который задаёт условие.
             </strong>
           </Typography.Text>
           <Typography.Text>
-            Например, на парковке места для легковых машин и для микроавтобусов;
-            легковая машина при нехватке своих мест может встать на место
-            микроавтобуса, а микроавтобус на место легковой — нет. Тогда
-            легковая машина проверяет сначала свой список, затем чужой, а
+            Легковая машина проверяет сначала свой список, затем чужой, а
             микроавтобус — только свой:
           </Typography.Text>
           <CodeBlock
+            collapsible={false}
             code={
               'spots = {"A": [0], "B": [0]}\ncars = [(0, 10, "A"), (2, 5, "A"), (3, 4, "B"), (8, 2, "A")]\nparked_a = gone = 0\nfor arrival, duration, kind in cars:\n    allowed = ["A", "B"] if kind == "A" else ["B"]\n    placed = False\n    for group in allowed:\n        lst = spots[group]\n        for i in range(len(lst)):\n            if lst[i] <= arrival:\n                lst[i] = arrival + duration\n                placed = True\n                break\n        if placed:\n            break\n    parked_a += placed and kind == "A"\n    gone += not placed\nprint(parked_a, gone)'
             }
-            label={'Код на Python: spots = {"A": [0], "B": [0]}'}
+            label={"Два вида мест на парковке"}
             language="python"
             output={"3 1"}
           />
@@ -239,14 +260,17 @@ const content: LessonContent.PaidSubtopicContent = {
       explanation: (
         <>
           <Typography.Text>
+            А если свободного окна нет, но клиент готов подождать?
+          </Typography.Text>
+          <Typography.Text>
             <strong>
-              Очередь отличается от отказа тем, что клиент может начать
-              обслуживание позже своего прихода.
+              Клиент начинает, когда освободится окно, но не раньше прихода:
+              start = max(arrival, free_at).
             </strong>
           </Typography.Text>
           <Typography.Text>
-            Для одного окна достаточно хранить время его освобождения. Пусть
-            клиент пришёл в <Notation>{"arrival"}</Notation>, обслуживание
+            Для одного окна достаточно хранить время его освобождения free_at.
+            Клиент пришёл в <Notation>{"arrival"}</Notation>, обслуживание
             длится <Notation>{"duration"}</Notation>, окно свободно с{" "}
             <Notation>{"free_at"}</Notation>. Тогда{" "}
             <strong>
@@ -263,9 +287,8 @@ const content: LessonContent.PaidSubtopicContent = {
           </Typography.Text>
           <CodeRunner
             {...lessonMedia.runQueue}
-            label={
-              "Если клиент согласен ждать не более max_wait, пройди обслуживание по шагам"
-            }
+            collapsible={false}
+            label={"Очередь с ожиданием не больше max_wait"}
           />
           <Typography.Text>
             Третий клиент пришёл в 4, а окно освободится только в 8: ждать 4
@@ -303,10 +326,11 @@ const content: LessonContent.PaidSubtopicContent = {
             <Notation>{"queue[-1]"}</Notation>, а если очередь пуста — сразу:
           </Typography.Text>
           <CodeBlock
+            collapsible={false}
             code={
               "from collections import deque\n\nclients = [(0, 4), (1, 3), (2, 5), (9, 2)]\nqueue = deque()\nfor arrival, duration in clients:\n    while queue and queue[0] <= arrival:\n        queue.popleft()\n    people = len(queue)\n    start = max(arrival, queue[-1]) if queue else arrival\n    queue.append(start + duration)\n    print(arrival, people, start)"
             }
-            label={"Код на Python: from collections import deque"}
+            label={"Сколько людей в очереди"}
             language="python"
             output={"0 0 0\n1 1 4\n2 2 7\n9 1 12"}
           />
@@ -347,27 +371,24 @@ const content: LessonContent.PaidSubtopicContent = {
       explanation: (
         <>
           <Typography.Text>
+            «Заполнять контейнер грузами по убыванию массы; не помещается —
+            пробовать следующие». Это лучший способ упаковки?
+          </Typography.Text>
+          <Typography.Text>
             <strong>
-              При упаковке грузов важно отличать заданную процедуру от поиска
-              минимального количества контейнеров.
+              Не обязательно — но если условие предписывает процедуру, её
+              выполняют буквально и получают именно её результат.
             </strong>
           </Typography.Text>
-          <Typography.Text>Рассмотрим правило:</Typography.Text>
-          <blockquote>
-            <Typography.Text>
-              Заполнять контейнер грузами по убыванию массы. Если очередной груз
-              не помещается, пробовать следующие. Затем повторить для оставшихся
-              грузов.
-            </Typography.Text>
-          </blockquote>
           <Typography.Text>
             Это процедура, которую нужно воспроизвести:
           </Typography.Text>
           <CodeBlock
+            collapsible={false}
             code={
               "weights = [7, 6, 4, 3]\ncapacity = 10\nremaining = sorted(weights, reverse=True)\nloads = []\nwhile remaining:\n    next_remaining = []\n    load = 0\n    for weight in remaining:\n        if load + weight <= capacity:\n            load += weight\n        else:\n            next_remaining.append(weight)\n    loads.append(load)\n    remaining = next_remaining\nprint(loads)"
             }
-            label={"Это процедура, которую нужно воспроизвести"}
+            label={"Упаковка по убыванию массы"}
             language="python"
             output={"[10, 10]"}
           />
@@ -406,9 +427,13 @@ const content: LessonContent.PaidSubtopicContent = {
       explanation: (
         <>
           <Typography.Text>
+            Детали кладут в первый подходящий контейнер, изделия раскладывают с
+            двух концов ленты. Как программировать такие необычные правила?
+          </Typography.Text>
+          <Typography.Text>
             <strong>
-              Заданную процедуру выполняют буквально, даже если она выглядит
-              необычно.
+              Буквально, шаг за шагом, храня то состояние, которое меняет каждый
+              шаг: остаток места контейнеров, свободные места ленты.
             </strong>
           </Typography.Text>
           <Typography.Text>
@@ -422,10 +447,11 @@ const content: LessonContent.PaidSubtopicContent = {
             место каждого контейнера:
           </Typography.Text>
           <CodeBlock
+            collapsible={false}
             code={
               "room = [10, 6, 8]\nparts = [5, 7, 4, 6, 3]\nplaced = []\nfor part in parts:\n    for i in range(len(room)):\n        if room[i] >= part:\n            room[i] -= part\n            placed.append(part)\n            break\nprint(len(placed), max(placed), room)"
             }
-            label={"Состояние — оставшееся место каждого контейнера"}
+            label={"Первый подходящий контейнер"}
             language="python"
             output={"4 7 [1, 0, 1]"}
           />
@@ -442,10 +468,11 @@ const content: LessonContent.PaidSubtopicContent = {
             изделий пропускают:
           </Typography.Text>
           <CodeBlock
+            collapsible={false}
             code={
               "items = [(3, 8), (7, 1), (2, 5), (9, 6)]\nvalues = sorted((v, kind, i)\n                for i, pair in enumerate(items)\n                for kind, v in enumerate(pair))\nline = [None] * len(items)\nfront, back = 0, len(items) - 1\norder = []\nfor v, kind, i in values:\n    if i + 1 in line:\n        continue\n    if kind == 0:\n        line[front] = i + 1\n        front += 1\n    else:\n        line[back] = i + 1\n        back -= 1\n    order.append(i + 1)\nprint(order, line)"
             }
-            label={"Код на Python: items = [(3, 8), (7, 1), (2, 5), (9, 6)]"}
+            label={"Раскладка с двух концов ленты"}
             language="python"
             output={"[2, 3, 1, 4] [3, 1, 4, 2]"}
           />
@@ -465,9 +492,13 @@ const content: LessonContent.PaidSubtopicContent = {
       explanation: (
         <>
           <Typography.Text>
+            Сервер копит запросы и делает резервную копию, когда память
+            переполняется. С чего начать?
+          </Typography.Text>
+          <Typography.Text>
             <strong>
-              Задачи о журналах и резервных копиях собираются из уже изученных
-              приёмов.
+              Собрать из известных шагов: перевести время в секунды,
+              отсортировать записи и смоделировать память по правилам.
             </strong>
           </Typography.Text>
           <Typography.Text>
@@ -490,12 +521,11 @@ const content: LessonContent.PaidSubtopicContent = {
             можно, если у всех две цифры в часах, но секунды надёжнее.
           </Typography.Text>
           <CodeBlock
+            collapsible={false}
             code={
               'log = [("08:00:05", 7, 40), ("07:59:59", 3, 50),\n       ("09:10:00", 7, 30), ("11:30:00", 3, 60),\n       ("12:00:00", 5, 70), ("13:15:00", 7, 20)]\ncapacity = 100\nrecords = []\nfor text, client, volume in log:\n    h, m, s = map(int, text.split(":"))\n    records.append((h * 3600 + m * 60 + s, client, volume))\nrecords.sort()\n\nclient_total = {}\nused = 0\nbackups = []\nfor time, client, volume in records:\n    client_total[client] = client_total.get(client, 0) + volume\n    if used + volume > capacity:\n        backups.append((time, used))\n        used = 0\n    used += volume\nbest = max(client_total, key=client_total.get)\nprint(best, *[u for t, u in backups if t < 12 * 3600])'
             }
-            label={
-              "Сравнивать строки времени тоже можно, если у всех две цифры в часах, но секунды надёжнее"
-            }
+            label={"Журнал сервера и резервные копии"}
             language="python"
             output={"3 90"}
           />
@@ -531,50 +561,31 @@ const content: LessonContent.PaidSubtopicContent = {
           <LessonSummary
             items={[
               {
+                key: "Выбрать или исполнить",
+                note: <>правила условия выполняют буквально</>,
+              },
+              {
+                key: "Состояние",
                 note: (
                   <>
-                    Сначала решают, выбирать лучшее или исполнять правила; при
-                    моделировании хранят состояние.
+                    <Notation>{"free_at"}</Notation> — когда освободится каждая
+                    ячейка
                   </>
                 ),
               },
               {
+                key: "Со следующей минуты",
                 note: (
                   <>
-                    Камера хранения: <Notation>{"free_at"}</Notation> для каждой
-                    ячейки, заявки по времени прихода,{" "}
-                    <Notation>{"<="}</Notation> или <Notation>{"<"}</Notation> —
-                    по формулировке, номер — индекс + 1.
+                    <Notation>{"free_at[i] < start"}</Notation>
                   </>
                 ),
               },
+              { key: "Задача темы", note: <>859 11</> },
+              { key: "Очередь", note: <>start = max(arrival, free_at)</> },
               {
-                note: (
-                  <>
-                    Цена ячейки — порядок просмотра{" "}
-                    <Notation>{"(цена, номер)"}</Notation>; два вида мест —
-                    состояние для каждого вида.
-                  </>
-                ),
-              },
-              {
-                note: (
-                  <>
-                    Очередь: начало{" "}
-                    <Notation>{"max(приход, освобождение)"}</Notation>, отказ не
-                    меняет состояние, длина очереди —{" "}
-                    <Notation>{"deque"}</Notation> времён окончания.
-                  </>
-                ),
-              },
-              {
-                note: (
-                  <>
-                    Заданная процедура выполняется буквально и не обязана быть
-                    оптимальной; журнал — секунды, сортировка, накопление по
-                    ключу и копия до добавления запроса.
-                  </>
-                ),
+                key: "Процедура",
+                note: <>шаг за шагом, даже если она не лучшая</>,
               },
             ]}
           />
@@ -584,7 +595,7 @@ const content: LessonContent.PaidSubtopicContent = {
   ],
   checkpoint: [
     {
-      id: "zadacha-5",
+      id: "zadacha-1",
       prompt: (
         <>
           Вместимость контейнера 12, грузы 8, 7, 5, 4, 3, 1, процедура упаковки
@@ -595,7 +606,7 @@ const content: LessonContent.PaidSubtopicContent = {
       reveal: <>12, 12 и 4. Меньше нельзя: суммарная масса 28 больше 2 · 12.</>,
     },
     {
-      id: "zadacha-7",
+      id: "zadacha-2",
       prompt: (
         <>
           Изделия (шлифовка, покраска): (5, 9), (8, 2), (4, 7), (6, 3). Размести
@@ -604,6 +615,49 @@ const content: LessonContent.PaidSubtopicContent = {
         </>
       ),
       reveal: <>Изделие 1, перед ним одно: лента 3, 1, 4, 2.</>,
+    },
+    {
+      id: "zadacha-3",
+      prompt: (
+        <>
+          Две ячейки, заявки (1, 4), (2, 6), (4, 7), (5, 9); ячейку можно занять
+          со следующей минуты. Сколько пассажиров сдадут багаж и в какую ячейку
+          положит последний?
+        </>
+      ),
+      reveal: (
+        <>
+          3 и ячейка 1: (4, 7) получает отказ — ячейка 1 свободна только с 5-й
+          минуты, — а (5, 9) занимает ячейку 1.
+        </>
+      ),
+    },
+    {
+      id: "zadacha-4",
+      prompt: (
+        <>
+          В задаче темы правило «со следующей минуты» заменили на «в ту же
+          минуту». Принятых станет больше или меньше? Почему?
+        </>
+      ),
+      reveal: (
+        <>
+          Больше — 877 вместо 859: каждая ячейка освобождается на минуту раньше,
+          и часть пассажиров находит место.
+        </>
+      ),
+    },
+    {
+      id: "zadacha-5",
+      prompt: (
+        <>
+          Окно свободно с 10, клиент пришёл в 7, обслуживание длится 4 минуты.
+          Когда он начнёт, закончит и сколько ждал?
+        </>
+      ),
+      reveal: (
+        <>Начнёт в 10, закончит в 14, ждал 3 минуты: start = max(7, 10).</>
+      ),
     },
   ],
 };

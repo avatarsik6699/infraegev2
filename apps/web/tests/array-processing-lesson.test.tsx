@@ -110,11 +110,10 @@ describe("task 26 data processing lesson (Change 184)", () => {
       ["ryady-i-serii", "core"],
       ["intervaly", "core"],
       ["modelirovanie", "core"],
-      ["pary-okno-kucha", "advanced"],
-      ["slozhnye-cepochki", "advanced"],
+      ["pary-okno-i-cepochki", "advanced"],
     ]);
     expect(subtopics.map(({ checkpoint }) => checkpoint?.length ?? 0)).toEqual([
-      4, 1, 2, 2, 1, 2, 1, 1,
+      5, 5, 5, 5, 5, 5, 4,
     ]);
     expect(lesson.examFocus).toBeDefined();
     expect(lesson.result).toBeDefined();
@@ -194,7 +193,7 @@ describe("task 26 data processing lesson (Change 184)", () => {
           prelude += piece.code + "\n";
       }
     }
-    expect(ran).toBe(53);
+    expect(ran).toBe(56);
   }, 60_000);
 
   it("keeps spaces around inline code, links and emphasis", () => {

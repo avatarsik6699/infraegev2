@@ -27,6 +27,7 @@ export const lessonMedia = {
     height: 150,
     alt: "Ряд из 21 мест",
   },
+  // run notes: "1: Отмеченные позиции ряда, уже по возрастанию.\n2: `line_count` — сколько линий длиной от трёх уже насчитали.\n3: `current` — длина текущей серии.\n4: `previous` — предыдущая позиция; пока её нет.\n5.1: Первая позиция — `5`.\n6.1: Предыдущей позиции нет — серия начинается заново.\n9.1: Закончившейся серии ещё не было (`current` = `0`) — линией её не считаем.\n11.1: Позиция `5` начинает новую серию длины `1`.\n12.1: Запоминаем `5` как предыдущую позицию.\n5.2: Следующая позиция — `8`.\n6.2: `8` ≠ `5 + 1` — разрыв, серия оборвалась.\n9.2: Оборвалась серия длины `1` — меньше трёх, это не линия.\n11.2: `8` начинает новую серию.\n12.2: Предыдущая позиция — `8`.\n5.3: Позиция `9`.\n6.3: `9` = `8 + 1` — серия продолжается.\n7.1: Длина серии — `2`.\n12.3: Предыдущая позиция — `9`.\n5.4: Позиция `10`.\n6.4: `10` = `9 + 1` — серия продолжается.\n7.2: Длина серии — `3`.\n12.4: Предыдущая позиция — `10`.\n13: Позиции кончились, а последняя серия разрывом не закончилась — проверяем её после цикла: `3` ≥ `3`.\n14: Это линия: `line_count` = `1`.\n15: Одна линия — 8, 9, 10. Без проверки после цикла программа вывела бы 0."
   runLines: {
     kind: "run",
     code: "positions = [5, 8, 9, 10]\nline_count = 0\ncurrent = 0\nprevious = None\nfor position in positions:\n    if previous is not None and position == previous + 1:\n        current += 1\n    else:\n        if current >= 3:\n            line_count += 1\n        current = 1\n    previous = position\nif current >= 3:\n    line_count += 1\nprint(line_count)",
@@ -43,7 +44,7 @@ export const lessonMedia = {
       },
       {
         line: 1,
-        text: "`positions` получает значение `[5, 8, 9, 10]`.",
+        text: "Отмеченные позиции ряда, уже по возрастанию.",
         kind: "line",
         frames: [
           {
@@ -56,7 +57,7 @@ export const lessonMedia = {
       },
       {
         line: 2,
-        text: "`line_count` получает значение `0`.",
+        text: "`line_count` — сколько линий длиной от трёх уже насчитали.",
         kind: "line",
         frames: [
           {
@@ -72,7 +73,7 @@ export const lessonMedia = {
       },
       {
         line: 3,
-        text: "`current` получает значение `0`.",
+        text: "`current` — длина текущей серии.",
         kind: "line",
         frames: [
           {
@@ -89,7 +90,7 @@ export const lessonMedia = {
       },
       {
         line: 4,
-        text: "`previous` получает значение `None`.",
+        text: "`previous` — предыдущая позиция; пока её нет.",
         kind: "line",
         frames: [
           {
@@ -107,7 +108,7 @@ export const lessonMedia = {
       },
       {
         line: 5,
-        text: "`for` берёт первое значение: `position` = `5`.",
+        text: "Первая позиция — `5`.",
         kind: "line",
         frames: [
           {
@@ -126,7 +127,7 @@ export const lessonMedia = {
       },
       {
         line: 6,
-        text: "Проверка `previous is not None and position == previous + 1` даёт `False` — блок пропускается, дальше следующая проверка.",
+        text: "Предыдущей позиции нет — серия начинается заново.",
         kind: "line",
         frames: [
           {
@@ -145,7 +146,7 @@ export const lessonMedia = {
       },
       {
         line: 9,
-        text: "Проверка `current >= 3` даёт `False` — блок пропускается.",
+        text: "Закончившейся серии ещё не было (`current` = `0`) — линией её не считаем.",
         kind: "line",
         frames: [
           {
@@ -164,7 +165,7 @@ export const lessonMedia = {
       },
       {
         line: 11,
-        text: "`current` получает значение `1`. Прежнее значение `0` больше не связано с `current`.",
+        text: "Позиция `5` начинает новую серию длины `1`.",
         kind: "line",
         frames: [
           {
@@ -183,7 +184,7 @@ export const lessonMedia = {
       },
       {
         line: 12,
-        text: "`previous` получает то же, что `position`: теперь оба имени ведут к `5`. Прежнее значение `None` больше не связано с `previous`.",
+        text: "Запоминаем `5` как предыдущую позицию.",
         kind: "line",
         frames: [
           {
@@ -202,7 +203,7 @@ export const lessonMedia = {
       },
       {
         line: 5,
-        text: "`for` берёт следующее значение: `position` = `8`.",
+        text: "Следующая позиция — `8`.",
         kind: "line",
         frames: [
           {
@@ -221,7 +222,7 @@ export const lessonMedia = {
       },
       {
         line: 6,
-        text: "Проверка `previous is not None and position == previous + 1` даёт `False` — блок пропускается, дальше следующая проверка.",
+        text: "`8` ≠ `5 + 1` — разрыв, серия оборвалась.",
         kind: "line",
         frames: [
           {
@@ -240,7 +241,7 @@ export const lessonMedia = {
       },
       {
         line: 9,
-        text: "Проверка `current >= 3` даёт `False` — блок пропускается.",
+        text: "Оборвалась серия длины `1` — меньше трёх, это не линия.",
         kind: "line",
         frames: [
           {
@@ -259,7 +260,7 @@ export const lessonMedia = {
       },
       {
         line: 11,
-        text: "`current` получает значение `1`.",
+        text: "`8` начинает новую серию.",
         kind: "line",
         frames: [
           {
@@ -278,7 +279,7 @@ export const lessonMedia = {
       },
       {
         line: 12,
-        text: "`previous` получает то же, что `position`: теперь оба имени ведут к `8`. Прежнее значение `5` больше не связано с `previous`.",
+        text: "Предыдущая позиция — `8`.",
         kind: "line",
         frames: [
           {
@@ -297,7 +298,7 @@ export const lessonMedia = {
       },
       {
         line: 5,
-        text: "`for` берёт следующее значение: `position` = `9`.",
+        text: "Позиция `9`.",
         kind: "line",
         frames: [
           {
@@ -316,7 +317,7 @@ export const lessonMedia = {
       },
       {
         line: 6,
-        text: "Проверка `previous is not None and position == previous + 1` даёт `True` — выполняется блок под этим условием.",
+        text: "`9` = `8 + 1` — серия продолжается.",
         kind: "line",
         frames: [
           {
@@ -335,7 +336,7 @@ export const lessonMedia = {
       },
       {
         line: 7,
-        text: "`current += 1`: значение `current` увеличилось — было `1`, стало `2`.",
+        text: "Длина серии — `2`.",
         kind: "line",
         frames: [
           {
@@ -354,7 +355,7 @@ export const lessonMedia = {
       },
       {
         line: 12,
-        text: "`previous` получает то же, что `position`: теперь оба имени ведут к `9`. Прежнее значение `8` больше не связано с `previous`.",
+        text: "Предыдущая позиция — `9`.",
         kind: "line",
         frames: [
           {
@@ -373,7 +374,7 @@ export const lessonMedia = {
       },
       {
         line: 5,
-        text: "`for` берёт следующее значение: `position` = `10`.",
+        text: "Позиция `10`.",
         kind: "line",
         frames: [
           {
@@ -392,7 +393,7 @@ export const lessonMedia = {
       },
       {
         line: 6,
-        text: "Проверка `previous is not None and position == previous + 1` даёт `True` — выполняется блок под этим условием.",
+        text: "`10` = `9 + 1` — серия продолжается.",
         kind: "line",
         frames: [
           {
@@ -411,7 +412,7 @@ export const lessonMedia = {
       },
       {
         line: 7,
-        text: "`current += 1`: значение `current` увеличилось — было `2`, стало `3`.",
+        text: "Длина серии — `3`.",
         kind: "line",
         frames: [
           {
@@ -430,7 +431,7 @@ export const lessonMedia = {
       },
       {
         line: 12,
-        text: "`previous` получает то же, что `position`: теперь оба имени ведут к `10`. Прежнее значение `9` больше не связано с `previous`.",
+        text: "Предыдущая позиция — `10`.",
         kind: "line",
         frames: [
           {
@@ -468,7 +469,7 @@ export const lessonMedia = {
       },
       {
         line: 13,
-        text: "Проверка `current >= 3` даёт `True` — выполняется блок под этим условием.",
+        text: "Позиции кончились, а последняя серия разрывом не закончилась — проверяем её после цикла: `3` ≥ `3`.",
         kind: "line",
         frames: [
           {
@@ -487,7 +488,7 @@ export const lessonMedia = {
       },
       {
         line: 14,
-        text: "`line_count += 1`: значение `line_count` увеличилось — было `0`, стало `1`.",
+        text: "Это линия: `line_count` = `1`.",
         kind: "line",
         frames: [
           {
@@ -506,7 +507,7 @@ export const lessonMedia = {
       },
       {
         line: 15,
-        text: "На экран выводится «1».",
+        text: "Одна линия — 8, 9, 10. Без проверки после цикла программа вывела бы 0.",
         kind: "line",
         frames: [
           {

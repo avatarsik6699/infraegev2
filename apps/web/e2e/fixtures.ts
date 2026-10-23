@@ -101,9 +101,9 @@ const arrayProcessingLessonConfig = {
   route: "/ege/26-sortirovka-i-otbor/zapisi-i-rejting",
   title: "Обработка данных с сортировкой",
   taskNumber: 26,
-  taskCount: 67,
-  masteryTaskCount: 53,
-  diagramCount: 13,
+  taskCount: 72,
+  masteryTaskCount: 59,
+  diagramCount: 14,
   downloadCount: 26,
 };
 

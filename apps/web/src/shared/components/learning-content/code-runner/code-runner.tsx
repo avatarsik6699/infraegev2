@@ -22,6 +22,8 @@ import styles from "./code-runner.module.css";
 export type CodeRunnerProps = Omit<LessonMediaTypes.Run, "kind"> & {
   kind?: "run";
   label: string;
+  /** A key program stays unfolded, as `CodeBlock`'s `collapsible={false}`. */
+  collapsible?: boolean;
 };
 
 /** Explanation of a step: `code` in backticks becomes inline code. */
@@ -199,7 +201,7 @@ export const CodeRunner: React.FC<CodeRunnerProps> = (props) => {
         output={props.output}
         error={props.error}
         headerActions={actions}
-        collapsible={!running}
+        collapsible={!running && (props.collapsible ?? true)}
         activeLine={running && step.line ? step.line : undefined}
         activeLineTone={step.stop ? "error" : "current"}
         codeAside={

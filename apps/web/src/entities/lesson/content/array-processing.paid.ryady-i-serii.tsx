@@ -16,51 +16,32 @@ import { PythonTerm } from "./python-term";
 const content: LessonContent.PaidSubtopicContent = {
   theory: [
     {
-      id: "pozicii-v-ryadah",
-      navLabel: "Позиции в рядах",
-      explanation: (
-        <>
-          <Typography.Text>
-            <strong>
-              Позиции в рядах сначала собирают по рядам и сортируют, а потом
-              смотрят на разности соседних позиций.
-            </strong>{" "}
-            Так решаются задачи о свободных местах и посадках в рядах, о креслах
-            одного номера в зале, о светлых точках и линиях на экране, о
-            подъездах домов и артикулах товаров. Это одна из самых частых
-            моделей задания в последние годы.
-          </Typography.Text>
-          <Typography.Text>
-            Главный пример урока — ряд с занятыми местами 4, 7, 12, 16 и
-            отмеченные позиции 2, 3, 4, 8, 9, 10, 11, 20. Сортировка записей и
-            ключ из нескольких полей знакомы по первой подтеме.
-          </Typography.Text>
-        </>
-      ),
-    },
-    {
       id: "mnozhestva-i-slovari",
-      navLabel: "Множества и словари",
+      navLabel: "Позиции по рядам",
       explanation: (
         <>
           <Typography.Text>
+            В строках файла — номер ряда и номер занятого места, вперемешку. Как
+            узнать, что происходит в каждом ряду?
+          </Typography.Text>
+          <Typography.Text>
             <strong>
-              Для работы с рядами и группами полезны множества и словари.
+              Разложить позиции по рядам в словарь «ряд → множество мест», а
+              потом в каждом ряду отсортировать места и смотреть на соседние.
             </strong>
           </Typography.Text>
           <Typography.Text>
-            Пусть каждая строка файла содержит номер ряда и номер позиции.
-            Сначала нужно собрать позиции отдельно для каждого ряда. Для этого
-            подходит <PythonTerm term="dict">словарь</PythonTerm> «номер ряда →
-            позиции в этом ряду», а позиции удобно хранить{" "}
+            Ключ <PythonTerm term="dict">словаря</PythonTerm> — номер ряда, а
+            позиции удобно хранить{" "}
             <PythonTerm term="set">множеством</PythonTerm>: оно хранит только
             различные значения.
           </Typography.Text>
           <CodeBlock
+            collapsible={false}
             code={
               "data = [(5, 3), (9, 13), (5, 2), (5, 8),\n        (9, 10), (5, 4), (9, 20), (5, 3)]\nrows = {}\nfor row, position in data:\n    if row not in rows:\n        rows[row] = set()\n    rows[row].add(position)\nfor row in sorted(rows):\n    print(row, sorted(rows[row]))"
             }
-            label={"Код на Python: data = [(5, 3), (9, 13), (5, 2), (5, 8),"}
+            label={"Позиции по рядам"}
             language="python"
             output={"5 [2, 3, 4, 8]\n9 [10, 13, 20]"}
           />
@@ -118,16 +99,18 @@ const content: LessonContent.PaidSubtopicContent = {
       explanation: (
         <>
           <Typography.Text>
+            В ряду заняты места 4, 7, 12, 16. Где есть ровно два свободных места
+            подряд между занятыми?
+          </Typography.Text>
+          <Typography.Text>
             <strong>
-              Свободные места между занятыми находятся по разности соседних
-              номеров.
+              Между соседними занятыми местами a и b свободно b − a − 1 мест:
+              ровно два — там, где b − a = 3.
             </strong>
           </Typography.Text>
           <Typography.Text>
-            Пусть в одном ряду заняты места 4, 7, 12, 16. Между местами 4 и 7
-            свободны 5 и 6. Количество свободных мест между занятыми номерами a{" "}
-            {"<"} b равно <strong>b − a − 1</strong>: сами занятые места в
-            промежуток не входят.
+            Между местами 4 и 7 свободны 5 и 6: сами занятые места в промежуток
+            не входят.
           </Typography.Text>
           <LessonDiagram
             {...lessonMedia.greedyRow18_ea6afc}
@@ -140,9 +123,7 @@ const content: LessonContent.PaidSubtopicContent = {
             }
           />
           <Typography.Text>
-            Чтобы между двумя <strong>соседними занятыми</strong> местами
-            находились ровно два свободных, нужно b − a − 1 = 2, то есть b − a =
-            3. Соседними здесь называются соседние элементы{" "}
+            Соседними здесь называются соседние элементы{" "}
             <strong>отсортированного списка занятых мест</strong>, а не соседние
             строки файла.
           </Typography.Text>
@@ -153,10 +134,11 @@ const content: LessonContent.PaidSubtopicContent = {
             Тогда подходит первое найденное решение:
           </Typography.Text>
           <CodeBlock
+            collapsible={false}
             code={
               "data = [(5, 4), (8, 11), (5, 12), (8, 3),\n        (5, 7), (8, 8), (5, 16)]\nplaces = sorted(set(data), key=lambda x: (-x[0], x[1]))\nanswer = None\nfor i in range(len(places) - 1):\n    row1, seat1 = places[i]\n    row2, seat2 = places[i + 1]\n    if row1 == row2 and seat2 - seat1 == 3:\n        answer = (row1, seat1 + 1)\n        break\nprint(*answer)"
             }
-            label={"Тогда подходит первое найденное решение"}
+            label={"Ряд с наибольшим номером и ровно два свободных места"}
             language="python"
             output={"8 9"}
           />
@@ -206,18 +188,19 @@ const content: LessonContent.PaidSubtopicContent = {
       explanation: (
         <>
           <Typography.Text>
+            «Перед креслом свободны все кресла с тем же номером» — как искать,
+            если важны не места в ряду, а один номер кресла во всех рядах?
+          </Typography.Text>
+          <Typography.Text>
             <strong>
-              Кресла с одинаковым номером образуют столбец: его собирают так же,
-              только ключом служит номер кресла.
+              Собрать столбец: ключом словаря служит номер кресла, а значениями
+              — номера рядов. Дальше всё как с местами в ряду.
             </strong>
           </Typography.Text>
           <Typography.Text>
-            Бывает, что важны не места одного ряда, а кресла с одним номером в
-            разных рядах — например, «перед местом свободны все кресла с таким
-            же номером» или «перед ним как можно больше свободных кресел
+            Так же решается и «перед ним как можно больше свободных кресел
             подряд». Ряды нумеруются от сцены, поэтому «перед» значит «в рядах с
-            меньшими номерами». Тогда словарь строят по номеру кресла, а
-            позициями служат номера рядов.
+            меньшими номерами».
           </Typography.Text>
           <Typography.Text>
             Пусть в зале 10 рядов, а кресло номер 5 занято в рядах 3 и 7.
@@ -240,10 +223,11 @@ const content: LessonContent.PaidSubtopicContent = {
             }
           />
           <CodeBlock
+            collapsible={false}
             code={
               "m = 10\ncolumn = [3, 7]\nbest = None\nprev = 0\nfor occupied in sorted(column) + [m + 1]:\n    if occupied - prev >= 2:\n        free_before = occupied - prev - 2\n        seat_row = occupied - 1\n        if best is None or free_before > best[0]:\n            best = (free_before, seat_row)\n    prev = occupied\nprint(*best)"
             }
-            label={"Код на Python: m = 10"}
+            label={"Свободные кресла перед местом"}
             language="python"
             output={"2 6"}
           />
@@ -266,16 +250,17 @@ const content: LessonContent.PaidSubtopicContent = {
       explanation: (
         <>
           <Typography.Text>
+            Отмечены позиции 2, 3, 4, 8, 9, 10, 11, 20. Как найти самую длинную
+            непрерывную серию?
+          </Typography.Text>
+          <Typography.Text>
             <strong>
-              Последовательности соседних позиций обрабатываются счётчиком
-              текущей серии.
+              Идти по отсортированным позициям со счётчиком серии: следующая
+              позиция на 1 больше — серия растёт, иначе начинается заново с 1.
             </strong>
           </Typography.Text>
           <Typography.Text>
-            Пусть в ряду отмечены позиции 2, 3, 4, 8, 9, 10, 11, 20. Здесь три
-            непрерывные серии — 2–4, 8–11 и 20 — длиной 3, 4 и 1. Чтобы понять,
-            продолжает ли новая позиция текущую серию, достаточно проверить:
-            новая позиция = предыдущая + 1.
+            Здесь три непрерывные серии — 2–4, 8–11 и 20 — длиной 3, 4 и 1.
           </Typography.Text>
           <LessonDiagram
             {...lessonMedia.greedyRow21_203564}
@@ -289,10 +274,11 @@ const content: LessonContent.PaidSubtopicContent = {
           />
           <Typography.Text>Код для максимальной длины серии:</Typography.Text>
           <CodeBlock
+            collapsible={false}
             code={
               "positions = sorted(set([10, 2, 3, 4, 8, 9, 11, 20, 3]))\ncurrent = 0\nbest = 0\nprevious = None\nfor position in positions:\n    if previous is not None and position == previous + 1:\n        current += 1\n    else:\n        current = 1\n    if current > best:\n        best = current\n    previous = position\nprint(best)"
             }
-            label={"Код для максимальной длины серии"}
+            label={"Самая длинная серия"}
             language="python"
             output={"4"}
           />
@@ -311,9 +297,8 @@ const content: LessonContent.PaidSubtopicContent = {
           </Typography.Text>
           <CodeRunner
             {...lessonMedia.runLines}
-            label={
-              "Пройди программу по шагам на позициях, где последняя серия заканчивает ряд"
-            }
+            collapsible={false}
+            label={"Серии длиной от трёх: шаг за шагом"}
           />
           <Typography.Text>
             <strong>Последняя проверка после цикла обязательна.</strong> Серия
@@ -363,28 +348,28 @@ const content: LessonContent.PaidSubtopicContent = {
       explanation: (
         <>
           <Typography.Text>
+            А если внутри линии разрешены тёмные точки — не больше k подряд?
+          </Typography.Text>
+          <Typography.Text>
             <strong>
-              Линия, внутри которой допускаются тёмные точки, — та же серия с
-              разрешённым промежутком.
+              Это та же серия, только продолжается она, пока промежуток между
+              соседними светлыми точками не больше k.
             </strong>
           </Typography.Text>
           <Typography.Text>
-            Иногда линией называют группу светлых точек, между которыми может
-            быть не больше k тёмных точек подряд, а длиной линии — количество
-            всех её точек, светлых и тёмных. Тогда новая позиция продолжает
-            серию, если <Notation>{"position - previous <= k + 1"}</Notation>:
-            между ними <Notation>{"position − previous − 1 ≤ k"}</Notation>{" "}
-            тёмных точек. Длина линии —{" "}
-            <strong>последняя позиция − первая + 1</strong>, а не число
-            отмеченных позиций.
+            Длина такой линии — количество всех её точек, светлых и тёмных.
+            Тогда новая позиция продолжает серию, если{" "}
+            <Notation>{"position - previous <= k + 1"}</Notation>: между ними{" "}
+            <Notation>{"position − previous − 1 ≤ k"}</Notation> тёмных точек.
+            Длина линии — <strong>последняя позиция − первая + 1</strong>, а не
+            число отмеченных позиций.
           </Typography.Text>
           <CodeBlock
+            collapsible={false}
             code={
               "positions = [2, 3, 7, 8, 15]\nk = 3\nbest = 0\nfirst = previous = None\nfor position in positions:\n    if previous is None or position - previous > k + 1:\n        first = position\n    best = max(best, position - first + 1)\n    previous = position\nprint(best)"
             }
-            label={
-              "Длина линии — последняя позиция − первая + 1, а не число отмеченных позиций"
-            }
+            label={"Линия с промежутком до k"}
             language="python"
             output={"7"}
           />
@@ -402,22 +387,25 @@ const content: LessonContent.PaidSubtopicContent = {
       explanation: (
         <>
           <Typography.Text>
+            Как найти светлые точки, у которых все другие светлые точки ряда
+            дальше чем на D?
+          </Typography.Text>
+          <Typography.Text>
             <strong>
-              Для изолированной точки достаточно проверить ближайшего соседа
-              слева и ближайшего справа.
+              Достаточно проверить двух ближайших соседей в отсортированном
+              ряду: если и они дальше D, остальные — тем более.
             </strong>
           </Typography.Text>
           <Typography.Text>
-            Точка изолирована, если другие светлые точки ряда находятся от неё
-            дальше чем на D. Если даже ближайшая точка справа дальше D, все
-            остальные справа тем более дальше. Для позиции с индексом{" "}
-            <Notation>{"i"}</Notation> отсортированного списка:
+            Для позиции с индексом <Notation>{"i"}</Notation> отсортированного
+            списка:
           </Typography.Text>
           <CodeBlock
+            collapsible={false}
             code={
               "positions = [2, 3, 10, 20, 24]\ndistance = 4\ncount = 0\nfor i in range(len(positions)):\n    left_ok = (i == 0\n               or positions[i] - positions[i - 1] > distance)\n    right_ok = (i == len(positions) - 1\n                or positions[i + 1] - positions[i] > distance)\n    if left_ok and right_ok:\n        count += 1\nprint(count)"
             }
-            label={"Для позиции с индексом i отсортированного списка"}
+            label={"Изолированные точки"}
             language="python"
             output={"1"}
           />
@@ -438,9 +426,13 @@ const content: LessonContent.PaidSubtopicContent = {
       explanation: (
         <>
           <Typography.Text>
+            Нужен лидер продаж: по каждому артикулу — сколько продано и сколько
+            осталось. Как собрать эти числа?
+          </Typography.Text>
+          <Typography.Text>
             <strong>
-              Если нужны суммы и количества по ключу, их накапливают в словаре,
-              а лучший ключ выбирают по приоритетам.
+              Накапливать суммы и количества в словаре по ключу-артикулу, а
+              лучший ключ выбирать кортежем приоритетов.
             </strong>
           </Typography.Text>
           <Typography.Text>
@@ -455,10 +447,11 @@ const content: LessonContent.PaidSubtopicContent = {
             :
           </Typography.Text>
           <CodeBlock
+            collapsible={false}
             code={
               "items = [(101, 500, 0), (101, 500, 0), (101, 500, 1),\n         (205, 900, 0), (205, 900, 1), (205, 900, 1),\n         (307, 120, 0), (307, 120, 0), (307, 120, 0),\n         (412, 700, 0), (412, 700, 0), (412, 700, 1)]\naverage = sum(p for _, p, _ in items) / len(items)\nsold, left, price = {}, {}, {}\nfor art, p, status in items:\n    price[art] = p\n    if status == 0:\n        sold[art] = sold.get(art, 0) + 1\n    else:\n        left[art] = left.get(art, 0) + 1\nbest = max((sold.get(a, 0), price[a], -left.get(a, 0), a)\n           for a in price if price[a] > average)\nprint(best[3], best[0] * best[1], -best[2])"
             }
-            label={"Количества по артикулу считают через {{dictget|get}}"}
+            label={"Лидер продаж среди дорогих артикулов"}
             language="python"
             output={"412 1400 1"}
           />
@@ -486,47 +479,28 @@ const content: LessonContent.PaidSubtopicContent = {
         <>
           <LessonSummary
             items={[
+              { key: "По рядам", note: <>словарь «ряд → множество позиций»</> },
               {
+                key: "Свободные места",
+                note: <>между a и b свободно b − a − 1</>,
+              },
+              {
+                key: "Столбец",
+                note: <>ключ — номер кресла, значения — ряды</>,
+              },
+              {
+                key: "Серия",
                 note: (
-                  <>
-                    Позиции собирают словарём «ряд → множество позиций»; повторы
-                    убирают, только если они не меняют смысл.
-                  </>
+                  <>+1 — продолжение, иначе заново; после цикла — ещё раз</>
                 ),
               },
               {
-                note: (
-                  <>
-                    Свободных мест между соседними занятыми a {"<"} b — b − a −
-                    1; соседи — в отсортированном списке и в одном ряду.
-                  </>
-                ),
+                key: "Изолированная точка",
+                note: <>проверить двух ближайших соседей</>,
               },
               {
-                note: (
-                  <>
-                    Столбец кресел — тот же словарь с ключом-номером кресла;
-                    края зала — условные занятые ряды 0 и M + 1.
-                  </>
-                ),
-              },
-              {
-                note: (
-                  <>
-                    Серии считают счётчиком текущей серии; последнюю серию
-                    проверяют после цикла; допустимый промежуток меняет только
-                    проверку соседства и длину.
-                  </>
-                ),
-              },
-              {
-                note: (
-                  <>
-                    Изолированность — по ближайшим соседям; накопление по ключу
-                    — словарь и <Notation>{"get"}</Notation>, выбор лучшего —
-                    кортеж приоритетов.
-                  </>
-                ),
+                key: "По ключу",
+                note: <>суммы в словаре, лучший — кортежем приоритетов</>,
               },
             ]}
           />
@@ -536,7 +510,7 @@ const content: LessonContent.PaidSubtopicContent = {
   ],
   checkpoint: [
     {
-      id: "zadacha-3",
+      id: "zadacha-1",
       prompt: (
         <>
           В ряду заняты места 3, 9, 13, 14, 20. Сколько свободных мест между
@@ -552,7 +526,7 @@ const content: LessonContent.PaidSubtopicContent = {
       ),
     },
     {
-      id: "zadacha-7",
+      id: "zadacha-2",
       prompt: (
         <>
           Артикулы из примера урока, но средняя цена считается без проданных
@@ -564,6 +538,47 @@ const content: LessonContent.PaidSubtopicContent = {
           Изменится: средняя цена непроданных (500, 900, 900, 700) равна 750,
           дорогим остаётся только артикул 205. Лидер — 205: выручка 900,
           осталось 2.
+        </>
+      ),
+    },
+    {
+      id: "zadacha-3",
+      prompt: (
+        <>
+          Отмечены позиции 5, 6, 7, 10, 11, 15. Сколько непрерывных серий и
+          какая самая длинная?
+        </>
+      ),
+      reveal: (
+        <>Три серии: 5–7, 10–11 и 15. Самая длинная — 5, 6, 7, длина 3.</>
+      ),
+    },
+    {
+      id: "zadacha-4",
+      prompt: (
+        <>
+          Светлые точки ряда — 4, 9, 12, 20, D = 3. Какие точки изолированы, то
+          есть все остальные дальше чем на 3?
+        </>
+      ),
+      reveal: (
+        <>
+          4 и 20. У 9 и 12 расстояние ровно 3 — «дальше чем на 3» не выполнено.
+        </>
+      ),
+    },
+    {
+      id: "zadacha-5",
+      prompt: (
+        <>
+          Кресло номер 5 занято в рядах 2 и 6 зала из 8 рядов. Перед каким
+          креслом этого номера больше всего свободных кресел подряд?
+        </>
+      ),
+      reveal: (
+        <>
+          В ряду 5: перед ним свободны ряды 3 и 4. В ряду 8 перед ним свободен
+          только ряд 7.
         </>
       ),
     },

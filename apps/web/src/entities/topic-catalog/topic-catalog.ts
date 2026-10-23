@@ -27,7 +27,7 @@ const subtopicFacts: Readonly<
   "graph-analysis": { count: 6, first: "graf-i-put" },
   "string-processing": { count: 7, first: "stroka-i-cepochka" },
   "divisors-and-masks": { count: 6, first: "perebor-i-proverki" },
-  "array-processing": { count: 8, first: "zapisi-i-rejting" },
+  "array-processing": { count: 7, first: "zapisi-i-rejting" },
   "data-analysis": { count: 8, first: "tochki-i-rasstoyaniya" },
   "information-models": { count: 6, first: "model-i-stepeni" },
   "truth-tables": { count: 4, first: "logicheskie-operacii" },

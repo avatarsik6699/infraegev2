@@ -156192,6 +156192,12 @@
               "code": "records = [(12, 80, 5), (3, 90, 8), (7, 90, 4), (2, 90, 4)]\nrecords.sort(key=lambda r: (-r[1], r[2], r[0]))\nprint(*[r[0] for r in records])",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `2 7 3 12`"
+            }
           }
         ],
         "skills": [],
@@ -156199,7 +156205,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 0,
+            "position": 1,
             "material_id": "array-processing"
           }
         ],
@@ -156275,6 +156281,12 @@
               "code": "print(*max([(5, 40), (6, 12), (6, 15), (4, 100)]))",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `6 15`"
+            }
           }
         ],
         "skills": [],
@@ -156282,7 +156294,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 1,
+            "position": 0,
             "material_id": "array-processing"
           }
         ],
@@ -156358,6 +156370,12 @@
               "code": "sc = [3, -2, 0, 5, -1, 0, 4]\npositive = sum(x for x in sc if x > 0)\nprint(sum(sc), positive, sum(x != 0 for x in sc))",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `9 12 5`"
+            }
           }
         ],
         "skills": [],
@@ -156365,7 +156383,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 2,
+            "position": 4,
             "material_id": "array-processing"
           }
         ],
@@ -156441,6 +156459,12 @@
               "code": "a = [90, 85, 80, 80, 80, 75, 70, 70, 65, 60, 55, 50]\nk = len(a) * 25 // 100\nlast = a[k - 1]\nprint(sum(x >= last for x in a), k)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `5 3`"
+            }
           }
         ],
         "skills": [],
@@ -156448,7 +156472,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 3,
+            "position": 5,
             "material_id": "array-processing"
           }
         ],
@@ -156498,7 +156522,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "В файле 26-1.txt записаны результаты сессии: в первой строке — количество студентов N, в каждой следующей — ID студента и четыре оценки от 2 до 5. Рейтинг составляют так: сначала студенты без двоек по убыванию суммы оценок, при равной сумме — по возрастанию ID; затем студенты с двойками по возрастанию количества двоек, при равном количестве — по возрастанию ID. Повышенную стипендию получают студенты, занявшие первые 15 % мест рейтинга (целая часть от 0,15 · N); гарантируется, что у всех них нет двоек. Запишите ID последнего студента с повышенной стипендией, затем количество студентов без двоек, сумма оценок которых равна сумме оценок этого студента."
+              "markdown": "В файле 26-1.txt записаны результаты сессии: в первой строке — количество студентов N, в каждой следующей — ID студента и четыре оценки от 2 до 5. Рейтинг составляют так: сначала студенты без двоек по убыванию суммы оценок, при равной сумме — по возрастанию ID; затем студенты с двойками по возрастанию количества двоек, при равном количестве — по возрастанию ID. Повышенную стипендию получают студенты, занявшие первые 15 % мест рейтинга (целая часть от 0,15 · N); гарантируется, что у всех них нет двоек. Запиши ID последнего студента с повышенной стипендией, затем количество студентов без двоек, сумма оценок которых равна сумме оценок этого студента."
             }
           },
           {
@@ -156530,6 +156554,12 @@
               "code": "with open('26-1.txt') as f:\n    f.readline()\n    data = [list(map(int, line.split())) for line in f]\n\ndef key(r):\n    twos = r[1:].count(2)\n    if twos == 0:\n        return (0, -sum(r[1:]), r[0])\n    return (twos, 0, r[0])\n\n\ndata.sort(key=key)\nk = len(data) * 15 // 100\nlast = data[k - 1]\nsame = 0\nfor r in data:\n    if 2 not in r[1:] and sum(r[1:]) == sum(last[1:]):\n        same += 1\nprint(last[0], same)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `86976 440`"
+            }
           }
         ],
         "skills": [],
@@ -156546,7 +156576,7 @@
         ],
         "lessons": [
           {
-            "position": 4,
+            "position": 2,
             "material_id": "array-processing"
           }
         ],
@@ -156596,7 +156626,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "В файле 26-2.txt записаны результаты викторины: в первой строке — количество участников N, в каждой следующей — ID участника и баллы за 10 вопросов (положительный балл — верный ответ, отрицательный — неверный, 0 — ответа нет). Для каждого участника считают сумму баллов и количество данных ответов (ненулевых баллов). Таблица упорядочена по убыванию суммы, при равной сумме — по возрастанию количества ответов, при равенстве обоих показателей — по возрастанию ID. В финал проходят участники, занявшие первые 20 % мест таблицы (целая часть), а также все участники, у которых оба показателя такие же, как у последнего из них. Запишите количество финалистов, затем ID первого в таблице участника, не прошедшего в финал."
+              "markdown": "В файле 26-2.txt записаны результаты викторины: в первой строке — количество участников N, в каждой следующей — ID участника и баллы за 10 вопросов (положительный балл — верный ответ, отрицательный — неверный, 0 — ответа нет). Для каждого участника считают сумму баллов и количество данных ответов (ненулевых баллов). Таблица упорядочена по убыванию суммы, при равной сумме — по возрастанию количества ответов, при равенстве обоих показателей — по возрастанию ID. В финал проходят участники, занявшие первые 20 % мест таблицы (целая часть), а также все участники, у которых оба показателя такие же, как у последнего из них. Запиши количество финалистов, затем ID первого в таблице участника, не прошедшего в финал."
             }
           },
           {
@@ -156610,7 +156640,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "После 20 % мест добавьте всех с теми же двумя показателями, что у последнего."
+              "markdown": "После 20 % мест добавь всех с теми же двумя показателями, что у последнего."
             }
           }
         ],
@@ -156628,6 +156658,12 @@
               "code": "with open('26-2.txt') as f:\n    f.readline()\n    data = [list(map(int, line.split())) for line in f]\n\ntable = []\nfor r in data:\n    answers = sum(x != 0 for x in r[1:])\n    table.append((sum(r[1:]), answers, r[0]))\ntable.sort(key=lambda t: (-t[0], t[1], t[2]))\nk = len(table) * 20 // 100\nlast = table[k - 1]\nwhile k < len(table) and table[k][:2] == last[:2]:\n    k += 1\nprint(k, table[k][2])",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `615 1075`"
+            }
           }
         ],
         "skills": [],
@@ -156644,7 +156680,7 @@
         ],
         "lessons": [
           {
-            "position": 5,
+            "position": 6,
             "material_id": "array-processing"
           }
         ],
@@ -156702,7 +156738,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Наберите самые маленькие, затем замените последний на наибольший помещающийся."
+              "markdown": "Набери самые маленькие, затем замени последний на наибольший помещающийся."
             }
           }
         ],
@@ -156720,6 +156756,12 @@
               "code": "a = sorted([5, 7, 8, 9, 12, 16])\ncapacity = 30\nused = count = 0\nfor x in a:\n    if used + x > capacity:\n        break\n    used += x\n    count += 1\nlimit = capacity - (used - a[count - 1])\nlargest = max(x for x in a[count - 1:] if x <= limit)\nprint(count, largest)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `4 9`"
+            }
           }
         ],
         "skills": [],
@@ -156727,7 +156769,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 6,
+            "position": 7,
             "material_id": "array-processing"
           }
         ],
@@ -156803,6 +156845,12 @@
               "code": "from itertools import combinations\n\na = [4, 5, 6]\ncapacity = 10\nk = max(r for r in range(len(a) + 1)\n        if sum(sorted(a)[:r]) <= capacity)\nsets = [c for c in combinations(a, k) if sum(c) <= capacity]\nprint(k, max(map(sum, sets)), max(map(max, sets)))",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `2 10 6`"
+            }
           }
         ],
         "skills": [],
@@ -156810,7 +156858,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 7,
+            "position": 8,
             "material_id": "array-processing"
           }
         ],
@@ -156886,6 +156934,12 @@
               "code": "money = 300\na = [(4, 25), (3, 40)]\nb = [(6, 10), (5, 30)]\nfor batches in (a, b):\n    bought = 0\n    for count, price in sorted(batches, key=lambda p: p[1]):\n        take = min(count, money // price)\n        bought += take\n        money -= take * price\nprint(bought, money)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `6 20`"
+            }
           }
         ],
         "skills": [],
@@ -156893,7 +156947,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 8,
+            "position": 11,
             "material_id": "array-processing"
           }
         ],
@@ -156969,6 +157023,12 @@
               "code": "a = sorted([3, 8, 9])\nb = sorted([2, 4, 7])\nmoney = 20\ntotal = 0\ncount = 0\nfor p in sorted(a + b):\n    if total + p > money:\n        break\n    total += p\n    count += 1\nbest = None\nfor ca in range(count + 1):\n    cb = count - ca\n    if ca <= len(a) and cb <= len(b):\n        spent = sum(a[:ca]) + sum(b[:cb])\n        if spent <= money:\n            best = (ca, money - spent)\nprint(*best)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `2 3`"
+            }
           }
         ],
         "skills": [],
@@ -156976,7 +157036,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 9,
+            "position": 12,
             "material_id": "array-processing"
           }
         ],
@@ -157052,6 +157112,12 @@
               "code": "p = sorted([120, 45, 300, 80, 60, 95, 210, 150],\n           reverse=True)\nprint(sum(p) - sum(p[2::3]), sum(p) - sum(p[:len(p) // 3]))",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `830 550`"
+            }
           }
         ],
         "skills": [],
@@ -157059,7 +157125,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 10,
+            "position": 15,
             "material_id": "array-processing"
           }
         ],
@@ -157135,6 +157201,12 @@
               "code": "prices = [120, 45, 300, 80, 60, 95, 210, 150]\nbig = sorted(p for p in prices if p > 100)\ndisc = big[:len(big) // 2]\nrest = sum(prices) - sum(disc)\nprint(rest + (4 * sum(disc) + 4) // 5, max(disc))",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `1006 150`"
+            }
           }
         ],
         "skills": [],
@@ -157142,7 +157214,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 11,
+            "position": 16,
             "material_id": "array-processing"
           }
         ],
@@ -157192,7 +157264,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "В файле 26-3.txt в первой строке записаны свободный объём диска S и количество файлов N, в каждой следующей — размер одного файла (натуральное число, не больше 100). Определите максимальное количество файлов, которые можно сохранить на диске, и максимальный размер файла, который может быть сохранён при условии, что сохранено максимальное количество файлов."
+              "markdown": "В файле 26-3.txt в первой строке записаны свободный объём диска S и количество файлов N, в каждой следующей — размер одного файла (натуральное число, не больше 100). Определи максимальное количество файлов, которые можно сохранить на диске, и максимальный размер файла, который может быть сохранён при условии, что сохранено максимальное количество файлов."
             }
           },
           {
@@ -157206,7 +157278,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Закрепите все файлы, кроме последнего, и найдите наибольший, который поместится вместо него."
+              "markdown": "Закрепите все файлы, кроме последнего, и найди наибольший, который поместится вместо него."
             }
           }
         ],
@@ -157224,6 +157296,12 @@
               "code": "with open('26-3.txt') as f:\n    capacity, n = map(int, f.readline().split())\n    a = sorted(int(line) for line in f)\n\nused = count = 0\nfor x in a:\n    if used + x > capacity:\n        break\n    used += x\n    count += 1\nlimit = capacity - (used - a[count - 1])\nlargest = max(x for x in a[count - 1:] if x <= limit)\nprint(count, largest)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `2694 93`"
+            }
           }
         ],
         "skills": [],
@@ -157240,7 +157318,7 @@
         ],
         "lessons": [
           {
-            "position": 12,
+            "position": 9,
             "material_id": "array-processing"
           }
         ],
@@ -157290,7 +157368,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "В файле 26-4.txt в первой строке записаны количество изделий у поставщика N и выделенная сумма M, в каждой следующей — цена изделия и его тип (латинская буква A или B). Нужно купить как можно больше изделий; если это можно сделать разными способами — купить как можно больше изделий A; если и так способов несколько — потратить как можно меньше. Запишите количество купленных изделий A, затем оставшуюся сумму."
+              "markdown": "В файле 26-4.txt в первой строке записаны количество изделий у поставщика N и выделенная сумма M, в каждой следующей — цена изделия и его тип (латинская буква A или B). Нужно купить как можно больше изделий; если это можно сделать разными способами — купить как можно больше изделий A; если и так способов несколько — потратить как можно меньше. Запиши количество купленных изделий A, затем оставшуюся сумму."
             }
           },
           {
@@ -157321,6 +157399,12 @@
               "language": "python",
               "code": "with open('26-4.txt') as f:\n    n, money = map(int, f.readline().split())\n    items = [line.split() for line in f]\n\na = sorted(int(p) for p, t in items if t == 'A')\nb = sorted(int(p) for p, t in items if t == 'B')\nspent = count = 0\nfor p in sorted(a + b):\n    if spent + p > money:\n        break\n    spent += p\n    count += 1\npa, pb = [0], [0]\nfor p in a:\n    pa.append(pa[-1] + p)\nfor p in b:\n    pb.append(pb[-1] + p)\nbest = None\nfor ca in range(count + 1):\n    cb = count - ca\n    if ca < len(pa) and cb < len(pb):\n        if pa[ca] + pb[cb] <= money:\n            best = (ca, money - pa[ca] - pb[cb])\nprint(*best)",
               "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `163 85`"
             }
           }
         ],
@@ -157388,7 +157472,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "В файле 26-5.txt в первой строке записано количество товаров N, в каждой следующей — цена товара. В магазине акция: товары делят на тройки, и в каждой полной тройке самый дешёвый товар бесплатный; оставшиеся один-два товара оплачиваются полностью. Покупатель покупает все товары и делит их на тройки самым выгодным для себя способом. Запишите сумму, которую он заплатит, затем цену самого дорогого бесплатного товара."
+              "markdown": "В файле 26-5.txt в первой строке записано количество товаров N, в каждой следующей — цена товара. В магазине акция: товары делят на тройки, и в каждой полной тройке самый дешёвый товар бесплатный; оставшиеся один-два товара оплачиваются полностью. Покупатель покупает все товары и делит их на тройки самым выгодным для себя способом. Запиши сумму, которую он заплатит, затем цену самого дорогого бесплатного товара."
             }
           },
           {
@@ -157420,6 +157504,12 @@
               "code": "with open('26-5.txt') as f:\n    f.readline()\n    a = [int(line) for line in f]\n\na.sort(reverse=True)\nfree = a[2::3]\nprint(sum(a) - sum(free), free[0])",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `5142686 4997`"
+            }
           }
         ],
         "skills": [],
@@ -157436,7 +157526,7 @@
         ],
         "lessons": [
           {
-            "position": 14,
+            "position": 17,
             "material_id": "array-processing"
           }
         ],
@@ -157512,6 +157602,12 @@
               "code": "def chain(sizes, gap):\n    sel = []\n    for x in sorted(sizes, reverse=True):\n        if not sel or sel[-1] - x >= gap:\n            sel.append(x)\n    return sel\n\n\nsel = chain([10, 16, 21, 27, 34, 40], 6)\nprint(len(sel), sel[-1])",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `5 10`"
+            }
           }
         ],
         "skills": [],
@@ -157519,7 +157615,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 15,
+            "position": 19,
             "material_id": "array-processing"
           }
         ],
@@ -157595,6 +157691,12 @@
               "code": "sel = []\nfor x in sorted([10, 16, 21, 27, 34, 40]):\n    if not sel or x - sel[-1] >= 6:\n        sel.append(x)\nprint(len(sel), sel[-1])",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `5 40`"
+            }
           }
         ],
         "skills": [],
@@ -157602,7 +157704,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 16,
+            "position": 21,
             "material_id": "array-processing"
           }
         ],
@@ -157678,6 +157780,12 @@
               "code": "a = sorted([40, 55, 70, 85, 90])\nleft, right = 0, len(a) - 1\ntrips = 0\nwhile left <= right:\n    if left < right and a[left] + a[right] <= 130:\n        left += 1\n    right -= 1\n    trips += 1\nprint(trips)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `3`"
+            }
           }
         ],
         "skills": [],
@@ -157685,7 +157793,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 17,
+            "position": 22,
             "material_id": "array-processing"
           }
         ],
@@ -157743,7 +157851,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Самый лёгкий груз — в самый маленький подходящий контейнер; затем замените последний груз."
+              "markdown": "Самый лёгкий груз — в самый маленький подходящий контейнер; затем замени последний груз."
             }
           }
         ],
@@ -157761,6 +157869,12 @@
               "code": "g = sorted([12, 18, 25, 27])\nc = sorted([15, 20, 28, 10])\nused = [False] * len(c)\nj = count = 0\nfor x in g:\n    while j < len(c) and c[j] < x:\n        j += 1\n    if j == len(c):\n        break\n    used[j] = True\n    count += 1\n    j += 1\nused[max(i for i in range(len(c)) if used[i])] = False\nroom = max(c[i] for i in range(len(c)) if not used[i])\nprint(count, max(x for x in g[count - 1:] if x <= room))",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `3 27`"
+            }
           }
         ],
         "skills": [],
@@ -157768,7 +157882,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 18,
+            "position": 23,
             "material_id": "array-processing"
           }
         ],
@@ -157844,6 +157958,12 @@
               "code": "a = sorted([31, 44, 52, 60], reverse=True)\nb = sorted([35, 47, 49, 70], reverse=True)\ni = j = count = profit = 0\nwhile i < len(a) and j < len(b):\n    if a[i] > b[j] + 4:\n        i += 1\n    elif b[j] > a[i] + 4:\n        j += 1\n    else:\n        count += 1\n        profit += a[i] + b[j]\n        i += 1\n        j += 1\nprint(count, profit)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `3 258`"
+            }
           }
         ],
         "skills": [],
@@ -157851,7 +157971,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 19,
+            "position": 25,
             "material_id": "array-processing"
           }
         ],
@@ -157901,7 +158021,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "В файле 26-6.txt в первой строке записано количество коробок N, в каждой следующей — длина стороны коробки (натуральное число, не больше 10 000). Одну коробку можно вложить в другую, если длина её стороны хотя бы на 7 меньше. Определите наибольшее количество коробок в одной «матрёшке» и максимально возможную длину стороны самой маленькой коробки в такой «матрёшке»."
+              "markdown": "В файле 26-6.txt в первой строке записано количество коробок N, в каждой следующей — длина стороны коробки (натуральное число, не больше 10 000). Одну коробку можно вложить в другую, если длина её стороны хотя бы на 7 меньше. Определи наибольшее количество коробок в одной «матрёшке» и максимально возможную длину стороны самой маленькой коробки в такой «матрёшке»."
             }
           },
           {
@@ -157932,6 +158052,12 @@
               "language": "python",
               "code": "with open('26-6.txt') as f:\n    f.readline()\n    a = [int(line) for line in f]\n\ndef chain(sizes, gap):\n    sel = []\n    for x in sorted(sizes, reverse=True):\n        if not sel or sel[-1] - x >= gap:\n            sel.append(x)\n    return sel\n\n\nsel = chain(a, 7)\nprint(len(sel), sel[-1])",
               "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `1319 7`"
             }
           }
         ],
@@ -157999,7 +158125,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "В файле 26-7.txt в первой строке записано число N, в каждой следующей — два натуральных числа: масса очередного груза и вместимость очередного контейнера. Строка не связывает груз с контейнером: всего N грузов и N контейнеров. В контейнер помещается один груз, масса которого не больше вместимости контейнера. Определите максимальное количество грузов, которое можно отправить, и максимальную массу отправленного груза при условии, что отправлено максимальное количество грузов."
+              "markdown": "В файле 26-7.txt в первой строке записано число N, в каждой следующей — два натуральных числа: масса очередного груза и вместимость очередного контейнера. Строка не связывает груз с контейнером: всего N грузов и N контейнеров. В контейнер помещается один груз, масса которого не больше вместимости контейнера. Определи максимальное количество грузов, которое можно отправить, и максимальную массу отправленного груза при условии, что отправлено максимальное количество грузов."
             }
           },
           {
@@ -158031,6 +158157,12 @@
               "code": "with open('26-7.txt') as f:\n    f.readline()\n    data = [list(map(int, line.split())) for line in f]\n\ng = sorted(r[0] for r in data)\nc = sorted(r[1] for r in data)\nused = [False] * len(c)\nj = count = 0\nfor x in g:\n    while j < len(c) and c[j] < x:\n        j += 1\n    if j == len(c):\n        break\n    count += 1\n    j += 1\nj = 0\nfor x in g[:count - 1]:\n    while c[j] < x:\n        j += 1\n    used[j] = True\n    j += 1\nroom = max(c[i] for i in range(len(c)) if not used[i])\nprint(count, max(x for x in g[count - 1:] if x <= room))",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `5641 8799`"
+            }
           }
         ],
         "skills": [],
@@ -158047,7 +158179,7 @@
         ],
         "lessons": [
           {
-            "position": 21,
+            "position": 24,
             "material_id": "array-processing"
           }
         ],
@@ -158097,7 +158229,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "В том же файле 26-7.txt первое число строки — размер заготовки A, второе — размер заготовки B. Изделие делают из одной заготовки A и одной B, размеры которых различаются не больше чем на 15; прибыль от изделия равна сумме размеров заготовок. Заготовки используют так, чтобы получить наибольшую прибыль. Запишите количество изделий, затем прибыль."
+              "markdown": "В том же файле 26-7.txt первое число строки — размер заготовки A, второе — размер заготовки B. Изделие делают из одной заготовки A и одной B, размеры которых различаются не больше чем на 15; прибыль от изделия равна сумме размеров заготовок. Заготовки используют так, чтобы получить наибольшую прибыль. Запиши количество изделий, затем прибыль."
             }
           },
           {
@@ -158129,6 +158261,12 @@
               "code": "with open('26-7.txt') as f:\n    f.readline()\n    data = [list(map(int, line.split())) for line in f]\n\na = sorted((r[0] for r in data), reverse=True)\nb = sorted((r[1] for r in data), reverse=True)\ni = j = count = profit = 0\nwhile i < len(a) and j < len(b):\n    if a[i] > b[j] + 15:\n        i += 1\n    elif b[j] > a[i] + 15:\n        j += 1\n    else:\n        count += 1\n        profit += a[i] + b[j]\n        i += 1\n        j += 1\nprint(count, profit)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `5514 54132404`"
+            }
           }
         ],
         "skills": [],
@@ -158145,7 +158283,7 @@
         ],
         "lessons": [
           {
-            "position": 22,
+            "position": 26,
             "material_id": "array-processing"
           }
         ],
@@ -158221,6 +158359,12 @@
               "code": "taken = [(5, 10), (5, 13), (8, 20), (8, 23), (8, 30),\n         (8, 33)]\nrows = {}\nfor r, s in taken:\n    rows.setdefault(r, []).append(s)\nfound = None\nfor r in sorted(rows, reverse=True):\n    s = sorted(rows[r])\n    for x, y in zip(s, s[1:]):\n        if y - x - 1 == 2:\n            found = (r, x + 1)\n            break\n    if found:\n        break\nprint(*found)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `8 21`"
+            }
           }
         ],
         "skills": [],
@@ -158228,7 +158372,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 23,
+            "position": 28,
             "material_id": "array-processing"
           }
         ],
@@ -158286,7 +158430,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Серия продолжается, если позиция на 1 больше предыдущей; последнюю серию учтите после цикла."
+              "markdown": "Серия продолжается, если позиция на 1 больше предыдущей; последнюю серию учти после цикла."
             }
           }
         ],
@@ -158304,6 +158448,12 @@
               "code": "p = [1, 2, 3, 7, 8, 9, 10, 15, 16]\nruns = []\ncurrent = 1\nfor i in range(1, len(p)):\n    if p[i] == p[i - 1] + 1:\n        current += 1\n    else:\n        runs.append(current)\n        current = 1\nruns.append(current)\nprint(max(runs), sum(r >= 3 for r in runs))",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `4 2`"
+            }
           }
         ],
         "skills": [],
@@ -158311,7 +158461,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 24,
+            "position": 31,
             "material_id": "array-processing"
           }
         ],
@@ -158387,6 +158537,12 @@
               "code": "p = [1, 2, 5, 6, 7, 11, 12]\nstart = p[0]\nbest = 0\nfor i in range(len(p)):\n    if i > 0 and p[i] - p[i - 1] - 1 > 2:\n        start = p[i]\n    best = max(best, p[i] - start + 1)\nprint(best)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `7`"
+            }
           }
         ],
         "skills": [],
@@ -158394,7 +158550,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 25,
+            "position": 33,
             "material_id": "array-processing"
           }
         ],
@@ -158470,6 +158626,12 @@
               "code": "p = [1, 6, 8, 15, 30, 33]\ncount = 0\nfor i in range(len(p)):\n    left = i == 0 or p[i] - p[i - 1] > 3\n    right = i == len(p) - 1 or p[i + 1] - p[i] > 3\n    if left and right:\n        count += 1\nprint(count)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `2`"
+            }
           }
         ],
         "skills": [],
@@ -158477,7 +158639,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 26,
+            "position": 34,
             "material_id": "array-processing"
           }
         ],
@@ -158535,7 +158697,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Добавьте условные занятые ряды 0 и 11; лучшее место — перед следующим занятым."
+              "markdown": "Добавь условные занятые ряды 0 и 11; лучшее место — перед следующим занятым."
             }
           }
         ],
@@ -158553,6 +158715,12 @@
               "code": "taken = [3, 7]\nbest = None\nprev = 0\nfor o in taken + [11]:\n    if o - prev >= 2:\n        cand = (o - prev - 2, -(o - 1))\n        if best is None or cand > best:\n            best = cand\n    prev = o\nprint(-best[1], best[0])",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `6 2`"
+            }
           }
         ],
         "skills": [],
@@ -158560,7 +158728,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 27,
+            "position": 30,
             "material_id": "array-processing"
           }
         ],
@@ -158610,7 +158778,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "В файле 26-8.txt в первой строке записаны количество занятых мест N, число рядов M и число мест в ряду K, в каждой следующей — номер ряда и номер занятого места. Найдите ряд с наибольшим номером, в котором есть ровно 4 свободных места подряд, таких, что непосредственно слева и справа от них места заняты. Запишите номер этого ряда, затем наименьший номер первого места из таких четвёрок в этом ряду."
+              "markdown": "В файле 26-8.txt в первой строке записаны количество занятых мест N, число рядов M и число мест в ряду K, в каждой следующей — номер ряда и номер занятого места. Найди ряд с наибольшим номером, в котором есть ровно 4 свободных места подряд, таких, что непосредственно слева и справа от них места заняты. Запиши номер этого ряда, затем наименьший номер первого места из таких четвёрок в этом ряду."
             }
           },
           {
@@ -158642,6 +158810,12 @@
               "code": "with open('26-8.txt') as f:\n    f.readline()\n    data = [list(map(int, line.split())) for line in f]\n\nseats = {}\nfor r, s in data:\n    seats.setdefault(r, set()).add(s)\nfound = None\nfor r in sorted(seats, reverse=True):\n    s = sorted(seats[r])\n    for x, y in zip(s, s[1:]):\n        if y - x - 1 == 4:\n            found = (r, x + 1)\n            break\n    if found:\n        break\nprint(*found)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `1496 49`"
+            }
           }
         ],
         "skills": [],
@@ -158658,7 +158832,7 @@
         ],
         "lessons": [
           {
-            "position": 28,
+            "position": 29,
             "material_id": "array-processing"
           }
         ],
@@ -158708,7 +158882,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "В файле 26-9.txt записан протокол попаданий частиц в экран: в первой строке — количество попаданий N, в каждой следующей — номер ряда и номер позиции (в одну точку могло попасть несколько частиц). Точка, в которую попала хотя бы одна частица, светлая, остальные тёмные. Линией называют не менее трёх светлых точек подряд в одном ряду, слева и справа от которых тёмная точка или край экрана. Определите наибольшее количество линий в одном ряду и номер этого ряда; если таких рядов несколько, укажите наибольший номер."
+              "markdown": "В файле 26-9.txt записан протокол попаданий частиц в экран: в первой строке — количество попаданий N, в каждой следующей — номер ряда и номер позиции (в одну точку могло попасть несколько частиц). Точка, в которую попала хотя бы одна частица, светлая, остальные тёмные. Линией называют не менее трёх светлых точек подряд в одном ряду, слева и справа от которых тёмная точка или край экрана. Определи наибольшее количество линий в одном ряду и номер этого ряда; если таких рядов несколько, укажите наибольший номер."
             }
           },
           {
@@ -158740,6 +158914,12 @@
               "code": "with open('26-9.txt') as f:\n    f.readline()\n    data = [list(map(int, line.split())) for line in f]\n\nscreen = {}\nfor r, p in data:\n    screen.setdefault(r, set()).add(p)\nbest = (0, 0)\nfor r, ps in screen.items():\n    p = sorted(ps)\n    lines = 0\n    current = 1\n    for i in range(1, len(p) + 1):\n        if i < len(p) and p[i] == p[i - 1] + 1:\n            current += 1\n        else:\n            if current >= 3:\n                lines += 1\n            current = 1\n    best = max(best, (lines, r))\nprint(*best)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `10 132`"
+            }
           }
         ],
         "skills": [],
@@ -158756,7 +158936,7 @@
         ],
         "lessons": [
           {
-            "position": 29,
+            "position": 32,
             "material_id": "array-processing"
           }
         ],
@@ -158806,7 +158986,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Для файла 26-9.txt светлая точка называется изолированной, если остальные светлые точки её ряда находятся от неё дальше чем на 4 позиции или их нет. Определите наибольшее количество изолированных точек в одном ряду и номер этого ряда; если таких рядов несколько, укажите наименьший номер."
+              "markdown": "Для файла 26-9.txt светлая точка называется изолированной, если остальные светлые точки её ряда находятся от неё дальше чем на 4 позиции или их нет. Определи наибольшее количество изолированных точек в одном ряду и номер этого ряда; если таких рядов несколько, укажите наименьший номер."
             }
           },
           {
@@ -158838,6 +159018,12 @@
               "code": "with open('26-9.txt') as f:\n    f.readline()\n    data = [list(map(int, line.split())) for line in f]\n\nscreen = {}\nfor r, p in data:\n    screen.setdefault(r, set()).add(p)\nbest = None\nfor r, ps in screen.items():\n    p = sorted(ps)\n    count = 0\n    for i in range(len(p)):\n        left = i == 0 or p[i] - p[i - 1] > 4\n        right = i == len(p) - 1 or p[i + 1] - p[i] > 4\n        if left and right:\n            count += 1\n    if best is None or (count, -r) > best:\n        best = (count, -r)\nprint(best[0], -best[1])",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `22 145`"
+            }
           }
         ],
         "skills": [],
@@ -158854,7 +159040,7 @@
         ],
         "lessons": [
           {
-            "position": 30,
+            "position": 35,
             "material_id": "array-processing"
           }
         ],
@@ -158930,6 +159116,12 @@
               "code": "def greedy(meetings, pause):\n    sel = []\n    for s, f in sorted(meetings, key=lambda m: (m[1], m[0])):\n        if not sel or s >= sel[-1][1] + pause:\n            sel.append((s, f))\n    return sel\n\n\nm = [(1, 3), (2, 6), (3, 5), (5, 8), (9, 15), (12, 16)]\nsel = greedy(m, 0)\nend = sel[-2][1]\nprint(len(sel), max(s for s, f in m if s >= end) - end)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `4 4`"
+            }
           }
         ],
         "skills": [],
@@ -158937,7 +159129,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 31,
+            "position": 37,
             "material_id": "array-processing"
           }
         ],
@@ -159013,6 +159205,12 @@
               "code": "def greedy(meetings, pause):\n    sel = []\n    for s, f in sorted(meetings, key=lambda m: (m[1], m[0])):\n        if not sel or s >= sel[-1][1] + pause:\n            sel.append((s, f))\n    return sel\n\n\nm = [(0, 20), (1, 3), (3, 5), (5, 7)]\nby_start = []\nfor s, f in sorted(m):\n    if not by_start or s >= by_start[-1][1]:\n        by_start.append((s, f))\nprint(len(greedy(m, 0)), len(by_start))",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `3 1`"
+            }
           }
         ],
         "skills": [],
@@ -159020,7 +159218,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 32,
+            "position": 36,
             "material_id": "array-processing"
           }
         ],
@@ -159096,6 +159294,12 @@
               "code": "def greedy(meetings, pause):\n    sel = []\n    for s, f in sorted(meetings, key=lambda m: (m[1], m[0])):\n        if not sel or s >= sel[-1][1] + pause:\n            sel.append((s, f))\n    return sel\n\n\nm = [(1, 3), (2, 6), (3, 5), (5, 8), (9, 15), (12, 16)]\nsel = greedy(m, 1)\nend = sel[-2][1]\nlast = max(s for s, f in m if s >= end + 1)\nprint(len(sel), last - end)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `3 4`"
+            }
           }
         ],
         "skills": [],
@@ -159103,7 +159307,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 33,
+            "position": 38,
             "material_id": "array-processing"
           }
         ],
@@ -159161,7 +159365,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Переведите (начало, длительность) в (начало, окончание)."
+              "markdown": "Переведи (начало, длительность) в (начало, окончание)."
             }
           }
         ],
@@ -159179,6 +159383,12 @@
               "code": "def greedy(meetings, pause):\n    sel = []\n    for s, f in sorted(meetings, key=lambda m: (m[1], m[0])):\n        if not sel or s >= sel[-1][1] + pause:\n            sel.append((s, f))\n    return sel\n\n\nm = [(s, s + d) for s, d in\n     [(1, 4), (5, 2), (6, 5), (8, 3), (12, 2)]]\nsel = greedy(m, 0)\nend = sel[-2][1]\nafter = [(s, f) for s, f in m if s >= end]\npause = max(s for s, f in after) - end\nprint(len(sel), pause, max(f for s, f in after))",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `4 1 14`"
+            }
           }
         ],
         "skills": [],
@@ -159186,7 +159396,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 34,
+            "position": 39,
             "material_id": "array-processing"
           }
         ],
@@ -159244,7 +159454,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Объедините пересекающиеся интервалы, затем пройдите от 0 до 24."
+              "markdown": "Объедини пересекающиеся интервалы, затем пройдите от 0 до 24."
             }
           }
         ],
@@ -159262,6 +159472,12 @@
               "code": "work = sorted([(2, 6), (4, 9), (10, 12), (11, 15), (20, 22)])\nmerged = []\nfor s, f in work:\n    if merged and s <= merged[-1][1]:\n        merged[-1][1] = max(merged[-1][1], f)\n    else:\n        merged.append([s, f])\nbusy = sum(f - s for s, f in merged)\ncursor = count = idle = 0\nfor s, f in merged + [[24, 24]]:\n    if s > cursor:\n        count += 1\n        idle += s - cursor\n    cursor = f\nprint(busy, count, idle)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `14 4 10`"
+            }
           }
         ],
         "skills": [],
@@ -159269,7 +159485,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 35,
+            "position": 41,
             "material_id": "array-processing"
           }
         ],
@@ -159345,6 +159561,12 @@
               "code": "req = [(1, 6), (2, 4), (4, 8), (5, 9)]\nchanges = {}\nfor s, f in req:\n    changes[s] = changes.get(s, 0) + 1\n    changes[f] = changes.get(f, 0) - 1\ntimes = sorted(changes)\ncur = top = total = 0\nfor i in range(len(times) - 1):\n    cur += changes[times[i]]\n    d = times[i + 1] - times[i]\n    if cur > top:\n        top, total = cur, d\n    elif cur == top:\n        total += d\nprint(top, total)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `3 1`"
+            }
           }
         ],
         "skills": [],
@@ -159352,7 +159574,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 36,
+            "position": 43,
             "material_id": "array-processing"
           }
         ],
@@ -159402,7 +159624,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "В файле 26-10.txt в первой строке записано количество заявок N, в каждой следующей — время начала и время окончания мероприятия в минутах от начала суток. Между окончанием одного мероприятия и началом следующего нужен перерыв не меньше 10 минут. Определите максимальное количество мероприятий, которые можно провести в зале, и максимально возможный при таком количестве перерыв между двумя последними мероприятиями."
+              "markdown": "В файле 26-10.txt в первой строке записано количество заявок N, в каждой следующей — время начала и время окончания мероприятия в минутах от начала суток. Между окончанием одного мероприятия и началом следующего нужен перерыв не меньше 10 минут. Определи максимальное количество мероприятий, которые можно провести в зале, и максимально возможный при таком количестве перерыв между двумя последними мероприятиями."
             }
           },
           {
@@ -159434,6 +159656,12 @@
               "code": "with open('26-10.txt') as f:\n    f.readline()\n    data = [list(map(int, line.split())) for line in f]\n\ndef greedy(meetings, pause):\n    sel = []\n    for s, f in sorted(meetings, key=lambda m: (m[1], m[0])):\n        if not sel or s >= sel[-1][1] + pause:\n            sel.append((s, f))\n    return sel\n\n\nsel = greedy(data, 10)\nend = sel[-2][1]\nlast = max(s for s, f in data if s >= end + 10)\nprint(len(sel), last - end)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `40 35`"
+            }
           }
         ],
         "skills": [],
@@ -159450,7 +159678,7 @@
         ],
         "lessons": [
           {
-            "position": 37,
+            "position": 40,
             "material_id": "array-processing"
           }
         ],
@@ -159500,7 +159728,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "В файле 26-11.txt в первой строке записано количество задач N, в каждой следующей — время начала и время окончания задачи в секундах от начала суток (0 ≤ начало < окончание ≤ 86 400). В моменты начала и окончания задача считается работающей. Определите количество периодов за сутки (от 0 до 86 400), когда не работала ни одна задача, затем их суммарную длительность в секундах."
+              "markdown": "В файле 26-11.txt в первой строке записано количество задач N, в каждой следующей — время начала и время окончания задачи в секундах от начала суток (0 ≤ начало < окончание ≤ 86 400). В моменты начала и окончания задача считается работающей. Определи количество периодов за сутки (от 0 до 86 400), когда не работала ни одна задача, затем их суммарную длительность в секундах."
             }
           },
           {
@@ -159532,6 +159760,12 @@
               "code": "with open('26-11.txt') as f:\n    f.readline()\n    data = [list(map(int, line.split())) for line in f]\n\nmerged = []\nfor s, f in sorted(data):\n    if merged and s <= merged[-1][1]:\n        merged[-1][1] = max(merged[-1][1], f)\n    else:\n        merged.append([s, f])\ncursor = count = idle = 0\nfor s, f in merged + [[86400, 86400]]:\n    if s > cursor:\n        count += 1\n        idle += s - cursor\n    cursor = f\nprint(count, idle)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `595 17677`"
+            }
           }
         ],
         "skills": [],
@@ -159548,7 +159782,7 @@
         ],
         "lessons": [
           {
-            "position": 38,
+            "position": 42,
             "material_id": "array-processing"
           }
         ],
@@ -159598,7 +159832,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Для файла 26-11.txt считайте, что задача работает с момента начала до момента окончания, а в одну секунду окончание одной задачи и начало другой не меняют их количество. Определите наибольшее количество одновременно работающих задач, затем общую длительность в секундах, в течение которой работало столько задач."
+              "markdown": "Для файла 26-11.txt считай, что задача работает с момента начала до момента окончания, а в одну секунду окончание одной задачи и начало другой не меняют их количество. Определи наибольшее количество одновременно работающих задач, затем общую длительность в секундах, в течение которой работало столько задач."
             }
           },
           {
@@ -159630,6 +159864,12 @@
               "code": "with open('26-11.txt') as f:\n    f.readline()\n    data = [list(map(int, line.split())) for line in f]\n\nchanges = {}\nfor s, f in data:\n    changes[s] = changes.get(s, 0) + 1\n    changes[f] = changes.get(f, 0) - 1\ntimes = sorted(changes)\ncur = top = total = 0\nfor i in range(len(times) - 1):\n    cur += changes[times[i]]\n    d = times[i + 1] - times[i]\n    if cur > top:\n        top, total = cur, d\n    elif cur == top:\n        total += d\nprint(top, total)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `8 6`"
+            }
           }
         ],
         "skills": [],
@@ -159646,7 +159886,7 @@
         ],
         "lessons": [
           {
-            "position": 39,
+            "position": 44,
             "material_id": "array-processing"
           }
         ],
@@ -159722,6 +159962,12 @@
               "code": "requests = [(1, 5), (2, 4), (3, 7), (4, 8), (5, 6)]\nfree_at = [0, 0]\naccepted = last = 0\nfor start, end in sorted(requests):\n    for i in range(len(free_at)):\n        if free_at[i] < start:\n            free_at[i] = end\n            accepted += 1\n            last = i + 1\n            break\nprint(accepted, last)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `3 2`"
+            }
           }
         ],
         "skills": [],
@@ -159729,7 +159975,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 40,
+            "position": 46,
             "material_id": "array-processing"
           }
         ],
@@ -159805,6 +160051,12 @@
               "code": "requests = [(0, 10), (2, 6), (4, 9), (6, 12), (9, 11),\n            (10, 15)]\nfree_at = [0, 0, 0]\naccepted = last = 0\nfor start, end in sorted(requests):\n    for i in range(len(free_at)):\n        if free_at[i] <= start:\n            free_at[i] = end\n            accepted += 1\n            last = i + 1\n            break\nprint(accepted, last)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `6 1`"
+            }
           }
         ],
         "skills": [],
@@ -159812,7 +160064,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 41,
+            "position": 47,
             "material_id": "array-processing"
           }
         ],
@@ -159888,6 +160140,12 @@
               "code": "clients = [(0, 5), (2, 3), (4, 4), (12, 2)]\nfree = served = gone = 0\nfor arrive, d in clients:\n    start = max(arrive, free)\n    if start - arrive > 2:\n        gone += 1\n        continue\n    free = start + d\n    served += 1\nprint(served, gone)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `3 1`"
+            }
           }
         ],
         "skills": [],
@@ -159895,7 +160153,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 42,
+            "position": 49,
             "material_id": "array-processing"
           }
         ],
@@ -159971,6 +160229,12 @@
               "code": "clients = [(0, 5), (2, 3), (4, 4), (12, 2)]\nfree = 0\nwaits = []\nfor arrive, d in clients:\n    start = max(arrive, free)\n    waits.append(start - arrive)\n    free = start + d\nprint(*waits)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `0 3 4 0`"
+            }
           }
         ],
         "skills": [],
@@ -159978,7 +160242,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 43,
+            "position": 50,
             "material_id": "array-processing"
           }
         ],
@@ -160054,6 +160318,12 @@
               "code": "room = [10, 6, 8]\nplaced = 0\nleft = []\nfor part in [6, 9, 3, 5, 4]:\n    for i in range(len(room)):\n        if room[i] >= part:\n            room[i] -= part\n            placed += 1\n            break\n    else:\n        left.append(part)\nprint(placed, *left)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `4 9`"
+            }
           }
         ],
         "skills": [],
@@ -160061,7 +160331,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 44,
+            "position": 52,
             "material_id": "array-processing"
           }
         ],
@@ -160099,7 +160369,7 @@
     {
       "task": {
         "id": "task-26-6-08",
-        "title": "Камера хранения из файла",
+        "title": "Задача темы: камера хранения",
         "short_description": null,
         "explanation_kind": "worked_solution",
         "difficulty": 2,
@@ -160111,7 +160381,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "В файле 26-12.txt в первой строке записано количество ячеек камеры хранения K, во второй — количество пассажиров N, в каждой следующей — время сдачи багажа и время освобождения ячейки в минутах от начала суток. Багаж кладут в свободную ячейку с наименьшим номером; освободившуюся ячейку можно занять только со следующей минуты. Если свободных ячеек нет, пассажир уходит. Определите, сколько пассажиров сдадут багаж, и номер ячейки, в которую положит багаж последний из них."
+              "markdown": "Задача темы. Файл 26-12.txt содержит заявки пассажиров, которые сдают багаж в камеру хранения: время сдачи багажа и время освобождения ячейки (в минутах от начала суток). Ячейки пронумерованы начиная с 1. Багаж кладут в свободную ячейку с наименьшим номером; освободившуюся ячейку можно занять, начиная со следующей минуты после её освобождения. Если свободных ячеек нет, пассажир уходит. В первой строке файла — количество ячеек K, во второй — количество пассажиров N, в каждой из следующих N строк — время сдачи и время освобождения. Определи, сколько пассажиров сдадут багаж, и номер ячейки, в которую положит багаж последний из них."
             }
           },
           {
@@ -160125,7 +160395,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Строгое free_at[i] < start: ячейку занимают со следующей минуты."
+              "markdown": "Отсортируй заявки по времени сдачи и храни для каждой ячейки момент освобождения; «со следующей минуты» — это free_at < start."
             }
           }
         ],
@@ -160143,6 +160413,12 @@
               "code": "with open('26-12.txt') as f:\n    k = int(f.readline())\n    f.readline()\n    data = [list(map(int, line.split())) for line in f]\n\nfree_at = [0] * k\naccepted = last = 0\nfor start, end in sorted(data, key=lambda r: r[0]):\n    for i in range(k):\n        if free_at[i] < start:\n            free_at[i] = end\n            accepted += 1\n            last = i + 1\n            break\nprint(accepted, last)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `859 11`"
+            }
           }
         ],
         "skills": [],
@@ -160159,14 +160435,14 @@
         ],
         "lessons": [
           {
-            "position": 45,
+            "position": 48,
             "material_id": "array-processing"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "kamera-hraneniya",
+            "section": "zadacha-temy",
             "material_id": "array-processing"
           }
         ],
@@ -160209,7 +160485,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "В файле 26-13.txt в первой строке записано количество клиентов N, в каждой следующей — время прихода (минуты от открытия, все различны), время обслуживания и номер окна от 1 до 3, к которому нужно встать в очередь. Клиент уходит, если обслуживание в его окне начнётся позже чем через 15 минут после прихода; если окно освобождается ровно через 15 минут, клиент остаётся. Определите наибольшее количество клиентов, обслуженных одним окном, затем количество ушедших клиентов."
+              "markdown": "В файле 26-13.txt в первой строке записано количество клиентов N, в каждой следующей — время прихода (минуты от открытия, все различны), время обслуживания и номер окна от 1 до 3, к которому нужно встать в очередь. Клиент уходит, если обслуживание в его окне начнётся позже чем через 15 минут после прихода; если окно освобождается ровно через 15 минут, клиент остаётся. Определи наибольшее количество клиентов, обслуженных одним окном, затем количество ушедших клиентов."
             }
           },
           {
@@ -160241,6 +160517,12 @@
               "code": "with open('26-13.txt') as f:\n    f.readline()\n    data = [list(map(int, line.split())) for line in f]\n\nfree = {1: 0, 2: 0, 3: 0}\nserved = {1: 0, 2: 0, 3: 0}\ngone = 0\nfor arrive, d, w in sorted(data):\n    start = max(arrive, free[w])\n    if start - arrive > 15:\n        gone += 1\n        continue\n    free[w] = start + d\n    served[w] += 1\nprint(max(served.values()), gone)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `198 56`"
+            }
           }
         ],
         "skills": [],
@@ -160257,7 +160539,7 @@
         ],
         "lessons": [
           {
-            "position": 46,
+            "position": 51,
             "material_id": "array-processing"
           }
         ],
@@ -160307,7 +160589,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "В файле 26-14.txt в первой строке записаны количество запросов N и объём памяти сервера K, в каждой следующей — время запроса `ЧЧ:ММ:СС`, ID клиента и объём данных (записи не упорядочены по времени). Запросы обрабатываются по времени; если очередной запрос не помещается в память, сервер создаёт резервную копию накопленного, очищает память и записывает запрос. Определите ID клиента с наибольшим суммарным объёмом (при равенстве — меньший ID), затем сумму двух наибольших резервных копий, созданных до 12:00:00."
+              "markdown": "В файле 26-14.txt в первой строке записаны количество запросов N и объём памяти сервера K, в каждой следующей — время запроса `ЧЧ:ММ:СС`, ID клиента и объём данных (записи не упорядочены по времени). Запросы обрабатываются по времени; если очередной запрос не помещается в память, сервер создаёт резервную копию накопленного, очищает память и записывает запрос. Определи ID клиента с наибольшим суммарным объёмом (при равенстве — меньший ID), затем сумму двух наибольших резервных копий, созданных до 12:00:00."
             }
           },
           {
@@ -160339,6 +160621,12 @@
               "code": "with open('26-14.txt') as f:\n    n, k = map(int, f.readline().split())\n    log = []\n    for line in f:\n        t, c, v = line.split()\n        h, m, s = map(int, t.split(':'))\n        log.append((h * 3600 + m * 60 + s, int(c), int(v)))\n\nlog.sort()\ntotal = {}\nfor t, c, v in log:\n    total[c] = total.get(c, 0) + v\nbest = max(total, key=lambda c: (total[c], -c))\nused = 0\ncopies = []\nfor t, c, v in log:\n    if used + v > k:\n        if t < 12 * 3600:\n            copies.append(used)\n        used = 0\n    used += v\ncopies.sort()\nprint(best, copies[-1] + copies[-2])",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `1765 119834`"
+            }
           }
         ],
         "skills": [],
@@ -160355,7 +160643,7 @@
         ],
         "lessons": [
           {
-            "position": 47,
+            "position": 53,
             "material_id": "array-processing"
           }
         ],
@@ -160431,6 +160719,12 @@
               "code": "a = sorted([2, 5, 7, 9, 12])\nleft, right = 0, len(a) - 1\ncount = 0\nwhile left < right:\n    if a[left] + a[right] <= 14:\n        count += right - left\n        left += 1\n    else:\n        right -= 1\nprint(count)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `6`"
+            }
           }
         ],
         "skills": [],
@@ -160438,7 +160732,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 48,
+            "position": 54,
             "material_id": "array-processing",
             "counts_toward_mastery": false
           }
@@ -160515,6 +160809,12 @@
               "code": "a = [2, 4, 6, 9, 10, 14]\nvalues = set(a)\ncount = best = 0\nfor i in range(len(a)):\n    for j in range(i + 1, len(a)):\n        x, y = a[i], a[j]\n        if x % 2 == 0 and y % 2 == 0:\n            if (x + y) // 2 in values:\n                count += 1\n                best = max(best, (x + y) // 2)\nprint(count, best)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `4 10`"
+            }
           }
         ],
         "skills": [],
@@ -160522,7 +160822,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 49,
+            "position": 55,
             "material_id": "array-processing",
             "counts_toward_mastery": false
           }
@@ -160599,6 +160899,12 @@
               "code": "a = [3, 5, 8, 13, 21]\nvalues = set(a)\neven = [x for x in a if x % 2 == 0]\nodd = [x for x in a if x % 2]\nprint(sum(x + y in values for x in even for y in odd))",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `2`"
+            }
           }
         ],
         "skills": [],
@@ -160606,7 +160912,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 50,
+            "position": 56,
             "material_id": "array-processing",
             "counts_toward_mastery": false
           }
@@ -160683,6 +160989,12 @@
               "code": "a = sorted([5, 1, 9, 12, 2, 7, 13])\nleft = best = 0\nfor right in range(len(a)):\n    while a[right] - a[left] > 4:\n        left += 1\n    best = max(best, right - left + 1)\nprint(best)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `3`"
+            }
           }
         ],
         "skills": [],
@@ -160690,7 +161002,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 51,
+            "position": 58,
             "material_id": "array-processing",
             "counts_toward_mastery": false
           }
@@ -160767,6 +161079,12 @@
               "code": "h = sorted(set([30, 28, 23, 21, 17, 15, 9, 8]),\n           reverse=True)\nleft = used = 0\nbest = (0, 0)\nfor right in range(len(h)):\n    if right:\n        gap = h[right - 1] - h[right]\n        if gap > 6:\n            left, used = right, 0\n        elif gap > 3:\n            used += 1\n    while used > 2:\n        if h[left] - h[left + 1] > 3:\n            used -= 1\n        left += 1\n    best = max(best, (right - left + 1, h[right]))\nprint(*best)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `6 15`"
+            }
           }
         ],
         "skills": [],
@@ -160774,7 +161092,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 52,
+            "position": 59,
             "material_id": "array-processing",
             "counts_toward_mastery": false
           }
@@ -160825,7 +161143,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "В файле 26-15.txt в первой строке записано количество чисел N, в каждой следующей — натуральное число; все числа различны. Определите количество пар чисел разной чётности, сумма которых тоже есть в файле, и наибольшую из сумм таких пар."
+              "markdown": "В файле 26-15.txt в первой строке записано количество чисел N, в каждой следующей — натуральное число; все числа различны. Определи количество пар чисел разной чётности, сумма которых тоже есть в файле, и наибольшую из сумм таких пар."
             }
           },
           {
@@ -160857,6 +161175,12 @@
               "code": "with open('26-15.txt') as f:\n    f.readline()\n    a = [int(line) for line in f]\n\nvalues = set(a)\neven = [x for x in a if x % 2 == 0]\nodd = [x for x in a if x % 2]\ncount = best = 0\nfor x in even:\n    for y in odd:\n        if x + y in values:\n            count += 1\n            best = max(best, x + y)\nprint(count, best)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `49222 19999`"
+            }
           }
         ],
         "skills": [],
@@ -160873,7 +161197,7 @@
         ],
         "lessons": [
           {
-            "position": 53,
+            "position": 57,
             "material_id": "array-processing",
             "counts_toward_mastery": false
           }
@@ -160924,7 +161248,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "В файле 26-16.txt в первой строке записано количество лагерей N, в каждой следующей — высота лагеря в метрах. Из лагеря можно перейти в лагерь, который ниже не более чем на 60 метров; не более пяти раз за маршрут можно воспользоваться страховкой и перейти в лагерь ниже не более чем на 100 метров. Каждый лагерь можно посетить не более одного раза, переходить можно только вниз. Определите наибольшее количество лагерей в маршруте и максимально возможную высоту лагеря, на котором маршрут заканчивается, при таком количестве."
+              "markdown": "В файле 26-16.txt в первой строке записано количество лагерей N, в каждой следующей — высота лагеря в метрах. Из лагеря можно перейти в лагерь, который ниже не более чем на 60 метров; не более пяти раз за маршрут можно воспользоваться страховкой и перейти в лагерь ниже не более чем на 100 метров. Каждый лагерь можно посетить не более одного раза, переходить можно только вниз. Определи наибольшее количество лагерей в маршруте и максимально возможную высоту лагеря, на котором маршрут заканчивается, при таком количестве."
             }
           },
           {
@@ -160956,6 +161280,12 @@
               "code": "with open('26-16.txt') as f:\n    f.readline()\n    a = [int(line) for line in f]\n\nh = sorted(set(a), reverse=True)\nleft = used = 0\nbest = (0, 0)\nfor right in range(len(h)):\n    if right:\n        gap = h[right - 1] - h[right]\n        if gap > 100:\n            left, used = right, 0\n        elif gap > 60:\n            used += 1\n    while used > 5:\n        if h[left] - h[left + 1] > 60:\n            used -= 1\n        left += 1\n    best = max(best, (right - left + 1, h[right]))\nprint(*best)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `43 901320`"
+            }
           }
         ],
         "skills": [],
@@ -160972,7 +161302,7 @@
         ],
         "lessons": [
           {
-            "position": 54,
+            "position": 60,
             "material_id": "array-processing",
             "counts_toward_mastery": false
           }
@@ -161049,6 +161379,12 @@
               "code": "boxes = [(40, 0), (37, 1), (33, 1), (31, 0), (26, 0),\n         (24, 1), (20, 0), (18, 1), (12, 1)]\nbest = (0, 0)\nfor first in (0, 1):\n    need, count, last = first, 0, None\n    for size, color in sorted(boxes, reverse=True):\n        if color != need:\n            continue\n        if last is None or last - size >= 4:\n            count += 1\n            last = size\n            need = 1 - need\n    best = max(best, (count, last))\nprint(*best)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `5 12`"
+            }
           }
         ],
         "skills": [],
@@ -161056,7 +161392,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 55,
+            "position": 61,
             "material_id": "array-processing",
             "counts_toward_mastery": false
           }
@@ -161133,6 +161469,12 @@
               "code": "def alternate(boxes, base_gap):\n    best_count, best_outer = 0, None\n    for first_type in (0, 1):\n        expected, count, last = first_type, 0, None\n        for size, material in sorted(boxes):\n            if material != expected:\n                continue\n            if last is None or size - last >= base_gap + count:\n                count += 1\n                last = size\n                expected = 1 - expected\n        if count > best_count or (\n            count == best_count and last is not None\n            and (best_outer is None or last < best_outer)\n        ):\n            best_count, best_outer = count, last\n    return best_count, best_outer\n\n\nboxes = [(10, 0), (11, 1), (13, 1), (14, 0), (17, 0),\n         (18, 1), (22, 1), (23, 0), (27, 0), (28, 1),\n         (33, 1)]\nprint(*alternate(boxes, 1))",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `6 33`"
+            }
           }
         ],
         "skills": [],
@@ -161140,7 +161482,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 56,
+            "position": 62,
             "material_id": "array-processing",
             "counts_toward_mastery": false
           }
@@ -161217,6 +161559,12 @@
               "code": "a = sorted([3, 5, 6, 9, 11, 12, 13, 17])\nleft = best = 0\nfor right in range(len(a)):\n    while a[right] - a[left] >= 4:\n        left += 1\n    best = max(best, right - left + 1)\nprint(best)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `3`"
+            }
           }
         ],
         "skills": [],
@@ -161224,7 +161572,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 57,
+            "position": 64,
             "material_id": "array-processing",
             "counts_toward_mastery": false
           }
@@ -161306,22 +161654,10 @@
         "skills": [],
         "exam_numbers": [26],
         "files": [],
-        "lessons": [
-          {
-            "position": 58,
-            "material_id": "array-processing",
-            "counts_toward_mastery": false
-          }
-        ],
-        "theory_links": [
-          {
-            "label": "Теория",
-            "section": "bloki-s-cherodovaniem",
-            "material_id": "array-processing"
-          }
-        ],
+        "lessons": [],
+        "theory_links": [],
         "catalog_visible": false,
-        "archived": false,
+        "archived": true,
         "sources": [
           {
             "url": null,
@@ -161385,6 +161721,12 @@
               "code": "sizes = sorted([5, 7, 8, 9, 12, 16])\ncapacity = 33\nused = k = 0\nfor x in sizes:\n    if used + x > capacity:\n        break\n    used += x\n    k += 1\nchosen = list(range(k))\nfree = capacity - used\nupper = len(sizes)\nfor j in range(k - 1, -1, -1):\n    best = chosen[j]\n    for i in range(chosen[j] + 1, upper):\n        if sizes[i] - sizes[chosen[j]] <= free:\n            best = i\n    free -= sizes[best] - sizes[chosen[j]]\n    chosen[j] = best\n    upper = best\nprint(*[sizes[i] for i in chosen])",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `5 7 9 12`"
+            }
           }
         ],
         "skills": [],
@@ -161392,7 +161734,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 59,
+            "position": 66,
             "material_id": "array-processing",
             "counts_toward_mastery": false
           }
@@ -161443,7 +161785,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "В файле 26-6.txt в первой строке записано количество коробок N, в каждой следующей — длина стороны коробки. Одну коробку можно вложить в другую, если её сторона хотя бы на 7 меньше. Группа вложенных друг в друга коробок или одиночная коробка занимает одну ячейку склада. Определите наименьшее количество ячеек для хранения всех коробок, затем наибольшее количество коробок в одной группе."
+              "markdown": "В файле 26-6.txt в первой строке записано количество коробок N, в каждой следующей — длина стороны коробки. Одну коробку можно вложить в другую, если её сторона хотя бы на 7 меньше. Группа вложенных друг в друга коробок или одиночная коробка занимает одну ячейку склада. Определи наименьшее количество ячеек для хранения всех коробок, затем наибольшее количество коробок в одной группе."
             }
           },
           {
@@ -161475,6 +161817,12 @@
               "code": "with open('26-6.txt') as f:\n    f.readline()\n    a = [int(line) for line in f]\n\ndef chain(sizes, gap):\n    sel = []\n    for x in sorted(sizes, reverse=True):\n        if not sel or sel[-1] - x >= gap:\n            sel.append(x)\n    return sel\n\n\na.sort()\nleft = cells = 0\nfor right in range(len(a)):\n    while a[right] - a[left] >= 7:\n        left += 1\n    cells = max(cells, right - left + 1)\nprint(cells, len(chain(a, 7)))",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `17 1319`"
+            }
           }
         ],
         "skills": [],
@@ -161491,7 +161839,7 @@
         ],
         "lessons": [
           {
-            "position": 60,
+            "position": 65,
             "material_id": "array-processing",
             "counts_toward_mastery": false
           }
@@ -161542,7 +161890,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "В файле 26-17.txt в первой строке записано количество коробок N, в каждой следующей — длина стороны коробки и её материал (0 или 1). Коробки «матрёшки» нумеруются с единицы изнутри наружу. Коробку с номером K можно поместить в следующую, если они из разных материалов, а сторона коробки K хотя бы на K + 500 меньше. Определите наибольшее количество коробок в «матрёшке», затем наименьшую возможную сторону самой большой коробки при таком количестве."
+              "markdown": "В файле 26-17.txt в первой строке записано количество коробок N, в каждой следующей — длина стороны коробки и её материал (0 или 1). Коробки «матрёшки» нумеруются с единицы изнутри наружу. Коробку с номером K можно поместить в следующую, если они из разных материалов, а сторона коробки K хотя бы на K + 500 меньше. Определи наибольшее количество коробок в «матрёшке», затем наименьшую возможную сторону самой большой коробки при таком количестве."
             }
           },
           {
@@ -161574,6 +161922,12 @@
               "code": "with open('26-17.txt') as f:\n    f.readline()\n    data = [list(map(int, line.split())) for line in f]\n\ndef alternate(boxes, base_gap):\n    best_count, best_outer = 0, None\n    for first_type in (0, 1):\n        expected, count, last = first_type, 0, None\n        for size, material in sorted(boxes):\n            if material != expected:\n                continue\n            if last is None or size - last >= base_gap + count:\n                count += 1\n                last = size\n                expected = 1 - expected\n        if count > best_count or (\n            count == best_count and last is not None\n            and (best_outer is None or last < best_outer)\n        ):\n            best_count, best_outer = count, last\n    return best_count, best_outer\n\n\nprint(*alternate(data, 500))",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `936 999673`"
+            }
           }
         ],
         "skills": [],
@@ -161590,7 +161944,7 @@
         ],
         "lessons": [
           {
-            "position": 61,
+            "position": 63,
             "material_id": "array-processing",
             "counts_toward_mastery": false
           }
@@ -161641,7 +161995,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "В файле 26-8.txt в первой строке записаны количество занятых мест N, число рядов M и число мест в каждом ряду K, в каждой следующей — номер ряда и номер занятого места. Ряды нумеруются от сцены. Нужно купить билет на свободное место, перед которым (в рядах с меньшими номерами) как можно больше идущих подряд свободных кресел с тем же номером места. Если подходящих мест несколько, выбирают ряд ближе к сцене. Запишите номер ряда, затем количество свободных кресел перед выбранным местом. (Подтема 4.)"
+              "markdown": "В файле 26-8.txt в первой строке записаны количество занятых мест N, число рядов M и число мест в каждом ряду K, в каждой следующей — номер ряда и номер занятого места. Ряды нумеруются от сцены. Нужно купить билет на свободное место, перед которым (в рядах с меньшими номерами) как можно больше идущих подряд свободных кресел с тем же номером места. Если подходящих мест несколько, выбирают ряд ближе к сцене. Запиши номер ряда, затем количество свободных кресел перед выбранным местом. (Подтема 4.)"
             }
           },
           {
@@ -161673,6 +162027,12 @@
               "code": "with open('26-8.txt') as f:\n    n, m, k = map(int, f.readline().split())\n    data = [list(map(int, line.split())) for line in f]\n\ncol = {}\nfor r, s in data:\n    col.setdefault(s, set()).add(r)\nbest = None\nfor s in range(1, k + 1):\n    prev = 0\n    for o in sorted(col.get(s, set())) + [m + 1]:\n        if o - prev >= 2:\n            cand = (o - prev - 2, -(o - 1))\n            if best is None or cand > best:\n                best = cand\n        prev = o\nprint(-best[1], best[0])",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `523 115`"
+            }
           }
         ],
         "skills": [],
@@ -161689,7 +162049,7 @@
         ],
         "lessons": [
           {
-            "position": 62,
+            "position": 67,
             "material_id": "array-processing"
           }
         ],
@@ -161733,7 +162093,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "В файле 26-10.txt в первой строке записано количество заявок N, в каждой следующей — время начала и время окончания мероприятия в минутах от начала суток. Следующее мероприятие можно начать в момент окончания предыдущего. Определите максимальное количество мероприятий, которые можно провести, и самое позднее время окончания последнего мероприятия при таком количестве. (Подтема 5.)"
+              "markdown": "В файле 26-10.txt в первой строке записано количество заявок N, в каждой следующей — время начала и время окончания мероприятия в минутах от начала суток. Следующее мероприятие можно начать в момент окончания предыдущего. Определи максимальное количество мероприятий, которые можно провести, и самое позднее время окончания последнего мероприятия при таком количестве. (Подтема 5.)"
             }
           },
           {
@@ -161765,6 +162125,12 @@
               "code": "with open('26-10.txt') as f:\n    f.readline()\n    data = [list(map(int, line.split())) for line in f]\n\ndef greedy(meetings, pause):\n    sel = []\n    for s, f in sorted(meetings, key=lambda m: (m[1], m[0])):\n        if not sel or s >= sel[-1][1] + pause:\n            sel.append((s, f))\n    return sel\n\n\nsel = greedy(data, 0)\nend = sel[-2][1]\nprint(len(sel), max(f for s, f in data if s >= end))",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `57 1439`"
+            }
           }
         ],
         "skills": [],
@@ -161781,7 +162147,7 @@
         ],
         "lessons": [
           {
-            "position": 63,
+            "position": 68,
             "material_id": "array-processing"
           }
         ],
@@ -161825,7 +162191,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "В файле 26-5.txt в первой строке записано количество товаров N, в каждой следующей — цена товара в рублях. На каждый второй товар дороже 1000 рублей предоставляется скидка 20 %; порядок товаров в чеке определяет продавец так, чтобы общая скидка была наименьшей; итоговая стоимость покупки округляется вверх до целого числа рублей. Запишите итоговую стоимость, затем цену самого дорогого товара, на который предоставлена скидка. (Подтема 2.)"
+              "markdown": "В файле 26-5.txt в первой строке записано количество товаров N, в каждой следующей — цена товара в рублях. На каждый второй товар дороже 1000 рублей предоставляется скидка 20 %; порядок товаров в чеке определяет продавец так, чтобы общая скидка была наименьшей; итоговая стоимость покупки округляется вверх до целого числа рублей. Запиши итоговую стоимость, затем цену самого дорогого товара, на который предоставлена скидка. (Подтема 2.)"
             }
           },
           {
@@ -161857,6 +162223,12 @@
               "code": "with open('26-5.txt') as f:\n    f.readline()\n    a = [int(line) for line in f]\n\nbig = sorted(p for p in a if p > 1000)\ndisc = big[:len(big) // 2]\nrest = sum(a) - sum(disc)\nprint(rest + (4 * sum(disc) + 4) // 5, max(disc))",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `7211541 3038`"
+            }
           }
         ],
         "skills": [],
@@ -161873,7 +162245,7 @@
         ],
         "lessons": [
           {
-            "position": 64,
+            "position": 69,
             "material_id": "array-processing"
           }
         ],
@@ -161917,7 +162289,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "В файле 26-6.txt в первой строке записано количество коробок N, в каждой следующей — длина стороны коробки. Одну коробку можно вложить в другую, если её сторона хотя бы на 10 меньше. Определите наибольшее количество коробок в одной «матрёшке» и наименьшую возможную сторону самой большой коробки при таком количестве. (Подтема 3.)"
+              "markdown": "В файле 26-6.txt в первой строке записано количество коробок N, в каждой следующей — длина стороны коробки. Одну коробку можно вложить в другую, если её сторона хотя бы на 10 меньше. Определи наибольшее количество коробок в одной «матрёшке» и наименьшую возможную сторону самой большой коробки при таком количестве. (Подтема 3.)"
             }
           },
           {
@@ -161949,6 +162321,12 @@
               "code": "with open('26-6.txt') as f:\n    f.readline()\n    a = [int(line) for line in f]\n\nsel = []\nfor x in sorted(a):\n    if not sel or x - sel[-1] >= 10:\n        sel.append(x)\nprint(len(sel), sel[-1])",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `944 9993`"
+            }
           }
         ],
         "skills": [],
@@ -161965,7 +162343,7 @@
         ],
         "lessons": [
           {
-            "position": 65,
+            "position": 70,
             "material_id": "array-processing"
           }
         ],
@@ -162009,7 +162387,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "В файле 26-3.txt в первой строке записаны два числа, из которых нужно только второе — количество грузов N, в каждой следующей — масса груза. Контейнеры вместимостью 250 заполняют так: грузы перебирают по убыванию массы и кладут в контейнер каждый, который ещё помещается; затем то же повторяют для оставшихся грузов со следующим контейнером. Определите количество контейнеров и загрузку предпоследнего контейнера. (Подтема 6.)"
+              "markdown": "В файле 26-3.txt в первой строке записаны два числа, из которых нужно только второе — количество грузов N, в каждой следующей — масса груза. Контейнеры вместимостью 250 заполняют так: грузы перебирают по убыванию массы и кладут в контейнер каждый, который ещё помещается; затем то же повторяют для оставшихся грузов со следующим контейнером. Определи количество контейнеров и загрузку предпоследнего контейнера. (Подтема 6.)"
             }
           },
           {
@@ -162041,6 +162419,12 @@
               "code": "with open('26-3.txt') as f:\n    f.readline()\n    a = [int(line) for line in f]\n\nrest = sorted(a, reverse=True)\nloads = []\nwhile rest:\n    left, load = [], 0\n    for w in rest:\n        if load + w <= 250:\n            load += w\n        else:\n            left.append(w)\n    loads.append(load)\n    rest = left\nprint(len(loads), loads[-2])",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `1008 250`"
+            }
           }
         ],
         "skills": [],
@@ -162057,7 +162441,7 @@
         ],
         "lessons": [
           {
-            "position": 66,
+            "position": 71,
             "material_id": "array-processing"
           }
         ],
@@ -825700,6 +826084,540 @@
         }
       },
       "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "task-26-10-01",
+        "title": "Каждый четвёртый за полцены",
+        "short_description": null,
+        "explanation_kind": "worked_solution",
+        "difficulty": 2,
+        "estimated_minutes": 6,
+        "answer_instruction": "Введите два числа через пробел в том порядке, в каком их спрашивают.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "В магазине акция: каждый четвёртый товар в чеке — за полцены. Цены товаров: 120, 46, 300, 80, 16, 60, 210, 96, 40, 180, 70, 24. Покупатель раскладывает товары на ленте так, чтобы заплатить как можно меньше, а касса сортирует их так, чтобы стоимость была как можно больше. Сколько заплатил бы покупатель при своей раскладке и сколько возьмёт касса?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "За полцены идут len // 4 товаров: покупателю выгодны самые дорогие, кассе — самые дешёвые."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "За полцены идут три товара. Покупатель ставит на 4-е, 8-е и 12-е места 300, 210 и 180: 1242 − 345 = 897. Касса ставит туда 16, 24 и 40: 1242 − 40 = 1202."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "prices = [120, 46, 300, 80, 16, 60, 210, 96, 40, 180, 70, 24]\nprices.sort(reverse=True)\nq = len(prices) // 4\ntotal = sum(prices)\nbuyer = total - sum(prices[:q]) // 2\nshop = total - sum(prices[-q:]) // 2\nprint(buyer, shop)",
+              "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `897 1202`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [26],
+        "files": [],
+        "lessons": [
+          {
+            "position": 14,
+            "material_id": "array-processing"
+          }
+        ],
+        "theory_links": [
+          {
+            "label": "Теория",
+            "section": "skidki",
+            "material_id": "array-processing"
+          }
+        ],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["897 1202"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "task-26-10-02",
+        "title": "Обязательные файлы первыми",
+        "short_description": null,
+        "explanation_kind": "worked_solution",
+        "difficulty": 1,
+        "estimated_minutes": 5,
+        "answer_instruction": "Введите два числа через пробел в том порядке, в каком их спрашивают.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "На диске свободно 100. Файлы (размер, обязательный ли): (30, да), (18, нет), (7, нет), (25, да), (12, нет), (40, нет), (9, нет), (22, нет). Обязательные файлы переносят в первую очередь, а на оставшееся место — как можно больше остальных. Сколько файлов перенесут и сколько места останется?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Сначала положи обязательные, затем остальные от самых маленьких, пока помещаются."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Обязательные занимают 55. Дальше 7, 9 и 12 — 83; 18 уже не помещается. Файлов 5, свободно 17."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "capacity = 100\nfiles = [(30, 1), (18, 0), (7, 0), (25, 1), (12, 0), (40, 0),\n         (9, 0), (22, 0)]\nused = sum(size for size, must in files if must)\ncount = sum(must for size, must in files)\nfor size in sorted(s for s, must in files if not must):\n    if used + size > capacity:\n        break\n    used += size\n    count += 1\nprint(count, capacity - used)",
+              "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `5 17`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [26],
+        "files": [],
+        "lessons": [
+          {
+            "position": 10,
+            "material_id": "array-processing"
+          }
+        ],
+        "theory_links": [
+          {
+            "label": "Теория",
+            "section": "vazhnye-pervymi",
+            "material_id": "array-processing"
+          }
+        ],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["5 17"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "task-26-10-03",
+        "title": "Матрёшка с разницей ровно 1",
+        "short_description": null,
+        "explanation_kind": "worked_solution",
+        "difficulty": 2,
+        "estimated_minutes": 6,
+        "answer_instruction": "Введите два числа через пробел в том порядке, в каком их спрашивают.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Кубические коробки со сторонами 3, 5, 6, 7, 7, 9, 10, 11, 12, 15. Коробку можно вложить в другую, только если её сторона ровно на 1 меньше. Найди наибольшее число коробок в одной матрёшке и наибольшую сторону самой маленькой коробки в такой матрёшке."
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Цепочка с разницей ровно 1 — это серия идущих подряд различных размеров."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Подходящие цепочки — серии подряд идущих размеров: 12, 11, 10, 9 и 7, 6, 5. Самая длинная — 4 коробки, самая маленькая в ней — 9."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "sizes = [3, 5, 6, 7, 7, 9, 10, 11, 12, 15]\nbest = (0, 0)\nchain = []\nfor size in sorted(set(sizes), reverse=True):\n    if chain and chain[-1] - size == 1:\n        chain.append(size)\n    else:\n        chain = [size]\n    best = max(best, (len(chain), chain[-1]))\nprint(*best)",
+              "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `4 9`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [26],
+        "files": [],
+        "lessons": [
+          {
+            "position": 18,
+            "material_id": "array-processing"
+          }
+        ],
+        "theory_links": [
+          {
+            "label": "Теория",
+            "section": "cepochka-snaruzhi",
+            "material_id": "array-processing"
+          }
+        ],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["4 9"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "task-26-10-04",
+        "title": "Ровно три свободных места",
+        "short_description": null,
+        "explanation_kind": "worked_solution",
+        "difficulty": 2,
+        "estimated_minutes": 6,
+        "answer_instruction": "Введите два числа через пробел в том порядке, в каком их спрашивают.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Заняты места (ряд, место): (3, 4), (3, 8), (3, 15), (7, 2), (7, 9), (7, 13), (7, 20), (7, 24), (5, 1), (5, 5). Нужны ровно три свободных места подряд, слева и справа от которых места заняты. Найди наибольший номер ряда, где такие места есть, и наименьший номер первого из трёх свободных мест в нём."
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Между занятыми a и b ровно три свободных, если b − a = 4."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ряд 7 — наибольший: между 9 и 13 свободны 10, 11, 12, а между 20 и 24 — 21, 22, 23. Наименьший номер первого места — 10."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "taken = [(3, 4), (3, 8), (3, 15), (7, 2), (7, 9), (7, 13),\n         (7, 20), (7, 24), (5, 1), (5, 5)]\nrows = {}\nfor r, s in taken:\n    rows.setdefault(r, []).append(s)\nfor r in sorted(rows, reverse=True):\n    seats = sorted(rows[r])\n    found = [a + 1 for a, b in zip(seats, seats[1:])\n             if b - a == 4]\n    if found:\n        print(r, found[0])\n        break",
+              "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `7 10`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [26],
+        "files": [],
+        "lessons": [
+          {
+            "position": 27,
+            "material_id": "array-processing"
+          }
+        ],
+        "theory_links": [
+          {
+            "label": "Теория",
+            "section": "svobodnye-mesta",
+            "material_id": "array-processing"
+          }
+        ],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["7 10"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "task-26-10-05",
+        "title": "Три ячейки со следующей минуты",
+        "short_description": null,
+        "explanation_kind": "worked_solution",
+        "difficulty": 2,
+        "estimated_minutes": 6,
+        "answer_instruction": "Введите два числа через пробел в том порядке, в каком их спрашивают.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Камера хранения из трёх ячеек, заявки (время сдачи, время освобождения): (2, 9), (1, 4), (5, 8), (3, 6), (7, 12), (6, 10), (9, 14), (10, 11). Багаж кладут в свободную ячейку с наименьшим номером; освободившуюся ячейку можно занять со следующей минуты. Сколько пассажиров сдадут багаж и в какую ячейку положит багаж последний?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Обрабатывай заявки по времени сдачи; ячейка свободна, если free_at < start."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Отказ получает только (6, 10): в минуту 6 ячейка 3 только освобождается. Последняя заявка (10, 11) занимает ячейку 2."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "requests = [(2, 9), (1, 4), (5, 8), (3, 6), (7, 12), (6, 10),\n            (9, 14), (10, 11)]\nfree_at = [0, 0, 0]\naccepted = last = 0\nfor start, end in sorted(requests):\n    for i in range(len(free_at)):\n        if free_at[i] < start:\n            free_at[i] = end\n            accepted += 1\n            last = i + 1\n            break\nprint(accepted, last)",
+              "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `7 2`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [26],
+        "files": [],
+        "lessons": [
+          {
+            "position": 45,
+            "material_id": "array-processing"
+          }
+        ],
+        "theory_links": [
+          {
+            "label": "Теория",
+            "section": "kamera-hraneniya",
+            "material_id": "array-processing"
+          }
+        ],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["7 2"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "task-26-10-06",
+        "title": "Победитель соревнования",
+        "short_description": null,
+        "explanation_kind": "worked_solution",
+        "difficulty": 2,
+        "estimated_minutes": 6,
+        "answer_instruction": "Введите два числа через пробел в том порядке, в каком их спрашивают.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Записи о решённых задачах (минута, участник): (14, 7), (3, 2), (25, 7), (9, 5), (31, 2), (12, 2), (40, 5), (18, 5), (44, 7), (52, 2), (36, 5), (61, 9). Побеждает тот, кто решил больше всех задач и первым набрал это число. Сколько задач решил победитель и какой у него номер?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Иди по записям в порядке времени: считай задачи участника и запоминай минуту последней."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "По 4 задачи у участников 2 и 5. Участник 5 набрал четвёртую в минуту 40, участник 2 — в 52. Победитель — 5."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "solved = [(14, 7), (3, 2), (25, 7), (9, 5), (31, 2), (12, 2),\n          (40, 5), (18, 5), (44, 7), (52, 2), (36, 5), (61, 9)]\ncount = {}\nreached = {}\nfor time, who in sorted(solved):\n    count[who] = count.get(who, 0) + 1\n    reached[who] = time\nbest = max(count.values())\nwinner = min((reached[w], w) for w in count if count[w] == best)\nprint(best, winner[1])",
+              "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `4 5`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [26],
+        "files": [],
+        "lessons": [
+          {
+            "position": 3,
+            "material_id": "array-processing"
+          }
+        ],
+        "theory_links": [
+          {
+            "label": "Теория",
+            "section": "klyuch-reytinga",
+            "material_id": "array-processing"
+          }
+        ],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["4 5"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
     }
   ],
   "files": [
@@ -839275,25 +840193,21 @@
         "klyuch-reytinga",
         "vychislyaemye-pokazateli",
         "granica-prohoda",
-        "ocenka-raboty",
         "zapisi-itogo",
-        "samye-malenkie",
-        "zhadnyy-algoritm",
         "bolshe-vsego-faylov",
+        "zhadnyy-algoritm",
         "samyy-bolshoy-fayl",
+        "vazhnye-pervymi",
         "pokupka-partiyami",
         "dva-tipa",
         "skidki",
         "zhadnyy-itogo",
-        "vozmozhnosti-dlya-prodolzheniya",
         "cepochka-snaruzhi",
-        "pochemu-cepochka-dlinnee",
         "napravlenie-postroeniya",
         "dva-ukazatelya",
         "gruzy-i-konteynery",
         "detali-dvuh-vidov",
         "cepochki-itogo",
-        "pozicii-v-ryadah",
         "mnozhestva-i-slovari",
         "svobodnye-mesta",
         "stolbcy",
@@ -839302,7 +840216,6 @@
         "izolirovannaya-tochka",
         "nakoplenie-po-klyuchu",
         "ryady-itogo",
-        "tri-zadachi-intervalov",
         "rannee-okonchanie",
         "kontrprimery",
         "vtoroy-kriteriy",
@@ -839310,9 +840223,9 @@
         "sobytiya",
         "okno-nablyudeniya",
         "intervaly-itogo",
-        "ispolnit-pravila",
         "vybrat-ili-ispolnit",
         "kamera-hraneniya",
+        "zadacha-temy",
         "cena-i-nomer",
         "dva-vida-mest",
         "ochered",
@@ -839320,20 +840233,16 @@
         "zadannaya-procedura",
         "zhurnaly-i-kopii",
         "modelirovanie-itogo",
-        "dopolnitelnyy-urok-pary",
         "podschyot-i-razbienie",
         "perebor-par",
         "skolzyashchee-okno",
         "osobye-perehody",
         "kucha",
-        "pary-itogo",
-        "dopolnitelnyy-urok-cepochki",
         "chereduyushchiesya-cveta",
         "rastushchiy-zazor",
         "naimenshee-chislo-blokov",
-        "bloki-s-cherodovaniem",
         "luchshiy-nabor",
-        "slozhnye-itogo"
+        "dop-itogo"
       ],
       "kind": "topic",
       "status": "published",
@@ -839351,7 +840260,6 @@
             "klyuch-reytinga",
             "vychislyaemye-pokazateli",
             "granica-prohoda",
-            "ocenka-raboty",
             "zapisi-itogo"
           ]
         },
@@ -839359,10 +840267,10 @@
           "slug": "zhadnyj-vybor",
           "access": "free",
           "sections": [
-            "samye-malenkie",
-            "zhadnyy-algoritm",
             "bolshe-vsego-faylov",
+            "zhadnyy-algoritm",
             "samyy-bolshoy-fayl",
+            "vazhnye-pervymi",
             "pokupka-partiyami",
             "dva-tipa",
             "skidki",
@@ -839371,11 +840279,9 @@
         },
         {
           "slug": "cepochki-i-pary",
-          "access": "free",
+          "access": "paid",
           "sections": [
-            "vozmozhnosti-dlya-prodolzheniya",
             "cepochka-snaruzhi",
-            "pochemu-cepochka-dlinnee",
             "napravlenie-postroeniya",
             "dva-ukazatelya",
             "gruzy-i-konteynery",
@@ -839387,7 +840293,6 @@
           "slug": "ryady-i-serii",
           "access": "paid",
           "sections": [
-            "pozicii-v-ryadah",
             "mnozhestva-i-slovari",
             "svobodnye-mesta",
             "stolbcy",
@@ -839402,7 +840307,6 @@
           "slug": "intervaly",
           "access": "paid",
           "sections": [
-            "tri-zadachi-intervalov",
             "rannee-okonchanie",
             "kontrprimery",
             "vtoroy-kriteriy",
@@ -839416,9 +840320,9 @@
           "slug": "modelirovanie",
           "access": "paid",
           "sections": [
-            "ispolnit-pravila",
             "vybrat-ili-ispolnit",
             "kamera-hraneniya",
+            "zadacha-temy",
             "cena-i-nomer",
             "dva-vida-mest",
             "ochered",
@@ -839429,29 +840333,19 @@
           ]
         },
         {
-          "slug": "pary-okno-kucha",
+          "slug": "pary-okno-i-cepochki",
           "access": "paid",
           "sections": [
-            "dopolnitelnyy-urok-pary",
             "podschyot-i-razbienie",
             "perebor-par",
             "skolzyashchee-okno",
             "osobye-perehody",
             "kucha",
-            "pary-itogo"
-          ]
-        },
-        {
-          "slug": "slozhnye-cepochki",
-          "access": "paid",
-          "sections": [
-            "dopolnitelnyy-urok-cepochki",
             "chereduyushchiesya-cveta",
             "rastushchiy-zazor",
             "naimenshee-chislo-blokov",
-            "bloki-s-cherodovaniem",
             "luchshiy-nabor",
-            "slozhnye-itogo"
+            "dop-itogo"
           ]
         }
       ],

@@ -158,10 +158,10 @@ def greedy_room(sizes: list[int], cap: int) -> str:
             )
         )
         out.append(_text(x - 10, yy + 17, str(s), 14, INK if ok else MUTED, "end", 600))
-        note = (
-            "наибольший, что помещается" if s == best else ("помещается" if ok else "не помещается")
-        )
-        out.append(_text(x + s * scale + 10, yy + 17, note, 13, ACCENT if s == best else MUTED))
+        note = "наибольший подходящий" if s == best else ("помещается" if ok else "не помещается")
+        # notes start past the capacity line so the line never crosses them
+        nx = max(x + s * scale, x0 + cap * scale) + 10
+        out.append(_text(nx, yy + 17, note, 13, ACCENT if s == best else MUTED))
         yy += 34
     out.append(_line(x0 + cap * scale, y - 8, x0 + cap * scale, yy, INK, 1.5, "3 3"))
     out.append("</svg>")
@@ -176,7 +176,7 @@ def greedy_compare(sizes: list[int], chosen: list[int]) -> str:
     step = 540 / len(a)
     x0 = 100
     sa, sb = sum(a[:k]), sum(b)
-    out = [_svg(246, f"{k} самых маленьких и другой набор из {k}")]
+    out = [_svg(272, f"{k} самых маленьких и другой набор из {k}")]
     out.append(_text(x0, 16, f"все размеры; первые {k} — сумма {sa}", 14, INK, "start", 600))
     out.append(_text(x0 - 14, 47, "все", 14, MUTED, "end"))
     pos: dict[int, list[float]] = {}
@@ -195,8 +195,9 @@ def greedy_compare(sizes: list[int], chosen: list[int]) -> str:
         out.append(_text(cx, 199, str(s), 15, INK, "middle", 600))
         ax = x0 + j * step + step / 2
         out.append(_line(ax, 58, cx, 176, MUTED, 1.25))
-        out.append(_text((ax + cx) / 2 + 6, 122, f"{s} ≥ {a[j]}", 13, MUTED))
-    out.append(_text(640, 236, f"сумма набора {sb} ≥ {sa}", 14, ACCENT, "end", 600))
+        # the comparison sits under its own box, clear of every line
+        out.append(_text(cx, 230, f"{s} ≥ {a[j]}", 13, MUTED, "middle"))
+    out.append(_text(640, 262, f"сумма набора {sb} ≥ {sa}", 14, ACCENT, "end", 600))
     out.append("</svg>")
     return "".join(out)
 
@@ -235,7 +236,8 @@ def greedy_chain_frames(sizes: list[int], gap: int) -> list[tuple[str, str]]:
                 _text(x, y - 16, str(s), 14, INK if on else MUTED, "middle", 600 if on else 400)
             )
         for i, (p, q) in enumerate(zip(chain, chain[1:], strict=False)):
-            xp, xq = _axis_x(p, lo, hi), _axis_x(q, lo, hi)
+            # a box shared by two links: the links meet it at two separate points
+            xp, xq = _axis_x(p, lo, hi) - 5, _axis_x(q, lo, hi) + 5
             out.append(
                 f'<path d="M {xp:.1f} {y + 12} Q {(xp + xq) / 2:.1f} {y + 34} {xq:.1f} {y + 12}" fill="none" stroke="{ACCENT}" stroke-width="1.5"/>'
             )
@@ -260,20 +262,32 @@ def greedy_chain_frames(sizes: list[int], gap: int) -> list[tuple[str, str]]:
             f"Размеры по убыванию: {', '.join(map(str, a))}. Начинаем снаружи — с самой большой коробки.",
         )
     )
+    skipped: list[int] = []
     for s in a:
         if not chain:
             chain.append(s)
             frames.append((frame(), f"Внешняя коробка — самая большая, {s}."))
             continue
         limit = chain[-1] - gap
-        if s <= limit:
-            chain.append(s)
-            frames.append(
-                (
-                    frame(limit),
-                    f"В {chain[-2]} помещается размер не больше {chain[-2]} − {gap} = {limit}. Берём наибольший такой — {s}.",
-                )
+        if s > limit:
+            skipped.append(s)
+            continue
+        chain.append(s)
+        why = (
+            " "
+            + ", ".join(map(str, skipped))
+            + f" не подход{'ят' if len(skipped) > 1 else 'ит'}: разница с {chain[-2]} меньше {gap}."
+            if skipped
+            else ""
+        )
+        skipped.clear()
+        frames.append(
+            (
+                frame(limit),
+                f"В {chain[-2]} помещается размер не больше {chain[-2]} − {gap} = {limit}.{why}"
+                f" Берём наибольший подходящий — {s}.",
             )
+        )
     frames.append(
         (frame(), f"Больше вложить нечего: {len(chain)} коробок, самая маленькая — {chain[-1]}.")
     )
@@ -316,8 +330,11 @@ def greedy_trips_frames(weights: list[int], cap: int) -> list[tuple[str, str]]:
         out.append(
             _text(40, 30, f"вместимость {cap}; поездок: {len(trips)}", 15, INK, "start", 600)
         )
-        tail = "; ".join("+".join(str(a[i]) for i in t) for t in trips)
-        out.append(_text(40, 176, tail, 13, MUTED))
+        rides = [
+            " + ".join(str(a[i]) for i in t) if len(t) > 1 else f"{a[t[0]]} один" for t in trips
+        ]
+        if rides:
+            out.append(_text(40, 176, "поездки: " + "; ".join(rides), 13, MUTED))
         out.append("</svg>")
         return "".join(out)
 
@@ -604,8 +621,11 @@ def greedy_window_frames(values: list[int], d: int) -> list[tuple[str, str]]:
         xl = x0 + left * step + step / 2 - 30
         xr = x0 + right * step + step / 2 + 30
         out.append(_rect(xl, 42, xr - xl, 50, "none", ACCENT, 2, rx=8))
-        out.append(_text(xl, 116, "left", 14, ACCENT, "start", 600))
-        out.append(_text(xr, 116, "right", 14, ACCENT, "end", 600))
+        if left == right:
+            out.append(_text((xl + xr) / 2, 116, "left = right", 14, ACCENT, "middle", 600))
+        else:
+            out.append(_text(xl, 116, "left", 14, ACCENT, "start", 600))
+            out.append(_text(xr, 116, "right", 14, ACCENT, "end", 600))
         out.append(_text(40, 28, f"D = {d}; лучшая длина: {best_pair}", 15, INK, "start", 600))
         out.append("</svg>")
         return "".join(out)
@@ -619,8 +639,8 @@ def greedy_window_frames(values: list[int], d: int) -> list[tuple[str, str]]:
         best = max(best, length)
         if moved:
             note = (
-                f"right на {a[right]}: {a[right]} − {moved[0]} > {d}, left уходит вправо "
-                f"до {a[left]}. Длина окна {length}."
+                f"right на {a[right]}: {a[right]} − {moved[0]} = {a[right] - moved[0]} > {d}, "
+                f"поэтому left сдвигается вправо до {a[left]}. Длина окна {length}."
             )
         else:
             note = f"right на {a[right]}: {a[right]} − {a[left]} = {a[right] - a[left]} ≤ {d}. Длина окна {length}."

@@ -12,25 +12,21 @@
         "klyuch-reytinga",
         "vychislyaemye-pokazateli",
         "granica-prohoda",
-        "ocenka-raboty",
         "zapisi-itogo",
-        "samye-malenkie",
-        "zhadnyy-algoritm",
         "bolshe-vsego-faylov",
+        "zhadnyy-algoritm",
         "samyy-bolshoy-fayl",
+        "vazhnye-pervymi",
         "pokupka-partiyami",
         "dva-tipa",
         "skidki",
         "zhadnyy-itogo",
-        "vozmozhnosti-dlya-prodolzheniya",
         "cepochka-snaruzhi",
-        "pochemu-cepochka-dlinnee",
         "napravlenie-postroeniya",
         "dva-ukazatelya",
         "gruzy-i-konteynery",
         "detali-dvuh-vidov",
         "cepochki-itogo",
-        "pozicii-v-ryadah",
         "mnozhestva-i-slovari",
         "svobodnye-mesta",
         "stolbcy",
@@ -39,7 +35,6 @@
         "izolirovannaya-tochka",
         "nakoplenie-po-klyuchu",
         "ryady-itogo",
-        "tri-zadachi-intervalov",
         "rannee-okonchanie",
         "kontrprimery",
         "vtoroy-kriteriy",
@@ -47,9 +42,9 @@
         "sobytiya",
         "okno-nablyudeniya",
         "intervaly-itogo",
-        "ispolnit-pravila",
         "vybrat-ili-ispolnit",
         "kamera-hraneniya",
+        "zadacha-temy",
         "cena-i-nomer",
         "dva-vida-mest",
         "ochered",
@@ -57,20 +52,16 @@
         "zadannaya-procedura",
         "zhurnaly-i-kopii",
         "modelirovanie-itogo",
-        "dopolnitelnyy-urok-pary",
         "podschyot-i-razbienie",
         "perebor-par",
         "skolzyashchee-okno",
         "osobye-perehody",
         "kucha",
-        "pary-itogo",
-        "dopolnitelnyy-urok-cepochki",
         "chereduyushchiesya-cveta",
         "rastushchiy-zazor",
         "naimenshee-chislo-blokov",
-        "bloki-s-cherodovaniem",
         "luchshiy-nabor",
-        "slozhnye-itogo"
+        "dop-itogo"
       ],
       "kind": "topic",
       "status": "published",
@@ -88,7 +79,6 @@
             "klyuch-reytinga",
             "vychislyaemye-pokazateli",
             "granica-prohoda",
-            "ocenka-raboty",
             "zapisi-itogo"
           ]
         },
@@ -96,10 +86,10 @@
           "slug": "zhadnyj-vybor",
           "access": "free",
           "sections": [
-            "samye-malenkie",
-            "zhadnyy-algoritm",
             "bolshe-vsego-faylov",
+            "zhadnyy-algoritm",
             "samyy-bolshoy-fayl",
+            "vazhnye-pervymi",
             "pokupka-partiyami",
             "dva-tipa",
             "skidki",
@@ -108,11 +98,9 @@
         },
         {
           "slug": "cepochki-i-pary",
-          "access": "free",
+          "access": "paid",
           "sections": [
-            "vozmozhnosti-dlya-prodolzheniya",
             "cepochka-snaruzhi",
-            "pochemu-cepochka-dlinnee",
             "napravlenie-postroeniya",
             "dva-ukazatelya",
             "gruzy-i-konteynery",
@@ -124,7 +112,6 @@
           "slug": "ryady-i-serii",
           "access": "paid",
           "sections": [
-            "pozicii-v-ryadah",
             "mnozhestva-i-slovari",
             "svobodnye-mesta",
             "stolbcy",
@@ -139,7 +126,6 @@
           "slug": "intervaly",
           "access": "paid",
           "sections": [
-            "tri-zadachi-intervalov",
             "rannee-okonchanie",
             "kontrprimery",
             "vtoroy-kriteriy",
@@ -153,9 +139,9 @@
           "slug": "modelirovanie",
           "access": "paid",
           "sections": [
-            "ispolnit-pravila",
             "vybrat-ili-ispolnit",
             "kamera-hraneniya",
+            "zadacha-temy",
             "cena-i-nomer",
             "dva-vida-mest",
             "ochered",
@@ -166,29 +152,19 @@
           ]
         },
         {
-          "slug": "pary-okno-kucha",
+          "slug": "pary-okno-i-cepochki",
           "access": "paid",
           "sections": [
-            "dopolnitelnyy-urok-pary",
             "podschyot-i-razbienie",
             "perebor-par",
             "skolzyashchee-okno",
             "osobye-perehody",
             "kucha",
-            "pary-itogo"
-          ]
-        },
-        {
-          "slug": "slozhnye-cepochki",
-          "access": "paid",
-          "sections": [
-            "dopolnitelnyy-urok-cepochki",
             "chereduyushchiesya-cveta",
             "rastushchiy-zazor",
             "naimenshee-chislo-blokov",
-            "bloki-s-cherodovaniem",
             "luchshiy-nabor",
-            "slozhnye-itogo"
+            "dop-itogo"
           ]
         }
       ],
