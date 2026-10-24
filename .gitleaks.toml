@@ -48,6 +48,14 @@ regexes = [
 ]
 
 [[rules.allowlists]]
+description = "Change 203: content-addressed storage keys of public bank attachments (SHA-256 of the file)"
+condition = "AND"
+paths = ['''(^|/)content/practice-bank/bank\.json$''']
+regexTarget = "line"
+# Unanchored: the directory scan reads large files in chunks, so a line may arrive without its start.
+regexes = ['''"storage_key": "[0-9a-f]{64}"''']
+
+[[rules.allowlists]]
 description = "Verified public task SHA-256 digests in the historical migration snapshot"
 condition = "AND"
 paths = ['''(^|/)content/practice-migration/snapshot\.json$''']

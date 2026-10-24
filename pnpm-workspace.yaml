@@ -28,11 +28,20 @@ overrides:
   "basic-ftp@<6.2.1": "6.2.1"
   "proxy-addr@<2.0.8": "2.0.8"
   "compression@<1.8.2": "1.8.2"
+  # Change 203: release audit 2026-10-24, dev tooling only (ESLint plugin, Lighthouse CI).
+  "zod@>=4.0.0 <4.6.6": "4.6.6"
 
 # Change 194: extract-zip has no fixed release. It is reached only through Lighthouse CI's
 # browser download (@lhci/cli → lighthouse → puppeteer), never with untrusted archives and
 # never in an image. Revisit when a fix exists.
+# Change 203: zod 3.x has no fixed release for GHSA-mrhx-c7xc-m3w5; it is reached only through
+# Lighthouse CI (lighthouse → chromium-bidi), validates no untrusted input and never ships in an image.
+# GHSA-27r3-jxmh-p828 (body-parser DoS) is fixed in 1.20.9, released 2026-10-22: younger than
+# minimumReleaseAge. It sits in Lighthouse CI's local server only; from 2026-10-29 replace this
+# ignore with an override "body-parser@<1.20.9": "1.20.9".
 auditConfig:
   ignoreGhsas:
     - GHSA-jmr9-qjv8-65gv
     - GHSA-7pqw-9j4j-h8q3
+    - GHSA-mrhx-c7xc-m3w5
+    - GHSA-27r3-jxmh-p828
