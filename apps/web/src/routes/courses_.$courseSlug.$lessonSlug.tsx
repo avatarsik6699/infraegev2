@@ -1,4 +1,5 @@
-import { createFileRoute, notFound } from "@tanstack/react-router";
+import { createFileRoute, notFound, redirect } from "@tanstack/react-router";
+import { legacyCourseLessonRouteSlugs } from "~/shared/config/legacy-routes";
 import {
   findCourseByRouteSlug,
   findCourseLessonByRouteSlugs,
@@ -67,6 +68,17 @@ const getCourseLessonRouteSummary = (courseId: string) =>
   getCourseLessonSummary({ data: courseId }).catch(() => null);
 
 export const Route = createFileRoute("/courses_/$courseSlug/$lessonSlug")({
+  // Change 206: lessons of the first production release keep answering after the rebuild.
+  beforeLoad: ({ params }) => {
+    const renamed =
+      legacyCourseLessonRouteSlugs[params.courseSlug]?.[params.lessonSlug];
+    if (renamed)
+      throw redirect({
+        to: "/courses/$courseSlug/$lessonSlug",
+        params: { courseSlug: params.courseSlug, lessonSlug: renamed },
+        statusCode: 301,
+      });
+  },
   loader: async ({ params }) => {
     const course = findCoursePublicationByRouteSlug(params.courseSlug);
     const lesson = findCourseLessonPublicationByRouteSlugs(
