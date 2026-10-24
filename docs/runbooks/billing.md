@@ -24,6 +24,19 @@ Turn on in this order: `BILLING_ENABLED=true` with `ROBOKASSA_TEST=true` → tes
 1 ₽ check → `ROBOKASSA_TEST=false` → announcement period → `PAYWALL_ENABLED=true`. Turning the
 paywall off again makes everything free at once; grants are kept.
 
+The app has one password pair. While `ROBOKASSA_TEST=true`, Robokassa signs `IsTest` payments with
+the shop's **test** passwords, so `ROBOKASSA_PASSWORD1/2` hold the test pair then. When switching to
+`ROBOKASSA_TEST=false`, replace them with the live pair. Password #3 (refunds) is live only.
+
+The shop was created on 2026-10-24 (Change 211):
+- shop `kodumka`, status «Новый», activation not yet requested;
+- hash SHA256 for live and test;
+- the URLs below;
+- all five passwords were generated in the shop and kept in athanor (infraegev2 vault:
+  `ROBOKASSA_MERCHANT_LOGIN`, `ROBOKASSA_PASSWORD1..3` live, `ROBOKASSA_TEST_PASSWORD1..2`);
+- production runs `BILLING_ENABLED=true`, `ROBOKASSA_TEST=true` with the test pair, `PAYWALL_ENABLED=false`;
+- the env copy before that is `production.env.pre-billing-2026-10-24`.
+
 Robokassa shop settings: ResultURL `https://kodumka.ru/api/billing/webhooks/robokassa` (POST),
 SuccessURL and FailURL `https://kodumka.ru/subscribe/return` (GET), hash algorithm equal to
 `ROBOKASSA_HASH`. Notifications come from `185.59.216.65` and `185.59.217.65`; the signature, not
