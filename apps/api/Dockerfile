@@ -8,6 +8,7 @@ RUN apt-get update \
         gzip=1.13-1+deb13u1 \
         libblkid1=2.41.5-0+deb13u1 \
         liblastlog2-2=2.41.5-0+deb13u1 \
+        liblzma5=5.8.1-1+deb13u2 \
         libmount1=2.41.5-0+deb13u1 \
         libpcre2-8-0=10.46-1~deb13u3 \
         libsmartcols1=2.41.5-0+deb13u1 \

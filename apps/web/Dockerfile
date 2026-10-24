@@ -37,7 +37,9 @@ FROM node:22.23.2-slim@sha256:83f487e0a63425e5b4d146fb5e5be574bcbe1b7b843d3ebafd
 WORKDIR /repo
 RUN apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends --only-upgrade \
-        libpcre2-8-0=10.42-1+deb12u1 \
+        liblzma5=5.4.1-1+deb12u2 \
+        libpcre2-8-0=10.42-1+deb12u2 \
+        perl-base=5.36.0-7+deb12u4 \
     && rm -rf /var/lib/apt/lists/*
 RUN rm -rf /usr/local/lib/node_modules/npm /usr/local/bin/npm /usr/local/bin/npx /root/.npm
 COPY --from=builder --chown=node:node /repo/apps/web/.output ./apps/web/.output
