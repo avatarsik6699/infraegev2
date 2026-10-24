@@ -15,6 +15,10 @@ Change 198 (SPEC §6.2), manual measures only; look at the numbers before any of
     python -m app.modules.billing.admin terminate --user ID|--email A --reason TEXT
     python -m app.modules.billing.admin lift --user ID|--email ADDRESS [--compensate]
 
+Change 199, the operator console on sre.infraege.ru (smotryashchiy SPEC §4j) — JSON in, JSON out:
+    python -m app.modules.billing.admin operator KIND <args.json   # one allow-listed command
+    python -m app.modules.billing.admin export-operator            # kodumka.operator/1 report
+
 Output names payments, amounts and states only; addresses never reach the journal.
 """
 
@@ -23,16 +27,19 @@ from __future__ import annotations
 import argparse
 import asyncio
 import json
+import sys
 from collections import defaultdict
 from datetime import datetime, timedelta
+from typing import Annotated, Any, Self
 from uuid import UUID
 
+from pydantic import BaseModel, ConfigDict, Field, ValidationError, model_validator
 from sqlalchemy import distinct, func, or_, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.config import settings
 from app.core.database import database_engine
-from app.modules.account import restrictions
+from app.modules.account import operator_export, restrictions
 from app.modules.account.mail import MailUnavailable, send_account_mail
 from app.modules.account.models import AccountIdentity, AccountPassword, AccountUser
 from app.modules.billing import provider, service
@@ -267,6 +274,81 @@ async def measure(db: AsyncSession, args: argparse.Namespace) -> dict:
     return outcome
 
 
+# Change 199: the console's commands. The host script checks them first; this is the second
+# check, so a console that sends something else gets an error, never a partial action.
+Reason = Annotated[str, Field(min_length=1, max_length=300, pattern=r"^[^\x00-\x1f\x7f]+$")]
+
+
+class ConsoleArgs(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+
+class AccountTarget(ConsoleArgs):
+    user: UUID | None = None
+    email: Annotated[str, Field(max_length=320, pattern=r"^[^@\s]+@[^@\s]+$")] | None = None
+
+    @model_validator(mode="after")
+    def one_target(self) -> Self:
+        if (self.user is None) == (self.email is None):
+            raise ValueError("exactly one of user or email")
+        return self
+
+
+class MeasureArgs(AccountTarget):
+    reason: Reason
+    note: Annotated[str, Field(max_length=1000)] | None = None
+
+
+class SuspendArgs(MeasureArgs):
+    days: Annotated[int, Field(ge=1, le=30)]
+
+
+class LiftArgs(AccountTarget):
+    compensate: bool = False
+
+
+class RefundArgs(ConsoleArgs):
+    refund: UUID
+
+
+CONSOLE_KINDS: dict[str, tuple[type[ConsoleArgs], str | None]] = {
+    "warn": (MeasureArgs, "warning"),
+    "suspend": (SuspendArgs, "suspension"),
+    "terminate": (MeasureArgs, "termination"),
+    "lift": (LiftArgs, None),
+    "refund_execute": (RefundArgs, None),
+    "account_show": (AccountTarget, None),
+}
+
+
+async def console(db: AsyncSession, kind: str, args: ConsoleArgs) -> dict[str, Any]:
+    """Run one validated console command; the result is one JSON object for the console."""
+    measure_kind = CONSOLE_KINDS[kind][1]
+    if isinstance(args, RefundArgs):
+        done = await service.execute_refund(db, provider.current(), args.refund)
+        return {
+            "refund": str(done.id),
+            "status": done.status,
+            "amount_kopecks": done.amount_kopecks,
+        }
+    assert isinstance(args, AccountTarget)
+    target = argparse.Namespace(user=str(args.user) if args.user else None, email=args.email)
+    if kind == "account_show":
+        async with db.begin():
+            user_id = await account_of(db, target)
+            return await operator_export.account_card(db, user_id)
+    namespace = argparse.Namespace(
+        **vars(target),
+        command="lift" if kind == "lift" else kind,
+        command_kind=measure_kind,
+        reason=getattr(args, "reason", ""),
+        note=getattr(args, "note", None),
+        days=getattr(args, "days", None),
+        compensate=getattr(args, "compensate", False),
+    )
+    return await measure(db, namespace)
+
+
 async def main_async(args: argparse.Namespace) -> object:
     engine = database_engine(settings.account_database_url, role="infraege_app")
     try:
@@ -298,6 +380,11 @@ async def main_async(args: argparse.Namespace) -> object:
                 return await export(db)
             if args.command == "signals":
                 return await restrictions.signals(db, args.days)
+            if args.command == "operator":
+                return await console(db, args.kind, args.payload)
+            if args.command == "export-operator":
+                async with db.begin():
+                    return await operator_export.operator_document(db)
             if args.command in ("warn", "suspend", "terminate", "lift"):
                 return await measure(db, args)
             year = args.year or service.now().astimezone(service.MOSCOW).year
@@ -347,7 +434,33 @@ def main() -> None:
                 action="store_true",
                 help="appeal upheld: extend access by the suspended time (offer 6.3)",
             )
-    print(json.dumps(asyncio.run(main_async(parser.parse_args())), ensure_ascii=False, indent=2))
+    operator_cmd = commands.add_parser("operator", help="one console command, args JSON on stdin")
+    operator_cmd.add_argument("kind", choices=sorted(CONSOLE_KINDS))
+    commands.add_parser("export-operator")
+    args = parser.parse_args()
+    if args.command != "operator":
+        print(json.dumps(asyncio.run(main_async(args)), ensure_ascii=False, indent=2))
+        return
+    # The console reads exactly one JSON object back, also for a refusal. Arguments are checked
+    # before the database is touched.
+    try:
+        args.payload = CONSOLE_KINDS[args.kind][0].model_validate_json(sys.stdin.read() or "{}")
+    except ValidationError as exc:
+        fields = sorted({".".join(map(str, error["loc"])) or "args" for error in exc.errors()})
+        print(json.dumps({"error": "invalid arguments", "fields": fields}))
+        raise SystemExit(2) from None
+    try:
+        result = asyncio.run(main_async(args))
+    except (ValueError, LookupError) as exc:  # unknown account or refund
+        print(json.dumps({"error": str(exc) or "invalid input"}, ensure_ascii=False))
+        raise SystemExit(2) from None
+    except SystemExit as exc:
+        print(json.dumps({"error": str(exc.code)}, ensure_ascii=False))
+        raise SystemExit(2) from None
+    except Exception as exc:  # the console shows the class; the traceback stays on the host
+        print(json.dumps({"error": f"internal: {type(exc).__name__}"}))
+        raise
+    print(json.dumps(result, ensure_ascii=False))
 
 
 if __name__ == "__main__":

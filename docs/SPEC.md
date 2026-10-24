@@ -422,10 +422,13 @@ API by the generated practice registry, not a database column.
 Devices and restrictions (Change 198). A session additionally records a random device id from a
 separate long-lived host-only cookie, a coarse device label (browser · OS from User-Agent), the IP
 address and a city resolved from a local offline database at sign-in and last activity (updated at
-most every 10 minutes), and the last-seen time; IP and city are erased after 90 days. An append-only
+most every 10 minutes), and the last-seen time; IP and city live only as long as the session row (at
+most 30 days, a day after sign-out), known browsers without IP for 90 days. An append-only
 account restriction record (kind `warning | suspension | termination`, reason, operator note,
-created/ends/lifted time) is the evidence of every manual measure. A daily per-account counter of
-distinct paid chunks served feeds the operator signal report only. Accounts created through a
+created/ends/lifted time) is the evidence of every manual measure. Daily per-account counters (new
+devices, evictions, cities, paid chunks served, solutions opened; 30 days) feed the operator signal
+report; since Change 199 only devices, evictions and cities raise a signal, chunks and solutions are
+informational numbers in the account card and never limit a reader (architect decision 2026-10-24). Accounts created through a
 login provider record the same consent version and time as email registration.
 
 ## 4. API / Backend Contract
@@ -462,8 +465,8 @@ checker answers remain available without registration. Regenerate OpenAPI client
 No public task-bank write/admin API.
 
 Change 198. A paid task's public projection carries an empty explanation; its solution is
-returned by check/check-and-save or by `GET /api/tasks/{id}/solution` (active access, per-account
-limit, no-store); free tasks are unchanged. `GET /api/auth/sessions` lists the owner's active devices
+returned by check/check-and-save or by `GET /api/tasks/{id}/solution` (active access, no-store;
+no per-account limit since Change 199); free tasks are unchanged. `GET /api/auth/sessions` lists the owner's active devices
 (label, city, last activity, current); `DELETE /api/auth/sessions/{id}` and
 `DELETE /api/auth/sessions?others=1` sign devices out. A first login through a provider without a
 linked account creates no account until `POST /api/auth/provider/register` receives the current
@@ -708,8 +711,11 @@ cookie-идентификатором устройства; повторный �
 или все, кроме текущего. Отпечаток браузера не используется.
 
 Ограничения применяет только оператор вручную, после просмотра сигналов (одновременная
-активность из разных городов, частое вытеснение устройств, аномальный объём платных
-скачиваний); автоматической блокировки нет. Ступени: предупреждение (сеансы завершаются, письмо,
+активность из разных городов, частое вытеснение устройств, частые новые устройства; объём
+платных скачиваний и решений — только справочные числа, лимитов на чтение нет); автоматической
+блокировки нет. С Change 199 сигналы, меры, возвраты, поиск аккаунта и журнал инцидентов доступны
+в операторской консоли `sre.infraege.ru` (smotryashchiy §4j): агент на production забирает
+разрешённые команды и выполняет их хостовым исполнителем; CLI остаётся запасным путём. Ступени: предупреждение (сеансы завершаются, письмо,
 уведомление в аккаунте) → приостановка платного доступа на срок (аккаунт, прогресс и бесплатные
 материалы сохраняются; платные страницы показывают дату, причину и контакт для обжалования)
 → прекращение доступа с возвратом за неиспользованные дни. Снятие ограничения уведомляет
@@ -820,7 +826,7 @@ per-context progress on an isolated target. Guest browser progress is never migr
 | Client resilience / API drift | Route failures восстанавливаемы без белого экрана; loading/empty/error/not-found состояния доступны с клавиатуры и скринридера; OpenAPI schema/types drift ломает gate до merge; runtime HTTP имеет timeout/abort и не делает скрытый retry мутаций |
 | Account security | Passwords use a current password-hashing scheme; verification/reset tokens expire and are single-use; sessions are server-revocable, HttpOnly/Secure/SameSite and protected from CSRF. Auth endpoints have targeted abuse limits, generic recovery responses and no sensitive URL/query/access-log leakage. Authentication does not grant editorial, operator or paid access. At most three active devices per account, a new-device email, owner-visible device list and sign-out (§6.2). Paid chunks get their own anti-bot budget of the practice-read size (120/min, burst 110); no limit a reader can feel. |
 | Personal-data isolation | Progress and account reads/writes are owner-scoped and no-store; logout and account switching clear in-memory personalized state. Guest checking remains anonymous and read-only. Account/identity/progress data and new role grants are covered by isolated backup/restore checks. |
-| Юридическое (152-ФЗ) | `/privacy` публикует фактические цели, состав, сроки и получателей обработки; регистрация по email требует отдельной неотмеченной по умолчанию галочки со ссылкой на версионированное согласие, а API фиксирует версию и время. Контакт — `kodumka@mail.ru`. С Change 198 политика и согласие называют оператора (ФИО, ИНН, email; адрес не публикуется), политика перечисляет правовые основания, права субъекта со сроком ответа, всех получателей и данные устройств; согласие — отдельный документ (156-ФЗ) и отдельная галочка, в том числе при первом входе через провайдера; оплата и защита аккаунта опираются на исполнение договора, поэтому у прежних пользователей согласие повторно не запрашивается. Возраст и полномочия представителя при регистрации не проверяются (пункт о несовершеннолетних — в оферте); уведомление РКН подаётся оператором до включения оплаты. Юридическая проверка не проводится по решению архитектора (2026-10-18, подтверждено 2026-10-23); тексты — инженерный ориентир, не заявление о соответствии закону; надпись «18+» для фактически школьной аудитории не используется как фиктивное освобождение от обязанностей. Гости любого возраста могут читать уроки и проверять ответы без регистрации. Браузерная аналитика возвращена (2026-09-22, архитектор пересмотрел прежний отказ, §1.2/§7.3): self-hosted `smotryashchiy`, без cookie и постоянного идентификатора — visitor-хэш `sha256(daily_salt+site+IP+UA)` с посуточной ротацией соли, сырой IP не сохраняется, referrer усекается до hostname. Отсутствие отдельного consent UI для этой аналитики — интерпретация архитектора, не юридическое заключение. Памятка оператора о действиях при утечке (РКН — 24 и 72 часа, ст. 21 ч. 3.1) ручная, без автоматизации. |
+| Юридическое (152-ФЗ) | `/privacy` публикует фактические цели, состав, сроки и получателей обработки; регистрация по email требует отдельной неотмеченной по умолчанию галочки со ссылкой на версионированное согласие, а API фиксирует версию и время. Контакт — `kodumka@mail.ru`. С Change 198 политика и согласие называют оператора (ФИО, ИНН, email; адрес не публикуется), политика перечисляет правовые основания, права субъекта со сроком ответа, всех получателей и данные устройств; согласие — отдельный документ (156-ФЗ) и отдельная галочка, в том числе при первом входе через провайдера; оплата и защита аккаунта опираются на исполнение договора, поэтому у прежних пользователей согласие повторно не запрашивается. Возраст и полномочия представителя при регистрации не проверяются (пункт о несовершеннолетних — в оферте); уведомление РКН подаётся оператором до включения оплаты. Юридическая проверка не проводится по решению архитектора (2026-10-18, подтверждено 2026-10-23); тексты — инженерный ориентир, не заявление о соответствии закону; надпись «18+» для фактически школьной аудитории не используется как фиктивное освобождение от обязанностей. Гости любого возраста могут читать уроки и проверять ответы без регистрации. Браузерная аналитика возвращена (2026-09-22, архитектор пересмотрел прежний отказ, §1.2/§7.3): self-hosted `smotryashchiy`, без cookie и постоянного идентификатора — visitor-хэш `sha256(daily_salt+site+IP+UA)` с посуточной ротацией соли, сырой IP не сохраняется, referrer усекается до hostname. Отсутствие отдельного consent UI для этой аналитики — интерпретация архитектора, не юридическое заключение. Памятка оператора о действиях при утечке (РКН — 24 и 72 часа, ст. 21 ч. 3.1) ручная, без автоматизации; с Change 199 журнал инцидентов с отсчётом сроков ведётся в консоли `sre.infraege.ru`, уведомление по-прежнему подаёт оператор. С Change 199 собственный сервер мониторинга оператора в России (`sre.infraege.ru`) получает email, ID аккаунта, IP и город активных сеансов для защиты аккаунтов и операторских мер (решение архитектора 2026-10-24): выгрузка заменяется при каждом отчёте, результаты команд хранятся 30 дней, журнал действий — 3 года; пароли и платёжные данные production не покидают; политика называет этот сервер новой редакцией. |
 | Публичные профили (будущее) | Публикация любых данных пользователя (псевдоним, аватар, результаты, место в рейтинге) требует отдельного согласия на распространение (ст. 10.1): выключено по умолчанию, отдельное действие со ссылкой на документ, выбор полей, версия и время в БД, отзыв сразу скрывает публикацию; email и настоящее имя не публикуются, по умолчанию — псевдоним. Текст документа готовится в Change 198, интерфейс — вместе с профилями |
 | Юридическое (436-ФЗ) | Возрастная маркировка для обычного сайта не вводится: существующая `12+` удаляется без замены на `18+` |
 | Происхождение контента | Существующие уроки сохраняют Content Quality Gate (§2.3). Для нового банка принято импортируемое содержимое с явным provenance (§3); происхождение, атрибуция и допустимость использования проверяются при подготовке импорта, не выводятся автоматически из URL и не заменяются технической валидацией |

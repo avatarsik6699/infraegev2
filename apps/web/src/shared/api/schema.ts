@@ -693,7 +693,8 @@ export interface paths {
         };
         /**
          * Get Solution
-         * @description The solution of a paid task, sent only when asked for (SPEC §4).
+         * @description The solution of a paid task, sent only when asked for (SPEC §4). Change 199: no
+         *     daily limit; the count is an informational number for the operator.
          */
         get: operations["get_solution_api_tasks__task_id__solution_get"];
         put?: never;

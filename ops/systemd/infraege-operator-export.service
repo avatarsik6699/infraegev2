@@ -1,0 +1,11 @@
+[Unit]
+Description=kodumka operator console report (Change 199)
+Requires=docker.service
+After=docker.service
+
+[Service]
+Type=oneshot
+User=root
+Group=root
+WorkingDirectory=/opt/infraege/current
+ExecStart=/opt/infraege/current/scripts/operator-export.sh

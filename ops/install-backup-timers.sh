@@ -33,7 +33,11 @@ done
 # Change 198: the monthly offline city database for «Где выполнен вход»
 install -m 644 "$repo_dir/ops/systemd/infraege-geoip.service" /etc/systemd/system/
 install -m 644 "$repo_dir/ops/systemd/infraege-geoip.timer" /etc/systemd/system/
+# Change 199: the operator console report shipped by the smotryashchiy agent
+install -m 644 "$repo_dir/ops/systemd/infraege-operator-export.service" /etc/systemd/system/
+install -m 644 "$repo_dir/ops/systemd/infraege-operator-export.timer" /etc/systemd/system/
 systemctl daemon-reload
 systemctl enable --now infraege-backup.timer infraege-restore-check.timer infraege-account-purge.timer \
   infraege-billing-hourly.timer infraege-billing-daily.timer \
-  infraege-offsite-check.timer infraege-backup-summary.timer infraege-geoip.timer
+  infraege-offsite-check.timer infraege-backup-summary.timer infraege-geoip.timer \
+  infraege-operator-export.timer

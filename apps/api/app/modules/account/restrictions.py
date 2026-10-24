@@ -23,13 +23,12 @@ from app.modules.account.models import (
 
 MOSCOW = ZoneInfo("Europe/Moscow")
 WARNING_SHOWN = timedelta(days=14)
-# What a shared account or a downloader looks like within one day; a student studying a
-# lot stays far below every threshold.
+# What a shared account looks like; a student studying a lot never reaches these. Change 199:
+# paid chunks and solutions raise no signal — an active reader must never look like a thief;
+# they stay informational numbers in the report and the account card.
 SIGNAL_CITIES = 3
 SIGNAL_EVICTIONS = 3
 SIGNAL_NEW_DEVICES = 4
-SIGNAL_PAID_CHUNKS = 400
-SIGNAL_SOLUTIONS = 150
 CLOSING = ("suspension", "termination")
 
 
@@ -213,8 +212,6 @@ async def signals(db: AsyncSession, days: int) -> list[dict]:
                 ("cities", (cities or 0) >= SIGNAL_CITIES),
                 ("evictions", (evictions or 0) >= SIGNAL_EVICTIONS),
                 ("new_devices", (new_devices or 0) >= SIGNAL_NEW_DEVICES),
-                ("paid_chunks", (chunks or 0) >= SIGNAL_PAID_CHUNKS),
-                ("solutions", (solutions or 0) >= SIGNAL_SOLUTIONS),
             )
             if hit
         ]

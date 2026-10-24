@@ -193,6 +193,18 @@ to the «Продажи» view: its unit runs `agent run` with `--business-file
 /var/lib/infraege/business/summary.json` (smotryashchiy v0.4.0 or later). Without the flag, or
 before the first hourly run writes the file, the view says that no summary has arrived.
 
+Change 199 adds the operator console (smotryashchiy SPEC §4j, release with smotryashchiy Change 30).
+Install the timers again (`ops/install-backup-timers.sh` adds `infraege-operator-export.timer`,
+every ten minutes) and extend the agent unit's `agent run` with
+`--document operator=/var/lib/infraege/ops/operator.json` and
+`--operator-command /opt/infraege/current/scripts/operator-command.sh` (the business summary moves to
+`--document business=…` or stays on `--business-file`), then `systemctl daemon-reload` and restart
+the agent. The executor runs only the allow-listed kinds `warn`, `suspend`, `terminate`, `lift`,
+`refund_execute`, `account_show`, checks every argument and passes them as JSON on stdin to
+`billing.admin operator KIND`; without `--operator-command` the agent never asks for commands. The
+report names people (email, account ID, IP, city): it stays root-only (`640`) and travels only to
+the operator's own monitoring server in Russia.
+
 ## Retired operations stack
 
 The pre-Change-122 operations stack `infraege-ops` (Umami, Beszel and its agent, docker-socket-proxy,

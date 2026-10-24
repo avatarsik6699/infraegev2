@@ -24,8 +24,6 @@ from app.modules.practice.schemas import Block, StrictModel
 from app.modules.practice.service import Conflict
 
 router = APIRouter(tags=["progress"])
-# Change 198: far above what a student opens in a day, far below a whole paid bank.
-SOLUTIONS_PER_DAY = 300
 
 
 class SolutionView(StrictModel):
@@ -34,7 +32,8 @@ class SolutionView(StrictModel):
 
 @router.get("/tasks/{task_id}/solution", response_model=SolutionView)
 async def get_solution(task_id: str, request: Request, db: AccountDb) -> SolutionView:
-    """The solution of a paid task, sent only when asked for (SPEC §4)."""
+    """The solution of a paid task, sent only when asked for (SPEC §4). Change 199: no
+    daily limit; the count is an informational number for the operator."""
     current = await active_session(request, db)
     if await task_is_paid(db, task_id) and await access_until(db, current.user_id) is None:
         raise HTTPException(403, SUBSCRIPTION_REQUIRED)
@@ -43,9 +42,7 @@ async def get_solution(task_id: str, request: Request, db: AccountDb) -> Solutio
     )
     if content is None:
         raise HTTPException(404, "task unavailable")
-    if await service.count_today(db, current.user_id, "solutions") > SOLUTIONS_PER_DAY:
-        await db.commit()
-        raise HTTPException(429, "solution limit reached")
+    await service.count_today(db, current.user_id, "solutions")
     await db.commit()
     return SolutionView(explanation=content["explanation"])
 

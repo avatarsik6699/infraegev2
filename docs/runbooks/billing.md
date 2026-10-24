@@ -98,6 +98,8 @@ docker compose --env-file /etc/infraege/production.env --project-name infraege \
 | `revenue [--year YEAR]` | НПД income of a Moscow calendar year and its share of the limit |
 | `signals [--days N]` | Change 198: accounts above a sharing or downloading threshold, numbers only; no measure is automatic |
 | `warn` / `suspend --days N` / `terminate` / `lift [--compensate]` (`--user ID` or `--email A`) | Change 198: the graded manual measures of offer section 6 and their lifting — procedure in [accounts](accounts.md#ограничения-change-198) |
+| `operator KIND` (args JSON on stdin) | Change 199: the console's form of `warn`, `suspend`, `terminate`, `lift`, `refund_execute`, `account_show`; one JSON object out, a refusal is `{"error": …}` with exit 2. Normally run by `scripts/operator-command.sh` for the sre.infraege.ru console |
+| `export-operator` | Change 199: the `kodumka.operator/1` report (signals, running measures, open refunds); `scripts/operator-export.sh` writes it every ten minutes |
 
 A refund is idempotent by payment, reason and amount: repeating the command does not pay twice.
 Robokassa finishes refunds asynchronously; the hourly job records the result and mails the buyer.

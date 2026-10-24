@@ -141,6 +141,25 @@ def test_paid_solution_comes_on_request(paid_site, database, monkeypatch):  # no
         solution = client.get(f"/api/tasks/{paid.task.id}/solution")
         assert solution.status_code == 200
         assert solution.json()["explanation"]
+
+        # Change 199: an active reader is never limited and never flagged for reading
+        async def heavy_reader(db):
+            async with db.begin():
+                await db.execute(
+                    update(AccountActivityDay).values(paid_chunks=10_000, solutions=10_000)
+                )
+
+        run_db(database, heavy_reader)
+        assert client.get(f"/api/tasks/{paid.task.id}/solution").status_code == 200
+
+        reader = client.get("/api/auth/session").json()["account"]["id"]
+
+        async def no_signal(db):
+            report = await restrictions.signals(db, 7)
+            assert reader not in {row["user"] for row in report}
+            assert all(not {"paid_chunks", "solutions"} & set(row["signals"]) for row in report)
+
+        run_db(database, no_signal)
         open_task = client.get(f"/api/tasks/{free.task.id}").json()
         assert open_task["solution_on_request"] is False
         assert len(open_task["content"]["explanation"]) == len(free.task.explanation)
