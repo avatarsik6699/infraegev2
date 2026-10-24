@@ -22,7 +22,9 @@ for expected in 'banaction = ufw' 'bantime.increment = true' 'bantime.maxtime = 
 done
 
 # Change 198: the Nginx jail bans in DOCKER-USER, which published container ports pass.
-section infraege-nginx-limit | grep -Fxq 'banaction = iptables-allports[chain="DOCKER-USER"]'
+section infraege-nginx-limit | grep -Fxq 'banaction = iptables-allports'
+# Change 205: a jail option, not a banaction parameter (the default action overrides that one).
+section infraege-nginx-limit | grep -Fxq 'chain = DOCKER-USER'
 
 sshd_jail=$(section sshd)
 for expected in 'enabled = true' 'backend = systemd' 'maxretry = 5'; do

@@ -121,7 +121,9 @@ the deploy is dispatched:
    `systemctl start infraege-geoip.service`; the API reads the city database after its next
    restart. Reinstall `ops/fail2ban/jail.d/infraege.conf`: the Nginx jail now bans in the
    `DOCKER-USER` chain, which published container ports pass (UFW bans never reach them); check
-   with `fail2ban-client status infraege-nginx-limit` and `iptables -S DOCKER-USER`.
+   with `fail2ban-client status infraege-nginx-limit` and `iptables -S DOCKER-USER`. The chain is the
+   jail option `chain = DOCKER-USER` (Change 205); `fail2ban-client -d` must show
+   `-I DOCKER-USER` in the jail's `actionstart`, not `-I INPUT`.
 
 Keep `infraege.ru` registered while the redirect matters. A rollback to a release before Change
 193 serves `infraege.ru` again with its own certificate; restore the two environment values with it.
