@@ -9,7 +9,7 @@
 | Change | `198` |
 | Slug | `legal-launch` |
 | Title | Юридический минимум и защита платного доступа перед запуском |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/198-legal-launch` |
 
 ---
