@@ -436,6 +436,10 @@ are shown by the shared `ObjectIllustration` (`course`), mascot scenes by `Masco
   filled danger «Сбросить» with white text.
 - **Hover / Focus:** hover darkens the fill or border; focus is a 2px ink outline with 2px offset.
 - **Never** an orange or pastel-filled button, except the CTA Orange of paid access (Change 192).
+- **Provider sign-in** (Change 208): the providers' "additional" variant. It is a secondary button
+  with an ink hairline, because Yandex ID forbids recolouring its outline. The mark is the
+  provider's own, 20px: VK blue and the Yandex red «Я» circle; it is the only place those colours
+  appear. The texts are the short «VK ID» / «Яндекс ID», and the group is labelled «… с помощью».
 
 ### Links
 - Always Hyperlink Blue. Inline links underlined; standalone action links ("Открыть тему →")

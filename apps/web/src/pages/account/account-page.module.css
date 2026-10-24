@@ -177,7 +177,7 @@
 }
 .providerSection {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: var(--space-1);
   margin-top: var(--space-1);
   padding-top: var(--space-2);
@@ -188,35 +188,29 @@
   font-size: var(--text-sm);
   font-weight: 500;
 }
-.providerLink {
-  display: inline-flex;
-  min-height: var(--control-height);
-  align-items: center;
-  justify-content: center;
-  gap: var(--space-0-5);
-  padding: 0 var(--space-1);
-  border: 1px solid var(--color-rule-strong);
-  border-radius: var(--radius-control);
-  background: var(--color-surface);
-  color: var(--color-text);
-  font-family: var(--font-ui);
-  font-size: var(--text-control);
-  font-weight: 600;
-  text-decoration: none;
-}
-.providerLink:hover {
+/* Change 208: the providers' "additional" sign-in variant drawn as our secondary button. Yandex ID
+   forbids recolouring its button outline, so the hairline stays ink instead of the control grey. */
+.providerLink[data-hierarchy="secondary"] {
+  width: 100%;
   border-color: var(--color-text);
-  color: var(--color-text);
+}
+.providerLink[data-hierarchy="secondary"]:hover:not(:disabled) {
+  background: var(--color-wash);
 }
 .providerLink:disabled {
   border-color: var(--color-rule);
-  background: var(--color-surface-quiet);
-  color: var(--color-text-soft);
-  cursor: not-allowed;
 }
-.providerLink:focus-visible {
-  outline: 2px solid var(--color-focus);
-  outline-offset: 2px;
+.providerContent {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+.providerMark {
+  flex: none;
+}
+.providerLink:disabled .providerMark {
+  opacity: 0.45;
+  filter: grayscale(1);
 }
 @media (max-width: 26rem) {
   .providerSection {
