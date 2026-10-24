@@ -9,7 +9,7 @@
 | Change | `213` |
 | Slug | `minor-consent` |
 | Title | Согласие 14+, акт оценки вреда, памятка РКН |
-| Status | `done` |
+| Status | `archived` |
 | Branch | `feature/213-minor-consent` |
 
 ---
