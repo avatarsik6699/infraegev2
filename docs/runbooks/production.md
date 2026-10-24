@@ -114,8 +114,16 @@ the deploy is dispatched:
    site first) and Google Search Console «Изменение адреса»; submit
    `https://kodumka.ru/sitemap.xml` in both.
 6. Robokassa: shop URL `https://kodumka.ru` and the Result/Success/Fail URLs in
-   [billing](billing.md). OAuth providers are not enabled; when one is, register only the
-   `kodumka.ru` callbacks above.
+   [billing](billing.md).
+   OAuth providers are on since 2026-10-24 (Change 207):
+   - Yandex ID «Кодумка» is in the operator's oauth.yandex.ru account, scope `login:info` only.
+   - VK ID «Кодумка» (ID 54851111) is in the VK ID business account. Its base domain is
+     `kodumka.ru`, and its trusted redirect is the VK callback above.
+
+   Credentials are in athanor (infraegev2 vault: `YANDEX_CLIENT_*`, `VK_CLIENT_*`, `VK_APP_ID`) and
+   in `/etc/infraege/production.env`. Both flows reached the consent step `/register/provider` on
+   production. Yandex shows «Сервис ещё не верифицирован» until the app is verified in the OAuth
+   console.
 7. Change 198: set `GEOIP_DIR=/var/lib/infraege/geoip` in the protected environment, run
    `ops/install-backup-timers.sh` (it adds `infraege-geoip.timer`) and once
    `systemctl start infraege-geoip.service`; the API reads the city database after its next
