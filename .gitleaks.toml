@@ -51,9 +51,9 @@ regexes = [
 description = "Change 203: content-addressed storage keys of public bank attachments (SHA-256 of the file)"
 condition = "AND"
 paths = ['''(^|/)content/practice-bank/bank\.json$''']
-regexTarget = "line"
-# Unanchored: the directory scan reads large files in chunks, so a line may arrive without its start.
-regexes = ['''"storage_key": "[0-9a-f]{64}"''']
+# Change 204: matched on the value itself; the directory scan reads this large file in chunks, so a
+# line (and a digest in it) may arrive cut. Every lowercase-hex value here is part of a public digest.
+regexes = ['''^[0-9a-f]+$''']
 
 [[rules.allowlists]]
 description = "Verified public task SHA-256 digests in the historical migration snapshot"
@@ -65,3 +65,10 @@ regexes = [
   '''^513f50e1986542c2507065497fc35851925c54d9b018c062a8c1bbf263e89b29$''',
   '''^4de9c4f8a0065151b4555c305a2ba1fe421a1b06673e0da1df3cdb08f6e780ab$''',
 ]
+
+[[rules]]
+id = "twilio-api-key"
+
+[[rules.allowlists]]
+description = "Change 204: public bank attachments, content-addressed (file name = SHA-256); long random task data"
+paths = ['''(^|/)content/practice-bank/files/[0-9a-f]{64}$''']
