@@ -9,7 +9,7 @@
 | Change | `199` |
 | Slug | `operator-console` |
 | Title | Операторская консоль: сторона сайта и отказ от лимитов на чтение |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/199-operator-console` |
 
 ---
