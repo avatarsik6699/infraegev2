@@ -1,6 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 import { PublicHeader } from "~/widgets/public-header";
+import { SiteFlagsProvider } from "~/shared/lib/site-flags";
 import { PublicFooter } from "~/widgets/public-footer";
 
 const accountSession = vi.hoisted(() => ({
@@ -189,6 +190,27 @@ describe("PublicHeader", () => {
     expect(
       telegramLink.querySelector("svg.lucide-arrow-up-right"),
     ).not.toBeNull();
+  });
+
+  it("names the seller in the footer only while selling is on", () => {
+    const { container, unmount } = render(<PublicFooter />);
+    expect(container.querySelector("[data-footer-seller]")).toBeNull();
+    unmount();
+
+    render(
+      <SiteFlagsProvider value={{ billing: true }}>
+        <PublicFooter />
+      </SiteFlagsProvider>,
+    );
+    const seller = document.querySelector("[data-footer-seller]");
+    expect(seller?.textContent).toBe(
+      "Самозанятый Годлевский Владислав Александрович, ИНН 190302795145 · kodumka@mail.ru",
+    );
+    expect(
+      screen
+        .getByRole("link", { name: /kodumka@mail\.ru/ })
+        .getAttribute("href"),
+    ).toBe("mailto:kodumka@mail.ru");
   });
 
   it("keeps the explicitly compact identity linked to home", () => {

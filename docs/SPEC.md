@@ -523,7 +523,8 @@ fake countdowns or scarcity claims (§8.2). Checkout shows the chosen plan, «О
 line «Нажимая «Оплатить», вы принимаете условия оферты» with a link; no checkboxes. The return page
 polls the payment status and never trusts query parameters. The account «Доступ» section shows access
 end date, payment history with receipt links and «Продлить». Footer links: «Тарифы», «Оферта»,
-«Возврат» — no seller name.
+«Возврат» and one small line «Самозанятый ФИО, ИНН · email», which Robokassa requires in the footer
+(Change 200, architect 2026-10-24; no city, no phone). All of them appear only while selling is on.
 
 Change 164 replaces the minimal Change 122/156 profile with the "Clean Textbook" visual system
 in [DESIGN](../DESIGN.md), approved by the architect from full-page mockups. Keep the infraege
