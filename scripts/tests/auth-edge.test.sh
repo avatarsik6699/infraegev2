@@ -80,7 +80,20 @@ def status(_: int) -> int:
 
 with concurrent.futures.ThreadPoolExecutor(max_workers=20) as pool:
     assert 429 in list(pool.map(status, range(20)))
+
+# Change 202: with the sign-in budget spent, the per-page session check still answers.
+def session(_: int) -> int:
+    request = urllib.request.Request(base + "/api/auth/session", headers={"Host": "kodumka.ru"})
+    try:
+        with opener.open(request, timeout=5) as response:
+            return response.status
+    except urllib.error.HTTPError as error:
+        return error.code
+
+with concurrent.futures.ThreadPoolExecutor(max_workers=20) as pool:
+    codes = list(pool.map(session, range(60)))
+    assert 429 not in codes, codes
 PY
 
 grep -Fq -- '--no-access-log' "$repo_dir/apps/api/entrypoint.sh"
-printf 'Auth edge contract: PASS (bounded auth, no callback query access logging, Uvicorn access disabled)\n'
+printf 'Auth edge contract: PASS (bounded auth, session check on the page budget, no callback query access logging, Uvicorn access disabled)\n'

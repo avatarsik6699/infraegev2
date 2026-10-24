@@ -160,7 +160,9 @@ availability and TLS. Preserve bounded logs and rate limits. Browser analytics i
 ingestion.
 
 Auth endpoints have an independent Nginx per-IP limit (10/minute, burst 10, immediate 429), separate
-from practice reads/checker. Production access logs use a query-free request format and provider
+from practice reads/checker. The exception is `GET /api/auth/session`, the check every page load
+makes: it uses the page-read budget (600/minute, burst 200), so visitors behind one NAT address
+(a school class) are not shown «Не удалось проверить вход» (Change 202). Production access logs use a query-free request format and provider
 callbacks disable edge access logging and suppress query-bearing proxy warnings; Uvicorn access logs
 are disabled because they include request queries. The API's structured events retain path, status and
 request ID only. Treat a callback query,
