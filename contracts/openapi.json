@@ -1736,7 +1736,7 @@
             "type": "boolean"
           },
           "privacy_consent_version": {
-            "const": "2026-10-23",
+            "const": "2026-10-25",
             "title": "Privacy Consent Version",
             "type": "string"
           }
@@ -2224,7 +2224,7 @@
             "type": "boolean"
           },
           "privacy_consent_version": {
-            "const": "2026-10-23",
+            "const": "2026-10-25",
             "title": "Privacy Consent Version",
             "type": "string"
           }

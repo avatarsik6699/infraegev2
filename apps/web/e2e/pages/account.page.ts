@@ -545,7 +545,7 @@ export class AccountPage {
     await this.page.route("**/api/auth/provider/register", (route) => {
       expect(route.request().postDataJSON()).toEqual({
         privacy_consent: true,
-        privacy_consent_version: "2026-10-23",
+        privacy_consent_version: "2026-10-25",
       });
       registered = true;
       return route.fulfill({

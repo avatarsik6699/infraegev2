@@ -24,14 +24,15 @@ export const ConsentPage: React.FC = () => (
         Согласие на обработку персональных данных
       </Typography.Title>
       <Typography.Prose className={styles.content}>
-        <Typography.Text>Версия от 23 октября 2026 года.</Typography.Text>
+        <Typography.Text>Версия от 25 октября 2026 года.</Typography.Text>
         <Typography.Text>
           Отмечая согласие в форме регистрации — по почте или после входа через
           VK ID или Яндекс ID, — я свободно, своей волей и в своём интересе
           разрешаю оператору {operator.nameDative} ({operator.status}, ИНН{" "}
           {operator.inn}, адрес для обращений: {contact}) обрабатывать мои
           персональные данные на условиях ниже. Согласие не включает рекламные
-          рассылки.
+          рассылки. Мне исполнилось 14 лет; если нет, согласие от моего имени
+          даёт мой родитель или иной законный представитель.
         </Typography.Text>
         <Typography.Title order={2}>Цели</Typography.Title>
         <Typography.Text>

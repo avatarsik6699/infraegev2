@@ -93,7 +93,7 @@ def member(client: TestClient, sent: list[tuple[str, str]], email: str) -> dict[
                 "email": email,
                 "password": "correct horse battery",
                 "privacy_consent": True,
-                "privacy_consent_version": "2026-10-23",
+                "privacy_consent_version": "2026-10-25",
             },
             headers=ORIGIN,
         ).status_code

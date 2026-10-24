@@ -40,7 +40,7 @@ IMAGE = (
 )
 
 
-CONSENT = {"privacy_consent": True, "privacy_consent_version": "2026-10-23"}
+CONSENT = {"privacy_consent": True, "privacy_consent_version": "2026-10-25"}
 
 
 def consent_step(client: TestClient, origin: dict[str, str]) -> dict:
@@ -798,7 +798,7 @@ def test_account_auth_guest_and_context_progress(database, monkeypatch):
                     "email": email,
                     "password": "correct horse battery",
                     "privacy_consent": True,
-                    "privacy_consent_version": "2026-10-23",
+                    "privacy_consent_version": "2026-10-25",
                 },
                 headers=headers,
             )
@@ -813,7 +813,7 @@ def test_account_auth_guest_and_context_progress(database, monkeypatch):
                         "email": email,
                         "password": "another secure password",
                         "privacy_consent": True,
-                        "privacy_consent_version": "2026-10-23",
+                        "privacy_consent_version": "2026-10-25",
                     },
                     headers=headers,
                 ).status_code
@@ -1018,7 +1018,7 @@ def test_registration_requires_and_records_privacy_consent(database, monkeypatch
                 json={
                     **required,
                     "privacy_consent": False,
-                    "privacy_consent_version": "2026-10-23",
+                    "privacy_consent_version": "2026-10-25",
                 },
                 headers=headers,
             ).status_code
@@ -1051,7 +1051,7 @@ def test_registration_requires_and_records_privacy_consent(database, monkeypatch
                 json={
                     **required,
                     "privacy_consent": True,
-                    "privacy_consent_version": "2026-10-23",
+                    "privacy_consent_version": "2026-10-25",
                 },
                 headers=headers,
             ).status_code
@@ -1069,7 +1069,7 @@ def test_registration_requires_and_records_privacy_consent(database, monkeypatch
                     .where(AccountPassword.email_normalized == "consent@example.com")
                 )
                 assert user is not None
-                assert user.privacy_consent_version == "2026-10-23"
+                assert user.privacy_consent_version == "2026-10-25"
                 assert user.privacy_consented_at is not None
         finally:
             await engine.dispose()
@@ -1360,7 +1360,7 @@ def test_account_mail_resend_limits_preserve_valid_links_and_retract_failures(
                     "email": "resend@example.com",
                     "password": "correct horse battery",
                     "privacy_consent": True,
-                    "privacy_consent_version": "2026-10-23",
+                    "privacy_consent_version": "2026-10-25",
                 },
                 headers=headers,
             ).status_code
@@ -1378,7 +1378,7 @@ def test_account_mail_resend_limits_preserve_valid_links_and_retract_failures(
                         "email": address,
                         "password": "correct horse battery",
                         "privacy_consent": True,
-                        "privacy_consent_version": "2026-10-23",
+                        "privacy_consent_version": "2026-10-25",
                     },
                     headers=headers,
                 ).status_code
@@ -1533,7 +1533,7 @@ def test_provider_account_can_add_verified_email_without_merging(database, monke
                     "email": "taken@example.com",
                     "password": "a secure different password",
                     "privacy_consent": True,
-                    "privacy_consent_version": "2026-10-23",
+                    "privacy_consent_version": "2026-10-25",
                 },
                 headers=origin,
             ).status_code

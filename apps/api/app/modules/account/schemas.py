@@ -13,7 +13,7 @@ class StrictModel(BaseModel):
 
 
 # The current edition of the consent page (SPEC §8.2); earlier consents stay valid.
-ConsentVersion = Literal["2026-10-23"]
+ConsentVersion = Literal["2026-10-25"]
 
 
 class RegisterRequest(StrictModel):

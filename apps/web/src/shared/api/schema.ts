@@ -1336,7 +1336,7 @@ export interface components {
              * Privacy Consent Version
              * @constant
              */
-            privacy_consent_version: "2026-10-23";
+            privacy_consent_version: "2026-10-25";
         };
         /** ProviderRegisteredView */
         ProviderRegisteredView: {
@@ -1457,7 +1457,7 @@ export interface components {
              * Privacy Consent Version
              * @constant
              */
-            privacy_consent_version: "2026-10-23";
+            privacy_consent_version: "2026-10-25";
         };
         /** ResetPasswordRequest */
         ResetPasswordRequest: {

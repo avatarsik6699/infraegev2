@@ -1,7 +1,7 @@
 import { apiClient, ApiError } from "~/shared/api";
 
 /** The edition of /consent the form links to; the API accepts only this one. */
-export const CONSENT_VERSION = "2026-10-23";
+export const CONSENT_VERSION = "2026-10-25";
 
 function ensure(response: { response: Response }) {
   if (!response.response.ok)
