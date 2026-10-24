@@ -77,4 +77,9 @@ expect 413 "$(request -X POST --data "InvId=1&pad=$big" "$base/api/billing/webho
   'oversized notification'
 expect 200 "$(request -X POST --data 'InvId=1' "$base/api/billing/webhooks/robokassa")" \
   'notification'
+# Change 198: a reader's page loads 1–3 chunks; only a downloader meets the paid budget.
+codes=$(for _ in $(seq 1 125); do
+  request -H 'Cookie: __Host-infraege_session=granted' "$base/assets/paid/x.js"; echo
+done | sort | uniq -c)
+grep -Eq '^ +[0-9]+ 429$' <<<"$codes" || { echo "paid budget never limits: $codes" >&2; exit 1; }
 echo 'paid gate contract passed'

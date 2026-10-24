@@ -30,7 +30,10 @@ for unit in infraege-billing-hourly infraege-billing-daily; do
   install -m 644 "$repo_dir/ops/systemd/$unit.service" /etc/systemd/system/
   install -m 644 "$repo_dir/ops/systemd/$unit.timer" /etc/systemd/system/
 done
+# Change 198: the monthly offline city database for «Где выполнен вход»
+install -m 644 "$repo_dir/ops/systemd/infraege-geoip.service" /etc/systemd/system/
+install -m 644 "$repo_dir/ops/systemd/infraege-geoip.timer" /etc/systemd/system/
 systemctl daemon-reload
 systemctl enable --now infraege-backup.timer infraege-restore-check.timer infraege-account-purge.timer \
   infraege-billing-hourly.timer infraege-billing-daily.timer \
-  infraege-offsite-check.timer infraege-backup-summary.timer
+  infraege-offsite-check.timer infraege-backup-summary.timer infraege-geoip.timer

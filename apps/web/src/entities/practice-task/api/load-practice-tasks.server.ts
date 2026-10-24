@@ -394,6 +394,7 @@ export function projectPracticeTask(
     statement: blocks(source.content.statement),
     hint: blocks(source.content.hint),
     solution: blocks(source.content.explanation),
+    solutionOnRequest: source.solution_on_request,
     theoryLinks: (source.content.theory_links ?? []).flatMap((link) =>
       link.material_id === materialId && link.section
         ? [{ hash: link.section, label: link.label }]
@@ -431,6 +432,32 @@ export function projectLockedTask(
     ),
     countsTowardMastery: source.counts_toward_mastery,
   };
+}
+
+/** Change 198: the solution of a paid task, asked for by «Решение» (SPEC §4).
+ * The task supplies the file deliveries its solution blocks may refer to. */
+export async function loadTaskSolution(
+  taskId: string,
+): Promise<readonly PracticeTaskTypes.ContentBlock[]> {
+  const cookie = sessionCookie.header();
+  const options = {
+    params: { path: { task_id: taskId } },
+    headers: cookie ? { cookie } : undefined,
+    cache: "no-store" as const,
+    signal: AbortSignal.timeout(6000),
+  };
+  const [task, solution] = await Promise.all([
+    practiceServerClient.GET("/api/tasks/{task_id}", options),
+    practiceServerClient.GET("/api/tasks/{task_id}/solution", options),
+  ]);
+  if (!task.data || !solution.data) throw new Error("Solution unavailable");
+  return projectPracticeTask(
+    {
+      ...task.data,
+      content: { ...task.data.content, explanation: solution.data.explanation },
+    },
+    "",
+  ).solution;
 }
 
 export async function loadLessonPractice(

@@ -2,10 +2,11 @@
 
 # Ordered schema heads; a transition is allowed only from the immediately previous head, or
 # along a reviewed skip below.
-APPLICATION_SCHEMAS=(122_01 140_01 191_01 192_01)
+APPLICATION_SCHEMAS=(122_01 140_01 191_01 192_01 198_01)
 # Change 192: production runs 140_01 (191_01 was never released). Both later heads are
 # additive, so one isolated rehearsal of 140_01 -> 192_01 proves the whole step.
-APPLICATION_SKIPS=("140_01 192_01")
+# Change 198: neither 192_01 was released; one rehearsal of 140_01 -> 198_01 proves it.
+APPLICATION_SKIPS=("140_01 192_01" "140_01 198_01")
 
 application_known_schema() {
   local schema
@@ -51,8 +52,9 @@ application_schema_preflight() {
   previous_schema=$(cat "$previous/infra/database-schema" 2>/dev/null || true)
   application_known_schema "$candidate_schema" || return 1
   # Each head is additive over its predecessor (140_01 accounts, 191_01 generated catalog
-  # columns, 192_01 billing tables): a retained previous release reads its own schema after a
-  # failed activation. A first deployment of a new head still needs a fresh isolated restore
+  # columns, 192_01 billing tables, 198_01 devices and restrictions; its narrower provider
+  # CHECK only drops the never-enabled Telegram): a retained previous release reads its own
+  # schema after a failed activation. A first deployment of a new head still needs a fresh isolated restore
   # acceptance for this exact image before migration is allowed.
   if [[ $candidate_schema == "$previous_schema" ]]; then return 0; fi
   application_allowed_transition "$previous_schema" "$candidate_schema" || return 1

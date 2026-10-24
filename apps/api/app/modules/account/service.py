@@ -3,13 +3,18 @@
 from __future__ import annotations
 
 import asyncio
-from datetime import UTC, datetime, timedelta
+from dataclasses import dataclass
+from datetime import UTC, date, datetime, timedelta
 from uuid import UUID
 
 from sqlalchemy import delete, func, select, update
+from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.modules.account.device import Device
 from app.modules.account.models import (
+    AccountActivityDay,
+    AccountDevice,
     AccountIdentity,
     AccountPassword,
     AccountSession,
@@ -25,6 +30,10 @@ RECENT_AUTH = timedelta(minutes=10)
 RESEND_COOLDOWN = timedelta(minutes=1)
 RESEND_WINDOW = timedelta(hours=1)
 MAX_RESENDS_PER_WINDOW = 5
+# Change 198 (SPEC §6.2): personal access, at most three browsers at once.
+MAX_ACTIVE_DEVICES = 3
+TOUCH_INTERVAL = timedelta(minutes=10)
+MAX_CITIES_PER_DAY = 20
 
 
 class InvalidCredentials(ValueError):
@@ -66,7 +75,71 @@ async def current_session(db: AsyncSession, opaque: str | None) -> AccountSessio
     )
 
 
-async def create_session(db: AsyncSession, user_id: UUID, old_token: str | None = None) -> str:
+@dataclass(frozen=True)
+class SignIn:
+    opaque: str
+    new_device: bool
+
+
+def last_used():
+    return func.coalesce(AccountSession.last_seen_at, AccountSession.authenticated_at)
+
+
+async def ensure_day(db: AsyncSession, user_id: UUID) -> None:
+    await db.execute(
+        insert(AccountActivityDay)
+        .values(
+            user_id=user_id,
+            day=today(),
+            new_devices=0,
+            evictions=0,
+            paid_chunks=0,
+            solutions=0,
+            cities=[],
+        )
+        .on_conflict_do_nothing()
+    )
+
+
+async def count_today(db: AsyncSession, user_id: UUID, field: str, by: int = 1) -> int:
+    """Add to one daily counter of the signal report and return its new value."""
+    await ensure_day(db, user_id)
+    column = getattr(AccountActivityDay, field)
+    return (
+        await db.execute(
+            update(AccountActivityDay)
+            .where(AccountActivityDay.user_id == user_id, AccountActivityDay.day == today())
+            .values({field: column + by})
+            .returning(column)
+        )
+    ).scalar_one()
+
+
+async def note_city(db: AsyncSession, user_id: UUID, city: str | None) -> None:
+    if not city:
+        return
+    await ensure_day(db, user_id)
+    await db.execute(
+        update(AccountActivityDay)
+        .where(
+            AccountActivityDay.user_id == user_id,
+            AccountActivityDay.day == today(),
+            ~AccountActivityDay.cities.contains([city]),
+            func.cardinality(AccountActivityDay.cities) < MAX_CITIES_PER_DAY,
+        )
+        .values(cities=func.array_append(AccountActivityDay.cities, city))
+    )
+
+
+def today() -> date:
+    return now().date()
+
+
+async def create_session(
+    db: AsyncSession, user_id: UUID, old_token: str | None = None, device: Device | None = None
+) -> SignIn:
+    """A new session of this browser. Earlier sessions of the same browser end; beyond
+    three browsers the one used longest ago ends (SPEC §6.2)."""
     if old_token:
         try:
             await db.execute(
@@ -76,18 +149,130 @@ async def create_session(db: AsyncSession, user_id: UUID, old_token: str | None 
             )
         except UnicodeEncodeError:
             pass
-    opaque = new_token()
     timestamp = now()
+    new_device = False
+    if device is not None:
+        await db.execute(
+            update(AccountSession)
+            .where(
+                AccountSession.user_id == user_id,
+                AccountSession.device_hash == device.hash,
+                AccountSession.revoked_at.is_(None),
+            )
+            .values(revoked_at=timestamp)
+        )
+        known = await db.scalar(
+            select(AccountDevice)
+            .where(AccountDevice.user_id == user_id, AccountDevice.device_hash == device.hash)
+            .with_for_update()
+        )
+        if known is None:
+            new_device = True
+            db.add(
+                AccountDevice(
+                    user_id=user_id,
+                    device_hash=device.hash,
+                    label=device.label,
+                    first_seen_at=timestamp,
+                    last_seen_at=timestamp,
+                )
+            )
+            await count_today(db, user_id, "new_devices")
+        else:
+            known.label = device.label
+            known.last_seen_at = timestamp
+        await note_city(db, user_id, device.city)
+    active = list(
+        await db.scalars(
+            select(AccountSession.id)
+            .where(
+                AccountSession.user_id == user_id,
+                AccountSession.revoked_at.is_(None),
+                AccountSession.expires_at > timestamp,
+            )
+            .order_by(last_used().desc(), AccountSession.id)
+        )
+    )
+    evicted = active[MAX_ACTIVE_DEVICES - 1 :]
+    if evicted:
+        await db.execute(
+            update(AccountSession)
+            .where(AccountSession.id.in_(evicted))
+            .values(revoked_at=timestamp)
+        )
+        await count_today(db, user_id, "evictions", len(evicted))
+    opaque = new_token()
     db.add(
         AccountSession(
             user_id=user_id,
             token_hash=token_hash(opaque),
             authenticated_at=timestamp,
             expires_at=timestamp + SESSION_LIFETIME,
+            device_hash=device.hash if device else None,
+            device_label=device.label if device else None,
+            ip=device.ip if device else None,
+            city=device.city if device else None,
+            last_ip=device.ip if device else None,
+            last_seen_at=timestamp,
         )
     )
     await db.flush()
-    return opaque
+    return SignIn(opaque, new_device)
+
+
+async def touch_session(db: AsyncSession, session: AccountSession, device: Device) -> None:
+    """Remember the last activity of a session, at most once per TOUCH_INTERVAL."""
+    timestamp = now()
+    if session.last_seen_at is not None and session.last_seen_at > timestamp - TOUCH_INTERVAL:
+        return
+    session.last_seen_at = timestamp
+    if device.ip:
+        session.last_ip = device.ip
+        if device.city:
+            session.city = device.city
+    if session.device_hash:
+        await db.execute(
+            update(AccountDevice)
+            .where(
+                AccountDevice.user_id == session.user_id,
+                AccountDevice.device_hash == session.device_hash,
+            )
+            .values(last_seen_at=timestamp)
+        )
+    await note_city(db, session.user_id, device.city)
+    await db.flush()
+
+
+async def active_sessions(db: AsyncSession, user_id: UUID) -> list[AccountSession]:
+    return list(
+        await db.scalars(
+            select(AccountSession)
+            .where(
+                AccountSession.user_id == user_id,
+                AccountSession.revoked_at.is_(None),
+                AccountSession.expires_at > now(),
+            )
+            .order_by(last_used().desc(), AccountSession.id)
+        )
+    )
+
+
+async def revoke_sessions(
+    db: AsyncSession, user_id: UUID, *, only: UUID | None = None, keep: UUID | None = None
+) -> int:
+    """End one session of the owner, or all of them except `keep`."""
+    conditions = [AccountSession.user_id == user_id, AccountSession.revoked_at.is_(None)]
+    if only is not None:
+        conditions.append(AccountSession.id == only)
+    if keep is not None:
+        conditions.append(AccountSession.id != keep)
+    result = await db.execute(
+        update(AccountSession)
+        .where(*conditions)
+        .values(revoked_at=now())
+        .returning(AccountSession.id)
+    )
+    return len(result.all())
 
 
 async def register(
@@ -283,7 +468,9 @@ async def verify_email(db: AsyncSession, opaque: str) -> None:
     await db.flush()
 
 
-async def login(db: AsyncSession, email: str, password: str, old_token: str | None) -> str:
+async def login(
+    db: AsyncSession, email: str, password: str, old_token: str | None, device: Device | None
+) -> SignIn:
     credential = await db.scalar(
         select(AccountPassword).where(AccountPassword.email_normalized == email.casefold())
     )
@@ -292,7 +479,7 @@ async def login(db: AsyncSession, email: str, password: str, old_token: str | No
     )
     if credential is None or not valid or credential.email_verified_at is None:
         raise InvalidCredentials("invalid credentials")
-    return await create_session(db, credential.user_id, old_token)
+    return await create_session(db, credential.user_id, old_token, device)
 
 
 async def reset_password(db: AsyncSession, opaque: str, password: str) -> None:

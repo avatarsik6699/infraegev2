@@ -30,6 +30,7 @@ apps/api/migrations/versions/122_01_minimal_bank.py
 apps/api/migrations/versions/140_01_accounts_server_progress.py
 apps/api/migrations/versions/191_01_catalog_columns.py
 apps/api/migrations/versions/192_01_billing.py
+apps/api/migrations/versions/198_01_devices_restrictions.py
 infra/database-schema
 "}
 

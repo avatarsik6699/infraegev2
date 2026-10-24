@@ -18,6 +18,7 @@ describe("public practice projection", () => {
         id: "imported-task",
         revision: 1,
         solution_revision: 1,
+        solution_on_request: false,
         content: {
           id: "imported-task",
           title: "Таблица",

@@ -60,4 +60,16 @@ printf '122_01\n' > "$test_root/previous/infra/database-schema"
 if application_schema_preflight "$test_root/candidate" "$test_root/previous" "$test_root/proof"; then exit 1; fi
 application_allowed_transition 140_01 192_01
 if application_allowed_transition 122_01 192_01; then exit 1; fi
+# Change 198: 198_01 follows 192_01, or production's 140_01 along the reviewed skip.
+printf '198_01\n' > "$test_root/candidate/infra/database-schema"
+printf '140_01\n' > "$test_root/previous/infra/database-schema"
+if application_schema_preflight "$test_root/candidate" "$test_root/previous" "$test_root/proof"; then exit 1; fi
+printf '198_01 %s\n' "$DEPLOY_SHA" > "$test_root/proof"
+application_schema_preflight "$test_root/candidate" "$test_root/previous" "$test_root/proof"
+printf '192_01\n' > "$test_root/previous/infra/database-schema"
+application_schema_preflight "$test_root/candidate" "$test_root/previous" "$test_root/proof"
+printf '191_01\n' > "$test_root/previous/infra/database-schema"
+if application_schema_preflight "$test_root/candidate" "$test_root/previous" "$test_root/proof"; then exit 1; fi
+application_allowed_transition 140_01 198_01
+if application_allowed_transition 191_01 198_01; then exit 1; fi
 echo 'Deploy preflight: PASS (sourceable env, compatible schema, exact candidate acceptance)'

@@ -1,0 +1,18 @@
+/* Change 198: a quiet bordered note, no alarm colours: the learner can appeal. */
+.root {
+  display: grid;
+  gap: var(--space-1);
+  padding: var(--space-3);
+  border: 1px solid var(--color-rule);
+  border-radius: var(--radius-tile);
+}
+
+.root .title[data-order] {
+  margin: 0;
+  font-size: var(--text-xl);
+}
+
+.text[data-variant] {
+  margin: 0;
+  color: var(--color-text-soft);
+}

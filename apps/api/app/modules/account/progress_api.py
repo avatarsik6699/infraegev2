@@ -5,7 +5,9 @@ from __future__ import annotations
 from typing import Annotated
 
 from fastapi import APIRouter, Header, HTTPException, Request, status
+from sqlalchemy import select
 
+from app.modules.account import service
 from app.modules.account.api import AccountDb, active_session, require_csrf, require_origin
 from app.modules.account.progress import (
     CheckAndSaveRequest,
@@ -16,10 +18,36 @@ from app.modules.account.progress import (
     reset_lesson,
 )
 from app.modules.entitlement.service import SUBSCRIPTION_REQUIRED, access_until, task_is_paid
-from app.modules.practice.readers import InvalidAnswer, Unavailable
+from app.modules.practice.models import TaskRecord
+from app.modules.practice.readers import InvalidAnswer, Unavailable, availability
+from app.modules.practice.schemas import Block, StrictModel
 from app.modules.practice.service import Conflict
 
 router = APIRouter(tags=["progress"])
+# Change 198: far above what a student opens in a day, far below a whole paid bank.
+SOLUTIONS_PER_DAY = 300
+
+
+class SolutionView(StrictModel):
+    explanation: list[Block]
+
+
+@router.get("/tasks/{task_id}/solution", response_model=SolutionView)
+async def get_solution(task_id: str, request: Request, db: AccountDb) -> SolutionView:
+    """The solution of a paid task, sent only when asked for (SPEC §4)."""
+    current = await active_session(request, db)
+    if await task_is_paid(db, task_id) and await access_until(db, current.user_id) is None:
+        raise HTTPException(403, SUBSCRIPTION_REQUIRED)
+    content = await db.scalar(
+        select(TaskRecord.content).where(TaskRecord.id == task_id, availability())
+    )
+    if content is None:
+        raise HTTPException(404, "task unavailable")
+    if await service.count_today(db, current.user_id, "solutions") > SOLUTIONS_PER_DAY:
+        await db.commit()
+        raise HTTPException(429, "solution limit reached")
+    await db.commit()
+    return SolutionView(explanation=content["explanation"])
 
 
 @router.post(

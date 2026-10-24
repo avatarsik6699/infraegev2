@@ -122,3 +122,29 @@ SELECT (SELECT count(*) FROM expected) =
        OR has_table_privilege('infraege_import', name, 'SELECT')
   );
 """
+
+# Change 198: known browsers and daily counters are ordinary account data; operator
+# restrictions are evidence the application never deletes; the runtime and import roles see
+# none of them.
+DEVICE_RESTORE = r"""
+WITH expected(tablename) AS (
+  VALUES ('account_device'), ('account_activity_day'), ('account_restriction')
+), actual AS (
+  SELECT tablename FROM pg_tables WHERE schemaname = 'practice'
+), private(name) AS (
+  SELECT 'practice.' || tablename FROM expected
+)
+SELECT (SELECT count(*) FROM expected) =
+  (SELECT count(*) FROM expected JOIN actual USING (tablename))
+  AND has_table_privilege(
+    'infraege_app', 'practice.account_device', 'SELECT, INSERT, UPDATE, DELETE')
+  AND has_table_privilege(
+    'infraege_app', 'practice.account_activity_day', 'SELECT, INSERT, UPDATE, DELETE')
+  AND has_table_privilege('infraege_app', 'practice.account_restriction', 'SELECT, INSERT, UPDATE')
+  AND NOT has_table_privilege('infraege_app', 'practice.account_restriction', 'DELETE')
+  AND NOT EXISTS (
+    SELECT 1 FROM private
+    WHERE has_table_privilege('infraege_runtime', name, 'SELECT')
+       OR has_table_privilege('infraege_import', name, 'SELECT')
+  );
+"""

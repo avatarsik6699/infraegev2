@@ -1,5 +1,8 @@
 import { apiClient, ApiError } from "~/shared/api";
 
+/** The edition of /consent the form links to; the API accepts only this one. */
+export const CONSENT_VERSION = "2026-10-23";
+
 function ensure(response: { response: Response }) {
   if (!response.response.ok)
     throw new ApiError("http", "Account request returned an HTTP error", {
@@ -14,8 +17,39 @@ export const accountApi = {
         email,
         password,
         privacy_consent: true,
-        privacy_consent_version: "2026-09-25",
+        privacy_consent_version: CONSENT_VERSION,
       },
+    });
+    ensure(response);
+  },
+  /** Change 198: the consent step after a first sign-in through a provider. */
+  pendingProvider: async () => {
+    const response = await apiClient.GET("/api/auth/provider/pending");
+    return response.response.ok ? (response.data?.provider ?? null) : null;
+  },
+  registerWithProvider: async () => {
+    const response = await apiClient.POST("/api/auth/provider/register", {
+      body: { privacy_consent: true, privacy_consent_version: CONSENT_VERSION },
+    });
+    ensure(response);
+    return response.data?.return_to ?? "/";
+  },
+  sessions: async () => {
+    const response = await apiClient.GET("/api/auth/sessions");
+    ensure(response);
+    return response.data ?? [];
+  },
+  endSession: async (id: string, csrfToken: string | null) => {
+    const response = await apiClient.DELETE("/api/auth/sessions/{session_id}", {
+      params: { path: { session_id: id } },
+      headers: { "x-csrf-token": csrfToken },
+    });
+    ensure(response);
+  },
+  endOtherSessions: async (csrfToken: string | null) => {
+    const response = await apiClient.DELETE("/api/auth/sessions", {
+      params: { query: { others: true } },
+      headers: { "x-csrf-token": csrfToken },
     });
     ensure(response);
   },

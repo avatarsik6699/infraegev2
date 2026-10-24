@@ -31,6 +31,7 @@ import { Route as EgeSlugRouteImport } from './routes/ege.$slug'
 import { Route as OfertaVersionRouteImport } from './routes/oferta_.$version'
 import { Route as PracticeIndexRouteImport } from './routes/practice.index'
 import { Route as PracticeTaskIdRouteImport } from './routes/practice.$taskId'
+import { Route as RegisterProviderRouteImport } from './routes/register_.provider'
 import { Route as SitemapPracticePageRouteImport } from './routes/sitemap-practice.$page'
 import { Route as SubscribeReturnRouteImport } from './routes/subscribe_.return'
 import { Route as CoursesCourseSlugLessonSlugRouteImport } from './routes/courses_.$courseSlug.$lessonSlug'
@@ -147,6 +148,11 @@ const PracticeTaskIdRoute = PracticeTaskIdRouteImport.update({
   path: '/practice/$taskId',
   getParentRoute: () => rootRouteImport,
 } as any)
+const RegisterProviderRoute = RegisterProviderRouteImport.update({
+  id: '/register_/provider',
+  path: '/register/provider',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SitemapPracticePageRoute = SitemapPracticePageRouteImport.update({
   id: '/sitemap-practice/$page',
   path: '/sitemap-practice/$page',
@@ -194,6 +200,7 @@ export interface FileRoutesByFullPath {
   '/ege/$slug': typeof EgeSlugRoute
   '/oferta/$version': typeof OfertaVersionRoute
   '/practice/$taskId': typeof PracticeTaskIdRoute
+  '/register/provider': typeof RegisterProviderRoute
   '/sitemap-practice/$page': typeof SitemapPracticePageRoute
   '/subscribe/return': typeof SubscribeReturnRoute
   '/courses/': typeof CoursesIndexRoute
@@ -223,6 +230,7 @@ export interface FileRoutesByTo {
   '/ege/$slug': typeof EgeSlugRoute
   '/oferta/$version': typeof OfertaVersionRoute
   '/practice/$taskId': typeof PracticeTaskIdRoute
+  '/register/provider': typeof RegisterProviderRoute
   '/sitemap-practice/$page': typeof SitemapPracticePageRoute
   '/subscribe/return': typeof SubscribeReturnRoute
   '/courses': typeof CoursesIndexRoute
@@ -253,6 +261,7 @@ export interface FileRoutesById {
   '/ege/$slug': typeof EgeSlugRoute
   '/oferta_/$version': typeof OfertaVersionRoute
   '/practice/$taskId': typeof PracticeTaskIdRoute
+  '/register_/provider': typeof RegisterProviderRoute
   '/sitemap-practice/$page': typeof SitemapPracticePageRoute
   '/subscribe_/return': typeof SubscribeReturnRoute
   '/courses/': typeof CoursesIndexRoute
@@ -284,6 +293,7 @@ export interface FileRouteTypes {
     | '/ege/$slug'
     | '/oferta/$version'
     | '/practice/$taskId'
+    | '/register/provider'
     | '/sitemap-practice/$page'
     | '/subscribe/return'
     | '/courses/'
@@ -313,6 +323,7 @@ export interface FileRouteTypes {
     | '/ege/$slug'
     | '/oferta/$version'
     | '/practice/$taskId'
+    | '/register/provider'
     | '/sitemap-practice/$page'
     | '/subscribe/return'
     | '/courses'
@@ -342,6 +353,7 @@ export interface FileRouteTypes {
     | '/ege/$slug'
     | '/oferta_/$version'
     | '/practice/$taskId'
+    | '/register_/provider'
     | '/sitemap-practice/$page'
     | '/subscribe_/return'
     | '/courses/'
@@ -372,6 +384,7 @@ export interface RootRouteChildren {
   EgeSlugRoute: typeof EgeSlugRoute
   OfertaVersionRoute: typeof OfertaVersionRoute
   PracticeTaskIdRoute: typeof PracticeTaskIdRoute
+  RegisterProviderRoute: typeof RegisterProviderRoute
   SitemapPracticePageRoute: typeof SitemapPracticePageRoute
   SubscribeReturnRoute: typeof SubscribeReturnRoute
   CoursesIndexRoute: typeof CoursesIndexRoute
@@ -538,6 +551,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PracticeTaskIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/register_/provider': {
+      id: '/register_/provider'
+      path: '/register/provider'
+      fullPath: '/register/provider'
+      preLoaderRoute: typeof RegisterProviderRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/sitemap-practice/$page': {
       id: '/sitemap-practice/$page'
       path: '/sitemap-practice/$page'
@@ -596,6 +616,7 @@ const rootRouteChildren: RootRouteChildren = {
   EgeSlugRoute: EgeSlugRoute,
   OfertaVersionRoute: OfertaVersionRoute,
   PracticeTaskIdRoute: PracticeTaskIdRoute,
+  RegisterProviderRoute: RegisterProviderRoute,
   SitemapPracticePageRoute: SitemapPracticePageRoute,
   SubscribeReturnRoute: SubscribeReturnRoute,
   CoursesIndexRoute: CoursesIndexRoute,

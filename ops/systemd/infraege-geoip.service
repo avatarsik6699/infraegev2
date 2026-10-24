@@ -1,0 +1,11 @@
+[Unit]
+Description=Refresh the offline city database for signed-in devices (Change 198)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+User=root
+Group=root
+Environment=GEOIP_DIR=/var/lib/infraege/geoip
+ExecStart=/opt/infraege/current/scripts/geoip-update.sh

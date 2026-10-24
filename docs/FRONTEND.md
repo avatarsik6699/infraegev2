@@ -253,9 +253,9 @@ Progress and accounts:
 - Email registration alone has a separate, initially unchecked privacy-consent checkbox linked to
   its versioned document and the policy; the API records the accepted version and server time. Do
   not present it as proof of parental authority, and do not invent an 18+ rule. Provider-created
-  accounts need their own consent flow before those providers are enabled.
+  accounts get the same consent on `/register/provider` (Change 198) before the account exists.
 - Auth and recovery routes reuse the public header and layout with one narrow form column. VK ID,
-  Yandex ID and Telegram stay visibly disabled until enabled on the server; SSR and client use its
+  Yandex ID stay visibly disabled until enabled on the server (Telegram removed, Change 198); SSR and client use its
   public availability contract. Every credential-bearing form renders `method="post"` in SSR, and
   auth submit controls stay disabled until enhancement is ready. Password visibility is a local
   accessible control; the minimum stays 12 characters. No name fields or remember-me option.

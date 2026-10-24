@@ -7,7 +7,9 @@ export {
   loadStandaloneTask,
   loadTaskSitemapIndex,
   loadTaskSitemapPage,
+  loadTaskSolution,
 } from "./api/server-loaders";
+export { getTaskSolution } from "./api/get-task-solution";
 export type { PracticeTaskTypes } from "./practice-task.types";
 export { masteryTasks } from "./mastery-tasks";
 export { practiceCatalog } from "./practice-catalog";

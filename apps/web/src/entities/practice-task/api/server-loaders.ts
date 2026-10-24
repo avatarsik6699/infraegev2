@@ -30,3 +30,6 @@ export const loadTaskSitemapIndex = createServerOnlyFn(() =>
 export const loadTaskSitemapPage = createServerOnlyFn((page: number) =>
   discovery.loadTaskSitemapPage(page),
 );
+export const loadTaskSolution = createServerOnlyFn((id: string) =>
+  lessons.loadTaskSolution(id),
+);

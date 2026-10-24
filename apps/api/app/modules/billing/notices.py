@@ -20,12 +20,12 @@ def paid(amount_kopecks: int, until: datetime, receipt_url: str | None) -> tuple
     ]
     if receipt_url:
         lines.insert(1, f"Чек: {receipt_url}")
-    return "Доступ к infraege открыт", "\n".join(lines) + "\n"
+    return "Доступ к Кодумке открыт", "\n".join(lines) + "\n"
 
 
 def ending(until: datetime) -> tuple[str, str]:
     return (
-        "Доступ к infraege заканчивается",
+        "Доступ к Кодумке заканчивается",
         f"Доступ к платным материалам действует до {date(until)}. Продлить его можно в профиле: "
         f"{settings.public_origin}/account/access\n",
     )
@@ -33,7 +33,7 @@ def ending(until: datetime) -> tuple[str, str]:
 
 def refunded(amount_kopecks: int) -> tuple[str, str]:
     return (
-        "Возврат оплаты infraege",
+        "Возврат оплаты Кодумки",
         f"Мы вернули {rubles(amount_kopecks)} ₽. Деньги придут на карту в срок, который "
         "устанавливает ваш банк. Доступ к платным материалам по этой оплате закрыт.\n",
     )

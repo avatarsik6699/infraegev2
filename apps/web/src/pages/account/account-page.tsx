@@ -23,6 +23,9 @@ import { AccountForm } from "./account-form";
 import { ProviderLinks } from "./provider-links";
 import { AccountProfile } from "./account-profile";
 
+const PROVIDER_STEP_EXPIRED =
+  "Время на подтверждение входа истекло. Войдите через сервис ещё раз.";
+
 export const AccountPage: React.FC<AccountPageTypes.Props> = (props) => {
   const session = useAccountSession();
   const refreshSession = session.refresh;
@@ -39,7 +42,23 @@ export const AccountPage: React.FC<AccountPageTypes.Props> = (props) => {
   } | null>(null);
   const [invalidResetToken, setInvalidResetToken] = useState(false);
   const [formCooldown, setFormCooldown] = useState(0);
+  const [pendingProvider, setPendingProvider] = useState<string | null>(null);
   const destination = safeReturnTo(props.returnTo);
+  useEffect(
+    function pendingProviderFx() {
+      if (props.mode !== "provider-consent") return;
+      let active = true;
+      void accountApi.pendingProvider().then((provider) => {
+        if (!active) return;
+        if (provider) setPendingProvider(provider);
+        else setError(PROVIDER_STEP_EXPIRED);
+      });
+      return () => {
+        active = false;
+      };
+    },
+    [props.mode],
+  );
   useEffect(
     function formCooldownFx() {
       if (props.mode !== "register" && props.mode !== "recovery") return;
@@ -90,7 +109,10 @@ export const AccountPage: React.FC<AccountPageTypes.Props> = (props) => {
     const data = new FormData(event.currentTarget);
     const email = accountPageHelpers.inputValue(data, "email");
     const password = accountPageHelpers.inputValue(data, "password");
-    if (submittedMode === "register" && data.get("privacy_consent") !== "on") {
+    if (
+      (submittedMode === "register" || submittedMode === "provider-consent") &&
+      data.get("privacy_consent") !== "on"
+    ) {
       setError(
         "Подтвердите согласие на обработку данных, чтобы создать аккаунт.",
       );
@@ -115,6 +137,12 @@ export const AccountPage: React.FC<AccountPageTypes.Props> = (props) => {
           mailCooldown.markSent("verification");
           setDelivery({ purpose: "verification", email });
           return;
+        case "provider-consent": {
+          const returnTo = await accountApi.registerWithProvider();
+          await session.refresh();
+          await navigate({ to: safeReturnTo(returnTo), replace: true });
+          return;
+        }
         case "verify":
           await accountApi.requestVerification(email);
           setDelivery({ purpose: "verification", email });
@@ -160,6 +188,12 @@ export const AccountPage: React.FC<AccountPageTypes.Props> = (props) => {
         }
       } else if (submittedMode === "register") {
         setError(accountPageHelpers.registrationError(reason));
+      } else if (submittedMode === "provider-consent") {
+        setError(
+          reason instanceof ApiError && reason.status === 404
+            ? PROVIDER_STEP_EXPIRED
+            : "Не удалось создать аккаунт. Попробуйте ещё раз.",
+        );
       } else {
         setError(accountPageHelpers.deliveryError(reason));
       }
@@ -196,6 +230,7 @@ export const AccountPage: React.FC<AccountPageTypes.Props> = (props) => {
   const titles: Record<AccountPageTypes.Mode, string> = {
     "sign-in": "Войти",
     register: "Создать аккаунт",
+    "provider-consent": "Создать аккаунт",
     verify: "Подтвердить почту",
     recovery: "Восстановить пароль",
     "new-password": "Новый пароль",
@@ -228,6 +263,14 @@ export const AccountPage: React.FC<AccountPageTypes.Props> = (props) => {
               {props.mode === "sign-in" ? (
                 <Typography.Text tone="muted">
                   Прогресс будет сохраняться в аккаунте.
+                </Typography.Text>
+              ) : null}
+              {props.mode === "provider-consent" && pendingProvider ? (
+                <Typography.Text tone="muted">
+                  Вход через{" "}
+                  {accountPageHelpers.providerLabels[pendingProvider] ??
+                    pendingProvider}{" "}
+                  подтверждён. Осталось дать согласие на обработку данных.
                 </Typography.Text>
               ) : null}
             </header>
@@ -286,7 +329,14 @@ export const AccountPage: React.FC<AccountPageTypes.Props> = (props) => {
               }}
             />
           ) : null}
-          {props.mode !== "profile" && !delivery && props.mode !== "verify" ? (
+          {props.mode === "provider-consent" &&
+          error === PROVIDER_STEP_EXPIRED ? (
+            <ActionLink to="/register">Начать заново</ActionLink>
+          ) : null}
+          {props.mode !== "profile" &&
+          !delivery &&
+          props.mode !== "verify" &&
+          !(props.mode === "provider-consent" && !pendingProvider) ? (
             <AccountForm
               mode={invalidResetToken ? "recovery" : props.mode}
               token={props.token}
@@ -334,7 +384,9 @@ export const AccountPage: React.FC<AccountPageTypes.Props> = (props) => {
         {props.mode !== "profile" ? (
           <MascotScene
             scene={
-              props.mode === "register" || props.mode === "verify"
+              props.mode === "register" ||
+              props.mode === "provider-consent" ||
+              props.mode === "verify"
                 ? "register"
                 : "sign-in"
             }

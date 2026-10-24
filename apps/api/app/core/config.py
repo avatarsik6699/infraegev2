@@ -25,9 +25,8 @@ class Settings(BaseSettings):
     yandex_client_id: str = ""
     yandex_client_secret: SecretStr = SecretStr("")
     yandex_enabled: bool = False
-    telegram_client_id: str = ""
-    telegram_client_secret: SecretStr = SecretStr("")
-    telegram_enabled: bool = False
+    # Change 198: DB-IP Lite city database (mmdb); empty or missing means no city
+    geoip_city_database: str = ""
     # Change 192 (SPEC §6.1): both flags stay off until launch; while the paywall is
     # off every material is free, while billing is off checkout is unavailable.
     paywall_enabled: bool = False
@@ -40,6 +39,8 @@ class Settings(BaseSettings):
     # НПД yearly income limit; new checkouts pause at 95 % of it (SPEC §7.3)
     billing_npd_limit_kopecks: int = 240_000_000
     billing_operator_email: str = ""
+    # Change 198: the address students write to, also to appeal a restriction
+    contact_email: str = "kodumka@mail.ru"
     robokassa_merchant_login: str = ""
     robokassa_password1: SecretStr = SecretStr("")
     robokassa_password2: SecretStr = SecretStr("")

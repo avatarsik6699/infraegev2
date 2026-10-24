@@ -336,6 +336,8 @@ class PublicTask(StrictModel):
     solution_revision: int
     content: PublicTaskContent
     deliveries: list["FileDelivery"] = Field(default_factory=list)
+    # Change 198: a paid task's solution is not sent with it; the site asks for it.
+    solution_on_request: bool = False
 
 
 class FileDelivery(StrictModel):

@@ -94,6 +94,9 @@ export namespace PracticeTaskTypes {
     hint: readonly ContentBlock[];
     theoryLinks: readonly TheoryLink[];
     solution: readonly ContentBlock[];
+    /** Change 198: a paid task's solution is not sent with it; «Решение»
+     *  loads it (SPEC §4). Missing means the solution is in `solution`. */
+    solutionOnRequest?: boolean;
     /** `false` for advanced-subtopic tasks: solved and saved as usual, but
      *  outside the lesson's mastery total (SPEC §1.4). Missing means counted. */
     countsTowardMastery?: boolean;

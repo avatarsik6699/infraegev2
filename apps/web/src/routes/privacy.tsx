@@ -3,12 +3,12 @@ import { PrivacyPage } from "~/pages/privacy";
 import { pageHead } from "~/shared/lib/seo";
 
 const description =
-  "Какие технические данные обрабатывает Кодумка и как хранится прогресс обучения.";
+  "Какие персональные данные обрабатывает Кодумка, зачем, кому передаёт и как их удалить.";
 
 export const Route = createFileRoute("/privacy")({
   head: () =>
     pageHead.create({
-      title: "Обработка данных — Кодумка",
+      title: "Политика обработки персональных данных — Кодумка",
       description,
       path: "/privacy",
     }),

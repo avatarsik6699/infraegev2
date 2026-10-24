@@ -16,13 +16,15 @@ DB_IMAGE = (
     "postgres:18.6-alpine3.24@sha256:"
     "d3e1620b530c944afa6e887d22eb899824da68e19c52024bf98f5220c88a65b2"
 )
-SCHEMA = "192_01"
+SCHEMA = "198_01"
 # Bundles retain their exact verifier image, so the current maintenance tool can restore an
 # additive predecessor without pretending that its verifier understands account records.
-TASK_SCHEMAS = {"122_01", "140_01", "191_01", SCHEMA}
-# Heads with account tables (140_01) and with billing tables (192_01): each is additive.
-ACCOUNT_SCHEMAS = {"140_01", "191_01", SCHEMA}
-BILLING_SCHEMAS = {SCHEMA}
+TASK_SCHEMAS = {"122_01", "140_01", "191_01", "192_01", SCHEMA}
+# Heads with account tables (140_01), billing tables (192_01) and device/restriction tables
+# (198_01): each is additive.
+ACCOUNT_SCHEMAS = {"140_01", "191_01", "192_01", SCHEMA}
+BILLING_SCHEMAS = {"192_01", SCHEMA}
+DEVICE_SCHEMAS = {SCHEMA}
 BASE_FILES = (
     "application.dump",
     "roles.sql",

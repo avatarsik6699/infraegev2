@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from datetime import datetime
 from typing import Literal
 
 from pydantic import BaseModel, ConfigDict, EmailStr, Field
@@ -11,11 +12,20 @@ class StrictModel(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
 
+# The current edition of the consent page (SPEC §8.2); earlier consents stay valid.
+ConsentVersion = Literal["2026-10-23"]
+
+
 class RegisterRequest(StrictModel):
     email: EmailStr
     password: str = Field(min_length=12, max_length=128)
     privacy_consent: Literal[True]
-    privacy_consent_version: Literal["2026-09-25"]
+    privacy_consent_version: ConsentVersion
+
+
+class ProviderRegisterRequest(StrictModel):
+    privacy_consent: Literal[True]
+    privacy_consent_version: ConsentVersion
 
 
 class AddEmailMethodRequest(StrictModel):
@@ -60,3 +70,19 @@ class AccountView(StrictModel):
 class SessionView(StrictModel):
     account: AccountView | None
     csrf_token: str | None = None
+
+
+class ProviderRegisteredView(SessionView):
+    return_to: str
+
+
+class PendingProviderView(StrictModel):
+    provider: Literal["vk", "yandex"]
+
+
+class SignedInDevice(StrictModel):
+    id: str
+    label: str
+    city: str | None
+    last_seen_at: datetime
+    current: bool

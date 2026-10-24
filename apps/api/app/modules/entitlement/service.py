@@ -16,8 +16,10 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.config import settings
 from app.core.database import request_engine
+from app.modules.account import restrictions
 from app.modules.account import service as account_service
 from app.modules.account.api import raw_session_token
+from app.modules.account.models import AccountRestriction
 from app.modules.billing.models import AccessGrant
 
 logger = structlog.get_logger(__name__)
@@ -28,9 +30,17 @@ class AccessUnavailable(RuntimeError):
 
 
 @dataclass(frozen=True)
+class Restriction:
+    kind: str
+    reason: str
+    until: datetime | None
+
+
+@dataclass(frozen=True)
 class AccessState:
     user_id: UUID | None
     until: datetime | None
+    restriction: Restriction | None = None
 
     @property
     def granted(self) -> bool:
@@ -43,8 +53,11 @@ def now() -> datetime:
 
 async def access_until(db: AsyncSession, user_id: UUID) -> datetime | None:
     """The end of the viewer's access, when a grant covers the current moment.
-    Grants of repeat purchases follow each other, so the latest end is the end."""
+    Grants of repeat purchases follow each other, so the latest end is the end.
+    A suspension or termination by the operator closes it (Change 198)."""
     moment = now()
+    if await restrictions.closes_paid_access(db, user_id):
+        return None
     covered = await db.scalar(
         select(AccessGrant.id)
         .where(
@@ -80,10 +93,33 @@ async def resolve(request: Request) -> AccessState:
             current = await account_service.current_session(db, token)
             if current is None:
                 return AccessState(None, None)
-            return AccessState(current.user_id, await access_until(db, current.user_id))
+            row = await restrictions.active(db, current.user_id)
+            return AccessState(
+                current.user_id,
+                await access_until(db, current.user_id),
+                restriction_of(row) if row else None,
+            )
     except (OSError, TimeoutError, SQLAlchemyError, PostgresError, ValueError) as exc:
         logger.error("entitlement.database_unavailable", error_type=type(exc).__name__)
         raise AccessUnavailable("access unavailable") from exc
+
+
+def restriction_of(row: AccountRestriction) -> Restriction:
+    return Restriction(row.kind, row.reason, row.ends_at)
+
+
+async def record_paid_chunk(request: Request, user_id: UUID) -> None:
+    """Count one served paid chunk for the operator signal report; never blocks."""
+    try:
+        async with (
+            asyncio.timeout(5),
+            request_engine(request, settings.account_database_url, role="infraege_app") as engine,
+            AsyncSession(engine) as db,
+            db.begin(),
+        ):
+            await account_service.count_today(db, user_id, "paid_chunks")
+    except (OSError, TimeoutError, SQLAlchemyError, PostgresError, ValueError) as exc:
+        logger.warning("entitlement.chunk_count_unavailable", error_type=type(exc).__name__)
 
 
 class Viewer:
@@ -93,6 +129,9 @@ class Viewer:
     def __init__(self, request: Request) -> None:
         self.request = request
         self._state: AccessState | None = None
+
+    def cached(self) -> AccessState | None:
+        return self._state
 
     async def state(self) -> AccessState:
         if self._state is None:

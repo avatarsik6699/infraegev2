@@ -79,9 +79,6 @@ services:
       - YANDEX_CLIENT_ID=${YANDEX_CLIENT_ID:-}
       - YANDEX_CLIENT_SECRET=${YANDEX_CLIENT_SECRET:-}
       - YANDEX_ENABLED=${YANDEX_ENABLED:-false}
-      - TELEGRAM_CLIENT_ID=${TELEGRAM_CLIENT_ID:-}
-      - TELEGRAM_CLIENT_SECRET=${TELEGRAM_CLIENT_SECRET:-}
-      - TELEGRAM_ENABLED=${TELEGRAM_ENABLED:-false}
       # Change 192: paid access stays off until launch
       - PAYWALL_ENABLED=${PAYWALL_ENABLED:-false}
       - BILLING_ENABLED=${BILLING_ENABLED:-false}
@@ -97,8 +94,11 @@ services:
       - ROBOKASSA_TEST=${ROBOKASSA_TEST:-false}
       - DEPLOY_SHA=${DEPLOY_SHA:-development}
       - TASK_FILES_DIR=/task-files
+      # Change 198: offline city database for «Где выполнен вход»; missing means no city
+      - GEOIP_CITY_DATABASE=/geoip/dbip-city-lite.mmdb
     volumes:
       - ${TASK_FILES_DIR:-./task-files.local}:/task-files:ro
+      - ${GEOIP_DIR:-./geoip.local}:/geoip:ro
     depends_on:
       postgres:
         condition: service_healthy

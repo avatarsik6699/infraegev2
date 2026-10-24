@@ -603,6 +603,9 @@ export class MinimalApplicationPage {
       await expect(
         navigation.getByRole("link", { name: "Страница 5", exact: true }),
       ).toHaveAttribute("aria-current", "page");
+      // Change 198 (T4): the leading catalog tasks are KEGE imports without help;
+      // the toolbar check needs «Подсказка», so it opens a topic whose first task has one.
+      await this.page.goto(`/practice?topics=ege-${String(hintedTopic.exam)}`);
       const row = this.page.locator('li[id^="task-"]').first();
       await row.getByRole("button", { name: /Раскрыть задание:/ }).click();
       const input = row.getByRole("textbox", { name: "Ваш ответ" });
@@ -1053,7 +1056,12 @@ export class MinimalApplicationPage {
         expect(Math.abs(listAfter!.y - listBefore!.y)).toBeLessThan(1);
         expect(Math.abs(rowAfter!.height - rowBefore!.height)).toBeLessThan(1);
         const origin = await this.page.evaluate(() => performance.timeOrigin);
-        await filters.getByRole("searchbox").fill("рекурс");
+        // The search field is the suggestions combobox since Change 191.
+        await filters
+          .getByRole("combobox", { name: "Поиск задач", exact: true })
+          .fill("рекурс");
+        // the suggestions list opens over the form; close it before submitting
+        await this.page.keyboard.press("Escape");
         await filters.getByRole("button", { name: "Найти задачи" }).click();
         await expect(this.page).toHaveURL(
           (url) => url.searchParams.get("q") === "рекурс",
@@ -1087,7 +1095,7 @@ export class MinimalApplicationPage {
         name: "Подтемы урока",
       });
       const trigger = outline.getByRole("button", {
-        name: "Задание 16 · 1 из 7",
+        name: "Задание 16 · 1 из 6",
       });
       await expect(trigger).toBeVisible();
       await expect(trigger).toBeDisabled();

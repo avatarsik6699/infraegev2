@@ -48,8 +48,8 @@ trap 'exit 143' TERM
 # These are fresh synthetic credentials, never inherited development/production values.
 export APP_ENV=development DEPLOY_SHA=development POSTGRES_USER=infraege POSTGRES_DB=infraege
 export SMTP_HOST='' SMTP_USERNAME='' SMTP_PASSWORD='' MAIL_FROM=''
-export VK_ENABLED=false YANDEX_ENABLED=false TELEGRAM_ENABLED=false
-unset VK_CLIENT_SECRET YANDEX_CLIENT_SECRET TELEGRAM_CLIENT_SECRET
+export VK_ENABLED=false YANDEX_ENABLED=false
+unset VK_CLIENT_SECRET YANDEX_CLIENT_SECRET
 for credential in POSTGRES_PASSWORD DB_RUNTIME_PASSWORD DB_APP_PASSWORD DB_IMPORT_PASSWORD DB_MIGRATION_PASSWORD DB_BACKUP_PASSWORD AUTH_CSRF_SECRET; do
   printf -v "$credential" '%s' "$(openssl rand -hex 24)"
   export "${credential?}"

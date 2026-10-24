@@ -24,7 +24,8 @@ export const AccountForm: React.FC<AccountFormTypes.Props> = (props) => {
         />
       </>
     );
-  const email = props.mode !== "new-password";
+  const email =
+    props.mode !== "new-password" && props.mode !== "provider-consent";
   const password =
     props.mode === "sign-in" ||
     props.mode === "register" ||
@@ -83,7 +84,7 @@ export const AccountForm: React.FC<AccountFormTypes.Props> = (props) => {
           minLength={props.mode === "sign-in" ? 1 : 12}
         />
       ) : null}
-      {props.mode === "register" ? (
+      {props.mode === "register" || props.mode === "provider-consent" ? (
         <div className={styles.consentRow}>
           <input
             id="privacy-consent"
@@ -120,7 +121,7 @@ export const AccountForm: React.FC<AccountFormTypes.Props> = (props) => {
             ? `Повторить через ${props.cooldown} с`
             : accountPageHelpers.formLabel(props.mode)}
         </Button>
-        {props.mode !== "sign-in" ? (
+        {props.mode !== "sign-in" && props.mode !== "provider-consent" ? (
           <ActionLink to="/sign-in">Уже есть аккаунт</ActionLink>
         ) : null}
       </div>

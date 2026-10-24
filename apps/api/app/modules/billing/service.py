@@ -241,9 +241,9 @@ async def end_access(db: AsyncSession, payment: Payment) -> None:
     )
 
 
-async def on_account_deletion(db: AsyncSession, user_id: UUID) -> None:
-    """Before the account row goes: end access, request refunds of the unused days and
-    forget the contact. Payments stay, pseudonymized by `ON DELETE SET NULL`."""
+async def end_access_with_refund(db: AsyncSession, user_id: UUID, reason: str) -> None:
+    """End every running access period and request refunds of its unused days; the
+    operator CLI executes them."""
     moment = now()
     rows = await db.execute(
         select(Payment, AccessGrant)
@@ -255,8 +255,14 @@ async def on_account_deletion(db: AsyncSession, user_id: UUID) -> None:
         )
     )
     for payment, grant in rows.all():
-        await request_refund(db, payment, unused_kopecks(payment, grant, moment), "account_deleted")
+        await request_refund(db, payment, unused_kopecks(payment, grant, moment), reason)
         grant.revoked_at = moment
+
+
+async def on_account_deletion(db: AsyncSession, user_id: UUID) -> None:
+    """Before the account row goes: end access, request refunds of the unused days and
+    forget the contact. Payments stay, pseudonymized by `ON DELETE SET NULL`."""
+    await end_access_with_refund(db, user_id, "account_deleted")
     await db.execute(update(Payment).where(Payment.user_id == user_id).values(contact_email=None))
     await db.flush()
 

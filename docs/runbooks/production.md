@@ -17,12 +17,12 @@ access during credential rotation. Store secrets outside Git, mode 600; never pu
    § Off-site copy (Change 196). Production must never reuse dev credentials.
 3. Before enabling accounts, configure SMTP delivery (`SMTP_*`, `MAIL_FROM`) and create provider
    applications with the exact HTTPS callback origins
-   `https://kodumka.ru/api/auth/providers/vk/callback`,
-   `https://kodumka.ru/api/auth/providers/yandex/callback` and
-   `https://kodumka.ru/api/auth/providers/telegram/callback`. Store client IDs/secrets only in the
+   `https://kodumka.ru/api/auth/providers/vk/callback` and
+   `https://kodumka.ru/api/auth/providers/yandex/callback` (Telegram sign-in was removed in
+   Change 198: a foreign service, 149-ФЗ ст. 10 ч. 8). Store client IDs/secrets only in the
    protected environment; do not paste callback `code`, `state`, mail links or tokens into tickets,
    shell history or journals. Provider methods also require the explicit per-provider
-   `VK_ENABLED`, `YANDEX_ENABLED`, or `TELEGRAM_ENABLED` release flag (default `false`), only
+   `VK_ENABLED` or `YANDEX_ENABLED` release flag (default `false`), only
    after the real callback and account-entry flows pass. Before disabling a previously enabled
    provider, verify that no member depends on it as the sole login method. A missing
    provider/mail setting is a bounded unavailable flow, not a
@@ -115,7 +115,13 @@ the deploy is dispatched:
    `https://kodumka.ru/sitemap.xml` in both.
 6. Robokassa: shop URL `https://kodumka.ru` and the Result/Success/Fail URLs in
    [billing](billing.md). OAuth providers are not enabled; when one is, register only the
-   `kodumka.ru` callbacks above (Telegram `/setdomain kodumka.ru`).
+   `kodumka.ru` callbacks above.
+7. Change 198: set `GEOIP_DIR=/var/lib/infraege/geoip` in the protected environment, run
+   `ops/install-backup-timers.sh` (it adds `infraege-geoip.timer`) and once
+   `systemctl start infraege-geoip.service`; the API reads the city database after its next
+   restart. Reinstall `ops/fail2ban/jail.d/infraege.conf`: the Nginx jail now bans in the
+   `DOCKER-USER` chain, which published container ports pass (UFW bans never reach them); check
+   with `fail2ban-client status infraege-nginx-limit` and `iptables -S DOCKER-USER`.
 
 Keep `infraege.ru` registered while the redirect matters. A rollback to a release before Change
 193 serves `infraege.ru` again with its own certificate; restore the two environment values with it.

@@ -5,7 +5,13 @@ import { type MailPurpose } from "./model/mail-cooldown";
 
 export namespace AccountPageTypes {
   export type Mode =
-    "sign-in" | "register" | "verify" | "recovery" | "new-password" | "profile";
+    | "sign-in"
+    | "register"
+    | "provider-consent"
+    | "verify"
+    | "recovery"
+    | "new-password"
+    | "profile";
   export type Props = {
     mode: Mode;
     returnTo?: string;

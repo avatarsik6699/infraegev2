@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# Schema head cutover (122_01 -> 140_01, 140_01 -> 191_01, 140_01 -> 192_01): two disposable
-# restores, never the live DB. The target is the candidate's declared head; the source is the
+# Schema head cutover (122_01 -> 140_01, 140_01 -> 191_01, 140_01 -> 192_01, 140_01 -> 198_01):
+# two disposable restores, never the live DB. The target is the candidate's declared head; the source is the
 # schema of the release production runs now, along an allowed transition.
 set -euo pipefail
 umask 077

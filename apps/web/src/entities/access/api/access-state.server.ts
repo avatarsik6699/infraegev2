@@ -23,6 +23,7 @@ export async function loadAccessState(): Promise<AccessTypes.State> {
       signedIn: result.data.signed_in,
       granted: result.data.granted,
       until: result.data.until ?? null,
+      restriction: result.data.restriction ?? null,
     };
   } catch {
     return { status: "unavailable" };

@@ -95,7 +95,14 @@ async def get_next_task(
 @router.get("/tasks/{task_id}", response_model=PublicTask)
 async def get_task(task_id: str, request: Request, connection: Session) -> PublicTask:
     await require_readable(connection, request, task_id)
-    return await readers.task(connection, task_id)
+    return await readers.task(connection, task_id, paid_solution())
+
+
+def paid_solution() -> readers.Deferred:
+    """Change 198 (SPEC §4): with the paywall on, a paid task's solution comes on request."""
+    if not settings.paywall_enabled:
+        return None
+    return lambda content: task_access(content) == "paid"
 
 
 @router.get(
@@ -108,7 +115,7 @@ async def get_lesson(
         return await readers.lesson(
             connection, kind, material_id, lambda content: task_access(content) == "paid"
         )
-    return await readers.lesson(connection, kind, material_id)
+    return await readers.lesson(connection, kind, material_id, deferred=paid_solution())
 
 
 @router.get("/topics/practice-summary", response_model=readers.TopicSummary)

@@ -1,5 +1,5 @@
 import { BookOpen, CircleHelp, ListChecks } from "lucide-react";
-import type { AccessTypes } from "~/entities/access";
+import { RestrictionNotice, type AccessTypes } from "~/entities/access";
 import {
   billingFormat,
   billingPlans,
@@ -47,6 +47,18 @@ export const PaywallGate: React.FC<Props> = (props) => {
   const { from } = props;
   const guest = props.access?.status === "ready" && !props.access.signedIn;
   const year = billingPlans.find(props.offer, "year");
+  const restriction =
+    props.access?.status === "ready" ? props.access.restriction : null;
+  // Change 198: a suspended or terminated access is explained, never sold again.
+  if (restriction && restriction.kind !== "warning")
+    return (
+      <div className="paywall" data-paywall="restricted">
+        <RestrictionNotice
+          restriction={restriction}
+          headingOrder={props.headingOrder}
+        />
+      </div>
+    );
 
   if (guest)
     return (

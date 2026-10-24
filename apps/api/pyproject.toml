@@ -15,6 +15,7 @@ dependencies = [
   "argon2-cffi>=25.1",
   "httpx>=0.28",
   "PyJWT[crypto]>=2.10",
+  "maxminddb>=2.6",
 ]
 
 [dependency-groups]

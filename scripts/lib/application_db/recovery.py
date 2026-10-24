@@ -5,7 +5,14 @@ import subprocess
 from pathlib import Path
 
 from . import sql
-from .bundle import ACCOUNT_SCHEMAS, BILLING_SCHEMAS, TASK_SCHEMAS, schema_version, validate
+from .bundle import (
+    ACCOUNT_SCHEMAS,
+    BILLING_SCHEMAS,
+    DEVICE_SCHEMAS,
+    TASK_SCHEMAS,
+    schema_version,
+    validate,
+)
 from .postgres import TIMEOUT, Database, docker
 
 
@@ -62,6 +69,8 @@ def restore(bundle: Path, container: str) -> None:
         raise ValueError("restored account schema or application grants mismatch")
     if metadata.schemaVersion in BILLING_SCHEMAS and db.query(sql.BILLING_RESTORE).strip() != "t":
         raise ValueError("restored billing schema or application grants mismatch")
+    if metadata.schemaVersion in DEVICE_SCHEMAS and db.query(sql.DEVICE_RESTORE).strip() != "t":
+        raise ValueError("restored device schema or application grants mismatch")
     checks = [("data-checks.txt", sql.FINGERPRINT), ("schema.txt", sql.SCHEMAS)]
     if metadata.schemaVersion in TASK_SCHEMAS:
         checks.append(("file-references.txt", sql.REFERENCES))

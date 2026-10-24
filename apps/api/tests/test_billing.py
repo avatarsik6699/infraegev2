@@ -93,7 +93,7 @@ def member(client: TestClient, sent: list[tuple[str, str]], email: str) -> dict[
                 "email": email,
                 "password": "correct horse battery",
                 "privacy_consent": True,
-                "privacy_consent_version": "2026-09-25",
+                "privacy_consent_version": "2026-10-23",
             },
             headers=ORIGIN,
         ).status_code
@@ -148,7 +148,13 @@ def test_flags_off_keep_everything_free(paid_site):
         assert client.get(f"/api/tasks/{paid.task.id}").status_code == 200
         assert client.get("/api/access/asset").status_code == 204
         access = client.get("/api/access").json()
-        assert access == {"paywall": False, "signed_in": False, "granted": True, "until": None}
+        assert access == {
+            "paywall": False,
+            "signed_in": False,
+            "granted": True,
+            "until": None,
+            "restriction": None,
+        }
         assert client.post("/api/billing/checkout", json={}, headers=ORIGIN).status_code in (
             404,
             422,

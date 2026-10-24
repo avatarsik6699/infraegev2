@@ -2,7 +2,7 @@ import { createServerOnlyFn } from "@tanstack/react-start";
 import { createApiClient } from "~/shared/api";
 import { accountServerConfig } from "~/shared/config/account.server";
 
-const providers = ["vk", "yandex", "telegram"] as const;
+const providers = ["vk", "yandex"] as const;
 export type Provider = (typeof providers)[number];
 
 export const loadProviderAvailability = createServerOnlyFn(

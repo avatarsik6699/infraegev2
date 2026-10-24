@@ -1,12 +1,11 @@
 import { ApiError } from "~/shared/api";
 import type { AccountPageTypes } from "./account-page.types";
 
-const providers = ["vk", "yandex", "telegram"] as const;
+const providers = ["vk", "yandex"] as const;
 
 const providerLabels: Record<string, string> = {
   vk: "VK ID",
   yandex: "Яндекс ID",
-  telegram: "Telegram",
   email: "Почта и пароль",
 };
 
@@ -46,6 +45,7 @@ function formLabel(mode: AccountPageTypes.Mode): string {
     case "sign-in":
       return "Войти";
     case "register":
+    case "provider-consent":
       return "Создать аккаунт";
     case "verify":
       return "Отправить письмо";

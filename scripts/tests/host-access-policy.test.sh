@@ -21,6 +21,9 @@ for expected in 'banaction = ufw' 'bantime.increment = true' 'bantime.maxtime = 
   grep -Fxq "$expected" <<<"$defaults"
 done
 
+# Change 198: the Nginx jail bans in DOCKER-USER, which published container ports pass.
+section infraege-nginx-limit | grep -Fxq 'banaction = iptables-allports[chain="DOCKER-USER"]'
+
 sshd_jail=$(section sshd)
 for expected in 'enabled = true' 'backend = systemd' 'maxretry = 5'; do
   grep -Fxq "$expected" <<<"$sshd_jail"

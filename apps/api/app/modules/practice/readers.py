@@ -88,8 +88,12 @@ def availability():
     )
 
 
-def public_task(row: TaskRecord, files: dict[str, FileObject]) -> PublicTask:
+def public_task(
+    row: TaskRecord, files: dict[str, FileObject], deferred: bool = False
+) -> PublicTask:
     content = dict(row.content)
+    if deferred:
+        content["explanation"] = []
     content["sources"] = [
         {k: v for k, v in source.items() if k != "is_public"}
         for source in content["sources"]
@@ -110,10 +114,16 @@ def public_task(row: TaskRecord, files: dict[str, FileObject]) -> PublicTask:
         solution_revision=row.solution_revision,
         content=PublicTaskContent.model_validate(content),
         deliveries=deliveries,
+        solution_on_request=deferred and bool(row.content["explanation"]),
     )
 
 
-async def project(session: AsyncSession, rows: list[TaskRecord]) -> list[PublicTask]:
+Deferred = Callable[[dict[str, Any]], bool] | None
+
+
+async def project(
+    session: AsyncSession, rows: list[TaskRecord], deferred: Deferred = None
+) -> list[PublicTask]:
     keys = {usage["checksum"] for row in rows for usage in row.content["files"]}
     files = (
         {
@@ -125,14 +135,14 @@ async def project(session: AsyncSession, rows: list[TaskRecord]) -> list[PublicT
         if keys
         else {}
     )
-    return [public_task(row, files) for row in rows]
+    return [public_task(row, files, deferred is not None and deferred(row.content)) for row in rows]
 
 
-async def task(session: AsyncSession, task_id: str) -> PublicTask:
+async def task(session: AsyncSession, task_id: str, deferred: Deferred = None) -> PublicTask:
     row = await session.scalar(select(TaskRecord).where(TaskRecord.id == task_id, availability()))
     if row is None:
         raise Unavailable("task unavailable")
-    return (await project(session, [row]))[0]
+    return (await project(session, [row], deferred))[0]
 
 
 async def file(session: AsyncSession, task_id: str, usage_id: str):
@@ -151,8 +161,10 @@ async def lesson(
     kind: str,
     material_id: str,
     closed: Callable[[dict[str, Any]], bool] | None = None,
+    deferred: Deferred = None,
 ) -> LessonPractice:
-    """The lesson's tasks in order; `closed` picks the ones shown locked."""
+    """The lesson's tasks in order; `closed` picks the ones shown locked and
+    `deferred` the ones whose solution is sent only on request."""
     rows = list(
         await session.scalars(
             select(TaskRecord)
@@ -173,7 +185,7 @@ async def lesson(
     return LessonPractice(
         id=material_id,
         kind=kind,
-        tasks=await project(session, open_rows),
+        tasks=await project(session, open_rows, deferred),
         locked=[
             LockedTask(
                 id=row.id,

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import type { AccessTypes } from "~/entities/access";
+import { RestrictionNotice, type AccessTypes } from "~/entities/access";
 import {
   billingApi,
   billingFormat,
@@ -82,6 +82,9 @@ export const AccountAccess: React.FC<Props> = (props) => {
       >
         Доступ
       </Typography.Title>
+      {access?.restriction ? (
+        <RestrictionNotice restriction={access.restriction} headingOrder={3} />
+      ) : null}
       <div className={styles.now}>
         <div className={styles.nowCopy}>
           <Typography.Title order={3} className={styles.nowTitle}>

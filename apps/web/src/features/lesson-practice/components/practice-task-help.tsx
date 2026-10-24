@@ -1,5 +1,8 @@
 import { useState, type ReactNode } from "react";
-import type { PracticeTaskTypes } from "~/entities/practice-task";
+import {
+  getTaskSolution,
+  type PracticeTaskTypes,
+} from "~/entities/practice-task";
 import { Button } from "~/shared/components/button";
 import { Typography } from "~/shared/components/typography";
 import { useIsEnhanced } from "~/shared/lib/use-is-enhanced";
@@ -27,8 +30,23 @@ export const PracticeTaskHelp: React.FC<{
   const [solution, setSolution] = useState(false);
   // A click before hydration would be lost; like «Проверить», wait for it.
   const enhanced = useIsEnhanced();
+  // Change 198: a paid task's solution arrives only when «Решение» is pressed.
+  const [loaded, setLoaded] = useState<
+    readonly PracticeTaskTypes.ContentBlock[] | "loading" | "failed" | null
+  >(null);
   const hasHint = props.task.hint.length > 0;
-  const hasSolution = props.task.solution.length > 0;
+  const hasSolution =
+    props.task.solution.length > 0 || props.task.solutionOnRequest === true;
+  const solutionBlocks = Array.isArray(loaded) ? loaded : props.task.solution;
+  const toggleSolution = () => {
+    setSolution(!solution);
+    if (!props.task.solutionOnRequest || solution) return;
+    if (Array.isArray(loaded) || loaded === "loading") return;
+    setLoaded("loading");
+    getTaskSolution({ data: props.task.id }).then(setLoaded, () =>
+      setLoaded("failed"),
+    );
+  };
   const solutionTitle =
     SOLUTION_TITLE[props.task.explanationKind ?? "unclassified"];
   return (
@@ -59,7 +77,7 @@ export const PracticeTaskHelp: React.FC<{
                 disabled={!enhanced}
                 aria-expanded={solution}
                 aria-controls={`solution-${props.task.id}`}
-                onClick={() => setSolution(!solution)}
+                onClick={toggleSolution}
               >
                 <span className={styles.helpLabel}>
                   <span className={styles.helpLabelReserve} aria-hidden="true">
@@ -101,10 +119,17 @@ export const PracticeTaskHelp: React.FC<{
           >
             {solutionTitle}
           </Typography.Title>
-          <PracticeTaskContent
-            blocks={props.task.solution}
-            context="solution"
-          />
+          {loaded === "loading" ? (
+            <Typography.Text tone="muted" role="status">
+              Загружаем решение…
+            </Typography.Text>
+          ) : null}
+          {loaded === "failed" ? (
+            <Typography.Text tone="muted" role="alert">
+              Не удалось загрузить решение. Попробуйте ещё раз позже.
+            </Typography.Text>
+          ) : null}
+          <PracticeTaskContent blocks={solutionBlocks} context="solution" />
         </div>
       )}
     </>

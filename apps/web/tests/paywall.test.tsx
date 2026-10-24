@@ -51,12 +51,15 @@ const offer: BillingTypes.Offer = {
   ],
 };
 
-const ready = (signedIn: boolean): AccessTypes.State => ({
+const ready = (
+  signedIn: boolean,
+): Extract<AccessTypes.State, { status: "ready" }> => ({
   status: "ready",
   paywall: true,
   signedIn,
   granted: false,
   until: null,
+  restriction: null,
 });
 
 afterEach(cleanup);
@@ -128,6 +131,36 @@ describe("paywall (Change 192)", () => {
     ).toBe("/pricing?from=%2Fege%2F25%2Fmaski");
   });
 
+  it("explains a suspension with the appeal contact and sells nothing", () => {
+    render(
+      <PaywallGate
+        access={{
+          ...ready(true),
+          restriction: {
+            kind: "suspension",
+            reason: "доступ передан другим людям",
+            until: "2027-10-01T09:00:00Z",
+            contact: "kodumka@mail.ru",
+          },
+        }}
+        offer={offer}
+        unlocks={{ lessons: [], questions: 0, tasks: 0, practice: false }}
+        {...paywallCopy.topic([25])}
+        headingOrder={2}
+        from="/ege/25/maski"
+      />,
+    );
+    const notice = screen.getByRole("region", {
+      name: "Платный доступ приостановлен",
+    });
+    expect(notice.textContent).toContain("До 1 октября 2027 г.");
+    expect(notice.textContent).toContain("доступ передан другим людям");
+    expect(
+      within(notice).getByRole("link", { name: "kodumka@mail.ru" }),
+    ).toBeTruthy();
+    expect(screen.queryByText("Получить полный доступ")).toBeNull();
+  });
+
   it("shows a locked task without its statement", () => {
     render(
       <LockedTasks
@@ -178,8 +211,13 @@ describe("pricing and legal helpers (Change 192)", () => {
     expect(offerVersions[0]?.version).toMatch(/^\d{4}-\d{2}-\d{2}$/u);
     const blocks = legalBlocks(offerVersions[0]?.text ?? "");
     expect(blocks[0]?.kind).toBe("title");
-    expect(blocks.some((block) => block.text.startsWith("9. Реквизиты"))).toBe(
+    expect(blocks.some((block) => block.text.startsWith("10. Реквизиты"))).toBe(
       true,
     );
+    // Change 198: personal access, three devices and the graded, appealable measures
+    const text = offerVersions[0]?.text ?? "";
+    expect(text).toContain("не более чем на трёх устройствах");
+    expect(text).toContain("6. Ограничение доступа при нарушении");
+    expect(offerVersions.map((offer) => offer.version)).toContain("2026-10-17");
   });
 });

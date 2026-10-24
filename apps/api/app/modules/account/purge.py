@@ -20,6 +20,8 @@ from sqlalchemy.sql.elements import ColumnElement
 from app.core.config import settings
 from app.core.database import database_engine
 from app.modules.account.models import (
+    AccountActivityDay,
+    AccountDevice,
     AccountIdentity,
     AccountPassword,
     AccountProviderChallenge,
@@ -34,6 +36,10 @@ PURGE_BATCH_SIZE = 500
 REVOKED_SESSION_RETENTION = timedelta(days=1)
 EXPIRED_ARTIFACT_RETENTION = timedelta(hours=1)
 UNVERIFIED_EMAIL_ACCOUNT_RETENTION = timedelta(days=30)
+# Change 198: a browser unseen for 90 days is forgotten (its next sign-in is «new»);
+# the daily counters of the operator signal report are kept for 30 days.
+DEVICE_RETENTION = timedelta(days=90)
+ACTIVITY_RETENTION = timedelta(days=30)
 
 
 @dataclass(frozen=True)
@@ -42,6 +48,8 @@ class PurgeResult:
     tokens: int = 0
     provider_challenges: int = 0
     abandoned_unverified_users: int = 0
+    devices: int = 0
+    activity_days: int = 0
 
 
 def now() -> datetime:
@@ -130,12 +138,28 @@ async def purge_expired_artifacts(
         AccountProviderChallenge.expires_at <= expiry_cutoff,
     )
     abandoned_unverified_users = await _delete_abandoned_unverified_users(db, timestamp)
+    devices = await _count_deleted(
+        db, delete(AccountDevice).where(AccountDevice.last_seen_at <= timestamp - DEVICE_RETENTION)
+    )
+    activity_days = await _count_deleted(
+        db,
+        delete(AccountActivityDay).where(
+            AccountActivityDay.day <= (timestamp - ACTIVITY_RETENTION).date()
+        ),
+    )
     return PurgeResult(
         sessions=sessions,
         tokens=tokens,
         provider_challenges=provider_challenges,
         abandoned_unverified_users=abandoned_unverified_users,
+        devices=devices,
+        activity_days=activity_days,
     )
+
+
+async def _count_deleted(db: AsyncSession, statement: Any) -> int:
+    result = await db.execute(statement)
+    return int(getattr(result, "rowcount", 0) or 0)
 
 
 async def run() -> PurgeResult:

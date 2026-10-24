@@ -10,7 +10,7 @@ from sqlalchemy.ext.asyncio import AsyncEngine, create_async_engine
 from sqlalchemy.orm import DeclarativeBase
 from sqlalchemy.pool import NullPool
 
-SCHEMA_REVISION = "192_01"
+SCHEMA_REVISION = "198_01"
 SCHEMA_LOCK = 114001
 
 

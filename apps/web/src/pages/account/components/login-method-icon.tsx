@@ -1,4 +1,4 @@
-import { AtSign, MessageCircle, Search, Send } from "lucide-react";
+import { AtSign, MessageCircle, Search } from "lucide-react";
 import type { Provider } from "~/features/account";
 
 type Props = {
@@ -19,7 +19,5 @@ export const LoginMethodIcon: React.FC<Props> = (props) => {
       return <MessageCircle {...iconProps} className={props.className} />;
     case "yandex":
       return <Search {...iconProps} className={props.className} />;
-    case "telegram":
-      return <Send {...iconProps} className={props.className} />;
   }
 };

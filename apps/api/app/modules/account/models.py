@@ -1,18 +1,21 @@
 """Account and server-owned progress records; credentials never store submitted answers."""
 
-from datetime import datetime
+from datetime import date, datetime
 from uuid import UUID, uuid4
 
 from sqlalchemy import (
     CheckConstraint,
+    Date,
     DateTime,
     ForeignKey,
     Index,
     Integer,
     String,
+    Text,
     UniqueConstraint,
     func,
 )
+from sqlalchemy.dialects.postgresql import ARRAY
 from sqlalchemy.dialects.postgresql import UUID as PG_UUID
 from sqlalchemy.orm import Mapped, mapped_column
 
@@ -36,7 +39,7 @@ class AccountIdentity(Base):
     __table_args__ = (
         UniqueConstraint("provider", "subject"),
         UniqueConstraint("user_id", "provider"),
-        CheckConstraint("provider IN ('vk', 'yandex', 'telegram')", name="provider"),
+        CheckConstraint("provider IN ('vk', 'yandex')", name="provider"),
     )
 
     id: Mapped[UUID] = mapped_column(PG_UUID(as_uuid=True), primary_key=True, default=uuid4)
@@ -85,6 +88,72 @@ class AccountSession(Base):
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), nullable=False, server_default=func.now()
     )
+    # Change 198 (SPEC §3, §6.2): the browser behind the session, for the device
+    # limit and «Где выполнен вход». IP and city live only as long as the session.
+    device_hash: Mapped[str | None] = mapped_column(String(64))
+    device_label: Mapped[str | None] = mapped_column(String(80))
+    ip: Mapped[str | None] = mapped_column(String(45))
+    city: Mapped[str | None] = mapped_column(String(80))
+    last_ip: Mapped[str | None] = mapped_column(String(45))
+    last_seen_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+
+
+class AccountDevice(Base):
+    """A browser that has signed in to the account; it makes «вход с нового
+    устройства» mean a really new one. Forgotten 90 days after its last visit."""
+
+    __tablename__ = "account_device"
+
+    user_id: Mapped[UUID] = mapped_column(
+        PG_UUID(as_uuid=True),
+        ForeignKey("practice.account_user.id", ondelete="CASCADE"),
+        primary_key=True,
+    )
+    device_hash: Mapped[str] = mapped_column(String(64), primary_key=True)
+    label: Mapped[str] = mapped_column(String(80), nullable=False)
+    first_seen_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+    last_seen_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+
+
+class AccountActivityDay(Base):
+    """Per-account daily counters behind the operator signal report; 30 days kept."""
+
+    __tablename__ = "account_activity_day"
+
+    user_id: Mapped[UUID] = mapped_column(
+        PG_UUID(as_uuid=True),
+        ForeignKey("practice.account_user.id", ondelete="CASCADE"),
+        primary_key=True,
+    )
+    day: Mapped[date] = mapped_column(Date, primary_key=True)
+    new_devices: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    evictions: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    paid_chunks: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    solutions: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    cities: Mapped[list[str]] = mapped_column(ARRAY(String(80)), nullable=False, default=list)
+
+
+class AccountRestriction(Base):
+    """A manual measure of the operator (SPEC §6.2), kept as evidence for an appeal."""
+
+    __tablename__ = "account_restriction"
+    __table_args__ = (
+        CheckConstraint("kind IN ('warning', 'suspension', 'termination')", name="kind"),
+        Index("ix_account_restriction_user", "user_id", "created_at"),
+    )
+
+    id: Mapped[UUID] = mapped_column(PG_UUID(as_uuid=True), primary_key=True, default=uuid4)
+    user_id: Mapped[UUID] = mapped_column(
+        PG_UUID(as_uuid=True),
+        ForeignKey("practice.account_user.id", ondelete="CASCADE"),
+        nullable=False,
+    )
+    kind: Mapped[str] = mapped_column(String(20), nullable=False)
+    reason: Mapped[str] = mapped_column(String(300), nullable=False)
+    note: Mapped[str | None] = mapped_column(Text)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+    ends_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    lifted_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
 
 
 class AccountToken(Base):
@@ -114,7 +183,7 @@ class AccountProviderChallenge(Base):
     __tablename__ = "account_provider_challenge"
     __table_args__ = (
         CheckConstraint("flow IN ('login', 'link', 'reauth')", name="flow"),
-        CheckConstraint("provider IN ('vk', 'yandex', 'telegram')", name="provider"),
+        CheckConstraint("provider IN ('vk', 'yandex')", name="provider"),
         Index("ix_account_provider_challenge_expires_at", "expires_at"),
     )
 
@@ -129,6 +198,8 @@ class AccountProviderChallenge(Base):
         PG_UUID(as_uuid=True), ForeignKey("practice.account_user.id", ondelete="CASCADE")
     )
     return_path: Mapped[str] = mapped_column(String(2048), nullable=False)
+    # Change 198: a verified identity without an account waits here for the consent step.
+    pending_subject: Mapped[str | None] = mapped_column(String(255))
     expires_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
     consumed_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
     created_at: Mapped[datetime] = mapped_column(

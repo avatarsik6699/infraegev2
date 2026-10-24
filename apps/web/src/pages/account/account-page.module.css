@@ -239,6 +239,14 @@
   border-radius: var(--radius-control);
   background: var(--color-surface-quiet);
 }
+/* Change 198: a signed-in device has no icon; its «Выйти» stays at the right edge. */
+.device {
+  grid-template-columns: minmax(0, 1fr) auto;
+}
+.device .methodActions {
+  grid-column: auto;
+  justify-content: flex-end;
+}
 .methodIdentity {
   display: grid;
   gap: 0.1rem;

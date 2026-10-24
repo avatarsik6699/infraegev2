@@ -1,11 +1,21 @@
+import { ActionLink } from "~/shared/components/action-link";
 import { ExternalLink } from "~/shared/components/external-link";
 import { PageContainer } from "~/shared/components/page-container";
 import { Typography } from "~/shared/components/typography";
 import { siteConfig } from "~/shared/config/site";
 import { PublicFooter } from "~/widgets/public-footer";
 import { PublicHeader } from "~/widgets/public-header";
+import { operator } from "./model/operator";
 import styles from "./privacy-page.module.css";
 
+const contact = (
+  <ExternalLink href={`mailto:${siteConfig.privacyContactEmail}`}>
+    {siteConfig.privacyContactEmail}
+  </ExternalLink>
+);
+
+/** A separate document since 1 September 2025 (152-ФЗ ст. 9 ч. 1); its
+ * version is the one the forms send (`CONSENT_VERSION`). */
 export const ConsentPage: React.FC = () => (
   <div className={styles.page}>
     <PublicHeader />
@@ -14,57 +24,62 @@ export const ConsentPage: React.FC = () => (
         Согласие на обработку персональных данных
       </Typography.Title>
       <Typography.Prose className={styles.content}>
-        <Typography.Text>Версия от 25 сентября 2026 года.</Typography.Text>
+        <Typography.Text>Версия от 23 октября 2026 года.</Typography.Text>
         <Typography.Text>
-          Создавая аккаунт и отдельно отмечая согласие в форме регистрации, вы
-          разрешаете оператору сайта kodumka.ru обрабатывать указанные ниже
-          данные для создания аккаунта, подтверждения почты, входа и сохранения
-          ваших учебных результатов. Оператор доступен по адресу{" "}
-          <ExternalLink href={`mailto:${siteConfig.privacyContactEmail}`}>
-            {siteConfig.privacyContactEmail}
-          </ExternalLink>
-          . Это согласие не включает рекламу и маркетинговые рассылки.
+          Отмечая согласие в форме регистрации — по почте или после входа через
+          VK ID или Яндекс ID, — я свободно, своей волей и в своём интересе
+          разрешаю оператору {operator.nameDative} ({operator.status}, ИНН{" "}
+          {operator.inn}, адрес для обращений: {contact}) обрабатывать мои
+          персональные данные на условиях ниже. Согласие не включает рекламные
+          рассылки.
         </Typography.Text>
-        <Typography.Title order={2}>Какие данные и действия</Typography.Title>
+        <Typography.Title order={2}>Цели</Typography.Title>
         <Typography.Text>
-          При регистрации по почте это адрес, отметка о его подтверждении,
-          стойкий хеш пароля, идентификаторы и сроки действия сеансов и
-          одноразовых ссылок. При решении задач в аккаунте сохраняются
-          идентификатор и версия верно решённой задачи, контекст урока или
-          самостоятельной практики и время решения — не текст ответа. Мы
-          получаем, записываем, систематизируем, храним, используем и удаляем
-          эти данные автоматизированно на сервере в России.
+          Создание аккаунта на kodumka.ru, подтверждение почты, вход и защита
+          аккаунта, сохранение учебных результатов и служебные письма о входе и
+          безопасности аккаунта.
         </Typography.Text>
-        <Typography.Title order={2}>Передача и срок</Typography.Title>
+        <Typography.Title order={2}>Данные</Typography.Title>
         <Typography.Text>
-          Для доставки служебного письма адрес и содержание письма передаются
-          Yandex Cloud Postbox. Защищённые резервные копии сайта временно
-          содержат те же данные. Данные аккаунта хранятся до удаления аккаунта;
-          неподтверждённая регистрация без другого способа входа удаляется после
-          30 дней при отсутствии действующей ссылки, а действующие сеансы — до
-          30 дней. Удалённые данные могут оставаться в резервных копиях до
-          окончания их срока хранения; подробности и другие сроки — в политике
-          обработки данных.
+          Адрес электронной почты и отметка о его подтверждении, хеш пароля,
+          идентификатор VK ID или Яндекс ID, сведения о сеансах входа и
+          устройствах (случайный идентификатор браузера, тип браузера и системы,
+          IP-адрес и город, время входа и последней активности), идентификаторы
+          и время верно решённых задач и контекст их решения — без текста
+          ответов.
         </Typography.Text>
-        <Typography.Title order={2}>Отзыв</Typography.Title>
+        <Typography.Title order={2}>Действия и способ</Typography.Title>
         <Typography.Text>
-          Вы можете удалить аккаунт в его настройках или направить запрос об
-          отзыве согласия на{" "}
-          <ExternalLink href={`mailto:${siteConfig.privacyContactEmail}`}>
-            {siteConfig.privacyContactEmail}
-          </ExternalLink>
-          . После отзыва мы прекратим обработку, основанную на согласии, и
-          удалим данные в установленные сроки, если другое законное основание не
-          требует их сохранения. Без обработки данных аккаунт и сохранение
-          прогресса работать не смогут; читать уроки и проверять ответы можно
-          без аккаунта.
+          Сбор, запись, систематизация, накопление, хранение, уточнение,
+          использование, передача (предоставление) указанным ниже получателям,
+          обезличивание, блокирование, удаление и уничтожение —
+          автоматизированно, на сервере в России.
+        </Typography.Text>
+        <Typography.Title order={2}>Получатели</Typography.Title>
+        <Typography.Text>
+          Yandex Cloud Postbox — для доставки писем (адрес и содержание письма);
+          хранилище резервных копий Yandex Object Storage (Россия) — в
+          зашифрованном виде.
+        </Typography.Text>
+        <Typography.Title order={2}>Срок и отзыв</Typography.Title>
+        <Typography.Text>
+          Согласие действует до удаления аккаунта или до его отзыва. Отозвать
+          согласие можно, удалив аккаунт в профиле или написав на {contact}.
+          После отзыва обработка, основанная на согласии, прекращается, а данные
+          удаляются в течение 30 дней, если их хранение не требуется по другому
+          законному основанию; в резервных копиях они остаются до ротации копий.
+          Без обработки данных аккаунт работать не может; уроки и проверка
+          ответов доступны без аккаунта. Подробнее — в{" "}
+          <ActionLink presentation="inline" icon="none" to="/privacy">
+            политике обработки персональных данных
+          </ActionLink>
+          .
         </Typography.Text>
         <Typography.Title order={2}>Если вам нет 18 лет</Typography.Title>
         <Typography.Text>
           Обсудите регистрацию с родителем или другим законным представителем.
-          Сайт пока не проверяет возраст и полномочия представителя; отметка в
-          форме сама по себе не подтверждает такие полномочия. Уроки и проверка
-          ответов доступны без аккаунта.
+          Сайт не проверяет возраст; родитель может обратиться к оператору,
+          чтобы получить сведения о данных или удалить аккаунт.
         </Typography.Text>
       </Typography.Prose>
     </PageContainer>

@@ -48,6 +48,12 @@ test("email account deletion requires the current password", async ({
   await accountPage.expectPasswordProtectedDeletion();
 });
 
+test("a first provider sign-in asks for consent before the account", async ({
+  accountPage,
+}) => {
+  await accountPage.expectProviderConsentStep();
+});
+
 test("provider-only deletion keeps its recent sign-in flow", async ({
   accountPage,
 }) => {

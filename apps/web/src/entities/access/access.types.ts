@@ -1,4 +1,10 @@
 export namespace AccessTypes {
+  export type Restriction = {
+    kind: "warning" | "suspension" | "termination";
+    reason: string;
+    until: string | null;
+    contact: string;
+  };
   /** The visitor's paid access as SSR learns it (Change 192, SPEC §6.1). */
   export type State =
     | {
@@ -9,6 +15,8 @@ export namespace AccessTypes {
         /** Paid modules may load: an active grant, or the paywall is off. */
         granted: boolean;
         until: string | null;
+        /** Change 198: a manual measure of the operator, with the appeal contact. */
+        restriction: Restriction | null;
       }
     /** The API did not answer: paid text stays closed, never shown on a guess. */
     | { status: "unavailable" };

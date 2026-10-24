@@ -419,6 +419,15 @@ pseudonymizes billing rows (user link and contact removed); billing rows are ret
 and consumer disputes. The free/paid level of materials is content metadata (§2.2), carried to the
 API by the generated practice registry, not a database column.
 
+Devices and restrictions (Change 198). A session additionally records a random device id from a
+separate long-lived host-only cookie, a coarse device label (browser · OS from User-Agent), the IP
+address and a city resolved from a local offline database at sign-in and last activity (updated at
+most every 10 minutes), and the last-seen time; IP and city are erased after 90 days. An append-only
+account restriction record (kind `warning | suspension | termination`, reason, operator note,
+created/ends/lifted time) is the evidence of every manual measure. A daily per-account counter of
+distinct paid chunks served feeds the operator signal report only. Accounts created through a
+login provider record the same consent version and time as email registration.
+
 ## 4. API / Backend Contract
 
 Existing `/api/tasks` detail/check/file and lesson-practice/course-summary capabilities remain.
@@ -451,6 +460,16 @@ they return no-store data only to the owning account. The checker response disti
 from saved; a write failure never claims that progress was saved. Public catalog/lesson reads and
 checker answers remain available without registration. Regenerate OpenAPI clients with the API.
 No public task-bank write/admin API.
+
+Change 198. A paid task's public projection carries an empty explanation; its solution is
+returned by check/check-and-save or by `GET /api/tasks/{id}/solution` (active access, per-account
+limit, no-store); free tasks are unchanged. `GET /api/auth/sessions` lists the owner's active devices
+(label, city, last activity, current); `DELETE /api/auth/sessions/{id}` and
+`DELETE /api/auth/sessions?others=1` sign devices out. A first login through a provider without a
+linked account creates no account until `POST /api/auth/provider/register` receives the current
+consent version. Account restrictions are an operator CLI (`signals`, `warn`, `suspend`,
+`terminate`, `lift`), not an API; `GET /api/access` reports an active suspension (until, reason,
+appeal contact).
 
 Paid access (Change 192). Practice reads apply the access level (§2.2): for a viewer without access
 lesson practice returns paid tasks as locked stubs (ID, position, revision, title, skills; no
@@ -613,7 +632,8 @@ auto-resume scrolling and production delivery are out of scope.
 ## 6. Auth & Access Model
 
 С Change 140 ученик может зарегистрироваться по подтверждённому email и паролю либо войти через
-VK ID, Яндекс ID или Telegram. Каждый способ входа привязывается к внутреннему `user_id` по
+VK ID или Яндекс ID (вход через Telegram удалён в Change 198: иностранный сервис, 149-ФЗ ст. 10
+ч. 8 и КоАП 13.55 с 07.07.2026). Каждый способ входа привязывается к внутреннему `user_id` по
 проверенному идентификатору провайдера (`provider`, `subject`); email провайдера не является
 ключом объединения. Социальный аккаунт может не иметь email. Привязка нового способа входа
 выполняется только из уже открытого аккаунта после повторного подтверждения, отвязка последнего
@@ -632,7 +652,7 @@ state/PKCE и проверкой issuer/подписи/получателя, г�
 пароля и восстановления доступа через ограниченный по времени одноразовый токен. Запрос
 восстановления не раскрывает наличие аккаунта. Потеря провайдера лечится другим привязанным
 способом входа; доступ к чужому аккаунту по совпавшему адресу почты не выдаётся.
-VK ID, Яндекс ID и Telegram по умолчанию выключены отдельными release-флагами. Пока флаг
+VK ID и Яндекс ID по умолчанию выключены отдельными release-флагами. Пока флаг
 выключен, вход, привязка, повторное подтверждение и callback не доступны; интерфейс явно
 показывает способ как недоступный. Включение каждого флага требует проверенных учётных данных,
 callback и сценария входа, а также проверки, что существующие пользователи не теряют единственный
@@ -677,6 +697,23 @@ cookie. Идентификатор сессии хранится на серве
 Флаги `PAYWALL_ENABLED` и `BILLING_ENABLED` выключены по умолчанию: пока они выключены, все
 материалы бесплатны, а оплата недоступна; включение — правка окружения и перезапуск, без нового
 кода.
+
+### 6.2 Устройства и ограничения (Change 198)
+
+Доступ личный. У аккаунта не больше трёх активных устройств: устройство — браузер со своей
+cookie-идентификатором устройства; повторный вход с того же браузера не создаёт нового
+устройства. Вход с четвёртого устройства отзывает сессию, которая дольше всех не использовалась,
+а вход с нового устройства отправляет владельцу служебное письмо (город, браузер, время,
+совет сменить пароль). Владелец видит список «Где выполнен вход» и может завершить любой сеанс
+или все, кроме текущего. Отпечаток браузера не используется.
+
+Ограничения применяет только оператор вручную, после просмотра сигналов (одновременная
+активность из разных городов, частое вытеснение устройств, аномальный объём платных
+скачиваний); автоматической блокировки нет. Ступени: предупреждение (сеансы завершаются, письмо,
+уведомление в аккаунте) → приостановка платного доступа на срок (аккаунт, прогресс и бесплатные
+материалы сохраняются; платные страницы показывают дату, причину и контакт для обжалования)
+→ прекращение доступа с возвратом за неиспользованные дни. Снятие ограничения уведомляет
+пользователя. Порядок закреплён в оферте; обжалование — письмом на контакт, указанный на плашке.
 
 ---
 
@@ -781,14 +818,15 @@ per-context progress on an isolated target. Guest browser progress is never migr
 | SEO | `/`, `/privacy`, published topics, courses и CourseLesson имеют canonical, уникальные metadata, SSR content, общий crawlable social preview и входят в sitemap (prerender только `/` и `/ege`, остальное SSR); root document публикует browser-only manifest, SVG/PNG/ICO favicon и Apple touch icon из production-знака, а `/` — правдивый `WebSite` JSON-LD без выдуманной Organization; черновые маршруты остаются unlisted, `noindex,nofollow` и исключены из public discovery; платные страницы (Change 192) остаются в sitemap, робот получает ровно то, что гость (превью и блок оплаты, без клоакинга), с JSON-LD `isAccessibleForFree: false` и `hasPart` на закрытую часть; `/subscribe` и страница возврата с оплаты — `noindex`; страницы входа, регистрации, восстановления, подтверждения почты и `/account` — `noindex` и закрыты в robots.txt вместе с `/api/` и `/_serverFn/`, robots.txt даёт Яндексу `Clean-param` для служебных параметров (Change 194); задачи практики, включая банк КЕГЭ, индексируются с собственными title и description из условия (решение архитектора 2026-10-19); sitemap содержит только отвечающие 200 адреса, crawl-пути не делят лимит чтения практики; Lighthouse SEO для публичных маршрутов проходит без ошибок |
 | Mobile / no-JS readability | TopicLesson, Course overview и CourseLesson сохраняют текст, программу, подписи, решения и section anchors в SSR HTML (платные части — для зрителя с доступом; остальным SSR отдаёт превью и блок оплаты, Change 192); интерактивная проверка и персональный progress остаются progressive enhancement |
 | Client resilience / API drift | Route failures восстанавливаемы без белого экрана; loading/empty/error/not-found состояния доступны с клавиатуры и скринридера; OpenAPI schema/types drift ломает gate до merge; runtime HTTP имеет timeout/abort и не делает скрытый retry мутаций |
-| Account security | Passwords use a current password-hashing scheme; verification/reset tokens expire and are single-use; sessions are server-revocable, HttpOnly/Secure/SameSite and protected from CSRF. Auth endpoints have targeted abuse limits, generic recovery responses and no sensitive URL/query/access-log leakage. Authentication does not grant editorial, operator or paid access. |
+| Account security | Passwords use a current password-hashing scheme; verification/reset tokens expire and are single-use; sessions are server-revocable, HttpOnly/Secure/SameSite and protected from CSRF. Auth endpoints have targeted abuse limits, generic recovery responses and no sensitive URL/query/access-log leakage. Authentication does not grant editorial, operator or paid access. At most three active devices per account, a new-device email, owner-visible device list and sign-out (§6.2). Paid chunks get their own anti-bot budget of the practice-read size (120/min, burst 110); no limit a reader can feel. |
 | Personal-data isolation | Progress and account reads/writes are owner-scoped and no-store; logout and account switching clear in-memory personalized state. Guest checking remains anonymous and read-only. Account/identity/progress data and new role grants are covered by isolated backup/restore checks. |
-| Юридическое (152-ФЗ) | `/privacy` публикует фактические цели, состав, сроки и получателей обработки; регистрация по email требует отдельной неотмеченной по умолчанию галочки со ссылкой на версионированное согласие, а API фиксирует версию и время. Контакт — `kodumka@mail.ru`. По явному решению архитектора ФИО и адрес оператора не публикуются (с Change 192 ФИО и ИНН продавца есть только в реквизитах оферты, строка «Юридическое (оплата)»), возраст и полномочия представителя при регистрации не проверяются, уведомление РКН переносится на отдельный пункт после релиза. Эти решения оставляют существенный юридический риск и не являются заявлением о соответствии закону; надпись «18+» для фактически школьной аудитории не используется как фиктивное освобождение от обязанностей. Гости любого возраста могут читать уроки и проверять ответы без регистрации. Браузерная аналитика возвращена (2026-09-22, архитектор пересмотрел прежний отказ, §1.2/§7.3): self-hosted `smotryashchiy`, без cookie и постоянного идентификатора — visitor-хэш `sha256(daily_salt+site+IP+UA)` с посуточной ротацией соли, сырой IP не сохраняется, referrer усекается до hostname. Отсутствие отдельного consent UI для этой аналитики — интерпретация архитектора, не юридическое заключение. Формальная проверка уведомления РКН, локализации, текста политики, детей и этой трактовки юристом остаётся внешним follow-up. |
+| Юридическое (152-ФЗ) | `/privacy` публикует фактические цели, состав, сроки и получателей обработки; регистрация по email требует отдельной неотмеченной по умолчанию галочки со ссылкой на версионированное согласие, а API фиксирует версию и время. Контакт — `kodumka@mail.ru`. С Change 198 политика и согласие называют оператора (ФИО, ИНН, email; адрес не публикуется), политика перечисляет правовые основания, права субъекта со сроком ответа, всех получателей и данные устройств; согласие — отдельный документ (156-ФЗ) и отдельная галочка, в том числе при первом входе через провайдера; оплата и защита аккаунта опираются на исполнение договора, поэтому у прежних пользователей согласие повторно не запрашивается. Возраст и полномочия представителя при регистрации не проверяются (пункт о несовершеннолетних — в оферте); уведомление РКН подаётся оператором до включения оплаты. Юридическая проверка не проводится по решению архитектора (2026-10-18, подтверждено 2026-10-23); тексты — инженерный ориентир, не заявление о соответствии закону; надпись «18+» для фактически школьной аудитории не используется как фиктивное освобождение от обязанностей. Гости любого возраста могут читать уроки и проверять ответы без регистрации. Браузерная аналитика возвращена (2026-09-22, архитектор пересмотрел прежний отказ, §1.2/§7.3): self-hosted `smotryashchiy`, без cookie и постоянного идентификатора — visitor-хэш `sha256(daily_salt+site+IP+UA)` с посуточной ротацией соли, сырой IP не сохраняется, referrer усекается до hostname. Отсутствие отдельного consent UI для этой аналитики — интерпретация архитектора, не юридическое заключение. Памятка оператора о действиях при утечке (РКН — 24 и 72 часа, ст. 21 ч. 3.1) ручная, без автоматизации. |
+| Публичные профили (будущее) | Публикация любых данных пользователя (псевдоним, аватар, результаты, место в рейтинге) требует отдельного согласия на распространение (ст. 10.1): выключено по умолчанию, отдельное действие со ссылкой на документ, выбор полей, версия и время в БД, отзыв сразу скрывает публикацию; email и настоящее имя не публикуются, по умолчанию — псевдоним. Текст документа готовится в Change 198, интерфейс — вместе с профилями |
 | Юридическое (436-ФЗ) | Возрастная маркировка для обычного сайта не вводится: существующая `12+` удаляется без замены на `18+` |
 | Происхождение контента | Существующие уроки сохраняют Content Quality Gate (§2.3). Для нового банка принято импортируемое содержимое с явным provenance (§3); происхождение, атрибуция и допустимость использования проверяются при подготовке импорта, не выводятся автоматически из URL и не заменяются технической валидацией |
 | Платежи (Change 192) | Номер карты и платёжные данные не проходят через сайт; уведомления провайдера принимаются только с верной подписью, статус перезапрашивается у провайдера, обработка идемпотентна; двойное нажатие оплаты не создаёт двух платежей; суммы — целые копейки; логи биллинга без email, токенов и сырых уведомлений; возвраты — только операторская CLI. Пока флаги выключены, production бесплатен |
-| Юридическое (оплата) | Продавец — самозанятый (НПД, лимит 2,4 млн ₽ в год, чек на каждую оплату и аннулирование при возврате через провайдера). Принцип архитектора (2026-10-17): юридические требования выполняются в наименее заметной законной форме, но не ниже законного минимума. Оферта и правила возврата — версионированные страницы; ФИО и ИНН продавца — только в блоке «Реквизиты исполнителя» в конце оферты (паспорт и адрес не публикуются), в подвале — ссылки без имени. Галочек нет: строка под «Оплатить» о принятии оферты; пункт о покупке несовершеннолетним (ГК ст. 26) и полном возврате по обращению родителя — в оферте. Возврат — пропорционально неиспользованным дням (ЗоЗПП ст. 32). Цены и скидки правдивы (38-ФЗ ст. 5): зачёркнутая сумма — только реальное сравнение (12 × месячный тариф), без фиктивных базовых цен, ложных таймеров и дефицита. Формальная проверка оферты юристом — предпосылка запуска (§11) |
-| Other (юридический ориентир, не консультация) | Открытые источники используются как инженерный ориентир; формальная юридическая проверка, данные оператора, оформление доступа детей и уведомление РКН не закрыты. Архитектор принял риск выпуска без них и планирует РКН отдельным пунктом после релиза; это не меняет установленного законом срока подачи уведомления до обработки, если исключение неприменимо. |
+| Юридическое (оплата) | Продавец — самозанятый (НПД, лимит 2,4 млн ₽ в год, чек на каждую оплату и аннулирование при возврате через провайдера). Принцип архитектора (2026-10-17): юридические требования выполняются в наименее заметной законной форме, но не ниже законного минимума. Оферта и правила возврата — версионированные страницы; ФИО и ИНН продавца — только в блоке «Реквизиты исполнителя» в конце оферты (паспорт и адрес не публикуются), в подвале — ссылки без имени. Галочек нет: строка под «Оплатить» о принятии оферты; пункт о покупке несовершеннолетним (ГК ст. 26) и полном возврате по обращению родителя — в оферте; там же (Change 198) личный характер доступа, лимит устройств, запрет копирования и автоматического скачивания, ступени ограничения и обжалование — без отдельной страницы правил и новых строк в формах. Возврат — пропорционально неиспользованным дням (ЗоЗПП ст. 32). Цены и скидки правдивы (38-ФЗ ст. 5): зачёркнутая сумма — только реальное сравнение (12 × месячный тариф), без фиктивных базовых цен, ложных таймеров и дефицита. Юридическая проверка не проводится (решение архитектора 2026-10-18) |
+| Other (юридический ориентир, не консультация) | Открытые источники используются как инженерный ориентир (сводка — [privacy-legal-checklist](runbooks/privacy-legal-checklist.md)); юриста нет по решению архитектора. Уведомление РКН подаётся до включения оплаты; срок по закону — до начала обработки, если исключение неприменимо. |
 
 ---
 
@@ -831,6 +869,14 @@ Ordered unfinished outcomes (each a separate change, smallest coherent slice fir
    возвраты реализуются одним change и попадают в `main` с выключенными флагами; включение — вместе
    с релизом после предпосылок §11 (цель — конец августа 2027, начало сезона 2027/28).
 
+4. **Операторская консоль на `sre.infraege.ru` (решение архитектора 2026-10-24).** Сигналы и
+   меры ограничения (§6.2), возвраты, поиск аккаунта, журнал инцидентов с отсчётом 24/72 ч и
+   журнал действий — в интерфейсе мониторинга вместо CLI. Канал команд: агент на production сам
+   забирает команды из очереди сервера мониторинга и выполняет только разрешённый набор через
+   хостовый исполнитель; на мониторинг уходят email, ID, счётчики сигналов, города и IP активных
+   сеансов, но не пароли и не платёжные данные. Работа — smotryashchiy Change 30 и Change 199
+   здесь (исполнитель `operator-command.sh`, режим `--json` и выгрузка `kodumka.operator/1`).
+
 Later product decisions may add manual completion, richer statistics, auto-renewal, live formats
 and parent reports; each needs its own decision.
 
@@ -856,7 +902,8 @@ prerequisites, not claims of completion.
 
 Before enabling paid access (Change 192 flags): seller registered as НПД; Robokassa shop connected
 with Робочеки СМЗ, verified by a real 1 ₽ payment and refund with receipt and annulment in «Мой
-налог»; offer, refund rules and updated privacy policy reviewed by a lawyer; RKN notification filed
+налог»; offer, refund rules and updated privacy policy published in their Change 198 editions (no lawyer
+review, architect's decision 2026-10-18); Яндекс ID and VK ID applications registered; RKN notification filed
 (payments add processing purposes); off-site backup in place and a restore proof including billing
 tables; provenance of tasks in paid subtopics confirmed; date and text of the announcement for topics
 that are free on production today chosen by the architect.

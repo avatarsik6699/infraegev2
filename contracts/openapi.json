@@ -12,6 +12,16 @@
             "title": "Paywall",
             "type": "boolean"
           },
+          "restriction": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/RestrictionView"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
           "signed_in": {
             "title": "Signed In",
             "type": "boolean"
@@ -1639,6 +1649,24 @@
         "title": "PaymentView",
         "type": "object"
       },
+      "PendingProviderView": {
+        "additionalProperties": false,
+        "properties": {
+          "provider": {
+            "enum": [
+              "vk",
+              "yandex"
+            ],
+            "title": "Provider",
+            "type": "string"
+          }
+        },
+        "required": [
+          "provider"
+        ],
+        "title": "PendingProviderView",
+        "type": "object"
+      },
       "PlanView": {
         "additionalProperties": false,
         "properties": {
@@ -1699,6 +1727,63 @@
         "title": "ProgressView",
         "type": "object"
       },
+      "ProviderRegisterRequest": {
+        "additionalProperties": false,
+        "properties": {
+          "privacy_consent": {
+            "const": true,
+            "title": "Privacy Consent",
+            "type": "boolean"
+          },
+          "privacy_consent_version": {
+            "const": "2026-10-23",
+            "title": "Privacy Consent Version",
+            "type": "string"
+          }
+        },
+        "required": [
+          "privacy_consent",
+          "privacy_consent_version"
+        ],
+        "title": "ProviderRegisterRequest",
+        "type": "object"
+      },
+      "ProviderRegisteredView": {
+        "additionalProperties": false,
+        "properties": {
+          "account": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/AccountView"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "csrf_token": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Csrf Token"
+          },
+          "return_to": {
+            "title": "Return To",
+            "type": "string"
+          }
+        },
+        "required": [
+          "account",
+          "return_to"
+        ],
+        "title": "ProviderRegisteredView",
+        "type": "object"
+      },
       "PublicTask": {
         "additionalProperties": false,
         "properties": {
@@ -1719,6 +1804,11 @@
           "revision": {
             "title": "Revision",
             "type": "integer"
+          },
+          "solution_on_request": {
+            "default": false,
+            "title": "Solution On Request",
+            "type": "boolean"
           },
           "solution_revision": {
             "title": "Solution Revision",
@@ -2134,7 +2224,7 @@
             "type": "boolean"
           },
           "privacy_consent_version": {
-            "const": "2026-09-25",
+            "const": "2026-10-23",
             "title": "Privacy Consent Version",
             "type": "string"
           }
@@ -2169,6 +2259,49 @@
           "password"
         ],
         "title": "ResetPasswordRequest",
+        "type": "object"
+      },
+      "RestrictionView": {
+        "additionalProperties": false,
+        "description": "Change 198 (SPEC §6.2): a manual measure, with the address to appeal it.",
+        "properties": {
+          "contact": {
+            "title": "Contact",
+            "type": "string"
+          },
+          "kind": {
+            "enum": [
+              "warning",
+              "suspension",
+              "termination"
+            ],
+            "title": "Kind",
+            "type": "string"
+          },
+          "reason": {
+            "title": "Reason",
+            "type": "string"
+          },
+          "until": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Until"
+          }
+        },
+        "required": [
+          "kind",
+          "reason",
+          "until",
+          "contact"
+        ],
+        "title": "RestrictionView",
         "type": "object"
       },
       "ResultView": {
@@ -2281,6 +2414,48 @@
         "title": "SessionView",
         "type": "object"
       },
+      "SignedInDevice": {
+        "additionalProperties": false,
+        "properties": {
+          "city": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "City"
+          },
+          "current": {
+            "title": "Current",
+            "type": "boolean"
+          },
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "label": {
+            "title": "Label",
+            "type": "string"
+          },
+          "last_seen_at": {
+            "format": "date-time",
+            "title": "Last Seen At",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "label",
+          "city",
+          "last_seen_at",
+          "current"
+        ],
+        "title": "SignedInDevice",
+        "type": "object"
+      },
       "SitemapEntry": {
         "additionalProperties": false,
         "properties": {
@@ -2349,6 +2524,75 @@
           "label"
         ],
         "title": "SkillOption",
+        "type": "object"
+      },
+      "SolutionView": {
+        "additionalProperties": false,
+        "properties": {
+          "explanation": {
+            "items": {
+              "discriminator": {
+                "mapping": {
+                  "attachment": "#/components/schemas/AttachmentBlock",
+                  "callout": "#/components/schemas/CalloutBlock",
+                  "code_example": "#/components/schemas/CodeExampleBlock",
+                  "code_variants": "#/components/schemas/CodeVariantsBlock",
+                  "completion_exercise": "#/components/schemas/WorkedExampleBlock",
+                  "diagram": "#/components/schemas/DiagramBlock",
+                  "image": "#/components/schemas/ImageBlock",
+                  "list": "#/components/schemas/ListBlock",
+                  "productive_failure_prompt": "#/components/schemas/WorkedExampleBlock",
+                  "rich_text": "#/components/schemas/RichTextBlock",
+                  "table": "#/components/schemas/TableBlock",
+                  "text": "#/components/schemas/TextBlock",
+                  "worked_example": "#/components/schemas/WorkedExampleBlock"
+                },
+                "propertyName": "type"
+              },
+              "oneOf": [
+                {
+                  "$ref": "#/components/schemas/TextBlock"
+                },
+                {
+                  "$ref": "#/components/schemas/ListBlock"
+                },
+                {
+                  "$ref": "#/components/schemas/CodeExampleBlock"
+                },
+                {
+                  "$ref": "#/components/schemas/TableBlock"
+                },
+                {
+                  "$ref": "#/components/schemas/WorkedExampleBlock"
+                },
+                {
+                  "$ref": "#/components/schemas/CalloutBlock"
+                },
+                {
+                  "$ref": "#/components/schemas/ImageBlock"
+                },
+                {
+                  "$ref": "#/components/schemas/DiagramBlock"
+                },
+                {
+                  "$ref": "#/components/schemas/AttachmentBlock"
+                },
+                {
+                  "$ref": "#/components/schemas/RichTextBlock"
+                },
+                {
+                  "$ref": "#/components/schemas/CodeVariantsBlock"
+                }
+              ]
+            },
+            "title": "Explanation",
+            "type": "array"
+          }
+        },
+        "required": [
+          "explanation"
+        ],
+        "title": "SolutionView",
         "type": "object"
       },
       "Source": {
@@ -3223,6 +3467,70 @@
         ]
       }
     },
+    "/api/auth/provider/pending": {
+      "get": {
+        "description": "The provider of a verified sign-in that still waits for the consent step.",
+        "operationId": "provider_pending_api_auth_provider_pending_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PendingProviderView"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Provider Pending",
+        "tags": [
+          "account"
+        ]
+      }
+    },
+    "/api/auth/provider/register": {
+      "post": {
+        "description": "Create the account of a verified provider identity once consent is given.",
+        "operationId": "provider_register_api_auth_provider_register_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProviderRegisterRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProviderRegisteredView"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Provider Register",
+        "tags": [
+          "account"
+        ]
+      }
+    },
     "/api/auth/providers": {
       "get": {
         "description": "Expose only release-enabled providers; credentials remain server-only.",
@@ -3236,8 +3544,7 @@
                     "items": {
                       "enum": [
                         "vk",
-                        "yandex",
-                        "telegram"
+                        "yandex"
                       ],
                       "type": "string"
                     },
@@ -3617,6 +3924,134 @@
           }
         },
         "summary": "Get Session",
+        "tags": [
+          "account"
+        ]
+      }
+    },
+    "/api/auth/sessions": {
+      "delete": {
+        "operationId": "end_other_sessions_api_auth_sessions_delete",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "others",
+            "required": false,
+            "schema": {
+              "default": false,
+              "title": "Others",
+              "type": "boolean"
+            }
+          },
+          {
+            "in": "header",
+            "name": "x-csrf-token",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Csrf-Token"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "End Other Sessions",
+        "tags": [
+          "account"
+        ]
+      },
+      "get": {
+        "description": "Where the account is signed in (SPEC §6.2), for its owner only.",
+        "operationId": "list_sessions_api_auth_sessions_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/SignedInDevice"
+                  },
+                  "title": "Response List Sessions Api Auth Sessions Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "List Sessions",
+        "tags": [
+          "account"
+        ]
+      }
+    },
+    "/api/auth/sessions/{session_id}": {
+      "delete": {
+        "operationId": "end_session_api_auth_sessions__session_id__delete",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "session_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Session Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "x-csrf-token",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Csrf-Token"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "End Session",
         "tags": [
           "account"
         ]
@@ -4708,6 +5143,49 @@
           }
         },
         "summary": "Get Next Task"
+      }
+    },
+    "/api/tasks/{task_id}/solution": {
+      "get": {
+        "description": "The solution of a paid task, sent only when asked for (SPEC §4).",
+        "operationId": "get_solution_api_tasks__task_id__solution_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "task_id",
+            "required": true,
+            "schema": {
+              "title": "Task Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SolutionView"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Get Solution",
+        "tags": [
+          "progress"
+        ]
       }
     },
     "/api/topics/practice-summary": {

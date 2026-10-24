@@ -21,6 +21,7 @@ import { AccountAccess } from "./components/account-access";
 import { AccountOverview } from "./components/account-overview";
 import { EmailMethodForm } from "./components/email-method-form";
 import { LoginMethodIcon } from "./components/login-method-icon";
+import { SignedInDevices } from "./components/signed-in-devices";
 import styles from "./account-page.module.css";
 import type { AccountProfileTypes } from "./account-profile.types";
 import { accountPageHelpers } from "./account-page.helpers";
@@ -276,6 +277,7 @@ export const AccountProfile: React.FC<AccountProfileTypes.Props> = (props) => {
               </ActionLink>
             ) : null}
           </section>
+          <SignedInDevices />
           <section
             className={styles.profileSafety}
             aria-labelledby="safety-title"

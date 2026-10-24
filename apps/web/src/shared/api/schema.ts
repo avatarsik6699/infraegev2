@@ -124,6 +124,46 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/auth/provider/pending": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Provider Pending
+         * @description The provider of a verified sign-in that still waits for the consent step.
+         */
+        get: operations["provider_pending_api_auth_provider_pending_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/auth/provider/register": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Provider Register
+         * @description Create the account of a verified provider identity once consent is given.
+         */
+        post: operations["provider_register_api_auth_provider_register_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/auth/providers": {
         parameters: {
             query?: never;
@@ -258,6 +298,44 @@ export interface paths {
         put?: never;
         post?: never;
         delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/auth/sessions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List Sessions
+         * @description Where the account is signed in (SPEC §6.2), for its owner only.
+         */
+        get: operations["list_sessions_api_auth_sessions_get"];
+        put?: never;
+        post?: never;
+        /** End Other Sessions */
+        delete: operations["end_other_sessions_api_auth_sessions_delete"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/auth/sessions/{session_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /** End Session */
+        delete: operations["end_session_api_auth_sessions__session_id__delete"];
         options?: never;
         head?: never;
         patch?: never;
@@ -606,6 +684,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/tasks/{task_id}/solution": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get Solution
+         * @description The solution of a paid task, sent only when asked for (SPEC §4).
+         */
+        get: operations["get_solution_api_tasks__task_id__solution_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/topics/practice-summary": {
         parameters: {
             query?: never;
@@ -684,6 +782,7 @@ export interface components {
             granted: boolean;
             /** Paywall */
             paywall: boolean;
+            restriction?: components["schemas"]["RestrictionView"] | null;
             /** Signed In */
             signed_in: boolean;
             /** Until */
@@ -1194,6 +1293,14 @@ export interface components {
              */
             status: "created" | "pending" | "succeeded" | "failed" | "refunded";
         };
+        /** PendingProviderView */
+        PendingProviderView: {
+            /**
+             * Provider
+             * @enum {string}
+             */
+            provider: "vk" | "yandex";
+        };
         /** PlanView */
         PlanView: {
             /** Days */
@@ -1217,6 +1324,27 @@ export interface components {
             /** Results */
             results: components["schemas"]["ResultView"][];
         };
+        /** ProviderRegisterRequest */
+        ProviderRegisterRequest: {
+            /**
+             * Privacy Consent
+             * @constant
+             */
+            privacy_consent: true;
+            /**
+             * Privacy Consent Version
+             * @constant
+             */
+            privacy_consent_version: "2026-10-23";
+        };
+        /** ProviderRegisteredView */
+        ProviderRegisteredView: {
+            account: components["schemas"]["AccountView"] | null;
+            /** Csrf Token */
+            csrf_token?: string | null;
+            /** Return To */
+            return_to: string;
+        };
         /** PublicTask */
         PublicTask: {
             content: components["schemas"]["PublicTaskContent"];
@@ -1226,6 +1354,11 @@ export interface components {
             id: string;
             /** Revision */
             revision: number;
+            /**
+             * Solution On Request
+             * @default false
+             */
+            solution_on_request: boolean;
             /** Solution Revision */
             solution_revision: number;
         };
@@ -1323,7 +1456,7 @@ export interface components {
              * Privacy Consent Version
              * @constant
              */
-            privacy_consent_version: "2026-09-25";
+            privacy_consent_version: "2026-10-23";
         };
         /** ResetPasswordRequest */
         ResetPasswordRequest: {
@@ -1331,6 +1464,23 @@ export interface components {
             password: string;
             /** Token */
             token: string;
+        };
+        /**
+         * RestrictionView
+         * @description Change 198 (SPEC §6.2): a manual measure, with the address to appeal it.
+         */
+        RestrictionView: {
+            /** Contact */
+            contact: string;
+            /**
+             * Kind
+             * @enum {string}
+             */
+            kind: "warning" | "suspension" | "termination";
+            /** Reason */
+            reason: string;
+            /** Until */
+            until: string | null;
         };
         /** ResultView */
         ResultView: {
@@ -1368,6 +1518,22 @@ export interface components {
             /** Csrf Token */
             csrf_token?: string | null;
         };
+        /** SignedInDevice */
+        SignedInDevice: {
+            /** City */
+            city: string | null;
+            /** Current */
+            current: boolean;
+            /** Id */
+            id: string;
+            /** Label */
+            label: string;
+            /**
+             * Last Seen At
+             * Format: date-time
+             */
+            last_seen_at: string;
+        };
         /** SitemapEntry */
         SitemapEntry: {
             /** Id */
@@ -1394,6 +1560,11 @@ export interface components {
             label: string;
             /** Value */
             value: string;
+        };
+        /** SolutionView */
+        SolutionView: {
+            /** Explanation */
+            explanation: (components["schemas"]["TextBlock"] | components["schemas"]["ListBlock"] | components["schemas"]["CodeExampleBlock"] | components["schemas"]["TableBlock"] | components["schemas"]["WorkedExampleBlock"] | components["schemas"]["CalloutBlock"] | components["schemas"]["ImageBlock"] | components["schemas"]["DiagramBlock"] | components["schemas"]["AttachmentBlock"] | components["schemas"]["RichTextBlock"] | components["schemas"]["CodeVariantsBlock"])[];
         };
         /** Source */
         Source: {
@@ -1805,6 +1976,59 @@ export interface operations {
             };
         };
     };
+    provider_pending_api_auth_provider_pending_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PendingProviderView"];
+                };
+            };
+        };
+    };
+    provider_register_api_auth_provider_register_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ProviderRegisterRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProviderRegisteredView"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
     provider_availability_api_auth_providers_get: {
         parameters: {
             query?: never;
@@ -1821,7 +2045,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        [key: string]: ("vk" | "yandex" | "telegram")[];
+                        [key: string]: ("vk" | "yandex")[];
                     };
                 };
             };
@@ -2047,6 +2271,88 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["SessionView"];
+                };
+            };
+        };
+    };
+    list_sessions_api_auth_sessions_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SignedInDevice"][];
+                };
+            };
+        };
+    };
+    end_other_sessions_api_auth_sessions_delete: {
+        parameters: {
+            query?: {
+                others?: boolean;
+            };
+            header?: {
+                "x-csrf-token"?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    end_session_api_auth_sessions__session_id__delete: {
+        parameters: {
+            query?: never;
+            header?: {
+                "x-csrf-token"?: string | null;
+            };
+            path: {
+                session_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
                 };
             };
         };
@@ -2641,6 +2947,37 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["NextTask"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_solution_api_tasks__task_id__solution_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                task_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SolutionView"];
                 };
             };
             /** @description Validation Error */

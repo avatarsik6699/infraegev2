@@ -32,10 +32,10 @@ the address, authenticates them.
 ## Launch checklist
 
 1. Release the paid-access code with both flags off; production stays free. Before that deploy,
-   rehearse the `140_01` → `192_01` migration on the production host and keep its attestation
-   ([backup-restore](backup-restore.md), «Change 192»).
+   rehearse the `140_01` → `198_01` migration on the production host and keep its attestation
+   ([backup-restore](backup-restore.md), «Change 192» and «Change 198»).
 2. Off-site backups are running (`offsite-backup-status.json` success, BACKUPS ledger OK; setup in
-   [backup-restore](backup-restore.md) § Off-site copy) and a restore check of a `192_01` bundle
+   [backup-restore](backup-restore.md) § Off-site copy) and a restore check of a `198_01` bundle
    from the off-site copy has passed (billing rows are evidence, see «Backups»).
 3. Register as самозанятый, connect the Robokassa shop and Робочеки СМЗ, put the credentials into
    `/etc/infraege/production.env` ([billing-provider-selection](billing-provider-selection.md)).
@@ -43,8 +43,11 @@ the address, authenticates them.
    payment and refund with both receipts visible in «Мой налог».
 5. Announce the paid part for the topics that are free today, then `PAYWALL_ENABLED=true`.
 6. The offer, refund rules and privacy text were not reviewed by a lawyer (architect's decision,
-   2026-10-18). Any change to the offer after the first payment is a new dated file in
-   `content/legal/oferta/`; an accepted edition is never edited.
+   2026-10-18, confirmed 2026-10-23). Any change to the offer after the first payment is a new
+   dated file in `content/legal/oferta/`; an accepted edition is never edited.
+7. Change 198 ([privacy-legal-checklist](privacy-legal-checklist.md) § 7): the RKN notification is
+   filed; the Яндекс ID and VK ID applications are registered and their `*_ENABLED` flags are on
+   in `/etc/infraege/production.env`; the country of the `smotryashchiy` VPS is checked.
 
 ## What runs on its own
 
@@ -93,6 +96,8 @@ docker compose --env-file /etc/infraege/production.env --project-name infraege \
 | `funnel [--days N]` | orders of the last N Moscow days (default 30) by day and plan: paid, failed, open, refunded and the money kept — the payment conversion (Change 194) |
 | `execute --refund ID` | send a requested or failed refund to the provider |
 | `revenue [--year YEAR]` | НПД income of a Moscow calendar year and its share of the limit |
+| `signals [--days N]` | Change 198: accounts above a sharing or downloading threshold, numbers only; no measure is automatic |
+| `warn` / `suspend --days N` / `terminate` / `lift [--compensate]` (`--user ID` or `--email A`) | Change 198: the graded manual measures of offer section 6 and their lifting — procedure in [accounts](accounts.md#ограничения-change-198) |
 
 A refund is idempotent by payment, reason and amount: repeating the command does not pay twice.
 Robokassa finishes refunds asynchronously; the hourly job records the result and mails the buyer.

@@ -8,6 +8,13 @@
     python -m app.modules.billing.admin funnel [--days N]       # orders → payments by day
     python -m app.modules.billing.admin export                  # the monitoring summary (JSON)
 
+Change 198 (SPEC §6.2), manual measures only; look at the numbers before any of them:
+    python -m app.modules.billing.admin signals [--days N]      # accounts above a threshold
+    python -m app.modules.billing.admin warn --user ID|--email ADDRESS --reason TEXT [--note T]
+    python -m app.modules.billing.admin suspend --user ID|--email A --days N --reason TEXT
+    python -m app.modules.billing.admin terminate --user ID|--email A --reason TEXT
+    python -m app.modules.billing.admin lift --user ID|--email ADDRESS [--compensate]
+
 Output names payments, amounts and states only; addresses never reach the journal.
 """
 
@@ -25,6 +32,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.config import settings
 from app.core.database import database_engine
+from app.modules.account import restrictions
+from app.modules.account.mail import MailUnavailable, send_account_mail
 from app.modules.account.models import AccountIdentity, AccountPassword, AccountUser
 from app.modules.billing import provider, service
 from app.modules.billing.models import AccessGrant, Payment, Refund
@@ -213,6 +222,51 @@ async def export(db: AsyncSession) -> dict:
     }
 
 
+async def account_of(db: AsyncSession, args: argparse.Namespace) -> UUID:
+    if args.user:
+        user_id = UUID(args.user)
+    else:
+        user_id = await db.scalar(
+            select(AccountPassword.user_id).where(
+                AccountPassword.email_normalized == args.email.casefold()
+            )
+        )
+    if user_id is None or await db.get(AccountUser, user_id) is None:
+        raise SystemExit("account not found")
+    return user_id
+
+
+async def measure(db: AsyncSession, args: argparse.Namespace) -> dict:
+    """Apply one manual measure and mail its notice; the mail never decides the outcome."""
+    async with db.begin():
+        user_id = await account_of(db, args)
+        if args.command == "lift":
+            if not await restrictions.lift(db, user_id, compensate=args.compensate):
+                raise SystemExit("no active restriction")
+            text = restrictions.notice("lift", "compensated" if args.compensate else "", None)
+            outcome: dict = {"user": str(user_id), "lifted": True, "compensated": args.compensate}
+        else:
+            row = await restrictions.restrict(
+                db, user_id, args.command_kind, args.reason, days=args.days, note=args.note
+            )
+            text = restrictions.notice(row.kind, row.reason, row.ends_at)
+            outcome = {
+                "user": str(user_id),
+                "restriction": str(row.id),
+                "kind": row.kind,
+                "until": row.ends_at.isoformat() if row.ends_at else None,
+            }
+        email = await restrictions.verified_email(db, user_id)
+    outcome["mailed"] = False
+    if email:
+        try:
+            await send_account_mail(email, text.subject, text.body)
+            outcome["mailed"] = True
+        except MailUnavailable:
+            pass
+    return outcome
+
+
 async def main_async(args: argparse.Namespace) -> object:
     engine = database_engine(settings.account_database_url, role="infraege_app")
     try:
@@ -242,6 +296,10 @@ async def main_async(args: argparse.Namespace) -> object:
                 return await funnel(db, args.days)
             if args.command == "export":
                 return await export(db)
+            if args.command == "signals":
+                return await restrictions.signals(db, args.days)
+            if args.command in ("warn", "suspend", "terminate", "lift"):
+                return await measure(db, args)
             year = args.year or service.now().astimezone(service.MOSCOW).year
             income = await service.revenue_kopecks(db, year)
             return {
@@ -266,6 +324,29 @@ def main() -> None:
     commands.add_parser("revenue").add_argument("--year", type=int)
     commands.add_parser("funnel").add_argument("--days", type=int, default=30)
     commands.add_parser("export")
+    commands.add_parser("signals").add_argument("--days", type=int, default=7)
+    for name, kind in (
+        ("warn", "warning"),
+        ("suspend", "suspension"),
+        ("terminate", "termination"),
+        ("lift", None),
+    ):
+        command = commands.add_parser(name)
+        command.set_defaults(command_kind=kind, days=None, reason="", note=None, compensate=False)
+        target = command.add_mutually_exclusive_group(required=True)
+        target.add_argument("--user")
+        target.add_argument("--email")
+        if kind is not None:
+            command.add_argument("--reason", required=True, help="shown to the student")
+            command.add_argument("--note", help="operator evidence, never shown")
+        if kind == "suspension":
+            command.add_argument("--days", type=int, required=True, choices=range(1, 31))
+        if kind is None:
+            command.add_argument(
+                "--compensate",
+                action="store_true",
+                help="appeal upheld: extend access by the suspended time (offer 6.3)",
+            )
     print(json.dumps(asyncio.run(main_async(parser.parse_args())), ensure_ascii=False, indent=2))
 
 

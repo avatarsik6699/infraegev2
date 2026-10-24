@@ -12,9 +12,8 @@ from typing import Literal
 from urllib.parse import urlencode, urlsplit, urlunsplit
 
 import httpx
-import jwt
 
-ProviderName = Literal["vk", "yandex", "telegram"]
+ProviderName = Literal["vk", "yandex"]
 
 VK_AUTHORIZE_URL = "https://id.vk.ru/authorize"
 VK_TOKEN_URL = "https://id.vk.ru/oauth2/auth"
@@ -22,10 +21,6 @@ VK_USER_INFO_URL = "https://id.vk.ru/oauth2/user_info"
 YANDEX_AUTHORIZE_URL = "https://oauth.yandex.ru/authorize"
 YANDEX_TOKEN_URL = "https://oauth.yandex.ru/token"
 YANDEX_USER_INFO_URL = "https://login.yandex.ru/info"
-TELEGRAM_AUTHORIZE_URL = "https://oauth.telegram.org/auth"
-TELEGRAM_TOKEN_URL = "https://oauth.telegram.org/token"
-TELEGRAM_JWKS_URL = "https://oauth.telegram.org/.well-known/jwks.json"
-TELEGRAM_ISSUER = "https://oauth.telegram.org"
 REQUEST_TIMEOUT_SECONDS = 5.0
 
 
@@ -36,8 +31,6 @@ class ProviderSettings:
     vk_app_id: str
     yandex_client_id: str
     yandex_client_secret: str
-    telegram_client_id: str
-    telegram_client_secret: str
 
 
 @dataclass(frozen=True)
@@ -88,21 +81,6 @@ def authorization_url(
                 "redirect_uri": callback_url,
                 "scope": "login:info",
                 "state": state,
-                "code_challenge": code_challenge,
-                "code_challenge_method": "S256",
-            },
-        )
-    if provider == "telegram":
-        _require_values(client_id=settings.telegram_client_id, nonce=nonce)
-        return _with_query(
-            TELEGRAM_AUTHORIZE_URL,
-            {
-                "client_id": settings.telegram_client_id,
-                "redirect_uri": callback_url,
-                "response_type": "code",
-                "scope": "openid profile",
-                "state": state,
-                "nonce": nonce,
                 "code_challenge": code_challenge,
                 "code_challenge_method": "S256",
             },
@@ -212,66 +190,7 @@ async def _authenticate(
             raise ProviderError("Yandex token was issued to another client")
         return ProviderIdentity("yandex", _required_subject(user_info, "id"))
 
-    if provider == "telegram":
-        _require_values(
-            client_id=settings.telegram_client_id,
-            client_secret=settings.telegram_client_secret,
-            nonce=nonce,
-        )
-        token = await _form_post(
-            client,
-            TELEGRAM_TOKEN_URL,
-            {
-                "grant_type": "authorization_code",
-                "code": code,
-                "redirect_uri": callback_url,
-                "client_id": settings.telegram_client_id,
-                "code_verifier": code_verifier,
-            },
-            auth=(settings.telegram_client_id, settings.telegram_client_secret),
-        )
-        claims = await _verify_telegram_id_token(
-            _required_string(token, "id_token"), settings.telegram_client_id, nonce, client
-        )
-        return ProviderIdentity("telegram", _required_subject(claims, "sub"))
-
     raise ProviderError("unsupported provider")
-
-
-async def _verify_telegram_id_token(
-    token: str, client_id: str, nonce: str, client: httpx.AsyncClient
-) -> Mapping[str, object]:
-    try:
-        header = jwt.get_unverified_header(token)
-    except jwt.PyJWTError as error:
-        raise ProviderError("invalid Telegram ID token") from error
-    algorithm = header.get("alg")
-    key_id = header.get("kid")
-    if algorithm not in {"RS256", "ES256"} or not isinstance(key_id, str) or not key_id:
-        raise ProviderError("invalid Telegram ID token header")
-
-    jwks = await _get_json(client, TELEGRAM_JWKS_URL, {})
-    keys = jwks.get("keys")
-    if not isinstance(keys, list):
-        raise ProviderError("invalid Telegram JWKS")
-    jwk = next((key for key in keys if isinstance(key, dict) and key.get("kid") == key_id), None)
-    if jwk is None:
-        raise ProviderError("Telegram signing key not found")
-    try:
-        signing_key = jwt.PyJWK.from_dict(jwk)
-        claims = jwt.decode(
-            token,
-            signing_key.key,
-            algorithms=[algorithm],
-            audience=client_id,
-            issuer=TELEGRAM_ISSUER,
-            options={"require": ["aud", "exp", "iat", "iss", "nonce", "sub"]},
-        )
-    except jwt.PyJWTError as error:
-        raise ProviderError("invalid Telegram ID token") from error
-    if claims.get("nonce") != nonce:
-        raise ProviderError("Telegram ID token nonce mismatch")
-    return claims
 
 
 async def _form_post(

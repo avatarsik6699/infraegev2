@@ -1,16 +1,11 @@
 import asyncio
 import base64
-import json
 from urllib.parse import parse_qs, urlsplit
 
 import httpx
-import jwt
 import pytest
-from cryptography.hazmat.primitives.asymmetric import rsa
-from jwt.algorithms import RSAAlgorithm
 
 from app.modules.account.providers import (
-    TELEGRAM_JWKS_URL,
     ProviderError,
     ProviderSettings,
     authenticate_callback,
@@ -19,15 +14,13 @@ from app.modules.account.providers import (
 
 pytestmark = pytest.mark.pure
 
-CALLBACK_URL = "https://infraege.example/api/auth/providers/telegram/callback"
+CALLBACK_URL = "https://infraege.example/api/auth/providers/yandex/callback"
 SETTINGS = ProviderSettings(
     vk_client_id="vk-client",
     vk_client_secret="vk-secret",
     vk_app_id="vk-app",
     yandex_client_id="yandex-client",
     yandex_client_secret="yandex-secret",
-    telegram_client_id="123456",
-    telegram_client_secret="telegram-secret",
 )
 
 
@@ -35,7 +28,7 @@ def run(coroutine):
     return asyncio.run(coroutine)
 
 
-def test_authorization_urls_use_pinned_endpoints_pkce_and_only_telegram_gets_nonce():
+def test_authorization_urls_use_pinned_endpoints_and_pkce():
     vk = urlsplit(
         authorization_url(
             "vk",
@@ -49,16 +42,6 @@ def test_authorization_urls_use_pinned_endpoints_pkce_and_only_telegram_gets_non
     yandex = urlsplit(
         authorization_url(
             "yandex",
-            SETTINGS,
-            callback_url=CALLBACK_URL,
-            state="state",
-            code_challenge="challenge",
-            nonce="nonce",
-        )
-    )
-    telegram = urlsplit(
-        authorization_url(
-            "telegram",
             SETTINGS,
             callback_url=CALLBACK_URL,
             state="state",
@@ -80,8 +63,16 @@ def test_authorization_urls_use_pinned_endpoints_pkce_and_only_telegram_gets_non
     }
     assert parse_qs(yandex.query)["scope"] == ["login:info"]
     assert parse_qs(yandex.query)["code_challenge_method"] == ["S256"]
-    assert parse_qs(telegram.query)["scope"] == ["openid profile"]
-    assert parse_qs(telegram.query)["nonce"] == ["nonce"]
+    # Change 198: Telegram sign-in is gone (a foreign service, 149-ФЗ ст. 10 ч. 8)
+    with pytest.raises(ProviderError, match="unsupported"):
+        authorization_url(
+            "telegram",  # type: ignore[arg-type]
+            SETTINGS,
+            callback_url=CALLBACK_URL,
+            state="state",
+            code_challenge="challenge",
+            nonce="nonce",
+        )
 
 
 def test_vkid_exchange_and_user_info_return_only_stable_subject():
@@ -166,53 +157,10 @@ def test_yandex_rejects_token_for_another_client():
         run(scenario())
 
 
-def test_telegram_validates_jwks_signature_issuer_audience_expiry_and_nonce():
-    private_key = rsa.generate_private_key(public_exponent=65537, key_size=2048)
-    public_jwk = json.loads(RSAAlgorithm.to_jwk(private_key.public_key()))
-    public_jwk["kid"] = "telegram-key"
-    token = jwt.encode(
-        {
-            "iss": "https://oauth.telegram.org",
-            "aud": "123456",
-            "sub": "telegram-subject",
-            "nonce": "nonce",
-            "iat": 1_700_000_000,
-            "exp": 4_000_000_000,
-        },
-        private_key,
-        algorithm="RS256",
-        headers={"kid": "telegram-key"},
-    )
-
-    def handler(request: httpx.Request) -> httpx.Response:
-        if str(request.url) == "https://oauth.telegram.org/token":
-            assert (
-                request.headers["authorization"]
-                == "Basic " + base64.b64encode(b"123456:telegram-secret").decode()
-            )
-            return httpx.Response(200, json={"id_token": token})
-        assert str(request.url) == TELEGRAM_JWKS_URL
-        return httpx.Response(200, json={"keys": [public_jwk]})
-
-    async def scenario():
-        async with httpx.AsyncClient(transport=httpx.MockTransport(handler)) as client:
-            return await authenticate_callback(
-                "telegram",
-                SETTINGS,
-                code="code",
-                callback_url=CALLBACK_URL,
-                code_verifier="verifier",
-                nonce="nonce",
-                client=client,
-            )
-
-    assert run(scenario()).subject == "telegram-subject"
-
-
 def test_authorization_rejects_non_https_callback_url():
     with pytest.raises(ProviderError, match="HTTPS"):
         authorization_url(
-            "telegram",
+            "yandex",
             SETTINGS,
             callback_url="http://localhost/callback",
             state="state",

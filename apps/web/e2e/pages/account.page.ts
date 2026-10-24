@@ -49,7 +49,7 @@ export class AccountPage {
     await expect(
       this.page.getByRole("textbox", { name: "Пароль" }),
     ).toBeVisible();
-    for (const provider of ["VK ID", "Яндекс ID", "Telegram"]) {
+    for (const provider of ["VK ID", "Яндекс ID"]) {
       await expect(
         this.page.getByRole("button", { name: provider, exact: true }),
       ).toBeDisabled();
@@ -532,6 +532,62 @@ export class AccountPage {
     await expect(this.page).toHaveURL("/");
     expect(submittedPasswords).toEqual(["wrong-password", "correct-password"]);
     expect(deleted).toBe(true);
+  }
+
+  /** Change 198: a first provider sign-in creates no account before consent. */
+  async expectProviderConsentStep(): Promise<void> {
+    let registered = false;
+    await this.page.route("**/api/auth/provider/pending", (route) =>
+      registered
+        ? route.fulfill({ status: 404, json: { detail: "no pending sign-in" } })
+        : route.fulfill({ json: { provider: "yandex" } }),
+    );
+    await this.page.route("**/api/auth/provider/register", (route) => {
+      expect(route.request().postDataJSON()).toEqual({
+        privacy_consent: true,
+        privacy_consent_version: "2026-10-23",
+      });
+      registered = true;
+      return route.fulfill({
+        json: {
+          account: {
+            id: "provider-member",
+            email: null,
+            methods: [{ provider: "yandex", subject_hint: null }],
+          },
+          csrf_token: "test-csrf",
+          return_to: "/ege",
+        },
+      });
+    });
+    await this.page.route("**/api/auth/session", (route) =>
+      route.fulfill({
+        json: registered
+          ? {
+              account: {
+                id: "provider-member",
+                email: null,
+                methods: [{ provider: "yandex", subject_hint: null }],
+              },
+              csrf_token: "test-csrf",
+            }
+          : { account: null },
+      }),
+    );
+    await this.page.goto("/register/provider");
+    await this.expectEnhancedForm();
+    await expect(
+      this.page.getByText("Вход через Яндекс ID подтверждён"),
+    ).toBeVisible();
+    await expect(
+      this.page.getByRole("textbox", { name: "Электронная почта" }),
+    ).toHaveCount(0);
+    await this.page.getByRole("button", { name: "Создать аккаунт" }).click();
+    expect(registered).toBe(false);
+    await this.page.getByRole("checkbox", { name: /Даю согласие/ }).check();
+    await this.page.getByRole("button", { name: "Создать аккаунт" }).click();
+    await expect(this.page).toHaveURL("/ege");
+    expect(registered).toBe(true);
   }
 
   async expectProviderDeletionWithoutPassword(): Promise<void> {

@@ -40,6 +40,18 @@ IMAGE = (
 )
 
 
+CONSENT = {"privacy_consent": True, "privacy_consent_version": "2026-10-23"}
+
+
+def consent_step(client: TestClient, origin: dict[str, str]) -> dict:
+    """Change 198: the separate consent step after a first provider sign-in."""
+    assert client.get("/api/auth/provider/pending").status_code == 200
+    registered = client.post("/api/auth/provider/register", json=CONSENT, headers=origin)
+    assert registered.status_code == 200, registered.text
+    assert client.get("/api/auth/provider/pending").status_code == 404
+    return registered.json()
+
+
 @pytest.fixture(scope="module")
 def database():
     name = f"infraege-db-test-122-{os.getpid()}"
@@ -786,7 +798,7 @@ def test_account_auth_guest_and_context_progress(database, monkeypatch):
                     "email": email,
                     "password": "correct horse battery",
                     "privacy_consent": True,
-                    "privacy_consent_version": "2026-09-25",
+                    "privacy_consent_version": "2026-10-23",
                 },
                 headers=headers,
             )
@@ -801,7 +813,7 @@ def test_account_auth_guest_and_context_progress(database, monkeypatch):
                         "email": email,
                         "password": "another secure password",
                         "privacy_consent": True,
-                        "privacy_consent_version": "2026-09-25",
+                        "privacy_consent_version": "2026-10-23",
                     },
                     headers=headers,
                 ).status_code
@@ -1006,7 +1018,7 @@ def test_registration_requires_and_records_privacy_consent(database, monkeypatch
                 json={
                     **required,
                     "privacy_consent": False,
-                    "privacy_consent_version": "2026-09-25",
+                    "privacy_consent_version": "2026-10-23",
                 },
                 headers=headers,
             ).status_code
@@ -1024,13 +1036,22 @@ def test_registration_requires_and_records_privacy_consent(database, monkeypatch
             ).status_code
             == 422
         )
+        # Change 198: an earlier edition of the consent page is no longer accepted
+        assert (
+            client.post(
+                "/api/auth/register",
+                json={**required, "privacy_consent": True, "privacy_consent_version": "2026-09-25"},
+                headers=headers,
+            ).status_code
+            == 422
+        )
         assert (
             client.post(
                 "/api/auth/register",
                 json={
                     **required,
                     "privacy_consent": True,
-                    "privacy_consent_version": "2026-09-25",
+                    "privacy_consent_version": "2026-10-23",
                 },
                 headers=headers,
             ).status_code
@@ -1048,7 +1069,7 @@ def test_registration_requires_and_records_privacy_consent(database, monkeypatch
                     .where(AccountPassword.email_normalized == "consent@example.com")
                 )
                 assert user is not None
-                assert user.privacy_consent_version == "2026-09-25"
+                assert user.privacy_consent_version == "2026-10-23"
                 assert user.privacy_consented_at is not None
         finally:
             await engine.dispose()
@@ -1126,7 +1147,7 @@ def test_account_artifact_purge_preserves_live_and_rate_limit_records(database):
                         AccountProviderChallenge(
                             state_hash="active-challenge",
                             browser_hash="active-browser",
-                            provider="telegram",
+                            provider="vk",
                             code_verifier="active-verifier",
                             nonce="active-nonce",
                             flow="login",
@@ -1136,7 +1157,7 @@ def test_account_artifact_purge_preserves_live_and_rate_limit_records(database):
                         AccountProviderChallenge(
                             state_hash="purgeable-challenge",
                             browser_hash="expired-browser",
-                            provider="telegram",
+                            provider="vk",
                             code_verifier="expired-verifier",
                             nonce="expired-nonce",
                             flow="login",
@@ -1243,7 +1264,7 @@ def test_account_artifact_purge_removes_only_abandoned_unverified_email_accounts
                 session.add(
                     AccountIdentity(
                         user_id=provider_linked.id,
-                        provider="telegram",
+                        provider="vk",
                         subject="provider-linked-cleanup-test",
                     )
                 )
@@ -1339,7 +1360,7 @@ def test_account_mail_resend_limits_preserve_valid_links_and_retract_failures(
                     "email": "resend@example.com",
                     "password": "correct horse battery",
                     "privacy_consent": True,
-                    "privacy_consent_version": "2026-09-25",
+                    "privacy_consent_version": "2026-10-23",
                 },
                 headers=headers,
             ).status_code
@@ -1357,7 +1378,7 @@ def test_account_mail_resend_limits_preserve_valid_links_and_retract_failures(
                         "email": address,
                         "password": "correct horse battery",
                         "privacy_consent": True,
-                        "privacy_consent_version": "2026-09-25",
+                        "privacy_consent_version": "2026-10-23",
                     },
                     headers=headers,
                 ).status_code
@@ -1498,9 +1519,9 @@ def test_provider_account_can_add_verified_email_without_merging(database, monke
     monkeypatch.setattr(settings, "auth_csrf_secret", SecretStr("e" * 48))
     monkeypatch.setattr(settings, "smtp_host", "fake-relay")
     monkeypatch.setattr(settings, "mail_from", "no-reply@example.com")
-    monkeypatch.setattr(settings, "telegram_client_id", "test-bot")
-    monkeypatch.setattr(settings, "telegram_client_secret", SecretStr("test-secret"))
-    monkeypatch.setattr(settings, "telegram_enabled", True)
+    monkeypatch.setattr(settings, "yandex_client_id", "test-yandex-app")
+    monkeypatch.setattr(settings, "yandex_client_secret", SecretStr("test-secret"))
+    monkeypatch.setattr(settings, "yandex_enabled", True)
     origin = {"Origin": "https://infraege.example"}
     payload = {"email": "pending@example.com", "password": "correct horse battery"}
 
@@ -1512,22 +1533,23 @@ def test_provider_account_can_add_verified_email_without_merging(database, monke
                     "email": "taken@example.com",
                     "password": "a secure different password",
                     "privacy_consent": True,
-                    "privacy_consent_version": "2026-09-25",
+                    "privacy_consent_version": "2026-10-23",
                 },
                 headers=origin,
             ).status_code
             == 202
         )
-        started = client.get("/api/auth/providers/telegram/start", follow_redirects=False)
+        started = client.get("/api/auth/providers/yandex/start", follow_redirects=False)
         state = parse_qs(urlsplit(started.headers["location"]).query)["state"][0]
         assert (
             client.get(
-                "/api/auth/providers/telegram/callback",
+                "/api/auth/providers/yandex/callback",
                 params={"code": "valid-code", "state": state},
                 follow_redirects=False,
-            ).status_code
-            == 303
+            ).headers["location"]
+            == "/register/provider"
         )
+        consent_step(client, origin)
         session = client.get("/api/auth/session").json()
         user_id = session["account"]["id"]
         headers = {**origin, "X-CSRF-Token": session["csrf_token"]}
@@ -1551,7 +1573,7 @@ def test_provider_account_can_add_verified_email_without_merging(database, monke
         assert original is not None
         pending = client.get("/api/auth/session").json()["account"]
         assert pending["email"] == "pending@example.com"
-        assert [method["provider"] for method in pending["methods"]] == ["telegram"]
+        assert [method["provider"] for method in pending["methods"]] == ["yandex"]
         assert client.post("/api/auth/login", json=payload, headers=origin).status_code == 401
 
         timestamp += timedelta(seconds=61)
@@ -1583,7 +1605,7 @@ def test_provider_account_can_add_verified_email_without_merging(database, monke
         enabled = client.get("/api/auth/session").json()["account"]
         assert enabled["id"] == user_id
         assert enabled["email"] == "corrected@example.com"
-        assert {method["provider"] for method in enabled["methods"]} == {"email", "telegram"}
+        assert {method["provider"] for method in enabled["methods"]} == {"email", "yandex"}
         email_login = client.post("/api/auth/login", json=corrected, headers=origin)
         assert email_login.json()["account"]["id"] == user_id
         current_headers = {**origin, "X-CSRF-Token": email_login.json()["csrf_token"]}
@@ -1606,9 +1628,9 @@ def test_provider_state_is_single_use_and_last_method_is_guarded(database, monke
     monkeypatch.setattr(settings, "account_database_url", database("app"))
     monkeypatch.setattr(settings, "public_origin", "https://infraege.example")
     monkeypatch.setattr(settings, "auth_csrf_secret", SecretStr("b" * 48))
-    monkeypatch.setattr(settings, "telegram_client_id", "test-telegram-bot")
-    monkeypatch.setattr(settings, "telegram_client_secret", SecretStr("test-secret"))
-    monkeypatch.setattr(settings, "telegram_enabled", True)
+    monkeypatch.setattr(settings, "vk_client_id", "test-vk-client")
+    monkeypatch.setattr(settings, "vk_app_id", "test-vk-app")
+    monkeypatch.setattr(settings, "vk_enabled", True)
     monkeypatch.setattr(settings, "yandex_client_id", "test-yandex-app")
     monkeypatch.setattr(settings, "yandex_client_secret", SecretStr("test-secret"))
     monkeypatch.setattr(settings, "yandex_enabled", True)
@@ -1621,7 +1643,7 @@ def test_provider_state_is_single_use_and_last_method_is_guarded(database, monke
     origin = {"Origin": "https://infraege.example"}
     with TestClient(create_app()) as client:
         started = client.get(
-            "/api/auth/providers/telegram/start?return_to=%2F%2Fevil.example",
+            "/api/auth/providers/vk/start?return_to=%2F%2Fevil.example",
             follow_redirects=False,
         )
         assert started.status_code == 303
@@ -1629,7 +1651,7 @@ def test_provider_state_is_single_use_and_last_method_is_guarded(database, monke
         with TestClient(create_app()) as other_browser:
             assert (
                 other_browser.get(
-                    "/api/auth/providers/telegram/callback",
+                    "/api/auth/providers/vk/callback",
                     params={"code": "valid-code", "state": state},
                     follow_redirects=False,
                 ).status_code
@@ -1637,30 +1659,34 @@ def test_provider_state_is_single_use_and_last_method_is_guarded(database, monke
             )
         assert (
             client.get(
-                "/api/auth/providers/telegram/callback",
+                "/api/auth/providers/vk/callback",
                 params={"code": "valid-code", "state": "x" * 43},
                 follow_redirects=False,
             ).status_code
             == 400
         )
         callback = client.get(
-            "/api/auth/providers/telegram/callback",
+            "/api/auth/providers/vk/callback",
             params={"code": "valid-code", "state": state},
             follow_redirects=False,
         )
-        assert callback.status_code == 303 and callback.headers["location"] == "/"
+        # Change 198: an unknown identity waits for the consent step, then returns home
+        assert callback.status_code == 303
+        assert callback.headers["location"] == "/register/provider"
+        assert client.get("/api/auth/session").json()["account"] is None
+        assert consent_step(client, origin)["return_to"] == "/"
         assert (
             client.get(
-                "/api/auth/providers/telegram/callback",
+                "/api/auth/providers/vk/callback",
                 params={"code": "valid-code", "state": state},
                 follow_redirects=False,
             ).status_code
             == 400
         )
         session = client.get("/api/auth/session").json()
-        assert session["account"]["methods"] == [{"provider": "telegram", "subject_hint": None}]
+        assert session["account"]["methods"] == [{"provider": "vk", "subject_hint": None}]
         headers = {**origin, "X-CSRF-Token": session["csrf_token"]}
-        assert client.delete("/api/auth/providers/telegram", headers=headers).status_code == 409
+        assert client.delete("/api/auth/providers/vk", headers=headers).status_code == 409
         linked = client.post("/api/auth/providers/yandex/link", headers=headers)
         assert linked.status_code == 200
         link_state = parse_qs(urlsplit(linked.json()["url"]).query)["state"][0]
@@ -1674,12 +1700,12 @@ def test_provider_state_is_single_use_and_last_method_is_guarded(database, monke
         )
         refreshed = client.get("/api/auth/session").json()
         assert {method["provider"] for method in refreshed["account"]["methods"]} == {
-            "telegram",
+            "vk",
             "yandex",
         }
         assert (
             client.delete(
-                "/api/auth/providers/telegram",
+                "/api/auth/providers/vk",
                 headers={**origin, "X-CSRF-Token": refreshed["csrf_token"]},
             ).status_code
             == 204
@@ -1708,7 +1734,6 @@ def test_provider_release_flags_default_off_and_close_every_entry_boundary(datab
     monkeypatch.setattr(settings, "account_database_url", database("app"))
     monkeypatch.setattr(settings, "vk_enabled", False)
     monkeypatch.setattr(settings, "yandex_enabled", False)
-    monkeypatch.setattr(settings, "telegram_enabled", False)
 
     async def callback_must_not_run(*args, **kwargs):
         raise AssertionError("disabled provider callback must not authenticate")
@@ -1717,7 +1742,7 @@ def test_provider_release_flags_default_off_and_close_every_entry_boundary(datab
 
     with TestClient(create_app()) as client:
         assert client.get("/api/auth/providers").json() == {"enabled": []}
-        for provider in ("vk", "yandex", "telegram"):
+        for provider in ("vk", "yandex", "telegram"):  # telegram is gone for good
             assert (
                 client.get(
                     f"/api/auth/providers/{provider}/start", follow_redirects=False
@@ -1736,8 +1761,12 @@ def test_provider_release_flags_default_off_and_close_every_entry_boundary(datab
             )
 
         monkeypatch.setattr(settings, "vk_enabled", True)
-        monkeypatch.setattr(settings, "telegram_enabled", True)
-        assert client.get("/api/auth/providers").json() == {"enabled": ["vk", "telegram"]}
+        monkeypatch.setattr(settings, "yandex_enabled", True)
+        assert client.get("/api/auth/providers").json() == {"enabled": ["vk", "yandex"]}
+        assert (
+            client.get("/api/auth/providers/telegram/start", follow_redirects=False).status_code
+            == 404
+        )
 
 
 def test_database_roles_deny_cross_boundary_access(database):
@@ -1750,6 +1779,9 @@ def test_database_roles_deny_cross_boundary_access(database):
         "account_token",
         "account_provider_challenge",
         "progress_result",
+        "account_device",
+        "account_activity_day",
+        "account_restriction",
     )
     bank_tables = ("task", "task_checker", "lesson_task", "file_object")
 

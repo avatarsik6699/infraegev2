@@ -109,6 +109,11 @@ provider events but never delete them, offer acceptances are append-only, and th
 import roles see none of them. Billing rows are 5-year evidence: paid access needs this proof and
 off-site backups before `BILLING_ENABLED` (docs/runbooks/billing.md).
 
+Change 198: neither `192_01` was released, so the launch rehearses `140_01` → `198_01` in one
+step (the reviewed skip). The restore check of a `198_01` bundle also proves the device,
+activity and restriction tables and grants (`sql.DEVICE_RESTORE`): restrictions are evidence the
+application never deletes; the runtime and import roles see none of them.
+
 Use the reviewed `scripts/rehearse-account-cutover.sh` from the exact candidate source on the
 production host, before deploy dispatch. Take a fresh production backup through the existing
 `make db-backup` command and record its full 64-character Restic snapshot ID. On a production host
