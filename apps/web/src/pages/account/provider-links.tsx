@@ -7,8 +7,8 @@ import type { ProviderLinksTypes } from "./provider-links.types";
 import { accountPageHelpers } from "./account-page.helpers";
 
 /**
- * Provider sign-in (Change 208): the providers' "additional" variant — a white button with a thin
- * dark outline and the provider's own mark, grouped under «… с помощью» as Yandex ID asks.
+ * Provider sign-in (Changes 208, 209): soft buttons without an outline, each with the provider's
+ * own mark, grouped under «… с помощью» as Yandex ID asks.
  */
 export const ProviderLinks: React.FC<ProviderLinksTypes.Props> = (props) => (
   <div className={styles.providerSection}>
@@ -31,7 +31,7 @@ export const ProviderLinks: React.FC<ProviderLinksTypes.Props> = (props) => (
           key={provider}
           className={styles.providerLink}
           presentation="button"
-          hierarchy="secondary"
+          hierarchy="soft"
           icon="none"
           to="/api/auth/providers/$provider/start"
           params={{ provider }}
@@ -48,7 +48,7 @@ export const ProviderLinks: React.FC<ProviderLinksTypes.Props> = (props) => (
         <Button
           key={provider}
           className={styles.providerLink}
-          hierarchy="secondary"
+          hierarchy="soft"
           disabled
           title="Вход через этот сервис пока недоступен"
           iconStart={mark}

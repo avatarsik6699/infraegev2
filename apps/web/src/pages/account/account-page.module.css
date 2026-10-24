@@ -188,17 +188,9 @@
   font-size: var(--text-sm);
   font-weight: 500;
 }
-/* Change 208: the providers' "additional" sign-in variant drawn as our secondary button. Yandex ID
-   forbids recolouring its button outline, so the hairline stays ink instead of the control grey. */
-.providerLink[data-hierarchy="secondary"] {
+/* Change 209 (architect): soft wash buttons without an outline, like Yandex ID's light variant. */
+.providerLink {
   width: 100%;
-  border-color: var(--color-text);
-}
-.providerLink[data-hierarchy="secondary"]:hover:not(:disabled) {
-  background: var(--color-wash);
-}
-.providerLink:disabled {
-  border-color: var(--color-rule);
 }
 .providerContent {
   display: inline-flex;
