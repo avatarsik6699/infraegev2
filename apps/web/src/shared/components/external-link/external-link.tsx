@@ -5,6 +5,16 @@ import styles from "./external-link.module.css";
 
 export const ExternalLink: React.FC<ExternalLinkTypes.Props> = (props) => {
   const hierarchy = props.presentation === "action" ? "text" : "default";
+  const icon = props.href.startsWith("mailto:") ? (
+    <Mail className={styles.icon} aria-hidden="true" />
+  ) : (
+    <ArrowUpRight
+      className={styles.icon}
+      aria-hidden="true"
+      strokeWidth={2}
+      data-external-link-icon
+    />
+  );
 
   return (
     <a
@@ -19,16 +29,7 @@ export const ExternalLink: React.FC<ExternalLinkTypes.Props> = (props) => {
       <span className={styles.label} data-external-link-label>
         {props.children}
       </span>
-      {props.href.startsWith("mailto:") ? (
-        <Mail className={styles.icon} aria-hidden="true" />
-      ) : (
-        <ArrowUpRight
-          className={styles.icon}
-          aria-hidden="true"
-          strokeWidth={2}
-          data-external-link-icon
-        />
-      )}
+      {props.icon === "none" ? null : icon}
       {props.newTab && (
         <span className={styles.visuallyHidden}>
           {" "}

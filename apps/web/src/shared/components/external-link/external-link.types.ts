@@ -6,5 +6,7 @@ export namespace ExternalLinkTypes {
     className?: string;
     ariaLabel?: string;
     presentation?: "inline" | "action";
+    /** Change 226: "none" drops the trailing arrow (links side by side). */
+    icon?: "none";
   };
 }

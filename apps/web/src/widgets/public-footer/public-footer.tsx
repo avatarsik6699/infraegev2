@@ -15,27 +15,29 @@ export const PublicFooter: React.FC = () => {
           <span className={styles.mark} aria-hidden="true" />
           Кодумка
         </span>
+        {/* Change 226: links side by side carry no arrows. */}
         <nav className={styles.links} aria-label="Ссылки в подвале">
-          <ActionLink hierarchy="text" to="/privacy">
+          <ActionLink hierarchy="text" icon="none" to="/privacy">
             Обработка данных
           </ActionLink>
           {billing ? (
             <>
-              <ActionLink hierarchy="text" to="/pricing">
+              <ActionLink hierarchy="text" icon="none" to="/pricing">
                 Тарифы
               </ActionLink>
-              <ActionLink hierarchy="text" to="/oferta">
+              <ActionLink hierarchy="text" icon="none" to="/oferta">
                 Оферта
               </ActionLink>
-              <ActionLink hierarchy="text" to="/vozvrat">
+              <ActionLink hierarchy="text" icon="none" to="/vozvrat">
                 Возврат
               </ActionLink>
             </>
           ) : null}
           <ExternalLink
             className={styles.telegramLink}
-            href={siteConfig.telegramInviteUrl}
+            href={siteConfig.telegramChannelUrl}
             presentation="action"
+            icon="none"
             newTab
           >
             <TelegramLogo />

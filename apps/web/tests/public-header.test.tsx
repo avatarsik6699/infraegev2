@@ -187,9 +187,10 @@ describe("PublicHeader", () => {
     const telegramLink = screen.getByRole("link", { name: /Telegram-канал/ });
     expect(telegramLink.getAttribute("data-hierarchy")).toBe("text");
     expect(telegramLink.querySelector("[data-link-underline]")).toBeNull();
-    expect(
-      telegramLink.querySelector("svg.lucide-arrow-up-right"),
-    ).not.toBeNull();
+    expect(telegramLink.getAttribute("href")).toBe("https://t.me/kodumka");
+    // Change 226: links side by side carry no arrows.
+    expect(footer?.querySelector("nav svg.lucide-arrow-up-right")).toBeNull();
+    expect(footer?.querySelector("nav svg.lucide-arrow-right")).toBeNull();
   });
 
   it("names the seller in the footer only while selling is on", () => {
@@ -202,6 +203,9 @@ describe("PublicHeader", () => {
         <PublicFooter />
       </SiteFlagsProvider>,
     );
+    expect(
+      document.querySelector("footer nav svg.lucide-arrow-right"),
+    ).toBeNull();
     const seller = document.querySelector("[data-footer-seller]");
     expect(seller?.textContent).toBe(
       "Самозанятый Годлевский Владислав Александрович, ИНН 190302795145 · kodumka@mail.ru",

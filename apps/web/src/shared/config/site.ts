@@ -10,7 +10,7 @@ export const siteConfig = Object.freeze({
     name: "Годлевский Владислав Александрович",
     inn: "190302795145",
   }),
-  telegramInviteUrl: "https://t.me/+dElnKYPKGd81OGYy",
+  telegramChannelUrl: "https://t.me/kodumka",
   description:
     "Понятные материалы для подготовки к ЕГЭ по информатике: теория, разборы и практика с объяснениями.",
 });
