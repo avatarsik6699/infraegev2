@@ -78,7 +78,9 @@ if ! run_compose "$release_dir" "$DEPLOY_SHA" run --rm --no-deps --interactive=f
   exit 1
 fi
 # Prepared DB must already contain the reviewed bank; deploy never reimports content.
-run_compose "$release_dir" "$DEPLOY_SHA" up --detach --wait --wait-timeout 60 postgres
+# Change 219: postgres is recreated on each release (its role script lives in the release) and,
+# right after the image pull, may need more than a minute of disk before it accepts connections.
+run_compose "$release_dir" "$DEPLOY_SHA" up --detach --wait --wait-timeout 180 postgres
 backup_args=("$env_file")
 backup_mode=$(application_backup_mode "$release_dir" "$previous_release") || exit 1
 if [[ $backup_mode == recovery-hold ]]; then
