@@ -9,7 +9,7 @@
 | Change | `218` |
 | Slug | `code-cleanup-rename` |
 | Title | Код: мёртвое, дубли, переименование, LCP и e2e |
-| Status | `done` |
+| Status | `archived` |
 | Branch | `feature/218-code-cleanup-rename` |
 
 ---
