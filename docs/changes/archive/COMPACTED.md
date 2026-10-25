@@ -1,6 +1,6 @@
-# Compacted change history — 01–172
+# Compacted change history — 01–220
 
-Changes 01–110, 111–153 and 154–172 have separate immutable source snapshots. Current contracts remain
+Changes 01–110, 111–153, 154–172 and 173–220 have separate immutable source snapshots. Current contracts remain
 SPEC, FRONTEND, STACK and the owning runbooks; this checkpoint preserves historical decisions,
 approvals and unresolved risks. Local archive/publication status is not live release evidence.
 The metadata is verified by `python3 scripts/change_history.py inspect` before history-dependent work.
@@ -497,6 +497,64 @@ The metadata is verified by `python3 scripts/change_history.py inspect` before h
         "docs/runbooks/practice-transition.md"
       ],
       "source_digest": "28fe3ab90c601c4fde6c835a9efdad5b8d7421736957643eb37f8f65e0bcf5ee"
+    },
+    {
+      "covered_from": 173,
+      "covered_through": 220,
+      "source_commit": "5cdd7e9ef1c2d7fa02ddfab84ac4bcd8cdb2db11",
+      "date": "2026-10-25",
+      "missing_numbers": [],
+      "source_paths": [
+        "docs/changes/archive/173-repository-audit-gates.md",
+        "docs/changes/archive/174-python-course-stand.md",
+        "docs/changes/archive/175-python-course-site.md",
+        "docs/changes/archive/176-excel-course-stand.md",
+        "docs/changes/archive/177-excel-course-site.md",
+        "docs/changes/archive/178-topic-5-stand.md",
+        "docs/changes/archive/179-topics-16-17-27-stand.md",
+        "docs/changes/archive/180-topics-4-7-8-9-stand.md",
+        "docs/changes/archive/181-topics-10-11-14-18-stand.md",
+        "docs/changes/archive/182-topics-19-21-24-26-stand.md",
+        "docs/changes/archive/183-topic-3-stand.md",
+        "docs/changes/archive/184-topics-site-transfer.md",
+        "docs/changes/archive/185-home-cards-ui-audit.md",
+        "docs/changes/archive/186-course-pages-tone.md",
+        "docs/changes/archive/187-lessons-comparative-audit.md",
+        "docs/changes/archive/188-kompege-bank-import.md",
+        "docs/changes/archive/189-seven-topics-phase-b.md",
+        "docs/changes/archive/190-seven-topics-site-transfer.md",
+        "docs/changes/archive/191-practice-speed-bank-cleanup.md",
+        "docs/changes/archive/192-paid-access.md",
+        "docs/changes/archive/193-kodumka-domain.md",
+        "docs/changes/archive/194-release-hardening.md",
+        "docs/changes/archive/195-business-summary.md",
+        "docs/changes/archive/196-offsite-backups.md",
+        "docs/changes/archive/197-content-audit.md",
+        "docs/changes/archive/198-legal-launch.md",
+        "docs/changes/archive/199-operator-console.md",
+        "docs/changes/archive/200-footer-requisites.md",
+        "docs/changes/archive/201-image-pins.md",
+        "docs/changes/archive/202-session-check-budget.md",
+        "docs/changes/archive/203-release-audit.md",
+        "docs/changes/archive/204-ci-secrets-tree.md",
+        "docs/changes/archive/205-fail2ban-chain.md",
+        "docs/changes/archive/206-legacy-addresses.md",
+        "docs/changes/archive/207-oauth-apps.md",
+        "docs/changes/archive/208-provider-buttons.md",
+        "docs/changes/archive/209-provider-buttons-soft.md",
+        "docs/changes/archive/210-slim-release-bundle.md",
+        "docs/changes/archive/211-robokassa-shop.md",
+        "docs/changes/archive/212-rkn-start-date.md",
+        "docs/changes/archive/213-minor-consent.md",
+        "docs/changes/archive/214-rkn-actual-start-date.md",
+        "docs/changes/archive/215-legal-folder.md",
+        "docs/changes/archive/216-rkn-notice-filed.md",
+        "docs/changes/archive/217-ci-infra-cleanup.md",
+        "docs/changes/archive/218-code-cleanup-rename.md",
+        "docs/changes/archive/219-deploy-postgres-wait.md",
+        "docs/changes/archive/220-docs-compaction.md"
+      ],
+      "source_digest": "103f4c3cea4f4535b98778704eb80d991b212d28eb8e4c7891d0fdad85dba10b"
     }
   ]
 }
@@ -757,6 +815,74 @@ manifest, then removed again. Live inputs stayed or moved (Change 173): lesson d
 ```bash
 python3 scripts/change_history.py read docs/changes/archive/170-redesign-release-readiness.md
 python3 scripts/change_history.py read docs/artifacts/change-156/final-audit/verification.md
+```
+
+Paths present in several snapshots require `--source <full SHA>`.
+
+## Snapshot 173–220: outcomes and decisions
+
+Compacted in Change 221 on 2026-10-25 from source `5cdd7e9ef1c2d7fa02ddfab84ac4bcd8cdb2db11`. The exact manifest above
+replaces 48 completed changes. Documents retired by Change 220 (`lesson-wave.md`,
+`billing-provider-selection.md`, `release-readiness.md`, `course-illustration-prompts.md`,
+`references/pricing/`, `Python_podrobny_uchebnik.html`) are not in this snapshot; read them with
+plain git from `a1fbfeb5f27b92c391e5398c49415df47da950aa` (`git show a1fbfeb5:<path>`).
+
+| Changes | Outcome and retained decision |
+|---|---|
+| 173 | Audit A01–A21, compaction of 154–172, live tooling out of `docs/artifacts`, advisory `gate.py affected`, summarized gate output (architect 2026-10-09). |
+| 174–177 | Python course rebuilt on the pipeline: 30 lessons, 27 core + 3 advanced outside mastery, old lessons removed without redirects (2026-10-10/11). Excel course: 15 lessons, live `SheetBlock`, reproducible `.xlsx` workbook as a bank attachment (2026-10-11). |
+| 178–183 | Stand waves: topics 5; 16/17/27; 4/7/8/9; 10/11/14/18; 19–21 (one topic)/24/26; 3. One Opus agent per topic; after the 18 GB `checks.py` run (2026-10-12): generators and `ulimit -v`. Topic 10 via `ipaddress`; 3 and 18 Excel only (2026-10-12). |
+| 184 | 16 topic lessons to the site, one by one without parallel agents (2026-10-12); replaced lessons without redirects, old tasks archived; files and workbooks as bank attachments. |
+| 185 | Home cards and site UI audit (architect picks 2026-10-14/15): `/ege` rows with exam map and level goal from the FIPI 2027 spec, `/practice` K3 filter panel and number groups, home grid Д2, course scenes as WebP. |
+| 186 | Course identity: Python blue, Excel green as a DESIGN exception; green check only when done; ink `#17191e` kept for EGE buttons. |
+| 187, 189, 190 | Topics 1, 2, 6, 12, 13, 15, 22 audited against Yandex Учебник and FIPI, built on the stand without interim approvals (2026-10-16), moved to the site: all topics 1–27 on the pipeline; FIPI 2027 short names, ids and routes unchanged. |
+| 188 | One local kompege import (worktree at the architect's request): 5,648 new tasks, bank 7,475, practice 6,195; existing tasks, results and files unchanged. |
+| 191 | `/practice` TTFB 4.4 s → 0.16 s via generated columns; 232 19–21 games merged; orange difficulty tone as a DESIGN exception on request. |
+| 192 | Paid access: month 490 ₽ / year 2 990 ₽ one-time, soft paywall, `.paid.` chunks behind `/assets/paid/`, Robokassa, НПД guard; flags off (sessions 2026-10-16/17). |
+| 193–196 | kodumka.ru with 301 from infraege.ru; consent version `2026-09-25` kept, no lawyer (2026-10-18). Release hardening (TanStack XSS, SEO, alerts), hourly sales summary (2026-10-19), off-site Restic copy to Yandex storage that blocks a deploy when it fails. |
+| 197 | Content audit of 30 + 15 lessons and 25 topics, 260 items. The site is the only lesson source (2026-10-19); stand archive deleted (T259, 2026-10-23); «Практика и итог» in course style; free = first round(n/3) subtopics; `EnginePool` (2026-10-22). |
+| 198–200 | Legal minimum without a lawyer (2026-10-23): Telegram sign-in removed, three devices, manual restrictions with appeal, requisites without address. Download limits that could hit learners removed and operator console site side (2026-10-24); seller line in the footer only while billing is on. |
+| 201–205 | Release fixes: package pins, session check moved to the `page_reads` budget, gitleaks/audit triage, tree-export secrets scan, fail2ban `DOCKER-USER`. kodumka.ru released 2026-10-24. |
+| 206–211 | Legacy 301s; Yandex ID and VK ID apps (2026-10-24), soft provider buttons; release bundle without bank files; Robokassa shop, billing in test mode, paywall off, passwords regenerated after a log exposure. |
+| 212–216 | RKN: 214 (2026-10-25) set the start date 10.08.2026 and replaced 212; consent states 14+ and a harm act was drawn up (213); `docs/legal/` (215); notice `100472735` filed 2026-10-25 (216). |
+| 217–220 | Audit plan 2026-10-25: CI false positives and drift, dead code, `infraege` → `kodumka` (cookies without migration), course LCP, postgres wait 180 s, SPEC v2.36. |
+
+## Snapshot 173–220: unresolved risks and acceptance limits
+
+- No lawyer review (architect 2026-10-18 and 2026-10-23); formal legal review stays out of scope.
+- RKN notice filed 2026-10-25 with start date 10.08.2026; the filing is late but voluntary, and
+  the registry number is pending. The explanation rests on `/root/rkn-evidence-2026-10-25.txt`
+  (two operator accounts, no payments). Harm act degree «высокая» (minors can be parties); not yet
+  signed. Consents given before 2026-10-25 stay valid (213).
+- Off-site backups: a failed copy stops a deploy before migrating; deploying during a storage
+  outage is a deliberate runbook step (196).
+- Git history size was not reduced: a rewrite is not authorized (173 A21).
+- Robokassa activation waits for the payout account check; billing in test mode, paywall off;
+  live 1 ₽ payment/refund proof pending, then live passwords, the announcement for topics free
+  today and `PAYWALL_ENABLED=true`.
+- Recovery hold snapshot `3dd0ba47`: review on 2026-11-23; rehearsal-candidate API images (196 I7)
+  wait for the hold review.
+- `body-parser` audit ignore (203): replace with an override from 2026-10-29.
+- One 5 MB lesson chunk with the free content of all 25 topics (TBT ≈700 ms); 218 named it for
+  Change 221, now planned as Change 222. CI hydration waits are 15 s until then.
+- Postgres is recreated on every deploy (role script mounted from the release): 1–2 min API
+  unavailability; a persistent mount is a separate decision (219).
+- Yandex OAuth app shows «Сервис ещё не верифицирован»; the VK app has no icon (207).
+- Tracker honours `data-exclude` only after the smotryashchiy change (194 F7); production-build
+  tests send pageviews to real analytics with host `127.0.0.1` (202).
+- Moving every black button to the new style is a later change (186).
+- FIPI 2027 levels and topic names come from the project spec; recheck at the final version (185).
+- Bank data: TeX notation and heuristic 19–21 summaries need owner cleanup (185 F7, 191 D2);
+  kompege answer keys were transferred, not independently solved (188).
+- Self-check counts in topics 1–5 and 10 stay below the pattern (architect 2026-10-23); Windows
+  screenshots for IDLE, PyCharm and VS Code are missing (`docs/artifacts/lesson-images.md`).
+- Dev-server `ERR_INSUFFICIENT_RESOURCES` on heavy lessons is a dev-mode limit (202).
+
+## Recovery after Change 221
+
+```bash
+python3 scripts/change_history.py read docs/changes/archive/192-paid-access.md
+python3 scripts/change_history.py read docs/changes/archive/197-content-audit.md
 ```
 
 Paths present in several snapshots require `--source <full SHA>`.
