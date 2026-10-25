@@ -9,7 +9,7 @@
 | Change | `217` |
 | Slug | `ci-infra-cleanup` |
 | Title | CI, инфраструктура и уборка |
-| Status | `done` |
+| Status | `archived` |
 | Branch | `feature/217-ci-infra-cleanup` |
 
 ---
