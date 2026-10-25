@@ -175,10 +175,13 @@ export function inFormulaRange(
   formula: LessonMediaTypes.SheetFormula,
   addr: string,
 ): boolean {
+  // Change 225: a formula copied down, across or over a rectangle (B2 to F6)
   const [row, col] = parseAddress(formula.cell);
-  const last = formula.until ? parseAddress(formula.until)[0] : row;
+  const [lastRow, lastCol] = formula.until
+    ? parseAddress(formula.until)
+    : [row, col];
   const [r, c] = parseAddress(addr);
-  return c === col && r >= row && r <= last;
+  return r >= row && r <= lastRow && c >= col && c <= lastCol;
 }
 
 /** Visible rows of a sheet: the filter and hand-hidden rows are skipped. */

@@ -252,6 +252,25 @@
   border: 0 solid var(--rc);
 }
 
+/* Change 225: on the grid's edge a frame stays inside its cell, so the sticky
+   headings never cover it and the scroll box never clips it. */
+.cell[data-at*="t"]::after,
+.cell[data-at*="t"][data-selected]::before {
+  top: 0;
+}
+.cell[data-at*="l"]::after,
+.cell[data-at*="l"][data-selected]::before {
+  left: 0;
+}
+.cell[data-at*="b"]::after,
+.cell[data-at*="b"][data-selected]::before {
+  bottom: 0;
+}
+.cell[data-at*="r"]::after,
+.cell[data-at*="r"][data-selected]::before {
+  right: 0;
+}
+
 .cell[data-edge*="t"]::after {
   border-top-width: 2px;
 }

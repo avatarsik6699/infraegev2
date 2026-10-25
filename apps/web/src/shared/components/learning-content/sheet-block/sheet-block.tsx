@@ -75,14 +75,38 @@ const barLines = (sheets: readonly LessonMediaTypes.SheetPart[]) =>
  * scroll inside it, a long formula breaks between its arguments, the formulas
  * under the grid select their cells, and the block opens on the whole screen.
  */
-export const SheetBlock: React.FC<SheetBlockProps> = (props) => {
+export const SheetBlock: React.FC<SheetBlockProps> = (props) => (
+  // Change 225: a block keeps its selection, sheet and edits only for its own
+  // data. Navigating to another lesson reuses the component at the same place
+  // in the tree; a new key starts it afresh instead of carrying the previous
+  // lesson's selection and hiding every sheet of this one.
+  <LiveSheet key={identityOf(props.sheets)} {...props} />
+);
+
+// One number per sheet data object (the lesson manifest's entry), for the key.
+const identities = new WeakMap<object, number>();
+let lastIdentity = 0;
+const identityOf = (sheets: object): number => {
+  let id = identities.get(sheets);
+  if (id === undefined) {
+    id = ++lastIdentity;
+    identities.set(sheets, id);
+  }
+  return id;
+};
+
+const LiveSheet: React.FC<SheetBlockProps> = (props) => {
   const enhanced = useIsEnhanced();
   const [edits, setEdits] = useState<ReadonlyMap<string, string>>(new Map());
   const [selection, setSelection] = useState<Selection>(() => {
     const [sheet, addr] = firstSelection(props);
     return { sheet, addr };
   });
-  const [activeSheet, setActiveSheet] = useState(props.sheets[0].name);
+  const [chosenSheet, setActiveSheet] = useState(props.sheets[0].name);
+  // a sheet that is not in this block (never expected) falls back to the first
+  const activeSheet = props.sheets.some((part) => part.name === chosenSheet)
+    ? chosenSheet
+    : props.sheets[0].name;
   const [editing, setEditing] = useState<Editing | null>(null);
   const [message, setMessage] = useState("");
   // cells whose shown value changed with the last edit, and its number: a new
@@ -428,6 +452,7 @@ export const SheetBlock: React.FC<SheetBlockProps> = (props) => {
       >
         {props.sheets.map((part) => {
           const hidden = enhanced ? part.name !== activeSheet : false;
+          const rows = visibleRows(part);
           const columns: number[] = [];
           for (let c = part.cols[0]; c <= part.cols[1]; c++) columns.push(c);
           return (
@@ -460,7 +485,7 @@ export const SheetBlock: React.FC<SheetBlockProps> = (props) => {
                   </tr>
                 </thead>
                 <tbody>
-                  {visibleRows(part).map((r) => (
+                  {rows.map((r) => (
                     <tr key={r}>
                       <th scope="row">{r}</th>
                       {columns.map((c) => {
@@ -475,8 +500,18 @@ export const SheetBlock: React.FC<SheetBlockProps> = (props) => {
                         // keeps a tab stop
                         const entry =
                           selection.sheet !== part.name &&
-                          r === visibleRows(part)[0] &&
+                          r === rows[0] &&
                           c === part.cols[0];
+                        // Change 225: sides on the grid's edge, where a frame
+                        // drawn over the neighbour's line would hide under the
+                        // sticky headings or be clipped by the scroll box
+                        const at =
+                          [
+                            r === rows[0] ? "t" : "",
+                            r === rows.at(-1) ? "b" : "",
+                            c === part.cols[0] ? "l" : "",
+                            c === part.cols[1] ? "r" : "",
+                          ].join("") || undefined;
                         const frame = frames.cells.get(key);
                         const isEditing =
                           editing?.sheet === part.name && editing.addr === addr;
@@ -504,6 +539,7 @@ export const SheetBlock: React.FC<SheetBlockProps> = (props) => {
                             data-wall={part.walls?.[addr]}
                             data-ref={frame?.color}
                             data-edge={frame?.edge}
+                            data-at={at}
                             data-changed={flash || undefined}
                             role={enhanced ? "gridcell" : undefined}
                             aria-selected={enhanced ? selected : undefined}
@@ -603,6 +639,7 @@ export const SheetBlock: React.FC<SheetBlockProps> = (props) => {
       <FormulaNote
         sheets={props.sheets}
         selected={enhanced ? selection : undefined}
+        selectedFormula={enhanced ? selectedText : undefined}
         onShow={enhanced ? showFormula : undefined}
       />
       <Typography.Text
@@ -620,6 +657,8 @@ const FormulaNote: React.FC<{
   sheets: readonly LessonMediaTypes.SheetPart[];
   /** The selected cell: its formula is marked in the list. */
   selected?: Selection;
+  /** The selected cell's own formula: a copy shows it in place of the source. */
+  selectedFormula?: string;
   /** Selects the cell of a formula in the grid (with scripting). */
   onShow?: (sheet: string, addr: string) => void;
 }> = (props) => {
@@ -665,18 +704,28 @@ const FormulaNote: React.FC<{
           const current =
             props.selected?.sheet === item.sheet &&
             inFormulaRange(item, props.selected.addr);
+          // Change 225: a selected copy shows its own address and formula, so the
+          // marked row always says what the selected cell holds
+          const copy =
+            current &&
+            props.selected &&
+            props.selected.addr !== item.cell &&
+            props.selectedFormula?.startsWith("=")
+              ? { addr: props.selected.addr, formula: props.selectedFormula }
+              : undefined;
+          const note = copy
+            ? `копия формулы ${item.cell}`
+            : item.until && `скопирована до ${item.until}`;
           const body = (
             <>
               <span className={styles.noteCell}>
-                <code>{at}</code>
-                {item.until ? (
-                  <span className={styles.noteUntil}>
-                    {`скопирована до ${item.until}`}
-                  </span>
-                ) : null}
+                <code>
+                  {copy ? `${named ? `${item.sheet}!` : ""}${copy.addr}` : at}
+                </code>
+                {note ? <span className={styles.noteUntil}>{note}</span> : null}
               </span>
               <code className={styles.noteFormula}>
-                {formulaParts(item.formula).map((part, k) =>
+                {formulaParts(copy?.formula ?? item.formula).map((part, k) =>
                   part.kind === "function" ? (
                     <span key={k} className={styles.function}>
                       {part.text}

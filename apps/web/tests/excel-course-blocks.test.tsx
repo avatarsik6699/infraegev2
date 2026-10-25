@@ -271,6 +271,60 @@ describe("SheetBlock (Change 184)", () => {
   });
 });
 
+describe("SheetBlock (Change 225)", () => {
+  it("shows a selected copy's own address and formula in the list", () => {
+    render(<SheetBlock {...base} label="Лист «База»" />);
+    const row = screen.getByRole("button", { name: /D3/u });
+    expect(row.getAttribute("aria-current")).toBe("true");
+    expect(row.textContent).toContain("копия формулы D2");
+    expect(row.textContent).toContain("=B3*C3");
+    fireEvent.click(cell("200"));
+    const source = screen.getByRole("button", { name: /D2/u });
+    expect(source.textContent).toContain("скопирована до D3");
+    expect(source.textContent).toContain("=B2*C2");
+  });
+
+  it("relates every cell of a rectangle a formula was copied over", () => {
+    const table: LessonMediaTypes.Sheet = {
+      ...base,
+      sheets: [
+        {
+          ...base.sheets[0],
+          inputs: { ...base.sheets[0].inputs, C3: "=B3*C2" },
+          formulas: [{ cell: "C2", formula: "=B2*C1", until: "D3" }],
+        },
+      ],
+      select: ["База", "D3"],
+    };
+    render(<SheetBlock {...table} label="Лист «База»" />);
+    expect(
+      screen.getByRole("button", { name: /D3/u }).getAttribute("aria-current"),
+    ).toBe("true");
+  });
+
+  it("starts afresh when the same place shows another lesson's sheet", () => {
+    const { container, rerender } = render(
+      <SheetBlock {...base} label="Лист «База»" />,
+    );
+    fireEvent.click(cell("40"));
+    rerender(<SheetBlock {...books} label="Лист «Операции»" />);
+    const grid = container.querySelector<HTMLElement>(
+      '[data-sheet-name="Операции"]',
+    );
+    expect(grid?.hidden).toBe(false);
+    expect(screen.getByLabelText("Адрес ячейки").textContent).toBe(
+      "Операции!B2",
+    );
+  });
+
+  it("keeps the frames of cells on the grid's edge inside them", () => {
+    render(<SheetBlock {...base} label="Лист «База»" />);
+    expect(cell("Товар").getAttribute("data-at")).toBe("tl");
+    expect(cell("60").getAttribute("data-at")).toBe("br");
+    expect(cell("40").getAttribute("data-at")).toBeNull();
+  });
+});
+
 describe("FillSandbox (Change 177)", () => {
   it("copies the formula and marks the moved parts", () => {
     const view = render(
