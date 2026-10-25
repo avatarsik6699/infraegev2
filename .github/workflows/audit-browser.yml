@@ -40,7 +40,7 @@ jobs:
         run: bash scripts/run-isolated-browser-audit.sh account full production
       - name: Upload non-account browser failure traces
         if: ${{ always() }}
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
         with:
           name: browser-audit-${{ github.sha }}
           path: |
@@ -73,7 +73,7 @@ jobs:
           pnpm audit:performance
       - name: Upload public Lighthouse reports
         if: ${{ always() }}
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
         with:
           name: public-lighthouse-${{ github.sha }}
           path: .lighthouseci/reports/
