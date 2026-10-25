@@ -9,7 +9,7 @@
 | Change | `221` |
 | Slug | `history-compaction` |
 | Title | Сжатие истории изменений 173–220 |
-| Status | `done` |
+| Status | `archived` |
 | Branch | `feature/221-history-compaction` |
 
 ---
