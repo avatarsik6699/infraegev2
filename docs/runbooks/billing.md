@@ -58,7 +58,7 @@ the address, authenticates them.
 6. The offer, refund rules and privacy text were not reviewed by a lawyer (architect's decision,
    2026-10-18, confirmed 2026-10-23). Any change to the offer after the first payment is a new
    dated file in `content/legal/oferta/`; an accepted edition is never edited.
-7. Change 198 ([privacy-legal-checklist](privacy-legal-checklist.md) § 7): the RKN notification is
+7. Change 198 ([privacy-legal-checklist](../legal/privacy-legal-checklist.md) § 7): the RKN notification is
    filed; the Яндекс ID and VK ID applications are registered and their `*_ENABLED` flags are on
    in `/etc/infraege/production.env`; the country of the `smotryashchiy` VPS is checked.
 
