@@ -15,7 +15,7 @@ describe("public release metadata", () => {
       expect.objectContaining({
         name: "Кодумка",
         themeColor: "#ffffff",
-        socialImagePath: "/brand/infraege-social.png",
+        socialImagePath: "/brand/kodumka-social.png",
         socialImageAlt: "Три камня и название Кодумка",
       }),
     );

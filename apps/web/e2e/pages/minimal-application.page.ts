@@ -287,7 +287,7 @@ export class MinimalApplicationPage {
       const response = await this.page.goto(path);
       expect(response?.status()).toBe(200);
       await expect(this.page.getByRole("heading", { level: 1 })).toBeVisible();
-      await expect(this.page.locator("[data-infraege-mark]")).toBeVisible();
+      await expect(this.page.locator("[data-kodumka-mark]")).toBeVisible();
       await expect(
         this.page.locator(
           'script[src*="/stats/"], [data-analytics-consent], [data-home-map], [data-svg-pattern]',
@@ -311,12 +311,16 @@ export class MinimalApplicationPage {
         await expect(this.page.locator("[data-course-program]")).toBeVisible();
       }
     }
-    // The retired topic 25 route has no redirect (Change 171).
-    for (const path of [
-      "/lab/design-system",
-      "/lab/lesson",
+    // Change 206: the retired topic 25 address moves permanently to its new slug.
+    const retired = await this.page.request.get(
       "/ege/25-obrabotka-celyh-chisel",
-    ]) {
+      {
+        maxRedirects: 0,
+      },
+    );
+    expect(retired.status()).toBe(301);
+    expect(retired.headers().location).toMatch(/\/ege\/25-deliteli-i-maski$/u);
+    for (const path of ["/lab/design-system", "/lab/lesson"]) {
       expect((await this.page.goto(path))?.status()).toBe(404);
       await expect(
         this.page.getByRole("link", { name: "На главную", exact: true }),
@@ -333,7 +337,7 @@ export class MinimalApplicationPage {
       const response = await this.page.goto(path);
       expect(response?.status()).toBe(200);
       await expect(this.page.getByRole("heading", { level: 1 })).toBeVisible();
-      await expect(this.page.locator("[data-infraege-mark]")).toBeVisible();
+      await expect(this.page.locator("[data-kodumka-mark]")).toBeVisible();
       await expectNoHorizontalOverflow(this.page);
     }
   }
@@ -501,10 +505,19 @@ export class MinimalApplicationPage {
         .locator('select[name="limit"][form="practice-pagination-limit"]')
         .selectOption("10");
     } else {
-      await this.page
-        .getByRole("combobox", { name: "На странице:", exact: true })
-        .click();
-      await this.page.getByRole("option", { name: "10", exact: true }).click();
+      // The result list re-renders after the sort change and may close a popup that
+      // opened during it; reopen until the option is really offered.
+      const limitOption = this.page.getByRole("option", {
+        name: "10",
+        exact: true,
+      });
+      await expect(async () => {
+        await this.page
+          .getByRole("combobox", { name: "На странице:", exact: true })
+          .click();
+        await expect(limitOption).toBeVisible({ timeout: 2_000 });
+      }).toPass({ timeout: 15_000 });
+      await limitOption.click();
     }
     if (noJavaScript)
       await this.page

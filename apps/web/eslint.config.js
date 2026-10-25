@@ -445,20 +445,6 @@ export default tseslint.config(
     }),
   },
   {
-    // The proof is a specialized semantic diagram: its native text nodes are part of the
-    // renderer geometry, not general page typography.
-    files: ["src/pages/lesson-design-lab/components/binary-search-proof.tsx"],
-    rules: {
-      "no-restricted-syntax": [
-        "error",
-        ...platformSyntaxRestrictions,
-        ...policyJsxRestrictions.filter(
-          ({ selector }) => !selector.includes("p|h1|h2|h3|h4|h5|h6"),
-        ),
-      ],
-    },
-  },
-  {
     files: ["src/routes/**/*.{ts,tsx}"],
     ...architectureRules({
       publicApi: [

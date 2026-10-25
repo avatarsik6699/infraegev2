@@ -12,7 +12,7 @@ const isPaidChunk = (moduleIds: readonly string[]) =>
 
 function paidChunks(): Plugin {
   return {
-    name: "infraege:paid-chunks",
+    name: "kodumka:paid-chunks",
     applyToEnvironment: (environment) => environment.name === "client",
     outputOptions(output) {
       return {
@@ -84,7 +84,6 @@ export default defineConfig((configEnv) => {
           // The foundation route is static and must remain readable without JavaScript.
           enabled: true,
           crawlLinks: true,
-          // The design-system lab is an unlisted design proof, not published content.
           filter: ({ path }) => path === "/" || path === "/ege",
           failOnError: true,
         },

@@ -64,7 +64,7 @@ def test_payment_link_is_signed_with_password_one():
         PaymentRequest(
             invoice_no=1001,
             amount_kopecks=49_000,
-            description="Доступ на месяц — infraege",
+            description="Доступ на месяц — Кодумка",
             email="buyer@example.com",
             success_url="https://kodumka.ru/subscribe/return",
             fail_url="https://kodumka.ru/subscribe/return",

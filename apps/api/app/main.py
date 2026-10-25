@@ -24,7 +24,7 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
 def create_app() -> FastAPI:
     configure_logging()
 
-    app = FastAPI(title="infraege API", lifespan=lifespan)
+    app = FastAPI(title="kodumka API", lifespan=lifespan)
     register_middleware(app)
     # /health lives outside /api/ deliberately — infra/nginx/nginx.conf routes it separately
     # so monitoring doesn't share the checker endpoint's rate limit.

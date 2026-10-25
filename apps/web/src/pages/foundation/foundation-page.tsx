@@ -7,7 +7,7 @@ import { MascotScene } from "~/shared/components/mascot-scene";
 import { PageContainer } from "~/shared/components/page-container";
 import { PageHead } from "~/shared/components/page-head";
 import { Typography } from "~/shared/components/typography";
-import { russianCount } from "~/shared/lib/russian-count";
+import { russianCount, russianForms } from "~/shared/lib/russian-count";
 import { PublicFooter } from "~/widgets/public-footer";
 import { PublicHeader } from "~/widgets/public-header";
 import { FoundationCourseCard } from "./foundation-course-card";
@@ -27,7 +27,6 @@ const foundation = {
   ),
   featuredTopicCount: 4,
   moduleForms: ["модуль", "модуля", "модулей"],
-  lessonForms: ["урок", "урока", "уроков"],
 } as const;
 
 export const FoundationPage: React.FC = () => (
@@ -57,7 +56,7 @@ export const FoundationPage: React.FC = () => (
         <ul className={styles.facts} aria-label="Что есть на сайте">
           <li>{foundation.publishedTopics.length} тем ЕГЭ</li>
           {foundation.course?.status === "published" ? (
-            <li>{`${russianCount.of(courseCatalog.coreLessonCount(foundation.course), foundation.lessonForms)} Python`}</li>
+            <li>{`${russianCount.of(courseCatalog.coreLessonCount(foundation.course), russianForms.lesson)} Python`}</li>
           ) : null}
         </ul>
       </PageHead>
@@ -115,7 +114,7 @@ export const FoundationPage: React.FC = () => (
                 </Typography.Text>
                 <div className={styles.pathFoot}>
                   <span className={styles.cardFacts}>
-                    {`${russianCount.of(foundation.course.moduleCount, foundation.moduleForms)} · ${russianCount.of(courseCatalog.coreLessonCount(foundation.course), foundation.lessonForms)}`}
+                    {`${russianCount.of(foundation.course.moduleCount, foundation.moduleForms)} · ${russianCount.of(courseCatalog.coreLessonCount(foundation.course), russianForms.lesson)}`}
                   </span>
                   <ActionLink
                     className={styles.stretchedLink}

@@ -1,3 +1,4 @@
+import { russianCount, russianForms } from "~/shared/lib/russian-count";
 import { examTopicDefinitions } from "~/shared/config/exam-topics.mjs";
 import type { PracticeCatalogTypes } from "./practice-catalog.types";
 
@@ -118,12 +119,7 @@ function difficultyLabel(value: number) {
 }
 
 function countLabel(count: number) {
-  const last = count % 10;
-  const teen = count % 100;
-  let word = "заданий";
-  if (last === 1 && teen !== 11) word = "задание";
-  else if (last >= 2 && last <= 4 && (teen < 12 || teen > 14)) word = "задания";
-  return `${count} ${word}`;
+  return russianCount.of(count, russianForms.task);
 }
 
 /** «16 номер. Рекуррентные выражения» (API facet label) → «ЕГЭ 16 · Рекуррентные выражения» (v5 mockup). */

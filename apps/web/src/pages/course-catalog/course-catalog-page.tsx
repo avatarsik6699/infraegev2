@@ -53,10 +53,11 @@ export const CourseCatalogPage: React.FC<CourseCatalogPageTypes.Props> = (
             data-course-list
             aria-labelledby="course-catalog-heading"
           >
-            {courseCatalog.entries.map((entry) => (
+            {courseCatalog.entries.map((entry, index) => (
               <CourseCatalogCard
                 progress={catalog.byId[entry.id]}
                 entry={entry}
+                priority={index === 0}
                 key={entry.id}
               />
             ))}

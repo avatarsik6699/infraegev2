@@ -1,7 +1,7 @@
 import { useRouterState } from "@tanstack/react-router";
 import { useAccountSession } from "~/features/account";
 import { ActionLink } from "~/shared/components/action-link";
-import { russianCount } from "~/shared/lib/russian-count";
+import { russianCount, russianForms } from "~/shared/lib/russian-count";
 import type { CourseOverviewPageTypes } from "../course-overview-page.types";
 import styles from "../course-overview-page.module.css";
 import { courseOverviewModel } from "../model/course-overview-model";
@@ -18,7 +18,6 @@ const count = (value: number | undefined, total: number | undefined) =>
     ? `${String(value)} из ${String(total)}`
     : "— из —";
 
-const lessonForms = ["урок", "урока", "уроков"] as const;
 const taskForms = ["задача", "задачи", "задач"] as const;
 
 type Stat = { value: string; label: string };
@@ -46,7 +45,7 @@ export const CourseOverviewProgress: React.FC<Props> = (props) => {
     ? [
         {
           value: String(props.lessonCount),
-          label: `${russianCount.noun(props.lessonCount, lessonForms)} в курсе`,
+          label: `${russianCount.noun(props.lessonCount, russianForms.lesson)} в курсе`,
         },
         {
           value: String(props.guestTotal),

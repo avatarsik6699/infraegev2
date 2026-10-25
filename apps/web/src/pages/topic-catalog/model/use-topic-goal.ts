@@ -7,7 +7,7 @@ import { useExternalStoreValue } from "~/shared/lib/use-external-store-value";
  * prerendered page shows Хард (every task), so a stored goal only dims rows.
  */
 const goalStore = safeLs.createStore<TopicCatalogTypes.Goal>({
-  key: "infraege:ege-goal",
+  key: "kodumka:ege-goal",
   version: 1,
   guard: examPlan.isGoal,
 });

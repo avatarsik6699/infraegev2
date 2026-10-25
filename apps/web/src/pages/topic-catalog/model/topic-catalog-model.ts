@@ -99,14 +99,5 @@ export const topicCatalogModel = {
     }
     return { byId, totalSolved: solvedIds.size };
   },
-  taskCount: (count: number) => {
-    const tens = count % 100;
-    const units = count % 10;
-    let noun = "задач";
-    if (tens < 11 || tens > 14) {
-      if (units === 1) noun = "задача";
-      else if (units >= 2 && units <= 4) noun = "задачи";
-    }
-    return `${String(count)} ${noun}`;
-  },
+  taskCount: (count: number) => russianCount.tasks(count),
 };

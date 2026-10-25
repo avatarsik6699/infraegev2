@@ -10,13 +10,13 @@
   "theme_color": "#f5f3ef",
   "icons": [
     {
-      "src": "/brand/infraege-icon-192.png",
+      "src": "/brand/kodumka-icon-192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/brand/infraege-icon-512.png",
+      "src": "/brand/kodumka-icon-512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"

@@ -14,7 +14,7 @@ const courseScenes: Record<ObjectIllustrationTypes.Course, Size> = {
   "algorithms-data-structures": { width: 1600, height: 664 },
   "advanced-problems": { width: 1600, height: 615 },
 };
-const sceneWidths = [960, 1600] as const;
+const sceneWidths = [480, 960, 1600] as const;
 
 /** Whether the course has a scene; others keep the placeholder. */
 export const hasCourseIllustration = (
@@ -32,7 +32,7 @@ function source(props: ObjectIllustrationTypes.Props) {
   const base = `/images/courses/course-${props.course}`;
   return {
     name: `course-${props.course}-scene`,
-    src: `${base}-${String(sceneWidths[0])}.webp`,
+    src: `${base}-${String(sceneWidths[1])}.webp`,
     srcSet: sceneWidths
       .map((width) => `${base}-${String(width)}.webp ${String(width)}w`)
       .join(", "),
@@ -42,8 +42,8 @@ function source(props: ObjectIllustrationTypes.Props) {
 }
 
 /**
- * Decorative object illustration (DESIGN.md › Shapes): a separate file, lazy,
- * with any motion inside an SVG file.
+ * Decorative object illustration (DESIGN.md › Shapes): a separate file, lazy
+ * unless it is the page's largest paint, with any motion inside an SVG file.
  */
 export const ObjectIllustration: React.FC<ObjectIllustrationTypes.Props> = (
   props,
@@ -59,7 +59,8 @@ export const ObjectIllustration: React.FC<ObjectIllustrationTypes.Props> = (
       alt=""
       width={picture.width}
       height={picture.height}
-      loading="lazy"
+      loading={props.priority ? "eager" : "lazy"}
+      fetchPriority={props.priority ? "high" : undefined}
       decoding="async"
     />
   );

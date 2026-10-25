@@ -68,6 +68,8 @@ type CoverProps = {
   entry: CourseCatalogTypes.Entry;
   /** Image `sizes` of the picture as laid out by the page. */
   sizes: string;
+  /** The page's largest paint: load at once, with high priority. */
+  priority?: boolean;
   className?: string;
 };
 
@@ -88,6 +90,7 @@ export const CourseCover: React.FC<CoverProps> = (props) => {
         <ObjectIllustration
           course={props.entry.id}
           sizes={props.sizes}
+          priority={props.priority}
           className={styles.picture}
         />
       ) : (

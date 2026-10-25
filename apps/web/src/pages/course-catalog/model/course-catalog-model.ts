@@ -1,3 +1,4 @@
+import { russianCount } from "~/shared/lib/russian-count";
 import {
   courseProgress,
   type CourseCatalogTypes,
@@ -55,16 +56,7 @@ const calculate = (
   return { byId, summary, total };
 };
 
-const lessonCount = (count: number): string => {
-  const lastTwo = count % 100;
-  const last = count % 10;
-  let noun = "уроков";
-  if (lastTwo < 11 || lastTwo > 14) {
-    if (last === 1) noun = "урок";
-    else if (last >= 2 && last <= 4) noun = "урока";
-  }
-  return `${String(count)} ${noun}`;
-};
+const lessonCount = (count: number): string => russianCount.lessons(count);
 
 /** «из 27 уроков», «из 41 урока»: the genitive after «из». */
 const ofLessons = (count: number): string =>

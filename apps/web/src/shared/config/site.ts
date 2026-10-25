@@ -2,7 +2,7 @@ export const siteConfig = Object.freeze({
   name: "Кодумка",
   origin: "https://kodumka.ru",
   themeColor: "#ffffff",
-  socialImagePath: "/brand/infraege-social.png",
+  socialImagePath: "/brand/kodumka-social.png",
   socialImageAlt: "Три камня и название Кодумка",
   privacyContactEmail: "kodumka@mail.ru",
   // Change 200: Robokassa requires the seller in the footer while selling is on.

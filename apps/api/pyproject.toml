@@ -1,7 +1,7 @@
 [project]
-name = "infraege-api"
+name = "kodumka-api"
 version = "0.1.0"
-description = "infraege backend — accounts, progress and practice API (docs/SPEC.md §4)"
+description = "kodumka backend — accounts, progress and practice API (docs/SPEC.md §4)"
 requires-python = ">=3.12"
 dependencies = [
   "fastapi>=0.115",
@@ -14,7 +14,7 @@ dependencies = [
   "asyncpg==0.31.0",
   "argon2-cffi>=25.1",
   "httpx>=0.28",
-  "PyJWT[crypto]>=2.10",
+  "PyJWT>=2.10",
   "maxminddb>=2.6",
 ]
 

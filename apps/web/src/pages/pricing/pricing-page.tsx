@@ -5,7 +5,7 @@ import { MascotScene } from "~/shared/components/mascot-scene";
 import { PageContainer } from "~/shared/components/page-container";
 import { PageHead } from "~/shared/components/page-head";
 import { Typography } from "~/shared/components/typography";
-import { russianCount } from "~/shared/lib/russian-count";
+import { russianCount, russianForms } from "~/shared/lib/russian-count";
 import patterns from "~/shared/styles/patterns.module.css";
 import { PublicFooter } from "~/widgets/public-footer";
 import { PublicHeader } from "~/widgets/public-header";
@@ -13,8 +13,8 @@ import { freeScope } from "./model/free-scope";
 import type { PricingPageTypes } from "./pricing-page.types";
 import styles from "./pricing-page.module.css";
 
-const lessonForms = ["урок", "урока", "уроков"] as const;
-const lessonWord = (count: number) => russianCount.noun(count, lessonForms);
+const lessonWord = (count: number) =>
+  russianCount.noun(count, russianForms.lesson);
 
 /**
  * Change 192 (F1, approved v15): three plan cards in the home path-tile layout,

@@ -17,9 +17,9 @@ from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.config import settings
+from app.modules.account import restrictions
 from app.modules.account.api import AccountDb, active_session, require_csrf, require_origin
 from app.modules.account.mail import MailUnavailable, send_account_mail
-from app.modules.account.models import AccountPassword
 from app.modules.billing import notices, provider, service
 from app.modules.billing.documents import current_offer
 from app.modules.billing.models import AccessGrant, Payment, ProviderEvent
@@ -75,13 +75,6 @@ async def get_offer(response: Response) -> OfferView:
     )
 
 
-async def verified_email(db: AsyncSession, user_id: UUID) -> str | None:
-    credential = await db.get(AccountPassword, user_id)
-    if credential is None or credential.email_verified_at is None:
-        return None
-    return credential.email_normalized
-
-
 @router.post("/checkout", response_model=CheckoutView)
 async def post_checkout(
     request: Request,
@@ -94,7 +87,7 @@ async def post_checkout(
     require_csrf(request, x_csrf_token)
     user_id = (await active_session(request, db)).user_id
     # the receipt and the notices need a confirmed address
-    email = await verified_email(db, user_id)
+    email = await restrictions.verified_email(db, user_id)
     if email is None:
         raise HTTPException(409, "email_required")
     gateway = provider.current()
@@ -122,7 +115,7 @@ async def post_checkout(
             PaymentRequest(
                 invoice_no=invoice_no,
                 amount_kopecks=amount,
-                description=f"{title} — infraege",
+                description=f"{title} — Кодумка",
                 email=email,
                 success_url=back,
                 fail_url=back,

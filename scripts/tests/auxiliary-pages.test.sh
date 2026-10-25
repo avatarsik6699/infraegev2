@@ -47,7 +47,7 @@ docker run --rm -d --name "$container_name" -p 127.0.0.1:18082:8080 \
   -v "$test_dir/nginx.conf:/etc/nginx/nginx.conf:ro" \
   -v "$repo_dir/infra/nginx/snippets:/etc/nginx/snippets:ro" \
   -v "$repo_dir/infra/nginx/auxiliary:/usr/share/nginx/auxiliary:ro" \
-  -v "$repo_dir/apps/web/public/brand/infraege-mark.svg:/usr/share/nginx/auxiliary/assets/infraege-mark.svg:ro" \
+  -v "$repo_dir/apps/web/public/brand/kodumka-mark.svg:/usr/share/nginx/auxiliary/assets/kodumka-mark.svg:ro" \
   -v "$repo_dir/apps/web/public/fonts:/usr/share/nginx/auxiliary/assets/fonts:ro" \
   "$nginx_image" >/dev/null
 for _ in {1..30}; do
@@ -87,10 +87,10 @@ curl -sS -H 'Accept: application/json' http://127.0.0.1:18082/asset.js | grep -q
 for target in missing broken; do
   curl -sS -H 'Accept: text/html' "http://127.0.0.1:18082/$target" | grep -q 'application'
 done
-for asset in styles.css infraege-mark.svg fonts/onest/onest-cyrillic-wght-normal.woff2; do
+for asset in styles.css kodumka-mark.svg fonts/onest/onest-cyrillic-wght-normal.woff2; do
   test "$(curl -sS -o /dev/null -w '%{http_code}' "http://127.0.0.1:18082/_infraege/$asset")" = 200
 done
-curl -sSI http://127.0.0.1:18082/_infraege/infraege-mark.svg | grep -qi 'Content-Type: image/svg+xml'
+curl -sSI http://127.0.0.1:18082/_infraege/kodumka-mark.svg | grep -qi 'Content-Type: image/svg+xml'
 printf 'Auxiliary Nginx contracts: PASS (502/503/504, real disconnected upstream, methods, resources, API and original application errors)\n'
 if [[ ${1:-} == --preview ]]; then
   printf 'Preview at http://localhost:18082/{502,503,504}; press Enter to clean up.\n'

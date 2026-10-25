@@ -40,10 +40,6 @@ class InvalidCredentials(ValueError):
     pass
 
 
-class LastLoginMethod(ValueError):
-    pass
-
-
 class EmailMethodConflict(ValueError):
     pass
 

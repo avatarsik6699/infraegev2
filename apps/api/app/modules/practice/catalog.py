@@ -13,7 +13,6 @@ from app.modules.practice.readers import Unavailable
 from app.modules.practice.schemas import Source, StrictModel, TheoryLink
 
 SITEMAP_SIZE = 1000
-PAGE_SIZE = 30
 
 
 class TopicDefinition(StrictModel):

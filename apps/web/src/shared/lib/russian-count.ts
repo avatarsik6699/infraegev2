@@ -21,6 +21,12 @@ const taskPluralRules = new Intl.PluralRules("ru-RU");
 /** Word forms for 1, 2–4 and 5 of something: «клетка», «клетки», «клеток». */
 export type RussianForms = readonly [one: string, few: string, many: string];
 
+/** Shared word forms, so every page declines the same nouns the same way. */
+export const russianForms = {
+  lesson: ["урок", "урока", "уроков"],
+  task: ["задание", "задания", "заданий"],
+} as const satisfies Record<string, RussianForms>;
+
 export const russianCount = {
   /** «3 полные порции», «5 полных порций», «21 клетка». */
   of(count: number, forms: RussianForms): string {
@@ -33,6 +39,9 @@ export const russianCount = {
       few: 1,
     };
     return forms[index[taskPluralRules.select(count)] ?? 2];
+  },
+  lessons(count: number): string {
+    return russianCount.of(count, russianForms.lesson);
   },
   tasks(count: number): string {
     return `${String(count)} ${taskForms[taskPluralRules.select(count)]}`;

@@ -135,7 +135,7 @@ async def alert_operator(subject: str, body: str) -> None:
         return
     try:
         await send_account_mail(
-            settings.billing_operator_email, f"[infraege billing] {subject}", body
+            settings.billing_operator_email, f"[kodumka billing] {subject}", body
         )
     except MailUnavailable:
         logger.error("billing.operator_mail_unavailable", subject=subject)

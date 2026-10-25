@@ -72,11 +72,11 @@ PROVIDERS: tuple[ProviderName, ...] = ("vk", "yandex")
 
 
 def cookie_name() -> str:
-    return "__Host-infraege_session" if settings.is_production else "infraege_session"
+    return "__Host-kodumka_session" if settings.is_production else "kodumka_session"
 
 
 def provider_cookie_name() -> str:
-    return "__Host-infraege_oauth" if settings.is_production else "infraege_oauth"
+    return "__Host-kodumka_oauth" if settings.is_production else "kodumka_oauth"
 
 
 def set_provider_cookie(response: Response, opaque: str) -> None:

@@ -944,7 +944,7 @@ def test_account_auth_guest_and_context_progress(database, monkeypatch):
         final_csrf = {**headers, "X-CSRF-Token": final_login.json()["csrf_token"]}
         assert client.post(check_url, json=body, headers=final_csrf).json()["saved"]
         assert len(client.get("/api/progress").json()["results"]) == 1
-        old_cookie = client.cookies.get("infraege_session")
+        old_cookie = client.cookies.get("kodumka_session")
         assert old_cookie
         for password_proof in ({}, {"password": "not the password"}):
             assert (
@@ -976,7 +976,7 @@ def test_account_auth_guest_and_context_progress(database, monkeypatch):
             ).status_code
             == 204
         )
-        client.cookies.set("infraege_session", old_cookie)
+        client.cookies.set("kodumka_session", old_cookie)
         assert client.get("/api/auth/session").json()["account"] is None
         assert client.get("/api/progress").status_code == 401
         assert (

@@ -8,7 +8,7 @@ import {
 import { ActionLink } from "~/shared/components/action-link";
 import { MascotScene } from "~/shared/components/mascot-scene";
 import { Typography } from "~/shared/components/typography";
-import { russianCount } from "~/shared/lib/russian-count";
+import { russianCount, russianForms } from "~/shared/lib/russian-count";
 import type { PaywallTypes } from "../paywall.types";
 import styles from "./paywall-gate.module.css";
 
@@ -25,7 +25,6 @@ type Props = {
   from: string;
 };
 
-const lessonForms = ["урок", "урока", "уроков"] as const;
 const questionForms = [
   "вопрос для самопроверки",
   "вопроса для самопроверки",
@@ -139,7 +138,7 @@ export const PaywallGate: React.FC<Props> = (props) => {
             <BookOpen className={styles.unlockIcon} aria-hidden="true" />
             <span className={styles.unlockText}>
               <b>{unlocks.lessons.length}</b>{" "}
-              {`${russianCount.noun(unlocks.lessons.length, lessonForms)} с разбором`}
+              {`${russianCount.noun(unlocks.lessons.length, russianForms.lesson)} с разбором`}
             </span>
             <ul className={styles.lessons}>
               {unlocks.lessons.map((lesson) => (

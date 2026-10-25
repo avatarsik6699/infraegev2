@@ -8,7 +8,7 @@ import {
 import { ActionLink } from "~/shared/components/action-link";
 import { Typography } from "~/shared/components/typography";
 import { cssUtils } from "~/shared/lib/css-utils";
-import { russianCount } from "~/shared/lib/russian-count";
+import { russianCount, russianForms } from "~/shared/lib/russian-count";
 import styles from "./foundation-page.module.css";
 
 type Props = {
@@ -16,7 +16,6 @@ type Props = {
 };
 
 const moduleForms = ["модуль", "модуля", "модулей"] as const;
-const lessonForms = ["урок", "урока", "уроков"] as const;
 
 /**
  * Change 185 (F57): a published course in the «Темы ЕГЭ» grid — its cover
@@ -58,7 +57,7 @@ export const FoundationCourseCard: React.FC<Props> = (props) => (
       </div>
       <div className={styles.cardFoot}>
         <span className={styles.cardFacts}>
-          {`${russianCount.of(props.course.moduleCount, moduleForms)} · ${russianCount.of(courseCatalog.coreLessonCount(props.course), lessonForms)}${russianCount.additional(props.course.advancedLessonIds.length, "lessons")}`}
+          {`${russianCount.of(props.course.moduleCount, moduleForms)} · ${russianCount.of(courseCatalog.coreLessonCount(props.course), russianForms.lesson)}${russianCount.additional(props.course.advancedLessonIds.length, "lessons")}`}
         </span>
         <ActionLink
           className={styles.stretchedLink}

@@ -7,14 +7,10 @@ const scriptDir = dirname(fileURLToPath(import.meta.url));
 const rootDir = resolve(scriptDir, "..");
 const sourcePath = resolve(
   rootDir,
-  "docs/artifacts/references/infraege-mark.svg",
+  "docs/artifacts/references/kodumka-mark.svg",
 );
 const publicDir = resolve(rootDir, "apps/web/public");
 const brandDir = resolve(publicDir, "brand");
-const headerAssetPath = resolve(
-  rootDir,
-  "apps/web/src/widgets/public-header/assets/infraege-mark.svg",
-);
 const source = readFileSync(sourcePath, "utf8");
 
 const pathCount = source.match(/<path\b/g)?.length ?? 0;
@@ -28,7 +24,7 @@ if (
   )
 ) {
   throw new Error(
-    "infraege-mark.svg does not satisfy the approved source contract",
+    "kodumka-mark.svg does not satisfy the approved source contract",
   );
 }
 
@@ -41,10 +37,9 @@ const faviconTheme =
 const smallMark = productionMark
   .replace('viewBox="0 0 120 156"', 'viewBox="-18 0 156 156"')
   .replace(/(<svg\b[^>]*>)/, `$1${faviconTheme}`);
-const productionMarkPath = resolve(brandDir, "infraege-mark.svg");
+const productionMarkPath = resolve(brandDir, "kodumka-mark.svg");
 
 writeFileSync(productionMarkPath, productionMark);
-writeFileSync(headerAssetPath, productionMark);
 writeFileSync(resolve(publicDir, "favicon.svg"), smallMark);
 
 const runFfmpeg = (args) => {
@@ -90,8 +85,8 @@ const favicon32Path = resolve(publicDir, "favicon-32x32.png");
 renderIcon(16, favicon16Path, resolve(publicDir, "favicon.svg"), "rgba");
 renderIcon(32, favicon32Path, resolve(publicDir, "favicon.svg"), "rgba");
 renderIcon(180, resolve(publicDir, "apple-touch-icon.png"));
-renderIcon(192, resolve(brandDir, "infraege-icon-192.png"));
-renderIcon(512, resolve(brandDir, "infraege-icon-512.png"));
+renderIcon(192, resolve(brandDir, "kodumka-icon-192.png"));
+renderIcon(512, resolve(brandDir, "kodumka-icon-512.png"));
 
 runFfmpeg([
   "-i",
@@ -136,7 +131,7 @@ runFfmpeg([
   "-frames:v",
   "1",
   "-y",
-  resolve(brandDir, "infraege-social.png"),
+  resolve(brandDir, "kodumka-social.png"),
 ]);
 
 for (const stalePath of [

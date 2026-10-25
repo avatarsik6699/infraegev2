@@ -1,5 +1,5 @@
 @font-face {
-  font-family: "Infraege Onest";
+  font-family: "Kodumka Onest";
   src: url("fonts/onest/onest-cyrillic-wght-normal.woff2") format("woff2");
   font-display: optional;
 }
@@ -11,7 +11,7 @@ body {
   background: #fff;
   color: #17191e;
   font:
-    1rem/1.6 "Infraege Onest",
+    1rem/1.6 "Kodumka Onest",
     Arial,
     sans-serif;
   min-height: 100vh;
@@ -42,7 +42,7 @@ a:focus-visible {
   align-items: center;
   gap: 0.8rem;
   font:
-    2rem "Infraege Onest",
+    2rem "Kodumka Onest",
     Georgia,
     serif;
   text-decoration: none;
@@ -60,7 +60,7 @@ main {
 }
 h1 {
   font:
-    2.5rem/1.15 "Infraege Onest",
+    2.5rem/1.15 "Kodumka Onest",
     Georgia,
     serif;
 }

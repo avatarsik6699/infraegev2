@@ -1,6 +1,7 @@
 import type { components } from "~/shared/api/schema";
 import { sessionCookie } from "~/shared/api/session-cookie.server";
 import { practiceServerClient } from "./practice-server-client.server";
+import { practiceCatalog } from "../practice-catalog";
 import type { PracticeTaskTypes } from "../practice-task.types";
 
 export function parseContentBlock(
@@ -328,12 +329,6 @@ function requireOnlyKeys(
   }
 }
 
-function difficultyLabel(difficulty: number): string {
-  if (difficulty <= 1) return "Лёгкая";
-  if (difficulty === 2) return "Средняя";
-  return "Трудная";
-}
-
 type PublicTask = components["schemas"]["PublicTask"];
 
 export function projectPracticeTask(
@@ -390,7 +385,7 @@ export function projectPracticeTask(
     answerInstruction: source.content.answer_instruction,
     explanationKind: source.content.explanation_kind,
     difficulty: source.content.difficulty,
-    difficultyLabel: difficultyLabel(source.content.difficulty),
+    difficultyLabel: practiceCatalog.difficultyLabel(source.content.difficulty),
     statement: blocks(source.content.statement),
     hint: blocks(source.content.hint),
     solution: blocks(source.content.explanation),
@@ -422,7 +417,7 @@ export function projectLockedTask(
     id: source.id,
     title: source.title,
     difficulty: source.difficulty,
-    difficultyLabel: difficultyLabel(source.difficulty),
+    difficultyLabel: practiceCatalog.difficultyLabel(source.difficulty),
     skills: source.skills,
     examNumbers: source.exam_numbers,
     theoryLinks: source.theory_links.flatMap((link) =>

@@ -4,7 +4,7 @@ export const expectPublicReleaseIdentity = async (
   page: Page,
 ): Promise<void> => {
   const header = page.getByRole("banner");
-  await expect(header.locator("[data-infraege-mark]")).toBeVisible();
+  await expect(header.locator("[data-kodumka-mark]")).toBeVisible();
   await expect(header.getByText("Кодумка", { exact: true })).toBeVisible();
   await expect(
     header.getByText("подготовка к ЕГЭ по информатике", { exact: true }),

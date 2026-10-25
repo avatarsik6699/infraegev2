@@ -2,7 +2,7 @@
 (Change 185).
 
 The architect's generated pictures are coloured and shaded, so they are not
-traced like the ink scenes: they ship as WebP in two widths. The Excel scene
+traced like the ink scenes: they ship as WebP in three widths. The Excel scene
 runs on a diagonal; turned 6 degrees clockwise it lies flat and fits a card
 whole. Usage:
 
@@ -21,7 +21,7 @@ SCENES = {
     "algorithms-data-structures": ("algos_and_stucts_course.png", 0),
     "advanced-problems": ("strong_exercisies_course.png", 0),
 }
-WIDTHS = (960, 1600)
+WIDTHS = (480, 960, 1600)
 MARGIN = 12
 
 

@@ -54,7 +54,7 @@
   width: 1.375rem;
   aspect-ratio: 120 / 156;
   flex: 0 0 auto;
-  background: url("./assets/infraege-mark.svg") center / contain no-repeat;
+  background: url("/brand/kodumka-mark.svg") center / contain no-repeat;
 }
 
 .name {

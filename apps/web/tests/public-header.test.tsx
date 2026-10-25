@@ -122,12 +122,12 @@ describe("PublicHeader", () => {
     const { container } = render(<PublicHeader home />);
 
     expect(container.querySelector("[data-public-header]")).not.toBeNull();
-    expect(container.querySelector("[data-infraege-mark]")).not.toBeNull();
+    expect(container.querySelector("[data-kodumka-mark]")).not.toBeNull();
     expect(screen.getByText("Кодумка", { exact: true })).not.toBeNull();
     expect(
       screen.getByText("подготовка к ЕГЭ по информатике", { exact: true }),
     ).not.toBeNull();
-    expect(container.querySelector("[data-infraege-benefits]")).toBeNull();
+    expect(container.querySelector("[data-kodumka-benefits]")).toBeNull();
     expect(screen.queryByText("beta", { exact: true })).toBeNull();
     expect(screen.queryByText("v1.0.0", { exact: true })).toBeNull();
     expect(screen.getByLabelText("Кодумка — ЕГЭ информатика")).not.toBeNull();

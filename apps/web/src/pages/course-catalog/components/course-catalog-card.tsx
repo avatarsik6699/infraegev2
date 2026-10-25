@@ -17,6 +17,8 @@ import styles from "../course-catalog-page.module.css";
 type Props = {
   entry: CourseCatalogTypes.Entry;
   progress?: CourseCatalogPageTypes.Progress;
+  /** The first card's cover is the page's largest paint. */
+  priority?: boolean;
 };
 
 /**
@@ -43,6 +45,7 @@ export const CourseCatalogCard: React.FC<Props> = (props) => {
       <CourseCover
         entry={props.entry}
         sizes="(max-width: 40rem) 92vw, 34rem"
+        priority={props.priority}
         className={styles.plate}
       />
       <div className={styles.cardContent}>

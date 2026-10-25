@@ -292,7 +292,7 @@ async def execute_refund(
             refund.amount_kopecks,
             refund.amount_kopecks == payment.amount_kopecks,
         )
-    result = await gateway.refund(invoice_no, amount, full, "Возврат оплаты infraege")
+    result = await gateway.refund(invoice_no, amount, full, "Возврат оплаты Кодумка")
     async with db.begin():
         refund = await db.get(Refund, refund_id, with_for_update=True)
         assert refund is not None

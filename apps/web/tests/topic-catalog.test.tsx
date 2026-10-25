@@ -522,7 +522,7 @@ describe("exam plan (Change 185, F34–F35)", () => {
 });
 
 it("dims topics outside the chosen goal and keeps the goal on this device", async () => {
-  window.localStorage.removeItem("infraege:ege-goal");
+  window.localStorage.removeItem("kodumka:ege-goal");
   const { container } = renderCatalog();
   const row = (id: string) =>
     container.querySelector(`[data-topic-id="${id}"]`);
@@ -540,6 +540,6 @@ it("dims topics outside the chosen goal and keeps the goal on this device", asyn
     document.getElementById(base.getAttribute("aria-describedby") ?? "")
       ?.textContent,
   ).toContain("11 из 27 заданий, до 11 первичных ≈ 54 балла");
-  expect(window.localStorage.getItem("infraege:ege-goal")).toContain("base");
-  window.localStorage.removeItem("infraege:ege-goal");
+  expect(window.localStorage.getItem("kodumka:ege-goal")).toContain("base");
+  window.localStorage.removeItem("kodumka:ege-goal");
 });

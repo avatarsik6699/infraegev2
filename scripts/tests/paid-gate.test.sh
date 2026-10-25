@@ -20,7 +20,7 @@ server {
   listen 8000;
   access_log off;
   location = /api/access/asset {
-    if ($http_cookie ~ "__Host-infraege_session=granted") { return 204; }
+    if ($http_cookie ~ "__Host-kodumka_session=granted") { return 204; }
     return 403;
   }
   location / { return 200 "api"; }
@@ -59,11 +59,11 @@ expect() {
 }
 
 expect 403 "$(request "$base/assets/paid/topic.paid.subtopic-AbC123.js")" 'paid chunk without access'
-expect 403 "$(request -H 'Cookie: __Host-infraege_session=other' "$base/assets/paid/x.js")" \
+expect 403 "$(request -H 'Cookie: __Host-kodumka_session=other' "$base/assets/paid/x.js")" \
   'paid chunk for an account without access'
-expect 200 "$(request -H 'Cookie: __Host-infraege_session=granted' "$base/assets/paid/x.js")" \
+expect 200 "$(request -H 'Cookie: __Host-kodumka_session=granted' "$base/assets/paid/x.js")" \
   'paid chunk with access'
-cache=$(curl -ks -D - -o /dev/null -H 'Host: kodumka.ru' -H 'Cookie: __Host-infraege_session=granted' \
+cache=$(curl -ks -D - -o /dev/null -H 'Host: kodumka.ru' -H 'Cookie: __Host-kodumka_session=granted' \
   "$base/assets/paid/x.js" | tr -d '\r' | grep -i '^cache-control:')
 [[ $cache == *private* && $cache == *no-store* && $cache != *immutable* ]] || {
   echo "gated chunk cache policy: $cache" >&2
@@ -79,7 +79,7 @@ expect 200 "$(request -X POST --data 'InvId=1' "$base/api/billing/webhooks/robok
   'notification'
 # Change 198: a reader's page loads 1–3 chunks; only a downloader meets the paid budget.
 codes=$(for _ in $(seq 1 125); do
-  request -H 'Cookie: __Host-infraege_session=granted' "$base/assets/paid/x.js"; echo
+  request -H 'Cookie: __Host-kodumka_session=granted' "$base/assets/paid/x.js"; echo
 done | sort | uniq -c)
 grep -Eq '^ +[0-9]+ 429$' <<<"$codes" || { echo "paid budget never limits: $codes" >&2; exit 1; }
 echo 'paid gate contract passed'

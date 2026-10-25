@@ -17,6 +17,9 @@ export default defineConfig({
   reporter: process.env.GATE_SUMMARY ? "dot" : "list",
   fullyParallel: false,
   timeout: 45_000,
+  // The portfolio runs on the Vite dev server: on a shared CI runner the first visit to an
+  // account page compiles heavy route modules on demand and hydration can pass 5 s.
+  expect: { timeout: process.env.CI ? 15_000 : 5_000 },
   retries: 0,
   use: {
     baseURL: FRONTEND_URL,

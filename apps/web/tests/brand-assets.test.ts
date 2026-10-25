@@ -9,11 +9,7 @@ const generatorSource = readFileSync(
   "utf8",
 );
 const approvedSource = readFileSync(
-  resolve(
-    process.cwd(),
-    "../..",
-    "docs/artifacts/references/infraege-mark.svg",
-  ),
+  resolve(process.cwd(), "../..", "docs/artifacts/references/kodumka-mark.svg"),
   "utf8",
 );
 
@@ -31,7 +27,7 @@ function readPngColorType(path: string): number {
 
 describe("production brand assets", () => {
   it("publishes the approved infraege mark and a source-faithful favicon", () => {
-    const mark = readFileSync(publicPath("brand", "infraege-mark.svg"), "utf8");
+    const mark = readFileSync(publicPath("brand", "kodumka-mark.svg"), "utf8");
     const favicon = readFileSync(publicPath("favicon.svg"), "utf8");
     const approvedPathCount = approvedSource.match(/<path\b/g)?.length ?? 0;
 
@@ -52,7 +48,7 @@ describe("production brand assets", () => {
     expect(favicon).toContain(".stone-ink { fill: #fff; }");
 
     expect(generatorSource).toContain(
-      "docs/artifacts/references/infraege-mark.svg",
+      "docs/artifacts/references/kodumka-mark.svg",
     );
     expect(existsSync(publicPath("brand", "alchimia-mark.svg"))).toBe(false);
   });
@@ -72,18 +68,18 @@ describe("production brand assets", () => {
     });
     expect(readPngColorType(publicPath("apple-touch-icon.png"))).toBe(2);
     expect(
-      readPngDimensions(publicPath("brand", "infraege-icon-192.png")),
+      readPngDimensions(publicPath("brand", "kodumka-icon-192.png")),
     ).toEqual({ width: 192, height: 192 });
-    expect(readPngColorType(publicPath("brand", "infraege-icon-192.png"))).toBe(
+    expect(readPngColorType(publicPath("brand", "kodumka-icon-192.png"))).toBe(
       2,
     );
     expect(
-      readPngDimensions(publicPath("brand", "infraege-icon-512.png")),
+      readPngDimensions(publicPath("brand", "kodumka-icon-512.png")),
     ).toEqual({ width: 512, height: 512 });
-    expect(readPngColorType(publicPath("brand", "infraege-icon-512.png"))).toBe(
+    expect(readPngColorType(publicPath("brand", "kodumka-icon-512.png"))).toBe(
       2,
     );
-    expect(readPngDimensions(publicPath("brand/infraege-social.png"))).toEqual({
+    expect(readPngDimensions(publicPath("brand/kodumka-social.png"))).toEqual({
       width: 1200,
       height: 630,
     });
@@ -113,12 +109,12 @@ describe("production brand assets", () => {
         theme_color: "#f5f3ef",
         icons: [
           expect.objectContaining({
-            src: "/brand/infraege-icon-192.png",
+            src: "/brand/kodumka-icon-192.png",
             sizes: "192x192",
             purpose: "any",
           }),
           expect.objectContaining({
-            src: "/brand/infraege-icon-512.png",
+            src: "/brand/kodumka-icon-512.png",
             sizes: "512x512",
             purpose: "any",
           }),
