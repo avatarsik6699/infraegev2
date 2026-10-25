@@ -9,7 +9,7 @@
 | Change | `215` |
 | Slug | `legal-folder` |
 | Title | Юридические документы в одной папке |
-| Status | `done` |
+| Status | `archived` |
 | Branch | `feature/215-legal-folder` |
 
 ---
