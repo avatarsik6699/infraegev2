@@ -9,7 +9,7 @@
 | Change | `222` |
 | Slug | `lesson-chunks` |
 | Title | Один чанк на тему и урок курса |
-| Status | `done` |
+| Status | `archived` |
 | Branch | `feature/222-lesson-chunks` |
 
 ---
