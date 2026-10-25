@@ -9,7 +9,7 @@
 | Change | `223` |
 | Slug | `sqlalchemy-asyncpg` |
 | Title | SQLAlchemy 2.1, asyncpg 0.32 и keepalive SSH деплоя |
-| Status | `done` |
+| Status | `archived` |
 | Branch | `feature/223-sqlalchemy-asyncpg` |
 
 ---
