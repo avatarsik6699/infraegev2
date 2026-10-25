@@ -69,7 +69,12 @@ def local(tag: str) -> str:
 def find(root: ElementTree.Element, *path: str) -> str | None:
     node: ElementTree.Element | None = root
     for name in path:
-        node = next((child for child in node if local(child.tag) == name), None) if node else None
+        # `is not None`: an element's truth value means "has children" and is deprecated.
+        node = (
+            next((child for child in node if local(child.tag) == name), None)
+            if node is not None
+            else None
+        )
     return node.text if node is not None else None
 
 

@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import Literal
+from typing import Literal, cast
 
 from pydantic import Field
 from sqlalchemy import and_, delete, exists, or_, select
@@ -141,7 +141,8 @@ async def read_progress(db: AsyncSession, session: AccountSession) -> ProgressVi
     return ProgressView(
         results=[
             ResultView(
-                context_kind=kind,
+                # The `context_kind` check constraint holds the same three values.
+                context_kind=cast(ContextKind, kind),
                 context_id=context_id,
                 task_id=task_id,
                 solution_revision=revision,

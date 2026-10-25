@@ -1,7 +1,7 @@
 """Public current-state projections; checker is read only for answer submission."""
 
 from collections.abc import Callable, Iterable, Sequence
-from typing import Any
+from typing import Any, cast
 
 from pydantic import Field
 from sqlalchemy import exists, or_, select
@@ -18,7 +18,7 @@ from app.modules.practice.schemas import (
     TheoryLink,
 )
 from app.modules.practice.service import Conflict
-from app.shared.checker import is_correct
+from app.shared.checker import CheckerInput, is_correct
 
 
 class Unavailable(ValueError):
@@ -310,7 +310,9 @@ async def check(
     else:
         if answer is None or answers is not None:
             raise InvalidAnswer("single-answer task requires one answer")
-        correct = is_correct(checker, answer)
+        # SQLAlchemy 2.1 typing: pyright matches the protocol against `Mapped[...]`, while an
+        # instance attribute is the plain value at runtime.
+        correct = is_correct(cast(CheckerInput, checker), answer)
     return CheckedAnswer(
         correct=correct,
         explanation=row[0].content["explanation"],

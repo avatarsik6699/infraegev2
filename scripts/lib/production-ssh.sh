@@ -42,7 +42,11 @@ production_ssh_init() {
 }
 
 production_ssh() {
+  # Change 223: the pre-deploy backup can run for minutes without output; keepalives stop the
+  # runner's NAT from dropping the idle connection mid-deploy (2026-10-25: «Broken pipe»).
   SSH_ASKPASS="$INFRAEGE_SSH_ASKPASS" SSH_ASKPASS_REQUIRE=force ssh \
+    -o ServerAliveInterval=30 \
+    -o ServerAliveCountMax=6 \
     -o PreferredAuthentications=password \
     -o PubkeyAuthentication=no \
     -o NumberOfPasswordPrompts=1 \

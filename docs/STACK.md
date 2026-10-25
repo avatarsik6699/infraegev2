@@ -42,7 +42,7 @@ shellcheck --version      # shell static checks: >=0.9
 
 ### Practice persistence
 
-PostgreSQL 18.6, SQLAlchemy 2.0.52, Alembic 1.20.0 and asyncpg 0.31.0 are locked. Schema `198_01`
+PostgreSQL 18.6, SQLAlchemy 2.1.4, Alembic 1.20.0 and asyncpg 0.32.0 are locked. Schema `198_01`
 retains task JSON, private checker, lesson membership and file objects and adds accounts,
 identities, credentials, sessions, one-time tokens, provider challenges, per-context solved
 results, billing (`192_01`) and devices, activity counters and restrictions (`198_01`). `infraege_runtime` is SELECT-only on the bank and has no account-table rights;
