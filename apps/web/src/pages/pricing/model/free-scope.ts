@@ -3,7 +3,7 @@ import {
   findCourseByRouteSlug,
   getCourseLessons,
 } from "~/entities/course";
-import { lessonPublications, topicLessons } from "~/entities/lesson";
+import { publishedTopicOutlines } from "~/entities/lesson";
 
 /** «1–11, 14 и 16»: task numbers as consecutive ranges, the last joined by «и». */
 export function taskRanges(numbers: readonly number[]): string {
@@ -27,13 +27,9 @@ export function taskRanges(numbers: readonly number[]): string {
  * so /pricing never promises more or less than the lessons deliver.
  */
 export function freeScope() {
-  const published = new Set(
-    lessonPublications
-      .filter((publication) => publication.status === "published")
-      .map((publication) => publication.id),
+  const freeTopics = publishedTopicOutlines().filter(
+    (topic) => topic.accessTier === "free",
   );
-  const topics = topicLessons.filter((lesson) => published.has(lesson.id));
-  const freeTopics = topics.filter((lesson) => lesson.accessTier === "free");
   const courses = coursePublications.flatMap((publication) => {
     const course = findCourseByRouteSlug(publication.routeSlug);
     if (!course) return [];
@@ -49,7 +45,7 @@ export function freeScope() {
   return {
     freeTopicCount: freeTopics.length,
     freeTopicNumbers: taskRanges(
-      freeTopics.flatMap((lesson) => lesson.taskNumbers),
+      freeTopics.flatMap((topic) => topic.taskNumbers),
     ),
     /** Courses that are free in full and those free up to a lesson. */
     freeCourses: courses.filter(

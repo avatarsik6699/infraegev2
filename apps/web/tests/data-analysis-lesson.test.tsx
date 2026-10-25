@@ -2,12 +2,9 @@ import { spawnSync } from "node:child_process";
 import { resolve } from "node:path";
 import { isValidElement } from "react";
 import { describe, expect, it, vi } from "vitest";
-import {
-  dataAnalysisLesson,
-  findLessonByRouteSlug,
-  lessonPublications,
-  lessonSubtopics,
-} from "~/entities/lesson";
+import { lessonPublications, lessonSubtopics } from "~/entities/lesson";
+import { dataAnalysisLesson } from "~/entities/lesson/content/data-analysis.lesson";
+import { findLessonByRouteSlug } from "./lesson-content-test-utils";
 import { topicCatalog } from "~/entities/topic-catalog";
 import { publicPaths } from "~/pages/site-discovery/public-paths";
 import { CodeBlock } from "~/shared/components/code-block";
@@ -118,10 +115,10 @@ describe("task 27 clustering lesson (Change 197)", () => {
     expect(lesson.result).toBeDefined();
   });
 
-  it("is the lesson of the catalog topic of task 27", () => {
-    expect(findLessonByRouteSlug("27-analiz-dannyh-i-klasterizatsiya")).toBe(
-      dataAnalysisLesson,
-    );
+  it("is the lesson of the catalog topic of task 27", async () => {
+    expect(
+      await findLessonByRouteSlug("27-analiz-dannyh-i-klasterizatsiya"),
+    ).toBe(dataAnalysisLesson);
     expect(
       lessonPublications.filter(({ taskNumbers }) => taskNumbers.includes(27)),
     ).toEqual([expect.objectContaining({ id: "data-analysis" })]);

@@ -2,12 +2,9 @@ import { spawnSync } from "node:child_process";
 import { resolve } from "node:path";
 import { isValidElement } from "react";
 import { describe, expect, it, vi } from "vitest";
-import {
-  stringProcessingLesson,
-  findLessonByRouteSlug,
-  lessonPublications,
-  lessonSubtopics,
-} from "~/entities/lesson";
+import { lessonPublications, lessonSubtopics } from "~/entities/lesson";
+import { stringProcessingLesson } from "~/entities/lesson/content/string-processing.lesson";
+import { findLessonByRouteSlug } from "./lesson-content-test-utils";
 import { topicCatalog } from "~/entities/topic-catalog";
 import { publicPaths } from "~/pages/site-discovery/public-paths";
 import { CodeBlock } from "~/shared/components/code-block";
@@ -119,10 +116,10 @@ describe("task 24 string processing lesson (Change 184)", () => {
     expect(lesson.result).toBeDefined();
   });
 
-  it("is the lesson of the catalog topic of task 24", () => {
-    expect(findLessonByRouteSlug("24-obrabotka-simvolnyh-strok")).toMatchObject(
-      { id: lesson.id },
-    );
+  it("is the lesson of the catalog topic of task 24", async () => {
+    expect(
+      await findLessonByRouteSlug("24-obrabotka-simvolnyh-strok"),
+    ).toMatchObject({ id: lesson.id });
     expect(
       lessonPublications.filter(({ taskNumbers }) => taskNumbers.includes(24)),
     ).toEqual([expect.objectContaining({ id: "string-processing" })]);

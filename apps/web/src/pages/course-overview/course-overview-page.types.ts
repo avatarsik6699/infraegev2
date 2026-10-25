@@ -32,7 +32,7 @@ export namespace CourseOverviewPageTypes {
   };
 
   export type Action = {
-    lesson: CourseTypes.LessonDefinition;
+    lesson: CourseTypes.LessonOutline;
     label: string;
     continuing: boolean;
   };
@@ -50,6 +50,6 @@ export namespace CourseOverviewPageTypes {
   export type Props = {
     practiceSummary: readonly CourseProgressTypes.Lesson[] | null;
     course: CourseTypes.Definition;
-    lessons: readonly CourseTypes.LessonDefinition[];
+    lessons: readonly CourseTypes.LessonOutline[];
   };
 }

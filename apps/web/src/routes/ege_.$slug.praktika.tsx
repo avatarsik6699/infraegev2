@@ -1,11 +1,13 @@
 import { createFileRoute, notFound } from "@tanstack/react-router";
-import { findLessonByRouteSlug, lessonPublications } from "~/entities/lesson";
+import { use } from "react";
+import { findTopicOutline, lessonPublications } from "~/entities/lesson";
 import {
   getTopicLessonRouteData,
   TopicPracticePage,
 } from "~/pages/topic-lesson";
 import { accessState, getAccessState } from "~/entities/access";
 import { getOffer } from "~/entities/billing";
+import { lazyValue } from "~/shared/lib/lazy-value";
 import { paidContent } from "~/shared/lib/paid-content";
 import { pageHead } from "~/shared/lib/seo";
 
@@ -14,7 +16,9 @@ export const Route = createFileRoute("/ege_/$slug/praktika")({
     const publication = lessonPublications.find(
       (item) => item.routeSlug === params.slug,
     );
-    const lesson = findLessonByRouteSlug(params.slug);
+    // Change 222: only this topic's module loads, before rendering.
+    const outline = findTopicOutline(params.slug);
+    const lesson = outline ? await lazyValue.preload(outline.load) : undefined;
     if (!publication || !lesson) throw notFound();
     const [routeData, access] = await Promise.all([
       getTopicLessonRouteData({ data: params.slug }),
@@ -51,7 +55,7 @@ export const Route = createFileRoute("/ege_/$slug/praktika")({
       noIndex: publication.status !== "published",
     });
     // Change 192: a paid final page says so while the paywall is on
-    return findLessonByRouteSlug(params.slug)?.paidPractice &&
+    return findTopicOutline(params.slug)?.paidPractice &&
       loaderData?.access?.paywall
       ? pageHead.withPaidArticle(head, meta)
       : head;
@@ -62,7 +66,9 @@ export const Route = createFileRoute("/ege_/$slug/praktika")({
 function TopicPracticeRoute() {
   const params: { slug: string } = Route.useParams();
   const data = Route.useLoaderData();
-  const lesson = findLessonByRouteSlug(params.slug);
+  const outline = findTopicOutline(params.slug);
+  // Warmed by the loader; on hydration React waits for the chunk (Change 222).
+  const lesson = outline ? use(lazyValue.promise(outline.load)) : undefined;
   if (!lesson) return null;
   return (
     <TopicPracticePage

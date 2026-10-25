@@ -1,14 +1,9 @@
 import type { CourseTypes } from "../course.types";
+import { courseLessonOutlines } from "./course-lesson-outlines.gen";
 import { excelCourse } from "./excel-course";
-import { excelCourseLessons } from "./excel-course-lessons";
 import { pythonCourse } from "./python-course";
-import { pythonCourseLessons } from "./python-course-lessons";
 
 const courses: readonly CourseTypes.Definition[] = [pythonCourse, excelCourse];
-const courseLessons: readonly CourseTypes.LessonDefinition[] = [
-  ...pythonCourseLessons,
-  ...excelCourseLessons,
-];
 
 export function findCourseByRouteSlug(
   routeSlug: string,
@@ -16,28 +11,33 @@ export function findCourseByRouteSlug(
   return courses.find((course) => course.routeSlug === routeSlug);
 }
 
-export function findCourseLessonByRouteSlugs(
-  courseRouteSlug: string,
-  lessonRouteSlug: string,
-): CourseTypes.LessonDefinition | undefined {
-  const course = findCourseByRouteSlug(courseRouteSlug);
-  if (!course) return undefined;
-  const memberIds = new Set(
+function memberIds(course: CourseTypes.Definition): Set<string> {
+  return new Set(
     course.modules.flatMap((courseModule) =>
       courseModule.lessonPlan.map((lesson) => lesson.id),
     ),
   );
-  return courseLessons.find(
-    (lesson) =>
-      memberIds.has(lesson.id) && lesson.routeSlug === lessonRouteSlug,
+}
+
+/** A course's own lesson by both slugs, without loading its content (Change 222). */
+export function findCourseLessonOutline(
+  courseRouteSlug: string,
+  lessonRouteSlug: string,
+): CourseTypes.LessonOutline | undefined {
+  const course = findCourseByRouteSlug(courseRouteSlug);
+  if (!course) return undefined;
+  const members = memberIds(course);
+  return courseLessonOutlines.find(
+    (lesson) => members.has(lesson.id) && lesson.routeSlug === lessonRouteSlug,
   );
 }
 
+/** The course's lessons in plan order, without their content (Change 222). */
 export function getCourseLessons(
   course: CourseTypes.Definition,
-): readonly CourseTypes.LessonDefinition[] {
+): readonly CourseTypes.LessonOutline[] {
   const lessonsById = new Map(
-    courseLessons.map((lesson) => [lesson.id, lesson] as const),
+    courseLessonOutlines.map((lesson) => [lesson.id, lesson] as const),
   );
   return course.modules.flatMap((courseModule) =>
     courseModule.lessonPlan.flatMap((planItem) => {

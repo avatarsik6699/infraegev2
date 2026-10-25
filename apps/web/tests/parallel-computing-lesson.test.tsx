@@ -1,10 +1,7 @@
 import { describe, expect, it, vi } from "vitest";
-import {
-  parallelComputingLesson,
-  findLessonByRouteSlug,
-  lessonPublications,
-  lessonSubtopics,
-} from "~/entities/lesson";
+import { lessonPublications, lessonSubtopics } from "~/entities/lesson";
+import { parallelComputingLesson } from "~/entities/lesson/content/parallel-computing.lesson";
+import { findLessonByRouteSlug } from "./lesson-content-test-utils";
 import { topicCatalog } from "~/entities/topic-catalog";
 import { publicPaths } from "~/pages/site-discovery/public-paths";
 import {
@@ -54,8 +51,8 @@ describe("task 22 multiprocessor systems lesson (Change 190)", () => {
     expect(lesson.result).toBeDefined();
   });
 
-  it("is the lesson of the catalog topic of task 22", () => {
-    expect(findLessonByRouteSlug("22-mnogoprocessornye-sistemy")).toBe(
+  it("is the lesson of the catalog topic of task 22", async () => {
+    expect(await findLessonByRouteSlug("22-mnogoprocessornye-sistemy")).toBe(
       parallelComputingLesson,
     );
     expect(

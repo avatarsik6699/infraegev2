@@ -1,5 +1,6 @@
 import { renderToStaticMarkup } from "react-dom/server";
 import { expect } from "vitest";
+import { findTopicOutline, topicOutlines } from "~/entities/lesson";
 import type { LessonContent } from "~/entities/lesson";
 import type { LessonMediaTypes } from "~/shared/components/learning-content";
 
@@ -96,4 +97,16 @@ export function topicMedia(
       )
       .map(([, manifest]) => manifest.lessonMedia),
   ) as Record<string, LessonMediaTypes.Generated>;
+}
+
+/** Change 222: a topic's full definition by its slug, loaded through its outline. */
+export async function findLessonByRouteSlug(
+  routeSlug: string,
+): Promise<LessonContent.Definition | undefined> {
+  return findTopicOutline(routeSlug)?.load();
+}
+
+/** Every topic's full definition, for checks across all lessons. */
+export function loadTopicLessons(): Promise<LessonContent.Definition[]> {
+  return Promise.all(topicOutlines.map((outline) => outline.load()));
 }

@@ -2,12 +2,9 @@ import { spawnSync } from "node:child_process";
 import { resolve } from "node:path";
 import { isValidElement } from "react";
 import { describe, expect, it, vi } from "vitest";
-import {
-  graphAnalysisLesson,
-  findLessonByRouteSlug,
-  lessonPublications,
-  lessonSubtopics,
-} from "~/entities/lesson";
+import { lessonPublications, lessonSubtopics } from "~/entities/lesson";
+import { graphAnalysisLesson } from "~/entities/lesson/content/graph-analysis.lesson";
+import { findLessonByRouteSlug } from "./lesson-content-test-utils";
 import { topicCatalog } from "~/entities/topic-catalog";
 import { publicPaths } from "~/pages/site-discovery/public-paths";
 import { CodeBlock } from "~/shared/components/code-block";
@@ -110,8 +107,10 @@ describe("task 23 graph analysis lesson", () => {
     expect(lesson.result).toBeDefined();
   });
 
-  it("is the lesson of the catalog topic «Анализ графов»", () => {
-    expect(findLessonByRouteSlug("23-analiz-grafov")).toBe(graphAnalysisLesson);
+  it("is the lesson of the catalog topic «Анализ графов»", async () => {
+    expect(await findLessonByRouteSlug("23-analiz-grafov")).toBe(
+      graphAnalysisLesson,
+    );
     expect(
       lessonPublications.filter(({ taskNumbers }) => taskNumbers.includes(23)),
     ).toEqual([expect.objectContaining({ id: "graph-analysis" })]);

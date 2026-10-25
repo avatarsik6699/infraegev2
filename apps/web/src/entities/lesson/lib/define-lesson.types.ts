@@ -89,6 +89,35 @@ export namespace LessonContent {
 
   export type SubtopicLevel = "core" | "advanced";
 
+  /** Change 222: what trees, catalogs and the sitemap read about a subtopic, without its text. */
+  export type SubtopicOutline = {
+    slug: string;
+    title: string;
+    lead?: string;
+    level: SubtopicLevel;
+    paid: boolean;
+    /** Concept ids in authored order, for old `#section` links. */
+    sections: readonly string[];
+  };
+
+  /**
+   * Change 222: a topic without its content, generated from the lesson module by
+   * `scripts/practice-registry.mjs`. `load` imports the module on demand, so a page
+   * pulls only its own topic.
+   */
+  export type Outline = {
+    id: string;
+    routeSlug: string;
+    title: string;
+    summary: string;
+    taskNumbers: readonly [number, ...number[]];
+    status: Status;
+    accessTier: AccessTier;
+    paidPractice: boolean;
+    subtopics: readonly SubtopicOutline[];
+    load: () => Promise<Definition>;
+  };
+
   export type Definition = {
     id: string;
     /** Public path segment: /ege/{routeSlug}. */

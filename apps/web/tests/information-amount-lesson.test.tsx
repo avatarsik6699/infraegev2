@@ -1,12 +1,9 @@
 import { spawnSync } from "node:child_process";
 import { isValidElement } from "react";
 import { describe, expect, it, vi } from "vitest";
-import {
-  informationAmountLesson,
-  findLessonByRouteSlug,
-  lessonPublications,
-  lessonSubtopics,
-} from "~/entities/lesson";
+import { lessonPublications, lessonSubtopics } from "~/entities/lesson";
+import { informationAmountLesson } from "~/entities/lesson/content/information-amount.lesson";
+import { findLessonByRouteSlug } from "./lesson-content-test-utils";
 import { lessonMedia } from "~/entities/lesson/content/information-amount.media";
 import { topicCatalog } from "~/entities/topic-catalog";
 import { publicPaths } from "~/pages/site-discovery/public-paths";
@@ -117,8 +114,8 @@ describe("task 11 passwords lesson (Change 184)", () => {
     expect(lesson.result).toBeDefined();
   });
 
-  it("is the lesson of the catalog topic of task 11", () => {
-    expect(findLessonByRouteSlug("11-paroli-i-zapisi")).toBe(lesson);
+  it("is the lesson of the catalog topic of task 11", async () => {
+    expect(await findLessonByRouteSlug("11-paroli-i-zapisi")).toBe(lesson);
     expect(
       lessonPublications.filter(({ taskNumbers }) => taskNumbers.includes(11)),
     ).toEqual([expect.objectContaining({ id: "information-amount" })]);

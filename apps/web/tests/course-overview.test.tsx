@@ -89,22 +89,18 @@ vi.mock(
   },
 );
 
-const lessons: CourseTypes.LessonDefinition[] = [
-  "first",
-  "second",
-  "third",
-].map((id) => ({
-  id,
-  routeSlug: id,
-  title: `Урок ${id}`,
-  summary: "",
-  theory: [],
-  result: "",
-  learningOutcomes: [],
-  status: "published",
-  accessTier: "free",
-  masteryThreshold: 0.8,
-}));
+const lessons: CourseTypes.LessonOutline[] = ["first", "second", "third"].map(
+  (id) => ({
+    id,
+    routeSlug: id,
+    title: `Урок ${id}`,
+    summary: "",
+    status: "published",
+    accessTier: "free",
+    masteryThreshold: 0.8,
+    load: () => Promise.reject(new Error("not loaded in the overview")),
+  }),
+);
 const props: CourseOverviewPageTypes.Props = {
   course: {
     id: "python",

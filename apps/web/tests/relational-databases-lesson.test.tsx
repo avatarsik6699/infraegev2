@@ -1,10 +1,7 @@
 import { describe, expect, it, vi } from "vitest";
-import {
-  relationalDatabasesLesson,
-  findLessonByRouteSlug,
-  lessonPublications,
-  lessonSubtopics,
-} from "~/entities/lesson";
+import { lessonPublications, lessonSubtopics } from "~/entities/lesson";
+import { relationalDatabasesLesson } from "~/entities/lesson/content/relational-databases.lesson";
+import { findLessonByRouteSlug } from "./lesson-content-test-utils";
 import { lessonMedia } from "~/entities/lesson/content/relational-databases.media";
 import { topicCatalog } from "~/entities/topic-catalog";
 import { publicPaths } from "~/pages/site-discovery/public-paths";
@@ -47,8 +44,8 @@ describe("task 3 linked tables lesson (Change 184)", () => {
     expect(lesson.result).toBeDefined();
   });
 
-  it("is the lesson of the catalog topic of task 3", () => {
-    expect(findLessonByRouteSlug("3-svyazannye-tablicy")).toBe(lesson);
+  it("is the lesson of the catalog topic of task 3", async () => {
+    expect(await findLessonByRouteSlug("3-svyazannye-tablicy")).toBe(lesson);
     expect(
       lessonPublications.filter(({ taskNumbers }) => taskNumbers.includes(3)),
     ).toEqual([expect.objectContaining({ id: "relational-databases" })]);

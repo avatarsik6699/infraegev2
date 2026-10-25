@@ -5,7 +5,7 @@ import {
   coursePublications,
   findCourseByRouteSlug,
   findCourseLessonPublicationByRouteSlugs,
-  findCourseLessonByRouteSlugs,
+  findCourseLessonOutline,
   findCoursePublicationByRouteSlug,
   getCourseLessons,
   type CourseProgressTypes,
@@ -64,19 +64,22 @@ describe("Python course foundation", () => {
     );
   });
 
-  it("resolves lessons by route slug and drops the retired ones", () => {
+  it("resolves lessons by route slug and drops the retired ones", async () => {
     expect(
       findCourseLessonPublicationByRouteSlugs("python", "pervaya-programma"),
     ).toMatchObject({ id: "python-first-program", status: "published" });
     expect(
-      findCourseLessonByRouteSlugs("python", "logicheskie-vyrazheniya"),
+      await findCourseLessonOutline(
+        "python",
+        "logicheskie-vyrazheniya",
+      )?.load(),
     ).toMatchObject({ id: "python-logic" });
     expect(findCoursePublicationByRouteSlug("python")).toBeDefined();
     expect(
       findCourseLessonPublicationByRouteSlugs("missing", "pervaya-programma"),
     ).toBeUndefined();
     for (const retired of ["oshibki", "spisok-del", "otbor-rezultata"]) {
-      expect(findCourseLessonByRouteSlugs("python", retired)).toBeUndefined();
+      expect(findCourseLessonOutline("python", retired)).toBeUndefined();
     }
   });
 
@@ -104,10 +107,11 @@ describe("Python course foundation", () => {
     }
   });
 
-  it("opens every lesson with an untitled lead and ends it with a result", () => {
+  it("opens every lesson with an untitled lead and ends it with a result", async () => {
     const pythonCourse = findCourseByRouteSlug("python");
     if (!pythonCourse) throw new Error("Published Python course is missing");
-    for (const lesson of getCourseLessons(pythonCourse)) {
+    for (const outline of getCourseLessons(pythonCourse)) {
+      const lesson = await outline.load();
       // The Python course is free (Change 192): its theory stays in the lesson.
       const theory = lesson.theory ?? [];
       expect(lesson.paid).toBeUndefined();

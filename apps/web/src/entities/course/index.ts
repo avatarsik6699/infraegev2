@@ -13,6 +13,6 @@ export {
 } from "./content/course-publication.mjs";
 export {
   findCourseByRouteSlug,
-  findCourseLessonByRouteSlugs,
+  findCourseLessonOutline,
   getCourseLessons,
 } from "./content/course-registry";

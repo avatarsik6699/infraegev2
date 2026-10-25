@@ -399,3 +399,14 @@ repository root (`npx prettier --write content/practice-bank/bank.json`).
 - **Cause:** `verifyDepsBeforeRun: error` compares manifest timestamps with the install state; editing
   `package.json` or switching a branch that touches it marks the install stale.
 - **Fix:** `pnpm install --frozen-lockfile` (no lockfile change), then rerun the gate.
+
+### A lesson module imported statically
+
+- **Symptom:** one chunk grows to megabytes and every lesson page parses all topics (Lighthouse
+  TBT ≈700 ms on mobile before Change 222).
+- **Cause:** a registry or a public `index.ts` imports `*.lesson.tsx` modules statically, so the
+  bundler folds all of them into one chunk shared by every page.
+- **Fix:** read the generated outline (`topicOutlines`, `courseLessonOutlines`) and load the module
+  with `outline.load()` in a route loader or server function; after editing a lesson's subtopics,
+  titles, leads or access run `node scripts/practice-registry.mjs`.
+

@@ -1,5 +1,6 @@
 // Canonical exam taxonomy; publication controls course membership only.
 import { readFileSync, writeFileSync } from "node:fs";
+import { format } from "prettier";
 import { examTopicDefinitions } from "../apps/web/src/shared/config/exam-topics.mjs";
 import {
   coursePublications,
@@ -41,7 +42,8 @@ for (const course of coursePublications.filter(
     });
   }
 }
-const output = JSON.stringify(topics, null, 2) + "\n";
+// Written Prettier-formatted, so a run never leaves the format gate red.
+const output = await format(JSON.stringify(topics), { parser: "json" });
 const target = new URL(
   "../apps/api/practice-catalog-topics.json",
   import.meta.url,

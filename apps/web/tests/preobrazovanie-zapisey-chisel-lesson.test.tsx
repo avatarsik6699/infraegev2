@@ -1,12 +1,9 @@
 import { spawnSync } from "node:child_process";
 import { isValidElement } from "react";
 import { describe, expect, it, vi } from "vitest";
-import {
-  preobrazovanieZapiseyChiselLesson,
-  findLessonByRouteSlug,
-  lessonPublications,
-  lessonSubtopics,
-} from "~/entities/lesson";
+import { lessonPublications, lessonSubtopics } from "~/entities/lesson";
+import { preobrazovanieZapiseyChiselLesson } from "~/entities/lesson/content/preobrazovanie-zapisey-chisel.lesson";
+import { findLessonByRouteSlug } from "./lesson-content-test-utils";
 import { lessonMedia } from "~/entities/lesson/content/preobrazovanie-zapisey-chisel.media";
 import { topicCatalog } from "~/entities/topic-catalog";
 import { publicPaths } from "~/pages/site-discovery/public-paths";
@@ -110,8 +107,8 @@ describe("task 5 number records lesson (Change 184)", () => {
     expect(lesson.result).toBeDefined();
   });
 
-  it("is the lesson of the catalog topic of task 5", () => {
-    expect(findLessonByRouteSlug("5-preobrazovanie-zapisey-chisel")).toBe(
+  it("is the lesson of the catalog topic of task 5", async () => {
+    expect(await findLessonByRouteSlug("5-preobrazovanie-zapisey-chisel")).toBe(
       lesson,
     );
     expect(

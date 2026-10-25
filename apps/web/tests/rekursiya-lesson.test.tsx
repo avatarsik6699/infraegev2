@@ -1,12 +1,9 @@
 import { spawnSync } from "node:child_process";
 import { isValidElement } from "react";
 import { describe, expect, it, vi } from "vitest";
-import {
-  rekursiyaLesson,
-  findLessonByRouteSlug,
-  lessonPublications,
-  lessonSubtopics,
-} from "~/entities/lesson";
+import { lessonPublications, lessonSubtopics } from "~/entities/lesson";
+import { rekursiyaLesson } from "~/entities/lesson/content/rekursiya.lesson";
+import { findLessonByRouteSlug } from "./lesson-content-test-utils";
 import { lessonMedia } from "~/entities/lesson/content/rekursiya.media";
 import { topicCatalog } from "~/entities/topic-catalog";
 import { publicPaths } from "~/pages/site-discovery/public-paths";
@@ -103,8 +100,8 @@ describe("task 16 recursion lesson (Change 197)", () => {
     expect(lesson.result).toBeDefined();
   });
 
-  it("is the lesson of the catalog topic of task 16", () => {
-    expect(findLessonByRouteSlug("16-rekursiya")).toBe(lesson);
+  it("is the lesson of the catalog topic of task 16", async () => {
+    expect(await findLessonByRouteSlug("16-rekursiya")).toBe(lesson);
     expect(
       lessonPublications.filter(({ taskNumbers }) => taskNumbers.includes(16)),
     ).toEqual([expect.objectContaining({ id: "rekursiya" })]);

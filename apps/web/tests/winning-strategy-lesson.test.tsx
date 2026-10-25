@@ -1,12 +1,9 @@
 import { spawnSync } from "node:child_process";
 import { isValidElement } from "react";
 import { describe, expect, it, vi } from "vitest";
-import {
-  winningStrategyLesson,
-  findLessonByRouteSlug,
-  lessonPublications,
-  lessonSubtopics,
-} from "~/entities/lesson";
+import { lessonPublications, lessonSubtopics } from "~/entities/lesson";
+import { winningStrategyLesson } from "~/entities/lesson/content/winning-strategy.lesson";
+import { findLessonByRouteSlug } from "./lesson-content-test-utils";
 import { topicCatalog } from "~/entities/topic-catalog";
 import { publicPaths } from "~/pages/site-discovery/public-paths";
 import { CodeBlock } from "~/shared/components/code-block";
@@ -116,8 +113,8 @@ describe("tasks 19–21 winning strategy lesson (Change 184)", () => {
     expect(lesson.result).toBeDefined();
   });
 
-  it("is the lesson of the catalog topic of tasks 19–21", () => {
-    expect(findLessonByRouteSlug("19-21-vyigryshnaya-strategiya")).toBe(
+  it("is the lesson of the catalog topic of tasks 19–21", async () => {
+    expect(await findLessonByRouteSlug("19-21-vyigryshnaya-strategiya")).toBe(
       winningStrategyLesson,
     );
     expect(

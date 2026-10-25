@@ -2,12 +2,9 @@ import { spawnSync } from "node:child_process";
 import { resolve } from "node:path";
 import { isValidElement } from "react";
 import { describe, expect, it, vi } from "vitest";
-import {
-  numberSequencesLesson,
-  findLessonByRouteSlug,
-  lessonPublications,
-  lessonSubtopics,
-} from "~/entities/lesson";
+import { lessonPublications, lessonSubtopics } from "~/entities/lesson";
+import { numberSequencesLesson } from "~/entities/lesson/content/number-sequences.lesson";
+import { findLessonByRouteSlug } from "./lesson-content-test-utils";
 import { topicCatalog } from "~/entities/topic-catalog";
 import { publicPaths } from "~/pages/site-discovery/public-paths";
 import { CodeBlock } from "~/shared/components/code-block";
@@ -111,8 +108,8 @@ describe("task 17 number sequences lesson (Change 184)", () => {
     expect(lesson.result).toBeDefined();
   });
 
-  it("is the lesson of the catalog topic of task 17", () => {
-    expect(findLessonByRouteSlug("17-chislovye-posledovatelnosti")).toBe(
+  it("is the lesson of the catalog topic of task 17", async () => {
+    expect(await findLessonByRouteSlug("17-chislovye-posledovatelnosti")).toBe(
       numberSequencesLesson,
     );
     expect(

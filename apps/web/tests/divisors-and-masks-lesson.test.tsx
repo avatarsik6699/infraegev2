@@ -1,12 +1,9 @@
 import { spawnSync } from "node:child_process";
 import { isValidElement } from "react";
 import { describe, expect, it, vi } from "vitest";
-import {
-  divisorsAndMasksLesson,
-  findLessonByRouteSlug,
-  lessonPublications,
-  lessonSubtopics,
-} from "~/entities/lesson";
+import { lessonPublications, lessonSubtopics } from "~/entities/lesson";
+import { divisorsAndMasksLesson } from "~/entities/lesson/content/divisors-and-masks.lesson";
+import { findLessonByRouteSlug } from "./lesson-content-test-utils";
 import { topicCatalog } from "~/entities/topic-catalog";
 import { publicPaths } from "~/pages/site-discovery/public-paths";
 import { CodeBlock } from "~/shared/components/code-block";
@@ -108,11 +105,13 @@ describe("task 25 divisors and masks lesson", () => {
     expect(lesson.result).toBeDefined();
   });
 
-  it("replaces the retired topic 25 lesson without a redirect", () => {
-    expect(findLessonByRouteSlug("25-deliteli-i-maski")).toBe(
+  it("replaces the retired topic 25 lesson without a redirect", async () => {
+    expect(await findLessonByRouteSlug("25-deliteli-i-maski")).toBe(
       divisorsAndMasksLesson,
     );
-    expect(findLessonByRouteSlug("25-obrabotka-celyh-chisel")).toBeUndefined();
+    expect(
+      await findLessonByRouteSlug("25-obrabotka-celyh-chisel"),
+    ).toBeUndefined();
     expect(
       lessonPublications.filter(({ taskNumbers }) => taskNumbers.includes(25)),
     ).toEqual([expect.objectContaining({ id: "divisors-and-masks" })]);

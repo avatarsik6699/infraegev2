@@ -1,12 +1,9 @@
 import { spawnSync } from "node:child_process";
 import { isValidElement } from "react";
 import { describe, expect, it, vi } from "vitest";
-import {
-  mediaCodingLesson,
-  findLessonByRouteSlug,
-  lessonPublications,
-  lessonSubtopics,
-} from "~/entities/lesson";
+import { lessonPublications, lessonSubtopics } from "~/entities/lesson";
+import { mediaCodingLesson } from "~/entities/lesson/content/media-coding.lesson";
+import { findLessonByRouteSlug } from "./lesson-content-test-utils";
 import { lessonMedia } from "~/entities/lesson/content/media-coding.media";
 import { topicCatalog } from "~/entities/topic-catalog";
 import { publicPaths } from "~/pages/site-discovery/public-paths";
@@ -110,8 +107,10 @@ describe("task 7 information volume lesson (Change 184)", () => {
     expect(lesson.result).toBeDefined();
   });
 
-  it("is the lesson of the catalog topic of task 7", () => {
-    expect(findLessonByRouteSlug("7-izobrazheniya-zvuk-tekst")).toBe(lesson);
+  it("is the lesson of the catalog topic of task 7", async () => {
+    expect(await findLessonByRouteSlug("7-izobrazheniya-zvuk-tekst")).toBe(
+      lesson,
+    );
     expect(
       lessonPublications.filter(({ taskNumbers }) => taskNumbers.includes(7)),
     ).toEqual([expect.objectContaining({ id: "media-coding" })]);

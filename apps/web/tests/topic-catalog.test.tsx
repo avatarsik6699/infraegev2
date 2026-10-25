@@ -7,7 +7,8 @@ import {
 } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { LessonProgressProvider } from "~/features/lesson-progress";
-import { lessonSubtopics, topicLessons } from "~/entities/lesson";
+import { lessonSubtopics } from "~/entities/lesson";
+import { loadTopicLessons } from "./lesson-content-test-utils";
 import { examPlan, topicCatalog } from "~/entities/topic-catalog";
 import { topicCatalogModel } from "~/pages/topic-catalog/model/topic-catalog-model";
 import { TopicCatalogPage } from "~/pages/topic-catalog";
@@ -461,8 +462,8 @@ it("matches topics by practice progress only", () => {
 });
 
 describe("topic catalog subtopic counts", () => {
-  it("match the published lesson definitions", () => {
-    for (const lesson of topicLessons) {
+  it("match the published lesson definitions", async () => {
+    for (const lesson of await loadTopicLessons()) {
       const entry = topicCatalog.entries.find((item) => item.id === lesson.id);
       expect(entry?.status, lesson.id).toBe("published");
       if (entry?.status !== "published") continue;

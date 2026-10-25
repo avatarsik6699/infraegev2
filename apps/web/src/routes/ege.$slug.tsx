@@ -1,8 +1,7 @@
 import { createFileRoute, notFound, redirect } from "@tanstack/react-router";
 import {
-  findLessonByRouteSlug,
-  findSubtopicBySection,
-  lessonSubtopics,
+  findOutlineSubtopicBySection,
+  findTopicOutline,
 } from "~/entities/lesson";
 import { legacyTopicRouteSlugs } from "~/shared/config/legacy-routes";
 
@@ -18,11 +17,14 @@ export const Route = createFileRoute("/ege/$slug")({
         hash: location.hash || undefined,
         statusCode: 301,
       });
-    const lesson = findLessonByRouteSlug(params.slug);
-    const first = lesson ? lessonSubtopics(lesson)[0] : undefined;
-    if (!lesson || lesson.status !== "published" || !first) throw notFound();
+    // Change 222: the redirect reads the outline; no topic content loads here.
+    const outline = findTopicOutline(params.slug);
+    const first = outline?.subtopics[0];
+    if (!outline || outline.status !== "published" || !first) throw notFound();
     const hash = location.hash || undefined;
-    const owner = hash ? findSubtopicBySection(lesson, hash) : undefined;
+    const owner = hash
+      ? findOutlineSubtopicBySection(outline, hash)
+      : undefined;
     throw redirect({
       to: "/ege/$slug/$subtopic",
       params: { slug: params.slug, subtopic: (owner ?? first).slug },

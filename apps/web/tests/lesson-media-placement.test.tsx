@@ -1,14 +1,12 @@
 import { describe, expect, it, vi } from "vitest";
-import {
-  arrayProcessingLesson,
-  dataAnalysisLesson,
-  divisorsAndMasksLesson,
-  numberSequencesLesson,
-  preobrazovanieZapiseyChiselLesson,
-  rekursiyaLesson,
-  spreadsheetsLesson,
-  stringProcessingLesson,
-} from "~/entities/lesson";
+import { arrayProcessingLesson } from "~/entities/lesson/content/array-processing.lesson";
+import { dataAnalysisLesson } from "~/entities/lesson/content/data-analysis.lesson";
+import { divisorsAndMasksLesson } from "~/entities/lesson/content/divisors-and-masks.lesson";
+import { numberSequencesLesson } from "~/entities/lesson/content/number-sequences.lesson";
+import { preobrazovanieZapiseyChiselLesson } from "~/entities/lesson/content/preobrazovanie-zapisey-chisel.lesson";
+import { rekursiyaLesson } from "~/entities/lesson/content/rekursiya.lesson";
+import { spreadsheetsLesson } from "~/entities/lesson/content/spreadsheets.lesson";
+import { stringProcessingLesson } from "~/entities/lesson/content/string-processing.lesson";
 import { renderAuthoredLessonContent } from "./lesson-content-test-utils";
 
 vi.mock("~/shared/components/action-link", () => ({

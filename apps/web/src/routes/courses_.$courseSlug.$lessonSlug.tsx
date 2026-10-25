@@ -1,8 +1,9 @@
 import { createFileRoute, notFound, redirect } from "@tanstack/react-router";
+import { use } from "react";
 import { legacyCourseLessonRouteSlugs } from "~/shared/config/legacy-routes";
 import {
   findCourseByRouteSlug,
-  findCourseLessonByRouteSlugs,
+  findCourseLessonOutline,
   findCourseLessonPublicationByRouteSlugs,
   findCoursePublicationByRouteSlug,
 } from "~/entities/course";
@@ -17,6 +18,7 @@ import {
   type AccessTypes,
 } from "~/entities/access";
 import { getOffer } from "~/entities/billing";
+import { lazyValue } from "~/shared/lib/lazy-value";
 import { paidContent } from "~/shared/lib/paid-content";
 import { pageHead } from "~/shared/lib/seo";
 
@@ -55,8 +57,7 @@ function courseLessonHead(
   });
   // Change 192: a paid lesson says so while the paywall is on
   const access = loaderData.access;
-  return findCourseLessonByRouteSlugs(course.routeSlug, lesson.routeSlug)
-    ?.paid &&
+  return findCourseLessonOutline(course.routeSlug, lesson.routeSlug)?.paid &&
     access?.status === "ready" &&
     access.paywall
     ? pageHead.withPaidArticle(head, meta)
@@ -86,10 +87,14 @@ export const Route = createFileRoute("/courses_/$courseSlug/$lessonSlug")({
       params.lessonSlug,
     );
     if (!course || !lesson) throw notFound();
-    const definition = findCourseLessonByRouteSlugs(
+    // Change 222: only this lesson's module loads, before rendering.
+    const outline = findCourseLessonOutline(
       params.courseSlug,
       params.lessonSlug,
     );
+    const definition = outline
+      ? await lazyValue.preload(outline.load)
+      : undefined;
     const [routeData, practiceSummary, access] = await Promise.all([
       getCourseLessonRouteData({
         data: {
@@ -128,10 +133,9 @@ function CourseLessonRoute() {
   const params = Route.useParams();
   const data = Route.useLoaderData();
   const course = findCourseByRouteSlug(params.courseSlug);
-  const lesson = findCourseLessonByRouteSlugs(
-    params.courseSlug,
-    params.lessonSlug,
-  );
+  const outline = findCourseLessonOutline(params.courseSlug, params.lessonSlug);
+  // Warmed by the loader; on hydration React waits for the chunk (Change 222).
+  const lesson = outline ? use(lazyValue.promise(outline.load)) : undefined;
   if (!course || !lesson) return null;
   return (
     <CourseLessonPage

@@ -1,11 +1,8 @@
 import { isValidElement } from "react";
 import { describe, expect, it, vi } from "vitest";
-import {
-  codingAndFanoLesson,
-  findLessonByRouteSlug,
-  lessonPublications,
-  lessonSubtopics,
-} from "~/entities/lesson";
+import { lessonPublications, lessonSubtopics } from "~/entities/lesson";
+import { codingAndFanoLesson } from "~/entities/lesson/content/coding-and-fano.lesson";
+import { findLessonByRouteSlug } from "./lesson-content-test-utils";
 import { lessonMedia } from "~/entities/lesson/content/coding-and-fano.media";
 import { topicCatalog } from "~/entities/topic-catalog";
 import { publicPaths } from "~/pages/site-discovery/public-paths";
@@ -98,10 +95,10 @@ describe("task 4 Fano condition lesson (Change 184)", () => {
     expect(lesson.result).toBeDefined();
   });
 
-  it("is the lesson of the catalog topic of task 4", () => {
-    expect(findLessonByRouteSlug("4-kodirovanie-i-uslovie-fano")).toMatchObject(
-      { id: lesson.id },
-    );
+  it("is the lesson of the catalog topic of task 4", async () => {
+    expect(
+      await findLessonByRouteSlug("4-kodirovanie-i-uslovie-fano"),
+    ).toMatchObject({ id: lesson.id });
     expect(
       lessonPublications.filter(({ taskNumbers }) => taskNumbers.includes(4)),
     ).toEqual([expect.objectContaining({ id: "coding-and-fano" })]);

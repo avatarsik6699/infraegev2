@@ -19,7 +19,7 @@
 
 | Что | Где | Проверка |
 |---|---|---|
-| Текст, шаги, самопроверки, порядок подтем, `level`, `access` | `apps/web/src/entities/lesson/content/<id>.lesson.tsx` и платные модули `<id>.paid.<slug>.tsx`; урок курса — `apps/web/src/entities/course/content/<id>.lesson.tsx` (`accessTier`) | тест урока `apps/web/tests/<id>-lesson.test.tsx`, `node scripts/practice-registry.mjs` (реестр выводится из модулей), `pnpm validate:content` |
+| Текст, шаги, самопроверки, порядок подтем, `level`, `access` | `apps/web/src/entities/lesson/content/<id>.lesson.tsx` и платные модули `<id>.paid.<slug>.tsx`; урок курса — `apps/web/src/entities/course/content/<id>.lesson.tsx` (`accessTier`) | тест урока `apps/web/tests/<id>-lesson.test.tsx`, `node scripts/practice-registry.mjs` (реестр и оглавления `*-outlines.gen.ts` выводятся из модулей), `pnpm validate:content` |
 | Код с выводом (`CodeBlock`) | модуль урока | тест урока запускает каждую программу с выводом и сравнивает вывод |
 | Запускаемая программа (`CodeRunner`) | `code` и `output` записи `kind: "run"` в манифесте `<id>.media.ts`; пояснения шагов — строка `// run notes: "3: текст"` над записью | `python3 -I scripts/lesson_design/site_media.py`: шаги записываются заново, вывод сверяется |
 | Схема, пошаговая схема, данные песочницы | вызов построителя в строке `// %%builder(args)%%` над записью манифеста; новая схема — такая строка без записи; сам рисунок — построитель в `scripts/lesson_design/*_figures.py` | `site_media.py` пересобирает запись; `--check` (группа `lesson-media`) падает на устаревшей |

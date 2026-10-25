@@ -734,15 +734,12 @@ artifact cache и ledger доказательств не вводятся. Од�
 Ordered unfinished outcomes (each a separate change, smallest coherent slice first). Done since the
 last roadmap: all 25 EGE topics on the lesson pipeline (Changes 171–190), the release of the redesign
 and rebuilt lessons on kodumka.ru (2026-10-24), paid access in test mode (Change 192), the operator
-console (Change 199).
+console (Change 199), one chunk per topic and course lesson (Change 222).
 
-1. **Lesson chunks per topic (Change 222).** A lesson page loads the free content of all 25 topics
-   in one 5 MB chunk (TBT ≈700 ms on mobile Lighthouse); load only the opened topic, likewise for
-   courses.
-2. **Live payments.** When Robokassa activates the shop: a real 1 ₽ payment and refund with receipt
+1. **Live payments.** When Robokassa activates the shop: a real 1 ₽ payment and refund with receipt
    and annulment, live passwords, `ROBOKASSA_TEST=false`, the announcement for topics that are free
    today, then `PAYWALL_ENABLED=true`.
-3. **Registry and renewals.** Record the RKN registry number when it appears; replace the
+2. **Registry and renewals.** Record the RKN registry number when it appears; replace the
    `body-parser` audit ignore with an override from 2026-10-29; review the recovery hold on
    2026-11-23.
 

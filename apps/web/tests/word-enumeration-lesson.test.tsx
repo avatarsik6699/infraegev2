@@ -1,12 +1,9 @@
 import { spawnSync } from "node:child_process";
 import { isValidElement } from "react";
 import { describe, expect, it, vi } from "vitest";
-import {
-  wordEnumerationLesson,
-  findLessonByRouteSlug,
-  lessonPublications,
-  lessonSubtopics,
-} from "~/entities/lesson";
+import { lessonPublications, lessonSubtopics } from "~/entities/lesson";
+import { wordEnumerationLesson } from "~/entities/lesson/content/word-enumeration.lesson";
+import { findLessonByRouteSlug } from "./lesson-content-test-utils";
 import { lessonMedia } from "~/entities/lesson/content/word-enumeration.media";
 import { topicCatalog } from "~/entities/topic-catalog";
 import { publicPaths } from "~/pages/site-discovery/public-paths";
@@ -111,8 +108,8 @@ describe("task 8 word enumeration lesson (Change 184)", () => {
     expect(lesson.result).toBeDefined();
   });
 
-  it("is the lesson of the catalog topic of task 8", () => {
-    expect(findLessonByRouteSlug("8-perebor-slov")).toBe(lesson);
+  it("is the lesson of the catalog topic of task 8", async () => {
+    expect(await findLessonByRouteSlug("8-perebor-slov")).toBe(lesson);
     expect(
       lessonPublications.filter(({ taskNumbers }) => taskNumbers.includes(8)),
     ).toEqual([expect.objectContaining({ id: "word-enumeration" })]);

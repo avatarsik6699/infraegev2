@@ -2,7 +2,7 @@ import { cleanup, render, screen, within } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import type { AccessTypes } from "~/entities/access";
 import { billingFormat, type BillingTypes } from "~/entities/billing";
-import { divisorsAndMasksLesson } from "~/entities/lesson";
+import { divisorsAndMasksLesson } from "~/entities/lesson/content/divisors-and-masks.lesson";
 import {
   LockedTasks,
   PaywallGate,

@@ -1,10 +1,7 @@
 import { describe, expect, it, vi } from "vitest";
-import {
-  spreadsheetOptimizationLesson,
-  findLessonByRouteSlug,
-  lessonPublications,
-  lessonSubtopics,
-} from "~/entities/lesson";
+import { lessonPublications, lessonSubtopics } from "~/entities/lesson";
+import { spreadsheetOptimizationLesson } from "~/entities/lesson/content/spreadsheet-optimization.lesson";
+import { findLessonByRouteSlug } from "./lesson-content-test-utils";
 import { topicCatalog } from "~/entities/topic-catalog";
 import { publicPaths } from "~/pages/site-discovery/public-paths";
 import {
@@ -54,8 +51,8 @@ describe("task 18 robot lesson (Change 184)", () => {
     expect(lesson.result).toBeDefined();
   });
 
-  it("is the lesson of the catalog topic of task 18", () => {
-    expect(findLessonByRouteSlug("18-robot-sborshchik-monet")).toBe(
+  it("is the lesson of the catalog topic of task 18", async () => {
+    expect(await findLessonByRouteSlug("18-robot-sborshchik-monet")).toBe(
       spreadsheetOptimizationLesson,
     );
     expect(

@@ -128,6 +128,18 @@ and do not derive prerequisite, recommendation, membership or shared-progress st
 Introduce a new concept in plain language before its technical name or code; briefly remind the
 reader of existing Python basics at their point of use and link to the full course explanation.
 
+Lesson modules (Change 222):
+
+- A topic or course lesson module is reached only through its generated outline
+  (`entities/lesson/content/topic-outlines.gen.ts`,
+  `entities/course/content/course-lesson-outlines.gen.ts`, written by
+  `node scripts/practice-registry.mjs`): trees, catalogs, `/pricing`, the sitemap and redirects
+  read the outline; the page's route loader awaits `lazyValue.preload(outline.load)` and the
+  component reads the module with `use(lazyValue.promise(outline.load))`, so each page ships
+  only its own lesson. Never import a `*.lesson.tsx` statically outside its own folder, tests
+  and the generated outline; `tests/lesson-outlines.test.ts` checks every outline against its
+  module.
+
 Lesson media:
 
 - Lesson figures are code-built SVG from the lesson manifest (`LessonDiagram`, `LessonStepper`),

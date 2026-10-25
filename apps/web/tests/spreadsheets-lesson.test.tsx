@@ -2,12 +2,9 @@ import { spawnSync } from "node:child_process";
 import { resolve } from "node:path";
 import { isValidElement } from "react";
 import { describe, expect, it, vi } from "vitest";
-import {
-  spreadsheetsLesson,
-  findLessonByRouteSlug,
-  lessonPublications,
-  lessonSubtopics,
-} from "~/entities/lesson";
+import { lessonPublications, lessonSubtopics } from "~/entities/lesson";
+import { spreadsheetsLesson } from "~/entities/lesson/content/spreadsheets.lesson";
+import { findLessonByRouteSlug } from "./lesson-content-test-utils";
 import { lessonMedia } from "~/entities/lesson/content/spreadsheets.media";
 import { topicCatalog } from "~/entities/topic-catalog";
 import { publicPaths } from "~/pages/site-discovery/public-paths";
@@ -111,8 +108,10 @@ describe("task 9 spreadsheets lesson (Change 197)", () => {
     expect(lesson.result).toBeDefined();
   });
 
-  it("is the lesson of the catalog topic of task 9", () => {
-    expect(findLessonByRouteSlug("9-obrabotka-tablicy-chisel")).toBe(lesson);
+  it("is the lesson of the catalog topic of task 9", async () => {
+    expect(await findLessonByRouteSlug("9-obrabotka-tablicy-chisel")).toBe(
+      lesson,
+    );
     expect(
       lessonPublications.filter(({ taskNumbers }) => taskNumbers.includes(9)),
     ).toEqual([expect.objectContaining({ id: "spreadsheets" })]);

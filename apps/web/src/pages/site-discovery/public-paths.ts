@@ -3,10 +3,9 @@ import {
   coursePublications,
 } from "~/entities/course";
 import {
-  findLessonByRouteSlug,
+  findTopicOutline,
   lessonPracticeSlug,
   lessonPublications,
-  lessonSubtopics,
 } from "~/entities/lesson";
 
 const publicPaths = [
@@ -18,13 +17,11 @@ const publicPaths = [
   ...lessonPublications
     .filter((lesson) => lesson.status === "published")
     .flatMap((publication) => {
-      const lesson = findLessonByRouteSlug(publication.routeSlug);
+      const outline = findTopicOutline(publication.routeSlug);
       const base = `/ege/${publication.routeSlug}`;
-      return lesson
+      return outline
         ? [
-            ...lessonSubtopics(lesson).map(
-              (subtopic) => `${base}/${subtopic.slug}`,
-            ),
+            ...outline.subtopics.map((subtopic) => `${base}/${subtopic.slug}`),
             `${base}/${lessonPracticeSlug}`,
           ]
         : [];

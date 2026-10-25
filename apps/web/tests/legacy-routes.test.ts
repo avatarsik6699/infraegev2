@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { findCourseLessonPublicationByRouteSlugs } from "~/entities/course";
-import { findLessonByRouteSlug } from "~/entities/lesson";
+import { findLessonByRouteSlug } from "./lesson-content-test-utils";
 import {
   legacyCourseLessonRouteSlugs,
   legacyTopicRouteSlugs,
@@ -9,10 +9,10 @@ import {
 // Change 206: a legacy address must be gone (a redirect would shadow a live page) and its target
 // must be a published page (a redirect must not lead to 404).
 describe("legacy addresses of the first production release", () => {
-  it("send each renamed topic to a published topic", () => {
+  it("send each renamed topic to a published topic", async () => {
     for (const [old, current] of Object.entries(legacyTopicRouteSlugs)) {
-      expect(findLessonByRouteSlug(old)).toBeUndefined();
-      expect(findLessonByRouteSlug(current)?.status).toBe("published");
+      expect(await findLessonByRouteSlug(old)).toBeUndefined();
+      expect((await findLessonByRouteSlug(current))?.status).toBe("published");
     }
   });
 

@@ -1,12 +1,9 @@
 import { spawnSync } from "node:child_process";
 import { isValidElement } from "react";
 import { describe, expect, it, vi } from "vitest";
-import {
-  branchingAndEnumerationLesson,
-  findLessonByRouteSlug,
-  lessonPublications,
-  lessonSubtopics,
-} from "~/entities/lesson";
+import { lessonPublications, lessonSubtopics } from "~/entities/lesson";
+import { branchingAndEnumerationLesson } from "~/entities/lesson/content/branching-and-enumeration.lesson";
+import { findLessonByRouteSlug } from "./lesson-content-test-utils";
 import { topicCatalog } from "~/entities/topic-catalog";
 import { publicPaths } from "~/pages/site-discovery/public-paths";
 import { CodeBlock } from "~/shared/components/code-block";
@@ -123,9 +120,9 @@ describe("task 13 program counting lesson (Change 190)", () => {
     expect(lesson.result).toBeDefined();
   });
 
-  it("is the lesson of the catalog topic of task 13", () => {
+  it("is the lesson of the catalog topic of task 13", async () => {
     expect(
-      findLessonByRouteSlug("13-analiz-hoda-ispolneniya-algoritma"),
+      await findLessonByRouteSlug("13-analiz-hoda-ispolneniya-algoritma"),
     ).toMatchObject({
       id: lesson.id,
     });

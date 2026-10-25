@@ -1,8 +1,6 @@
 import { describe, expect, it } from "vitest";
-import {
-  preobrazovanieZapiseyChiselLesson,
-  rekursiyaLesson,
-} from "~/entities/lesson";
+import { preobrazovanieZapiseyChiselLesson } from "~/entities/lesson/content/preobrazovanie-zapisey-chisel.lesson";
+import { rekursiyaLesson } from "~/entities/lesson/content/rekursiya.lesson";
 import {
   loadMigrationPractice as loadPracticeTasks,
   migrationTaskIds,

@@ -5,8 +5,8 @@ import {
 } from "@tanstack/react-start/server";
 import { loadStandaloneTask } from "~/entities/practice-task";
 import {
-  findLessonByRouteSlug,
   findSubtopicBySection,
+  findTopicOutline,
   lessonPublications,
   lessonSections,
   lessonSubtopics,
@@ -14,7 +14,7 @@ import {
 import {
   courseLessonPublications,
   coursePublications,
-  findCourseLessonByRouteSlugs,
+  findCourseLessonOutline,
 } from "~/entities/course";
 import { theoryLinkLabel } from "~/shared/lib/theory-link-label";
 
@@ -35,54 +35,58 @@ export const getPracticeTask = createServerFn({ method: "GET" })
       setResponseStatus(result.status === "missing" ? 404 : 503);
       return { ...result, links: [] };
     }
-    const links = (result.detail.theoryLinks ?? []).flatMap((link) => {
-      const hash = link.section ? `#${link.section}` : "";
-      const topic = lessonPublications.find(
-        (item) => item.id === link.material_id && item.status === "published",
-      );
-      if (topic) {
-        const lesson = findLessonByRouteSlug(topic.routeSlug);
-        const subtopic = lesson
-          ? (link.section && findSubtopicBySection(lesson, link.section)) ||
-            lessonSubtopics(lesson)[0]
-          : undefined;
+    // Change 222: a link loads only the module of the topic or lesson it names.
+    const linkGroups = await Promise.all(
+      (result.detail.theoryLinks ?? []).map(async (link) => {
+        const hash = link.section ? `#${link.section}` : "";
+        const topic = lessonPublications.find(
+          (item) => item.id === link.material_id && item.status === "published",
+        );
+        if (topic) {
+          const outline = findTopicOutline(topic.routeSlug);
+          const lesson = outline ? await outline.load() : undefined;
+          const subtopic = lesson
+            ? (link.section && findSubtopicBySection(lesson, link.section)) ||
+              lessonSubtopics(lesson)[0]
+            : undefined;
+          return [
+            {
+              href: subtopic
+                ? `/ege/${topic.routeSlug}/${subtopic.slug}${hash}`
+                : `/ege/${topic.routeSlug}${hash}`,
+              label: theoryLinkLabel(
+                lesson ? lessonSections(lesson) : undefined,
+                link.section,
+              ),
+            },
+          ];
+        }
+        const lesson = courseLessonPublications.find(
+          (item) => item.id === link.material_id && item.status === "published",
+        );
+        const course = coursePublications.find(
+          (item) =>
+            item.status === "published" &&
+            item.modules.some((module) =>
+              module.lessonPlan.some((entry) => entry.id === link.material_id),
+            ),
+        );
+        if (!lesson || !course) return [];
+        const definition = await findCourseLessonOutline(
+          course.routeSlug,
+          lesson.routeSlug,
+        )?.load();
         return [
           {
-            href: subtopic
-              ? `/ege/${topic.routeSlug}/${subtopic.slug}${hash}`
-              : `/ege/${topic.routeSlug}${hash}`,
+            href: `/courses/${course.routeSlug}/${lesson.routeSlug}${hash}`,
             label: theoryLinkLabel(
-              lesson ? lessonSections(lesson) : undefined,
+              definition?.paid?.outline ?? definition?.theory,
               link.section,
             ),
           },
         ];
-      }
-      const lesson = courseLessonPublications.find(
-        (item) => item.id === link.material_id && item.status === "published",
-      );
-      const course = coursePublications.find(
-        (item) =>
-          item.status === "published" &&
-          item.modules.some((module) =>
-            module.lessonPlan.some((entry) => entry.id === link.material_id),
-          ),
-      );
-      const definition =
-        lesson && course
-          ? findCourseLessonByRouteSlugs(course.routeSlug, lesson.routeSlug)
-          : undefined;
-      return lesson && course
-        ? [
-            {
-              href: `/courses/${course.routeSlug}/${lesson.routeSlug}${hash}`,
-              label: theoryLinkLabel(
-                definition?.paid?.outline ?? definition?.theory,
-                link.section,
-              ),
-            },
-          ]
-        : [];
-    });
+      }),
+    );
+    const links = linkGroups.flat();
     return { ...result, links };
   });

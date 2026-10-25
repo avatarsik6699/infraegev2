@@ -76,6 +76,24 @@ export namespace CourseTypes {
     load: () => Promise<{ default: PaidLessonContent }>;
   };
 
+  /**
+   * Change 222: a course lesson without its content, generated from the lesson module by
+   * `scripts/practice-registry.mjs`; `load` imports the module on demand.
+   */
+  export type LessonOutline = {
+    id: string;
+    routeSlug: string;
+    title: string;
+    summary: string;
+    status: Status;
+    accessTier: AccessTier;
+    /** Present for a paid lesson: the count of its self-check questions. */
+    paid?: { selfCheck: number };
+    level?: Level;
+    masteryThreshold?: number;
+    load: () => Promise<LessonDefinition>;
+  };
+
   export type LessonDefinition = {
     id: string;
     routeSlug: string;

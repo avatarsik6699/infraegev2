@@ -1,12 +1,9 @@
 import { spawnSync } from "node:child_process";
 import { isValidElement } from "react";
 import { describe, expect, it, vi } from "vitest";
-import {
-  truthTablesLesson,
-  findLessonByRouteSlug,
-  lessonPublications,
-  lessonSubtopics,
-} from "~/entities/lesson";
+import { lessonPublications, lessonSubtopics } from "~/entities/lesson";
+import { truthTablesLesson } from "~/entities/lesson/content/truth-tables.lesson";
+import { findLessonByRouteSlug } from "./lesson-content-test-utils";
 import { lessonMedia } from "~/entities/lesson/content/truth-tables.media";
 import { topicCatalog } from "~/entities/topic-catalog";
 import { publicPaths } from "~/pages/site-discovery/public-paths";
@@ -115,8 +112,8 @@ describe("task 2 truth tables lesson (Change 190)", () => {
     expect(lesson.result).toBeDefined();
   });
 
-  it("is the lesson of the catalog topic of task 2", () => {
-    expect(findLessonByRouteSlug("2-tablicy-istinnosti")).toMatchObject({
+  it("is the lesson of the catalog topic of task 2", async () => {
+    expect(await findLessonByRouteSlug("2-tablicy-istinnosti")).toMatchObject({
       id: lesson.id,
     });
     expect(

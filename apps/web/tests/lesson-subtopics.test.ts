@@ -5,9 +5,9 @@ import {
   groupTasksBySubtopic,
   lessonSubtopics,
   subtopicErrors,
-  topicLessons,
   type LessonContent,
 } from "~/entities/lesson";
+import { loadTopicLessons } from "./lesson-content-test-utils";
 import { theoryLinkLabel } from "~/shared/lib/theory-link-label";
 
 const lesson: LessonContent.Definition = {
@@ -134,13 +134,13 @@ describe("lesson subtopics", () => {
     ).toEqual([]);
   });
 
-  it("keeps every authored topic split valid", () => {
-    expect(topicLessons.flatMap(subtopicErrors)).toEqual([]);
+  it("keeps every authored topic split valid", async () => {
+    expect((await loadTopicLessons()).flatMap(subtopicErrors)).toEqual([]);
   });
 
-  it("gives every authored subtopic a lead under its title", () => {
+  it("gives every authored subtopic a lead under its title", async () => {
     // Change 170 F42: a subtopic title is never followed straight by a heading.
-    const missing = topicLessons.flatMap((item) =>
+    const missing = (await loadTopicLessons()).flatMap((item) =>
       (item.subtopics ?? [])
         .filter((subtopic) => !subtopic.lead?.trim())
         .map((subtopic) => `${item.id}/${subtopic.slug}`),

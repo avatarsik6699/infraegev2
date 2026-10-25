@@ -12,6 +12,40 @@ export function lessonSource(kind, id) {
   );
 }
 
+/**
+ * A subtopic field holding one string literal at six spaces, on its line or the next one
+ * (Prettier's wrap); `undefined` when the subtopic has none.
+ */
+function text(chunk, name) {
+  // `name` is one of this script's own field literals.
+  // nosemgrep: javascript.lang.security.audit.detect-non-literal-regexp.detect-non-literal-regexp
+  const match = chunk.match(
+    new RegExp(`^ {6}${name}:\\s*("(?:[^"\\\\]|\\\\.)*"),`, "m"),
+  );
+  return match ? JSON.parse(match[1]) : undefined;
+}
+
+/** The exported name of the lesson module's definition (`export const x = define…(`). */
+export function lessonExport(kind, id) {
+  const name = lessonSource(kind, id).match(
+    /^export const (\w+) = define(?:Course)?Lesson\(/m,
+  )?.[1];
+  if (!name) throw new Error(`Unsupported lesson export: ${kind} ${id}`);
+  return name;
+}
+
+/** Plain top-level fields of a course lesson the overview and trees need. */
+export function courseLessonFields(id) {
+  const source = lessonSource("course", id);
+  const threshold = source.match(/^ {2}masteryThreshold: ([0-9.]+),/m)?.[1];
+  const selfCheck = source.match(/^ {4}selfCheck: (\d+),/m)?.[1];
+  return {
+    level: source.match(/^ {2}level: "(\w+)",/m)?.[1],
+    masteryThreshold: threshold === undefined ? undefined : Number(threshold),
+    selfCheck: selfCheck === undefined ? undefined : Number(selfCheck),
+  };
+}
+
 const strings = (text) =>
   [...text.matchAll(/"([^"]*)"/g)].map((match) => match[1]);
 
@@ -33,10 +67,14 @@ export function topicStructure(id) {
       chunk.match(new RegExp(`^ {6}${name}: "([^"]+)",`, "m"))?.[1];
     const ids = chunk.match(/^ {6}conceptIds: \[([\s\S]*?)\]/m);
     const slug = field("slug");
-    if (!slug || !ids) throw new Error(`Unsupported subtopic shape: ${id}`);
+    const title = text(chunk, "title");
+    if (!slug || !ids || !title)
+      throw new Error(`Unsupported subtopic shape: ${id}`);
     return [
       {
         slug,
+        title,
+        lead: text(chunk, "lead"),
         access: field("access") ?? "free",
         level: field("level") ?? "core",
         sections: strings(ids[1]),

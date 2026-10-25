@@ -1,12 +1,9 @@
 import { spawnSync } from "node:child_process";
 import { isValidElement } from "react";
 import { describe, expect, it, vi } from "vitest";
-import {
-  logicTransformationsLesson,
-  findLessonByRouteSlug,
-  lessonPublications,
-  lessonSubtopics,
-} from "~/entities/lesson";
+import { lessonPublications, lessonSubtopics } from "~/entities/lesson";
+import { logicTransformationsLesson } from "~/entities/lesson/content/logic-transformations.lesson";
+import { findLessonByRouteSlug } from "./lesson-content-test-utils";
 import { topicCatalog } from "~/entities/topic-catalog";
 import { publicPaths } from "~/pages/site-discovery/public-paths";
 import { CodeBlock } from "~/shared/components/code-block";
@@ -116,9 +113,9 @@ describe("task 15 laws of logic lesson (Change 190)", () => {
     expect(lesson.result).toBeDefined();
   });
 
-  it("is the lesson of the catalog topic of task 15", () => {
+  it("is the lesson of the catalog topic of task 15", async () => {
     expect(
-      findLessonByRouteSlug("15-zakony-matematicheskoj-logiki"),
+      await findLessonByRouteSlug("15-zakony-matematicheskoj-logiki"),
     ).toMatchObject({
       id: lesson.id,
     });

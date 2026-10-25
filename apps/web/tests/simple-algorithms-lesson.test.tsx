@@ -1,12 +1,9 @@
 import { spawnSync } from "node:child_process";
 import { isValidElement } from "react";
 import { describe, expect, it, vi } from "vitest";
-import {
-  simpleAlgorithmsLesson,
-  findLessonByRouteSlug,
-  lessonPublications,
-  lessonSubtopics,
-} from "~/entities/lesson";
+import { lessonPublications, lessonSubtopics } from "~/entities/lesson";
+import { simpleAlgorithmsLesson } from "~/entities/lesson/content/simple-algorithms.lesson";
+import { findLessonByRouteSlug } from "./lesson-content-test-utils";
 import { lessonMedia } from "~/entities/lesson/content/simple-algorithms.media";
 import { topicCatalog } from "~/entities/topic-catalog";
 import { publicPaths } from "~/pages/site-discovery/public-paths";
@@ -111,9 +108,9 @@ describe("task 6 simple algorithms lesson (Change 190)", () => {
     expect(lesson.result).toBeDefined();
   });
 
-  it("is the lesson of the catalog topic of task 6", () => {
+  it("is the lesson of the catalog topic of task 6", async () => {
     expect(
-      findLessonByRouteSlug("6-prostejshie-algoritmy-dlya-ispolnitelej"),
+      await findLessonByRouteSlug("6-prostejshie-algoritmy-dlya-ispolnitelej"),
     ).toMatchObject({
       id: lesson.id,
     });

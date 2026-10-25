@@ -1,12 +1,9 @@
 import { readFileSync, readdirSync } from "node:fs";
 import { resolve } from "node:path";
 import { describe, expect, it, vi } from "vitest";
-import {
-  findLessonByRouteSlug,
-  informationModelsLesson,
-  lessonPublications,
-  lessonSubtopics,
-} from "~/entities/lesson";
+import { lessonPublications, lessonSubtopics } from "~/entities/lesson";
+import { informationModelsLesson } from "~/entities/lesson/content/information-models.lesson";
+import { findLessonByRouteSlug } from "./lesson-content-test-utils";
 import { topicCatalog } from "~/entities/topic-catalog";
 import { publicPaths } from "~/pages/site-discovery/public-paths";
 import {
@@ -66,8 +63,8 @@ describe("task 1 information models lesson (Change 197)", () => {
     ).toEqual(["free", "free", "free", "free", "free"]);
   });
 
-  it("is the lesson of the catalog topic of task 1", () => {
-    expect(findLessonByRouteSlug(ROUTE)).toMatchObject({ id: lesson.id });
+  it("is the lesson of the catalog topic of task 1", async () => {
+    expect(await findLessonByRouteSlug(ROUTE)).toMatchObject({ id: lesson.id });
     expect(
       lessonPublications.filter(({ taskNumbers }) => taskNumbers.includes(1)),
     ).toEqual([expect.objectContaining({ id: "information-models" })]);

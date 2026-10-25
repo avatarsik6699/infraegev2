@@ -1,12 +1,9 @@
 import { spawnSync } from "node:child_process";
 import { isValidElement } from "react";
 import { describe, expect, it, vi } from "vitest";
-import {
-  networksLesson,
-  findLessonByRouteSlug,
-  lessonPublications,
-  lessonSubtopics,
-} from "~/entities/lesson";
+import { lessonPublications, lessonSubtopics } from "~/entities/lesson";
+import { networksLesson } from "~/entities/lesson/content/networks.lesson";
+import { findLessonByRouteSlug } from "./lesson-content-test-utils";
 import { lessonMedia } from "~/entities/lesson/content/networks.media";
 import { topicCatalog } from "~/entities/topic-catalog";
 import { publicPaths } from "~/pages/site-discovery/public-paths";
@@ -117,8 +114,8 @@ describe("task 10 IP addresses lesson (Change 197)", () => {
     expect(lesson.result).toBeDefined();
   });
 
-  it("is the lesson of the catalog topic of task 10", () => {
-    expect(findLessonByRouteSlug("10-ip-adresa-i-maski")).toBe(lesson);
+  it("is the lesson of the catalog topic of task 10", async () => {
+    expect(await findLessonByRouteSlug("10-ip-adresa-i-maski")).toBe(lesson);
     expect(
       lessonPublications.filter(({ taskNumbers }) => taskNumbers.includes(10)),
     ).toEqual([expect.objectContaining({ id: "networks" })]);

@@ -15,7 +15,7 @@ const none: ReadonlySet<string> = new Set();
  * guest or a missing summary marks nothing.
  */
 export const useMasteredLessons = (
-  lessons: readonly CourseTypes.LessonDefinition[],
+  lessons: readonly CourseTypes.LessonOutline[],
   summary: readonly CourseProgressTypes.Lesson[] | null | undefined,
 ): ReadonlySet<string> => {
   const session = useAccountSession();

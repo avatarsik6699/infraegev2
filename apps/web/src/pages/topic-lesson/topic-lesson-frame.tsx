@@ -1,9 +1,9 @@
 import { useEffect, useRef } from "react";
 import {
   groupTasksBySubtopic,
-  lessonPublications,
   lessonSubtopics,
-  topicLessons,
+  publishedTopicOutlines,
+  type LessonContent,
 } from "~/entities/lesson";
 import { accessState } from "~/entities/access";
 import { topicCatalog } from "~/entities/topic-catalog";
@@ -132,21 +132,12 @@ export const TopicLessonFrame: React.FC<TopicLessonPageTypes.FrameProps> = (
   );
 };
 
-type TopicLesson = (typeof topicLessons)[number];
-
-/** Published topics in exam order (F37 tree). */
-function publishedTopics(): TopicLesson[] {
-  const published = new Set(
-    lessonPublications
-      .filter((publication) => publication.status === "published")
-      .map((publication) => publication.id),
-  );
-  return topicLessons
-    .filter((lesson) => published.has(lesson.id))
-    .sort((a, b) => a.taskNumbers[0] - b.taskNumbers[0]);
+/** Published topics in exam order (F37 tree), from outlines: no topic content loads. */
+function publishedTopics(): LessonContent.Outline[] {
+  return publishedTopicOutlines();
 }
 
-function topicFolder(lesson: TopicLesson) {
+function topicFolder(lesson: LessonContent.Outline) {
   const numbers = lesson.taskNumbers;
   return {
     id: lesson.id,
@@ -156,13 +147,13 @@ function topicFolder(lesson: TopicLesson) {
       numbers.length === 1
         ? String(numbers[0]).padStart(2, "0")
         : `${String(numbers[0])}–${String(numbers.at(-1))}`,
-    subtopics: lessonSubtopics(lesson).map((subtopic) => ({
+    subtopics: lesson.subtopics.map((subtopic) => ({
       slug: subtopic.slug,
       title: subtopic.title,
       level: subtopic.level,
       taskIds: [],
-      paid: Boolean(subtopic.paid),
+      paid: subtopic.paid,
     })),
-    paidPractice: Boolean(lesson.paidPractice),
+    paidPractice: lesson.paidPractice,
   };
 }

@@ -1,6 +1,7 @@
 import { render as baseRender, screen, within } from "@testing-library/react";
 import { beforeAll, describe, expect, it, vi } from "vitest";
-import { divisorsAndMasksLesson, lessonSubtopics } from "~/entities/lesson";
+import { lessonSubtopics } from "~/entities/lesson";
+import { divisorsAndMasksLesson } from "~/entities/lesson/content/divisors-and-masks.lesson";
 import type { PracticeTaskTypes } from "~/entities/practice-task";
 import { LessonProgressProvider } from "~/features/lesson-progress";
 import { TopicPracticePage, TopicSubtopicPage } from "~/pages/topic-lesson";

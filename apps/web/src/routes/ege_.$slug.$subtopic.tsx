@@ -1,7 +1,8 @@
 import { createFileRoute, notFound } from "@tanstack/react-router";
+import { use } from "react";
 import {
-  findLessonByRouteSlug,
   findSubtopic,
+  findTopicOutline,
   lessonPublications,
 } from "~/entities/lesson";
 import {
@@ -10,6 +11,7 @@ import {
 } from "~/pages/topic-lesson";
 import { accessState, getAccessState } from "~/entities/access";
 import { getOffer } from "~/entities/billing";
+import { lazyValue } from "~/shared/lib/lazy-value";
 import { paidContent } from "~/shared/lib/paid-content";
 import { pageHead } from "~/shared/lib/seo";
 
@@ -22,7 +24,10 @@ export const Route = createFileRoute("/ege_/$slug/$subtopic")({
     const publication = lessonPublications.find(
       (item) => item.routeSlug === params.slug,
     );
-    const lesson = findLessonByRouteSlug(params.slug);
+    // Change 222: only this topic's module loads, before rendering, so the page reads
+    // it synchronously and SSR HTML stays complete.
+    const outline = findTopicOutline(params.slug);
+    const lesson = outline ? await lazyValue.preload(outline.load) : undefined;
     const subtopic = lesson ? findSubtopic(lesson, params.subtopic) : undefined;
     if (!publication || !subtopic) throw notFound();
     // Change 192: every topic page knows the visitor's access, so the tree locks
@@ -50,12 +55,13 @@ export const Route = createFileRoute("/ege_/$slug/$subtopic")({
     const publication = lessonPublications.find(
       (item) => item.routeSlug === params.slug,
     );
-    const lesson = findLessonByRouteSlug(params.slug);
-    const subtopic = lesson ? findSubtopic(lesson, params.subtopic) : undefined;
+    const subtopics = findTopicOutline(params.slug)?.subtopics ?? [];
+    const index = subtopics.findIndex((item) => item.slug === params.subtopic);
+    const subtopic = subtopics[index];
     if (!publication || !subtopic) return {};
     const meta = {
       title:
-        subtopic.index === 0
+        index === 0
           ? `${publication.title} — Кодумка`
           : `${subtopic.title} — ${publication.title} — Кодумка`,
       // Change 194: each subtopic page is described by its own lead.
@@ -78,7 +84,9 @@ export const Route = createFileRoute("/ege_/$slug/$subtopic")({
 function TopicSubtopicRoute() {
   const params: { slug: string; subtopic: string } = Route.useParams();
   const data = Route.useLoaderData();
-  const lesson = findLessonByRouteSlug(params.slug);
+  const outline = findTopicOutline(params.slug);
+  // Warmed by the loader; on hydration React waits for the chunk (Change 222).
+  const lesson = outline ? use(lazyValue.promise(outline.load)) : undefined;
   const subtopic = lesson ? findSubtopic(lesson, params.subtopic) : undefined;
   if (!lesson || !subtopic) return null;
   return (

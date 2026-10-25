@@ -1,12 +1,9 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
-import {
-  numberSequencesLesson,
-  rekursiyaLesson,
-  stringProcessingLesson,
-  lessonSubtopics,
-  type LessonContent,
-} from "~/entities/lesson";
+import { lessonSubtopics, type LessonContent } from "~/entities/lesson";
+import { numberSequencesLesson } from "~/entities/lesson/content/number-sequences.lesson";
+import { rekursiyaLesson } from "~/entities/lesson/content/rekursiya.lesson";
+import { stringProcessingLesson } from "~/entities/lesson/content/string-processing.lesson";
 import { TopicPracticePage, TopicSubtopicPage } from "~/pages/topic-lesson";
 import type { PracticeTaskTypes } from "~/entities/practice-task";
 

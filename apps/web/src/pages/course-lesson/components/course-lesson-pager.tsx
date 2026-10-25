@@ -4,13 +4,13 @@ import styles from "../course-lesson.module.css";
 
 type Props = {
   courseRouteSlug: string;
-  previous?: CourseTypes.LessonDefinition;
-  next?: CourseTypes.LessonDefinition;
+  previous?: CourseTypes.LessonOutline;
+  next?: CourseTypes.LessonOutline;
 };
 
 const PagerLink: React.FC<{
   courseRouteSlug: string;
-  lesson: CourseTypes.LessonDefinition;
+  lesson: CourseTypes.LessonOutline;
   direction: "previous" | "next";
 }> = (props) => (
   <Link

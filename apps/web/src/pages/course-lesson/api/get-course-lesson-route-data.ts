@@ -1,5 +1,5 @@
 import { createServerFn } from "@tanstack/react-start";
-import { findCourseLessonByRouteSlugs } from "~/entities/course";
+import { findCourseLessonOutline } from "~/entities/course";
 import { loadLessonPractice } from "~/entities/practice-task";
 
 type RouteInput = {
@@ -10,7 +10,7 @@ type RouteInput = {
 export const getCourseLessonRouteData = createServerFn({ method: "GET" })
   .validator((input: RouteInput) => input)
   .handler(async ({ data }: { data: RouteInput }) => {
-    const lesson = findCourseLessonByRouteSlugs(
+    const lesson = findCourseLessonOutline(
       data.courseRouteSlug,
       data.lessonRouteSlug,
     );

@@ -1,12 +1,9 @@
 import { spawnSync } from "node:child_process";
 import { isValidElement } from "react";
 import { describe, expect, it, vi } from "vitest";
-import {
-  numeralSystemsLesson,
-  findLessonByRouteSlug,
-  lessonPublications,
-  lessonSubtopics,
-} from "~/entities/lesson";
+import { lessonPublications, lessonSubtopics } from "~/entities/lesson";
+import { numeralSystemsLesson } from "~/entities/lesson/content/numeral-systems.lesson";
+import { findLessonByRouteSlug } from "./lesson-content-test-utils";
 import { lessonMedia } from "~/entities/lesson/content/numeral-systems.media";
 import { topicCatalog } from "~/entities/topic-catalog";
 import { publicPaths } from "~/pages/site-discovery/public-paths";
@@ -117,8 +114,8 @@ describe("task 14 numeral systems lesson (Change 184)", () => {
     expect(lesson.result).toBeDefined();
   });
 
-  it("is the lesson of the catalog topic of task 14", () => {
-    expect(findLessonByRouteSlug("14-sistemy-schisleniya")).toBe(lesson);
+  it("is the lesson of the catalog topic of task 14", async () => {
+    expect(await findLessonByRouteSlug("14-sistemy-schisleniya")).toBe(lesson);
     expect(
       lessonPublications.filter(({ taskNumbers }) => taskNumbers.includes(14)),
     ).toEqual([expect.objectContaining({ id: "numeral-systems" })]);
