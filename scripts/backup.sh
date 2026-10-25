@@ -34,9 +34,14 @@ trap 'rm -rf -- "$work_dir"; rm -f -- "$backup_output"; bash "$repo_dir/scripts/
 
 db_bundle "$work_dir/bundle" "$env_file"
 
-if ! restic snapshots >/dev/null 2>&1; then
+# Change 224: only a repository that does not exist is initialised; a locked or unreadable one
+# stops the backup. (2026-10-25: a stale lock failed `restic snapshots` and `init` was tried.)
+if ! restic --no-lock cat config >/dev/null 2>&1; then
   restic init
 fi
+# A job killed mid-run (a lost deploy session) leaves a stale lock; the flock above proves no local
+# Restic job runs, and `restic unlock` never removes a live lock.
+restic unlock
 backup_tags=(--tag "$snapshot_tag")
 if [[ $recovery_hold == true ]]; then
   backup_tags+=(--tag "$recovery_hold_tag")

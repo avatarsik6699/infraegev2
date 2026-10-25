@@ -74,11 +74,14 @@ offsite_repository_facts() {
 # retention there too, and prints the off-site ID of the copied snapshot.
 offsite_copy() {
   local local_repo=$1 snapshot_id=$2 copied
-  if ! offsite_restic cat config >/dev/null 2>&1; then
+  # Change 224: `--no-lock`, so a stale lock never passes for a missing repository.
+  if ! offsite_restic --no-lock cat config >/dev/null 2>&1; then
     # Same chunker parameters as the local repository, so the copy deduplicates the same way.
     offsite_restic init --from-repo "$local_repo" --from-password-file "$RESTIC_PASSWORD_FILE" \
       --copy-chunker-params >/dev/null || return
   fi
+  # A copy killed mid-run leaves a stale lock; the caller holds the host's Restic flock.
+  offsite_restic unlock >/dev/null || return
   offsite_restic copy --from-repo "$local_repo" --from-password-file "$RESTIC_PASSWORD_FILE" \
     --tag infraege-application --quiet || return
   offsite_restic forget --tag infraege-application --group-by host,tags \

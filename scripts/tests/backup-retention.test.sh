@@ -31,12 +31,20 @@ FAKE
 cat > "$test_root/bin/restic" <<'FAKE'
 #!/usr/bin/env bash
 set -euo pipefail
-printf '%s\n' "$*" >> "$FAKE_RESTIC_STATE/argv"
+# Off-site calls are logged with a prefix, so local and off-site steps stay distinguishable.
+if [[ $RESTIC_REPOSITORY == s3:* ]]; then
+  printf 'offsite: %s\n' "$*" >> "$FAKE_RESTIC_STATE/argv"
+else
+  printf '%s\n' "$*" >> "$FAKE_RESTIC_STATE/argv"
+fi
+# Change 224: the global --no-lock flag precedes the command.
+[[ ${1:-} != --no-lock ]] || shift
 # The off-site repository (Change 196): copies keep their source ID as `original`.
 if [[ $RESTIC_REPOSITORY == s3:* ]]; then
   [[ ${AWS_SECRET_ACCESS_KEY:-} == synthetic-offsite-secret ]] || exit 95
   case "$1" in
     cat) [[ $2 != config || -f $FAKE_RESTIC_STATE/offsite-config ]] ;;
+    unlock) ;;
     init) [[ " $* " == *' --copy-chunker-params '* ]]; touch "$FAKE_RESTIC_STATE/offsite-config" ;;
     copy) [[ ${FAKE_OFFSITE_FAIL:-0} == 0 ]]; cp "$FAKE_RESTIC_STATE/last-id" "$FAKE_RESTIC_STATE/offsite-original" ;;
     forget) [[ " $* " == *' --keep-tag infraege-recovery-hold '* ]] ;;
@@ -47,6 +55,7 @@ if [[ $RESTIC_REPOSITORY == s3:* ]]; then
   exit 0
 fi
 case "$1" in
+  unlock) ;;
   snapshots)
     if [[ " $* " == *' --json '* ]]; then
       if [[ " $* " == *' infraege-recovery-hold '* ]]; then echo '[{"short_id":"94c5a3e7","time":"2026-09-25T20:55:00Z"}]'; else echo '[{},{}]'; fi
@@ -65,6 +74,7 @@ case "$1" in
     printf '{"message_type":"summary","snapshot_id":"%s"}\n' "$id"
     ;;
   cat)
+    [[ $2 != config ]] || exit 0
     id=$3
     [[ $id == "$(cat "$FAKE_RESTIC_STATE/last-id")" || $id == "$(cat "$FAKE_RESTIC_STATE/held-id" 2>/dev/null)" ]] || exit 1
     [[ ${FAKE_LOSE_NEW_SNAPSHOT:-0} == 0 || $id != "$(cat "$FAKE_RESTIC_STATE/last-id")" ]] || exit 1
@@ -150,4 +160,10 @@ if DB_ENV=test DB_PROJECT=infraege-full-gate bash "$repo_dir/scripts/backup.sh" 
   echo 'unexpected credentials line accepted' >&2; exit 1
 fi
 [[ ! -e $test_root/pwned ]]
-echo 'Backup retention contract: PASS (two same-day modes, exact ID, malformed/lost proof, off-site copy)'
+# Change 224: an existing repository is never initialised again, and stale locks go before a backup.
+if grep -q '^init$' "$FAKE_RESTIC_STATE/argv"; then
+  echo 'backup tried to initialise an existing local repository' >&2; exit 1
+fi
+grep -q '^unlock$' "$FAKE_RESTIC_STATE/argv"
+grep -q '^--no-lock cat config$' "$FAKE_RESTIC_STATE/argv"
+echo 'Backup retention contract: PASS (two same-day modes, exact ID, malformed/lost proof, off-site copy, stale lock)'

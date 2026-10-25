@@ -410,3 +410,14 @@ repository root (`npx prettier --write content/practice-bank/bank.json`).
   with `outline.load()` in a route loader or server function; after editing a lesson's subtopics,
   titles, leads or access run `node scripts/practice-registry.mjs`.
 
+### Deploy fails with «create repository … config file already exists»
+
+- **Symptom:** the pre-deploy backup stops at `restic init`, the deploy rolls back; the nightly
+  backup fails the same way.
+- **Cause:** a backup killed mid-run (2026-10-25: the deploy's SSH session dropped during
+  `forget --prune`) left an exclusive Restic lock, and the old check took any `restic snapshots`
+  failure for a missing repository.
+- **Fix:** since Change 224 `backup.sh` checks `restic --no-lock cat config` and runs
+  `restic unlock` under the host flock. On an older release: `restic unlock` (only stale locks go),
+  then `restic check`.
+

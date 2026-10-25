@@ -10,7 +10,9 @@ plus timer/retention timing). A schema-transition deploy additionally creates on
 removes the hold. Review and manually release it after 30 days, after confirming recovery is no
 longer needed. This is a bounded operational review, not an automatic deletion timer. Individual
 records are never edited out of Restic snapshots. Jobs serialize with
-`/run/lock/infraege-restic.lock`. Every successful backup is also copied off the host (§ Off-site
+`/run/lock/infraege-restic.lock`. Under it a backup removes stale Restic locks left by a killed job
+(`restic unlock`, never a live lock) and initialises only a repository whose `config` is missing
+(Change 224). Every successful backup is also copied off the host (§ Off-site
 copy), so loss of the VPS no longer takes the backups with it.
 
 ## Operator commands
