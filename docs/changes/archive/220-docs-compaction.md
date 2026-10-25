@@ -9,7 +9,7 @@
 | Change | `220` |
 | Slug | `docs-compaction` |
 | Title | Документация: факты, остатки стенда, SPEC |
-| Status | `done` |
+| Status | `archived` |
 | Branch | `feature/220-docs-compaction` |
 
 ---
