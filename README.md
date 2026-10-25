@@ -1,8 +1,8 @@
-# infraege
+# Кодумка (kodumka.ru)
 
 Веб-приложение для подготовки к ЕГЭ по информатике: темы ЕГЭ, опубликованные в source tree
-(список — `apps/web/src/entities/lesson/content/lesson-registry.ts`), самостоятельный мини-курс
-Python из 28 уроков, server-owned практика и необязательный аккаунт для сохранения прогресса на
+(список — `apps/web/src/entities/lesson/content/lesson-registry.ts`), мини-курсы
+Python (30 уроков) и Excel, server-owned практика и необязательный аккаунт для сохранения прогресса на
 сервере. Гости читают и проверяют ответы без сохранения результатов. Темы ЕГЭ и CourseLesson
 остаются независимыми учебными траекториями.
 
@@ -60,7 +60,7 @@ fail2ban, application backup/restore и явный SHA deploy. Аналитич�
 в application; публичный tracker обращается к отдельному cookieless-сервису. Локальная работа
 не изменяет сервисы VPS.
 
-Практика хранится в PostgreSQL (migration head `191_01`, исходная схема банка `122_01`), импорт/экспорт описан в
+Практика хранится в PostgreSQL (migration head `198_01`, исходная схема банка `122_01`), импорт/экспорт описан в
 [practice](docs/runbooks/practice.md). `make practice-bootstrap` импортирует
 полный проверенный банк в локальную базу. Перед повторным импортом экспортируйте свои правки.
 [Production](docs/runbooks/production.md) и [backup/restore](docs/runbooks/backup-restore.md)

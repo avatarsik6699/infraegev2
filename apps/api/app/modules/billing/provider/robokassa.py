@@ -5,7 +5,7 @@ notification is signed with Password #2 and answered `OK{InvId}`; OpStateExt (Pa
 is the status of record; refunds go through the Refund API, a JWT signed with Password #3.
 Receipts are registered in «Мой налог» by Робочеки СМЗ on the shop side.
 
-Verify against the shop in test mode before launch (runbook billing-provider-selection):
+Verify against the shop in test mode before launch (docs/runbooks/billing.md, Launch checklist):
 the OpStateExt signature and state codes, and whether Робочеки need a `Receipt` field.
 """
 

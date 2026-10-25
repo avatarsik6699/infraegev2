@@ -3,8 +3,7 @@
 Paid access is a one-time pass: «Месяц» (30 days) or «Год» (365 days), no auto-renewal, no saved
 cards (SPEC §2.2, §6.1). The seller is a самозанятый; Robokassa takes the money and its Робочеки
 СМЗ register every receipt in «Мой налог». This runbook covers the flags, routine checks, refunds,
-incidents and the НПД limit. Provider questions and the launch checks are in
-[billing-provider-selection](billing-provider-selection.md).
+incidents and the НПД limit; the launch checks are in [Launch checklist](#launch-checklist).
 
 ## Flags and settings
 
@@ -44,23 +43,36 @@ the address, authenticates them.
 
 ## Launch checklist
 
-1. Release the paid-access code with both flags off; production stays free. Before that deploy,
-   rehearse the `140_01` → `198_01` migration on the production host and keep its attestation
-   ([backup-restore](backup-restore.md), «Change 192» and «Change 198»).
-2. Off-site backups are running (`offsite-backup-status.json` success, BACKUPS ledger OK; setup in
-   [backup-restore](backup-restore.md) § Off-site copy) and a restore check of a `198_01` bundle
-   from the off-site copy has passed (billing rows are evidence, see «Backups»).
-3. Register as самозанятый, connect the Robokassa shop and Робочеки СМЗ, put the credentials into
-   `/etc/infraege/production.env` ([billing-provider-selection](billing-provider-selection.md)).
-4. `BILLING_ENABLED=true`, `ROBOKASSA_TEST=true`: run the test-mode checks; then the live 1 ₽
-   payment and refund with both receipts visible in «Мой налог».
-5. Announce the paid part for the topics that are free today, then `PAYWALL_ENABLED=true`.
-6. The offer, refund rules and privacy text were not reviewed by a lawyer (architect's decision,
-   2026-10-18, confirmed 2026-10-23). Any change to the offer after the first payment is a new
-   dated file in `content/legal/oferta/`; an accepted edition is never edited.
-7. Change 198 ([privacy-legal-checklist](../legal/privacy-legal-checklist.md) § 7): the RKN notification is
-   filed; the Яндекс ID and VK ID applications are registered and their `*_ENABLED` flags are on
-   in `/etc/infraege/production.env`; the country of the `smotryashchiy` VPS is checked.
+The provider is Robokassa with Робочеки СМЗ: every payment gets a receipt in «Мой налог» and a
+refund annuls it, refunds go by API (password #3). The code reaches any provider through
+`app/modules/billing/provider/port.py`; Prodamus and CloudPayments are the fallbacks.
+
+Done (2026-10-24/25):
+- the paid-access code released with the paywall off;
+- the `140_01` → `198_01` migration rehearsed and applied;
+- off-site backups running, with a restore check of a `198_01` bundle;
+- НПД registration, the shop `kodumka` and Робочеки connected, credentials in
+  `/etc/infraege/production.env`, `BILLING_ENABLED=true`, `ROBOKASSA_TEST=true`;
+- RKN notification filed, Яндекс ID and VK ID on, the `smotryashchiy` VPS country checked.
+
+Test mode (`ROBOKASSA_TEST=true`):
+- [ ] a month purchase from the site returns to `/subscribe/return` and opens access;
+- [ ] `journalctl -u infraege-billing-hourly` shows no `billing.notification_rejected`;
+- [ ] OpStateExt answers for the test invoice (state codes 5/10/50/100 match); record a real
+      response as a fixture in `apps/api/tests/test_robokassa.py`;
+- [ ] a refund of the test payment through `admin refund … --amount full` finishes.
+
+Live (after Robokassa activates the shop, `ROBOKASSA_TEST=false`, live password pair):
+- [ ] a real 1 ₽ purchase (temporary `BILLING_MONTH_PRICE_KOPECKS=100`): the receipt appears in «Мой
+      налог» and in the buyer's mail;
+- [ ] its full refund: the receipt is annulled in «Мой налог»;
+- [ ] real prices restored, API restarted;
+- [ ] announce the paid part for the topics that are free today, then `PAYWALL_ENABLED=true`.
+
+The offer, refund rules and privacy text were not reviewed by a lawyer (architect's decision,
+2026-10-18, confirmed 2026-10-23). Any change to the offer after the first payment is a new dated
+file in `content/legal/oferta/`; an accepted edition is never edited. Legal status:
+[docs/legal](../legal/README.md).
 
 ## What runs on its own
 

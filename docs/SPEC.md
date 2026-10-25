@@ -1,4 +1,4 @@
-# TECHNICAL SPECIFICATION (SPEC.md): `infraege`
+# TECHNICAL SPECIFICATION (SPEC.md): Кодумка (`kodumka.ru`)
 
 > **For AI agents:** read the active change and the SPEC sections it affects; §3–§4 for data/API,
 > §2.3 for authoring, §5 plus FRONTEND for web, §7–§8 for operations. Read SPEC in full for initial
@@ -9,8 +9,8 @@
 
 | Field | Value |
 |-------|-------|
-| Document Version | `v2.35` |
-| Date | `2026-10-19` |
+| Document Version | `v2.36` |
+| Date | `2026-10-25` |
 | Architect / Owner | `v.godlevskiy` |
 | Stack | See [docs/STACK.md](./STACK.md) |
 | Brand / public origin | «Кодумка», `https://kodumka.ru` (с Change 193; `infraege` — внутреннее кодовое имя) |
@@ -57,27 +57,20 @@ sdamgia.ru, kpolyakov.spb.ru), ни новыми AI-ботами (решают �
 
 ### 1.3 Project Boundaries
 
-| Included (MVP) | Excluded (сознательно не входит в MVP) |
+| Included | Excluded (сознательно не входит) |
 |-----------------|------------------------------------------|
-| Полная публичная карта заданий ЕГЭ и 2 проверенные TopicLesson как содержательный MVP baseline | Полноценный тренажёр-пробник ЕГЭ с таймером на весь вариант |
-| 1 мини-курс — Python (закрывает больше всего номеров: 6, 8, 11, 14, 15, 16, 17, 18, 20–27) | Автоматическая персональная рекомендация следующей темы |
-| Завершённый самостоятельный мини-курс Python с отдельным Course/CourseLesson flow | Автопродление и сохранённые карты, живые форматы (группы, занятия), кабинет учителя, реклама |
-| Платный доступ (Change 192, §6.1): два разовых тарифа, soft paywall, оплата через провайдера с чеками самозанятого; включается флагами вместе с релизом | |
-| Публичные, индексируемые страницы тем и уроков (SSR/SSG) | AI внутри продукта (только как инструмент автора при подготовке контента) |
-| Практика по каждой опубликованной TopicLesson: 5–10 заданий с проверкой ответа, без адаптивного подбора сложности | Полные TopicLesson для остальных заданий ЕГЭ — вторая волна, по той же структуре |
-| Мини-курс Excel (задания 3, 9, 18, 22): стенд по пайплайну — Change 176, перенос на сайт — Change 177 | |
-| Необязательный аккаунт и серверный прогресс после Change 140; все текущие учебные действия доступны гостю | i18n/локализация (аудитория исключительно русскоязычная) |
-| | Полноценный поиск по сайту (линейная карта из 25 тем остаётся обозримой без отдельного поиска) |
+| Все 25 тем ЕГЭ (задания 1–27; 19–21 одной темой) по плану варианта ФИПИ 2027 | Полноценный тренажёр-пробник ЕГЭ с таймером на весь вариант |
+| Мини-курсы Python (30 уроков в 8 модулях) и Excel (задания 3, 9, 18, 22) | Автоматическая персональная рекомендация следующей темы |
+| Банк задач с проверкой ответа на сервере и практика в каждой теме, без адаптивного подбора | Автопродление и сохранённые карты, живые форматы (группы, занятия), кабинет учителя, реклама |
+| Платный доступ (§6.1): два разовых тарифа, soft paywall, Robokassa с чеками самозанятого | AI внутри продукта (только как инструмент автора при подготовке контента) |
+| Публичные индексируемые страницы тем и уроков (SSR/SSG) | i18n/локализация (аудитория исключительно русскоязычная) |
+| Необязательный аккаунт и серверный прогресс; все учебные действия доступны гостю | Полноценный поиск по сайту |
 
-Текущий состав опубликованных материалов задают publication registries
-(`apps/web/src/entities/lesson/content/lesson-registry.ts` и Course registry): независимый Python
-Course и опубликованные TopicLesson. С Change 175 курс — 30 CourseLesson в 8 модулях (27 основных и
-3 дополнительных), собранных по пайплайну на демо-стенде (Change 174); задачи его уроков — server-owned
-задачи банка, задачи прежних 28 уроков архивированы. С Change 177 опубликован второй курс — Excel:
-15 CourseLesson в 6 модулях (14 основных и 1 дополнительный), собранных на стенде (Change 176);
-задачи его уроков — задачи банка, у задач на данных задачника курса — вложение `.xlsx`.
-Новые Topic-связи не следуют из публикации курса. Текущий deployed SHA проверяется через
-`/health/ready`, а не выводится из local `main`, `origin/main` или старого релиза.
+Состав опубликованного задают publication registries
+(`apps/web/src/entities/lesson/content/lesson-registry.ts` и Course registry). Задачи уроков курсов —
+server-owned задачи банка; у задач на данных задачника Excel — вложение `.xlsx`. Новые Topic-связи
+не следуют из публикации курса. Текущий deployed SHA проверяется через `/health/ready`, а не
+выводится из local `main`, `origin/main` или старого релиза.
 
 ### 1.4 Durable Learning Flow
 
@@ -251,54 +244,31 @@ registry; «Алгоритмы и структуры данных» и «Реш�
 подготовке и локальной проверке каждого урока; формальная автоматизация не заменяет проверку
 архитектора до `/ship`.
 
-С Change 197 (решение архитектора 2026-10-19) модули уроков сайта — единственный источник учебного
-текста: правки вносятся прямо в них, экспорт со стенда удалён, а архив демо-стенда
-`content/lesson-design/` удалён 2026-10-23 (T259; он в истории git). Схемы и записанные запуски программ пересобирает
-`scripts/lesson_design/site_media.py` из вызовов построителей и кода в манифесте урока; код и
-вывод программ, ответы банка и доступ проверяют тесты урока и банка, реестр практики и валидатор
-содержимого ([порядок](runbooks/lesson-pipeline.md#сайт--источник-уроков-change-197)).
+Модули уроков сайта — единственный источник учебного текста (Change 197): правки вносятся прямо в
+них. Схемы и записанные запуски программ пересобирает `scripts/lesson_design/site_media.py` из
+вызовов построителей и кода в манифесте урока; код и вывод программ, ответы банка и доступ проверяют
+тесты урока и банка, реестр практики и валидатор содержимого
+([порядок](runbooks/lesson-pipeline.md#сайт--источник-уроков-change-197)).
 
-Тема ЕГЭ проектируется по обязательному [пайплайну подготовки темы](runbooks/lesson-pipeline.md)
-и [каталогу паттернов](runbooks/lesson-patterns.md); до Change 197 одобренная на демо-стенде тема
-переносилась на сайт отдельным change. Мини-курс Python проходит тот же пайплайн (раздел «Мини-курс Python»):
-вместо частотного анализа подборок — анализ конструкций, которые используют исходники тем ЕГЭ;
-алгоритмические приёмы тем остаются в темах. Практический порядок переноса и подготовки уроков Python — в
-[руководстве по подготовке урока](runbooks/lesson-authoring.md); оба документа поясняют этот
-checklist, не заменяя его. Схемы демо-стенда — точные SVG-диаграммы, построенные кодом; при переносе
-они остаются SVG-диаграммами по правилу ниже. Урок мини-курса перенесён со стенда целиком: блоки
-кода с шапкой (условное имя файла, копирование), одно поле «Вывод» строками как в терминале (набранный
-ввод — «клавишей» с ↵, ошибка — красным), запускаемый блок кода — пошаговое выполнение, записанное
-реальным запуском (`site_media.py`), без исполнения кода в браузере (Change 175), песочница диапазонов и
-срезов; сворачивание кода и вывода длиннее 8 строк, кроме режима пошагового запуска. Ссылки
-существующих TopicLesson на снятые уроки курса ведут на урок, который теперь объясняет тот же приём;
-снятые уроки удаляются без редиректов. Тема ЕГЭ перенесена так же целиком, экспортом: мини-листы
-и формулы — блоками курса Excel (`SheetBlock` со стенами и книгой из файла, `FormulaBlock`), термины
-Excel — подсказкой со ссылкой на урок курса, запускаемый код — `CodeRunner`, файлы данных и книги
-`.xlsx` — воспроизводимые вложения задач банка (Change 184).
+Тема ЕГЭ проектируется по обязательному [пайплайну подготовки темы](runbooks/lesson-pipeline.md) и
+[каталогу паттернов](runbooks/lesson-patterns.md); мини-курсы проходят тот же пайплайн (вместо
+частотного анализа подборок — анализ конструкций и формул, которые используют темы ЕГЭ), разборы
+заданий остаются в темах. Руководство [по подготовке урока](runbooks/lesson-authoring.md) поясняет
+этот checklist, не заменяя его.
 
-Мини-курс Excel (решение архитектора 2026-10-11, Change 176) проходит тот же пайплайн (раздел
-«Мини-курс Excel»): исходник — учебник и книга архитектора; вместо частотного анализа —
-анализ формул, которые используют темы 3, 9, 18 и 22. В курс идут механизмы электронной таблицы
-(ссылки и их копирование, функции, условный подсчёт, поиск по ключу, расчёт по вычисленным
-соседям); разборы заданий передаются темам. Формулы показываются в русской локали (`;` между
-аргументами), английские имена — в справочнике. Каждая таблица-пример вычисляется при сборке
-опорным вычислителем и сверяется независимой библиотекой; на стенде и сайте это живой мини-лист:
-строка формул, подсветка ячеек, на которые ссылается формула, правка исходных чисел с пересчётом
-в браузере (вычислитель ограничен функциями курса и проходит общий набор эталонных случаев).
-Задачник курса (.xlsx) генерируется из тех же данных, что и уроки.
-
-Перенос курса Excel на сайт (Change 177) повторяет перенос курса Python: урок экспортирован со
-стенда целиком; с Change 197 он правится только на сайте. Лист стенда становится блоком `SheetBlock`: при SSR и без
-JavaScript — статичная таблица значений с адресами и списком формул под ней; с JavaScript — выбор
-ячейки, строка формул, цветные рамки ячеек-предшественников и правка исходных чисел с пересчётом.
-Пересчёт выполняет TypeScript-вычислитель того же подмножества функций; он проходит общий набор
-эталонных случаев, записанный опорным вычислителем `sheet_eval.py`, и расхождение — ошибка проверки.
-Песочница копирования формулы — `FillSandbox`; формулы в тексте — блок формулы с подсветкой
-функций и ссылок; пошаговые схемы, включая вычисление формулы по шагам, — общий пошаговый блок.
-Задачи урока с одним коротким проверяемым ответом (число, слово, адрес) — задачи банка; задачи,
-где ответ — формула или рассуждение, — самопроверка урока: равносильные формулы checker строкой не
-сравнит. Задачник собирается воспроизводимо (одинаковые данные — одинаковые байты), хранится
-в банке как файл по контрольной сумме и прикрепляется к задачам, данные которых лежат в ней.
+Представление, общее для тем и курсов:
+- схемы — точные SVG, построенные кодом;
+- блоки кода с шапкой (условное имя файла, копирование) и одно поле «Вывод» строками как в
+  терминале; запускаемый код — пошаговое выполнение, записанное реальным запуском, без исполнения
+  кода в браузере;
+- код и вывод длиннее 8 строк сворачиваются, ключевые программы — нет;
+- Excel: живой мини-лист `SheetBlock`. Без JavaScript — таблица значений со списком формул, с
+  JavaScript — строка формул, рамки ячеек-предшественников и пересчёт правки. Его TypeScript-
+  вычислитель проходит общий набор эталонных случаев опорного `sheet_eval.py`. Ещё есть песочница
+  `FillSandbox` и блок формулы. Формулы — в русской локали (`;`), английские имена — в справочнике;
+- задачи с одним коротким проверяемым ответом — задачи банка; ответ-формула или рассуждение —
+  самопроверка урока;
+- файлы данных и книги `.xlsx` — воспроизводимые вложения задач банка по контрольной сумме.
 
 **Педагогика:**
 - [ ] Новое понятие сначала вводится через понятную ситуацию и объяснение своими словами;
@@ -312,8 +282,7 @@ JavaScript — статичная таблица значений с адрес�
   (решение архитектора 2026-10-07, [каталог паттернов](runbooks/lesson-patterns.md)).
 - [ ] Тема ЕГЭ прошла [пайплайн подготовки](runbooks/lesson-pipeline.md) и его чек-лист:
   исходник архитектора, частотный анализ подборок, основные и дополнительные подтемы, текст по
-  паттернам П1–П18, проверенный код и ответы, одобренный архитектором результат (до Change 197 —
-  демо-стенд, после — урок на локальном сайте).
+  паттернам П1–П18, проверенный код и ответы, одобренный архитектором урок на локальном сайте.
 - [ ] Каждое место, где правильность приёма держится на доказательстве, сначала показано примером
   и схемой (при процессе — пошаговой анимацией), а строгое доказательство сохранено (П18).
 - [ ] Подписи расположены на схеме или непосредственно рядом; связанные части синхронизированы,
@@ -526,112 +495,32 @@ end date, payment history with receipt links and «Продлить». Footer li
 «Возврат» and one small line «Самозанятый ФИО, ИНН · email», which Robokassa requires in the footer
 (Change 200, architect 2026-10-24; no city, no phone). All of them appear only while selling is on.
 
-Change 164 replaces the minimal Change 122/156 profile with the "Clean Textbook" visual system
-in [DESIGN](../DESIGN.md), approved by the architect from full-page mockups. Keep the infraege
-stone identity; the home page is the colourful entry point, every other page is a calm white
-reading surface where colour appears only where it carries meaning; light theme only. Fonts are
-self-hosted Onest and JetBrains Mono. EGE topic lessons
-have a left panel with the topic and its subtopic pages (Change 167: `/ege/{topic}/{subtopic}`,
-«Подтема N из M», previous/next, a right “on this page” rail; `/ege/{topic}` redirects to the first
-subtopic and old `#section` links resolve to the owning subtopic); course lessons keep in-page
-anchors but use the same three-column lesson frame (Change 169: the course and its lessons on the
-left, the lesson in the centre, «На этой странице» on the right). Change 170: the left panel of
-both is a file tree (EGE: published topics in exam order, each a folder of its subtopics and
-«Практика и итог»; course: modules as folders of lessons), the reading column opens with
-breadcrumbs, and lesson progress sits under «На этой странице»; course overview, catalogs and profile have
-no left panel; the profile has an overview dashboard (Change 168: next step, course/topic/practice tiles, per-topic progress, continuations and a next bank task, all derived from existing summaries and saved progress) and a settings tab. Keep educational
-figures and attachments (lesson media stays); hand-drawn monochrome illustrations are supplied by
-the architect and use neutral reserved placeholders until then (Change 169: the earlier topic and
-course catalog drawings are retired from home, catalogs and the course overview). Every page follows
-its approved v5 mockup (`docs/artifacts/mockups-v5/`).
-Change 171 adds lesson blocks for the lesson pipeline: a learning table (semantic `table`,
-numeric columns aligned, horizontal scroll only inside it), a collapsible proof (native `details`,
-closed by default, readable without scripting), an exact SVG diagram (repository-generated file,
-alt and one caption), a step-through diagram (manual previous/next and play, no autoplay; without
-scripting the final frame and all step captions) and the mask sandbox (enhancement only; without
-scripting a static worked alignment). Subtopics carry a level: advanced ones follow the core ones,
-are marked «дополнительный уровень» in the tree, the subtopic head and the pager, and may end with
-their own self-check. Topic 25 is rebuilt by the lesson pipeline with a new id and route; the old
-`integer-processing` lesson, its route and its eight tasks are retired without redirects.
-Change 177 adds two course blocks for the Excel course: a live sheet (`SheetBlock`: column letters
-and row numbers, a formula bar, coloured frames of the cells a formula reads, editable source cells
-recalculated in the browser, sheet tabs; horizontal scroll only inside the grid; SSR and no-JS show
-the static values and the formulas) and the copy sandbox (`FillSandbox`, enhancement only; without
-scripting the worked example stays).
-The `/courses` catalog keeps all four directions in registry order, published-only lesson
-counts, an overview CTA and a header summary of catalog totals and revision-aware mastered
-lessons. No filters or planned links.
-Shared semantic controls, accessible focus/errors/loading, stable fonts and retained-page
-navigation stay. FRONTEND is the binding implementation contract; DESIGN is the binding visual
-contract.
+### Visual system, lessons and catalogs
 
-Practice uses the catalog as its primary solving surface: multiple independently expandable
-rows expose statements, checking, help, files, published theory links and public sources.
-“Раскрыть все” and “Свернуть все” affect only the current page; bulk expansion loads full
-statements into visible document content for browser find. Individual disclosure remains available.
-Details load only on first expansion and remain mounted while collapsed. Transient input
-and help state survive collapse, but reset on selection/page changes, leaving or reloading.
-The detail route remains for direct links and no-JS reading; catalog IDs link there with the
-filter/page context. Real task IDs remain canonical; rows show eight-character UUID prefixes with accessible full IDs.
-The catalog head is «Практика» with the lead “Решай задачи и закрепляй теорию”, without a
-practice explanation popover (Change 170 F31). Search suggests up to six matching tasks with their number, title and marked snippet after
-two characters and a short pause; Enter or «Показать все» applies the search to the list and a
-suggestion opens its task. Difficulty bars are green, orange and near-red by level. Topic selection uses a grouped searchable multiple combobox,
-counts below labels, and Apply/cancel; selected topics appear as removable chips. Default sorting is
-stable UUID order; optional difficulty directions and compact numbered pagination retain URL context.
-No-JS retains GET controls, native multiple selection and detail reading. Empty topics show ordinary
-no-results feedback. Compact rows show difficulty, actual answer format, public sources and a disabled
-favorite affordance. Expanded statements precede answer/check/help actions; theory sits beside the topic heading above the statement. Every task — catalog, detail page and
-lessons — uses one answer layout (Change 170 F30): field, «Проверить», «Подсказка» and «Решение» in
-one row with the help panels below; an accepted answer is the green field with a check and a short
-confetti burst. The detail page has the task title as its heading, «← К списку задач» beside the
-topic, and the source in the metadata line. Theory links are named after the heading they lead to,
-or «Теория». Base UI owns controls,
-Lucide owns icons; no shadcn/HeroUI dependencies are added.
-Existing filters and numbered pagination remain. Detail pages have one context-preserving return
-link and no next-task navigation. Remove persisted answer drafts and special row/scroll restoration;
-return links carry filters and page. No telemetry consent or client-error collector. Change 140
-adds account screens and the smallest cross-route session/progress owner; no generic global state
-layer or speculative profile fields. Guest progress surfaces in topic/course catalogs, course
-overview and lesson rail/result show visual `0 из N` values derived from public memberships plus
-an explicit sign-in invitation; these zeroes are not results, cannot drive saved-progress filters
-or continuation and are not persisted. A locked progress block is a real sign-in link with
-hover, keyboard-focus and touch activation: desktop hover/focus blurs the scale and reveals a
-24px lock and the label “Войти, чтобы сохранять прогресс”, without tooltip or underline;
-the invitation remains visible on touch. Catalog, course overview and lesson scales reuse this
-interaction without separate duplicate login actions. Correct-answer feedback
-stays visible until the page is left, but a guest success is never represented as saved.
-Signed-in loading/errors and logout/account-switch transitions must not show another account's
-snapshot. Public lesson theory, navigation and practice remain SSR-readable without a session.
+DESIGN is the binding visual contract («Clean Textbook», light only, Кодумка stone identity,
+self-hosted Onest and JetBrains Mono, approved v5 mockups in `docs/artifacts/mockups-v5/`), and
+FRONTEND is the binding implementation contract (§1 interaction contracts, §5 learning and state,
+§7 catalogs). Product rules they implement:
+- the home page is the colourful entry, every other page a calm white reading surface;
+- lessons use one three-column frame: a file tree on the left, the lesson with breadcrumbs, «На этой
+  странице» with progress on the right. EGE topics are split into subtopic pages
+  `/ege/{topic}/{subtopic}`, with advanced subtopics after the core ones; course lessons keep in-page
+  anchors;
+- lesson blocks (learning table, collapsible proof, exact SVG, step-through diagram, sandboxes,
+  `SheetBlock`, `FillSandbox`) stay readable without JavaScript;
+- the practice catalog is the primary solving surface: expandable rows, search, topic/difficulty
+  filters, numbered pagination; GET fallbacks without JavaScript; one answer layout for catalog,
+  detail page and lessons;
+- guest progress shows `0 из N` from public totals plus a sign-in invitation. It is never saved,
+  never drives filters or continuation, and loading or account switches never show another account's
+  snapshot;
+- `GET /api/topics/practice-summary` returns `{topics: [{id, tasks: [{id, solution_revision}]}]}`
+  for published memberships without statements or checker data. Missing summaries are unavailable,
+  never zero; the catalogs stay prerendered without database reads and load summaries as an
+  enhancement.
 
-### EGE catalog (Change 126, layout Change 169)
-
-`/ege` retains 25 topics with 19–21 grouped. Topics are listed by first task number, published and
-planned mixed (Change 170 F25): published rows show number, illustration, title and one-line
-summary, «Теория · N задач · Практика …» on the title line, and a thin progress bar with «Решено X
-из Y» aligned with the bottom of the summary, plus the continuation link; planned topics are muted
-«Скоро» rows with no links, summaries or invented counts. Search and the status filter share one
-row above the list. The page head has no illustration; the source note sits in its meta line. Illustrations alone do not publish a planned topic.
-Search matches title, summary and numbers while typing, ignoring case and е/ё. Status filters
-are All, In progress (0 < solved < total), and Not started (solved = 0), with the latter two
-restricted to published topics with available practice. Completed topics remain in All.
-The heading summary counts unique currently solved tasks from published topic lessons only,
-independently of filtering; standalone practice and course progress remain separate.
-
-`GET /api/topics/practice-summary` returns `{topics: [{id, tasks: [{id, solution_revision}]}]}`
-for published topic memberships and nonarchived tasks, without statements or checker data.
-It uses the existing read-only session and no-store/error policy.
-The authenticated progress projection compares the summary with revision-aware lesson results.
-Missing topic summaries are unavailable, never fabricated zero totals. Old browser progress keys
-are ignored, not imported.
-The route remains prerendered without database reads; summary loading is client enhancement.
-No-JS retains the complete readable catalog and published links. Search/status controls are
-hidden via scripting CSS when JavaScript is disabled; hydration never inserts their geometry.
-Loading/error/retry and personalized text occupy reserved slots. API failure does not block
-reading, navigation or search. No unexpected layout shifts from hydration, data, images or fonts
-are accepted; intentional search/filter result changes remain user-controlled.
-Search/filter state is page-local. Theory completion, grid view, recommendation ordering,
-auto-resume scrolling and production delivery are out of scope.
+Base UI owns controls, Lucide owns icons. There is no telemetry consent UI or client-error
+collector, and no generic global state layer.
 
 ## 6. Auth & Access Model
 
@@ -685,8 +574,8 @@ cookie. Идентификатор сессии хранится на серве
 
 Право доступа отделено от идентичности: вход его не даёт, доступ даёт только действующий
 `AccessGrant` (§2.2). Скрытие ссылки или текста в интерфейсе защитой не считается. Платная теория
-не попадает в публичные файлы: экспорт стенда выносит каждую платную подтему и платный урок курса
-в отдельный TSX-модуль `*.paid.*`, который загружается через `React.lazy`; сборка складывает их
+не попадает в публичные файлы: каждая платная подтема и платный урок курса — отдельный TSX-модуль
+`*.paid.*`, который загружается через `React.lazy`; сборка складывает их
 чанки в `/assets/paid/`, и Nginx отдаёт этот путь только после внутренней проверки
 `GET /api/access/asset` с cookie сессии (`auth_request`). Основной модуль урока содержит
 бесплатные блоки, метаданные и превью всех подтем. SSR узнаёт доступ серверной функцией, которая
@@ -766,41 +655,32 @@ exact-SHA restore-приёмки (STACK Release Gate, runbook backup/restore); �
 
 ### 7.3 Minimal operations
 
-Сохраняются TLS, health, обычные журналы, rate limits и scheduled application backup/restore.
-Umami, Beszel, sre-kit integration, publishers и monitoring tunnels остаются удалены из
-репозитория как хостящиеся здесь сервисы — ни один из них не возвращается, и в этот Compose
-ничего нового не добавляется.
+Здесь только TLS, health, журналы, rate limits и scheduled application backup/restore. Сервисы
+мониторинга и аналитики в этот Compose не возвращаются.
 
-Браузерная аналитика возвращена точечно, без нового сервиса (2026-09-22, архитектор пересмотрел
-прежний отказ, см. §1.2/§8.2): публичные страницы подключают cookieless tracking snippet
-`<script async src="https://sre.infraege.ru/track.js" data-site="…">` self-hosted сервиса
-`smotryashchiy` — отдельный репозиторий, отдельный деплой на отдельном VPS, тот же оператор.
-Единственное изменение в этом репозитории — точечная правка Nginx CSP (`infra/nginx/conf.d/
-infraege.prod.conf`, §8.2): `script-src`/`connect-src` допускают `https://sre.infraege.ru` для
-этого конкретного origin, без `unsafe-eval`, без снятия остальных директив. Никакого reverse-proxy
-под первым лицом (first-party proxy) не заводится — расширять эту границу без нового явного
-решения архитектора нельзя.
+Наблюдаемость и операторская консоль — отдельный self-hosted сервис `smotryashchiy`
+(`sre.infraege.ru`, свой репозиторий и VPS, тот же оператор). Публичные страницы подключают его
+cookieless snippet; CSP допускает `https://sre.infraege.ru` только в `script-src`/`connect-src`, без
+`unsafe-eval` и без first-party proxy. Расширять эту границу можно только новым решением архитектора.
 
-Платный доступ (Change 192) не добавляет сервисов в Compose. Платёжный провайдер — Robokassa
-(самозанятый: каждый чек регистрируется в «Мой налог» сервисом «Робочеки СМЗ», при возврате
-аннулируется); код работает через порт провайдера с фейковым адаптером для тестов и dev, отключённым
-в production. Nginx получает внутренний `auth_request` для `/assets/paid/` и отдельный
-`location` уведомлений провайдера со своей зоной лимита и малым размером тела. Браузер уходит на
-страницу оплаты обычной навигацией (CSP не расширяется). Хостовый systemd-таймер биллинга (образец —
-`infraege-account-purge`) раз в час досверяет зависшие платежи, закрывает неоплаченные заказы,
-раз в сутки сверяет платежи и чеки с провайдером, считает выручку календарного года против лимита
-НПД (70 % — предупреждение в журнале, 85 % — письмо оператору, 95 % — пауза новых оплат) и
-отправляет нейтральное письмо «доступ заканчивается через 3 дня». Секреты провайдера и флаги — в
-`/etc/infraege/production.env`.
+Платный доступ (§6.1) сервисов не добавляет. Провайдер — Robokassa: самозанятый, каждый чек
+регистрируют «Робочеки СМЗ» в «Мой налог», при возврате чек аннулируется. Код работает через порт
+провайдера, фейковый адаптер в production отключён.
 
-Установленные сервисы VPS этим локальным change не изменяются, кроме упомянутой правки CSP. Их
-остановка и отключение старых таймеров входят в отдельный явно разрешённый release по runbook;
-volumes автоматически не удаляются.
+Nginx:
+- внутренний `auth_request` для `/assets/paid/`;
+- отдельный `location` уведомлений провайдера со своей зоной лимита и малым телом;
+- оплата — обычная навигация на страницу провайдера.
 
-Старый стек `infraege-ops` и остатки прежней эксплуатации удалены с хоста по решениям архитектора
-2026-09-23 (Changes 136, 138, 139; [production runbook](runbooks/production.md#retired-operations-stack)).
-Под защитой остаются только `infraege_postgres122-data` и снапшоты `infraege-application`; на хосте
-хранятся три последних релиза плюс цели `current` и `database-current`.
+Хостовый таймер биллинга ([billing runbook](runbooks/billing.md)):
+- досверяет зависшие платежи и закрывает неоплаченные заказы;
+- раз в сутки сверяет платежи и чеки с провайдером;
+- считает выручку года против лимита НПД: 70 % — журнал, 85 % — письмо, 95 % — пауза оплат;
+- пишет «доступ заканчивается через 3 дня».
+
+Секреты и флаги — в `/etc/infraege/production.env`. На хосте хранятся три последних релиза и цели
+`current` / `database-current`. Под защитой — том `infraege_postgres122-data` и снапшоты
+`infraege-application`.
 
 ## 8. Non-Functional Requirements
 
@@ -820,14 +700,14 @@ per-context progress on an isolated target. Guest browser progress is never migr
 | Security headers / CORS | Rate limiting чекер-эндпоинта на Nginx: `limit_req_zone` 20 req/min/IP, burst 5, `nodelay` (см. §4) — против автоматизированного перебора банка ответов; конкретную цифру пересмотреть по факту логов после запуска. Основной public root/password SSH использует принятый архитектором минимум 12 символов, pinned host key, UFW и fail2ban; production Environment не имеет required reviewers по решению архитектора от 2026-09-04, `can_admins_bypass` остаётся единственным environment safety property. Повышенный риск перебора и полного захвата VPS при компрометации более короткого пароля осознанно принят, key-only migration не запланирована. |
 | Accessibility target | Public pages не имеют serious/critical axe violations; lesson outline сохраняет вложенный semantic list, anchors, keyboard focus, различимый текущий пункт и корректный source order, а сложный визуал имеет видимую полную текстовую альтернативу |
 | Performance budget | Lighthouse-аудит раз в неделю или по запросу сохраняет median LCP ≤4.0s на мобильном 4G-профиле; продуктовая цель остаётся LCP ≤2.8s. CLS < 0.1, INP < 200ms. Server response (Change 191): on the full local bank `/practice` TTFB ≤300 ms, catalog/facet API ≤100 ms, search and suggestions ≤150 ms. Измеряются `/`, `/ege`, `/courses`, `/courses/python` и `/ege/16-rekursiya`; cold-load font/layout shifts проверяются отдельно. Lighthouse не является обязательным шагом каждого релиза или изменения CSS; подозрение на регрессию требует целевого измерения, а не автоматического Full Gate. Порог не ослабляется ради ускорения |
-| Observability | Health, structured server logs and scheduled external availability/TLS probe, plus a cookieless browser-analytics beacon (`smotryashchiy`, self-hosted at `sre.infraege.ru`, separate repo/deploy, §7.3) allowlisted in CSP; no cookies, no persistent visitor id, no consent UI, no dashboards or monitoring stack hosted in this repo; the beacon never records account/auth paths, also after in-app navigation; a failed external probe notifies the operator in Telegram (Change 194); payment conversion is read server-side from billing rows (`admin funnel`), not from tracker events; an hourly host job writes an aggregate business summary (orders → payments → refunds by day and plan, registrations, active and ending access, НПД limit, stuck orders and refunds, the last provider reconciliation) to `/var/lib/infraege/business/summary.json`, counts and sums only, which the `smotryashchiy` agent ships through its tunnel to the «Продажи» view (Change 195) |
-| Backup / restore | Application DB, files, roles and protected environment in encrypted Restic; 7 daily + 4 weekly + 3 monthly, monthly isolated restore; restore checks cover billing tables and grants (Change 192). Every successful backup is also copied with `restic copy` to an off-site Restic repository in Yandex Object Storage (Russia, bucket `kodumka-backup-app`: versioned, 30-day retention of deleted versions, the host key cannot delete versions or change bucket settings); the off-site copy keeps the same retention and recovery-hold, uses the same Restic password (kept off-host by the operator) and a root-only credentials file; a weekly integrity check and the monthly isolated restore read the off-site repository; a failed copy or check fails its systemd unit and records a failed off-site status; an hourly summary (`/var/lib/infraege/ops/backups.json`, schema `smotryashchiy.backup/1`, states, times, counts and sizes only) feeds the monitoring BACKUPS ledger, without notifications. Off-site storage is a prerequisite for enabling paid access, since offer acceptances and payments are evidence (Change 196) |
+| Observability | Health, structured server logs, an external availability/TLS probe (failure → Telegram to the operator, Change 194) and the cookieless `smotryashchiy` beacon allowlisted in CSP (§7.3): no cookies, no persistent visitor id, no consent UI, never account/auth paths. No dashboards or monitoring stack in this repo. Payment conversion is read from billing rows (`admin funnel`), not tracker events. Host jobs write aggregate documents for the monitoring agent: business summary (counts and sums only, Change 195), backups (Change 196), operator export (Change 199) — [production runbook](runbooks/production.md) |
+| Backup / restore | Application DB, files, roles and protected environment in encrypted Restic: 7 daily + 4 weekly + 3 monthly, monthly isolated restore that covers billing, device and restriction tables and grants. Every backup is copied off-site to versioned Yandex Object Storage in Russia; the host key cannot delete versions. A failed copy or check fails its unit; an hourly summary feeds the monitoring BACKUPS ledger. Off-site storage is a prerequisite for paid access (Change 196) — [backup runbook](runbooks/backup-restore.md) |
 | SEO | `/`, `/privacy`, published topics, courses и CourseLesson имеют canonical, уникальные metadata, SSR content, общий crawlable social preview и входят в sitemap (prerender только `/` и `/ege`, остальное SSR); root document публикует browser-only manifest, SVG/PNG/ICO favicon и Apple touch icon из production-знака, а `/` — правдивый `WebSite` JSON-LD без выдуманной Organization; черновые маршруты остаются unlisted, `noindex,nofollow` и исключены из public discovery; платные страницы (Change 192) остаются в sitemap, робот получает ровно то, что гость (превью и блок оплаты, без клоакинга), с JSON-LD `isAccessibleForFree: false` и `hasPart` на закрытую часть; `/subscribe` и страница возврата с оплаты — `noindex`; страницы входа, регистрации, восстановления, подтверждения почты и `/account` — `noindex` и закрыты в robots.txt вместе с `/api/` и `/_serverFn/`, robots.txt даёт Яндексу `Clean-param` для служебных параметров (Change 194); задачи практики, включая банк КЕГЭ, индексируются с собственными title и description из условия (решение архитектора 2026-10-19); sitemap содержит только отвечающие 200 адреса, crawl-пути не делят лимит чтения практики; Lighthouse SEO для публичных маршрутов проходит без ошибок |
 | Mobile / no-JS readability | TopicLesson, Course overview и CourseLesson сохраняют текст, программу, подписи, решения и section anchors в SSR HTML (платные части — для зрителя с доступом; остальным SSR отдаёт превью и блок оплаты, Change 192); интерактивная проверка и персональный progress остаются progressive enhancement |
 | Client resilience / API drift | Route failures восстанавливаемы без белого экрана; loading/empty/error/not-found состояния доступны с клавиатуры и скринридера; OpenAPI schema/types drift ломает gate до merge; runtime HTTP имеет timeout/abort и не делает скрытый retry мутаций |
 | Account security | Passwords use a current password-hashing scheme; verification/reset tokens expire and are single-use; sessions are server-revocable, HttpOnly/Secure/SameSite and protected from CSRF. Auth endpoints have targeted abuse limits, generic recovery responses and no sensitive URL/query/access-log leakage. Authentication does not grant editorial, operator or paid access. At most three active devices per account, a new-device email, owner-visible device list and sign-out (§6.2). Paid chunks get their own anti-bot budget of the practice-read size (120/min, burst 110); no limit a reader can feel. |
 | Personal-data isolation | Progress and account reads/writes are owner-scoped and no-store; logout and account switching clear in-memory personalized state. Guest checking remains anonymous and read-only. Account/identity/progress data and new role grants are covered by isolated backup/restore checks. |
-| Юридическое (152-ФЗ) | `/privacy` публикует фактические цели, состав, сроки и получателей обработки; регистрация по email требует отдельной неотмеченной по умолчанию галочки со ссылкой на версионированное согласие, а API фиксирует версию и время. Контакт — `kodumka@mail.ru`. С Change 198 политика и согласие называют оператора (ФИО, ИНН, email; адрес не публикуется), политика перечисляет правовые основания, права субъекта со сроком ответа, всех получателей и данные устройств; согласие — отдельный документ (156-ФЗ) и отдельная галочка, в том числе при первом входе через провайдера; оплата и защита аккаунта опираются на исполнение договора, поэтому у прежних пользователей согласие повторно не запрашивается. Возраст и полномочия представителя при регистрации не проверяются; с Change 213 согласие (версия `2026-10-25`) содержит заявление пользователя, что ему исполнилось 14 лет, а иначе согласие даёт законный представитель; пункт о покупателях до 18 лет — в оферте; уведомление РКН подано оператором 2026-10-25 (обращение 100472735, дата начала обработки 10.08.2026, Change 214/216), до включения боевой оплаты. Юридическая проверка не проводится по решению архитектора (2026-10-18, подтверждено 2026-10-23); тексты — инженерный ориентир, не заявление о соответствии закону; надпись «18+» для фактически школьной аудитории не используется как фиктивное освобождение от обязанностей. Гости любого возраста могут читать уроки и проверять ответы без регистрации. Браузерная аналитика возвращена (2026-09-22, архитектор пересмотрел прежний отказ, §1.2/§7.3): self-hosted `smotryashchiy`, без cookie и постоянного идентификатора — visitor-хэш `sha256(daily_salt+site+IP+UA)` с посуточной ротацией соли, сырой IP не сохраняется, referrer усекается до hostname. Отсутствие отдельного consent UI для этой аналитики — интерпретация архитектора, не юридическое заключение. Памятка оператора о действиях при утечке (РКН — 24 и 72 часа, ст. 21 ч. 3.1) ручная, без автоматизации; с Change 199 журнал инцидентов с отсчётом сроков ведётся в консоли `sre.infraege.ru`, уведомление по-прежнему подаёт оператор. С Change 199 собственный сервер мониторинга оператора в России (`sre.infraege.ru`) получает email, ID аккаунта, IP и город активных сеансов для защиты аккаунтов и операторских мер (решение архитектора 2026-10-24): выгрузка заменяется при каждом отчёте, результаты команд хранятся 30 дней, журнал действий — 3 года; пароли и платёжные данные production не покидают; политика называет этот сервер новой редакцией. |
+| Юридическое (152-ФЗ) | `/privacy` публикует цели, состав, сроки, получателей и права субъекта; оператор назван (ФИО, ИНН, email, без адреса). Согласие — отдельный версионированный документ (`/consent`) и отдельная неотмеченная галочка при регистрации, в том числе после первого входа через провайдера; API фиксирует версию и время; с версии `2026-10-25` согласие содержит заявление о 14+ или согласии законного представителя, возраст не проверяется. Оплата и защита аккаунта опираются на исполнение договора. Уведомление РКН подано 2026-10-25 (дата начала обработки 10.08.2026), акт оценки вреда — степень высокая. Сервер мониторинга оператора в России получает email, ID, IP и город активных сеансов для защиты аккаунтов (Change 199). Трансграничной передачи и зарубежных ресурсов на страницах нет. Тексты — инженерный ориентир без юриста (решение архитектора); подробности, журнал обращений и памятка утечек — [docs/legal](legal/README.md) |
 | Публичные профили (будущее) | Публикация любых данных пользователя (псевдоним, аватар, результаты, место в рейтинге) требует отдельного согласия на распространение (ст. 10.1): выключено по умолчанию, отдельное действие со ссылкой на документ, выбор полей, версия и время в БД, отзыв сразу скрывает публикацию; email и настоящее имя не публикуются, по умолчанию — псевдоним. Текст документа готовится в Change 198, интерфейс — вместе с профилями |
 | Юридическое (436-ФЗ) | Возрастная маркировка для обычного сайта не вводится: существующая `12+` удаляется без замены на `18+` |
 | Происхождение контента | Существующие уроки сохраняют Content Quality Gate (§2.3). Для нового банка принято импортируемое содержимое с явным provenance (§3); происхождение, атрибуция и допустимость использования проверяются при подготовке импорта, не выводятся автоматически из URL и не заменяются технической валидацией |
@@ -851,38 +731,20 @@ artifact cache и ledger доказательств не вводятся. Од�
 
 ## 9. Roadmap
 
-Ordered unfinished outcomes (each a separate change, smallest coherent slice first):
+Ordered unfinished outcomes (each a separate change, smallest coherent slice first). Done since the
+last roadmap: all 25 EGE topics on the lesson pipeline (Changes 171–190), the release of the redesign
+and rebuilt lessons on kodumka.ru (2026-10-24), paid access in test mode (Change 192), the operator
+console (Change 199).
 
-1. **Перестройка опубликованных тем ЕГЭ по [пайплайну](runbooks/lesson-pipeline.md).** Каждая тема
-   проходила демо-стенд (удалён в Change 197, T259) и одобрение архитектора, затем переносилась на сайт
-   отдельным change (эталоны — темы 25 и 23, Changes 171–172). Остальные уроки тем на сайте
-   признаны устаревшими (решение архитектора 2026-10-11): их не правят до перестройки. Исходники архитектора
-   (`docs/artifacts/lessons/`) есть для тем 3, 4, 7–11, 14, 16–21, 24, 26 и 27. Темы 5 (Change 178),
-   16, 17, 27 (Change 179), 4, 7, 8, 9 (Change 180) и 10, 11, 14, 18 (Change 181) на стенде; перенос — Change 184. Новые темы идут на
-   стенд волнами по 3–4 темы в одном change, параллельно через агентов
-   ([оркестрация](runbooks/lesson-wave.md)): волна 2 — 4, 7, 8, 9 (Change 180); волна 3 — 10, 11, 14,
-   18 (Change 181); волна 4 — 19–21, 24, 26 (Change 182); тема 3 (только Excel) — Change 183.
-   Перенос всех тем стенда на сайт (3, 4, 5, 7–11, 14, 16–21, 24, 26, 27; уроки 5, 16, 17, 24, 26,
-   27 заменяются) — Change 184: платформа и пилот (тема 9), затем темы по одной, без параллельных агентов.
-   Последние семь тем (1, 2, 6, 12, 13, 15, 22): карты — Change 187, стенд — Change 189, перенос на
-   сайт — Change 190; после него все темы 1–27 опубликованы уроками пайплайна, названия тем — короткие,
-   по плану варианта ФИПИ 2027. Выполнено: в релиз идут все 25 тем каталога (решение архитектора
-   2026-10-17).
-2. **Релиз программы редизайна и перестроенных уроков.** Локальный `main` с Changes 164–172 не
-   выпущен (Change 170 закрыт без релиза 2026-10-08). Отдельный release change закрывает
-   предпосылки §11 и обновляет `docs/artifacts/release-readiness.md`.
-
-3. **Платный доступ — Change 192.** Тарифы, soft paywall, закрытые чанки, оплата и операторские
-   возвраты реализуются одним change и попадают в `main` с выключенными флагами; включение — вместе
-   с релизом после предпосылок §11 (цель — конец августа 2027, начало сезона 2027/28).
-
-4. **Операторская консоль на `sre.infraege.ru` (решение архитектора 2026-10-24).** Сигналы и
-   меры ограничения (§6.2), возвраты, поиск аккаунта, журнал инцидентов с отсчётом 24/72 ч и
-   журнал действий — в интерфейсе мониторинга вместо CLI. Канал команд: агент на production сам
-   забирает команды из очереди сервера мониторинга и выполняет только разрешённый набор через
-   хостовый исполнитель; на мониторинг уходят email, ID, счётчики сигналов, города и IP активных
-   сеансов, но не пароли и не платёжные данные. Работа — smotryashchiy Change 30 и Change 199
-   здесь (исполнитель `operator-command.sh`, режим `--json` и выгрузка `kodumka.operator/1`).
+1. **Lesson chunks per topic (Change 222).** A lesson page loads the free content of all 25 topics
+   in one 5 MB chunk (TBT ≈700 ms on mobile Lighthouse); load only the opened topic, likewise for
+   courses.
+2. **Live payments.** When Robokassa activates the shop: a real 1 ₽ payment and refund with receipt
+   and annulment, live passwords, `ROBOKASSA_TEST=false`, the announcement for topics that are free
+   today, then `PAYWALL_ENABLED=true`.
+3. **Registry and renewals.** Record the RKN registry number when it appears; replace the
+   `body-parser` audit ignore with an override from 2026-10-29; review the recovery hold on
+   2026-11-23.
 
 Later product decisions may add manual completion, richer statistics, auto-renewal, live formats
 and parent reports; each needs its own decision.
@@ -902,15 +764,8 @@ decisions.
 
 ## 11. Open Questions
 
-The architect confirmed account deletion and lesson-scoped reset on 2026-09-24. Before production release, register and
-verify provider applications/callbacks and mail delivery, review the updated privacy policy and
-confirm account-data backup/restore with a fresh production restore proof. These are release
-prerequisites, not claims of completion.
-
-Before enabling paid access (Change 192 flags): seller registered as НПД; Robokassa shop connected
-with Робочеки СМЗ, verified by a real 1 ₽ payment and refund with receipt and annulment in «Мой
-налог»; offer, refund rules and updated privacy policy published in their Change 198 editions (no lawyer
-review, architect's decision 2026-10-18); Яндекс ID and VK ID applications registered; RKN notification filed
-(payments add processing purposes); off-site backup in place and a restore proof including billing
-tables; provenance of tasks in paid subtopics confirmed; date and text of the announcement for topics
-that are free on production today chosen by the architect.
+Before enabling paid access (Change 192 flags), still open: Robokassa shop activation (waits for the
+payout account check) and the 1 ₽ payment/refund proof; the date and text of the announcement for
+topics that are free on production today. Done: НПД, Робочеки, offer and refund editions, Яндекс ID
+and VK ID, RKN notification (2026-10-25), off-site backups with a restore proof, provenance of tasks
+in paid subtopics.

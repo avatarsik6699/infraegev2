@@ -88,58 +88,36 @@ same volume; no automatic downgrade runs. A candidate that changes the schema he
 image verification and before deploy dispatch. Do not bypass the preflight or migrate the live
 database to break the ordering cycle.
 
-## Domain move to kodumka.ru (Change 193)
+## Domain, providers and host prerequisites
 
-The public origin is `https://kodumka.ru`; `www.kodumka.ru`, `infraege.ru` and `www.infraege.ru`
-answer 301 with path and query kept (SPEC §7.1). DNS (reg.ru), the Postbox address `kodumka.ru`
-with its DKIM CNAMEs, SPF and DMARC, and the Yandex Webmaster / Google Search Console properties
-were set up on 2026-10-18. The first release that carries Change 193 needs, on the host, before
-the deploy is dispatched:
+The public origin is `https://kodumka.ru` (Change 193): `www.kodumka.ru`, `infraege.ru` and
+`www.infraege.ru` answer 301 with path and query kept; both certificates renew by webroot
+(`ops/configure-certificate-renewal.sh`), and the deploy preflight requires both. Keep
+`infraege.ru` registered while the redirect matters. Done:
+- DNS at reg.ru: Postbox `kodumka.ru` with DKIM, SPF and DMARC; the Google TXT record stays;
+- Google Search Console change of address `infraege.ru` → `kodumka.ru` (2026-10-25);
+- sitemaps in both search consoles;
+- uptime targets in `smotryashchiy`.
 
-1. `PUBLIC_IPV4=2.26.8.245 TLS_EMAIL=… bash ops/obtain-initial-certificate.sh` from the candidate
-   source. With the old Nginx running it obtains `kodumka.ru` through the ACME webroot (every host
-   on port 80 serves it) and leaves the existing `infraege.ru` certificate alone.
-2. In `/etc/infraege/production.env`: `PUBLIC_ORIGIN=https://kodumka.ru`,
-   `MAIL_FROM=accounts@kodumka.ru`. Do not print the file.
-3. Deploy as usual. `scripts/check-release-target.sh` accepts a healthy target on either domain;
-   the deploy preflight requires both certificates; post-deploy checks use `kodumka.ru`.
-4. After the release is healthy: `bash ops/configure-certificate-renewal.sh` (both certificates
-   renew by webroot); check `curl -sI https://infraege.ru/ege?x=1` answers 301 to
-   `https://kodumka.ru/ege?x=1`; send a test letter from the Postbox `kodumka.ru` address.
-   In `smotryashchiy` (sre.infraege.ru) add uptime targets `https://kodumka.ru/`,
-   `https://kodumka.ru/health/ready` (http) and `kodumka.ru:443` (tls): the infraege.ru target
-   stays green through the 301. The analytics site `kodumka.ru` (`data-site` in `__root.tsx`)
-   exists since 2026-10-19; keep the old `infraege.ru` site — deleting it deletes its history.
-5. Search engines: Yandex Webmaster «Переезд сайта» from `infraege.ru` (add and verify the old
-   site first) and Google Search Console «Изменение адреса»; submit
-   `https://kodumka.ru/sitemap.xml` in both.
-6. Robokassa: shop URL `https://kodumka.ru` and the Result/Success/Fail URLs in
-   [billing](billing.md).
-   OAuth providers are on since 2026-10-24 (Change 207):
-   - Yandex ID «Кодумка» is in the operator's oauth.yandex.ru account, scope `login:info` only.
-   - VK ID «Кодумка» (ID 54851111) is in the VK ID business account. Its base domain is
-     `kodumka.ru`, and its trusted redirect is the VK callback above.
+OAuth apps (Change 207):
+- Yandex ID «Кодумка» (oauth.yandex.ru, scope `login:info`, verification pending);
+- VK ID «Кодумка» (ID 54851111, base domain `kodumka.ru`).
 
-   Credentials are in athanor (infraegev2 vault: `YANDEX_CLIENT_*`, `VK_CLIENT_*`, `VK_APP_ID`) and
-   in `/etc/infraege/production.env`. Both flows reached the consent step `/register/provider` on
-   production. Yandex shows «Сервис ещё не верифицирован» until the app is verified in the OAuth
-   console.
-7. Change 198: set `GEOIP_DIR=/var/lib/infraege/geoip` in the protected environment, run
-   `ops/install-backup-timers.sh` (it adds `infraege-geoip.timer`) and once
-   `systemctl start infraege-geoip.service`; the API reads the city database after its next
-   restart. Reinstall `ops/fail2ban/jail.d/infraege.conf`: the Nginx jail now bans in the
-   `DOCKER-USER` chain, which published container ports pass (UFW bans never reach them); check
-   with `fail2ban-client status infraege-nginx-limit` and `iptables -S DOCKER-USER`. The chain is the
-   jail option `chain = DOCKER-USER` (Change 205); `fail2ban-client -d` must show
-   `-I DOCKER-USER` in the jail's `actionstart`, not `-I INPUT`.
+Credentials are in athanor (infraegev2 vault) and `/etc/infraege/production.env`. Robokassa URLs
+are in [billing](billing.md).
 
-Keep `infraege.ru` registered while the redirect matters. A rollback to a release before Change
-193 serves `infraege.ru` again with its own certificate; restore the two environment values with it.
+A rebuilt host also needs:
+- `GEOIP_DIR=/var/lib/infraege/geoip` in the protected environment (the prod overlay requires it);
+- `ops/install-backup-timers.sh` (adds `infraege-geoip.timer`), then one
+  `systemctl start infraege-geoip.service`;
+- the fail2ban jail `ops/fail2ban/jail.d/infraege.conf`. It bans in `DOCKER-USER` (option
+  `chain = DOCKER-USER`, Change 205); `fail2ban-client -d` must show `-I DOCKER-USER`.
 
 ## Alerts (Change 194)
 
 `.github/workflows/uptime.yml` probes kodumka.ru, the infraege.ru redirect, both certificates and
-`sre.infraege.ru` every 15 minutes. On failure it posts to Telegram when the repository secrets
+`sre.infraege.ru` on a 15-minute schedule; GitHub throttles scheduled runs, so in practice it runs
+every 2–5 hours and the uptime targets in `smotryashchiy` are the primary probe. On failure it posts to Telegram when the repository secrets
 `TELEGRAM_BOT_TOKEN` (a bot from BotFather) and `TELEGRAM_CHAT_ID` (the operator's chat with that
 bot) are set; without them the run only fails in GitHub with a warning. After setting or rotating
 them, check delivery once: dispatch the workflow with a deliberately failing step on a branch, or
@@ -219,24 +197,8 @@ the operator's own monitoring server in Russia.
 
 ## Retired operations stack
 
-The pre-Change-122 operations stack `infraege-ops` (Umami, Beszel and its agent, docker-socket-proxy,
-its own PostgreSQL, timers `infraege-ops-backup`, `infraege-ops-analytics-retention`,
-`infraege-ops-restore-check`, installed from `/opt/infraege-ops`) kept running after Change 122 until
-the Change 136 release removed it completely, volumes included, by architect decision (SPEC §7.3).
-Nothing on the host depends on it. Change 138 removed the rest of it by architect decision:
-
-- the WireGuard tunnel `wg0` (packages, `/etc/wireguard/`, its UFW rules);
-- the `systemd-journal-remote` package with the journal gateway socket;
-- the env files in `/etc/infraege/ops` and `/var/backups/infraege-ops`;
-- the `infraege-observability-ingress` network, its dangling anonymous volumes and one-off
-  bootstrap/cutover files in `/root`;
-- its restic snapshots (`restic forget --tag infraege-ops --prune`, followed by `restic check`).
-
-Change 139 (architect decision 2026-09-23) removed the old PostgreSQL 16 volume
-`infraege_postgres-data` (verified empty `infraege` database, test-only `umami` data) and 13
-untagged early Restic snapshots and recovered the interrupted
-2026-09-05 package upgrade (run `dpkg --audit` in routine operation). Only `infraege_postgres122-data`
-and `infraege-application` snapshots remain protected.
-
-The application's `infraege-application` snapshots were not touched by any retirement. Sibling
-repositories and remote management hosts are still not implicitly authorized by an application deploy.
+The pre-Change-122 stack `infraege-ops` (Umami, Beszel, WireGuard, journal gateway, its PostgreSQL
+and timers) and the old PostgreSQL 16 volume were removed from the host by architect decisions
+(Changes 136, 138, 139; details in `docs/changes/archive/COMPACTED.md`). Nothing depends on them;
+only `infraege_postgres122-data` and the `infraege-application` snapshots remain protected. An
+application deploy never implicitly authorizes changes to sibling repositories or other hosts.

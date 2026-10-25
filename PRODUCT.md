@@ -56,12 +56,13 @@ fallback.
   ones outside mastery where the topic has them, then «Практика и итог» in the course-summary
   form with the topic's mixed bank tasks (Change 197), their data files and the schemes of their
   statements.
-- Optional accounts and synchronized progress are implemented. Hard lesson locks, payments and
-  in-product AI remain out of scope; enabled sign-in methods depend on deployment configuration.
+- Optional accounts and synchronized progress are implemented; paid access (month and year
+  passes through Robokassa, soft paywall) shipped in Change 192. Hard lesson locks and in-product
+  AI remain out of scope; enabled sign-in methods depend on deployment configuration.
 
 ## Brand Commitments
 
-The public identity is `infraege`: three organic stones, orange at the top and ink below,
+The public identity is Кодумка (`kodumka.ru`, Change 193): three organic stones, orange at the top and ink below,
 with an accessible lowercase wordmark. The presentation is a calm, light "clean textbook":
 white reading surfaces, a more colourful home page that invites learners in, and colour elsewhere
 only where it carries meaning. Hand-drawn monochrome line illustrations and rare characters

@@ -388,6 +388,14 @@ removing the source worktree. Do not regenerate checksums around corrupted norma
 
 `apps/api/practice-registry.json` (format 2, with subtopic access) is copied verbatim into the
 `materials`/`courses` of `content/practice-bank/bank.json`, and the operator import refuses a
-difference. After a change of `access` in a stand: re-export, `node scripts/practice-registry.mjs`,
+difference. After a change of `access` in a lesson module: `node scripts/practice-registry.mjs`,
 then copy the registry's `materials` and `courses` into `bank.json` and format it from the
 repository root (`npx prettier --write content/practice-bank/bank.json`).
+
+### `ERR_PNPM_VERIFY_DEPS_BEFORE_RUN` after editing a manifest
+
+- **Symptom:** every `pnpm` script (and so every gate group that runs one) fails with «Setting
+  overrides of lockfile … is outdated» although the lockfile is current.
+- **Cause:** `verifyDepsBeforeRun: error` compares manifest timestamps with the install state; editing
+  `package.json` or switching a branch that touches it marks the install stale.
+- **Fix:** `pnpm install --frozen-lockfile` (no lockfile change), then rerun the gate.

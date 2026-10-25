@@ -12,9 +12,9 @@
 
 | Layer | Technology |
 |-------|-----------|
-| Frontend | React + TanStack Start (SSR/SSG, file-based routing and automatic route splitting) on Vite **8.2.1 exact** (Rolldown/Oxc); Base UI **1.7.0 exact** with local CSS Modules; Zustand **5.0.12 exact** for the cross-route lesson-progress registry; synchronous Python tokenization through `@speed-highlight/core` **2.0.0 exact**; TanStack Query for future server state; generated `openapi-typescript` contracts with `openapi-fetch` transport |
+| Frontend | React + TanStack Start (SSR/SSG, file-based routing and automatic route splitting) on Vite **8.2.4 exact** (Rolldown/Oxc); Base UI **1.7.0 exact** with local CSS Modules; Zustand **5.0.12 exact** for the cross-route lesson-progress registry; synchronous Python tokenization through `@speed-highlight/core` **2.0.0 exact**; TanStack Query for future server state; generated `openapi-typescript` contracts with `openapi-fetch` transport |
 | Backend | Python/FastAPI (`apps/api`) |
-| Database | PostgreSQL 18.6, separate runtime/app/import/migration/backup roles; Alembic `191_01`, additive account/progress schema and generated catalog columns on the isolated bank volume |
+| Database | PostgreSQL 18.6, separate runtime/app/import/migration/backup roles; Alembic `198_01`, additive account/progress, billing and device schema and generated catalog columns on the isolated bank volume |
 | Observability | Health, structured server logs, fail2ban and scheduled external availability/TLS probe |
 | Infra | Application Docker Compose on Ubuntu 24.04: Nginx → web/API/PostgreSQL; systemd, journald, fail2ban, Restic |
 | Package managers | uv (`apps/api`), pnpm workspace (`apps/web`, root) |
@@ -42,10 +42,10 @@ shellcheck --version      # shell static checks: >=0.9
 
 ### Practice persistence
 
-PostgreSQL 18.6, SQLAlchemy 2.0.52, Alembic 1.20.0 and asyncpg 0.31.0 are locked. Schema `191_01`
+PostgreSQL 18.6, SQLAlchemy 2.0.52, Alembic 1.20.0 and asyncpg 0.31.0 are locked. Schema `198_01`
 retains task JSON, private checker, lesson membership and file objects and adds accounts,
-identities, credentials, sessions, one-time tokens, provider challenges and per-context solved
-results. `infraege_runtime` is SELECT-only on the bank and has no account-table rights;
+identities, credentials, sessions, one-time tokens, provider challenges, per-context solved
+results, billing (`192_01`) and devices, activity counters and restrictions (`198_01`). `infraege_runtime` is SELECT-only on the bank and has no account-table rights;
 `infraege_app` has narrow account/progress writes and checker reads. Import/migration/backup use
 separate roles. Every datetime is timezone-aware. No revision history, package engine, release
 import or automatic data migration exists.

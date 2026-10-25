@@ -1,6 +1,6 @@
 # Practice operator workflow
 
-Migration head `191_01` retains the bank introduced by `122_01`: current task JSON, a separate
+Migration head `198_01` retains the bank introduced by `122_01`: current task JSON, a separate
 private checker, ordered lesson memberships and content-addressed files; it adds accounts and
 server progress, and `191_01` adds stored generated catalog columns (exam numbers, order,
 difficulty, skills, normalized search text) maintained by PostgreSQL from task JSON. PostgreSQL is the only runtime bank. Theory/publication definitions

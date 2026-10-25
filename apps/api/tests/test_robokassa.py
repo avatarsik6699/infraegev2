@@ -1,7 +1,7 @@
 """Change 192: the Robokassa adapter against the documented protocol (no network).
 
 Responses are synthetic fixtures in the documented shapes; replace them with recorded test-mode
-answers when the shop is connected (docs/runbooks/billing-provider-selection.md).
+answers when the shop is connected (docs/runbooks/billing.md, Launch checklist).
 """
 
 import asyncio

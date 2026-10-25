@@ -101,16 +101,14 @@ falling back to the predecessor in `APPLICATION_SCHEMAS`); the transition must b
 predecessor or a reviewed entry of `APPLICATION_SKIPS` in `scripts/lib/application-db-release.sh`.
 The attestation holds `<target> <sha>`. A further schema head extends that list and its own checks.
 
-Change 192: production runs `140_01` (191_01 was never released), so the paid-access release
-rehearses `140_01` → `192_01` in one step (the reviewed skip; both heads are additive). The
-restore check of a `192_01` bundle also proves the billing tables and grants
+Change 192: the restore check of a `192_01` bundle also proves the billing tables and grants
 (`sql.BILLING_RESTORE`): the application may add and update payments, grants, refunds and
 provider events but never delete them, offer acceptances are append-only, and the runtime and
 import roles see none of them. Billing rows are 5-year evidence: paid access needs this proof and
 off-site backups before `BILLING_ENABLED` (docs/runbooks/billing.md).
 
-Change 198: neither `192_01` was released, so the launch rehearses `140_01` → `198_01` in one
-step (the reviewed skip). The restore check of a `198_01` bundle also proves the device,
+Change 198: production went from `140_01` straight to `198_01` on 2026-10-24 (the reviewed
+skip). The restore check of a `198_01` bundle also proves the device,
 activity and restriction tables and grants (`sql.DEVICE_RESTORE`): restrictions are evidence the
 application never deletes; the runtime and import roles see none of them.
 

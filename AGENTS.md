@@ -175,5 +175,5 @@ consult `escalation`; the technical `architect` cannot grant human approval. Ful
 | `docs/FRONTEND.md` | Binding architecture, code, state, accessibility, SSR and interaction contract for `apps/web` | When frontend rules change |
 | `DESIGN.md` | Visual system for `apps/web`: tokens, typography, layout, components, do's and don'ts | Through `impeccable document` when the visual system changes |
 | `docs/KNOWN_GOTCHAS.md` | Recurring pitfall log | When new traps are discovered |
-| `docs/runbooks/lesson-pipeline.md` | Binding pipeline for EGE topic content: source, frequency levels, subtopics, visuals, checks, demo stand, transfer | When the architect changes the pipeline |
+| `docs/runbooks/lesson-pipeline.md` | Binding pipeline for EGE topic content: source, frequency levels, subtopics, visuals, checks, architect review; the site is the lesson source (Change 197) | When the architect changes the pipeline |
 | `docs/runbooks/lesson-patterns.md` | Binding catalogue of lesson skeleton and teaching patterns П1–П18 | When an architect review adds or changes a pattern |
