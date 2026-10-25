@@ -24,7 +24,7 @@ for image in "${images[@]}"; do
     --user "$(id -u):$(id -g)" \
     --mount "type=bind,src=$archive,dst=/scan/${image}.tar,readonly" \
     --mount "type=bind,src=$cache_dir,dst=/tmp/trivy-cache" \
-    aquasec/trivy:0.73.0 image \
+    aquasec/trivy:0.76.1 image \
     --cache-dir /tmp/trivy-cache \
     --input "/scan/${image}.tar" \
     --severity HIGH,CRITICAL --ignore-unfixed --exit-code 1

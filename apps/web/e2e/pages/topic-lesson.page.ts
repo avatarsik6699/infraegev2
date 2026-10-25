@@ -406,6 +406,7 @@ export class TopicLessonPage {
     const [topicSlug] = this.config.route.split("/").slice(-2);
     await this.page.goto(`/ege/${topicSlug}#${section}`);
     await expect(this.page).toHaveURL(
+      // nosemgrep: javascript.lang.security.audit.detect-non-literal-regexp.detect-non-literal-regexp
       new RegExp(`/ege/${topicSlug}/${subtopic}#${section}$`, "u"),
     );
     await expect(this.page.locator(`#${section}`)).toBeVisible();

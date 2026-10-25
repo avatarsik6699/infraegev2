@@ -58,6 +58,8 @@ LANGUAGE sql IMMUTABLE PARALLEL SAFE
 RETURN ARRAY(SELECT jsonb_array_elements_text(value))
 """
     )
+    # Interpolates module constants only, never input.
+    # nosemgrep: python.lang.security.audit.formatted-sql-query.formatted-sql-query, python.sqlalchemy.security.sqlalchemy-execute-raw-query.sqlalchemy-execute-raw-query  # noqa: E501
     op.execute(
         f"""
 CREATE FUNCTION practice.task_search_text(task_id text, content jsonb) RETURNS text

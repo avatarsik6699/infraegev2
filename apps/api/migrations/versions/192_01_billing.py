@@ -157,6 +157,7 @@ def upgrade() -> None:
         "practice.billing_offer_acceptance, practice.billing_payment, practice.access_grant, "
         "practice.billing_refund, practice.billing_provider_event"
     )
+    # nosemgrep: python.lang.security.audit.formatted-sql-query.formatted-sql-query, python.sqlalchemy.security.sqlalchemy-execute-raw-query.sqlalchemy-execute-raw-query  # noqa: E501
     op.execute(f"REVOKE ALL ON {tables} FROM infraege_runtime, infraege_import")
     op.execute("GRANT SELECT, INSERT ON practice.billing_offer_acceptance TO infraege_app")
     op.execute(

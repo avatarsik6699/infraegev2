@@ -461,6 +461,8 @@ function wildcard(pattern: string): RegExp {
     else if (ch === "?") out += "[\\s\\S]";
     else out += escapeRe(ch);
   }
+  // Every literal character went through escapeRe; only * and ? become patterns.
+  // nosemgrep: javascript.lang.security.audit.detect-non-literal-regexp.detect-non-literal-regexp
   return new RegExp(`^${out}$`, "i");
 }
 

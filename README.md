@@ -47,6 +47,7 @@ pnpm format | pnpm lint:fix               # применить Prettier/Ruff и 
 pnpm --filter web test                    # Vitest
 cd apps/api && uv run pytest              # backend
 pnpm --filter web test:e2e                # Playwright; нужен засеянный банк (STACK § Testing)
+pnpm brand:generate                       # пересобрать иконки и картинки бренда из знака
 ```
 
 Тесты запускаются только на host, не в контейнерах. Gate-таблицы и периодические аудиты —

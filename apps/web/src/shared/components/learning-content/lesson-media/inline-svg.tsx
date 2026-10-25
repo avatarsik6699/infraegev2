@@ -28,6 +28,7 @@ export const InlineSvg: React.FC<Props> = (props) => (
     aria-label={props.label}
     hidden={props.hidden}
     // Repository-generated markup (site_media.py), never user input.
+    // nosemgrep: typescript.react.security.audit.react-dangerouslysetinnerhtml.react-dangerouslysetinnerhtml
     dangerouslySetInnerHTML={{ __html: props.svg }}
   />
 );

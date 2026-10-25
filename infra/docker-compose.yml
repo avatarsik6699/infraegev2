@@ -93,6 +93,7 @@ services:
       - ROBOKASSA_HASH=${ROBOKASSA_HASH:-sha256}
       - ROBOKASSA_TEST=${ROBOKASSA_TEST:-false}
       - DEPLOY_SHA=${DEPLOY_SHA:-development}
+      - LOG_LEVEL=${LOG_LEVEL:-INFO}
       - TASK_FILES_DIR=/task-files
       # Change 198: offline city database for «Где выполнен вход»; missing means no city
       - GEOIP_CITY_DATABASE=/geoip/dbip-city-lite.mmdb

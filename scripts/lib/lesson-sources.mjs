@@ -27,7 +27,9 @@ export function topicStructure(id) {
   if (!list) throw new Error(`Unsupported subtopic shape: ${id}`);
   const subtopics = list[1].split(/\n {4}\},?\n/).flatMap((chunk) => {
     if (!chunk.trim()) return [];
+    // `name` is one of this script's own field literals.
     const field = (name) =>
+      // nosemgrep: javascript.lang.security.audit.detect-non-literal-regexp.detect-non-literal-regexp
       chunk.match(new RegExp(`^ {6}${name}: "([^"]+)",`, "m"))?.[1];
     const ids = chunk.match(/^ {6}conceptIds: \[([\s\S]*?)\]/m);
     const slug = field("slug");

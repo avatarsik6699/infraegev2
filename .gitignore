@@ -1,6 +1,5 @@
 node_modules/
 .output/
-.vinxi/
 .tanstack/
 dist/
 .lighthouseci/
@@ -10,7 +9,6 @@ apps/web/.impeccable/live/
 test-results/
 playwright-report/
 coverage/
-C:\\Users\\user\\AppData\\Local\\lighthouse.*/
 *.local
 
 __pycache__/

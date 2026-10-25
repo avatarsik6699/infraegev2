@@ -103,6 +103,7 @@ def upgrade() -> None:
         schema="practice",
     )
     tables = "practice.account_device, practice.account_activity_day, practice.account_restriction"
+    # nosemgrep: python.lang.security.audit.formatted-sql-query.formatted-sql-query, python.sqlalchemy.security.sqlalchemy-execute-raw-query.sqlalchemy-execute-raw-query  # noqa: E501
     op.execute(f"REVOKE ALL ON {tables} FROM infraege_runtime, infraege_import")
     op.execute(
         "GRANT SELECT, INSERT, UPDATE, DELETE ON practice.account_device, "

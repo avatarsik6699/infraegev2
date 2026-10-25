@@ -272,6 +272,8 @@ async def revoke_sessions(
         .values(revoked_at=now())
         .returning(AccountSession.id)
     )
+    # Counts the rows an UPDATE … RETURNING revoked; a SELECT count() cannot see them.
+    # nosemgrep: python.sqlalchemy.performance.performance-improvements.len-all-count
     return len(result.all())
 
 

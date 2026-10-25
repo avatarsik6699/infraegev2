@@ -48,7 +48,6 @@ owner changes:
 | Nginx auxiliary error pages | `bash scripts/tests/auxiliary-pages.test.sh` (Docker nginx) |
 | Practice read throttling | `bash scripts/tests/practice-read-limit.test.sh` |
 | Local Docker lifecycle | `bash scripts/tests/docker-dev-lifecycle.test.sh` |
-| Production environment rendering | `bash scripts/tests/production-env.test.sh` |
 | Restore readiness | `bash scripts/tests/restore-readiness.test.sh` |
 | Lighthouse wrapper | `bash scripts/tests/run-lighthouse-audit.test.sh` |
 | Security selection/orchestration | `python3 -m unittest scripts.tests.security_gate_test` |

@@ -134,7 +134,8 @@ The tracked `.vscode/settings.json` points the TypeScript language service at
 `parserOptions.tsconfigRootDir` to its own directory for every TypeScript file. Markdown stays
 outside Prettier and keeps trailing whitespace. `.editorconfig` covers other editors.
 
-`pnpm format:check` / `pnpm format` run Prettier plus Ruff over the API and the host-Python list.
+`pnpm format` applies Prettier plus Ruff over the API and the host-Python list; `pnpm format:check` is
+Prettier only, Python formatting is checked by the `python-format` group.
 `pnpm lint` runs root tooling (`pnpm lint:tooling`: `scripts/**/*.mjs`, `lighthouserc.cjs`) and the
 web workspace, whose lint also runs typed production rules and executable E2E/platform policy
 self-tests. `pnpm lint:fix` applies safe fixes to both.
@@ -194,7 +195,7 @@ local shipping or every release. Environment setup: [verification runbook](runbo
 | Backend test suite | `cd apps/api && uv run pytest` | local only |
 | Frontend build | `scripts/run-host-web-gate.sh pnpm --filter web build && node scripts/check-paid-leak.mjs` | temporarily stops only the gate web service, builds/prerenders on the host, restores it; fails if any crawled page 500s or paid lesson text leaves `assets/paid/` |
 | Frontend unit tests | `pnpm --filter web test` | local only |
-| E2E (Playwright) | `pnpm --filter web exec playwright test --list && pnpm --filter web test:e2e` | seeded isolated bank; includes `e2e/accessibility.spec.ts` (do not run `audit:a11y` twice) |
+| E2E (Playwright) | `pnpm --filter web exec playwright test --list && pnpm --filter web test:e2e` | seeded isolated bank; includes `e2e/accessibility.spec.ts` |
 | Smoke | `curl -f http://localhost:18000/health/ready` | frontend smoke is the build prerender crawl |
 | Content validation | `pnpm validate:content` | Course/module/lesson membership, publication registry and the complete bank through the API CLI; no database or credentials |
 | Repository hygiene | analyze all reports, then `make clean` | always last |

@@ -60,11 +60,14 @@ gitleaks_history() {
 }
 
 run_sast() {
-  (cd "$repo_dir" && uvx --from semgrep==1.172.0 semgrep scan --config p/default --error)
+  # Bank attachments are task data, not code; scripts/lesson_design runs the author's own lesson
+  # programs offline by design (eval/exec), it never ships or reads input.
+  (cd "$repo_dir" && uvx --from semgrep==1.172.0 semgrep scan --config p/default --error \
+    --exclude content/practice-bank/files --exclude scripts/lesson_design)
 }
 
 run_config() {
-  docker run --rm --volume "$repo_dir:/src:ro" aquasec/trivy:0.73.0 \
+  docker run --rm --volume "$repo_dir:/src:ro" aquasec/trivy:0.76.1 \
     fs --scanners vuln,misconfig,secret --severity HIGH,CRITICAL --ignore-unfixed --exit-code 1 \
     --ignorefile /src/.trivyignore.yaml /src
 }

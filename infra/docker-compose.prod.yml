@@ -45,6 +45,9 @@ services:
     environment:
       APP_ENV: production
       DEPLOY_SHA: ${DEPLOY_SHA}
+    volumes: !override
+      - ${TASK_FILES_DIR:?TASK_FILES_DIR required}:/task-files:ro
+      - ${GEOIP_DIR:?GEOIP_DIR required}:/geoip:ro
     mem_limit: 384m
     restart: always
     labels:

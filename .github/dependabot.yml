@@ -1,3 +1,4 @@
+# Node stays on the LTS line from STACK, Python on the image minor, nginx on the stable branch.
 version: 2
 updates:
   - package-ecosystem: npm
@@ -18,24 +19,36 @@ updates:
       interval: weekly
     cooldown:
       default-days: 7
+    ignore:
+      - dependency-name: node
+        update-types: [version-update:semver-major]
   - package-ecosystem: docker
     directory: /apps/api
     schedule:
       interval: weekly
     cooldown:
       default-days: 7
+    ignore:
+      - dependency-name: python
+        update-types: [version-update:semver-major, version-update:semver-minor]
   - package-ecosystem: docker
     directory: /infra/nginx
     schedule:
       interval: weekly
     cooldown:
       default-days: 7
+    ignore:
+      - dependency-name: nginx
+        update-types: [version-update:semver-minor]
   - package-ecosystem: docker-compose
     directory: /infra
     schedule:
       interval: weekly
     cooldown:
       default-days: 7
+    ignore:
+      - dependency-name: nginx
+        update-types: [version-update:semver-minor]
   - package-ecosystem: github-actions
     directory: /
     schedule:

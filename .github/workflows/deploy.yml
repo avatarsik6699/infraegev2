@@ -52,8 +52,9 @@ jobs:
         run: |
           # Change 210: the practice-bank attachments (~500 MB) are imported content, never read from a
           # release directory; leaving them out keeps the upload small on a slow runner-to-host link.
+          # Change 217: the development override must never reach a production release directory.
           git archive --format=tar.gz --output="/tmp/infraege-$DEPLOY_SHA.tar.gz" "$DEPLOY_SHA" \
-            -- . ':(exclude)content/practice-bank/files'
+            -- . ':(exclude)content/practice-bank/files' ':(exclude)infra/docker-compose.override.yml'
           ls -l "/tmp/infraege-$DEPLOY_SHA.tar.gz"
           source scripts/lib/production-ssh.sh
           INFRAEGE_PROD_HOST="$PROD_HOST"

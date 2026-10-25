@@ -89,7 +89,7 @@ run_compose "$release_dir" "$DEPLOY_SHA" run --rm --no-deps db-provision
 run_compose "$release_dir" "$DEPLOY_SHA" run --rm --no-deps db-migrate
 run_compose "$release_dir" "$DEPLOY_SHA" up --detach --remove-orphans --wait --wait-timeout 180
 ln -sfn "$release_dir" "$root/database-current"
-bash "$release_dir/ops/install-backup-timers.sh" application
+bash "$release_dir/ops/install-backup-timers.sh"
 
 curl --fail --silent --show-error --max-time 15 https://kodumka.ru/health/ready |
   jq -e --arg sha "$DEPLOY_SHA" '.status == "ok" and .version == $sha' >/dev/null
