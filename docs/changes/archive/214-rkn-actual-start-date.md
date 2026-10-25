@@ -9,7 +9,7 @@
 | Change | `214` |
 | Slug | `rkn-actual-start-date` |
 | Title | Фактическая дата начала обработки в уведомлении РКН |
-| Status | `done` |
+| Status | `archived` |
 | Branch | `feature/214-rkn-actual-start-date` |
 
 ---
