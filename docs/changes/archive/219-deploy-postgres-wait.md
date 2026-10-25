@@ -9,7 +9,7 @@
 | Change | `219` |
 | Slug | `deploy-postgres-wait` |
 | Title | Запас времени на старт postgres при деплое |
-| Status | `done` |
+| Status | `archived` |
 | Branch | `feature/219-deploy-postgres-wait` |
 
 ---
