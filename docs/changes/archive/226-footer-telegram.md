@@ -9,7 +9,7 @@
 | Change | `226` |
 | Slug | `footer-telegram` |
 | Title | Подвал: канал Telegram и ссылки без стрелок |
-| Status | `in-progress` |
+| Status | `archived` |
 | Branch | `feature/226-footer-telegram` |
 
 ---
