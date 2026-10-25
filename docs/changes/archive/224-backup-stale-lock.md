@@ -9,7 +9,7 @@
 | Change | `224` |
 | Slug | `backup-stale-lock` |
 | Title | Бэкап после прерванного запуска Restic |
-| Status | `done` |
+| Status | `archived` |
 | Branch | `feature/224-backup-stale-lock` |
 
 ---
