@@ -9,7 +9,7 @@
 | Change | `216` |
 | Slug | `rkn-notice-filed` |
 | Title | Уведомление в РКН подано |
-| Status | `done` |
+| Status | `archived` |
 | Branch | `feature/216-rkn-notice-filed` |
 
 ---
