@@ -9,7 +9,7 @@
 | Change | `225` |
 | Slug | `sheet-block-fixes` |
 | Title | Исправления таблиц Excel в уроках |
-| Status | `in-progress` |
+| Status | `archived` |
 | Branch | `feature/225-sheet-block-fixes` |
 
 ---
