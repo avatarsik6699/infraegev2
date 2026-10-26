@@ -9,7 +9,7 @@
 | Change | `227` |
 | Slug | `account-sign-in-methods` |
 | Title | Вход и способы входа: повторное подтверждение, ошибки, полный прогон |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/227-account-sign-in-methods` |
 
 ---
