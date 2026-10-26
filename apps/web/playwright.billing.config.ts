@@ -8,7 +8,8 @@ process.env.INFRAEGE_ACCOUNT_MAILBOX = mailbox;
 
 export default defineConfig({
   testDir: "./e2e",
-  testMatch: "billing-integration.spec.ts",
+  // Change 227: the account lifecycle needs paid access and the stand-in providers too
+  testMatch: ["billing-integration.spec.ts", "account-lifecycle.spec.ts"],
   outputDir: "../../.output/playwright-billing-integration",
   reporter: process.env.GATE_SUMMARY ? "dot" : "list",
   fullyParallel: false,
@@ -27,6 +28,7 @@ export default defineConfig({
         `INFRAEGE_ACCOUNT_MAILBOX=${JSON.stringify(mailbox)} APP_ENV=development ` +
         // Change 192: paid access on, the fake provider settles the payment locally
         "PAYWALL_ENABLED=true BILLING_ENABLED=true BILLING_PROVIDER=fake " +
+        "AUTH_FAKE_PROVIDERS=true VK_ENABLED=true YANDEX_ENABLED=true " +
         `PUBLIC_ORIGIN=${frontendUrl} SMTP_HOST=synthetic-mailbox SMTP_PORT=1 ` +
         "MAIL_FROM=accounts@example.test uv run --project ../api " +
         "python ../../scripts/test-account-server.py --host 127.0.0.2 --port 8100",

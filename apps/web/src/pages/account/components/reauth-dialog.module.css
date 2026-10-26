@@ -1,0 +1,20 @@
+.form,
+.providers {
+  display: grid;
+  gap: var(--space-1-5);
+}
+
+.username {
+  composes: visuallyHidden from "../../../shared/styles/patterns.module.css";
+}
+
+.or {
+  margin: 0;
+  font-size: var(--text-sm);
+  text-align: center;
+}
+
+.error {
+  margin: 0;
+  color: var(--color-danger);
+}

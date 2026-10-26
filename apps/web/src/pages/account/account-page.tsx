@@ -35,7 +35,12 @@ export const AccountPage: React.FC<AccountPageTypes.Props> = (props) => {
     message: string;
     tone: "success" | "info";
   } | null>(null);
-  const [error, setError] = useState<string | null>(null);
+  // Change 227: a return from VK ID or Яндекс ID that did not sign in says why
+  const [error, setError] = useState<string | null>(
+    props.mode === "sign-in" && props.authError
+      ? accountPageHelpers.authErrorMessage(props.authError, "sign-in")
+      : null,
+  );
   const [delivery, setDelivery] = useState<{
     purpose: AccountPageTypes.DeliveryPurpose;
     email: string;
@@ -305,6 +310,8 @@ export const AccountPage: React.FC<AccountPageTypes.Props> = (props) => {
               enabledProviders={props.enabledProviders ?? []}
               billing={props.billing}
               tab={props.tab}
+              resume={props.resume}
+              authError={props.authError}
             />
           ) : null}
           {props.mode === "verify" && props.token ? (

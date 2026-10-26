@@ -269,6 +269,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/auth/reauth": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Reauthenticate
+         * @description Change 227: the current password reopens the window for login-method changes.
+         */
+        post: operations["reauthenticate_api_auth_reauth_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/auth/register": {
         parameters: {
             query?: never;
@@ -797,6 +817,11 @@ export interface components {
             id: string;
             /** Methods */
             methods: components["schemas"]["LoginMethod"][];
+            /**
+             * Recent Auth Until
+             * Format: date-time
+             */
+            recent_auth_until: string;
         };
         /** AddEmailMethodRequest */
         AddEmailMethodRequest: {
@@ -1325,6 +1350,11 @@ export interface components {
             /** Results */
             results: components["schemas"]["ResultView"][];
         };
+        /** ProviderReauthRequest */
+        ProviderReauthRequest: {
+            /** Resume */
+            resume?: ("link:vk" | "link:yandex" | "unlink:vk" | "unlink:yandex" | "delete" | "email") | null;
+        };
         /** ProviderRegisterRequest */
         ProviderRegisterRequest: {
             /**
@@ -1428,6 +1458,14 @@ export interface components {
             theory_links?: components["schemas"]["TheoryLink"][];
             /** Title */
             title: string;
+        };
+        /**
+         * ReauthRequest
+         * @description Change 227: confirm the current password without signing out.
+         */
+        ReauthRequest: {
+            /** Password */
+            password: string;
         };
         /** RecoveryRequest */
         RecoveryRequest: {
@@ -2085,9 +2123,10 @@ export interface operations {
     };
     provider_callback_api_auth_providers__provider__callback_get: {
         parameters: {
-            query: {
-                state: string;
-                code: string;
+            query?: {
+                state?: string;
+                code?: string;
+                error?: string;
                 device_id?: string;
             };
             header?: never;
@@ -2164,7 +2203,11 @@ export interface operations {
             };
             cookie?: never;
         };
-        requestBody?: never;
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["ProviderReauthRequest"] | null;
+            };
+        };
         responses: {
             /** @description Successful Response */
             200: {
@@ -2209,6 +2252,39 @@ export interface operations {
                 content: {
                     "application/json": unknown;
                 };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    reauthenticate_api_auth_reauth_post: {
+        parameters: {
+            query?: never;
+            header?: {
+                "x-csrf-token"?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ReauthRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
             };
             /** @description Validation Error */
             422: {

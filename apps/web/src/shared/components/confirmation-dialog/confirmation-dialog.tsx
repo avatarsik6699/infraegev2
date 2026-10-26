@@ -10,7 +10,12 @@ import styles from "./confirmation-dialog.module.css";
 export const ConfirmationDialog: React.FC<ConfirmationDialogTypes.Props> = (
   props,
 ) => {
-  const [open, setOpen] = useState(false);
+  const [ownOpen, setOwnOpen] = useState(false);
+  const open = props.open ?? ownOpen;
+  const setOpen = (next: boolean) => {
+    if (props.open === undefined) setOwnOpen(next);
+    props.onOpenChange?.(next);
+  };
   const [pending, setPending] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const filled = props.actions === "filled";

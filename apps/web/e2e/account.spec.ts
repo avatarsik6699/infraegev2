@@ -72,10 +72,10 @@ test("unlinking a provider requires confirmation and remains recoverable", async
   await accountPage.expectProviderUnlinkConfirmation();
 });
 
-test("email member receives a contextual repeat-sign-in link after unlink refusal", async ({
+test("an email member past the ten minutes confirms with the password, then unlinks", async ({
   accountPage,
 }) => {
-  await accountPage.expectEmailReauthenticationAfterUnlinkRefusal();
+  await accountPage.expectEmailPasswordReconfirmation();
 });
 
 test("server-owned lesson progress is cleared from the UI on logout", async ({

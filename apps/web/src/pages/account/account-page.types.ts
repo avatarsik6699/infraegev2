@@ -2,6 +2,7 @@ import type { CourseProgressTypes } from "~/entities/course";
 import { type Provider } from "~/features/account";
 import type { AccountProfileTypes } from "./account-profile.types";
 import { type MailPurpose } from "./model/mail-cooldown";
+import type { AuthError, ResumeIntent } from "./model/recent-auth";
 
 export namespace AccountPageTypes {
   export type Mode =
@@ -23,6 +24,9 @@ export namespace AccountPageTypes {
     billing?: AccountProfileTypes.Billing;
     /** The profile tab to open first. */
     tab?: AccountProfileTypes.Tab;
+    /** Change 227: see AccountProfileTypes. */
+    resume?: ResumeIntent;
+    authError?: AuthError;
   };
   export type DeliveryPurpose = MailPurpose;
 }

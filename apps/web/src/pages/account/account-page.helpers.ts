@@ -1,5 +1,6 @@
 import { ApiError } from "~/shared/api";
 import type { AccountPageTypes } from "./account-page.types";
+import type { AuthError, ResumeIntent } from "./model/recent-auth";
 
 const providers = ["vk", "yandex"] as const;
 
@@ -21,7 +22,7 @@ function deletionError(reason: unknown): string {
 
 function providerDeletionError(reason: unknown): string {
   if (reason instanceof ApiError && reason.status === 403)
-    return "Нужно повторно войти через привязанный сервис. Закройте окно, подтвердите вход и попробуйте снова.";
+    return "С входа прошло больше 10 минут. Подтвердите вход и повторите удаление.";
   if (reason instanceof ApiError && reason.status === 401)
     return "Сеанс закончился. Войдите снова и повторите удаление.";
   return "Не удалось удалить аккаунт. Попробуйте ещё раз.";
@@ -29,10 +30,57 @@ function providerDeletionError(reason: unknown): string {
 
 function unlinkError(reason: unknown): string {
   if (reason instanceof ApiError && reason.status === 403)
-    return "Нужно повторно подтвердить вход через привязанный способ.";
+    return "С входа прошло больше 10 минут. Подтвердите вход и повторите.";
   if (reason instanceof ApiError && reason.status === 409)
     return "Последний способ входа отвязать нельзя.";
   return "Не удалось отвязать способ входа. Попробуйте ещё раз.";
+}
+
+/** Change 227: the action of the «Подтвердите, что это вы» description. */
+function intentAction(intent: ResumeIntent): string {
+  switch (intent) {
+    case "link:vk":
+      return "добавить VK\u00a0ID";
+    case "link:yandex":
+      return "добавить Яндекс\u00a0ID";
+    case "unlink:vk":
+      return "отвязать VK\u00a0ID";
+    case "unlink:yandex":
+      return "отвязать Яндекс\u00a0ID";
+    case "delete":
+      return "удалить аккаунт";
+    case "email":
+      return "добавить почту и пароль";
+  }
+}
+
+function reauthError(reason: unknown): string {
+  if (reason instanceof ApiError && reason.status === 403)
+    return "Пароль не подошёл. Проверьте раскладку и попробуйте ещё раз.";
+  if (reason instanceof ApiError && reason.status === 429)
+    return "Слишком много попыток. Подождите минуту и попробуйте снова.";
+  return "Не удалось подтвердить вход. Проверьте подключение и повторите.";
+}
+
+/** Change 227: why a return from VK ID or Яндекс ID did not sign in or change anything. */
+function authErrorMessage(
+  code: AuthError,
+  place: "sign-in" | "profile",
+): string {
+  switch (code) {
+    case "expired":
+      return "Время на вход через сервис истекло. Попробуйте ещё раз.";
+    case "cancelled":
+      return place === "sign-in"
+        ? "Вход через сервис отменён."
+        : "Подтверждение отменено, в аккаунте ничего не изменилось.";
+    case "failed":
+      return "Сервис не подтвердил вход. Попробуйте ещё раз чуть позже.";
+    case "other_account":
+      return "Аккаунт сервиса, под которым вы вошли, относится к другому аккаунту Кодумки. Аккаунты не объединяются: войдите в сервис под своим аккаунтом или сначала отвяжите этот в другом аккаунте Кодумки.";
+    case "already_linked":
+      return "К аккаунту уже привязан другой аккаунт этого сервиса. Чтобы заменить его, сначала отвяжите прежний.";
+  }
 }
 
 function inputValue(data: FormData, name: string): string {
@@ -88,6 +136,9 @@ export const accountPageHelpers = {
   deletionError,
   providerDeletionError,
   unlinkError,
+  intentAction,
+  reauthError,
+  authErrorMessage,
   inputValue,
   formLabel,
   deliveryError,

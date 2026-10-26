@@ -1,11 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { getProviderAvailability } from "~/features/account";
-import { AccountPage } from "~/pages/account";
+import { AccountPage, accountSearch } from "~/pages/account";
 import { pageHead } from "~/shared/lib/seo";
 export const Route = createFileRoute("/sign-in")({
-  validateSearch: (search) => ({
-    returnTo: typeof search.returnTo === "string" ? search.returnTo : undefined,
-  }),
+  validateSearch: accountSearch.signIn,
   loader: () => getProviderAvailability().catch(() => []),
   // Change 194: account and sign-in pages stay out of search, `returnTo` variants included.
   head: () =>
@@ -22,6 +20,7 @@ function SignInRoute() {
     <AccountPage
       mode="sign-in"
       returnTo={Route.useSearch().returnTo}
+      authError={Route.useSearch().auth_error}
       enabledProviders={Route.useLoaderData()}
     />
   );

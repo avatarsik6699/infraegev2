@@ -225,6 +225,12 @@
   border-radius: var(--radius-control);
   background: var(--color-surface-quiet);
 }
+/* Change 227: the mark sits on the method's name line, not between its two lines. */
+.method > svg:first-child {
+  align-self: start;
+  /* the name is body text: var(--text-reading) at line-height 1.7 */
+  margin-block-start: calc((1.7 * var(--text-reading) - 18px) / 2);
+}
 /* Change 198: a signed-in device has no icon; its «Выйти» stays at the right edge. */
 .device {
   grid-template-columns: minmax(0, 1fr) auto;

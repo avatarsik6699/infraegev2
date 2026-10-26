@@ -6,17 +6,13 @@ import {
   getAccountTopicSummary,
   getProviderAvailability,
 } from "~/features/account";
-import { AccountPage } from "~/pages/account";
+import { AccountPage, accountSearch } from "~/pages/account";
 import { pageHead } from "~/shared/lib/seo";
 
 export const Route = createFileRoute("/account")({
   // Change 192: «Раздел «Доступ»» links open the profile on that tab.
-  validateSearch: (
-    search: Record<string, unknown>,
-  ): { tab?: "access" | "settings" } =>
-    search.tab === "access" || search.tab === "settings"
-      ? { tab: search.tab }
-      : {},
+  // Change 227: `resume` and `auth_error` come back from a provider confirmation.
+  validateSearch: accountSearch.profile,
   loader: async () => {
     const [practiceSummary, topicSummary, enabledProviders, offer, access] =
       await Promise.all([
@@ -55,6 +51,8 @@ function AccountRoute() {
       enabledProviders={data.enabledProviders}
       billing={data.billing}
       tab={Route.useSearch().tab}
+      resume={Route.useSearch().resume}
+      authError={Route.useSearch().auth_error}
     />
   );
 }

@@ -1649,21 +1649,22 @@ def test_provider_state_is_single_use_and_last_method_is_guarded(database, monke
         assert started.status_code == 303
         state = parse_qs(urlsplit(started.headers["location"]).query)["state"][0]
         with TestClient(create_app()) as other_browser:
+            # Change 227: a failed callback ends on a page with an explanation, not JSON
             assert (
                 other_browser.get(
                     "/api/auth/providers/vk/callback",
                     params={"code": "valid-code", "state": state},
                     follow_redirects=False,
-                ).status_code
-                == 400
+                ).headers["location"]
+                == "/sign-in?auth_error=expired"
             )
         assert (
             client.get(
                 "/api/auth/providers/vk/callback",
                 params={"code": "valid-code", "state": "x" * 43},
                 follow_redirects=False,
-            ).status_code
-            == 400
+            ).headers["location"]
+            == "/sign-in?auth_error=expired"
         )
         callback = client.get(
             "/api/auth/providers/vk/callback",
@@ -1680,8 +1681,8 @@ def test_provider_state_is_single_use_and_last_method_is_guarded(database, monke
                 "/api/auth/providers/vk/callback",
                 params={"code": "valid-code", "state": state},
                 follow_redirects=False,
-            ).status_code
-            == 400
+            ).headers["location"]
+            == "/account?tab=settings&auth_error=expired"
         )
         session = client.get("/api/auth/session").json()
         assert session["account"]["methods"] == [{"provider": "vk", "subject_hint": None}]

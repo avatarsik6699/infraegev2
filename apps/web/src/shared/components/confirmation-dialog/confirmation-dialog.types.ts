@@ -12,5 +12,8 @@ export namespace ConfirmationDialogTypes {
     onConfirm: () => void | Promise<void>;
     errorMessage?: (reason: unknown) => string;
     onError?: (reason: unknown) => void;
+    /** Change 227: controlled mode, e.g. to ask for a sign-in before it opens. */
+    open?: boolean;
+    onOpenChange?: (open: boolean) => void;
   };
 }

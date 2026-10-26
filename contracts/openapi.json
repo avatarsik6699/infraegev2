@@ -72,12 +72,18 @@
             },
             "title": "Methods",
             "type": "array"
+          },
+          "recent_auth_until": {
+            "format": "date-time",
+            "title": "Recent Auth Until",
+            "type": "string"
           }
         },
         "required": [
           "id",
           "email",
-          "methods"
+          "methods",
+          "recent_auth_until"
         ],
         "title": "AccountView",
         "type": "object"
@@ -1727,6 +1733,32 @@
         "title": "ProgressView",
         "type": "object"
       },
+      "ProviderReauthRequest": {
+        "additionalProperties": false,
+        "properties": {
+          "resume": {
+            "anyOf": [
+              {
+                "enum": [
+                  "link:vk",
+                  "link:yandex",
+                  "unlink:vk",
+                  "unlink:yandex",
+                  "delete",
+                  "email"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Resume"
+          }
+        },
+        "title": "ProviderReauthRequest",
+        "type": "object"
+      },
       "ProviderRegisterRequest": {
         "additionalProperties": false,
         "properties": {
@@ -2175,6 +2207,23 @@
           "sources"
         ],
         "title": "PublicTaskContent",
+        "type": "object"
+      },
+      "ReauthRequest": {
+        "additionalProperties": false,
+        "description": "Change 227: confirm the current password without signing out.",
+        "properties": {
+          "password": {
+            "maxLength": 128,
+            "minLength": 1,
+            "title": "Password",
+            "type": "string"
+          }
+        },
+        "required": [
+          "password"
+        ],
+        "title": "ReauthRequest",
         "type": "object"
       },
       "RecoveryRequest": {
@@ -3631,10 +3680,10 @@
           {
             "in": "query",
             "name": "state",
-            "required": true,
+            "required": false,
             "schema": {
+              "default": "",
               "maxLength": 256,
-              "minLength": 20,
               "title": "State",
               "type": "string"
             }
@@ -3642,11 +3691,22 @@
           {
             "in": "query",
             "name": "code",
-            "required": true,
+            "required": false,
             "schema": {
+              "default": "",
               "maxLength": 2048,
-              "minLength": 1,
               "title": "Code",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "error",
+            "required": false,
+            "schema": {
+              "default": "",
+              "maxLength": 256,
+              "title": "Error",
               "type": "string"
             }
           },
@@ -3780,6 +3840,23 @@
             }
           }
         ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "anyOf": [
+                  {
+                    "$ref": "#/components/schemas/ProviderReauthRequest"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "title": "Body"
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "content": {
@@ -3858,6 +3935,59 @@
           }
         },
         "summary": "Provider Login Start",
+        "tags": [
+          "account"
+        ]
+      }
+    },
+    "/api/auth/reauth": {
+      "post": {
+        "description": "Change 227: the current password reopens the window for login-method changes.",
+        "operationId": "reauthenticate_api_auth_reauth_post",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "x-csrf-token",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Csrf-Token"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReauthRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Reauthenticate",
         "tags": [
           "account"
         ]

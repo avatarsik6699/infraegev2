@@ -10,6 +10,7 @@ from __future__ import annotations
 from fastapi import APIRouter
 
 from app.modules.account.api import router as account_router
+from app.modules.account.fake_provider import router as fake_provider_router
 from app.modules.account.progress_api import router as progress_router
 from app.modules.billing.api import router as billing_router
 from app.modules.entitlement.api import router as access_router
@@ -20,6 +21,8 @@ api_router = APIRouter(prefix="/api")
 api_router.include_router(tasks_router)
 api_router.include_router(practice_router)
 api_router.include_router(account_router)
+# Change 227: answers 404 unless AUTH_FAKE_PROVIDERS (never in production)
+api_router.include_router(fake_provider_router)
 api_router.include_router(progress_router)
 api_router.include_router(access_router)
 api_router.include_router(billing_router)

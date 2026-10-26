@@ -1,0 +1,29 @@
+.backdrop {
+  composes: backdrop from "../../styles/dialog.module.css";
+}
+
+.viewport {
+  composes: viewport from "../../styles/dialog.module.css";
+}
+
+.popup {
+  composes: popup from "../../styles/dialog.module.css";
+  gap: var(--space-2);
+}
+
+.copy {
+  display: grid;
+  gap: var(--space-1);
+}
+
+.title {
+  composes: title from "../../styles/dialog.module.css";
+}
+
+.description {
+  composes: description from "../../styles/dialog.module.css";
+}
+
+.actions {
+  composes: actions from "../../styles/dialog.module.css";
+}

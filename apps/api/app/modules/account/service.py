@@ -480,6 +480,18 @@ async def login(
     return await create_session(db, credential.user_id, old_token, device)
 
 
+async def reauthenticate(db: AsyncSession, session: AccountSession, password: str) -> None:
+    """Change 227: a confirmed password restarts this session's recent-authentication window."""
+    credential = await db.get(AccountPassword, session.user_id)
+    valid = await asyncio.to_thread(
+        verify_password, credential.password_hash if credential else None, password
+    )
+    if credential is None or not valid or credential.email_verified_at is None:
+        raise InvalidCredentials("invalid password")
+    session.authenticated_at = now()
+    await db.flush()
+
+
 async def reset_password(db: AsyncSession, opaque: str, password: str) -> None:
     token = await consume_token(db, opaque, "password_reset")
     credential = await db.get(AccountPassword, token.user_id)

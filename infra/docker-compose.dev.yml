@@ -40,6 +40,10 @@ services:
   api:
     environment:
       - APP_ENV=development
+      # Change 227: VK ID and Яндекс ID through the local stand-in (refused in production)
+      - AUTH_FAKE_PROVIDERS=true
+      - VK_ENABLED=true
+      - YANDEX_ENABLED=true
     volumes:
       - ../apps/api/app:/app/app
     healthcheck:

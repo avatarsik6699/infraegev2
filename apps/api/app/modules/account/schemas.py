@@ -51,6 +51,20 @@ class ResetPasswordRequest(TokenRequest):
     password: str = Field(min_length=12, max_length=128)
 
 
+class ReauthRequest(StrictModel):
+    """Change 227: confirm the current password without signing out."""
+
+    password: str = Field(min_length=1, max_length=128)
+
+
+# Change 227: what the profile resumes after a provider re-confirmation returns.
+ResumeIntent = Literal["link:vk", "link:yandex", "unlink:vk", "unlink:yandex", "delete", "email"]
+
+
+class ProviderReauthRequest(StrictModel):
+    resume: ResumeIntent | None = None
+
+
 class DeleteAccountRequest(StrictModel):
     confirmation: str = Field(max_length=16)
     password: str | None = Field(default=None, max_length=128)
@@ -65,6 +79,8 @@ class AccountView(StrictModel):
     id: str
     email: str | None
     methods: list[LoginMethod]
+    # Change 227: until then login methods and deletion need no new confirmation
+    recent_auth_until: datetime
 
 
 class SessionView(StrictModel):

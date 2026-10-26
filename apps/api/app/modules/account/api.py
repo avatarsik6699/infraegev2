@@ -7,7 +7,8 @@ import base64
 import hashlib
 from collections.abc import AsyncIterator
 from datetime import timedelta
-from typing import Annotated, cast
+from typing import Annotated, Literal, cast
+from urllib.parse import urlencode
 from uuid import UUID
 from zoneinfo import ZoneInfo
 
@@ -21,7 +22,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.config import settings
 from app.core.database import request_engine
-from app.modules.account import service
+from app.modules.account import fake_provider, service
 from app.modules.account.device import Device, device_of, set_device_cookie
 from app.modules.account.mail import MailUnavailable, send_account_mail
 from app.modules.account.models import (
@@ -45,8 +46,10 @@ from app.modules.account.schemas import (
     LoginMethod,
     LoginRequest,
     PendingProviderView,
+    ProviderReauthRequest,
     ProviderRegisteredView,
     ProviderRegisterRequest,
+    ReauthRequest,
     RecoveryRequest,
     RegisterRequest,
     ResetPasswordRequest,
@@ -69,6 +72,17 @@ SESSION_SECONDS = int(service.SESSION_LIFETIME.total_seconds())
 MOSCOW = ZoneInfo("Europe/Moscow")
 PENDING_REGISTRATION = timedelta(minutes=15)
 PROVIDERS: tuple[ProviderName, ...] = ("vk", "yandex")
+# Change 227: the profile settings tab, where link, re-confirmation and their errors return
+SETTINGS_PATH = "/account?tab=settings"
+CallbackFailure = Literal["expired", "cancelled", "failed", "other_account", "already_linked"]
+
+
+class CallbackFailed(Exception):
+    """A provider callback that ends on a page with an explanation, never in JSON."""
+
+    def __init__(self, code: CallbackFailure, flow: str | None = None, return_path: str = "/"):
+        super().__init__(code)
+        self.code, self.flow, self.return_path = code, flow, return_path
 
 
 def cookie_name() -> str:
@@ -206,13 +220,17 @@ async def start_provider(
     verifier = new_token()
     nonce = new_token()
     try:
-        target = authorization_url(
-            provider,
-            provider_settings(),
-            callback_url=callback_url(provider),
-            state=state,
-            code_challenge=code_challenge(verifier),
-            nonce=nonce,
+        target = (
+            fake_provider.authorization_url(provider, state)
+            if fake_provider.enabled()
+            else authorization_url(
+                provider,
+                provider_settings(),
+                callback_url=callback_url(provider),
+                state=state,
+                code_challenge=code_challenge(verifier),
+                nonce=nonce,
+            )
         )
     except ProviderError as exc:
         raise HTTPException(503, "provider unavailable") from exc
@@ -265,7 +283,9 @@ async def provider_link_start(
     current = await active_session(request, db)
     if current.authenticated_at < service.now() - service.RECENT_AUTH:
         raise HTTPException(403, "recent authentication required")
-    target, browser_token = await start_provider(db, selected, "link", "/account", current.user_id)
+    target, browser_token = await start_provider(
+        db, selected, "link", SETTINGS_PATH, current.user_id
+    )
     set_provider_cookie(response, browser_token)
     return {"url": target}
 
@@ -276,14 +296,17 @@ async def provider_reauth_start(
     request: Request,
     response: Response,
     db: AccountDb,
+    body: ProviderReauthRequest | None = None,
     x_csrf_token: Annotated[str | None, Header()] = None,
 ) -> dict[str, str]:
     selected = provider_name(provider)
     require_origin(request)
     require_csrf(request, x_csrf_token)
     current = await active_session(request, db)
+    # Change 227: the action the confirmation was for continues on return
+    resume = f"&{urlencode({'resume': body.resume})}" if body and body.resume else ""
     target, browser_token = await start_provider(
-        db, selected, "reauth", "/account", current.user_id
+        db, selected, "reauth", SETTINGS_PATH + resume, current.user_id
     )
     set_provider_cookie(response, browser_token)
     return {"url": target}
@@ -294,13 +317,54 @@ async def provider_callback(
     provider: str,
     request: Request,
     db: AccountDb,
-    state: Annotated[str, Query(min_length=20, max_length=256)],
-    code: Annotated[str, Query(min_length=1, max_length=2048)],
+    state: Annotated[str, Query(max_length=256)] = "",
+    code: Annotated[str, Query(max_length=2048)] = "",
+    error: Annotated[str, Query(max_length=256)] = "",
     device_id: Annotated[str, Query(max_length=256)] = "",
 ) -> RedirectResponse:
     selected = provider_name(provider)
-    if not state.isascii():
-        raise HTTPException(400, "provider sign-in failed")
+    try:
+        return await _complete_provider(selected, request, db, state, code, error, device_id)
+    except CallbackFailed as failure:
+        await db.rollback()
+        logger.info(
+            "account.provider_callback_failed",
+            provider=selected,
+            flow=failure.flow,
+            reason=failure.code,
+        )
+        flow = failure.flow
+        # an unknown `state` is not this browser's sign-in: its pending one stays usable
+        own_attempt = flow is not None
+        if flow is None:
+            signed_in = await service.current_session(db, raw_session_token(request))
+            flow = "reauth" if signed_in is not None else "login"
+        if flow == "login":
+            query = {"returnTo": failure.return_path} if failure.return_path != "/" else {}
+            target = f"/sign-in?{urlencode({**query, 'auth_error': failure.code})}"
+        else:
+            target = f"{SETTINGS_PATH}&{urlencode({'auth_error': failure.code})}"
+        response = RedirectResponse(
+            target,
+            status_code=303,
+            headers={"Cache-Control": "no-store", "Referrer-Policy": "no-referrer"},
+        )
+        if own_attempt:
+            clear_provider_cookie(response)
+        return response
+
+
+async def _complete_provider(
+    selected: ProviderName,
+    request: Request,
+    db: AsyncSession,
+    state: str,
+    code: str,
+    error: str,
+    device_id: str,
+) -> RedirectResponse:
+    if len(state) < 20 or not state.isascii():
+        raise CallbackFailed("expired")
     async with db.begin():
         challenge = await db.scalar(
             select(AccountProviderChallenge)
@@ -319,32 +383,43 @@ async def provider_callback(
             or len(browser_token) > 256
             or not token_matches(challenge.browser_hash, browser_token)
         ):
-            raise HTTPException(400, "provider sign-in failed")
+            raise CallbackFailed("expired")
         challenge.consumed_at = service.now()
         verifier, nonce = challenge.code_verifier, challenge.nonce
         flow, owner, return_path = challenge.flow, challenge.user_id, challenge.return_path
-    if flow in {"link", "reauth"}:
-        current = await active_session(request, db)
+    # Change 227: the person declined at the provider (VK ID and Яндекс ID send `error`)
+    if error or not code:
+        raise CallbackFailed("cancelled", flow, return_path)
+
+    async def same_owner() -> None:
+        current = await service.current_session(db, raw_session_token(request))
+        if current is None:
+            raise CallbackFailed("expired", "login")
         if current.user_id != owner:
-            raise HTTPException(403, "account changed during sign-in")
+            raise CallbackFailed("expired", flow, return_path)
+
+    if flow in {"link", "reauth"}:
+        await same_owner()
         await db.commit()
     try:
-        identity = await authenticate_callback(
-            selected,
-            provider_settings(),
-            code=code,
-            callback_url=callback_url(selected),
-            code_verifier=verifier,
-            nonce=nonce,
-            state=state,
-            device_id=device_id,
+        identity = (
+            fake_provider.identity(selected, code)
+            if fake_provider.enabled()
+            else await authenticate_callback(
+                selected,
+                provider_settings(),
+                code=code,
+                callback_url=callback_url(selected),
+                code_verifier=verifier,
+                nonce=nonce,
+                state=state,
+                device_id=device_id,
+            )
         )
     except ProviderError as exc:
-        raise HTTPException(400, "provider sign-in failed") from exc
+        raise CallbackFailed("failed", flow, return_path) from exc
     if flow in {"link", "reauth"}:
-        current = await active_session(request, db)
-        if current.user_id != owner:
-            raise HTTPException(403, "account changed during sign-in")
+        await same_owner()
     linked = await db.scalar(
         select(AccountIdentity).where(
             AccountIdentity.provider == identity.provider,
@@ -353,11 +428,11 @@ async def provider_callback(
     )
     if flow == "reauth":
         if linked is None or linked.user_id != owner:
-            raise HTTPException(403, "provider belongs to another account")
+            raise CallbackFailed("other_account", flow)
         account_id = owner
     elif flow == "link":
         if linked is not None and linked.user_id != owner:
-            raise HTTPException(409, "provider belongs to another account")
+            raise CallbackFailed("other_account", flow)
         existing_provider = await db.scalar(
             select(AccountIdentity).where(
                 AccountIdentity.user_id == owner,
@@ -365,7 +440,7 @@ async def provider_callback(
             )
         )
         if existing_provider is not None and existing_provider.subject != identity.subject:
-            raise HTTPException(409, "provider already linked")
+            raise CallbackFailed("already_linked", flow)
         account_id = owner
         if linked is None:
             db.add(
@@ -390,13 +465,13 @@ async def provider_callback(
             )
         account_id = linked.user_id
     if account_id is None:
-        raise HTTPException(400, "provider sign-in failed")
+        raise CallbackFailed("failed", flow, return_path)
     device, fresh_device = device_of(request)
     sign_in = await service.create_session(db, account_id, raw_session_token(request), device)
     try:
         await db.commit()
     except IntegrityError as exc:
-        raise HTTPException(409, "provider already linked") from exc
+        raise CallbackFailed("already_linked", flow) from exc
     if sign_in.new_device and flow == "login":
         await notify_new_device(db, account_id, device)
     response = RedirectResponse(
@@ -548,6 +623,7 @@ async def _view(db: AsyncSession, session: AccountSession) -> AccountView:
         id=str(session.user_id),
         email=email,
         methods=[LoginMethod(provider=method) for method in methods],
+        recent_auth_until=session.authenticated_at + service.RECENT_AUTH,
     )
 
 
@@ -713,6 +789,24 @@ async def login(
         account=view,
         csrf_token=csrf_token(sign_in.opaque, settings.auth_csrf_secret.get_secret_value()),
     )
+
+
+@router.post("/reauth", status_code=status.HTTP_204_NO_CONTENT)
+async def reauthenticate(
+    request: Request,
+    body: ReauthRequest,
+    db: AccountDb,
+    x_csrf_token: Annotated[str | None, Header()] = None,
+) -> None:
+    """Change 227: the current password reopens the window for login-method changes."""
+    require_origin(request)
+    require_csrf(request, x_csrf_token)
+    current = await active_session(request, db)
+    try:
+        await service.reauthenticate(db, current, body.password)
+        await db.commit()
+    except service.InvalidCredentials as exc:
+        raise HTTPException(403, "invalid password") from exc
 
 
 @router.post("/logout", status_code=status.HTTP_204_NO_CONTENT)

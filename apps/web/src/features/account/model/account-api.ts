@@ -1,4 +1,7 @@
 import { apiClient, ApiError } from "~/shared/api";
+import type { components } from "~/shared/api/schema";
+
+type ReauthResume = components["schemas"]["ProviderReauthRequest"]["resume"];
 
 /** The edition of /consent the form links to; the API accepts only this one. */
 export const CONSENT_VERSION = "2026-10-25";
@@ -111,19 +114,30 @@ export const accountApi = {
     ensure(response);
     return response.data?.url;
   },
+  /** Change 227: `resume` — the profile action that continues on return. */
   reauthenticateProvider: async (
     provider: string,
     csrfToken: string | null,
+    resume?: ReauthResume,
   ) => {
     const response = await apiClient.POST(
       "/api/auth/providers/{provider}/reauth",
       {
         params: { path: { provider } },
+        body: { resume: resume ?? null },
         headers: { "x-csrf-token": csrfToken },
       },
     );
     ensure(response);
     return response.data?.url;
+  },
+  /** Change 227: the current password restarts the ten-minute window. */
+  reauthenticate: async (password: string, csrfToken: string | null) => {
+    const response = await apiClient.POST("/api/auth/reauth", {
+      body: { password },
+      headers: { "x-csrf-token": csrfToken },
+    });
+    ensure(response);
   },
   deleteAccount: async (csrfToken: string | null, password?: string) => {
     const response = await apiClient.DELETE("/api/auth/account", {

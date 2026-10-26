@@ -1,6 +1,7 @@
 import { useNavigate } from "@tanstack/react-router";
 import { LogOut } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { billingFormat } from "~/entities/billing";
 import { accountApi, useAccountSession } from "~/features/account";
 import { ApiError } from "~/shared/api";
 import { ActionLink } from "~/shared/components/action-link";
@@ -18,6 +19,7 @@ import {
 import { Typography } from "~/shared/components/typography";
 import { authProviderNavigation } from "~/shared/lib/auth-provider-navigation";
 import { AccountAccess } from "./components/account-access";
+import { ReauthDialog } from "./components/reauth-dialog";
 import { AccountOverview } from "./components/account-overview";
 import { EmailMethodForm } from "./components/email-method-form";
 import { LoginMethodIcon } from "./components/login-method-icon";
@@ -25,17 +27,44 @@ import { SignedInDevices } from "./components/signed-in-devices";
 import styles from "./account-page.module.css";
 import type { AccountProfileTypes } from "./account-profile.types";
 import { accountPageHelpers } from "./account-page.helpers";
+import { recentAuth, type ResumeIntent } from "./model/recent-auth";
 
 export const AccountProfile: React.FC<AccountProfileTypes.Props> = (props) => {
   const session = useAccountSession();
   const navigate = useNavigate();
   const [pending, setPending] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [needsReauthentication, setNeedsReauthentication] = useState(false);
+  const [error, setError] = useState<string | null>(
+    props.authError
+      ? accountPageHelpers.authErrorMessage(props.authError, "profile")
+      : null,
+  );
+  // Change 227: the action waiting for «Подтвердите, что это вы», and the open confirmation
+  const [reauthFor, setReauthFor] = useState<ResumeIntent | null>(null);
+  const [confirming, setConfirming] = useState<ResumeIntent | null>(null);
+  const [emailResumed, setEmailResumed] = useState(false);
   const [tab, setTab] = useState<string>(
     props.tab === "access" && !props.billing
       ? "overview"
       : (props.tab ?? "overview"),
+  );
+  const account = session.account;
+  const resume = props.resume;
+  // a second start would replace the provider cookie of the first (React re-runs effects)
+  const resumed = useRef(false);
+  useEffect(
+    function resumeAfterProviderFx() {
+      if (!account || (!resume && !props.authError) || resumed.current) return;
+      resumed.current = true;
+      // the confirmation came back from a provider: continue once, then clean the address
+      if (resume) proceed(resume);
+      void navigate({
+        to: "/account",
+        search: { tab: "settings" },
+        replace: true,
+      });
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- once per returned intent
+    [account?.id, resume],
   );
   if (session.status === "loading")
     return (
@@ -70,26 +99,63 @@ export const AccountProfile: React.FC<AccountProfileTypes.Props> = (props) => {
   let emailMethodStatus = "Не подключено";
   if (session.account.email) emailMethodStatus = "Ожидает подтверждения";
   if (hasPassword) emailMethodStatus = "Подключено";
-  const act = async (action: () => Promise<void>) => {
+  const act = async (action: () => Promise<void>, intent?: ResumeIntent) => {
     setPending(true);
     setError(null);
-    setNeedsReauthentication(false);
     try {
       await action();
       await session.refresh();
     } catch (reason) {
-      setNeedsReauthentication(
-        reason instanceof ApiError && reason.status === 403,
-      );
-      setError(
-        reason instanceof ApiError && reason.status === 403
-          ? "Подтвердите вход и повторите действие."
-          : "Действие не выполнено. Попробуйте ещё раз.",
-      );
+      if (intent && reason instanceof ApiError && reason.status === 403)
+        setReauthFor(intent);
+      else if (reason instanceof ApiError && reason.status === 429)
+        setError("Слишком много попыток. Подождите минуту и повторите.");
+      else setError("Действие не выполнено. Попробуйте ещё раз.");
     } finally {
       setPending(false);
     }
   };
+  /** Runs a login-method change now, or first asks to confirm the sign-in. */
+  const guard = (intent: ResumeIntent, run: () => void) => {
+    if (recentAuth.isRecent(session.account!)) run();
+    else setReauthFor(intent);
+  };
+  const startLink = (provider: "vk" | "yandex") => {
+    void act(async () => {
+      const url = await accountApi.linkProvider(provider, session.csrfToken);
+      if (!url) throw new Error("Provider URL missing");
+      authProviderNavigation.leave(url);
+    }, `link:${provider}`);
+  };
+  /** The confirmed action continues: a link starts, a removal asks once more. */
+  function proceed(intent: ResumeIntent) {
+    setReauthFor(null);
+    setError(null);
+    if (intent === "link:vk" || intent === "link:yandex")
+      startLink(intent === "link:vk" ? "vk" : "yandex");
+    else if (intent === "email") setEmailResumed(true);
+    else setConfirming(intent);
+  }
+  const confirmation = (intent: ResumeIntent) => ({
+    open: confirming === intent,
+    onOpenChange: (open: boolean) => {
+      if (open) guard(intent, () => setConfirming(intent));
+      else setConfirming(null);
+    },
+    onError: (reason: unknown) => {
+      if (reason instanceof ApiError && reason.status === 403) {
+        setConfirming(null);
+        setReauthFor(intent);
+      }
+    },
+  });
+  const accessUntil =
+    props.billing?.access?.status === "ready"
+      ? props.billing.access.until
+      : null;
+  const deletionConsequence = accessUntil
+    ? ` Оплаченный доступ до ${billingFormat.date(accessUntil)} закончится, а деньги за неиспользованные полные дни вернутся на карту, с которой вы платили.`
+    : "";
   return (
     <div className={styles.profile}>
       <header className={styles.profileIdentity}>
@@ -151,8 +217,10 @@ export const AccountProfile: React.FC<AccountProfileTypes.Props> = (props) => {
               <Typography.Title order={2} id="methods-title">
                 Способы входа
               </Typography.Title>
-              <InfoPopover label="О повторном подтверждении входа">
-                Чтобы изменить способы входа, войдите повторно.
+              <InfoPopover label="О подтверждении входа">
+                Если с входа прошло больше 10 минут, перед изменением способов
+                входа или удалением аккаунта мы попросим подтвердить, что это
+                вы.
               </InfoPopover>
             </div>
             <ul className={styles.methods}>
@@ -188,27 +256,6 @@ export const AccountProfile: React.FC<AccountProfileTypes.Props> = (props) => {
                       </Typography.Text>
                     </div>
                     <div className={styles.methodActions}>
-                      {connected && enabled ? (
-                        <Button
-                          type="button"
-                          hierarchy="quiet"
-                          density="compact"
-                          disabled={pending}
-                          onClick={() => {
-                            void act(async () => {
-                              const url =
-                                await accountApi.reauthenticateProvider(
-                                  provider,
-                                  session.csrfToken,
-                                );
-                              if (!url) throw new Error("Provider URL missing");
-                              authProviderNavigation.leave(url);
-                            });
-                          }}
-                        >
-                          Подтвердить вход
-                        </Button>
-                      ) : null}
                       {connected && methods.length > 1 ? (
                         <ConfirmationDialog
                           triggerLabel="Отвязать"
@@ -218,12 +265,7 @@ export const AccountProfile: React.FC<AccountProfileTypes.Props> = (props) => {
                           description="После отвязки этот способ больше не позволит войти в аккаунт. Сохранённый прогресс останется здесь."
                           confirmLabel="Отвязать способ входа"
                           errorMessage={accountPageHelpers.unlinkError}
-                          onError={(reason) => {
-                            setNeedsReauthentication(
-                              reason instanceof ApiError &&
-                                reason.status === 403,
-                            );
-                          }}
+                          {...confirmation(`unlink:${provider}`)}
                           onConfirm={async () => {
                             await accountApi.unlinkProvider(
                               provider,
@@ -240,14 +282,9 @@ export const AccountProfile: React.FC<AccountProfileTypes.Props> = (props) => {
                           density="compact"
                           disabled={pending}
                           onClick={() => {
-                            void act(async () => {
-                              const url = await accountApi.linkProvider(
-                                provider,
-                                session.csrfToken,
-                              );
-                              if (!url) throw new Error("Provider URL missing");
-                              authProviderNavigation.leave(url);
-                            });
+                            guard(`link:${provider}`, () =>
+                              startLink(provider),
+                            );
                           }}
                         >
                           Добавить
@@ -259,22 +296,16 @@ export const AccountProfile: React.FC<AccountProfileTypes.Props> = (props) => {
               })}
             </ul>
             {!hasPassword ? (
-              <EmailMethodForm pendingEmail={session.account.email ?? null} />
+              <EmailMethodForm
+                pendingEmail={session.account.email ?? null}
+                resumed={emailResumed}
+                onNeedsReauth={() => setReauthFor("email")}
+              />
             ) : null}
             {error ? (
               <Typography.Text className={styles.error} role="alert">
                 {error}
               </Typography.Text>
-            ) : null}
-            {needsReauthentication && hasPassword ? (
-              <ActionLink
-                presentation="inline"
-                icon="none"
-                to="/sign-in"
-                search={{ returnTo: "/account" }}
-              >
-                Войти повторно
-              </ActionLink>
             ) : null}
           </section>
           <SignedInDevices />
@@ -292,7 +323,7 @@ export const AccountProfile: React.FC<AccountProfileTypes.Props> = (props) => {
                 triggerAriaLabel="Удалить аккаунт и прогресс"
                 triggerAppearance="danger"
                 title="Удалить аккаунт?"
-                description="Все сеансы будут отозваны, а сохранённый прогресс удалён без возможности восстановления. Для подтверждения введите текущий пароль."
+                description={`Все сеансы будут отозваны, а сохранённый прогресс удалён без возможности восстановления.${deletionConsequence} Для подтверждения введите текущий пароль.`}
                 confirmLabel="Удалить аккаунт"
                 errorMessage={accountPageHelpers.deletionError}
                 onConfirm={async (password) => {
@@ -307,9 +338,10 @@ export const AccountProfile: React.FC<AccountProfileTypes.Props> = (props) => {
                 triggerAriaLabel="Удалить аккаунт и прогресс"
                 triggerAppearance="danger"
                 title="Удалить аккаунт?"
-                description="Все сеансы будут отозваны, а сохранённый прогресс удалён без возможности восстановления."
+                description={`Все сеансы будут отозваны, а сохранённый прогресс удалён без возможности восстановления.${deletionConsequence}`}
                 confirmLabel="Удалить аккаунт"
                 errorMessage={accountPageHelpers.providerDeletionError}
+                {...confirmation("delete")}
                 onConfirm={async () => {
                   await accountApi.deleteAccount(session.csrfToken);
                   await session.refresh();
@@ -320,6 +352,16 @@ export const AccountProfile: React.FC<AccountProfileTypes.Props> = (props) => {
           </section>
         </TabsPanel>
       </TabsRoot>
+      <ReauthDialog
+        intent={reauthFor}
+        onClose={() => setReauthFor(null)}
+        onConfirmed={proceed}
+        providers={accountPageHelpers.providers.filter(
+          (provider) =>
+            props.enabledProviders.includes(provider) &&
+            methods.some((method) => method.provider === provider),
+        )}
+      />
     </div>
   );
 };

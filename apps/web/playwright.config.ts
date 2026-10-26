@@ -10,6 +10,7 @@ export default defineConfig({
     "production-smoke.spec.ts",
     "account-integration.spec.ts",
     "billing-integration.spec.ts",
+    "account-lifecycle.spec.ts",
   ],
   // Keep traces outside Vite's app root; writing them under apps/web makes the dev watcher reload
   // the page mid-test and clears controlled input state.

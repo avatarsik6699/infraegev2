@@ -6,9 +6,16 @@ import { Field } from "~/shared/components/field";
 import { PasswordField } from "~/shared/components/password-field";
 import { Typography } from "~/shared/components/typography";
 import { mailCooldown } from "../model/mail-cooldown";
+import { recentAuth } from "../model/recent-auth";
 import styles from "../account-page.module.css";
 
-type Props = { pendingEmail: string | null };
+type Props = {
+  pendingEmail: string | null;
+  /** Change 227: the sign-in was just confirmed for this form. */
+  resumed?: boolean;
+  /** Change 227: the ten-minute window has passed; the profile asks to confirm. */
+  onNeedsReauth: () => void;
+};
 
 export const EmailMethodForm: React.FC<Props> = (props) => {
   const session = useAccountSession();
@@ -32,6 +39,10 @@ export const EmailMethodForm: React.FC<Props> = (props) => {
     const data = new FormData(form);
     const password = data.get("password");
     if (typeof password !== "string") return;
+    if (session.account && !recentAuth.isRecent(session.account)) {
+      props.onNeedsReauth();
+      return;
+    }
     setPending(true);
     setNotice(null);
     setError(null);
@@ -46,9 +57,7 @@ export const EmailMethodForm: React.FC<Props> = (props) => {
       );
     } catch (reason) {
       if (reason instanceof ApiError && reason.status === 403) {
-        setError(
-          "Подтвердите вход через подключённый сервис выше и повторите действие.",
-        );
+        props.onNeedsReauth();
       } else if (reason instanceof ApiError && reason.status === 409) {
         setError(
           "Способ входа уже добавлен. Обновите страницу и проверьте аккаунт.",
@@ -151,6 +160,11 @@ export const EmailMethodForm: React.FC<Props> = (props) => {
               : "Отправить письмо ещё раз"}
           </Button>
         </div>
+      ) : null}
+      {props.resumed && !notice ? (
+        <Typography.Text className={styles.notice} role="status">
+          Вход подтверждён. Заполните форму и нажмите «Добавить почту».
+        </Typography.Text>
       ) : null}
       {notice ? (
         <Typography.Text className={styles.notice} role="status">

@@ -1,6 +1,7 @@
 import { CourseCatalogPage } from "./pages/course-catalog.page";
 import { AccountPage } from "./pages/account.page";
 import { AccountIntegrationPage } from "./pages/account-integration.page";
+import { AccountLifecyclePage } from "./pages/account-lifecycle.page";
 import { BillingIntegrationPage } from "./pages/billing-integration.page";
 import { MinimalApplicationPage } from "./pages/minimal-application.page";
 import { PracticeCutoverPage } from "./pages/practice-cutover.page";
@@ -16,11 +17,15 @@ import {
   removeAccountMailbox,
 } from "./support/account-mailbox";
 
+// Change 227: login-method changes need no new confirmation in these sessions
+const RECENT_AUTH_UNTIL = "2999-01-01T00:00:00Z";
+
 type AppFixtures = {
   accountPage: AccountPage;
   accountIdentity: { email: string; password: string };
   accountIntegrationPage: AccountIntegrationPage;
   billingIntegrationPage: BillingIntegrationPage;
+  accountLifecyclePage: AccountLifecyclePage;
   accountMailbox: { readVerificationLink(): string };
   noJavaScriptAccountPage: AccountPage;
   courseCatalogPage: CourseCatalogPage;
@@ -145,6 +150,9 @@ export const test = base.extend<AppFixtures>({
   billingIntegrationPage: async ({ page }, use) => {
     await use(new BillingIntegrationPage(page));
   },
+  accountLifecyclePage: async ({ page }, use) => {
+    await use(new AccountLifecyclePage(page));
+  },
   accountIdentity: async ({ browser }, use, testInfo) => {
     void browser;
     await use({
@@ -204,6 +212,7 @@ export const test = base.extend<AppFixtures>({
           account: {
             id: "catalog-member",
             email: "member@example.test",
+            recent_auth_until: RECENT_AUTH_UNTIL,
             methods: [{ provider: "email", subject_hint: null }],
           },
           csrf_token: "test-csrf",

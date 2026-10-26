@@ -25,6 +25,8 @@ class Settings(BaseSettings):
     yandex_client_id: str = ""
     yandex_client_secret: SecretStr = SecretStr("")
     yandex_enabled: bool = False
+    # Change 227: a local stand-in for VK ID and Яндекс ID (dev and tests only)
+    auth_fake_providers: bool = False
     # Change 198: DB-IP Lite city database (mmdb); empty or missing means no city
     geoip_city_database: str = ""
     # Change 192 (SPEC §6.1): both flags stay off until launch; while the paywall is
@@ -59,6 +61,8 @@ class Settings(BaseSettings):
 
     @model_validator(mode="after")
     def billing_consistent(self) -> Self:
+        if self.auth_fake_providers and self.is_production:
+            raise ValueError("the fake sign-in providers never run in production")
         if self.paywall_enabled and not self.billing_enabled:
             raise ValueError("PAYWALL_ENABLED requires BILLING_ENABLED: nobody could pay")
         if self.billing_enabled and self.is_production:

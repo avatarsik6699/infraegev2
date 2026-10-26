@@ -1,6 +1,7 @@
 import type { AccessTypes } from "~/entities/access";
 import type { CourseProgressTypes } from "~/entities/course";
 import { type Provider } from "~/features/account";
+import type { AuthError, ResumeIntent } from "./model/recent-auth";
 
 export namespace AccountProfileTypes {
   export type Props = {
@@ -9,6 +10,10 @@ export namespace AccountProfileTypes {
     enabledProviders: readonly Provider[];
     billing?: Billing;
     tab?: Tab;
+    /** Change 227: the action to continue after a provider confirmed the sign-in. */
+    resume?: ResumeIntent;
+    /** Change 227: why the return from a provider changed nothing. */
+    authError?: AuthError;
   };
 
   export type Tab = "overview" | "access" | "settings";

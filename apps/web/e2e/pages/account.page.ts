@@ -1,6 +1,9 @@
 import { expect, type Page } from "@playwright/test";
 import { lessonPublications } from "../../src/shared/config/lesson-publication.mjs";
 
+// Change 227: login-method changes need no new confirmation in these sessions
+const RECENT_AUTH_UNTIL = "2999-01-01T00:00:00Z";
+
 const publishedTopicCount = lessonPublications.filter(
   (lesson) => lesson.status === "published",
 ).length;
@@ -8,6 +11,7 @@ const publishedTopicCount = lessonPublications.filter(
 const member = {
   id: "test-account-one",
   email: "member@example.test",
+  recent_auth_until: RECENT_AUTH_UNTIL,
   methods: [{ provider: "email", subject_hint: null }],
 };
 
@@ -553,6 +557,7 @@ export class AccountPage {
           account: {
             id: "provider-member",
             email: null,
+            recent_auth_until: RECENT_AUTH_UNTIL,
             methods: [{ provider: "yandex", subject_hint: null }],
           },
           csrf_token: "test-csrf",
@@ -567,6 +572,7 @@ export class AccountPage {
               account: {
                 id: "provider-member",
                 email: null,
+                recent_auth_until: RECENT_AUTH_UNTIL,
                 methods: [{ provider: "yandex", subject_hint: null }],
               },
               csrf_token: "test-csrf",
@@ -601,6 +607,7 @@ export class AccountPage {
             : {
                 id: "provider-member",
                 email: null,
+                recent_auth_until: RECENT_AUTH_UNTIL,
                 methods: [{ provider: "vk", subject_hint: null }],
               },
           csrf_token: deleted ? null : "test-csrf",
@@ -630,9 +637,7 @@ export class AccountPage {
     await this.page.goto("/account");
     await this.openSettings();
     await expect(
-      this.page.getByRole("button", {
-        name: "О повторном подтверждении входа",
-      }),
+      this.page.getByRole("button", { name: "О подтверждении входа" }),
     ).toBeVisible();
     await this.page
       .getByRole("button", { name: "Удалить аккаунт и прогресс" })
@@ -642,12 +647,22 @@ export class AccountPage {
       dialog.getByRole("textbox", { name: "Текущий пароль" }),
     ).toHaveCount(0);
     await dialog.getByRole("button", { name: "Удалить аккаунт" }).click();
-    await expect(dialog.getByRole("alert")).toContainText(
-      "Нужно повторно войти",
-    );
-    await expect(dialog).toBeVisible();
+    // Change 227: a refusal asks to confirm the sign-in instead of an error in place
+    const reauth = this.page.getByRole("dialog", {
+      name: "Подтвердите, что это вы",
+    });
+    // the isolated portfolio runs with VK ID and Яндекс ID switched off
+    await expect(reauth).toContainText("сейчас недоступен");
+    await expect(dialog).toHaveCount(0);
     expect(deleted).toBe(false);
-    await dialog.getByRole("button", { name: "Удалить аккаунт" }).click();
+    await reauth.getByRole("button", { name: "Отмена" }).click();
+    await this.page
+      .getByRole("button", { name: "Удалить аккаунт и прогресс" })
+      .click();
+    await this.page
+      .getByRole("alertdialog")
+      .getByRole("button", { name: "Удалить аккаунт" })
+      .click();
     await expect(this.page).toHaveURL("/");
     expect(deleted).toBe(true);
   }
@@ -662,6 +677,7 @@ export class AccountPage {
           account: {
             id: "provider-member",
             email: pendingEmail,
+            recent_auth_until: RECENT_AUTH_UNTIL,
             methods: [
               { provider: "vk", subject_hint: null },
               ...(verified ? [{ provider: "email", subject_hint: null }] : []),
@@ -731,6 +747,7 @@ export class AccountPage {
           account: {
             id: "provider-member",
             email: null,
+            recent_auth_until: RECENT_AUTH_UNTIL,
             methods: [
               { provider: "vk", subject_hint: null },
               { provider: "yandex", subject_hint: null },
@@ -754,24 +771,32 @@ export class AccountPage {
     await expect(dialog).toContainText("После отвязки");
     expect(attempts).toBe(0);
     await dialog.getByRole("button", { name: "Отвязать способ входа" }).click();
-    await expect(dialog.getByRole("alert")).toContainText(
-      "Нужно повторно подтвердить вход",
-    );
-    await expect(dialog).toBeVisible();
+    const reauth = this.page.getByRole("dialog", {
+      name: "Подтвердите, что это вы",
+    });
+    // the isolated portfolio runs with VK ID and Яндекс ID switched off
+    await expect(reauth).toContainText("сейчас недоступен");
     expect(attempts).toBe(1);
-    await dialog.getByRole("button", { name: "Отмена" }).click();
+    await reauth.getByRole("button", { name: "Отмена" }).click();
+    await expect(reauth).toHaveCount(0);
     await expect(dialog).toHaveCount(0);
   }
 
-  async expectEmailReauthenticationAfterUnlinkRefusal(): Promise<void> {
+  /** Change 227: past the ten minutes the password confirms right in the dialog. */
+  async expectEmailPasswordReconfirmation(): Promise<void> {
+    let confirmed = false;
+    let unlinked = false;
     await this.page.route("**/api/auth/session", (route) =>
       route.fulfill({
         json: {
           account: {
             ...member,
+            recent_auth_until: confirmed
+              ? RECENT_AUTH_UNTIL
+              : "2000-01-01T00:00:00Z",
             methods: [
               { provider: "email", subject_hint: null },
-              { provider: "vk", subject_hint: null },
+              ...(unlinked ? [] : [{ provider: "vk", subject_hint: null }]),
             ],
           },
           csrf_token: "test-csrf",
@@ -781,24 +806,46 @@ export class AccountPage {
     await this.page.route("**/api/progress", (route) =>
       route.fulfill({ json: { results: [] } }),
     );
-    await this.page.route("**/api/auth/providers/vk", (route) =>
-      route.fulfill({ status: 403, json: { detail: "recent auth required" } }),
-    );
+    await this.page.route("**/api/auth/reauth", async (route) => {
+      const body = route.request().postDataJSON() as { password: string };
+      if (body.password !== "correct horse battery") {
+        await route.fulfill({ status: 403, json: { detail: "invalid" } });
+        return;
+      }
+      confirmed = true;
+      await route.fulfill({ status: 204 });
+    });
+    await this.page.route("**/api/auth/providers/vk", async (route) => {
+      expect(confirmed).toBe(true);
+      unlinked = true;
+      await route.fulfill({ status: 204 });
+    });
     await this.page.goto("/account");
     await this.openSettings();
     await expect(
-      this.page.getByRole("link", { name: "Войти повторно" }),
+      this.page.getByRole("button", { name: "Подтвердить вход" }),
     ).toHaveCount(0);
     await this.page.getByRole("button", { name: "Отвязать VK ID" }).click();
-    const dialog = this.page.getByRole("alertdialog");
-    await dialog.getByRole("button", { name: "Отвязать способ входа" }).click();
-    await expect(dialog.getByRole("alert")).toContainText(
-      "Нужно повторно подтвердить вход",
-    );
-    await dialog.getByRole("button", { name: "Отмена" }).click();
+    const reauth = this.page.getByRole("dialog", {
+      name: "Подтвердите, что это вы",
+    });
+    const password = reauth.getByLabel("Пароль", { exact: true });
+    await password.fill("not the password");
+    await reauth.getByRole("button", { name: "Подтвердить" }).click();
+    await expect(reauth.getByRole("alert")).toContainText("Пароль не подошёл");
+    await password.fill("correct horse battery");
+    await reauth.getByRole("button", { name: "Подтвердить" }).click();
+    const confirmation = this.page.getByRole("alertdialog");
+    await expect(confirmation).toContainText("Отвязать VK ID?");
+    await confirmation
+      .getByRole("button", { name: "Отвязать способ входа" })
+      .click();
     await expect(
-      this.page.getByRole("link", { name: "Войти повторно" }),
-    ).toHaveAttribute("href", /\/sign-in.*returnTo/);
+      this.page
+        .locator("#settings")
+        .getByRole("listitem")
+        .filter({ hasText: "VK ID" }),
+    ).not.toContainText("Подключено");
   }
 
   async expectProgressClearsOnLogout(): Promise<void> {
@@ -904,6 +951,7 @@ export class AccountPage {
           account: {
             id: "provider-member",
             email: null,
+            recent_auth_until: RECENT_AUTH_UNTIL,
             methods: [{ provider: "vk", subject_hint: null }],
           },
           csrf_token: "test-csrf",
