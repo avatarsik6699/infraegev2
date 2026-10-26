@@ -133,7 +133,8 @@ The receipt correction belongs to Робочеки; if it did not happen, annul 
 
 ## Refund requests by mail
 
-1. Find the buyer with `show --email` (the address of the account the mail came from).
+1. Find the buyer with `show --email` (the address the mail came from: the account's own or,
+   Change 228, the receipt address of a payment — a VK ID or Яндекс ID buyer has only that).
 2. Choose the amount: `auto` for the buyer's own refusal, `full` for a parent's request or a
    technical failure on our side.
 3. Run `refund`, answer the buyer with the amount and the bank's usual timing (up to 10 days).

@@ -65,3 +65,9 @@
     display: none;
   }
 }
+
+/* Change 228: white on the lighter CTA orange is large text only — 19px bold. */
+.content [data-hierarchy="primary"] {
+  font-size: var(--text-cta);
+  font-weight: 700;
+}

@@ -36,6 +36,18 @@ class Notification:
     state: State
     # stored for the operator: no signatures, emails or card details
     payload: dict[str, object] = field(default_factory=dict)
+    # Change 228: the address the buyer gave the provider for the receipt (Robokassa asks for
+    # it when the shop passes none); kept with the payment, never in `payload`
+    payer_email: str | None = None
+
+
+def payer_email(value: str | None) -> str | None:
+    """A provider-reported address, if it looks like one; anything else is dropped."""
+    value = (value or "").strip()
+    if not value or len(value) > 320 or value.count("@") != 1 or any(c.isspace() for c in value):
+        return None
+    local, domain = value.split("@")
+    return value if local and "." in domain.strip(".") else None
 
 
 @dataclass(frozen=True)

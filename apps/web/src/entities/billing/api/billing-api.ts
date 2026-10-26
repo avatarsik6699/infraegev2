@@ -4,11 +4,7 @@ import { toPayment } from "./billing-mapping";
 
 /** Why a checkout was refused, as the page explains it. */
 export type CheckoutFailure =
-  | "email_required"
-  | "offer_outdated"
-  | "checkout_paused"
-  | "signed_out"
-  | "unavailable";
+  "offer_outdated" | "checkout_paused" | "signed_out" | "unavailable";
 
 export class CheckoutError extends Error {
   readonly code: CheckoutFailure;
@@ -76,9 +72,7 @@ function failureOf(status: number, error: unknown): CheckoutFailure {
     error && typeof error === "object" && "detail" in error
       ? error.detail
       : undefined;
-  return detail === "email_required" ||
-    detail === "offer_outdated" ||
-    detail === "checkout_paused"
+  return detail === "offer_outdated" || detail === "checkout_paused"
     ? detail
     : "unavailable";
 }

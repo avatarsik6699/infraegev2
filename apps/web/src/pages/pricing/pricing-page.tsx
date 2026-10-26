@@ -1,4 +1,4 @@
-import { BookOpen, Calendar, CalendarRange, Check, Minus } from "lucide-react";
+import { Check, GraduationCap, Minus, Rocket, Sprout } from "lucide-react";
 import { billingFormat, billingPlans } from "~/entities/billing";
 import { ActionLink } from "~/shared/components/action-link";
 import { MascotScene } from "~/shared/components/mascot-scene";
@@ -20,7 +20,9 @@ const lessonWord = (count: number) =>
  * Change 192 (F1, approved v15): three plan cards in the home path-tile layout,
  * monochrome; the month plan in the centre is the one to try first — orange
  * chip and ticks, the main action and an animated frame. Prices come from the
- * API; the year's crossed-out sum is twelve real month prices.
+ * API. Change 228 (approved variant A): the plan's standing is a bold lead of
+ * its subtitle, not a badge; icons say what each plan is for; the year shows
+ * its price per month and no crossed-out sum.
  */
 export const PricingPage: React.FC<PricingPageTypes.Props> = (props) => {
   const month = billingPlans.find(props.offer, "month");
@@ -74,14 +76,22 @@ export const PricingPage: React.FC<PricingPageTypes.Props> = (props) => {
             <article className={styles.plan} data-look="free">
               <div className={styles.top}>
                 <span className={styles.chip}>
-                  <BookOpen aria-hidden="true" />
+                  <Sprout aria-hidden="true" />
                 </span>
                 <Typography.Title order={2} className={styles.name}>
                   Free
                 </Typography.Title>
-                {granted ? null : <span className={styles.pill}>Ваш план</span>}
                 <Typography.Text className={styles.sub}>
-                  Без оплаты и без срока
+                  {granted ? (
+                    "Без оплаты и без срока"
+                  ) : (
+                    <>
+                      <strong className={styles.standing}>
+                        Ваш план сейчас ·{" "}
+                      </strong>
+                      без оплаты и без срока
+                    </>
+                  )}
                 </Typography.Text>
               </div>
               <Typography.Text className={styles.desc}>
@@ -95,7 +105,7 @@ export const PricingPage: React.FC<PricingPageTypes.Props> = (props) => {
               </span>
               <span className={styles.plus}>Что входит</span>
               <PlanList items={freeItems} />
-              <BookOpen className={styles.mark} aria-hidden="true" />
+              <Sprout className={styles.mark} aria-hidden="true" />
             </article>
 
             {month ? (
@@ -106,15 +116,13 @@ export const PricingPage: React.FC<PricingPageTypes.Props> = (props) => {
               >
                 <div className={styles.top}>
                   <span className={styles.chip}>
-                    <Calendar aria-hidden="true" />
+                    <Rocket aria-hidden="true" />
                   </span>
                   <Typography.Title order={2} className={styles.name}>
                     Месяц
                   </Typography.Title>
-                  <span className={styles.pill} data-tone="start">
-                    Для начала
-                  </span>
                   <Typography.Text className={styles.sub}>
+                    <strong className={styles.standing}>Для начала · </strong>
                     {`${String(month.days)} дней полного доступа`}
                   </Typography.Text>
                 </div>
@@ -139,7 +147,7 @@ export const PricingPage: React.FC<PricingPageTypes.Props> = (props) => {
                 </ActionLink>
                 <span className={styles.plus}>Всё из Free, плюс</span>
                 <PlanList items={[...paidItems, "Без автопродления"]} />
-                <Calendar className={styles.mark} aria-hidden="true" />
+                <Rocket className={styles.mark} aria-hidden="true" />
               </article>
             ) : null}
 
@@ -151,13 +159,13 @@ export const PricingPage: React.FC<PricingPageTypes.Props> = (props) => {
               >
                 <div className={styles.top}>
                   <span className={styles.chip}>
-                    <CalendarRange aria-hidden="true" />
+                    <GraduationCap aria-hidden="true" />
                   </span>
                   <Typography.Title order={2} className={styles.name}>
                     Год
                   </Typography.Title>
-                  <span className={styles.pill}>Выгоднее</span>
                   <Typography.Text className={styles.sub}>
+                    <strong className={styles.standing}>Выгоднее · </strong>
                     {`${String(year.days)} дней, весь сезон`}
                   </Typography.Text>
                 </div>
@@ -168,14 +176,8 @@ export const PricingPage: React.FC<PricingPageTypes.Props> = (props) => {
                   <span className={styles.now}>
                     {billingFormat.rub(year.priceKopecks)}
                   </span>
-                  <span className={styles.was}>
-                    <s>{billingFormat.rub(year.monthsPriceKopecks)}</s>
-                    <span className={styles.save}>
-                      {`−${String(billingFormat.savingPercent(year))}%`}
-                    </span>
-                  </span>
                   <span className={styles.per}>
-                    {`${billingFormat.rub(year.monthlyEquivalentKopecks)} в месяц`}
+                    {`≈ ${billingFormat.rub(year.monthlyEquivalentKopecks)} в месяц`}
                   </span>
                 </div>
                 <ActionLink
@@ -190,7 +192,7 @@ export const PricingPage: React.FC<PricingPageTypes.Props> = (props) => {
                 <PlanList
                   items={[...paidItems, "Один платёж, без автопродления"]}
                 />
-                <CalendarRange className={styles.mark} aria-hidden="true" />
+                <GraduationCap className={styles.mark} aria-hidden="true" />
               </article>
             ) : null}
           </div>
@@ -258,18 +260,7 @@ export const PricingPage: React.FC<PricingPageTypes.Props> = (props) => {
           </section>
 
           <div className={styles.notes}>
-            {year && month ? (
-              <span>{`Зачёркнута стоимость двенадцати месяцев по ${billingFormat.rub(month.priceKopecks)}.`}</span>
-            ) : null}
             <span>Повторная покупка продлевает доступ с даты окончания.</span>
-            <ActionLink
-              presentation="inline"
-              icon="none"
-              hierarchy="text"
-              to="/vozvrat"
-            >
-              Условия возврата
-            </ActionLink>
           </div>
         </PageContainer>
       </main>

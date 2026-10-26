@@ -60,3 +60,15 @@ test("a VK-first learner moves to Яндекс ID, meets a taken identity and de
   await accountLifecyclePage.deleteProviderAccount();
   await accountLifecyclePage.expectSignedOut();
 });
+
+test("a VK-only learner buys a month and gives the receipt address at the provider", async ({
+  accountLifecyclePage,
+}) => {
+  await accountLifecyclePage.signInWithProvider("VK ID", "lifecycle-vk-payer");
+  await accountLifecyclePage.payForMonthTypingReceiptEmail(
+    "lifecycle-payer@example.com",
+  );
+  await accountLifecyclePage.rememberAccess();
+  await accountLifecyclePage.deleteProviderAccount();
+  await accountLifecyclePage.expectSignedOut();
+});

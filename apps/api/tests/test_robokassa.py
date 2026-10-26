@@ -84,6 +84,10 @@ def test_result_url_needs_password_two_and_answers_ok():
     note = gateway.parse_notification({**fields, "EMail": "buyer@example.com"})
     assert (note.invoice_no, note.amount_kopecks, note.state) == (1001, 49_000, "succeeded")
     assert "EMail" not in note.payload and "SignatureValue" not in note.payload
+    # Change 228: the receipt address the buyer typed at Robokassa, kept apart from the payload
+    assert note.payer_email == "buyer@example.com"
+    assert gateway.parse_notification({**fields, "EMail": "not an address"}).payer_email is None
+    assert gateway.parse_notification(fields).payer_email is None
     assert gateway.acknowledge(note) == "OK1001"
     with pytest.raises(InvalidNotification):
         gateway.parse_notification({**fields, "SignatureValue": sha("490.000000:1001:one")})

@@ -8,10 +8,10 @@
 
 | Документ | Адрес | Редакция | Где текст |
 | --- | --- | --- | --- |
-| Политика обработки персональных данных | [/privacy](https://kodumka.ru/privacy) | 25.10.2026 | `apps/web/src/pages/privacy/privacy-page.tsx` |
+| Политика обработки персональных данных | [/privacy](https://kodumka.ru/privacy) | 26.10.2026 (Change 228: адрес для чека) | `apps/web/src/pages/privacy/privacy-page.tsx` |
 | Согласие на обработку персональных данных | [/consent](https://kodumka.ru/consent) | 25.10.2026, версия `2026-10-25` | `apps/web/src/pages/privacy/consent-page.tsx` |
-| Публичная оферта | [/oferta](https://kodumka.ru/oferta) | 23.10.2026; прежняя — [/oferta/2026-10-17](https://kodumka.ru/oferta/2026-10-17) | `content/legal/oferta/2026-10-23.md` |
-| Правила возврата | [/vozvrat](https://kodumka.ru/vozvrat) | 23.10.2026 | `content/legal/vozvrat.md` |
+| Публичная оферта | [/oferta](https://kodumka.ru/oferta) | 26.10.2026 (Change 228: чек на адрес, указанный при оплате, пп. 3.3, 5.4, 7.2); прежние — [/oferta/2026-10-23](https://kodumka.ru/oferta/2026-10-23), [/oferta/2026-10-17](https://kodumka.ru/oferta/2026-10-17) | `content/legal/oferta/2026-10-26.md` |
+| Правила возврата | [/vozvrat](https://kodumka.ru/vozvrat) | 26.10.2026 | `content/legal/vozvrat.md` |
 | Реквизиты: ФИО, ИНН, email | подвал всех страниц | Change 200 | `apps/web/src/shared/config/site.ts` |
 
 Реквизиты оператора для политики и согласия заданы в `apps/web/src/pages/privacy/model/operator.ts`.

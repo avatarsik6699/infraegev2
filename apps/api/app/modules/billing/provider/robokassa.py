@@ -28,6 +28,7 @@ from app.modules.billing.provider.port import (
     RefundResult,
     State,
     Status,
+    payer_email,
 )
 
 PAY_URL = "https://auth.robokassa.ru/Merchant/Index.aspx"
@@ -133,6 +134,9 @@ class Robokassa:
                 "PaymentMethod": fields.get("PaymentMethod"),
                 "IncCurrLabel": fields.get("IncCurrLabel"),
             },
+            # «Email, указанный покупателем при оплате»; the signature does not cover it, so
+            # it is taken only from a notification whose signature passed
+            payer_email=payer_email(fields.get("EMail")),
         )
 
     def acknowledge(self, notification: Notification) -> str:

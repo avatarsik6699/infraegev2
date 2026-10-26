@@ -33,3 +33,9 @@
   align-items: center;
   margin-top: var(--space-1);
 }
+
+/* Change 228: white on the lighter CTA orange is large text only — 19px bold. */
+.root [data-hierarchy="primary"] {
+  font-size: var(--text-cta);
+  font-weight: 700;
+}

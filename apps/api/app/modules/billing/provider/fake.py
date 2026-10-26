@@ -16,6 +16,7 @@ from app.modules.billing.provider.port import (
     RefundResult,
     State,
     Status,
+    payer_email,
 )
 
 # The fake provider's own ledger: invoice → (state, amount); per process, like a sandbox.
@@ -38,17 +39,22 @@ class FakeProvider:
                 "amount": request.amount_kopecks,
                 "success": request.success_url,
                 "fail": request.fail_url,
+                # Change 228: like Robokassa, the page asks for an address when none is passed
+                **({"email": request.email} if request.email else {}),
             }
         )
         return f"{settings.public_origin}/api/billing/fake/pay/{request.invoice_no}?{query}"
 
-    def settle(self, invoice_no: int, amount_kopecks: int, state: State) -> dict[str, str]:
+    def settle(
+        self, invoice_no: int, amount_kopecks: int, state: State, email: str = ""
+    ) -> dict[str, str]:
         """The pay page's outcome, as the notification fields the webhook receives."""
         LEDGER[invoice_no] = (state, amount_kopecks)
         return {
             "invoice": str(invoice_no),
             "amount": str(amount_kopecks),
             "state": state,
+            "email": email,
             "signature": signature(invoice_no, amount_kopecks),
         }
 
@@ -68,6 +74,7 @@ class FakeProvider:
             amount_kopecks=amount,
             state=state,
             payload={"invoice": invoice_no, "amount": amount, "state": fields.get("state")},
+            payer_email=payer_email(fields.get("email")),
         )
 
     def acknowledge(self, notification: Notification) -> str:

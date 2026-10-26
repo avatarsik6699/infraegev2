@@ -117,19 +117,6 @@ export const AccountAccess: React.FC<Props> = (props) => {
       </div>
 
       <PaymentHistory payments={payments} />
-
-      <Typography.Text className={styles.note}>
-        Вернуть деньги за неиспользованные дни можно по{" "}
-        <ActionLink
-          presentation="inline"
-          icon="none"
-          hierarchy="text"
-          to="/vozvrat"
-        >
-          правилам возврата
-        </ActionLink>
-        .
-      </Typography.Text>
     </section>
   );
 };

@@ -123,7 +123,7 @@
   --text-3xl: clamp(1.875rem, 3.6vw, 2.625rem);
   --text-display: clamp(2.25rem, 4.8vw, 3.625rem);
   /* Change 192: the paid-access action (17px semibold on CTA Orange) and a plan's price. */
-  --text-cta: 1.0625rem;
+  --text-cta: 1.1875rem;
   --text-plan-price: 2.625rem;
   /* Home topic cards (Change 185): the faint task number behind the picture. */
   --text-cover-numeral: 6.5rem;

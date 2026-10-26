@@ -71,10 +71,27 @@ async def refund(db: AsyncSession, payment_id: UUID, spec: str, reason: str) -> 
     return {"refund": str(done.id), "amount_kopecks": done.amount_kopecks, "status": done.status}
 
 
-async def show(db: AsyncSession, email: str) -> list[dict]:
+async def user_by_email(db: AsyncSession, email: str) -> UUID | None:
+    """The account's own address first; Change 228: else the receipt address of a payment,
+    which is all a buyer signed in through VK ID or Яндекс ID writes from."""
     user_id = await db.scalar(
         select(AccountPassword.user_id).where(AccountPassword.email_normalized == email.casefold())
     )
+    if user_id is not None:
+        return user_id
+    return await db.scalar(
+        select(Payment.user_id)
+        .where(
+            func.lower(Payment.contact_email) == email.casefold(),
+            Payment.user_id.is_not(None),
+        )
+        .order_by(Payment.created_at.desc())
+        .limit(1)
+    )
+
+
+async def show(db: AsyncSession, email: str) -> list[dict]:
+    user_id = await user_by_email(db, email)
     if user_id is None:
         return []
     rows = await db.execute(
@@ -233,11 +250,7 @@ async def account_of(db: AsyncSession, args: argparse.Namespace) -> UUID:
     if args.user:
         user_id = UUID(args.user)
     else:
-        user_id = await db.scalar(
-            select(AccountPassword.user_id).where(
-                AccountPassword.email_normalized == args.email.casefold()
-            )
-        )
+        user_id = await user_by_email(db, args.email)
     if user_id is None or await db.get(AccountUser, user_id) is None:
         raise SystemExit("account not found")
     return user_id

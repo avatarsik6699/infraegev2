@@ -1,5 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { useAccountSession } from "~/features/account";
+import { accountIdentity } from "~/shared/lib/account-identity";
 import { ActionLink } from "~/shared/components/action-link";
 import { Button } from "~/shared/components/button";
 import { ProfileAvatar } from "~/shared/components/profile-avatar";
@@ -53,8 +54,7 @@ const PublicHeaderAccountNavigation: React.FC = () => {
     );
   }
 
-  const initial =
-    session.account.email?.trim().at(0)?.toLocaleUpperCase("ru") ?? "П";
+  const initial = accountIdentity.initial(session.account);
 
   return (
     <span className={styles.accountNavigation} data-header-session="member">

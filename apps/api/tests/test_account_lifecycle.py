@@ -19,6 +19,7 @@ from app.core.config import Settings, settings
 from app.core.database import database_engine
 from app.main import create_app
 from app.modules.account import service as account_service
+from app.modules.billing import admin
 from app.modules.billing.models import AccessGrant, Payment, Refund
 from tests.test_billing import ORIGIN, checkout, invoice_of, member, paid_site, pay  # noqa: F401
 from tests.test_minimal_bank import consent_step, database  # noqa: F401
@@ -269,3 +270,73 @@ def test_paid_access_survives_methods_and_ends_with_a_refund(site, database, mon
             await engine.dispose()
 
     asyncio.run(after_deletion())
+
+
+def test_provider_only_account_pays_with_the_address_typed_at_the_provider(
+    site,
+    database,  # noqa: F811
+    monkeypatch,
+):
+    """Change 228: no account email, so the pay page asks for one; it gets the paid notice and
+    is forgotten with the account."""
+    monkeypatch.setattr(settings, "billing_enabled", True)
+    monkeypatch.setattr(settings, "paywall_enabled", True)
+    with TestClient(create_app()) as client:
+        sign_in(client, "vk", "life-vk-payer")
+        assert account(client)["email"] is None
+        started = checkout(client, headers_of(client))
+        invoice, amount = invoice_of(started["redirect_url"])
+        assert "email=" not in started["redirect_url"]
+        page = client.get(started["redirect_url"].replace("http://testserver", ""))
+        assert "name=email required" in page.text
+        query = f"amount={amount}&success=http://testserver/ok&fail=http://testserver/no"
+        paid = client.post(
+            f"/api/billing/fake/pay/{invoice}?{query}",
+            content="email=payer%40example.com&state=succeeded",
+            headers={"Content-Type": "application/x-www-form-urlencoded"},
+            follow_redirects=False,
+        )
+        assert paid.status_code == 303
+        assert client.get("/api/access").json()["granted"] is True
+        assert any(recipient == "payer@example.com" for recipient, _ in site["mails"])
+
+        async def contact():
+            engine = database_engine(database("app"), role="infraege_app")
+            try:
+                async with AsyncSession(engine) as db:
+                    payment = await db.get(Payment, UUID(started["payment_id"]))
+                    assert payment is not None
+                    return payment.contact_email
+            finally:
+                await engine.dispose()
+
+        assert asyncio.run(contact()) == "payer@example.com"
+
+        async def operator_view():
+            engine = database_engine(database("app"), role="infraege_app")
+            try:
+                async with AsyncSession(engine) as db:
+                    return await admin.show(db, "Payer@Example.com")
+            finally:
+                await engine.dispose()
+
+        # the operator finds a VK-only buyer by the address the refund request comes from
+        assert [row["invoice"] for row in asyncio.run(operator_view())] == [invoice]
+        deleted = client.request(
+            "DELETE",
+            "/api/auth/account",
+            json={"confirmation": "DELETE"},
+            headers=headers_of(client),
+        )
+        assert deleted.status_code == 204
+        assert asyncio.run(contact()) is None
+
+
+def test_a_confirmed_account_address_still_goes_to_the_provider(site, monkeypatch):
+    monkeypatch.setattr(settings, "billing_enabled", True)
+    with TestClient(create_app()) as client:
+        headers = member(client, site["mails"], "life-receipt@example.com")
+        started = checkout(client, headers)
+        assert "email=life-receipt%40example.com" in started["redirect_url"]
+        page = client.get(started["redirect_url"].replace("http://testserver", ""))
+        assert 'type=hidden name=email value="life-receipt@example.com"' in page.text

@@ -70,7 +70,7 @@ async def checkout(
     db: AsyncSession,
     *,
     user_id: UUID,
-    email: str,
+    email: str | None,
     plan_id: PlanId,
     offer_version: str,
     idempotency_key: str,

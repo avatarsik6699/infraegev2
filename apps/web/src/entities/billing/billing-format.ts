@@ -28,10 +28,6 @@ export const billingFormat = {
   shortDate(iso: string): string {
     return shortDates.format(new Date(iso));
   },
-  /** The year saving against twelve months, rounded down: «49». */
-  savingPercent(plan: BillingTypes.Plan): number {
-    return Math.floor((1 - plan.priceKopecks / plan.monthsPriceKopecks) * 100);
-  },
 };
 
 export const billingPlans = {

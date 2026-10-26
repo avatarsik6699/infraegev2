@@ -101,6 +101,27 @@ export class AccountLifecyclePage {
     expect(await this.accessHeading()).toBe(this.access);
   }
 
+  /** Change 228: an account without an address types one for the receipt at the provider. */
+  async payForMonthTypingReceiptEmail(email: string): Promise<void> {
+    await this.page.goto("/subscribe?plan=month");
+    const account = this.page.locator("[data-checkout-account]");
+    await expect(account).toContainText("Войти в него можно: VK ID");
+    await expect(account).toContainText(
+      "Чек придёт на почту, которую вы укажете на странице оплаты",
+    );
+    await this.page.getByRole("button", { name: /^Оплатить/u }).click();
+    await expect(
+      this.page.getByRole("heading", { name: /Тестовая оплата/u }),
+    ).toBeVisible();
+    await this.page
+      .getByRole("textbox", { name: "Почта для чека" })
+      .fill(email);
+    await this.page.getByRole("button", { name: "Оплатить" }).click();
+    await expect(
+      this.page.getByRole("heading", { name: "Доступ открыт" }),
+    ).toBeVisible();
+  }
+
   async deleteWithPassword(password: string): Promise<void> {
     await this.openSettings();
     await this.page

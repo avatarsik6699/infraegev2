@@ -38,7 +38,18 @@
 .account {
   display: flex;
   gap: var(--space-1-5);
-  align-items: center;
+  align-items: flex-start;
+}
+
+.accountCopy {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+
+.accountName[data-variant] {
+  margin: 0;
+  overflow-wrap: anywhere;
 }
 
 .accountText[data-variant] {
@@ -148,4 +159,10 @@
   .plans {
     grid-template-columns: minmax(0, 1fr);
   }
+}
+
+/* Change 228: white on the lighter CTA orange is large text only — 19px bold. */
+.content [data-hierarchy="primary"] {
+  font-size: var(--text-cta);
+  font-weight: 700;
 }

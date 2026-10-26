@@ -12,7 +12,7 @@ from uuid import UUID
 import structlog
 from fastapi import APIRouter, Header, HTTPException, Request, Response
 from fastapi.responses import HTMLResponse, PlainTextResponse, RedirectResponse
-from sqlalchemy import select
+from sqlalchemy import select, update
 from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -86,10 +86,9 @@ async def post_checkout(
     require_origin(request)
     require_csrf(request, x_csrf_token)
     user_id = (await active_session(request, db)).user_id
-    # the receipt and the notices need a confirmed address
+    # Change 228: a confirmed account address goes to the provider for the receipt; without
+    # one Robokassa asks the buyer on its page and reports the address in its notification
     email = await restrictions.verified_email(db, user_id)
-    if email is None:
-        raise HTTPException(409, "email_required")
     gateway = provider.current()
     await db.commit()  # end the read transaction; the checkout is its own
     try:
@@ -176,6 +175,19 @@ async def process(db: AsyncSession, gateway: provider.PaymentProvider, note: Not
             )
             .on_conflict_do_nothing(index_elements=["provider", "event_key"])
         )
+        if note.payer_email:
+            # Change 228: the buyer's receipt address becomes the payment's contact, unless the
+            # account's own confirmed address is already there; an account deleted meanwhile
+            # (user_id NULL) is not given one back
+            await db.execute(
+                update(Payment)
+                .where(
+                    Payment.invoice_no == note.invoice_no,
+                    Payment.contact_email.is_(None),
+                    Payment.user_id.is_not(None),
+                )
+                .values(contact_email=note.payer_email)
+            )
     await settle(db, note.invoice_no, Status(note.state, amount_kopecks=note.amount_kopecks))
     try:
         reported = await gateway.fetch_status(note.invoice_no)
@@ -273,16 +285,25 @@ async def get_payments(request: Request, db: AccountDb) -> PaymentHistory:
 
 # The fake provider's pay page: local runs and tests only, never production.
 @router.get("/fake/pay/{invoice_no}", response_class=HTMLResponse, include_in_schema=False)
-async def fake_pay_page(invoice_no: int, amount: int, success: str, fail: str) -> HTMLResponse:
+async def fake_pay_page(
+    invoice_no: int, amount: int, success: str, fail: str, email: str = ""
+) -> HTMLResponse:
     if settings.billing_provider != "fake" or settings.is_production:
         raise HTTPException(404, "not found")
     query = html.escape(urlencode({"amount": amount, "success": success, "fail": fail}))
+    # Change 228: without the shop's address the buyer types one for the receipt, as at Robokassa
+    address = (
+        f'<input type=hidden name=email value="{html.escape(email, quote=True)}">'
+        if email
+        else "<label>Почта для чека <input type=email name=email required></label> "
+    )
     return HTMLResponse(
         "<!doctype html><meta charset=utf-8><title>Тестовая оплата</title>"
         f"<h1>Тестовая оплата: {amount // 100} ₽</h1>"
         f'<form method=post action="/api/billing/fake/pay/{invoice_no}?{query}">'
+        f"{address}"
         "<button name=state value=succeeded>Оплатить</button> "
-        "<button name=state value=failed>Отказаться</button></form>"
+        "<button name=state value=failed formnovalidate>Отказаться</button></form>"
     )
 
 
@@ -294,11 +315,14 @@ async def fake_pay(
         raise HTTPException(404, "not found")
     from app.modules.billing.provider.fake import FakeProvider
 
-    state = dict(parse_qsl((await request.body()).decode())).get("state")
+    form = dict(parse_qsl((await request.body()).decode()))
+    state = form.get("state")
     if state not in ("succeeded", "failed"):
         raise HTTPException(422, "unknown outcome")
     gateway = FakeProvider()
-    note = gateway.parse_notification(gateway.settle(invoice_no, amount, state))
+    note = gateway.parse_notification(
+        gateway.settle(invoice_no, amount, state, form.get("email", ""))
+    )
     await process(db, gateway, note)
     target = success if state == "succeeded" else fail
     if not target.startswith(settings.public_origin + "/"):

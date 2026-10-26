@@ -202,9 +202,8 @@ describe("pricing and legal helpers (Change 192)", () => {
     expect(scope.freeCourses.map((course) => course.title)).toContain("Python");
   });
 
-  it("formats rubles and the year saving honestly", () => {
+  it("formats rubles", () => {
     expect(billingFormat.rub(299000)).toBe("2 990 ₽");
-    expect(billingFormat.savingPercent(offer.plans[1]!)).toBe(49);
   });
 
   it("renders the offer from content/legal, newest edition first", () => {

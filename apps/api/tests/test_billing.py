@@ -343,7 +343,7 @@ def test_paywall_purchase_extension_refund_and_deletion(paid_site, database, mon
         asyncio.run(after_deletion())
 
 
-def test_checkout_needs_a_confirmed_email_and_billing(paid_site, monkeypatch):
+def test_checkout_needs_a_session_and_billing(paid_site, monkeypatch):
     monkeypatch.setattr(settings, "billing_enabled", True)
     with TestClient(create_app()) as client:
         assert (

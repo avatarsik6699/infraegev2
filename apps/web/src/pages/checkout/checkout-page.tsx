@@ -9,6 +9,7 @@ import {
   type CheckoutFailure,
 } from "~/entities/billing";
 import { useAccountSession } from "~/features/account";
+import { accountIdentity } from "~/shared/lib/account-identity";
 import { ActionLink } from "~/shared/components/action-link";
 import { Button } from "~/shared/components/button";
 import { PageContainer } from "~/shared/components/page-container";
@@ -23,19 +24,6 @@ import styles from "./checkout-page.module.css";
 const DAY_MS = 24 * 60 * 60 * 1000;
 
 const failures: Record<CheckoutFailure, React.ReactNode> = {
-  email_required: (
-    <>
-      Нужна подтверждённая почта: на неё придёт чек.{" "}
-      <ActionLink
-        presentation="inline"
-        icon="none"
-        hierarchy="text"
-        to="/account"
-      >
-        Подтвердить в профиле
-      </ActionLink>
-    </>
-  ),
   offer_outdated:
     "Условия оферты обновились. Обновите страницу, чтобы увидеть новую версию.",
   checkout_paused: "Оплата временно недоступна. Попробуйте позже.",
@@ -114,15 +102,23 @@ export const CheckoutPage: React.FC<CheckoutPageTypes.Props> = (props) => {
   else
     body = (
       <>
-        <div className={styles.account}>
-          <ProfileAvatar
-            initial={(session.account.email ?? "А").slice(0, 1).toUpperCase()}
-          />
-          <Typography.Text className={styles.accountText}>
-            {session.account.email
-              ? `Доступ откроется для ${session.account.email}`
-              : "Доступ откроется для этого аккаунта"}
-          </Typography.Text>
+        {/* Change 228: the same avatar as the header; access belongs to the account, not to
+            one way of signing in, and the receipt address is said up front */}
+        <div className={styles.account} data-checkout-account>
+          <ProfileAvatar initial={accountIdentity.initial(session.account)} />
+          <div className={styles.accountCopy}>
+            <Typography.Text className={styles.accountName}>
+              {session.account.email
+                ? `Доступ откроется для аккаунта ${session.account.email}`
+                : "Доступ откроется для вашего аккаунта"}
+            </Typography.Text>
+            <Typography.Text className={styles.accountText}>
+              {`Войти в него можно: ${russianList(accountIdentity.methods(session.account))}. `}
+              {session.account.email
+                ? "Чек придёт на этот адрес."
+                : "Чек придёт на почту, которую вы укажете на странице оплаты."}
+            </Typography.Text>
+          </div>
         </div>
 
         <fieldset className={styles.plans}>
@@ -152,7 +148,7 @@ export const CheckoutPage: React.FC<CheckoutPageTypes.Props> = (props) => {
               </span>
               <span className={styles.optionNote}>
                 {item.id === "year"
-                  ? `${String(item.days)} дней · ${billingFormat.rub(item.monthlyEquivalentKopecks)} в месяц`
+                  ? `${String(item.days)} дней · ≈ ${billingFormat.rub(item.monthlyEquivalentKopecks)} в месяц`
                   : `${String(item.days)} дней`}
               </span>
             </label>
@@ -224,6 +220,12 @@ export const CheckoutPage: React.FC<CheckoutPageTypes.Props> = (props) => {
     </div>
   );
 };
+
+/** «VK ID и Яндекс ID», «почта и пароль, VK ID и Яндекс ID». */
+function russianList(items: readonly string[]): string {
+  if (items.length < 2) return items.join("");
+  return `${items.slice(0, -1).join(", ")} и ${items.at(-1) ?? ""}`;
+}
 
 /** A new pass starts when the current one ends (SPEC §2.2), otherwise now. */
 function accessUntil(

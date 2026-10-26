@@ -3,6 +3,7 @@ import { LogOut } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { billingFormat } from "~/entities/billing";
 import { accountApi, useAccountSession } from "~/features/account";
+import { accountIdentity } from "~/shared/lib/account-identity";
 import { ApiError } from "~/shared/api";
 import { ActionLink } from "~/shared/components/action-link";
 import { Button } from "~/shared/components/button";
@@ -160,9 +161,7 @@ export const AccountProfile: React.FC<AccountProfileTypes.Props> = (props) => {
     <div className={styles.profile}>
       <header className={styles.profileIdentity}>
         <ProfileAvatar
-          initial={
-            session.account.email?.trim().at(0)?.toLocaleUpperCase("ru") ?? "П"
-          }
+          initial={accountIdentity.initial(session.account)}
           size="large"
         />
         <div className={styles.identityText}>
