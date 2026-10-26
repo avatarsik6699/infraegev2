@@ -33,6 +33,9 @@ checker and file; for schema `140_01` it also verifies all account/progress tabl
 columns in progress and the restored `infraege_app` grants before smoke. It removes only its own
 restore resources. Export is an encrypted portable copy.
 A passing backup alone is not a restore proof. Keep exact verifier images available with bundles.
+The bundle's release (and so its verifier image) is the target of `/opt/infraege/database-current`:
+deploy points it at a release after that release's migration, and since Change 229 a deploy no longer
+recreates the postgres container, so its label is not the release any more.
 
 The isolated verifier uses the restored `task-files` directory owner's numeric UID/GID.
 Production timer backups are root-owned; local operator backups may have another owner.

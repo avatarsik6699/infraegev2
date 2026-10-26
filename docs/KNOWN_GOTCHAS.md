@@ -421,3 +421,18 @@ repository root (`npx prettier --write content/practice-bank/bank.json`).
   `restic unlock` under the host flock. On an older release: `restic unlock` (only stale locks go),
   then `restic check`.
 
+### Postgres restarts on every deploy
+
+- **Symptom:** each deploy waits for postgres to become healthy again; the container's `StartedAt`
+  is the deploy time.
+- **Cause:** anything in the postgres service that changes with the release recreates it. Before
+  Change 229 that was `DEPLOY_SHA` in its environment, the `com.infraege.version` label, and the
+  initdb role script mounted from `releases/<sha>`.
+- **Fix:** keep the postgres service release-independent:
+  - no release values in its environment or labels;
+  - the initdb script comes from `/opt/infraege/shared`;
+  - the database's release is the `database-current` link.
+
+  `scripts/tests/postgres-release-stability.test.sh` renders two releases and requires an
+  identical service.
+

@@ -41,6 +41,11 @@ validate_production_env "$env_file" || {
 
 mkdir -p "$release_dir"
 tar --extract --gzip --file "$archive" --directory "$release_dir"
+# Change 229: postgres mounts its initdb role script from a path that is the same for every
+# release, so the container is not recreated by a deploy; db-provision re-applies grants anyway.
+install -d -m 755 "$root/shared"
+install -m 755 "$release_dir/scripts/db-provision-roles.sh" "$root/shared/db-provision-roles.sh.new"
+mv -f "$root/shared/db-provision-roles.sh.new" "$root/shared/db-provision-roles.sh"
 previous_release=""
 if [[ -L $root/current ]]; then
   previous_release=$(readlink -f "$root/current")
@@ -78,8 +83,8 @@ if ! run_compose "$release_dir" "$DEPLOY_SHA" run --rm --no-deps --interactive=f
   exit 1
 fi
 # Prepared DB must already contain the reviewed bank; deploy never reimports content.
-# Change 219: postgres is recreated on each release (its role script lives in the release) and,
-# right after the image pull, may need more than a minute of disk before it accepts connections.
+# Change 229: postgres keeps running across releases; a new image still recreates it, and right
+# after the image pull it may need more than a minute of disk before it accepts connections.
 run_compose "$release_dir" "$DEPLOY_SHA" up --detach --wait --wait-timeout 180 postgres
 backup_args=("$env_file")
 backup_mode=$(application_backup_mode "$release_dir" "$previous_release") || exit 1

@@ -33,6 +33,12 @@ BASE_FILES = (
     "metadata.json",
     "production.env",
 )
+# Change 229: a release no longer recreates (or relabels) postgres. The release whose schema the
+# database holds is the one deploy-remote.sh points this link at after migrating; it is read for
+# production, and the container's own label or DEPLOY_SHA stays the answer elsewhere.
+DATABASE_RELEASE_LINK = Path(
+    os.environ.get("INFRAEGE_DATABASE_CURRENT", "/opt/infraege/database-current")
+)
 DIGEST = re.compile(r"[a-f0-9]{64}")
 VERIFIER = re.compile(
     r"ghcr.io/avatarsik6699/infraegev2-api:[a-f0-9]{40}|infraege-dev-api|infraege-practice-test-[a-z0-9-]+"
@@ -157,6 +163,18 @@ def schema_version(db: Database, snapshot: str | None = None) -> str:
     return "pre-alembic"
 
 
+def database_release(db: Database, environment: str) -> str:
+    """The application release the database belongs to (its verifier image is that release's)."""
+    if environment == "prod" and DATABASE_RELEASE_LINK.is_symlink():
+        return DATABASE_RELEASE_LINK.resolve().name
+    release = docker(
+        "inspect", db.container, "--format", '{{index .Config.Labels "com.infraege.version"}}'
+    )
+    if not release:
+        release = docker("exec", db.container, "sh", "-ec", 'printf "%s" "${DEPLOY_SHA:-unknown}"')
+    return release
+
+
 def create(db: Database, bundle: Path, env_file: Path, environment: str, project: str) -> None:
     regular(env_file)
     if env_file.stat().st_mode & 0o777 != 0o600:
@@ -188,11 +206,7 @@ def create(db: Database, bundle: Path, env_file: Path, environment: str, project
             verify_files(files)
             verify_references(bundle)
         server_version = db.query("SHOW server_version_num;", snapshot).strip()
-    release = docker(
-        "inspect", db.container, "--format", '{{index .Config.Labels "com.infraege.version"}}'
-    )
-    if not release:
-        release = docker("exec", db.container, "sh", "-ec", 'printf "%s" "${DEPLOY_SHA:-unknown}"')
+    release = database_release(db, environment)
     if environment == "prod" and not re.fullmatch(r"[a-f0-9]{40}", release):
         raise ValueError("unknown production release metadata")
     verifier, verifier_id = "none", "none"

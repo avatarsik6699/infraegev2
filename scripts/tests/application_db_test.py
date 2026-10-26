@@ -14,6 +14,38 @@ from scripts.lib.application_db import bundle, recovery, sql
 from scripts.lib.application_db.postgres import Database, docker
 
 
+class DatabaseReleaseTests(unittest.TestCase):
+    """Change 229: production reads the release from database-current, not from the container."""
+
+    def test_production_reads_the_database_current_link(self):
+        with tempfile.TemporaryDirectory() as temp:
+            sha = "c" * 40
+            release = Path(temp) / "releases" / sha
+            release.mkdir(parents=True)
+            link = Path(temp) / "database-current"
+            link.symlink_to(release)
+            db = Mock(container="infraege-postgres-1")
+            with (
+                patch.object(bundle, "DATABASE_RELEASE_LINK", link),
+                patch.object(bundle, "docker") as fake_docker,
+            ):
+                self.assertEqual(bundle.database_release(db, "prod"), sha)
+                fake_docker.assert_not_called()
+
+    def test_other_environments_keep_the_container_answer(self):
+        db = Mock(container="infraege-dev-postgres-1")
+        with patch.object(bundle, "docker", side_effect=["", "development"]):
+            self.assertEqual(bundle.database_release(db, "dev"), "development")
+
+    def test_production_without_the_link_falls_back_to_the_label(self):
+        db = Mock(container="infraege-postgres-1")
+        with (
+            patch.object(bundle, "DATABASE_RELEASE_LINK", Path("/nonexistent/database-current")),
+            patch.object(bundle, "docker", return_value="d" * 40),
+        ):
+            self.assertEqual(bundle.database_release(db, "prod"), "d" * 40)
+
+
 class BundleTests(unittest.TestCase):
     def setUp(self):
         self.temp = tempfile.TemporaryDirectory()

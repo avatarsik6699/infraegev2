@@ -738,14 +738,41 @@ artifact cache и ledger доказательств не вводятся. Од�
 Ordered unfinished outcomes (each a separate change, smallest coherent slice first). Done since the
 last roadmap: all 25 EGE topics on the lesson pipeline (Changes 171–190), the release of the redesign
 and rebuilt lessons on kodumka.ru (2026-10-24), paid access in test mode (Change 192), the operator
-console (Change 199), one chunk per topic and course lesson (Change 222).
+console (Change 199), one chunk per topic and course lesson (Change 222). Changes 227–229 are
+built and merged locally (2026-10-26):
+- sign-in methods with re-confirmation;
+- payment without an account email, the 2026-10-26 offer edition, the plan cards;
+- postgres kept across releases, the `body-parser` fix.
 
-1. **Live payments.** When Robokassa activates the shop: a real 1 ₽ payment and refund with receipt
-   and annulment, live passwords, `ROBOKASSA_TEST=false`, the announcement for topics that are free
-   today, then `PAYWALL_ENABLED=true`.
-2. **Registry and renewals.** Record the RKN registry number when it appears; replace the
-   `body-parser` audit ignore with an override from 2026-10-29; review the recovery hold on
-   2026-11-23.
+Both recovery holds were released on 2026-10-26. The steps below are the checklist of Change 229.
+
+1. **One release after Robokassa activates the shop.** Nothing is pushed or deployed before then.
+   - Rename the offer edition `2026-10-26` to the release date if they differ.
+   - `/ship 229 --release`: push `main`, predeploy, deploy the exact SHA.
+2. **Production checks after the deploy:**
+   - `/health/ready` on the new SHA;
+   - postgres not restarted by the deploy (`StartedAt`);
+   - the nightly backup records the right release;
+   - the new offer edition on `/oferta`;
+   - sign-in scenarios with the architect's test VK ID and Яндекс ID in Playwriter: test Кодумка
+     accounts are created and deleted, the main accounts stay untouched.
+3. **Robokassa test mode on production:**
+   - a month purchase by an account with an email and by a VK-only account — Robokassa must ask for
+     the receipt address;
+   - `/subscribe/return` opens access, no `billing.notification_rejected`;
+   - the OpStateExt answer kept as a fixture in `test_robokassa.py`;
+   - a full test refund.
+4. **Live payments:**
+   - live passwords #1 and #2, `ROBOKASSA_TEST=false`;
+   - a real 1 ₽ purchase: the receipt in «Мой налог» and in the buyer's mail;
+   - its full refund annuls the receipt;
+   - real prices restored;
+   - the announcement for topics that are free today, then `PAYWALL_ENABLED=true` by the
+     architect's decision.
+5. **Registry.** Record the RKN registry number when it appears: notice `100472735` was filed
+   2026-10-25, registration takes 1–30 days.
+6. **Hints and solutions for the 5,187 imported KEGE tasks in `/practice`**, in several iterations.
+   The architect deferred it on 2026-10-25.
 
 Later product decisions may add manual completion, richer statistics, auto-renewal, live formats
 and parent reports; each needs its own decision.

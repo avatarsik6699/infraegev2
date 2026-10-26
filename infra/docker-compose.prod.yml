@@ -66,7 +66,15 @@ services:
   postgres:
     mem_limit: 640m
     restart: always
+    # Change 229: nothing here changes with a release, so a deploy keeps the database running;
+    # only a new image or a real configuration change recreates it. The release a database
+    # belongs to is /opt/infraege/database-current (backups read it), not a container label.
     labels:
-      <<: *runtime-labels
+      com.infraege.project: infraege
       com.infraege.service: postgres
+    volumes: !override
+      - postgres122-data:/var/lib/postgresql
+      # initdb only; installed by deploy-remote.sh outside the release directory
+      - /opt/infraege/shared/db-provision-roles.sh:/docker-entrypoint-initdb.d/10-application-roles.sh:ro
+      - ${TASK_FILES_DIR:?TASK_FILES_DIR is required}:/task-files:ro
     logging: *journald
