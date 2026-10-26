@@ -9,7 +9,7 @@
 | Change | `228` |
 | Slug | `billing-without-account-email` |
 | Title | Оплата без почты в аккаунте, тарифы и страница оформления |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/228-billing-without-account-email` |
 
 ---
