@@ -225,9 +225,12 @@ class Robokassa:
         try:
             async with httpx.AsyncClient(timeout=TIMEOUT, follow_redirects=False) as client:
                 response = await client.post(
-                    REFUND_URL, content=token, headers={"Content-Type": "application/json"}
+                    # Change 233: the JWT goes as a JSON string; a bare token is a 400 BadRequest
+                    REFUND_URL,
+                    content=json.dumps(token),
+                    headers={"Content-Type": "application/json"},
                 )
-                response.raise_for_status()
+                # Change 233: a refusal (401 for a key or access) still answers JSON with its reason
                 body = response.json()
         except (httpx.HTTPError, ValueError) as exc:
             raise ProviderError("Robokassa refund unavailable") from exc
