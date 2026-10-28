@@ -376,6 +376,8 @@ removing the source worktree. Do not regenerate checksums around corrupted norma
 - **Fix:** take the values you need (`payment.id`, the status) inside the block, as
   `service.apply_status` and `execute_refund` return plain dataclasses; end a read transaction with
   `await db.commit()` before opening `db.begin()` on the same session.
+- **Seen again (Change 235):** `jobs.refund_states` read `refund.provider_ref` after its select committed;
+  the first real pending refund (2026-10-28) stayed `pending`. It now selects `(id, provider_ref)`.
 
 ### Paid text in a public chunk
 

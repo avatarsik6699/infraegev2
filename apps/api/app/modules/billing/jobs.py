@@ -70,29 +70,38 @@ async def settle_open(db: AsyncSession, gateway: PaymentProvider) -> None:
 
 
 async def refund_states(db: AsyncSession, gateway: PaymentProvider) -> None:
+    # Change 235: plain values, not rows; a row read after its transaction commits reloads
+    # outside the async context (KNOWN_GOTCHAS, MissingGreenlet)
     async with db.begin():
-        pending = list(await db.scalars(select(Refund).where(Refund.status == "pending")))
-    for refund in pending:
-        if not refund.provider_ref:
+        pending = (
+            await db.execute(
+                select(Refund.id, Refund.provider_ref).where(
+                    Refund.status == "pending", Refund.provider_ref.is_not(None)
+                )
+            )
+        ).all()
+    for refund_id, provider_ref in pending:
+        if provider_ref is None:  # excluded above; narrows the type
             continue
         try:
-            result = await gateway.refund_state(refund.provider_ref)
+            result = await gateway.refund_state(provider_ref)
         except ProviderError:
             continue
         if result.state == "pending":
             continue
         async with db.begin():
-            row = await db.get(Refund, refund.id, with_for_update=True)
+            row = await db.get(Refund, refund_id, with_for_update=True)
             assert row is not None
             await service.finish_refund(db, row, result.state)
             payment = await db.get(Payment, row.payment_id)
-        if result.state == "succeeded" and payment and payment.contact_email:
-            subject, body = notices.refunded(row.amount_kopecks)
+            amount, contact = row.amount_kopecks, payment.contact_email if payment else None
+        if result.state == "succeeded" and contact:
+            subject, body = notices.refunded(amount)
             try:
-                await send_account_mail(payment.contact_email, subject, body)
+                await send_account_mail(contact, subject, body)
             except MailUnavailable:
                 logger.warning("billing.mail_unavailable", notice="refunded")
-        await service.refund_followup(db, refund.id, result.message)
+        await service.refund_followup(db, refund_id, result.message)
 
 
 async def ending_notices(db: AsyncSession) -> None:

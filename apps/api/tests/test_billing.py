@@ -18,7 +18,7 @@ from app.core.database import database_engine
 from app.main import create_app
 from app.modules.account import api as account_api
 from app.modules.billing import api as billing_api
-from app.modules.billing import notices, service
+from app.modules.billing import jobs, notices, service
 from app.modules.billing.documents import current_offer
 from app.modules.billing.models import AccessGrant, Payment, Refund
 from app.modules.billing.provider.fake import LEDGER, FakeProvider
@@ -179,6 +179,16 @@ class BrokeShop(FakeProvider):
 
     async def refund(self, invoice_no, amount_kopecks, full, item_name):
         return RefundResult("failed", message="Support, Refund error 8401")
+
+
+class SlowShop(FakeProvider):
+    """Robokassa's way: a refund is accepted as pending and finishes later (2026-10-28)."""
+
+    async def refund(self, invoice_no, amount_kopecks, full, item_name):
+        return RefundResult("pending", provider_ref=f"slow-{invoice_no}-{amount_kopecks}")
+
+    async def refund_state(self, provider_ref):
+        return RefundResult("succeeded", provider_ref=provider_ref, message="finished")
 
 
 def test_paywall_purchase_extension_refund_and_deletion(paid_site, database, monkeypatch):  # noqa: F811
@@ -360,7 +370,7 @@ def test_paywall_purchase_extension_refund_and_deletion(paid_site, database, mon
                         # an agreed partial sum, as `admin refund --amount KOPECKS` makes
                         partial = await service.request_refund(db, year, 100_000, "operator")
                         assert partial is not None
-                        refund_id, year_invoice = partial.id, year.invoice_no
+                        refund_id, year_invoice, year_id = partial.id, year.invoice_no, year.id
                         rest = year.amount_kopecks - 100_000
                     # Change 232: a refused refund reaches the operator with Robokassa's reason
                     failed = await service.execute_refund(db, BrokeShop(), refund_id)
@@ -381,6 +391,25 @@ def test_paywall_purchase_extension_refund_and_deletion(paid_site, database, mon
                     assert [(r["invoice"], r["remainder_kopecks"]) for r in due] == [
                         (year_invoice, rest)
                     ]
+                    # Change 235: the hourly job finishes a pending refund from plain values
+                    async with db.begin():
+                        year = await db.get(Payment, year_id, populate_existing=True)
+                        assert year is not None
+                        later = await service.request_refund(
+                            db, year, 50_000, "operator", key=f"operator:{year_id}:50000"
+                        )
+                        assert later is not None
+                        later_id = later.id
+                    pending = await service.execute_refund(db, SlowShop(), later_id)
+                    assert pending.status == "pending" and not operator
+                    await jobs.refund_states(db, SlowShop())
+                    async with db.begin():
+                        finished = await db.get(Refund, later_id, populate_existing=True)
+                        assert finished is not None and finished.status == "succeeded"
+                    subject, body = operator.pop()
+                    assert subject == "[kodumka billing] Выдайте чек на остаток в «Мой налог»"
+                    rest -= 50_000
+                    assert f"Сумма: {rest // 100}.{rest % 100:02d} ₽" in body
             finally:
                 await engine.dispose()
 
