@@ -738,20 +738,21 @@ artifact cache и ledger доказательств не вводятся. Од�
 Ordered unfinished outcomes (each a separate change, smallest coherent slice first). Done since the
 last roadmap: all 25 EGE topics on the lesson pipeline (Changes 171–190), the release of the redesign
 and rebuilt lessons on kodumka.ru (2026-10-24), paid access in test mode (Change 192), the operator
-console (Change 199), one chunk per topic and course lesson (Change 222). Changes 227–229 are
-built and merged locally (2026-10-26):
+console (Change 199), one chunk per topic and course lesson (Change 222). Robokassa activated the
+shop on 2026-10-28; Робочеки СМЗ are active. Changes 227–229 were released together on 2026-10-28:
 - sign-in methods with re-confirmation;
-- payment without an account email, the 2026-10-26 offer edition, the plan cards;
+- payment without an account email, the plan cards;
+- the offer, refund and privacy editions of 2026-10-28;
+- the receipt nomenclature for Робочеки;
 - postgres kept across releases, the `body-parser` fix.
 
-Both recovery holds were released on 2026-10-26. The steps below are the checklist of Change 229.
+Both recovery holds were released on 2026-10-26. Steps 2–4 below are the checklist of Change 230.
 
-1. **One release after Robokassa activates the shop.** Nothing is pushed or deployed before then.
-   - Rename the offer edition `2026-10-26` to the release date if they differ.
-   - `/ship 229 --release`: push `main`, predeploy, deploy the exact SHA.
+1. Done: the release of Changes 227–229 (`/ship 229 --release`).
 2. **Production checks after the deploy:**
    - `/health/ready` on the new SHA;
-   - postgres not restarted by the deploy (`StartedAt`);
+   - postgres was recreated once by this deploy (its configuration changed). The next deploy must
+     keep its `StartedAt`;
    - the nightly backup records the right release;
    - the new offer edition on `/oferta`;
    - sign-in scenarios with the architect's test VK ID and Яндекс ID in Playwriter: test Кодумка

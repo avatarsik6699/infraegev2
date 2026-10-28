@@ -9,7 +9,7 @@
 | Change | `229` |
 | Slug | `ops-debt-and-release` |
 | Title | Отложенные ops-задачи и релиз после активации Robokassa |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/229-ops-debt-and-release` |
 
 ---
