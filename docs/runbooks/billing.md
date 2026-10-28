@@ -147,14 +147,14 @@ docker compose --env-file /etc/infraege/production.env --project-name infraege \
 | `refund --payment ID --amount auto --reason buyer` | refund of unused whole days (ЗоЗПП ст. 32); access ends now |
 | `refund --payment ID --amount full --reason guardian` | a parent's request for a minor's purchase: the full price |
 | `refund --payment ID --amount KOPECKS --reason operator` | any other agreed sum |
-| `refunds` | requested, pending and failed refunds (account deletions create requested ones) |
+| `refunds` | `open`: requested, pending and failed refunds (account deletions create requested ones); `remainder_receipts`: partial refunds of 30 days with the receipt left to issue (Change 232) |
 | `funnel [--days N]` | orders of the last N Moscow days (default 30) by day and plan: paid, failed, open, refunded and the money kept — the payment conversion (Change 194) |
 | `execute --refund ID` | send a requested or failed refund to the provider |
 | `revenue [--year YEAR]` | НПД income of a Moscow calendar year and its share of the limit |
 | `signals [--days N]` | Change 198: accounts above a sharing or downloading threshold, numbers only; no measure is automatic |
 | `warn` / `suspend --days N` / `terminate` / `lift [--compensate]` (`--user ID` or `--email A`) | Change 198: the graded manual measures of offer section 6 and their lifting — procedure in [accounts](accounts.md#ограничения-change-198) |
 | `operator KIND` (args JSON on stdin) | Change 199: the console's form of `warn`, `suspend`, `terminate`, `lift`, `refund_execute`, `account_show`; one JSON object out, a refusal is `{"error": …}` with exit 2. Normally run by `scripts/operator-command.sh` for the sre.infraege.ru console |
-| `export-operator` | Change 199: the `kodumka.operator/1` report (signals, running measures, open refunds); `scripts/operator-export.sh` writes it every ten minutes |
+| `export-operator` | Change 199: the `kodumka.operator/1` report (signals, running measures, open refunds and, Change 232, `remainder_receipts`); `scripts/operator-export.sh` writes it every ten minutes |
 
 A refund is idempotent by payment, reason and amount: repeating the command does not pay twice.
 Robokassa finishes refunds asynchronously; the hourly job records the result and mails the buyer.
@@ -168,6 +168,26 @@ The receipt correction belongs to Робочеки; if it did not happen, annul 
 2. Choose the amount: `auto` for the buyer's own refusal, `full` for a parent's request or a
    technical failure on our side.
 3. Run `refund`, answer the buyer with the amount and the bank's usual timing (up to 10 days).
+
+## Refund money and the receipt for the rest (Change 232)
+
+- A refund is paid from the shop balance, which holds payments minus Robokassa's commission. Keep
+  a reserve there: never withdraw everything, and check that automatic payout is off. A refund
+  the balance cannot cover fails with `Support, Refund error 8401`; the operator gets the
+  «Возврат не прошёл» mail with the reason. Top up the balance or wait for payments, then run
+  `execute --refund ID` (or «Выполнить» in the console) within the 10 days of ЗоЗПП ст. 31.
+- The commission is not withheld from a refund: ЗоЗПП ст. 32 and ГК ст. 782 let the seller keep
+  only the expenses of performing the contract, and the commission pays for taking the money.
+  The lawful reduction is `auto`: the buyer pays for the days already used.
+- A partial refund (`auto`, or any sum below the payment) makes Робочеки annul the payment's whole
+  НПД receipt; no receipt for the rest is made (Robokassa support, 2026-10-28). When it
+  succeeds, the operator gets «Выдайте чек на остаток в «Мой налог»» with the service name, the
+  sum, the payment date and the receipt address. In «Мой налог»: «Новая продажа», that name and
+  sum, buyer a physical person, the payment date as the sale date, then send the receipt to that
+  address. `refunds` and the console's report list such payments for 30 days
+  (`remainder_receipts`); there is no mark for an issued one, so check «Мой налог» before
+  issuing.
+- A full refund annuls the receipt and needs nothing more.
 
 ## Account deletion
 
@@ -184,6 +204,8 @@ account link (5-year retention, SPEC §3). Run `refunds`, then `execute` each ne
 | `billing.notification_rejected` repeatedly | password #2 or the hash algorithm differs from the shop settings |
 | Webhook endpoint down for hours | nothing is lost: Robokassa retries and the hourly job asks for every open payment |
 | `billing.reconcile_mismatch` mail | compare the listed invoices in the shop; a refund made in the shop by hand must also be recorded here (`refund … --reason operator`) |
+| «Возврат не прошёл» mail, `billing.refund_failed` | the reason is Robokassa's; 8401 = the balance cannot cover the refund with its commission: top it up or wait for payments, then `execute --refund ID` (Change 232) |
+| «Выдайте чек на остаток» mail, `billing.remainder_receipt_due` | issue the receipt for the rest in «Мой налог» as described in [Refund money](#refund-money-and-the-receipt-for-the-rest-change-232) |
 | `billing.npd_limit_pause` | new checkouts are refused at 95 % of the НПД limit; access already bought continues. Decide with the architect: wait for the new year or move to ИП (a separate project: new offer, new contract) |
 
 ## Backups

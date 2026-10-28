@@ -375,16 +375,20 @@ async def main_async(args: argparse.Namespace) -> object:
                 rows = await db.scalars(
                     select(Refund).where(Refund.status.in_(("requested", "pending", "failed")))
                 )
-                return [
-                    {
-                        "refund": str(r.id),
-                        "payment": str(r.payment_id),
-                        "amount_kopecks": r.amount_kopecks,
-                        "reason": r.reason,
-                        "status": r.status,
-                    }
-                    for r in rows
-                ]
+                return {
+                    "open": [
+                        {
+                            "refund": str(r.id),
+                            "payment": str(r.payment_id),
+                            "amount_kopecks": r.amount_kopecks,
+                            "reason": r.reason,
+                            "status": r.status,
+                        }
+                        for r in rows
+                    ],
+                    # Change 232: receipts for the rest that the operator issues in «Мой налог»
+                    "remainder_receipts": await service.remainder_receipts(db),
+                }
             if args.command == "show":
                 return await show(db, args.email)
             if args.command == "funnel":

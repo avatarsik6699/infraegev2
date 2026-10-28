@@ -92,6 +92,7 @@ async def refund_states(db: AsyncSession, gateway: PaymentProvider) -> None:
                 await send_account_mail(payment.contact_email, subject, body)
             except MailUnavailable:
                 logger.warning("billing.mail_unavailable", notice="refunded")
+        await service.refund_followup(db, refund.id, result.message)
 
 
 async def ending_notices(db: AsyncSession) -> None:
@@ -130,17 +131,6 @@ async def ending_notices(db: AsyncSession) -> None:
                 grant.ending_notice_at = service.now()
 
 
-async def alert_operator(subject: str, body: str) -> None:
-    if not settings.billing_operator_email:
-        return
-    try:
-        await send_account_mail(
-            settings.billing_operator_email, f"[kodumka billing] {subject}", body
-        )
-    except MailUnavailable:
-        logger.error("billing.operator_mail_unavailable", subject=subject)
-
-
 async def reconcile(db: AsyncSession, gateway: PaymentProvider) -> None:
     """Recent payments must match the provider's record; mismatches go to the operator."""
     moment = service.now()
@@ -171,7 +161,7 @@ async def reconcile(db: AsyncSession, gateway: PaymentProvider) -> None:
     logger.info("billing.reconcile_done", checked=len(rows), mismatches=len(mismatches))
     if mismatches:
         logger.error("billing.reconcile_mismatch", count=len(mismatches))
-        await alert_operator("сверка с провайдером", "\n".join(mismatches) + "\n")
+        await notices.to_operator("сверка с провайдером", "\n".join(mismatches) + "\n")
 
 
 async def npd_guard(db: AsyncSession) -> None:
@@ -183,7 +173,7 @@ async def npd_guard(db: AsyncSession) -> None:
     if share >= service.PAUSE_SHARE:
         logger.error("billing.npd_limit_pause", share=round(share, 3))
     elif share >= 0.85:
-        await alert_operator(
+        await notices.to_operator(
             "лимит НПД",
             f"Выручка {year} года — {share:.0%} лимита НПД. При 95 % новые оплаты остановятся.\n",
         )

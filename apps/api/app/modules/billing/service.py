@@ -14,6 +14,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.config import settings
 from app.modules.account.security import safe_return_path
+from app.modules.billing import notices
 from app.modules.billing.documents import current_offer
 from app.modules.billing.models import AccessGrant, OfferAcceptance, Payment, Refund
 from app.modules.billing.plans import PlanId, plans, receipt_item
@@ -306,7 +307,88 @@ async def execute_refund(
         state=result.state,
         message=result.message,
     )
+    await refund_followup(db, refund_id, result.message)
     return outcome
+
+
+async def remainder_kopecks(db: AsyncSession, payment: Payment) -> int:
+    """What the buyer kept paying for after every succeeded refund of the payment."""
+    refunded = await db.scalar(
+        select(func.coalesce(func.sum(Refund.amount_kopecks), 0)).where(
+            Refund.payment_id == payment.id, Refund.status == "succeeded"
+        )
+    )
+    return payment.amount_kopecks - int(refunded or 0)
+
+
+REMAINDER_DAYS = 30
+
+
+async def remainder_receipts(db: AsyncSession) -> list[dict]:
+    """Change 232: payments with a succeeded partial refund in the last 30 days and the income
+    left on them; the operator issues that receipt in «Мой налог». There is no mark for an
+    issued one: the list ages out instead of growing a column."""
+    since = now() - timedelta(days=REMAINDER_DAYS)
+    payments = await db.scalars(
+        select(Payment)
+        .where(
+            Payment.id.in_(
+                select(Refund.payment_id).where(
+                    Refund.status == "succeeded", Refund.completed_at >= since
+                )
+            )
+        )
+        .order_by(Payment.paid_at)
+    )
+    rows = []
+    for payment in payments.all():
+        remainder = await remainder_kopecks(db, payment)
+        if 0 < remainder < payment.amount_kopecks:
+            rows.append(
+                {
+                    "payment": str(payment.id),
+                    "invoice": payment.invoice_no,
+                    "item": receipt_item(payment.days),
+                    "remainder_kopecks": remainder,
+                    "paid_at": payment.paid_at.isoformat() if payment.paid_at else None,
+                    "receipt_email": payment.contact_email,
+                }
+            )
+    return rows
+
+
+async def refund_followup(db: AsyncSession, refund_id: UUID, message: str | None) -> None:
+    """Change 232: a failed refund and a partial one both need the operator. Robokassa refuses
+    a refund the shop balance cannot cover; a partial refund annuls the whole НПД receipt and
+    the receipt for the rest is the seller's own (Robokassa support, 2026-10-28)."""
+    async with db.begin():
+        refund = await db.get(Refund, refund_id)
+        if refund is None or refund.status not in ("failed", "succeeded"):
+            return
+        payment = await db.get(Payment, refund.payment_id)
+        assert payment is not None
+        if refund.status == "failed":
+            logger.error("billing.refund_failed", refund_id=str(refund.id), message=message)
+            mail = notices.refund_failed(
+                str(refund.id), payment.invoice_no, refund.amount_kopecks, message
+            )
+        else:
+            remainder = await remainder_kopecks(db, payment)
+            if remainder <= 0 or remainder == payment.amount_kopecks:
+                return
+            logger.warning(
+                "billing.remainder_receipt_due",
+                refund_id=str(refund.id),
+                remainder_kopecks=remainder,
+            )
+            mail = notices.remainder_receipt(
+                receipt_item(payment.days),
+                remainder,
+                payment.paid_at,
+                payment.invoice_no,
+                payment.contact_email,
+            )
+    await notices.to_operator(*mail)
 
 
 async def finish_refund(db: AsyncSession, refund: Refund, state: str) -> None:

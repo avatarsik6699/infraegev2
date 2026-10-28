@@ -18,10 +18,11 @@ from app.core.database import database_engine
 from app.main import create_app
 from app.modules.account import api as account_api
 from app.modules.billing import api as billing_api
-from app.modules.billing import service
+from app.modules.billing import notices, service
 from app.modules.billing.documents import current_offer
 from app.modules.billing.models import AccessGrant, Payment, Refund
 from app.modules.billing.provider.fake import LEDGER, FakeProvider
+from app.modules.billing.provider.port import RefundResult
 from app.modules.entitlement.registry import task_access
 from app.modules.practice.schemas import Bank
 from tests.test_minimal_bank import BANK, database  # noqa: F401
@@ -173,9 +174,24 @@ def test_offer_year_compares_twelve_month_prices():
     assert month["months_price_kopecks"] == month["price_kopecks"]
 
 
+class BrokeShop(FakeProvider):
+    """Robokassa's answer when the shop balance cannot cover a refund (2026-10-28)."""
+
+    async def refund(self, invoice_no, amount_kopecks, full, item_name):
+        return RefundResult("failed", message="Support, Refund error 8401")
+
+
 def test_paywall_purchase_extension_refund_and_deletion(paid_site, database, monkeypatch):  # noqa: F811
     monkeypatch.setattr(settings, "billing_enabled", True)
     monkeypatch.setattr(settings, "paywall_enabled", True)
+    # Change 232: what the operator is told after a refund ends
+    operator: list[tuple[str, str]] = []
+
+    async def operator_mail(recipient: str, subject: str, body: str) -> None:
+        operator.append((subject, body))
+
+    monkeypatch.setattr(settings, "billing_operator_email", "operator@example.com")
+    monkeypatch.setattr(notices, "send_account_mail", operator_mail)
     paid, free = first_task("paid"), first_task("free")
     material = next(link.material_id for link in paid.task.lessons)
     with TestClient(create_app()) as client:
@@ -305,6 +321,7 @@ def test_paywall_purchase_extension_refund_and_deletion(paid_site, database, mon
                             select(AccessGrant.revoked_at).where(AccessGrant.payment_id == first_id)
                         )
                         assert revoked is not None
+                    assert not operator  # a full refund leaves no receipt to issue
                     # evidence stays append-only for the application role
                     for statement in (
                         "UPDATE practice.billing_offer_acceptance SET version = 'x'",
@@ -332,11 +349,38 @@ def test_paywall_purchase_extension_refund_and_deletion(paid_site, database, mon
             engine = database_engine(database("app"), role="infraege_app")
             try:
                 async with AsyncSession(engine) as db:
-                    payments = (await db.scalars(select(Payment))).all()
-                    assert payments and all(p.user_id is None for p in payments)
-                    assert all(p.contact_email is None for p in payments)
-                    reasons = {r.reason for r in (await db.scalars(select(Refund))).all()}
-                    assert "account_deleted" in reasons
+                    async with db.begin():
+                        payments = (await db.scalars(select(Payment))).all()
+                        assert payments and all(p.user_id is None for p in payments)
+                        assert all(p.contact_email is None for p in payments)
+                        reasons = {r.reason for r in (await db.scalars(select(Refund))).all()}
+                        assert "account_deleted" in reasons
+                        year = await db.scalar(select(Payment).where(Payment.plan == "year"))
+                        assert year is not None
+                        # an agreed partial sum, as `admin refund --amount KOPECKS` makes
+                        partial = await service.request_refund(db, year, 100_000, "operator")
+                        assert partial is not None
+                        refund_id, year_invoice = partial.id, year.invoice_no
+                        rest = year.amount_kopecks - 100_000
+                    # Change 232: a refused refund reaches the operator with Robokassa's reason
+                    failed = await service.execute_refund(db, BrokeShop(), refund_id)
+                    assert failed.status == "failed"
+                    subject, body = operator.pop()
+                    assert subject == "[kodumka billing] Возврат не прошёл"
+                    assert "8401" in body and f"execute --refund {refund_id}" in body
+                    # the retry goes through; the rest of the income needs its own receipt
+                    done = await service.execute_refund(db, FakeProvider(), refund_id)
+                    assert done.status == "succeeded"
+                    subject, body = operator.pop()
+                    assert subject == "[kodumka billing] Выдайте чек на остаток в «Мой налог»"
+                    assert f"Сумма: {rest // 100}.{rest % 100:02d} ₽" in body
+                    assert "Доступ к учебным материалам Кодумки на 365 дней" in body
+                    assert "адрес не сохранён" in body  # the deletion cleared the contact
+                    async with db.begin():
+                        due = await service.remainder_receipts(db)
+                    assert [(r["invoice"], r["remainder_kopecks"]) for r in due] == [
+                        (year_invoice, rest)
+                    ]
             finally:
                 await engine.dispose()
 

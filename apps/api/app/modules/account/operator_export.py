@@ -23,6 +23,7 @@ from app.modules.account.models import (
     AccountUser,
 )
 from app.modules.billing.models import AccessGrant, Payment, Refund
+from app.modules.billing.service import remainder_receipts
 from app.modules.entitlement.service import access_until
 
 SIGNAL_DAYS = 7
@@ -126,6 +127,8 @@ async def operator_document(db: AsyncSession) -> dict[str, Any]:
         "signals": signals,
         "restrictions": running,
         "refunds": refunds,
+        # Change 232: partial refunds of the last 30 days and the receipt left to issue
+        "remainder_receipts": await remainder_receipts(db),
     }
 
 
