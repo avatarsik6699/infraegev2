@@ -118,10 +118,9 @@ class Robokassa:
         out_sum = rubles(request.amount_kopecks)
         nomenclature = receipt(request.item_name, request.amount_kopecks)
         # Change 230: the shop's SuccessURL carries only OutSum and InvId, so the buyer comes back
-        # to this payment's own page; the signature takes the addresses URL-encoded
-        back = ":".join(
-            (quote(request.success_url, safe=""), "GET", quote(request.fail_url, safe=""), "GET")
-        )
+        # to this payment's own page. Change 231: the signature takes the addresses as they are;
+        # the URL-encoded form of Robokassa's own example is refused with error 29
+        back = f"{request.success_url}:GET:{request.fail_url}:GET"
         params = {
             "MerchantLogin": self.login,
             "OutSum": out_sum,

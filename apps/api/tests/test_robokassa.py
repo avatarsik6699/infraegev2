@@ -108,9 +108,9 @@ def test_payment_link_is_signed_with_password_one():
     back = "https://kodumka.ru/subscribe/return?payment=p-1"
     assert query["SuccessUrl2"] == back and query["FailUrl2"] == back
     assert query["SuccessUrl2Method"] == "GET" and query["FailUrl2Method"] == "GET"
-    encoded = quote(back, safe="")
+    # Change 231: as they are; the URL-encoded form got error 29 from the shop
     assert query["SignatureValue"] == sha(
-        f"infraege:490.00:1001:{nomenclature}:{encoded}:GET:{encoded}:GET:one"
+        f"infraege:490.00:1001:{nomenclature}:{back}:GET:{back}:GET:one"
     )
     assert query["IsTest"] == "1" and query["Email"] == "buyer@example.com"
 
