@@ -142,6 +142,8 @@ See `docs/SPEC.md` §2.2, §6.1, §7.3 and the billing runbook.
 
 ## Implementation Notes
 
+- B1, B3, B4, I1, I2 выпущены как Change 236 (`c067ec85`) от `main`, чтобы не ждать шагов на проде.
+
 ---
 
 ## Commit Message
