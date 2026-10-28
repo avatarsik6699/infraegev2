@@ -25,8 +25,9 @@
 ## Backlog
 
 ### Release
-- [ ] `T8` (из 232 F1) Playwriter на проде: после оплаты `/subscribe/return` пишет «Чек придёт на
-  почту, указанную при оплате.» — _Depends on:_ —
+- [x] `T8` (из 232 F1) Playwriter на проде: после оплаты `/subscribe/return` пишет «Чек придёт на
+  почту, указанную при оплате.» Проверено 2026-10-28 на `844e0bc2`, платёж 1005: текст на месте,
+  ошибок в консоли нет. — _Depends on:_ —
 - [ ] `T1` (из 232 T1) Прод после релизов 2026-10-28:
   - сделано: `/health/ready` на каждом SHA; `/oferta`, `/privacy`, `/vozvrat` показывают редакцию
     от 28.10, `/oferta/2026-10-23` открывается;
@@ -99,6 +100,7 @@ See `docs/SPEC.md` §2.2, §6.1, §7.3 and the billing runbook.
 
 | HEAD | Groups / focused checks | Result | Seconds |
 |------|-------------------------|--------|---------|
+| prod `844e0bc2` | T8: Playwriter `/subscribe/return?payment=…` (screenshot, console clean) | PASS | — |
 
 ---
 
