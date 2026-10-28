@@ -6,8 +6,9 @@ answers when the shop is connected (docs/runbooks/billing.md, Launch checklist).
 
 import asyncio
 import hashlib
+import json
 from collections.abc import Callable
-from urllib.parse import parse_qs, urlsplit
+from urllib.parse import parse_qs, quote, unquote, urlsplit
 
 import httpx
 import jwt
@@ -15,6 +16,7 @@ import pytest
 from pydantic import SecretStr
 
 from app.core.config import settings
+from app.modules.billing.plans import receipt_item
 from app.modules.billing.provider import robokassa
 from app.modules.billing.provider.port import (
     InvalidNotification,
@@ -59,12 +61,23 @@ def sha(text: str) -> str:
     return hashlib.sha256(text.encode()).hexdigest()
 
 
+ITEM = "Доступ к учебным материалам Кодумки на 30 дней"
+
+
+def test_receipt_item_names_the_days():
+    assert receipt_item(30) == ITEM
+    assert receipt_item(365).endswith("на 365 дней")
+    assert receipt_item(31).endswith("на 31 день") and receipt_item(11).endswith("на 11 дней")
+    assert receipt_item(2).endswith("на 2 дня") and receipt_item(14).endswith("на 14 дней")
+
+
 def test_payment_link_is_signed_with_password_one():
     url = robokassa.Robokassa().payment_url(
         PaymentRequest(
             invoice_no=1001,
             amount_kopecks=49_000,
             description="Доступ на месяц — Кодумка",
+            item_name=ITEM,
             email="buyer@example.com",
             success_url="https://kodumka.ru/subscribe/return",
             fail_url="https://kodumka.ru/subscribe/return",
@@ -74,7 +87,24 @@ def test_payment_link_is_signed_with_password_one():
     query = {key: value[0] for key, value in parse_qs(parts.query).items()}
     assert f"{parts.scheme}://{parts.netloc}{parts.path}" == robokassa.PAY_URL
     assert query["OutSum"] == "490.00" and query["InvId"] == "1001"
-    assert query["SignatureValue"] == sha("infraege:490.00:1001:one")
+    # Change 229: the link carries the URL-encoded receipt (so the query encodes it twice) and
+    # the signature takes it in that once-encoded form
+    nomenclature = query["Receipt"]
+    assert json.loads(unquote(nomenclature)) == {
+        "items": [
+            {
+                "name": ITEM,
+                "quantity": 1,
+                "sum": 490.0,
+                "payment_method": "full_payment",
+                "payment_object": "service",
+                "tax": "none",
+            }
+        ]
+    }
+    assert nomenclature == quote(unquote(nomenclature), safe="")
+    assert "%257B" in parts.query
+    assert query["SignatureValue"] == sha(f"infraege:490.00:1001:{nomenclature}:one")
     assert query["IsTest"] == "1" and query["Email"] == "buyer@example.com"
 
 
@@ -132,13 +162,26 @@ def test_refund_is_a_jwt_signed_with_password_three(monkeypatch):
         return httpx.Response(200, json={"success": True, "message": None, "requestId": "r-1"})
 
     transport(monkeypatch, handler)
-    partial = asyncio.run(robokassa.Robokassa().refund(1001, 16_333, False, "Возврат"))
+    partial = asyncio.run(robokassa.Robokassa().refund(1001, 16_333, False, ITEM))
     assert partial.state == "pending" and partial.provider_ref == "r-1"
+
+    def item(cost: float) -> dict:
+        return {
+            "Name": ITEM,
+            "Quantity": 1,
+            "Cost": cost,
+            "Tax": "none",
+            "PaymentMethod": "full_payment",
+            "PaymentObject": "service",
+        }
+
+    # Change 229: the receipt positions go with every refund, or the receipt stays as it was
     claims = jwt.decode(bodies[-1], "three", algorithms=["HS256"])
-    assert claims == {"OpKey": "op-key-1", "RefundSum": 163.33}
-    full = asyncio.run(robokassa.Robokassa().refund(1001, 49_000, True, "Возврат"))
+    assert claims == {"OpKey": "op-key-1", "RefundSum": 163.33, "InvoiceItems": [item(163.33)]}
+    full = asyncio.run(robokassa.Robokassa().refund(1001, 49_000, True, ITEM))
     assert full.state == "pending"
-    assert jwt.decode(bodies[-1], "three", algorithms=["HS256"]) == {"OpKey": "op-key-1"}
+    claims = jwt.decode(bodies[-1], "three", algorithms=["HS256"])
+    assert claims == {"OpKey": "op-key-1", "InvoiceItems": [item(490.0)]}
 
 
 def test_refund_state_maps_labels(monkeypatch):

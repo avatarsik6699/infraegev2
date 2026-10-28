@@ -55,8 +55,15 @@ Done (2026-10-24/25):
   `/etc/infraege/production.env`, `BILLING_ENABLED=true`, `ROBOKASSA_TEST=true`;
 - RKN notification filed, Яндекс ID and VK ID on, the `smotryashchiy` VPS country checked.
 
+Every payment link carries the receipt nomenclature (`Receipt`, one `service` position named
+«Доступ к учебным материалам Кодумки на N дней», `tax: none`), and every refund carries the same
+position as `InvoiceItems` (Change 229). Without them Робочеки cannot form the receipt or annul it.
+The shop's fiscalization is «Робочеки СМЗ — Одобрено ФНС — Активно» since the activation on
+2026-10-28.
+
 Test mode (`ROBOKASSA_TEST=true`):
-- [ ] a month purchase from the site returns to `/subscribe/return` and opens access;
+- [ ] a month purchase from the site returns to `/subscribe/return` and opens access; the payment
+      page accepts the signed `Receipt`;
 - [ ] `journalctl -u infraege-billing-hourly` shows no `billing.notification_rejected`;
 - [ ] OpStateExt answers for the test invoice (state codes 5/10/50/100 match); record a real
       response as a fixture in `apps/api/tests/test_robokassa.py`;

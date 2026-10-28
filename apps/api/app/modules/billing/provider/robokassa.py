@@ -3,16 +3,18 @@
 Payments: the Merchant/Index.aspx page, signed with Password #1; the ResultURL
 notification is signed with Password #2 and answered `OK{InvId}`; OpStateExt (Password #2)
 is the status of record; refunds go through the Refund API, a JWT signed with Password #3.
-Receipts are registered in «Мой налог» by Робочеки СМЗ on the shop side.
+Receipts are registered in «Мой налог» by Робочеки СМЗ from the nomenclature the shop sends
+(Change 229): `Receipt` with the payment, `InvoiceItems` with a refund.
 
 Verify against the shop in test mode before launch (docs/runbooks/billing.md, Launch checklist):
-the OpStateExt signature and state codes, and whether Робочеки need a `Receipt` field.
+the OpStateExt signature and state codes.
 """
 
 import hashlib
 import hmac
+import json
 from decimal import Decimal, InvalidOperation
-from urllib.parse import urlencode
+from urllib.parse import quote, urlencode
 from xml.etree import ElementTree
 
 import httpx
@@ -59,6 +61,22 @@ def kopecks(value: str) -> int:
     return int(amount)
 
 
+def receipt(item_name: str, amount_kopecks: int) -> str:
+    """The `Receipt` of one service position, URL-encoded once: the signature takes it in this
+    form, and the link encodes it again, as Robokassa's own GET examples do. No `sno`: НПД is
+    not one of its values, Робочеки take the shop's."""
+    item = {
+        "name": item_name[:128],
+        "quantity": 1,
+        "sum": float(Decimal(amount_kopecks) / 100),
+        "payment_method": "full_payment",
+        "payment_object": "service",
+        "tax": "none",
+    }
+    text = json.dumps({"items": [item]}, ensure_ascii=False, separators=(",", ":"))
+    return quote(text, safe="")
+
+
 def digest(text: str) -> str:
     return hashlib.new(settings.robokassa_hash, text.encode()).hexdigest()
 
@@ -98,13 +116,15 @@ class Robokassa:
 
     def payment_url(self, request: PaymentRequest) -> str:
         out_sum = rubles(request.amount_kopecks)
+        nomenclature = receipt(request.item_name, request.amount_kopecks)
         params = {
             "MerchantLogin": self.login,
             "OutSum": out_sum,
             "InvId": str(request.invoice_no),
             "Description": request.description[:100],
+            "Receipt": nomenclature,
             "SignatureValue": digest(
-                f"{self.login}:{out_sum}:{request.invoice_no}:{self.secret(1)}"
+                f"{self.login}:{out_sum}:{request.invoice_no}:{nomenclature}:{self.secret(1)}"
             ),
             "Culture": "ru",
             **({"Email": request.email} if request.email else {}),
@@ -169,14 +189,28 @@ class Robokassa:
         )
 
     async def refund(
-        self, invoice_no: int, amount_kopecks: int, full: bool, description: str
+        self, invoice_no: int, amount_kopecks: int, full: bool, item_name: str
     ) -> RefundResult:
         status = await self.fetch_status(invoice_no)
         if status.state != "succeeded" or not status.provider_ref:
             return RefundResult("failed", message="payment is not completed")
-        payload: dict[str, object] = {"OpKey": status.provider_ref}
+        refund_sum = float(Decimal(amount_kopecks) / 100)
+        payload: dict[str, object] = {
+            "OpKey": status.provider_ref,
+            # without the receipt positions Robokassa returns the money but leaves the receipt
+            "InvoiceItems": [
+                {
+                    "Name": item_name[:128],
+                    "Quantity": 1,
+                    "Cost": refund_sum,
+                    "Tax": "none",
+                    "PaymentMethod": "full_payment",
+                    "PaymentObject": "service",
+                }
+            ],
+        }
         if not full:
-            payload["RefundSum"] = float(Decimal(amount_kopecks) / 100)
+            payload["RefundSum"] = refund_sum
         token = jwt.encode(payload, self.secret(3), algorithm="HS256")
         try:
             async with httpx.AsyncClient(timeout=TIMEOUT, follow_redirects=False) as client:

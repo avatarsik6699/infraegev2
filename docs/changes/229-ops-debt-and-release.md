@@ -52,6 +52,9 @@
   миграции. Метка и `DEPLOY_SHA` контейнера остаются запасным путём для dev и test. Тесты бэкапа
   обновлены. — _Depends on:_ I2
 - [x] `I4` Документация: комментарий в `deploy-remote.sh`, `backup-restore.md`, KNOWN_GOTCHAS. — _Depends on:_ I2, I3
+- [x] `I5` (находка `/ship --release` 2026-10-28) `shell-lint`: SC2016 в
+  `postgres-release-stability.test.sh`, где `grep` ищет буквальную строку. Подавление с причиной,
+  как в соседних тестах. — _Depends on:_ I2
 
 ### Ops (прод, сейчас)
 - [x] `O1` Снять recovery hold по `backup-restore.md` § Recovery hold review and release:
@@ -72,36 +75,33 @@
   - удержаний не осталось ни в одном репозитории. — _Depends on:_ —
 
 ### Privacy (из smotryashchiy Change 35, выпускается тем же релизом)
-- [ ] `P1` `/privacy`, раздел «Аналитика посещений»: сервис мониторинга теперь хранит страну и регион
+- [x] `P1` `/privacy`, раздел «Аналитика посещений»: сервис мониторинга теперь хранит страну и регион
   (из IP по офлайн-базе, сам IP не сохраняется), UTM-метки перехода, группу ширины экрана, версии
   браузера и системы. Визиты связываются в пределах дня. Новая дата редакции; `docs/legal` и
   `privacy-legal-checklist.md`. — _Depends on:_ —
 
+### Billing (после активации Robokassa 2026-10-28)
+- [x] `B1` Номенклатура чека для Робочеков СМЗ. Письмо Robokassa об активации предупреждает, что без
+  номенклатуры чек формируется неправильно.
+  - Ссылка на оплату передаёт `Receipt` из одной позиции:
+    - название «Доступ к учебным материалам Кодумки на N дней»;
+    - количество 1, сумма равна `OutSum`;
+    - `full_payment`, `service`, `tax: none`, без `sno`.
+
+    `Receipt` в URL-кодированном виде входит в подпись `MerchantLogin:OutSum:InvId:Receipt:Пароль#1`.
+  - Возврат передаёт `InvoiceItems` с той же позицией на сумму возврата. Без неё Robokassa
+    возвращает только деньги, без чека.
+  - Тесты в `test_robokassa.py`.
+
+  Частичный возврат при НПД ждёт ответа поддержки Robokassa (вопрос архитектора от 2026-10-28). — _Depends on:_ —
+
 ### Release (после активации Robokassa)
-- [ ] `T1` Перед релизом:
-  - редакцию оферты `2026-10-26` переименовать на дату релиза, если она другая (Change 228);
+- [x] `T1` Перед релизом:
+  - оферта `2026-10-26` → `2026-10-28`, правила возврата и политика тоже от 28.10 (релиз 2026-10-28);
   - `/ship 229 --release`: push `main`, predeploy, деплой выбранного SHA. — _Depends on:_ I1–I4, активация
-- [ ] `T2` Прод после деплоя:
-  - `/health/ready` на новом SHA;
-  - postgres не перезапускался (`StartedAt` до и после);
-  - ночной бэкап записал правильный релиз;
-  - новая редакция оферты на `/oferta`. — _Depends on:_ T1
-- [ ] `T3` (из 227 T3) Playwriter на проде с тестовыми VK ID и Яндекс ID архитектора, сценарии 1–3
-  брифа. Тестовые аккаунты Кодумки создаются и удаляются, основные не трогаются. — _Depends on:_ T1
-- [ ] `T4` (из 227 T5) Тестовый режим Robokassa на проде:
-  - покупка «Месяц» аккаунтом с почтой и аккаунтом только с VK. Robokassa должна спросить почту
-    для чека;
-  - `/subscribe/return` открывает доступ;
-  - нет `billing.notification_rejected`;
-  - OpStateExt отвечает, его ответ сохраняется фикстурой в `test_robokassa.py`;
-  - тестовый полный возврат. — _Depends on:_ T1
+- ~~`T2`–`T4`, `T6`~~ (перенесено в Change 230: проверки на проде после деплоя, тестовый и боевой
+  режим Robokassa. По playbook `/ship` архивирует изменение до деплоя)
 - ~~`T5`~~ (removed: архитектор 2026-10-26 — демо-аккаунт для проверяющего Robokassa не нужен, в требованиях к активации его нет)
-- [ ] `T6` (из 227 T8–T10) Боевой режим:
-  - боевые пароли #1 и #2, `ROBOKASSA_TEST=false`;
-  - покупка за 1 ₽ (`BILLING_MONTH_PRICE_KOPECKS=100`): чек в «Мой налог» и в почте;
-  - полный возврат аннулирует чек;
-  - настоящие цены;
-  - анонс платной части, затем `PAYWALL_ENABLED=true` по решению архитектора. — _Depends on:_ T4
 
 ---
 
@@ -140,6 +140,11 @@ See `docs/SPEC.md` §7 and the Files list above.
 | 7e23e116+wt | format, python-format, shell-lint, host-ruff, host-python, tooling-lint, docs-links, infra-config | PASS | 45 |
 | 7e23e116+wt | shell tests: postgres-release-stability (fails on the old config), backup-retention, backup-restore, restore-readiness, account-cutover, deploy-preflight, release-retention, billing-jobs, operator-command; unittest application_db_test (+3), deploy_orchestration_test | PASS | 300 |
 | 7e23e116+wt | `pnpm audit --audit-level high` clean; high 4 → 3 (the 3 left are the listed ignores); 14 moderate unchanged and below the gate level | PASS | 10 |
+| d1a4c601+wt | B1, P1: format, python-format, api-lint, api-typecheck, docs-links, api-contract, web-lint, web-typecheck | PASS | 73 |
+| d1a4c601+wt | pytest `test_robokassa.py` (+1, Receipt and InvoiceItems), `test_billing.py`; `/privacy` in Playwriter: text and edition date, no page errors except the absent local API | PASS | 92 |
+| d1a4c601+wt (release, base prod `de541684`) | all 12 static groups (shell-lint first FAILED: SC2016 → I5, then PASS) | PASS | 75 |
+| d1a4c601+wt (release) | pytest test_billing, test_robokassa, test_operator_cli, test_account_lifecycle (26); vitest plans-checkout (3); `postgres-release-stability.test.sh` | PASS | 290 |
+| d1a4c601+wt (release) | isolated browser `billing`: billing-integration + account-lifecycle (4) | PASS | 155 |
 
 ---
 
@@ -152,6 +157,10 @@ See `docs/SPEC.md` §7 and the Files list above.
   меткой, и в бэкапе оказывался релиз, чья схема ещё не накатана.
 - В dev у postgres больше нет `DEPLOY_SHA`, поэтому релиз dev-бэкапа — `unknown`. Проверяющий образ
   dev от него не зависит (`infraege-dev-api`).
+- B1: в GET-примерах Robokassa `Receipt` закодирован дважды. Один раз его URL-кодируем мы, в этом
+  виде он входит в подпись. Второй раз его кодирует строка запроса. `InvoiceItems` уходят с каждым
+  возвратом на сумму возврата, с частичным `auto` тоже. Как Робочеки обработают частичный возврат
+  при НПД, ждём от поддержки Robokassa.
 
 ---
 
@@ -159,4 +168,5 @@ See `docs/SPEC.md` §7 and the Files list above.
 
 ```
 fix(change-229): postgres survives releases, body-parser fix, release checklist
+feat(change-229): receipt nomenclature for Робочеки, privacy analytics, offer edition 2026-10-28
 ```

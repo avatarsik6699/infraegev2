@@ -49,7 +49,7 @@ vi.mock("~/entities/billing", async (importOriginal) => {
 const offer: BillingTypes.Offer = {
   billing: true,
   paywall: true,
-  offerVersion: "2026-10-26",
+  offerVersion: "2026-10-28",
   plans: [
     {
       id: "month",

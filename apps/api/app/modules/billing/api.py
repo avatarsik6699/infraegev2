@@ -23,7 +23,7 @@ from app.modules.account.mail import MailUnavailable, send_account_mail
 from app.modules.billing import notices, provider, service
 from app.modules.billing.documents import current_offer
 from app.modules.billing.models import AccessGrant, Payment, ProviderEvent
-from app.modules.billing.plans import plans
+from app.modules.billing.plans import plans, receipt_item
 from app.modules.billing.provider.port import (
     InvalidNotification,
     Notification,
@@ -104,7 +104,7 @@ async def post_checkout(
                 provider=gateway.name,
             )
             payment_id, invoice_no, amount = payment.id, payment.invoice_no, payment.amount_kopecks
-            title = plans()[body.plan].title
+            title, item_name = plans()[body.plan].title, receipt_item(payment.days)
     except service.CheckoutRefused as exc:
         raise HTTPException(409, exc.code) from exc
     back = f"{settings.public_origin}/subscribe/return?payment={payment_id}"
@@ -115,6 +115,7 @@ async def post_checkout(
                 invoice_no=invoice_no,
                 amount_kopecks=amount,
                 description=f"{title} — Кодумка",
+                item_name=item_name,
                 email=email,
                 success_url=back,
                 fail_url=back,

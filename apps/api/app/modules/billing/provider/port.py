@@ -19,6 +19,8 @@ class PaymentRequest:
     invoice_no: int
     amount_kopecks: int
     description: str
+    # the one receipt position (Change 229), `plans.receipt_item`
+    item_name: str
     email: str | None
     success_url: str
     fail_url: str
@@ -85,9 +87,9 @@ class PaymentProvider(Protocol):
         ...
 
     async def refund(
-        self, invoice_no: int, amount_kopecks: int, full: bool, description: str
+        self, invoice_no: int, amount_kopecks: int, full: bool, item_name: str
     ) -> RefundResult:
-        """Return money; the provider annuls or corrects the НПД receipt."""
+        """Return money; the provider annuls or corrects the НПД receipt of `item_name`."""
         ...
 
     async def refund_state(self, provider_ref: str) -> RefundResult:

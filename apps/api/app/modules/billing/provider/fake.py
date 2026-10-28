@@ -92,7 +92,7 @@ class FakeProvider:
         )
 
     async def refund(
-        self, invoice_no: int, amount_kopecks: int, full: bool, description: str
+        self, invoice_no: int, amount_kopecks: int, full: bool, item_name: str
     ) -> RefundResult:
         state, amount = LEDGER.get(invoice_no, ("pending", 0))
         if state != "succeeded" or amount_kopecks > amount:

@@ -16,7 +16,7 @@ from app.core.config import settings
 from app.modules.account.security import safe_return_path
 from app.modules.billing.documents import current_offer
 from app.modules.billing.models import AccessGrant, OfferAcceptance, Payment, Refund
-from app.modules.billing.plans import PlanId, plans
+from app.modules.billing.plans import PlanId, plans, receipt_item
 from app.modules.billing.provider.port import PaymentProvider, Status
 
 logger = structlog.get_logger(__name__)
@@ -287,12 +287,13 @@ async def execute_refund(
             return RefundOutcome(refund.id, refund.amount_kopecks, refund.status)
         payment = await db.get(Payment, refund.payment_id)
         assert payment is not None
-        invoice_no, amount, full = (
+        invoice_no, amount, full, item_name = (
             payment.invoice_no,
             refund.amount_kopecks,
             refund.amount_kopecks == payment.amount_kopecks,
+            receipt_item(payment.days),
         )
-    result = await gateway.refund(invoice_no, amount, full, "Возврат оплаты Кодумка")
+    result = await gateway.refund(invoice_no, amount, full, item_name)
     async with db.begin():
         refund = await db.get(Refund, refund_id, with_for_update=True)
         assert refund is not None

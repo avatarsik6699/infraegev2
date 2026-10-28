@@ -45,6 +45,7 @@ fi
 jq -e '.services.postgres.volumes[] |
   select(.target == "/docker-entrypoint-initdb.d/10-application-roles.sh") |
   select(.source == "/opt/infraege/shared/db-provision-roles.sh")' "$test_root/first.json" >/dev/null
+# shellcheck disable=SC2016 # the literal install line of deploy-remote.sh, not expansions
 grep -Fq 'install -m 755 "$release_dir/scripts/db-provision-roles.sh" "$root/shared/db-provision-roles.sh.new"' \
   "$repo_dir/scripts/deploy-remote.sh"
 echo 'postgres release stability: PASS'
