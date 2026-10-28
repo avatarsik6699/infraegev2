@@ -24,6 +24,11 @@ Robokassa, переход на боевые платежи и включение
 
 ## Backlog
 
+### Backend
+- [x] `B1` Фикстура настоящего ответа OpStateExt по первому боевому платежу (`InvId` 1005, 1 ₽,
+  `State 100`, `OutSum` `1.000000`), номер карты, RRN и `OpKey` замаскированы; тест в
+  `test_robokassa.py`. — _Depends on:_ —
+
 ### Frontend
 - [ ] `F1` `/subscribe/return` после оплаты пишет «Чек придёт на почту аккаунта». У аккаунта без почты
   и у адреса с `+` (230 B2) чек уходит на адрес, введённый на странице Robokassa. Текст должен быть
@@ -59,7 +64,13 @@ Robokassa, переход на боевые платежи и включение
     невозможен, он проверяется в `T4`;
   - ошибки, найденные по ходу: 230 B1, B2, F1, 231 B1. — _Depends on:_ —
 - [ ] `T4` (из 229 T6) Боевой режим:
-  - копия `production.env`, боевые пароли #1 и #2 из athanor, `ROBOKASSA_TEST=false`;
+  - сделано 2026-10-28 11:38 UTC (разрешение архитектора): копия
+    `/etc/infraege/production.env.pre-live-20261028-1138`, боевые пароли #1 и #2 из athanor,
+    `ROBOKASSA_TEST=false`, цена месяца 1 ₽;
+  - сделано: покупка `InvId` 1005 за 1 ₽ на тестовом аккаунте с почтой. Боевая страница открылась,
+    оплату провёл архитектор. Возврат на `/subscribe/return?payment=…` показал «Доступ открыт»,
+    статус `succeeded`, OpStateExt `State 100`;
+  - сделано: цена месяца снова 490 ₽ (11:45 UTC), боевой режим остаётся;
   - покупка за 1 ₽ (`BILLING_MONTH_PRICE_KOPECKS=100`): чек с номенклатурой «Доступ к учебным
     материалам Кодумки на 30 дней» в «Мой налог» и в почте. Проверяет архитектор;
   - полный возврат (`admin refund … --amount full`) аннулирует чек; это и первая проверка API
@@ -101,6 +112,7 @@ F1: Vitest страницы возврата и Playwriter. Остальное �
 | HEAD | Groups / focused checks | Result | Seconds |
 |------|-------------------------|--------|---------|
 | 0cbf0a7f+wt | F1: format, web-lint, web-typecheck, docs-links | PASS | 92 |
+| 45b92e6a+wt | B1: python-format; pytest `test_robokassa.py` (12) | PASS | 1 |
 | 0cbf0a7f+wt | isolated browser `billing` (4): first run 2 failed on «Failed to fetch dynamically imported module» in the cold Vite server, rerun PASS | PASS | 150 |
 
 ---

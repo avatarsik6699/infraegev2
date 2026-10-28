@@ -177,6 +177,35 @@ UNKNOWN_INVOICE = (
 )
 
 
+# Change 232: OpStateExt's real answer for the first live payment (invoice 1005, 1 ₽,
+# 2026-10-28); the card, RRN and operation key are masked
+LIVE_SUCCEEDED = (
+    '\ufeff<?xml version="1.0" encoding="utf-8"?><OperationStateResponse'
+    ' xmlns:xsd="http://www.w3.org/2001/XMLSchema"'
+    ' xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"'
+    ' xmlns="http://merchant.roboxchange.com/WebService/"><Result><Code>0</Code></Result>'
+    "<State><Code>100</Code><RequestDate>2026-10-28T14:44:42.1358405+03:00</RequestDate>"
+    "<StateDate>2026-10-28T14:43:06.29+03:00</StateDate></State>"
+    '<Info xsi:type="OperationInfoExt"><IncCurrLabel>BankCardPSR</IncCurrLabel>'
+    "<IncSum>1.000000</IncSum><IncAccount>220220******0000</IncAccount><PaymentMethod>"
+    "<Code>BankCard</Code><Description>Банковской картой</Description></PaymentMethod>"
+    "<OutCurrLabel>BNR</OutCurrLabel><OutSum>1.000000</OutSum><OpKey>op-key-live</OpKey>"
+    "<BankCardRRN>000000000000</BankCardRRN></Info><UserFields /></OperationStateResponse>"
+)
+
+
+def test_live_operation_state_is_read(monkeypatch):
+    transport(
+        monkeypatch, lambda request: httpx.Response(200, content=LIVE_SUCCEEDED.encode("utf-8"))
+    )
+    status = asyncio.run(robokassa.Robokassa().fetch_status(1005))
+    assert (status.state, status.amount_kopecks, status.provider_ref) == (
+        "succeeded",
+        100,
+        "op-key-live",
+    )
+
+
 def test_unknown_invoice_is_pending_and_errors_raise(monkeypatch):
     transport(
         monkeypatch, lambda request: httpx.Response(200, content=UNKNOWN_INVOICE.encode("utf-8"))
