@@ -66,6 +66,12 @@ regexes = [
   '''^4de9c4f8a0065151b4555c305a2ba1fe421a1b06673e0da1df3cdb08f6e780ab$''',
 ]
 
+[[rules.allowlists]]
+description = "Change 229: synthetic CSRF value of the postgres release-stability contract, not a credential"
+condition = "AND"
+paths = ['''(^|/)scripts/tests/postgres-release-stability\.test\.sh$''']
+regexes = ['''^synthetic-csrf-secret-of-adequate-length-0000$''']
+
 [[rules]]
 id = "twilio-api-key"
 

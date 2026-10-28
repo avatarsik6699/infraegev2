@@ -55,6 +55,9 @@
 - [x] `I5` (находка `/ship --release` 2026-10-28) `shell-lint`: SC2016 в
   `postgres-release-stability.test.sh`, где `grep` ищет буквальную строку. Подавление с причиной,
   как в соседних тестах. — _Depends on:_ I2
+- [x] `I6` (находка Release Gate 2026-10-28) gitleaks `generic-api-key` на синтетическом
+  `AUTH_CSRF_SECRET` в `postgres-release-stability.test.sh` (коммит `931c3aad`). Точное исключение
+  путь + значение в `.gitleaks.toml`, как у прочих публичных значений. — _Depends on:_ I2
 
 ### Ops (прод, сейчас)
 - [x] `O1` Снять recovery hold по `backup-restore.md` § Recovery hold review and release:
