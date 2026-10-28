@@ -9,7 +9,7 @@
 | Change | `230` |
 | Slug | `release-checks-and-live-payments` |
 | Title | Проверки релиза 2026-10-28 и боевые платежи |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/230-release-checks-and-live-payments` |
 
 ---
@@ -66,7 +66,7 @@ apps/api/tests/test_robokassa.py (фикстура OpStateExt), docs/runbooks/bi
 
 ## Contracts
 
-See `docs/SPEC.md` §2.2, §6.1, §7.3 and [billing runbook](../runbooks/billing.md).
+See `docs/SPEC.md` §2.2, §6.1, §7.3 and [billing runbook](../../runbooks/billing.md).
 
 ---
 
