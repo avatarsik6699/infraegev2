@@ -27,7 +27,8 @@ Robokassa, переход на боевые платежи и включение
 ### Frontend
 - [ ] `F1` `/subscribe/return` после оплаты пишет «Чек придёт на почту аккаунта». У аккаунта без почты
   и у адреса с `+` (230 B2) чек уходит на адрес, введённый на странице Robokassa. Текст должен быть
-  верен для всех случаев. Увидено 2026-10-28 на аккаунте только с VK. — _Depends on:_ —
+  верен для всех случаев. Увидено 2026-10-28 на аккаунте только с VK. Сделано: «Чек придёт на почту,
+  указанную при оплате.» Отмечается после проверки в Playwriter на проде, после релиза 232. — _Depends on:_ —
 
 ### Release
 - [ ] `T1` Прод после релизов 2026-10-28:
@@ -96,6 +97,8 @@ F1: Vitest страницы возврата и Playwriter. Остальное �
 
 | HEAD | Groups / focused checks | Result | Seconds |
 |------|-------------------------|--------|---------|
+| 0cbf0a7f+wt | F1: format, web-lint, web-typecheck, docs-links | PASS | 92 |
+| 0cbf0a7f+wt | isolated browser `billing` (4): first run 2 failed on «Failed to fetch dynamically imported module» in the cold Vite server, rerun PASS | PASS | 150 |
 
 ---
 

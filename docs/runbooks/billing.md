@@ -69,6 +69,24 @@ Test mode (`ROBOKASSA_TEST=true`):
       response as a fixture in `apps/api/tests/test_robokassa.py`;
 - [ ] a refund of the test payment through `admin refund … --amount full` finishes.
 
+Changing a flag or price (Change 232): copy `production.env` first
+(`production.env.pre-live-<date>`), edit it as root, then recreate only the API. Its environment is
+interpolated from the file, so `restart` keeps the old values:
+
+```bash
+current=$(readlink -f /opt/infraege/current)
+DEPLOY_SHA=$(basename "$current") docker compose --env-file /etc/infraege/production.env \
+  --project-name infraege -f "$current/infra/docker-compose.yml" \
+  -f "$current/infra/docker-compose.prod.yml" up --detach --no-deps --wait api
+```
+
+Robokassa facts from the 2026-10-28 test purchases (Changes 230, 231):
+- it refuses a receipt address with `+`, so the link leaves such an address out;
+- it returns the buyer to the shop's SuccessURL unless `SuccessUrl2` is sent;
+- `SuccessUrl2` and `FailUrl2` are signed as they are; the URL-encoded form of its example gives
+  error 29;
+- OpStateExt does not find test operations (code 3), so a test payment cannot be refunded.
+
 Live (after Robokassa activates the shop, `ROBOKASSA_TEST=false`, live password pair):
 - [ ] a real 1 ₽ purchase (temporary `BILLING_MONTH_PRICE_KOPECKS=100`): the receipt appears in «Мой
       налог» and in the buyer's mail;

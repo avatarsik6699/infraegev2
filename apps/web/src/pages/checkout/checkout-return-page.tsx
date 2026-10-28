@@ -33,8 +33,10 @@ export const CheckoutReturnPage: React.FC<Props> = (props) => {
               {`Все уроки и задачи доступны до ${billingFormat.date(watch.payment.accessUntil)}.`}
             </Typography.Text>
           ) : null}
+          {/* Change 232: an account without an address, or with «+», gives
+              its receipt address at Robokassa (Change 230) */}
           <Typography.Text className={styles.note}>
-            Чек придёт на почту аккаунта.
+            Чек придёт на почту, указанную при оплате.
           </Typography.Text>
           <div className={styles.actions}>
             <ActionLink presentation="button" hierarchy="primary" to={back}>
