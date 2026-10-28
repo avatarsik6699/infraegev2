@@ -1,7 +1,7 @@
 # syntax=docker/dockerfile:1
 
 # apps/web keeps a Node runtime for TanStack Start/Nitro routing and future server boundaries.
-FROM node:22.23.2-slim@sha256:48e4b67d85f87bd551df43704e24d252f56cc5f8e9718841aace50f19948f0f9 AS development
+FROM node:22.23.3-slim@sha256:3ed98443660ff48413b5af19ecefce3b9d50845a901a43420d47cc63a9fddbe9 AS development
 RUN corepack enable
 WORKDIR /repo
 RUN chown node:node /repo
@@ -19,7 +19,7 @@ RUN pnpm install --frozen-lockfile --offline
 # wait out the full per-service timeout before force-killing the orphaned vite process.
 CMD ["pnpm", "--filter", "web", "exec", "vite", "dev", "--host", "0.0.0.0", "--port", "3000", "--strictPort"]
 
-FROM node:22.23.2-slim@sha256:48e4b67d85f87bd551df43704e24d252f56cc5f8e9718841aace50f19948f0f9 AS builder
+FROM node:22.23.3-slim@sha256:3ed98443660ff48413b5af19ecefce3b9d50845a901a43420d47cc63a9fddbe9 AS builder
 RUN corepack enable
 WORKDIR /repo
 COPY package.json pnpm-workspace.yaml pnpm-lock.yaml ./
@@ -33,7 +33,7 @@ COPY content/legal content/legal
 RUN pnpm install --frozen-lockfile --offline
 RUN pnpm --filter web build
 
-FROM node:22.23.2-slim@sha256:48e4b67d85f87bd551df43704e24d252f56cc5f8e9718841aace50f19948f0f9
+FROM node:22.23.3-slim@sha256:3ed98443660ff48413b5af19ecefce3b9d50845a901a43420d47cc63a9fddbe9
 WORKDIR /repo
 RUN apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends --only-upgrade \
