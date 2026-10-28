@@ -86,6 +86,11 @@ Robokassa facts from the 2026-10-28 test purchases (Changes 230, 231):
 - `SuccessUrl2` and `FailUrl2` are signed as they are; the URL-encoded form of its example gives
   error 29;
 - OpStateExt does not find test operations (code 3), so a test payment cannot be refunded.
+- the Refund API takes the JWT as a JSON string; a bare token is `400 BadRequest` (Change 233);
+- a refund is paid from the shop balance, which holds payments minus the commission (offer of
+  Robokassa, appendix 6). When the balance cannot cover it, the answer is `Support, Refund error
+  8401` and the refund becomes `failed`; the first live 1 ₽ payment left 0,96 ₽. Keep a reserve on
+  the balance, or refund from the cabinet after topping it up.
 
 Live (after Robokassa activates the shop, `ROBOKASSA_TEST=false`, live password pair):
 - [ ] a real 1 ₽ purchase (temporary `BILLING_MONTH_PRICE_KOPECKS=100`): the receipt appears in «Мой
