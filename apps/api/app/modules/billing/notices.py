@@ -7,11 +7,15 @@ import structlog
 
 from app.core.config import settings
 from app.modules.account.mail import MailUnavailable, send_account_mail
-from app.modules.billing.plans import rubles
 
 logger = structlog.get_logger(__name__)
 
 MOSCOW = ZoneInfo("Europe/Moscow")
+
+
+def money(kopecks: int) -> str:
+    """Change 234: a sum as a person reads it (0,10 ₽), not as the provider takes it."""
+    return f"{kopecks // 100},{kopecks % 100:02d}"
 
 
 def date(value: datetime) -> str:
@@ -20,7 +24,7 @@ def date(value: datetime) -> str:
 
 def paid(amount_kopecks: int, until: datetime, receipt_url: str | None) -> tuple[str, str]:
     lines = [
-        f"Оплата {rubles(amount_kopecks)} ₽ прошла. Доступ к материалам открыт до {date(until)}.",
+        f"Оплата {money(amount_kopecks)} ₽ прошла. Доступ к материалам открыт до {date(until)}.",
         f"Ваши оплаты и доступ: {settings.public_origin}/account/access",
     ]
     if receipt_url:
@@ -39,7 +43,7 @@ def ending(until: datetime) -> tuple[str, str]:
 def refunded(amount_kopecks: int) -> tuple[str, str]:
     return (
         "Возврат оплаты Кодумки",
-        f"Мы вернули {rubles(amount_kopecks)} ₽. Деньги придут на карту в срок, который "
+        f"Мы вернули {money(amount_kopecks)} ₽. Деньги придут на карту в срок, который "
         "устанавливает ваш банк. Доступ к платным материалам по этой оплате закрыт.\n",
     )
 
@@ -62,7 +66,7 @@ def refund_failed(
     refund_id: str, invoice_no: int, amount_kopecks: int, reason: str | None
 ) -> tuple[str, str]:
     lines = [
-        f"Возврат {refund_id} по счёту {invoice_no} на {rubles(amount_kopecks)} ₽ не прошёл.",
+        f"Возврат {refund_id} по счёту {invoice_no} на {money(amount_kopecks)} ₽ не прошёл.",
         f"Ответ Robokassa: {reason or 'нет ответа'}.",
     ]
     if reason and "8401" in reason:
@@ -89,7 +93,7 @@ def remainder_receipt(
         f"Частичный возврат по счёту {invoice_no} прошёл. Робочеки аннулировали чек этой оплаты "
         "целиком, а чек на оставшийся доход нужно выдать самому в «Мой налог».",
         f"Наименование: {item}",
-        f"Сумма: {rubles(remainder_kopecks)} ₽",
+        f"Сумма: {money(remainder_kopecks)} ₽",
         f"Дата оплаты: {date(paid_at) if paid_at else 'нет'}",
         f"Покупатель — физическое лицо, чек отправить на: {receipt_email or 'адрес не сохранён'}",
     ]

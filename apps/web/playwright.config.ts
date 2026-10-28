@@ -1,4 +1,5 @@
 import { defineConfig } from "@playwright/test";
+import { chromiumLaunch } from "./e2e/support/chromium-launch";
 
 const FRONTEND_URL = "http://127.0.0.2:3100";
 const BACKEND_URL = "http://127.0.0.2:8100";
@@ -25,6 +26,7 @@ export default defineConfig({
   use: {
     baseURL: FRONTEND_URL,
     trace: "retain-on-failure",
+    launchOptions: chromiumLaunch,
   },
   projects: [
     {

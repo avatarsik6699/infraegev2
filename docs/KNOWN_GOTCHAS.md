@@ -153,6 +153,18 @@ use `InfoPopover inline` (native `button popovertarget` + `span popover`).
 - **Fix:** `tmp_path_retention_policy = "failed"` in `apps/api/pyproject.toml`; the validate test
   links `files` instead of copying. Clear `/tmp/pytest-of-$USER` after a failed run.
 
+### Chromium under Playwright fills the WSL disk through `/tmp`
+
+- **Symptoms:** `ENOSPC` while writing traces, `ERR_INSUFFICIENT_RESOURCES`, `Failed to fetch
+  dynamically imported module`, pages stuck on «Проверяем вход»; free space drops by 1–5 GB in
+  seconds and returns, and `du` shows nothing.
+- **Cause:** Playwright launches Chromium with `--disable-dev-shm-usage`, so its shared memory is
+  unlinked files under `/tmp` on the WSL disk. Found 2026-10-28 (Change 234); it also explains many
+  earlier «cold Vite» failures.
+- **Fix:** every Playwright config uses `launchOptions: chromiumLaunch`
+  (`apps/web/e2e/support/chromium-launch.ts`, which drops that flag; `/dev/shm` is large here and on
+  GitHub runners). The isolated audit hard-links the 1.2 GB of bank files instead of copying them.
+
 ### Long Playwright crawls exhaust Vite dev hydration
 
 - **Symptoms:** `Failed to fetch dynamically imported module ... client.tsx` or Chromium

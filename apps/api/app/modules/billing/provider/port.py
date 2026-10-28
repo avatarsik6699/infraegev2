@@ -70,6 +70,11 @@ class RefundResult:
 class PaymentProvider(Protocol):
     name: str
 
+    def accepts_email(self, email: str) -> bool:
+        """Change 234: whether the payment link may carry this receipt address; a refused one
+        is asked on the provider's page and comes back in its notification."""
+        ...
+
     def payment_url(self, request: PaymentRequest) -> str:
         """Where the buyer pays; the browser goes there by plain navigation."""
         ...

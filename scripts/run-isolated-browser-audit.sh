@@ -56,6 +56,9 @@ for credential in POSTGRES_PASSWORD DB_RUNTIME_PASSWORD DB_APP_PASSWORD DB_IMPOR
 done
 export TASK_FILES_DIR="$audit_workspace/task-files"
 mkdir -p "$TASK_FILES_DIR"
+# Change 234: hard links instead of a 1.2 GB copy per run (KNOWN_GOTCHAS, WSL disk); the import
+# keeps files that already exist and copies the rest, so another filesystem still works
+cp -al "$repo_dir/content/practice-bank/files/." "$TASK_FILES_DIR/" 2>/dev/null || true
 export DATABASE_URL="postgresql://infraege_runtime:$DB_RUNTIME_PASSWORD@127.0.0.1:15432/infraege"
 export ACCOUNT_DATABASE_URL="postgresql://infraege_app:$DB_APP_PASSWORD@127.0.0.1:15432/infraege"
 export MIGRATION_DATABASE_URL="postgresql://infraege_migration:$DB_MIGRATION_PASSWORD@127.0.0.1:15432/infraege"

@@ -25,20 +25,30 @@
 ## Backlog
 
 ### Backend
-- [ ] `B1` `jobs.refund_states` молча пропускает возврат, когда статус у Robokassa недоступен
+- [x] `B1` `jobs.refund_states` молча пропускает возврат, когда статус у Robokassa недоступен
   (`ProviderError` → `continue`). Нужен журнал `billing.refund_state_unavailable` (id возврата), как
   `billing.settle_unavailable` у оплат. — _Depends on:_ —
 - [ ] `B2` Соединения с прода к `services.robokassa.ru` и `auth.robokassa.ru` периодически
   обрываются на TLS (тайм-аут рукопожатия, `UNEXPECTED_EOF`; 2026-10-28 около 17:00 по Москве).
   Выяснить: сбой у Robokassa, ограничение частоты или маршрут; при повторе — вопрос в поддержку.
   Часовая задача повторяет сама, деньги не теряются. — _Depends on:_ —
-- [ ] `B3` Адрес для чека расходится с тем, что покупатель ввёл в Robokassa. Платёж 1005: аккаунт с
+- [x] `B3` Адрес для чека расходится с тем, что покупатель ввёл в Robokassa. Платёж 1005: аккаунт с
   `+`-почтой, ссылка `Email` не передала (230 B2), покупатель ввёл `vlad-god500@…`. Чек и квитанция
   возврата Robokassa ушли туда, а `contact_email` остался адресом аккаунта, потому что `payer_email`
   из уведомления пишется только в пустое поле (228). Из-за этого письмо о чеке на остаток назвало
   адрес аккаунта. Исправление: провайдер говорит, примет ли он адрес; непринятый не пишется в
   `contact_email` при оформлении, и его заполняет адрес из уведомления, как у аккаунта только с VK. — _Depends on:_ —
-- [ ] `B4` Суммы в письмах человеку — с запятой (`0,10 ₽`), а не в формате провайдера (`0.10`). — _Depends on:_ —
+- [x] `B4` Суммы в письмах человеку — с запятой (`0,10 ₽`), а не в формате провайдера (`0.10`). — _Depends on:_ —
+
+### Infra
+- [x] `I1` (находка 2026-10-28) Chromium под Playwright заполнял диск WSL: флаг по умолчанию
+  `--disable-dev-shm-usage` держит разделяемую память в удалённых файлах `/tmp`, по 1–5 ГБ пилой,
+  невидимых для `du`. Отсюда ENOSPC, `ERR_INSUFFICIENT_RESOURCES` и сбои динамических импортов,
+  которые списывались на «холодный Vite». Все конфигурации Playwright берут `chromiumLaunch`
+  (`apps/web/e2e/support/chromium-launch.ts`) без этого флага. KNOWN_GOTCHAS. — _Depends on:_ —
+- [x] `I2` Изолированный браузерный прогон связывает 1,2 ГБ файлов банка жёсткими ссылками, а не
+  копирует их; на другом разделе импорт копирует, как раньше. Права файлов банка — 644, `chmod`
+  импорта их не меняет. — _Depends on:_ —
 
 ### Release
 - [x] `T8` (из 232 F1) Playwriter на проде: после оплаты `/subscribe/return` пишет «Чек придёт на
@@ -121,6 +131,9 @@ See `docs/SPEC.md` §2.2, §6.1, §7.3 and the billing runbook.
 
 | HEAD | Groups / focused checks | Result | Seconds |
 |------|-------------------------|--------|---------|
+| 45c29c76+wt | B1, B3, B4, I1, I2: format, python-format, web-lint, web-typecheck, shell-lint, api-lint, api-typecheck, api-contract, docs-links | PASS | 120 |
+| 45c29c76+wt | pytest test_billing (refused address → typed one; comma sums), test_robokassa, test_operator_cli (22) | PASS | 187 |
+| 45c29c76+wt | isolated browser `billing` with a 2 s disk probe: before I1 free space fell to 0 in bursts; after I1+I2 flat at 6.8–6.9 GB, 4/4 in 59 s | PASS | 164 |
 | prod `844e0bc2` | T8: Playwriter `/subscribe/return?payment=…` (screenshot, console clean) | PASS | — |
 
 ---

@@ -114,6 +114,10 @@ class Robokassa:
             raise ProviderError(f"Robokassa password #{number} is not configured")
         return value
 
+    def accepts_email(self, email: str) -> bool:
+        # Change 230: Robokassa refuses an address with «+» («Некорректный E-mail»)
+        return "+" not in email
+
     def payment_url(self, request: PaymentRequest) -> str:
         out_sum = rubles(request.amount_kopecks)
         nomenclature = receipt(request.item_name, request.amount_kopecks)
@@ -135,9 +139,8 @@ class Robokassa:
                 f"{self.login}:{out_sum}:{request.invoice_no}:{nomenclature}:{back}:{self.secret(1)}"
             ),
             "Culture": "ru",
-            # Change 230: Robokassa refuses an address with «+» («Некорректный E-mail»); without
-            # one it asks the buyer for the receipt address on its page
-            **({"Email": request.email} if request.email and "+" not in request.email else {}),
+            # without one Robokassa asks the buyer for the receipt address on its page
+            **({"Email": request.email} if request.email else {}),
             **({"IsTest": "1"} if settings.robokassa_test else {}),
         }
         return f"{PAY_URL}?{urlencode(params)}"

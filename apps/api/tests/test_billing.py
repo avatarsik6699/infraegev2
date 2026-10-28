@@ -383,7 +383,7 @@ def test_paywall_purchase_extension_refund_and_deletion(paid_site, database, mon
                     assert done.status == "succeeded"
                     subject, body = operator.pop()
                     assert subject == "[kodumka billing] Выдайте чек на остаток в «Мой налог»"
-                    assert f"Сумма: {rest // 100}.{rest % 100:02d} ₽" in body
+                    assert f"Сумма: {rest // 100},{rest % 100:02d} ₽" in body
                     assert "Доступ к учебным материалам Кодумки на 365 дней" in body
                     assert "адрес не сохранён" in body  # the deletion cleared the contact
                     async with db.begin():
@@ -409,7 +409,7 @@ def test_paywall_purchase_extension_refund_and_deletion(paid_site, database, mon
                     subject, body = operator.pop()
                     assert subject == "[kodumka billing] Выдайте чек на остаток в «Мой налог»"
                     rest -= 50_000
-                    assert f"Сумма: {rest // 100}.{rest % 100:02d} ₽" in body
+                    assert f"Сумма: {rest // 100},{rest % 100:02d} ₽" in body
             finally:
                 await engine.dispose()
 
@@ -431,6 +431,38 @@ def test_checkout_needs_a_session_and_billing(paid_site, monkeypatch):
             ).status_code
             == 403
         )
+
+
+def test_a_refused_address_takes_the_one_typed_at_the_provider(paid_site, database, monkeypatch):  # noqa: F811
+    # Change 234: like Robokassa with «+», the provider refuses the account's address; the buyer
+    # types another there, and the receipt address of the payment is that one
+    monkeypatch.setattr(settings, "billing_enabled", True)
+    monkeypatch.setattr(FakeProvider, "accepts_email", lambda self, email: "+" not in email)
+    with TestClient(create_app()) as client:
+        headers = member(client, paid_site, "learner+tag@example.com")
+        started = checkout(client, headers)
+        assert "email=" not in started["redirect_url"]
+        invoice_no, amount = invoice_of(started["redirect_url"])
+        query = f"amount={amount}&success=http://testserver/ok&fail=http://testserver/no"
+        response = client.post(
+            f"/api/billing/fake/pay/{invoice_no}?{query}",
+            content="state=succeeded&email=receipt@example.com",
+            headers={"Content-Type": "application/x-www-form-urlencoded"},
+            follow_redirects=False,
+        )
+        assert response.status_code == 303
+
+    async def contact() -> str | None:
+        engine = database_engine(database("app"), role="infraege_app")
+        try:
+            async with AsyncSession(engine) as db:
+                return await db.scalar(
+                    select(Payment.contact_email).where(Payment.invoice_no == invoice_no)
+                )
+        finally:
+            await engine.dispose()
+
+    assert asyncio.run(contact()) == "receipt@example.com"
 
 
 def test_jobs_settle_missed_notifications_expire_orders_and_notify(
