@@ -193,7 +193,8 @@ def test_refund_is_a_jwt_signed_with_password_three(monkeypatch):
     def handler(request: httpx.Request) -> httpx.Response:
         if request.url.path.endswith("OpStateExt"):
             return httpx.Response(200, text=STATE_XML.format(code=100))
-        bodies.append(request.content)
+        # Change 233: a JSON string holding the token
+        bodies.append(json.loads(request.content))
         return httpx.Response(200, json={"success": True, "message": None, "requestId": "r-1"})
 
     transport(monkeypatch, handler)
@@ -217,6 +218,29 @@ def test_refund_is_a_jwt_signed_with_password_three(monkeypatch):
     assert full.state == "pending"
     claims = jwt.decode(bodies[-1], "three", algorithms=["HS256"])
     assert claims == {"OpKey": "op-key-1", "InvoiceItems": [item(490.0)]}
+
+
+def test_a_refused_refund_keeps_robokassa_reason(monkeypatch):
+    # Change 233: the shop's answer to a key it does not know, seen 2026-10-28
+    reason = "Signature key is not exists or partner have not access to API"
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        if request.url.path.endswith("OpStateExt"):
+            return httpx.Response(200, text=STATE_XML.format(code=100))
+        return httpx.Response(401, json={"success": False, "message": reason, "requestId": None})
+
+    transport(monkeypatch, handler)
+    result = asyncio.run(robokassa.Robokassa().refund(1001, 49_000, True, ITEM))
+    assert (result.state, result.message) == ("failed", reason)
+
+    def broken(request: httpx.Request) -> httpx.Response:
+        if request.url.path.endswith("OpStateExt"):
+            return httpx.Response(200, text=STATE_XML.format(code=100))
+        return httpx.Response(502, text="Bad Gateway")
+
+    transport(monkeypatch, broken)
+    with pytest.raises(ProviderError):
+        asyncio.run(robokassa.Robokassa().refund(1001, 49_000, True, ITEM))
 
 
 def test_refund_state_maps_labels(monkeypatch):
