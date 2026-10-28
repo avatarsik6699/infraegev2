@@ -33,7 +33,10 @@ The shop was created on 2026-10-24 (Change 211):
 - the URLs below;
 - all five passwords were generated in the shop and kept in athanor (infraegev2 vault:
   `ROBOKASSA_MERCHANT_LOGIN`, `ROBOKASSA_PASSWORD1..3` live, `ROBOKASSA_TEST_PASSWORD1..2`);
-- production runs `BILLING_ENABLED=true`, `ROBOKASSA_TEST=true` with the test pair, `PAYWALL_ENABLED=false`;
+- production ran `BILLING_ENABLED=true`, `ROBOKASSA_TEST=true` with the test pair, `PAYWALL_ENABLED=false`
+  until 2026-10-28; since then the live pair, `ROBOKASSA_TEST=false` (env copy
+  `production.env.pre-live-20261028-1138`) and `PAYWALL_ENABLED=true` (copy
+  `production.env.pre-paywall-20261028-1639`), no automatic payout;
 - the env copy before that is `production.env.pre-billing-2026-10-24`.
 
 Robokassa shop settings: ResultURL `https://kodumka.ru/api/billing/webhooks/robokassa` (POST),
@@ -93,11 +96,11 @@ Robokassa facts from the 2026-10-28 test purchases (Changes 230, 231):
   the balance, or refund from the cabinet after topping it up.
 
 Live (after Robokassa activates the shop, `ROBOKASSA_TEST=false`, live password pair):
-- [ ] a real 1 ₽ purchase (temporary `BILLING_MONTH_PRICE_KOPECKS=100`): the receipt appears in «Мой
+- [x] a real 1 ₽ purchase (temporary `BILLING_MONTH_PRICE_KOPECKS=100`): the receipt appears in «Мой
       налог» and in the buyer's mail;
-- [ ] its full refund: the receipt is annulled in «Мой налог»;
-- [ ] real prices restored, API restarted;
-- [ ] announce the paid part for the topics that are free today, then `PAYWALL_ENABLED=true`.
+- [x] its full refund: the receipt is annulled in «Мой налог»;
+- [x] real prices restored, API restarted;
+- [x] announce the paid part for the topics that are free today, then `PAYWALL_ENABLED=true`.
 
 The offer, refund rules and privacy text were not reviewed by a lawyer (architect's decision,
 2026-10-18, confirmed 2026-10-23). Any change to the offer after the first payment is a new dated
