@@ -114,7 +114,9 @@ export const CheckoutPage: React.FC<CheckoutPageTypes.Props> = (props) => {
             </Typography.Text>
             <Typography.Text className={styles.accountText}>
               {`Войти в него можно: ${russianList(accountIdentity.methods(session.account))}. `}
-              {session.account.email
+              {/* Change 230: Robokassa refuses an address with «+», so the
+                  link leaves it out and the buyer types one there */}
+              {session.account.email && !session.account.email.includes("+")
                 ? "Чек придёт на этот адрес."
                 : "Чек придёт на почту, которую вы укажете на странице оплаты."}
             </Typography.Text>

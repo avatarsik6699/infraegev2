@@ -117,17 +117,28 @@ class Robokassa:
     def payment_url(self, request: PaymentRequest) -> str:
         out_sum = rubles(request.amount_kopecks)
         nomenclature = receipt(request.item_name, request.amount_kopecks)
+        # Change 230: the shop's SuccessURL carries only OutSum and InvId, so the buyer comes back
+        # to this payment's own page; the signature takes the addresses URL-encoded
+        back = ":".join(
+            (quote(request.success_url, safe=""), "GET", quote(request.fail_url, safe=""), "GET")
+        )
         params = {
             "MerchantLogin": self.login,
             "OutSum": out_sum,
             "InvId": str(request.invoice_no),
             "Description": request.description[:100],
             "Receipt": nomenclature,
+            "SuccessUrl2": request.success_url,
+            "SuccessUrl2Method": "GET",
+            "FailUrl2": request.fail_url,
+            "FailUrl2Method": "GET",
             "SignatureValue": digest(
-                f"{self.login}:{out_sum}:{request.invoice_no}:{nomenclature}:{self.secret(1)}"
+                f"{self.login}:{out_sum}:{request.invoice_no}:{nomenclature}:{back}:{self.secret(1)}"
             ),
             "Culture": "ru",
-            **({"Email": request.email} if request.email else {}),
+            # Change 230: Robokassa refuses an address with «+» («Некорректный E-mail»); without
+            # one it asks the buyer for the receipt address on its page
+            **({"Email": request.email} if request.email and "+" not in request.email else {}),
             **({"IsTest": "1"} if settings.robokassa_test else {}),
         }
         return f"{PAY_URL}?{urlencode(params)}"

@@ -315,12 +315,16 @@ export const AccountPage: React.FC<AccountPageTypes.Props> = (props) => {
             />
           ) : null}
           {props.mode === "verify" && props.token ? (
-            <div className={`${styles.secondary} ${styles.noScriptOnly}`}>
-              <Typography.Text>
-                Для подтверждения почты включите JavaScript и откройте эту
-                ссылку снова.
-              </Typography.Text>
-              <ActionLink to="/register">Вернуться к регистрации</ActionLink>
+            // Change 230: a wrapper of its own, or the auth surface's flex
+            // `.secondary` outranks the hiding and shows it after hydration
+            <div className={styles.noScriptOnly}>
+              <div className={styles.secondary}>
+                <Typography.Text>
+                  Для подтверждения почты включите JavaScript и откройте эту
+                  ссылку снова.
+                </Typography.Text>
+                <ActionLink to="/register">Вернуться к регистрации</ActionLink>
+              </div>
             </div>
           ) : null}
           {delivery ? (

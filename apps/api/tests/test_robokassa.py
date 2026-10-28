@@ -79,8 +79,8 @@ def test_payment_link_is_signed_with_password_one():
             description="Доступ на месяц — Кодумка",
             item_name=ITEM,
             email="buyer@example.com",
-            success_url="https://kodumka.ru/subscribe/return",
-            fail_url="https://kodumka.ru/subscribe/return",
+            success_url="https://kodumka.ru/subscribe/return?payment=p-1",
+            fail_url="https://kodumka.ru/subscribe/return?payment=p-1",
         )
     )
     parts = urlsplit(url)
@@ -104,8 +104,31 @@ def test_payment_link_is_signed_with_password_one():
     }
     assert nomenclature == quote(unquote(nomenclature), safe="")
     assert "%257B" in parts.query
-    assert query["SignatureValue"] == sha(f"infraege:490.00:1001:{nomenclature}:one")
+    # Change 230: the buyer returns to this payment's page, not to the shop's bare SuccessURL
+    back = "https://kodumka.ru/subscribe/return?payment=p-1"
+    assert query["SuccessUrl2"] == back and query["FailUrl2"] == back
+    assert query["SuccessUrl2Method"] == "GET" and query["FailUrl2Method"] == "GET"
+    encoded = quote(back, safe="")
+    assert query["SignatureValue"] == sha(
+        f"infraege:490.00:1001:{nomenclature}:{encoded}:GET:{encoded}:GET:one"
+    )
     assert query["IsTest"] == "1" and query["Email"] == "buyer@example.com"
+
+
+def test_an_address_with_plus_is_left_to_robokassa():
+    # Change 230: Robokassa answers «Некорректный E-mail» to it; the buyer types one there
+    url = robokassa.Robokassa().payment_url(
+        PaymentRequest(
+            invoice_no=1002,
+            amount_kopecks=49_000,
+            description="Доступ на месяц — Кодумка",
+            item_name=ITEM,
+            email="buyer+kodumka@example.com",
+            success_url="https://kodumka.ru/subscribe/return?payment=p-2",
+            fail_url="https://kodumka.ru/subscribe/return?payment=p-2",
+        )
+    )
+    assert "Email" not in parse_qs(urlsplit(url).query)
 
 
 def test_result_url_needs_password_two_and_answers_ok():
@@ -143,9 +166,21 @@ def test_operation_state_is_read_from_op_state_ext(monkeypatch, code, state):
     assert params["Signature"] == sha("infraege:1001:two")
 
 
+# Change 230: OpStateExt's real answer for a test-mode invoice (shop kodumka, 2026-10-28): a BOM,
+# another namespace than the documented one, and code 3 — it never finds test operations
+UNKNOWN_INVOICE = (
+    '\ufeff<?xml version="1.0" encoding="utf-8"?><OperationStateResponse'
+    ' xmlns:xsd="http://www.w3.org/2001/XMLSchema"'
+    ' xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"'
+    ' xmlns="http://merchant.roboxchange.com/WebService/"><Result><Code>3</Code>'
+    "<Description>Не удалось найти операцию</Description></Result></OperationStateResponse>"
+)
+
+
 def test_unknown_invoice_is_pending_and_errors_raise(monkeypatch):
-    unknown = "<OperationStateResponse><Result><Code>3</Code></Result></OperationStateResponse>"
-    transport(monkeypatch, lambda request: httpx.Response(200, text=unknown))
+    transport(
+        monkeypatch, lambda request: httpx.Response(200, content=UNKNOWN_INVOICE.encode("utf-8"))
+    )
     assert asyncio.run(robokassa.Robokassa().fetch_status(7)).state == "pending"
     transport(monkeypatch, lambda request: httpx.Response(502))
     with pytest.raises(ProviderError):
