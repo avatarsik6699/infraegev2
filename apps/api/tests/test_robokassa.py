@@ -204,7 +204,14 @@ def test_unknown_invoice_is_pending_and_errors_raise(monkeypatch):
     )
     assert asyncio.run(robokassa.Robokassa().fetch_status(7)).state == "pending"
     transport(monkeypatch, lambda request: httpx.Response(502))
-    with pytest.raises(ProviderError):
+    with pytest.raises(ProviderError, match="HTTP 502$"):  # Change 240: the cause, no signed URL
+        asyncio.run(robokassa.Robokassa().fetch_status(7))
+
+    def eof(request: httpx.Request) -> httpx.Response:
+        raise httpx.ConnectError("[SSL: UNEXPECTED_EOF_WHILE_READING]", request=request)
+
+    transport(monkeypatch, eof)
+    with pytest.raises(ProviderError, match="ConnectError .SSL: UNEXPECTED_EOF"):
         asyncio.run(robokassa.Robokassa().fetch_status(7))
 
 

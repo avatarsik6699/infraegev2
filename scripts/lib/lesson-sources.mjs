@@ -13,15 +13,17 @@ export function lessonSource(kind, id) {
 }
 
 /**
- * A subtopic field holding one string literal at six spaces, on its line or the next one
- * (Prettier's wrap); `undefined` when the subtopic has none.
+ * The subtopic fields holding one string literal at six spaces, on their line or the next one
+ * (Prettier's wrap). Change 238: literal patterns, so no expression is built from a value.
  */
+const TEXT_FIELDS = {
+  title: /^ {6}title:\s*("(?:[^"\\]|\\.)*"),/m,
+  lead: /^ {6}lead:\s*("(?:[^"\\]|\\.)*"),/m,
+};
+
+/** A subtopic's `title` or `lead`; `undefined` when the subtopic has none. */
 function text(chunk, name) {
-  // `name` is one of this script's own field literals.
-  // nosemgrep: javascript.lang.security.audit.detect-non-literal-regexp.detect-non-literal-regexp
-  const match = chunk.match(
-    new RegExp(`^ {6}${name}:\\s*("(?:[^"\\\\]|\\\\.)*"),`, "m"),
-  );
+  const match = chunk.match(TEXT_FIELDS[name]);
   return match ? JSON.parse(match[1]) : undefined;
 }
 

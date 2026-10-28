@@ -50,8 +50,8 @@ async def settle_open(db: AsyncSession, gateway: PaymentProvider) -> None:
     for invoice_no, created_at, status in rows:
         try:
             reported = await gateway.fetch_status(invoice_no)
-        except ProviderError:
-            logger.warning("billing.settle_unavailable", invoice_no=invoice_no)
+        except ProviderError as exc:
+            logger.warning("billing.settle_unavailable", invoice_no=invoice_no, reason=str(exc))
             continue
         if reported.state == "pending":
             if status == "created" and created_at < moment - EXPIRE_AFTER:
@@ -85,9 +85,11 @@ async def refund_states(db: AsyncSession, gateway: PaymentProvider) -> None:
             continue
         try:
             result = await gateway.refund_state(provider_ref)
-        except ProviderError:
-            # Change 234: the next run asks again; the operator sees why it waits
-            logger.warning("billing.refund_state_unavailable", refund_id=str(refund_id))
+        except ProviderError as exc:
+            # Change 234: the next run asks again; the operator sees why it waits (240: the cause)
+            logger.warning(
+                "billing.refund_state_unavailable", refund_id=str(refund_id), reason=str(exc)
+            )
             continue
         if result.state == "pending":
             continue
