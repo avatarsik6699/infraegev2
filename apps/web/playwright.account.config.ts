@@ -1,5 +1,6 @@
 import { defineConfig } from "@playwright/test";
 import { prepareAccountMailbox } from "./e2e/support/account-mailbox";
+import { chromiumLaunch } from "./e2e/support/chromium-launch";
 
 const frontendUrl = "http://127.0.0.2:3100";
 const backendUrl = "http://127.0.0.2:8100";
@@ -18,6 +19,7 @@ export default defineConfig({
   use: {
     baseURL: frontendUrl,
     trace: process.env.CI ? "off" : "retain-on-failure",
+    launchOptions: chromiumLaunch,
   },
   projects: [{ name: "chromium", use: { browserName: "chromium" } }],
   webServer: [

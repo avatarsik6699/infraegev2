@@ -1,4 +1,5 @@
 import { defineConfig } from "@playwright/test";
+import { chromiumLaunch } from "./e2e/support/chromium-launch";
 
 const baseURL = "http://127.0.0.2:3200";
 
@@ -16,6 +17,7 @@ export default defineConfig({
     baseURL,
     trace: "retain-on-failure",
     contextOptions: { reducedMotion: "reduce" },
+    launchOptions: chromiumLaunch,
   },
   projects: [{ name: "chromium", use: { browserName: "chromium" } }],
   webServer: {

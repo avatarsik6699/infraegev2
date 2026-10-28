@@ -116,19 +116,11 @@ def test_payment_link_is_signed_with_password_one():
 
 
 def test_an_address_with_plus_is_left_to_robokassa():
-    # Change 230: Robokassa answers «Некорректный E-mail» to it; the buyer types one there
-    url = robokassa.Robokassa().payment_url(
-        PaymentRequest(
-            invoice_no=1002,
-            amount_kopecks=49_000,
-            description="Доступ на месяц — Кодумка",
-            item_name=ITEM,
-            email="buyer+kodumka@example.com",
-            success_url="https://kodumka.ru/subscribe/return?payment=p-2",
-            fail_url="https://kodumka.ru/subscribe/return?payment=p-2",
-        )
-    )
-    assert "Email" not in parse_qs(urlsplit(url).query)
+    # Change 230: Robokassa answers «Некорректный E-mail» to it; Change 234: the checkout asks
+    # the provider, so that address is neither in the link nor the payment's receipt address
+    gateway = robokassa.Robokassa()
+    assert not gateway.accepts_email("buyer+kodumka@example.com")
+    assert gateway.accepts_email("buyer@example.com")
 
 
 def test_result_url_needs_password_two_and_answers_ok():

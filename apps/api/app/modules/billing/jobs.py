@@ -86,6 +86,8 @@ async def refund_states(db: AsyncSession, gateway: PaymentProvider) -> None:
         try:
             result = await gateway.refund_state(provider_ref)
         except ProviderError:
+            # Change 234: the next run asks again; the operator sees why it waits
+            logger.warning("billing.refund_state_unavailable", refund_id=str(refund_id))
             continue
         if result.state == "pending":
             continue

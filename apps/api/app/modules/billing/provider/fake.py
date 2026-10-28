@@ -32,6 +32,9 @@ def signature(invoice_no: int, amount_kopecks: int) -> str:
 class FakeProvider:
     name = "fake"
 
+    def accepts_email(self, email: str) -> bool:
+        return True
+
     def payment_url(self, request: PaymentRequest) -> str:
         LEDGER.setdefault(request.invoice_no, ("pending", request.amount_kopecks))
         query = urlencode(

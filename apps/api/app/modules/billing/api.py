@@ -90,6 +90,10 @@ async def post_checkout(
     # one Robokassa asks the buyer on its page and reports the address in its notification
     email = await restrictions.verified_email(db, user_id)
     gateway = provider.current()
+    if email and not gateway.accepts_email(email):
+        # Change 234: the buyer types another address at the provider and gets the receipt there;
+        # the payment takes that one from the notification, not the account's
+        email = None
     await db.commit()  # end the read transaction; the checkout is its own
     try:
         async with db.begin():
