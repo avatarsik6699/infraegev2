@@ -2,6 +2,7 @@
 
     python -m app.modules.billing.admin refund --payment ID --amount auto|full|KOPECKS --reason TEXT
     python -m app.modules.billing.admin execute --refund ID      # a requested refund
+    python -m app.modules.billing.admin refund-paid --refund ID --note TEXT  # paid by hand
     python -m app.modules.billing.admin refunds                  # requested and pending
     python -m app.modules.billing.admin show --email ADDRESS
     python -m app.modules.billing.admin revenue [--year YEAR]
@@ -368,6 +369,13 @@ async def main_async(args: argparse.Namespace) -> object:
         async with AsyncSession(engine) as db:
             if args.command == "refund":
                 return await refund(db, UUID(args.payment), args.amount, args.reason)
+            if args.command == "refund-paid":
+                # Change 237: the operator paid the refund himself; see docs/runbooks/billing.md
+                try:
+                    done = await service.refund_paid_manually(db, UUID(args.refund), args.note)
+                except service.RefundRefused as exc:
+                    raise SystemExit(str(exc)) from exc
+                return {"refund": str(done.id), "status": done.status}
             if args.command == "execute":
                 done = await service.execute_refund(db, provider.current(), UUID(args.refund))
                 return {"refund": str(done.id), "status": done.status}
@@ -423,6 +431,9 @@ def main() -> None:
     refund_cmd.add_argument("--amount", required=True, help="auto, full or kopecks")
     refund_cmd.add_argument("--reason", required=True, choices=("buyer", "guardian", "operator"))
     commands.add_parser("execute").add_argument("--refund", required=True)
+    paid = commands.add_parser("refund-paid")
+    paid.add_argument("--refund", required=True)
+    paid.add_argument("--note", required=True, help="how and when the money went back")
     commands.add_parser("refunds")
     commands.add_parser("show").add_argument("--email", required=True)
     commands.add_parser("revenue").add_argument("--year", type=int)

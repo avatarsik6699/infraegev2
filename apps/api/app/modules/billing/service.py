@@ -321,6 +321,47 @@ async def remainder_kopecks(db: AsyncSession, payment: Payment) -> int:
     return payment.amount_kopecks - int(refunded or 0)
 
 
+class RefundRefused(ValueError):
+    """The refund is not in a state the operator may settle by hand."""
+
+
+async def refund_paid_manually(db: AsyncSession, refund_id: UUID, note: str) -> RefundOutcome:
+    """Change 237: the operator returned the money himself (a transfer the buyer agreed to in
+    writing) because the provider could not; the refund is recorded without a provider call.
+    A pending one is the provider's and a succeeded one is paid, so both are refused."""
+    note = note.strip()
+    if not note:
+        raise RefundRefused("a note on how and when the money was returned is required")
+    async with db.begin():
+        refund = await db.get(Refund, refund_id, with_for_update=True)
+        if refund is None:
+            raise RefundRefused("refund not found")
+        if refund.status not in ("requested", "failed"):
+            raise RefundRefused(f"refund is {refund.status}")
+        refund.provider_ref = f"manual:{note}"[:120]
+        await finish_refund(db, refund, "succeeded")
+        payment = await db.get(Payment, refund.payment_id)
+        assert payment is not None
+        outcome = RefundOutcome(refund.id, refund.amount_kopecks, refund.status)
+        mail = notices.refund_paid_manually(
+            receipt_item(payment.days),
+            refund.amount_kopecks,
+            await remainder_kopecks(db, payment),
+            payment.paid_at,
+            payment.invoice_no,
+            payment.contact_email,
+        )
+        buyer, refunded = payment.contact_email, notices.refunded(refund.amount_kopecks)
+    logger.warning(
+        "billing.refund_paid_manually",
+        refund_id=str(refund_id),
+        amount_kopecks=outcome.amount_kopecks,
+    )
+    await notices.to_buyer(buyer, *refunded)
+    await notices.to_operator(*mail)
+    return outcome
+
+
 REMAINDER_DAYS = 30
 
 

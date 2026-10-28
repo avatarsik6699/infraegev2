@@ -62,6 +62,16 @@ async def to_operator(subject: str, body: str) -> None:
         logger.error("billing.operator_mail_unavailable", subject=subject)
 
 
+async def to_buyer(address: str | None, subject: str, body: str) -> None:
+    """A service notice to the payment's receipt address, when there is one."""
+    if not address:
+        return
+    try:
+        await send_account_mail(address, subject, body)
+    except MailUnavailable:
+        logger.warning("billing.mail_unavailable", notice=subject)
+
+
 def refund_failed(
     refund_id: str, invoice_no: int, amount_kopecks: int, reason: str | None
 ) -> tuple[str, str]:
@@ -72,7 +82,9 @@ def refund_failed(
     if reason and "8401" in reason:
         lines.append(
             "8401: на балансе магазина меньше суммы возврата с комиссией. Пополните баланс или "
-            "дождитесь оплат и повторите возврат."
+            "дождитесь оплат и повторите возврат. Или верните деньги сами переводом на реквизиты, "
+            "которые покупатель пришлёт письменно, и отметьте: "
+            f"admin refund-paid --refund {refund_id} --note «как и когда»."
         )
     lines += [
         f"Повтор: admin execute --refund {refund_id} или «Выполнить» в консоли.",
@@ -98,3 +110,29 @@ def remainder_receipt(
         f"Покупатель — физическое лицо, чек отправить на: {receipt_email or 'адрес не сохранён'}",
     ]
     return "Выдайте чек на остаток в «Мой налог»", "\n".join(lines) + "\n"
+
+
+def refund_paid_manually(
+    item: str,
+    refund_kopecks: int,
+    remainder_kopecks: int,
+    paid_at: datetime | None,
+    invoice_no: int,
+    receipt_email: str | None,
+) -> tuple[str, str]:
+    """Change 237: Робочеки take no part in a refund the operator paid, so the receipt is his."""
+    lines = [
+        f"Возврат {money(refund_kopecks)} ₽ по счёту {invoice_no} отмечен как выполненный вручную. "
+        "Робочеки в нём не участвовали: чек этой оплаты нужно аннулировать самому в «Мой налог» "
+        "с причиной «Возврат средств».",
+        f"Дата оплаты: {date(paid_at) if paid_at else 'нет'}",
+    ]
+    if remainder_kopecks > 0:
+        lines += [
+            "Возврат частичный: после аннулирования выдайте чек на остаток.",
+            f"Наименование: {item}",
+            f"Сумма: {money(remainder_kopecks)} ₽",
+            "Покупатель — физическое лицо, чек отправить на: "
+            + (receipt_email or "адрес не сохранён"),
+        ]
+    return "Аннулируйте чек в «Мой налог»", "\n".join(lines) + "\n"
