@@ -58,6 +58,12 @@
 - [x] `I6` (находка Release Gate 2026-10-28) gitleaks `generic-api-key` на синтетическом
   `AUTH_CSRF_SECRET` в `postgres-release-stability.test.sh` (коммит `931c3aad`). Точное исключение
   путь + значение в `.gitleaks.toml`, как у прочих публичных значений. — _Depends on:_ I2
+- [x] `I7` (находка `images.yml` для `5279e6c9`, 2026-10-28) HIGH в опубликованных образах:
+  - api: `dnspython` 2.8.0 → 2.9.0 (CVE-2026-114605, транзитивно через `email-validator`);
+  - nginx: `curl` и `libcurl` 8.22.0 → закреплены `8.23.0-r0` (CVE-2026-92392), рядом с
+    `brotli-libs`.
+
+  Деплой `5279e6c9` не запускался. — _Depends on:_ —
 
 ### Ops (прод, сейчас)
 - [x] `O1` Снять recovery hold по `backup-restore.md` § Recovery hold review and release:
