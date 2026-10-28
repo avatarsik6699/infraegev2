@@ -9,7 +9,7 @@
 | Change | `237` |
 | Slug | `manual-refund` |
 | Title | Возврат вручную, когда Robokassa не может вернуть |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/237-manual-refund` |
 
 ---
@@ -30,21 +30,21 @@ Robokassa возвращает деньги только с баланса ма�
 ## Backlog
 
 ### Backend
-- [ ] `B1` `admin refund-paid --refund ID --note TEXT`: возврат `requested` или `failed` становится
+- [x] `B1` `admin refund-paid --refund ID --note TEXT`: возврат `requested` или `failed` становится
   `succeeded` без запроса к провайдеру.
   - `provider_ref` = `manual:<note>`, доступ по оплате заканчивается, полный возврат переводит
     оплату в `refunded`;
   - `pending` и `succeeded` команда отвергает: Robokassa уже взялась или деньги уже вернулись;
   - журнал `billing.refund_paid_manually`. — _Depends on:_ —
-- [ ] `B2` Письма после ручного возврата.
+- [x] `B2` Письма после ручного возврата.
   - Покупателю — обычное «Возврат оплаты Кодумки».
   - Оператору — «Аннулируйте чек в «Мой налог»»: дата оплаты и сумма, а при частичном возврате ещё
     чек на остаток (наименование, сумма, адрес). Робочеки тут ничего не делают, письмо о Робочеках
     (232 B3) не отправляется.
   - Письмо «Возврат не прошёл» для 8401 называет и этот путь. — _Depends on:_ B1
-- [ ] `B3` Тесты в `test_billing.py`: отказ 8401 → `refund-paid` → оба письма, доступ закрыт; повторная
+- [x] `B3` Тесты в `test_billing.py`: отказ 8401 → `refund-paid` → оба письма, доступ закрыт; повторная
   отметка и отметка `pending` отвергнуты. — _Depends on:_ B1, B2
-- [ ] `B4` `billing.md`: порядок ручного возврата (письменная просьба покупателя с реквизитами,
+- [x] `B4` `billing.md`: порядок ручного возврата (письменная просьба покупателя с реквизитами,
   перевод, аннулирование чека, чек на остаток, `refund-paid`), строка в таблице CLI и в «Incidents».
   — _Depends on:_ B1, B2
 
@@ -65,7 +65,7 @@ docs/runbooks/billing.md
 
 ## Contracts
 
-See [billing runbook](../runbooks/billing.md).
+See [billing runbook](../../runbooks/billing.md).
 
 ---
 
@@ -77,10 +77,15 @@ pytest `test_billing.py`, `test_operator_cli.py`.
 
 | HEAD | Groups / focused checks | Result | Seconds |
 |------|-------------------------|--------|---------|
+| 527581f4+wt | format, python-format, api-lint, api-typecheck, api-contract, docs-links | PASS | 43 |
+| 527581f4+wt | pytest test_billing (8401 → `refund-paid` → operator «Аннулируйте чек» with the rest; blank note, `succeeded` and `pending` refused), test_operator_cli, test_robokassa (22); `refund-paid --help` | PASS | 224 |
 
 ---
 
 ## Implementation Notes
+
+- Отметки «вручную» в схеме нет: `provider_ref` = `manual:<note>`, по нему такой возврат отличим
+  от проведённого Robokassa. Консоль smotryashchiy его не умеет, только CLI.
 
 ---
 

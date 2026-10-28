@@ -150,6 +150,7 @@ docker compose --env-file /etc/infraege/production.env --project-name infraege \
 | `refunds` | `open`: requested, pending and failed refunds (account deletions create requested ones); `remainder_receipts`: partial refunds of 30 days with the receipt left to issue (Change 232) |
 | `funnel [--days N]` | orders of the last N Moscow days (default 30) by day and plan: paid, failed, open, refunded and the money kept — the payment conversion (Change 194) |
 | `execute --refund ID` | send a requested or failed refund to the provider |
+| `refund-paid --refund ID --note TEXT` | Change 237: record a requested or failed refund the operator paid by hand ([Refund by hand](#refund-by-hand-change-237)) |
 | `revenue [--year YEAR]` | НПД income of a Moscow calendar year and its share of the limit |
 | `signals [--days N]` | Change 198: accounts above a sharing or downloading threshold, numbers only; no measure is automatic |
 | `warn` / `suspend --days N` / `terminate` / `lift [--compensate]` (`--user ID` or `--email A`) | Change 198: the graded manual measures of offer section 6 and their lifting — procedure in [accounts](accounts.md#ограничения-change-198) |
@@ -171,11 +172,12 @@ The receipt correction belongs to Робочеки; if it did not happen, annul 
 
 ## Refund money and the receipt for the rest (Change 232)
 
-- A refund is paid from the shop balance, which holds payments minus Robokassa's commission. Keep
-  a reserve there: never withdraw everything, and check that automatic payout is off. A refund
-  the balance cannot cover fails with `Support, Refund error 8401`; the operator gets the
-  «Возврат не прошёл» mail with the reason. Top up the balance or wait for payments, then run
-  `execute --refund ID` (or «Выполнить» in the console) within the 10 days of ЗоЗПП ст. 31.
+- A refund is paid from the shop balance, which holds payments minus Robokassa's commission. No
+  reserve is kept there (the architect's decision, 2026-10-28) and automatic payout is off. A
+  refund the balance cannot cover fails with `Support, Refund error 8401`; the operator gets the
+  «Возврат не прошёл» mail with the reason. Wait for payments and run `execute --refund ID` (or
+  «Выполнить» in the console), or return the money by hand (below), within the 10 days of ЗоЗПП
+  ст. 31.
 - The commission is not withheld from a refund: ЗоЗПП ст. 32 and ГК ст. 782 let the seller keep
   only the expenses of performing the contract, and the commission pays for taking the money.
   The lawful reduction is `auto`: the buyer pays for the days already used.
@@ -188,6 +190,21 @@ The receipt correction belongs to Робочеки; if it did not happen, annul 
   (`remainder_receipts`); there is no mark for an issued one, so check «Мой налог» before
   issuing.
 - A full refund annuls the receipt and needs nothing more.
+
+### Refund by hand (Change 237)
+
+When Robokassa cannot pay a refund (8401) and waiting is not an option:
+
+1. Ask the buyer by mail for the details to send the money to (card number or bank account) and
+   keep the reply: returning money another way than it was paid needs the buyer's consent.
+2. Transfer the refund sum from your own account.
+3. `admin refund-paid --refund ID --note «перевод на карту …1234, 29.10»`. The refund becomes
+   `succeeded` without a provider call, access by that payment ends, the buyer gets «Возврат
+   оплаты Кодумки», and the operator gets «Аннулируйте чек в «Мой налог»». The command refuses a
+   `pending` refund (Robokassa already took it) and a `succeeded` one.
+4. In «Мой налог» annul the payment's receipt with the reason «Возврат средств»: Робочеки do not
+   know about this refund. For a partial refund then issue the receipt for the rest as above; the
+   mail names its sum.
 
 ## Account deletion
 
@@ -204,7 +221,7 @@ account link (5-year retention, SPEC §3). Run `refunds`, then `execute` each ne
 | `billing.notification_rejected` repeatedly | password #2 or the hash algorithm differs from the shop settings |
 | Webhook endpoint down for hours | nothing is lost: Robokassa retries and the hourly job asks for every open payment |
 | `billing.reconcile_mismatch` mail | compare the listed invoices in the shop; a refund made in the shop by hand must also be recorded here (`refund … --reason operator`) |
-| «Возврат не прошёл» mail, `billing.refund_failed` | the reason is Robokassa's; 8401 = the balance cannot cover the refund with its commission: top it up or wait for payments, then `execute --refund ID` (Change 232) |
+| «Возврат не прошёл» mail, `billing.refund_failed` | the reason is Robokassa's; 8401 = the balance cannot cover the refund with its commission: wait for payments and `execute --refund ID`, or pay it by hand and `refund-paid` (Changes 232, 237) |
 | «Выдайте чек на остаток» mail, `billing.remainder_receipt_due` | issue the receipt for the rest in «Мой налог» as described in [Refund money](#refund-money-and-the-receipt-for-the-rest-change-232) |
 | `billing.npd_limit_pause` | new checkouts are refused at 95 % of the НПД limit; access already bought continues. Decide with the architect: wait for the new year or move to ИП (a separate project: new offer, new contract) |
 

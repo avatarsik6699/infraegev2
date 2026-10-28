@@ -410,6 +410,52 @@ def test_paywall_purchase_extension_refund_and_deletion(paid_site, database, mon
                     assert subject == "[kodumka billing] Выдайте чек на остаток в «Мой налог»"
                     rest -= 50_000
                     assert f"Сумма: {rest // 100},{rest % 100:02d} ₽" in body
+                    # Change 237: the shop cannot refund, the operator pays by transfer and marks it
+                    async with db.begin():
+                        year = await db.get(Payment, year_id, populate_existing=True)
+                        assert year is not None
+                        manual = await service.request_refund(
+                            db, year, 30_000, "operator", key=f"operator:{year_id}:30000"
+                        )
+                        assert manual is not None
+                        manual_id = manual.id
+                    refused = await service.execute_refund(db, BrokeShop(), manual_id)
+                    assert refused.status == "failed"
+                    subject, body = operator.pop()
+                    assert "admin refund-paid --refund" in body
+                    with pytest.raises(service.RefundRefused):
+                        await service.refund_paid_manually(db, manual_id, "  ")
+                    paid = await service.refund_paid_manually(
+                        db, manual_id, "перевод по реквизитам покупателя 28.10"
+                    )
+                    assert paid.status == "succeeded"
+                    subject, body = operator.pop()
+                    assert subject == "[kodumka billing] Аннулируйте чек в «Мой налог»"
+                    rest -= 30_000
+                    assert "аннулировать самому" in body
+                    assert f"Сумма: {rest // 100},{rest % 100:02d} ₽" in body
+                    assert not operator  # no «Робочеки аннулировали» mail for a manual one
+                    async with db.begin():
+                        row = await db.get(Refund, manual_id, populate_existing=True)
+                        assert row is not None and row.provider_ref == (
+                            "manual:перевод по реквизитам покупателя 28.10"
+                        )
+                    with pytest.raises(service.RefundRefused, match="succeeded"):
+                        await service.refund_paid_manually(db, manual_id, "again")
+                    # a refund the provider holds as pending is not the operator's to settle
+                    async with db.begin():
+                        year = await db.get(Payment, year_id, populate_existing=True)
+                        assert year is not None
+                        held = await service.request_refund(
+                            db, year, 10_000, "operator", key=f"operator:{year_id}:10000"
+                        )
+                        assert held is not None
+                        held_id = held.id
+                    assert (
+                        await service.execute_refund(db, SlowShop(), held_id)
+                    ).status == "pending"
+                    with pytest.raises(service.RefundRefused, match="pending"):
+                        await service.refund_paid_manually(db, held_id, "transfer")
             finally:
                 await engine.dispose()
 
