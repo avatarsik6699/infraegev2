@@ -748,7 +748,8 @@ shop on 2026-10-28; Робочеки СМЗ are active. Changes 227–229 were r
 
 Both recovery holds were released on 2026-10-26. Changes 230 and 231 followed the same day: the
 return to the payment page, the receipt address with «+», the return-address signature. Steps 2–4
-below are the checklist of Change 232.
+below are the checklist of Change 234 (Change 232 added operator alerts for refused refunds
+and receipts for the rest).
 
 1. Done: the release of Changes 227–229 (`/ship 229 --release`).
 2. **Production checks after the deploy:**
