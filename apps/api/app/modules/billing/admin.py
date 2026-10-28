@@ -206,7 +206,7 @@ async def export(db: AsyncSession) -> dict:
                 .where(Refund.status.in_(("requested", "pending", "failed")))
                 .group_by(Refund.status)
             )
-        ).tuples()
+        ).all()
     }
     return {
         "schema": "kodumka.business/1",

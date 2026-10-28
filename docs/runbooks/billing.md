@@ -220,6 +220,7 @@ account link (5-year retention, SPEC §3). Run `refunds`, then `execute` each ne
 | `billing.amount_mismatch` in logs | the provider reported another sum: never grant; check the operation in the shop and refund |
 | `billing.notification_rejected` repeatedly | password #2 or the hash algorithm differs from the shop settings |
 | Webhook endpoint down for hours | nothing is lost: Robokassa retries and the hourly job asks for every open payment |
+| `billing.settle_unavailable` / `billing.refund_state_unavailable` | the next hourly run asks again. `reason` names the cause (Change 240): `HTTP 5xx` or `Robokassa status error N` is Robokassa's side; `ConnectTimeout`, `ConnectError … SSL` is the network. Repeats over several hours: check `curl -4 -w '%{time_appconnect}' https://auth.robokassa.ru/` from the host, then ask Robokassa support with the times |
 | `billing.reconcile_mismatch` mail | compare the listed invoices in the shop; a refund made in the shop by hand must also be recorded here (`refund … --reason operator`) |
 | «Возврат не прошёл» mail, `billing.refund_failed` | the reason is Robokassa's; 8401 = the balance cannot cover the refund with its commission: wait for payments and `execute --refund ID`, or pay it by hand and `refund-paid` (Changes 232, 237) |
 | «Выдайте чек на остаток» mail, `billing.remainder_receipt_due` | issue the receipt for the rest in «Мой налог» as described in [Refund money](#refund-money-and-the-receipt-for-the-rest-change-232) |

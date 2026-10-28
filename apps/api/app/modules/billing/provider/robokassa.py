@@ -38,6 +38,16 @@ STATE_URL = "https://auth.robokassa.ru/Merchant/WebService/Service.asmx/OpStateE
 REFUND_URL = "https://services.robokassa.ru/RefundService/Refund/Create"
 REFUND_STATE_URL = "https://services.robokassa.ru/RefundService/Refund/GetState"
 TIMEOUT = httpx.Timeout(10)
+
+
+def failure(exc: Exception) -> str:
+    """Change 240: why a request failed, for the job log; never the URL with its signature."""
+    if isinstance(exc, httpx.HTTPStatusError):
+        return f"HTTP {exc.response.status_code}"
+    detail = str(exc)[:160] if isinstance(exc, httpx.TransportError) else ""
+    return f"{type(exc).__name__} {detail}".strip()
+
+
 # OpStateExt State/Code: 5 created, 10 cancelled, 20 on hold, 50 received and being
 # credited, 60 returned to the buyer, 80 suspended, 100 completed.
 STATES: dict[int, State] = {
@@ -187,7 +197,7 @@ class Robokassa:
                 response.raise_for_status()
             root = ElementTree.fromstring(response.content[:65536])
         except (httpx.HTTPError, ElementTree.ParseError) as exc:
-            raise ProviderError("Robokassa status unavailable") from exc
+            raise ProviderError(f"Robokassa status unavailable: {failure(exc)}") from exc
         result = find(root, "Result", "Code")
         if result == "3":  # the invoice is unknown: the buyer never reached the pay page
             return Status("pending")
@@ -236,7 +246,7 @@ class Robokassa:
                 # Change 233: a refusal (401 for a key or access) still answers JSON with its reason
                 body = response.json()
         except (httpx.HTTPError, ValueError) as exc:
-            raise ProviderError("Robokassa refund unavailable") from exc
+            raise ProviderError(f"Robokassa refund unavailable: {failure(exc)}") from exc
         if not body.get("success"):
             return RefundResult("failed", message=str(body.get("message"))[:200])
         return RefundResult("pending", provider_ref=body.get("requestId"))
@@ -248,7 +258,7 @@ class Robokassa:
                 response.raise_for_status()
                 body = response.json()
         except (httpx.HTTPError, ValueError) as exc:
-            raise ProviderError("Robokassa refund state unavailable") from exc
+            raise ProviderError(f"Robokassa refund state unavailable: {failure(exc)}") from exc
         label = body.get("label")
         state = {"finished": "succeeded", "canceled": "failed"}.get(label, "pending")
         return RefundResult(state, provider_ref=provider_ref, message=label)  # type: ignore[arg-type]
