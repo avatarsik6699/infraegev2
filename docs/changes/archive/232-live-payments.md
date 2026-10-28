@@ -9,7 +9,7 @@
 | Change | `232` |
 | Slug | `live-payments` |
 | Title | Проверки после релиза и боевые платежи |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/232-live-payments` |
 
 ---
@@ -87,7 +87,7 @@ apps/web/src/pages/checkout/checkout-return-page.tsx (F1), docs/runbooks/billing
 
 ## Contracts
 
-See `docs/SPEC.md` §2.2, §6.1, §7.3 and [billing runbook](../runbooks/billing.md).
+See `docs/SPEC.md` §2.2, §6.1, §7.3 and [billing runbook](../../runbooks/billing.md).
 
 ---
 
