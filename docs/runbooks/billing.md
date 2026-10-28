@@ -64,13 +64,14 @@ position as `InvoiceItems` (Change 229). Without them Робочеки cannot fo
 The shop's fiscalization is «Робочеки СМЗ — Одобрено ФНС — Активно» since the activation on
 2026-10-28.
 
-Test mode (`ROBOKASSA_TEST=true`):
-- [ ] a month purchase from the site returns to `/subscribe/return` and opens access; the payment
-      page accepts the signed `Receipt`;
-- [ ] `journalctl -u infraege-billing-hourly` shows no `billing.notification_rejected`;
-- [ ] OpStateExt answers for the test invoice (state codes 5/10/50/100 match); record a real
-      response as a fixture in `apps/api/tests/test_robokassa.py`;
-- [ ] a refund of the test payment through `admin refund … --amount full` finishes.
+Test mode (`ROBOKASSA_TEST=true`), done 2026-10-28:
+- [x] a month purchase from the site returns to `/subscribe/return` and opens access; the payment
+      page accepts the signed `Receipt` (after Changes 230 and 231);
+- [x] no `billing.notification_rejected` in the logs;
+- [x] OpStateExt answers are fixtures in `apps/api/tests/test_robokassa.py`: code 3 for a test invoice
+      (it never finds test operations) and `State 100` for the first live one;
+- [x] a test payment cannot be refunded (the refund needs the OpStateExt operation key); the refund
+      was proven on the live 1 ₽ payment instead.
 
 Changing a flag or price (Change 232): copy `production.env` first
 (`production.env.pre-live-<date>`), edit it as root, then recreate only the API. Its environment is
