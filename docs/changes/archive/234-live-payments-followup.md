@@ -9,7 +9,7 @@
 | Change | `234` |
 | Slug | `live-payments-followup` |
 | Title | Проверки после релиза 232 и включение платной части |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/234-live-payments-followup` |
 
 ---
@@ -70,7 +70,7 @@
 - [x] `T8` (из 232 F1) Playwriter на проде: после оплаты `/subscribe/return` пишет «Чек придёт на
   почту, указанную при оплате.» Проверено 2026-10-28 на `844e0bc2`, платёж 1005: текст на месте,
   ошибок в консоли нет. — _Depends on:_ —
-- [ ] `T1` (из 232 T1) Прод после релизов 2026-10-28:
+- [x] `T1` (из 232 T1) Прод после релизов 2026-10-28:
   - сделано: `/health/ready` на каждом SHA; `/oferta`, `/privacy`, `/vozvrat` показывают редакцию
     от 28.10, `/oferta/2026-10-23` открывается;
   - сделано: postgres пересоздан деплоем `ff8960fd` (229 I2), `StartedAt` 2026-10-28T09:54:15Z, и
@@ -78,8 +78,13 @@
     smotryashchiy `SMOTRYASHCHIY_TARGET_VPS_*`);
   - сделано: в журналах с 09:00 четыре `billing.payment_succeeded`, ни одного
     `billing.notification_rejected`; одно `billing.settle_unavailable` (часовой опрос OpStateExt);
-  - ночной бэкап 28→29.10 записывает текущий релиз (сейчас `5728f16f` после 240, если его выложат,
-    иначе `51fbe66b`) из `database-current`. — _Depends on:_ —
+  - сделано 2026-10-29 06:30 UTC: ночной бэкап 28→29.10 (02:19 UTC, снимок `7a183ac8…`) записал в
+    `metadata.json` релиз `5728f16f` (как `database-current`), схема `198_01`. Внешняя копия ушла
+    в 02:19:48 (`ae043333…`), 11 снимков локально и снаружи, удержаний нет. Postgres `StartedAt` по-прежнему
+    09:54:15Z 28.10. После деплоя 240 журнал без `SADeprecationWarning`;
+  - ночная сверка 29.10 03:33: 3 расхождения из 4 платежей за три дня. Это тестовые 1000, 1001 и
+    1003: боевая Robokassa их не знает (код 3). Письмо «сверка с провайдером» у оператора. Повторится,
+    пока они не выйдут из трёхдневного окна, последний раз ночью 31.10. — _Depends on:_ —
 - [x] `T2` (из 232 T2, 227 T3) Сценарии входа 1–3 брифа 227 на проде через VK ID и Яндекс ID архитектора.
   Тестовые аккаунты Кодумки создаются и удаляются, основные не трогаются.
 
@@ -154,6 +159,8 @@ See `docs/SPEC.md` §2.2, §6.1, §7.3 and the billing runbook.
 | 45c29c76+wt | pytest test_billing (refused address → typed one; comma sums), test_robokassa, test_operator_cli (22) | PASS | 187 |
 | 45c29c76+wt | isolated browser `billing` with a 2 s disk probe: before I1 free space fell to 0 in bursts; after I1+I2 flat at 6.8–6.9 GB, 4/4 in 59 s | PASS | 164 |
 | prod `844e0bc2` | T8: Playwriter `/subscribe/return?payment=…` (screenshot, console clean) | PASS | — |
+| prod `51fbe66b` | B2: DNS, tracepath, 16 TLS handshakes from the host + 12 from the API container | PASS | — |
+| prod `5728f16f` | T1: nightly snapshot metadata release = `database-current`, off-site copy success | PASS | — |
 
 ---
 
