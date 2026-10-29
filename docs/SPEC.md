@@ -748,7 +748,8 @@ shop on 2026-10-28; Робочеки СМЗ are active. Changes 227–229 were r
 
 Both recovery holds were released on 2026-10-26. Changes 230 and 231 followed the same day: the
 return to the payment page, the receipt address with «+», the return-address signature. Steps 2–4
-below are the checklist of Change 232.
+below are the checklist of Change 234 (Change 232 added operator alerts for refused refunds
+and receipts for the rest).
 
 1. Done: the release of Changes 227–229 (`/ship 229 --release`).
 2. **Production checks after the deploy:**
@@ -795,8 +796,7 @@ decisions.
 
 ## 11. Open Questions
 
-Before enabling paid access (Change 192 flags), still open: Robokassa shop activation (waits for the
-payout account check) and the 1 ₽ payment/refund proof; the date and text of the announcement for
-topics that are free on production today. Done: НПД, Робочеки, offer and refund editions, Яндекс ID
+Paid access is on since 2026-10-28: Robokassa live mode, the 1 ₽ payment, receipt and refund proven,
+`PAYWALL_ENABLED=true` without an announcement (the architect's decision: no outside accounts yet). Done: НПД, Робочеки, offer and refund editions, Яндекс ID
 and VK ID, RKN notification (2026-10-25), off-site backups with a restore proof, provenance of tasks
 in paid subtopics.

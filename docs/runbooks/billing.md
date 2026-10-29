@@ -33,7 +33,10 @@ The shop was created on 2026-10-24 (Change 211):
 - the URLs below;
 - all five passwords were generated in the shop and kept in athanor (infraegev2 vault:
   `ROBOKASSA_MERCHANT_LOGIN`, `ROBOKASSA_PASSWORD1..3` live, `ROBOKASSA_TEST_PASSWORD1..2`);
-- production runs `BILLING_ENABLED=true`, `ROBOKASSA_TEST=true` with the test pair, `PAYWALL_ENABLED=false`;
+- production ran `BILLING_ENABLED=true`, `ROBOKASSA_TEST=true` with the test pair, `PAYWALL_ENABLED=false`
+  until 2026-10-28; since then the live pair, `ROBOKASSA_TEST=false` (env copy
+  `production.env.pre-live-20261028-1138`) and `PAYWALL_ENABLED=true` (copy
+  `production.env.pre-paywall-20261028-1639`), no automatic payout;
 - the env copy before that is `production.env.pre-billing-2026-10-24`.
 
 Robokassa shop settings: ResultURL `https://kodumka.ru/api/billing/webhooks/robokassa` (POST),
@@ -61,13 +64,14 @@ position as `InvoiceItems` (Change 229). Without them Робочеки cannot fo
 The shop's fiscalization is «Робочеки СМЗ — Одобрено ФНС — Активно» since the activation on
 2026-10-28.
 
-Test mode (`ROBOKASSA_TEST=true`):
-- [ ] a month purchase from the site returns to `/subscribe/return` and opens access; the payment
-      page accepts the signed `Receipt`;
-- [ ] `journalctl -u infraege-billing-hourly` shows no `billing.notification_rejected`;
-- [ ] OpStateExt answers for the test invoice (state codes 5/10/50/100 match); record a real
-      response as a fixture in `apps/api/tests/test_robokassa.py`;
-- [ ] a refund of the test payment through `admin refund … --amount full` finishes.
+Test mode (`ROBOKASSA_TEST=true`), done 2026-10-28:
+- [x] a month purchase from the site returns to `/subscribe/return` and opens access; the payment
+      page accepts the signed `Receipt` (after Changes 230 and 231);
+- [x] no `billing.notification_rejected` in the logs;
+- [x] OpStateExt answers are fixtures in `apps/api/tests/test_robokassa.py`: code 3 for a test invoice
+      (it never finds test operations) and `State 100` for the first live one;
+- [x] a test payment cannot be refunded (the refund needs the OpStateExt operation key); the refund
+      was proven on the live 1 ₽ payment instead.
 
 Changing a flag or price (Change 232): copy `production.env` first
 (`production.env.pre-live-<date>`), edit it as root, then recreate only the API. Its environment is
@@ -93,11 +97,11 @@ Robokassa facts from the 2026-10-28 test purchases (Changes 230, 231):
   the balance, or refund from the cabinet after topping it up.
 
 Live (after Robokassa activates the shop, `ROBOKASSA_TEST=false`, live password pair):
-- [ ] a real 1 ₽ purchase (temporary `BILLING_MONTH_PRICE_KOPECKS=100`): the receipt appears in «Мой
+- [x] a real 1 ₽ purchase (temporary `BILLING_MONTH_PRICE_KOPECKS=100`): the receipt appears in «Мой
       налог» and in the buyer's mail;
-- [ ] its full refund: the receipt is annulled in «Мой налог»;
-- [ ] real prices restored, API restarted;
-- [ ] announce the paid part for the topics that are free today, then `PAYWALL_ENABLED=true`.
+- [x] its full refund: the receipt is annulled in «Мой налог»;
+- [x] real prices restored, API restarted;
+- [x] announce the paid part for the topics that are free today, then `PAYWALL_ENABLED=true`.
 
 The offer, refund rules and privacy text were not reviewed by a lawyer (architect's decision,
 2026-10-18, confirmed 2026-10-23). Any change to the offer after the first payment is a new dated
