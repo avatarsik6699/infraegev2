@@ -99,9 +99,10 @@ Robokassa facts from the 2026-10-28 test purchases (Changes 230, 231):
 Live (after Robokassa activates the shop, `ROBOKASSA_TEST=false`, live password pair):
 - [x] a real 1 ₽ purchase (temporary `BILLING_MONTH_PRICE_KOPECKS=100`): the receipt appears in «Мой
       налог» and in the buyer's mail;
-- [x] its full refund: the receipt is annulled in «Мой налог»;
+- [x] its refund: the full one failed with 8401 (balance 0,96 ₽), a partial 0,90 ₽ one succeeded and
+      Робочеки annulled the whole receipt; a 0,10 ₽ receipt for the rest was issued by hand;
 - [x] real prices restored, API restarted;
-- [x] announce the paid part for the topics that are free today, then `PAYWALL_ENABLED=true`.
+- [x] `PAYWALL_ENABLED=true` on 2026-10-28 without an announcement (the architect's decision).
 
 The offer, refund rules and privacy text were not reviewed by a lawyer (architect's decision,
 2026-10-18, confirmed 2026-10-23). Any change to the offer after the first payment is a new dated
