@@ -10,7 +10,7 @@ dependencies = [
   "pydantic-settings>=2.5",
   "structlog>=24.1",
   "sqlalchemy[asyncio]==2.1.6",
-  "alembic==1.20.0",
+  "alembic==1.20.1",
   "asyncpg==0.32.0",
   "argon2-cffi>=25.1",
   "httpx>=0.28",
